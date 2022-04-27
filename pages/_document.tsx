@@ -12,7 +12,10 @@ class MyDocument extends Document {
                     {/* eslint-disable-next-line @next/next/no-title-in-document-head */}
                     <title>B-Side - Festival 2022</title>
 
-                    <link href="https://fonts.googleapis.com/css2?family=Londrina+Outline&family=Londrina+Solid:wght@100;300;400;900&display=swap" rel="stylesheet" />
+                    <link
+                        href="https://fonts.googleapis.com/css2?family=Londrina+Outline&family=Londrina+Solid:wght@100;300;400;900&display=swap"
+                        rel="stylesheet"
+                    />
                 </Head>
 
                 <body className="bg-black">

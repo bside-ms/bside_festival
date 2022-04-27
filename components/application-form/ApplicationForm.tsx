@@ -1,26 +1,23 @@
-import { useCallback, useState } from 'react';
+import Link from 'next/link';
 import type { ReactElement } from 'react';
 import ApplicationFormFields from 'components/application-form/ApplicationFormFields';
-import ApplicationFormSelect from 'components/application-form/ApplicationFormSelect';
 import type { ApplicationType } from 'lib/ApplicationFormService';
 
-const ApplicationForm = (): ReactElement => {
+interface Props {
+    applicationType: ApplicationType;
+}
 
-    const [applicationType, setApplicationType] = useState<ApplicationType>();
-
-    const handleTypeChange = useCallback((type: ApplicationType) => {
-        setApplicationType(type);
-    }, []);
+const ApplicationForm = ({ applicationType }: Props): ReactElement => {
 
     return (
-        <div className="w-full p-2 mt-4 text-cyan-50 bg-white">
-            <ApplicationFormSelect currentType={applicationType} onTypeChange={handleTypeChange} />
+        <div className="w-full p-2 mt-4 bg-white">
+            <div>
+                <Link href="/bewerbung" passHref={true}>
+                    <a>Zurück</a>
+                </Link>
+            </div>
 
-            {applicationType !== undefined && (
-                <div className="mt-5">
-                    <ApplicationFormFields currentType={applicationType} />
-                </div>
-            )}
+            <ApplicationFormFields currentType={applicationType} />
         </div>
     );
 };

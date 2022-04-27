@@ -1,3 +1,4 @@
+
 export enum ApplicationType {
     exhibition = 'exhibition',
     performance = 'performance',
@@ -9,25 +10,26 @@ export enum ApplicationType {
     neighborhood = 'neighborhood',
 }
 
+export const applicationTypes = new Array<{ type: ApplicationType, title: string, pathPart: string }>(
+    { type: ApplicationType.exhibition, title: 'Ausstellung', pathPart: 'ausstellung' },
+    { type: ApplicationType.performance, title: 'Performance, Theater & Kabarett', pathPart: 'performance' },
+    { type: ApplicationType.concert, title: 'Konzert', pathPart: 'konzert' },
+    { type: ApplicationType.workshop, title: 'Workshop / (interaktiver) Infostand', pathPart: 'workshop' },
+    { type: ApplicationType.familyProgram, title: 'Familienprogramm', pathPart: 'familienprogramm' },
+    { type: ApplicationType.reading, title: 'Lesung, Vortrag & Poesie', pathPart: 'lesung' },
+    { type: ApplicationType.food, title: 'Essensstand', pathPart: 'essensstand' },
+    { type: ApplicationType.neighborhood, title: 'Nachbarschaft', pathPart: 'nachbarschaft' }
+);
+
 export enum FieldType {
     text = 'text',
     textArea = 'textArea',
     upload = 'upload',
 }
 
-export const useApplicationTypeTitles = (): Map<ApplicationType, string> => {
-
-    return new Map([
-        [ApplicationType.exhibition, 'Ausstellung'],
-        [ApplicationType.performance, 'Performance, Theater & Kabarett'],
-        [ApplicationType.concert, 'Konzert'],
-        [ApplicationType.workshop, 'Workshop / (interaktiver) Infostand'],
-        [ApplicationType.familyProgram, 'Familienprogramm'],
-        [ApplicationType.reading, 'Lesung, Vortrag & Poesie'],
-        [ApplicationType.food, 'Essensstand'],
-        [ApplicationType.neighborhood, 'Nachbarschaft'],
-    ]);
-};
+export const getApplicationTypeByPathPart = (searchedPathPart: string): ApplicationType | undefined => (
+    applicationTypes.find(({ pathPart }) => pathPart === searchedPathPart)?.type
+);
 
 export interface ApplicationField {
     name: string;

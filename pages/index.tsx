@@ -1,8 +1,8 @@
-import type { NextPage } from 'next';
 import Link from 'next/link';
-import Header from '../components/Header';
+import type { ReactElement } from 'react';
+import Header from 'components/Header';
 
-const Home: NextPage = () => {
+export default (): ReactElement => {
 
     return (
         <div className="w-full md:w-2/3 mx-auto">
@@ -48,5 +48,3 @@ const Home: NextPage = () => {
         </div>
     );
 };
-
-export default Home;
