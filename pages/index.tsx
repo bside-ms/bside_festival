@@ -11,18 +11,16 @@ export default (): ReactElement => {
                     <Header />
                 </div>
 
-                <div className="absolute text-[#ffed00] top-[100px] left-[50px] font-title1 text-6xl skew-x-[40deg]">
+                <div className="absolute top-[100px] left-[50px] font-title1 text-6xl">
                     B-Side Festival
                 </div>
 
-                <div className="absolute text-[#ffed00] w-[400px] left-7 font-title2 text-9xl skew-x-[160deg]">
+                <div className="absolute w-[400px] left-7 font-title2 text-9xl">
                     Zurück für die Zukunft
                 </div>
-
-                {/* <div className="absolute top-60 left-32 w-20 h-20 bg-[#e5007d]" />*/}
             </div>
 
-            <div className="text-white text-center p-7">
+            <div className="text-center p-7">
                 <div>
                     Nach einem Jahr Pause ist das B-Side Festival in 2022 zurück! Im September erwartet euch
                     wieder ein vielfältiges Programm aus Konzerten, Workshops, Lesungen und vielem mehr.

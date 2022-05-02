@@ -1,15 +1,15 @@
 import type { ReactElement } from 'react';
 import ApplicationFormField from 'components/application-form/ApplicationFormField';
-import type { ApplicationType } from 'lib/ApplicationFormService';
-import { useApplicationFields } from 'lib/ApplicationFormService';
+import type ApplicationType from 'lib/application-form/ApplicationType';
+import { useApplicationFormFields } from 'lib/application-form/useApplicationFormFields';
 
 interface Props {
-    currentType: ApplicationType;
+    currentApplicationType: ApplicationType;
 }
 
-const ApplicationFormFields = ({ currentType }: Props): ReactElement => {
+const ApplicationFormFields = ({ currentApplicationType }: Props): ReactElement => {
 
-    const applicationFields = useApplicationFields(currentType);
+    const applicationFields = useApplicationFormFields(currentApplicationType);
 
     return (
         <div className="space-y-5">

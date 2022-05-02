@@ -1,17 +1,17 @@
 import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 import ApplicationForm from 'components/application-form/ApplicationForm';
-import { getApplicationTypeByPathPart } from 'lib/ApplicationFormService';
+import useIsValidApplicationType from 'lib/application-form/useIsValidApplicationType';
 
 export default (): ReactElement => {
 
     const router = useRouter();
 
-    const { pathPart } = router.query as {pathPart: string};
+    const { applicationType } = router.query as {applicationType: string};
 
-    const applicationType = getApplicationTypeByPathPart(pathPart);
+    const isValidApplicationType = useIsValidApplicationType(applicationType);
 
-    if (applicationType === undefined) {
+    if (!isValidApplicationType) {
         return <div className="text-red-500">hm..</div>;
     }
 
