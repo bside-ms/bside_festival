@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import Header from 'components/Header';
@@ -6,16 +7,16 @@ export default (): ReactElement => {
 
     return (
         <div className="w-full md:w-2/3 mx-auto">
-            <div className="h-screen relative">
-                <div className="relative z-10">
+            <div className="h-screen">
+                <div className="z-10">
                     <Header />
                 </div>
 
-                <div className="absolute top-[100px] left-[50px] font-title1 text-6xl">
+                <div className="font-title1 text-6xl">
                     B-Side Festival
                 </div>
 
-                <div className="absolute w-[400px] left-7 font-title2 text-9xl">
+                <div className="font-title2 text-9xl">
                     Zurück für die Zukunft
                 </div>
             </div>
@@ -37,9 +38,9 @@ export default (): ReactElement => {
 
                 <div className="pt-3">
                     <Link href="/bewerbung" passHref={true}>
-                        <button className="bg-white hover:bg-gray-300 text-gray-800 rounded px-3 py-1">
+                        <Button variant="contained">
                             Jetzt bewerben
-                        </button>
+                        </Button>
                     </Link>
                 </div>
             </div>

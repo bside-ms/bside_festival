@@ -9,15 +9,16 @@
     "lint:fix": "next lint -- --fix"
   },
   "dependencies": {
-    "@emotion/react": "^11.9.0",
-    "@emotion/styled": "^11.8.1",
-    "@mui/material": "^5.6.2",
+    "@emotion/react": "11.9.x",
+    "@emotion/styled": "11.8.x",
+    "@mui/material": "5.6.x",
+    "mariadb": "3.0.x",
     "next": "12.1.x",
     "react": "18.0.x",
     "react-dom": "18.0.x"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^12.1.5",
+    "@next/eslint-plugin-next": "12.1.x",
     "@types/node": "17.0.x",
     "@types/react": "18.0.x",
     "@typescript-eslint/eslint-plugin": "5.14.x",
@@ -34,7 +35,7 @@
     "postcss": "8.4.x",
     "prettier": "2.6.x",
     "prettier-plugin-tailwindcss": "0.1.x",
-    "sass": "^1.50.0",
+    "sass": "1.50.x",
     "tailwindcss": "3.0.x",
     "typescript": "4.6.x"
   }

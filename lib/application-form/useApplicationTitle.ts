@@ -17,7 +17,7 @@ const useApplicationTitle = (applicationType: ApplicationType): string => {
             return 'Lesung, Vortrag & Poesie';
         case ApplicationType.essensstand:
             return 'Essensstand';
-        case ApplicationType.nachbarschaf:
+        case ApplicationType.nachbarschaft:
             return 'Nachbarschaft';
     }
 };

@@ -12,7 +12,7 @@ const useShowApplicationFormDisclaimer = (applicationType: ApplicationType): boo
             return true;
 
         case ApplicationType.essensstand:
-        case ApplicationType.nachbarschaf:
+        case ApplicationType.nachbarschaft:
             return false;
     }
 };

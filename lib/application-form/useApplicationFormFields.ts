@@ -9,7 +9,7 @@ const participantsField: ApplicationFormField = {
 };
 
 const photoField: ApplicationFormField = {
-    type: ApplicationFormFieldType.upload,
+    type: ApplicationFormFieldType.imageUpload,
     name: 'photo',
     label: 'Euer Foto',
 };
@@ -205,7 +205,7 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                 ...contactFields,
             ];
 
-        case ApplicationType.nachbarschaf:
+        case ApplicationType.nachbarschaft:
             return [
                 {
                     type: ApplicationFormFieldType.textArea,

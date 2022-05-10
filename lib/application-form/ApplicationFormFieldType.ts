@@ -1,7 +1,7 @@
 enum ApplicationFormFieldType {
     text = 'text',
     textArea = 'textArea',
-    upload = 'upload',
+    imageUpload = 'imageUpload',
 }
 
 export default ApplicationFormFieldType;

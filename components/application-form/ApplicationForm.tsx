@@ -1,9 +1,10 @@
 import { Button } from '@mui/material';
-import Link from 'next/link';
 import type { ReactElement } from 'react';
+import ApplicationFormContextProvider from 'components/application-form/ApplicationFormContextProvider';
 import ApplicationFormDisclaimer from 'components/application-form/ApplicationFormDisclaimer';
 import ApplicationFormFields from 'components/application-form/ApplicationFormFields';
 import ApplicationFormInformation from 'components/application-form/ApplicationFormInformation';
+import ApplicationFormWrapper from 'components/application-form/ApplicationFormWrapper';
 import type ApplicationType from 'lib/application-form/ApplicationType';
 import useApplicationTitle from 'lib/application-form/useApplicationTitle';
 import useShowApplicationFormDisclaimer from 'lib/application-form/useShowApplicationFormDisclaimer';
@@ -18,13 +19,7 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement => {
     const title = useApplicationTitle(applicationType);
 
     return (
-        <div className="w-full p-2 mx-2 my-4">
-            <div className="text-gray-400">
-                <Link href="/bewerbung" passHref={true}>
-                    <a>« zurück zur Übersicht</a>
-                </Link>
-            </div>
-
+        <div>
             <div className="text-2xl">
                 Bewerbung für
             </div>
@@ -32,28 +27,30 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement => {
                 {title}
             </div>
 
-            <div className="my-4">
+            <div className="my-4 space-y-2">
                 <div className="font-bold">
                     Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!
                 </div>
                 <div>
                     Die Bewerbungsphase für das B-Side Festival 2022 ist eröffnet.
                 </div>
-            </div>
 
-            <div className="my-4 space-y-3">
                 <ApplicationFormInformation applicationType={applicationType} />
             </div>
 
-            <form action="/application-form/submit" method="post">
-                <ApplicationFormFields currentApplicationType={applicationType} />
+            <ApplicationFormContextProvider applicationType={applicationType}>
+                <ApplicationFormWrapper>
+                    <input type="hidden" name="applicationType" value={applicationType} />
 
-                <div className="mt-4">
-                    <Button type="submit" variant="contained">
-                        Bewerbung absenden
-                    </Button>
-                </div>
-            </form>
+                    <ApplicationFormFields currentApplicationType={applicationType} />
+
+                    <div className="mt-4">
+                        <Button type="submit" variant="contained">
+                            Bewerbung absenden
+                        </Button>
+                    </div>
+                </ApplicationFormWrapper>
+            </ApplicationFormContextProvider>
 
             {showDisclaimer && <ApplicationFormDisclaimer />}
         </div>

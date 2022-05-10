@@ -5,7 +5,7 @@ import type { ReactElement } from 'react';
 const Header = (): ReactElement => (
     <div className="flex w-full p-5">
         <Link href="https://b-side.ms" passHref={true}>
-            <div className="basis-2/12 cursor-pointer hover:sepia">
+            <div className="cursor-pointer bg-black p-2 basis-4/12">
                 <Image
                     src="/b_heart.png"
                     alt="B-Side Logo"
