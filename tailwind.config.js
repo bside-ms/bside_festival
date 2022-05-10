@@ -9,8 +9,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'title1': ['Londrina Outline', 'cursive'],
-        'title2': ['Londrina Solid', 'cursive'],
+        'display': ['Yatra One', 'cursive'],
       }
     }
   }

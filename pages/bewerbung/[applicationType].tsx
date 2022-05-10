@@ -10,14 +10,10 @@ export default (): ReactElement => {
 
     const { applicationType } = router.query as {applicationType?: string};
 
-    if (applicationType === undefined) {
-        return <div />;
-    }
-
     const isValidApplicationType = useIsValidApplicationType(applicationType);
 
     if (!isValidApplicationType) {
-        return <div className="text-red-500">hm..</div>;
+        return <div />;
     }
 
     return (
