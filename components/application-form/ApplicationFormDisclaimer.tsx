@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 
 const ApplicationFormDisclaimer = (): ReactElement => (
-    <div className="text-gray-400 text-sm space-y-3 mt-4">
+    <div className=" text-[#3a1a85] text-sm space-y-3 mt-4">
         <div>
             Das B-Side Festival ist auch 2022 ein Festival für alle mit vielfältigem und
             buntem Programm. Dabei wollen wir insbesondere Räume und Bühnen für FLINTA*

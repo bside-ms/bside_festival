@@ -15,12 +15,19 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 
     const { applicationType, ...applicationData } = submitRequest;
 
-    const successfullyCreated = await applicationFormDatabaseService.createNewApplication(
-        submitRequest.applicationType,
-        applicationData
-    );
+    try {
+        const successfullyCreated = await applicationFormDatabaseService.createNewApplication(
+            submitRequest.applicationType,
+            applicationData
+        );
 
-    response.status(200).json({ success: successfullyCreated });
+        response.status(200).json({ success: successfullyCreated });
+    } catch {
+        // TODO: Error handling
+
+        response.status(200).json({ success: false });
+    }
+
 };
 
 export default handler;

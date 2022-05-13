@@ -1,0 +1,38 @@
+.title {
+  background: linear-gradient(
+      180deg,
+      #00baee 0%,
+      #3fafe2 50%,
+      #9186af 100%
+  );
+
+  padding: 250px 0 30px;
+
+  color: #fff;
+  text-align: center;
+  font-size: 38px;
+}
+
+.cardsContainer {
+  padding: 20px;
+  background: #ffe698;
+  position: relative;
+}
+
+.cards {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media screen and (min-width: 400px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 950px) {
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 import ApplicationForm from 'components/application-form/ApplicationForm';
@@ -17,14 +16,6 @@ export default (): ReactElement => {
     }
 
     return (
-        <div className="min-h-full w-full md:w-2/3 mx-auto p-5">
-            <div className="text-gray-400">
-                <Link href="/bewerbung" passHref={true}>
-                    <a>« zurück zur Übersicht</a>
-                </Link>
-            </div>
-
-            <ApplicationForm applicationType={applicationType} />
-        </div>
+        <ApplicationForm applicationType={applicationType} />
     );
 };

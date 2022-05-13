@@ -2,6 +2,13 @@ import type ApplicationFormField from 'lib/application-form/ApplicationFormField
 import ApplicationFormFieldType from 'lib/application-form/ApplicationFormFieldType';
 import ApplicationType from 'lib/application-form/ApplicationType';
 
+const nameField: ApplicationFormField = {
+    type: ApplicationFormFieldType.text,
+    name: 'name',
+    label: 'Name',
+    mandatory: true,
+};
+
 const participantsField: ApplicationFormField = {
     type: ApplicationFormFieldType.text,
     name: 'participants',
@@ -61,20 +68,22 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
     switch (applicationType) {
         case ApplicationType.ausstellung:
             return [
+                nameField,
                 participantsField,
                 pressReleaseField,
                 {
                     type: ApplicationFormFieldType.text,
                     name: 'link',
-                    label: 'Euer Link mit Bildbeispielen (Website, Social Media, ...)',
-                    info: 'Bitte keine Downloads, WETransfer, etc.',
+                    label: 'Euer Link mit Bildbeispielen',
+                    info: 'Website, Social Media, etc. (Bitte keine Download-Links)',
                 },
                 photoField,
                 motivationField,
                 {
                     type: ApplicationFormFieldType.textArea,
-                    name: 'technicalRider',
-                    label: 'Technical Rider/Kunstform/Anzahl und Formate deiner Werke',
+                    name: 'additionalInfo',
+                    label: 'Informationen zur Ausstellung',
+                    info: 'Technical Rider/Kunstform/Anzahl und Formate deiner Werke',
                 },
                 residenceField,
                 ...contactFields,
@@ -82,13 +91,14 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
 
         case ApplicationType.performance:
             return [
+                nameField,
                 participantsField,
                 pressReleaseField,
                 {
                     type: ApplicationFormFieldType.text,
                     name: 'link',
-                    label: 'Euer Link mit Bild- und Tonbeispielen (Website, Social Media, Soundcloud, ...)',
-                    info: 'Bitte keine Downloads, WETransfer, etc.',
+                    label: 'Euer Link mit Bild- und Tonbeispielen',
+                    info: ' Website, Social Media, Soundcloud, etc. (Bitte keine Download-Links)',
                 },
                 photoField,
                 motivationField,
@@ -104,13 +114,14 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
 
         case ApplicationType.konzert:
             return [
+                nameField,
                 participantsField,
                 pressReleaseField,
                 {
                     type: ApplicationFormFieldType.text,
                     name: 'link',
-                    label: 'Euer Link mit Tonbeispielen (Website, Social Media, Soundcloud, ...)',
-                    info: 'Bitte keine Downloads, WETransfer, etc.',
+                    label: 'Euer Link mit Tonbeispielen',
+                    info: 'Website, Social Media, Soundcloud, etc. (Bitte keine Download-Links)',
                 },
                 photoField,
                 motivationField,
@@ -126,6 +137,7 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
 
         case ApplicationType.workshop:
             return [
+                nameField,
                 participantsField,
                 pressReleaseField,
                 {
@@ -138,7 +150,8 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                 {
                     type: ApplicationFormFieldType.textArea,
                     name: 'additionalInfo',
-                    label: 'Teilnehmendenanzahl/empfohlene Altersgruppe/Dauer des Programms/technische Voraussetzungen',
+                    label: 'Informationen zum Workshop',
+                    info: 'Teilnehmendenanzahl/empfohlene Altersgruppe/Dauer des Programms/technische Voraussetzungen',
                 },
                 residenceField,
                 ...contactFields,
@@ -146,6 +159,7 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
 
         case ApplicationType.familienprogramm:
             return [
+                nameField,
                 participantsField,
                 pressReleaseField,
                 {
@@ -158,7 +172,8 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                 {
                     type: ApplicationFormFieldType.textArea,
                     name: 'additionalInfo',
-                    label: 'Teilnehmendenanzahl/empfohlene Altersgruppe/Dauer des Programms/technische Voraussetzungen',
+                    label: 'Informationen zum Programm',
+                    info: 'Teilnehmendenanzahl/empfohlene Altersgruppe/Dauer des Programms/technische Voraussetzungen',
                 },
                 residenceField,
                 ...contactFields,
@@ -166,13 +181,14 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
 
         case ApplicationType.lesung:
             return [
+                nameField,
                 participantsField,
                 pressReleaseField,
                 {
                     type: ApplicationFormFieldType.text,
                     name: 'link',
-                    label: 'Euer Link mit Tonbeispielen (Website, Social Media, Soundcloud, ...)',
-                    info: 'Bitte keine Downloads, WETransfer, etc.',
+                    label: 'Euer Link mit Tonbeispielen',
+                    info: 'Website, Social Media, Soundcloud, etc. (Bitte keine Download-Links)',
                 },
                 photoField,
                 motivationField,
@@ -187,6 +203,7 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
 
         case ApplicationType.essensstand:
             return [
+                nameField,
                 participantsField,
                 pressReleaseField,
                 {
@@ -209,18 +226,25 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
             return [
                 {
                     type: ApplicationFormFieldType.textArea,
+                    name: 'name',
+                    label: 'Wer seid ihr?',
+                    mandatory: true,
+                },
+                {
+                    type: ApplicationFormFieldType.textArea,
                     name: 'info',
                     label: 'Wie möchtet ihr euch beim diesjährigen Festival einbringen?',
                 },
                 {
                     type: ApplicationFormFieldType.textArea,
-                    name: 'additionalInfo',
-                    label: 'Was möchtet ihr uns noch mitteilen?',
+                    name: 'usableArea',
+                    label: 'Nutzungsraum',
+                    info: 'Welchen Nutzungsraum könnt ihr für das diesjährige Festival zur Verfügung stellen?',
                 },
                 {
                     type: ApplicationFormFieldType.textArea,
-                    name: 'usableArea',
-                    label: 'Welchen Nutzungsraum könnt ihr für das diesjährige Festival zur Verfügung stellen?',
+                    name: 'additionalInfo',
+                    label: 'Was möchtet ihr uns noch mitteilen?',
                 },
                 {
                     type: ApplicationFormFieldType.text,

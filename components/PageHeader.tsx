@@ -1,15 +1,18 @@
-import styles from './PageHeader.module.scss';
+import styles from 'components/PageHeader.module.scss';
 
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 
+type HeaderThemes = 'blue' | 'yellow' | 'pink';
+
 interface Props {
-    theme: 'blue' | 'yellow';
+    theme: HeaderThemes;
 }
 
-const themeClasses: Record<'blue' | 'yellow', string> = {
+const themeClasses: Record<HeaderThemes, string> = {
     blue: styles.blueTheme,
     yellow: styles.yellowTheme,
+    pink: styles.pinkTheme,
 };
 
 const PageHeader = ({ theme = 'yellow' }: Props): ReactElement => {

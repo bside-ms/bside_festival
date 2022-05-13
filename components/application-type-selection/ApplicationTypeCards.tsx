@@ -7,17 +7,22 @@ import ApplicationType from 'lib/application-form/ApplicationType';
 const ApplicationTypeCards = (): ReactElement => {
 
     return (
-        <div className={styles.container}>
+        <>
+            <div className={`${styles.title} font-display`}>
+                BEWERBUNG
+            </div>
 
-            <div className={styles.title} />
-
-            {Object.values(ApplicationType).map(applicationType => (
-                <ApplicationTypeCard
-                    key={applicationType}
-                    applicationType={applicationType}
-                />
-            ))}
-        </div>
+            <div className={styles.cardsContainer}>
+                <div className={styles.cards}>
+                    {Object.values(ApplicationType).map(applicationType => (
+                        <ApplicationTypeCard
+                            key={applicationType}
+                            applicationType={applicationType}
+                        />
+                    ))}
+                </div>
+            </div>
+        </>
     );
 };
 

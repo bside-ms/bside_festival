@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import ApplicationTypeCards from 'components/application-type-selection/ApplicationTypeCards';
-import PageHeader from 'components/front-page/PageHeader';
+import PageHeader from 'components/PageHeader';
 
 export default (): ReactElement => {
 
