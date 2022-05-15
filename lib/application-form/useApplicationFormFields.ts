@@ -24,7 +24,8 @@ const photoField: ApplicationFormField = {
 const motivationField: ApplicationFormField = {
     type: ApplicationFormFieldType.textArea,
     name: 'motivation',
-    label: 'Warum möchtet ihr Teil des B-Side Festivals 2022 sein?',
+    label: 'Motivation',
+    info: 'Warum möchtet ihr Teil des B-Side Festivals 2022 sein?',
 };
 
 const residenceField: ApplicationFormField = {

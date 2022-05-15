@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { Button } from '@mui/material';
 import Image from 'next/image';
 import type { ChangeEvent, ReactElement } from 'react';
+import { PhotoCamera } from '@mui/icons-material';
 import type ApplicationFormField from 'lib/application-form/ApplicationFormField';
 import useApplicationFormContext from 'lib/application-form/useApplicationFormContext';
 
@@ -11,7 +12,7 @@ interface Props {
 
 const ApplicationFormImageUploadField = ({ formField }: Props): ReactElement => {
 
-    const { setFormValue } = useApplicationFormContext();
+    const { setFormValue, isSubmitting } = useApplicationFormContext();
 
     const [imageUploadPreview, setImageUploadPreview] = useState<string>('');
 
@@ -52,7 +53,12 @@ const ApplicationFormImageUploadField = ({ formField }: Props): ReactElement => 
             />
 
             <label htmlFor={formField.name}>
-                <Button variant="contained" component="span">
+                <Button
+                    variant="contained"
+                    component="span"
+                    disabled={isSubmitting}
+                    startIcon={<PhotoCamera />}
+                >
                     {formField.label}
                 </Button>
             </label>
@@ -68,7 +74,11 @@ const ApplicationFormImageUploadField = ({ formField }: Props): ReactElement => 
                         />
                     </div>
 
-                    <Button onClick={handleRemoveUpload} variant="text">
+                    <Button
+                        onClick={handleRemoveUpload}
+                        variant="text"
+                        disabled={isSubmitting}
+                    >
                         Bild entfernen
                     </Button>
                 </>

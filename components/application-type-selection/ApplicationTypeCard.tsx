@@ -22,9 +22,7 @@ const ApplicationTypeCard = ({ applicationType }: Props): ReactElement => {
                 <a>
                     <div className={styles.card} style={{ backgroundImage: `url(${imageUrl})` }}>
                         <div className={styles.contents}>
-                            {/* Necessary for shy hyphens */}
-                            {/* eslint-disable-next-line react/no-danger */}
-                            <div dangerouslySetInnerHTML={{ __html: title }} />
+                            {title}
                         </div>
                     </div>
                 </a>

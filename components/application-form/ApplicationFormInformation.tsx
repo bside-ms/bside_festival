@@ -1,3 +1,5 @@
+
+import Link from 'next/link';
 import type { ReactElement } from 'react';
 import ApplicationType from 'lib/application-form/ApplicationType';
 
@@ -106,8 +108,8 @@ const ApplicationFormInformation = ({ applicationType }: Props): ReactElement =>
                         Wir bitten um vollständige & aussagekräftige Bewerbungen.
                     </div>
                     <div>
-                        WICHTIG: Für Essensstände ist für alle Mitarbeitenden ein Gesundheitszeugnis notwendig
-                        (<a href={link}>für 25 € bei der Stadt Münster zu erhalten</a>).
+                        Wichtig: Für Essensstände ist für alle Mitarbeitenden ein Gesundheitszeugnis notwendig
+                        (für 25 € bei der Stadt Münster <Link href={link}><a className="underline">hier</a></Link> zu erhalten).
                     </div>
                 </>
             );

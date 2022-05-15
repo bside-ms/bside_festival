@@ -1,11 +1,15 @@
 import styles from './ApplicationForm.module.scss';
 
-import { Button } from '@mui/material';
+import Link from 'next/link';
 import type { ReactElement } from 'react';
+import { ArrowBackIosNew } from '@mui/icons-material';
+import ApplicationFormConfirmationOverlay from 'components/application-form/ApplicationFormConfirmationOverlay';
 import ApplicationFormContextProvider from 'components/application-form/ApplicationFormContextProvider';
 import ApplicationFormDisclaimer from 'components/application-form/ApplicationFormDisclaimer';
+import ApplicationFormError from 'components/application-form/ApplicationFormError';
 import ApplicationFormFields from 'components/application-form/ApplicationFormFields';
 import ApplicationFormInformation from 'components/application-form/ApplicationFormInformation';
+import ApplicationFormSubmitButton from 'components/application-form/ApplicationFormSubmitButton';
 import ApplicationFormWrapper from 'components/application-form/ApplicationFormWrapper';
 import PageHeader from 'components/PageHeader';
 import type ApplicationType from 'lib/application-form/ApplicationType';
@@ -35,6 +39,14 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement => {
             </div>
 
             <div className={styles.form}>
+                <div className={styles.backArrow}>
+                    <Link href="/bewerbung">
+                        <a>
+                            <ArrowBackIosNew sx={{ fontSize: 14 }} /> zurück zur Übersicht
+                        </a>
+                    </Link>
+                </div>
+
                 <div className="mb-4 space-y-2 text-[#3a1a85]">
                     <div className="font-bold">
                         Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!
@@ -52,11 +64,13 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement => {
 
                         <ApplicationFormFields currentApplicationType={applicationType} />
 
+                        <ApplicationFormError />
+
                         <div className="mt-4">
-                            <Button type="submit" variant="contained">
-                                Bewerbung absenden
-                            </Button>
+                            <ApplicationFormSubmitButton />
                         </div>
+
+                        <ApplicationFormConfirmationOverlay />
                     </ApplicationFormWrapper>
                 </ApplicationFormContextProvider>
 

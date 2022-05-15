@@ -27,7 +27,6 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 
         response.status(200).json({ success: false });
     }
-
 };
 
 export default handler;

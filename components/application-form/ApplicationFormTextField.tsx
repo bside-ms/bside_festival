@@ -10,7 +10,7 @@ interface Props {
 
 const ApplicationFormTextField = ({ formField }: Props): ReactElement => {
 
-    const { setFormValue } = useApplicationFormContext();
+    const { setFormValue, isSubmitting } = useApplicationFormContext();
 
     const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>): void => {
         setFormValue(event.target.name, event.target.value);
@@ -24,6 +24,7 @@ const ApplicationFormTextField = ({ formField }: Props): ReactElement => {
             onChange={handleChange}
             required={formField.mandatory}
             helperText={formField.info}
+            disabled={isSubmitting}
         />
     );
 };

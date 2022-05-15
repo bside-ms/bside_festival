@@ -10,7 +10,7 @@ interface Props {
 
 const ApplicationFormTextAreaField = ({ formField }: Props): ReactElement => {
 
-    const { setFormValue } = useApplicationFormContext();
+    const { setFormValue, isSubmitting } = useApplicationFormContext();
 
     const handleChange = useCallback((event: ChangeEvent<HTMLTextAreaElement>): void => {
         setFormValue(event.target.name, event.target.value);
@@ -25,6 +25,8 @@ const ApplicationFormTextAreaField = ({ formField }: Props): ReactElement => {
             required={formField.mandatory}
             multiline={true}
             minRows={4}
+            disabled={isSubmitting}
+            helperText={formField.info}
         />
     );
 };
