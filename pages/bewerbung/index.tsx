@@ -5,10 +5,10 @@ import PageHeader from 'components/PageHeader';
 export default (): ReactElement => {
 
     return (
-        <div className="w-full md:w-2/3 mx-auto">
+        <>
             <PageHeader theme="blue" />
 
             <ApplicationTypeCards />
-        </div>
+        </>
     );
 };

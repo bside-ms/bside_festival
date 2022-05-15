@@ -5,7 +5,8 @@
 
 .box {
   position: relative;
-  width: 300px;
+  min-width: 300px;
+  width: 50%;
   height: 500px;
   display: flex;
   flex-direction: column;

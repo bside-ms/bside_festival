@@ -6,8 +6,7 @@
 .blueTheme {
   .header {
     background: #33bbe9;
-    border-left-color: #ffe698;
-    border-bottom-color: #ffe698;
+    border-color: #ffe698;
   }
 
   .content {
@@ -28,8 +27,7 @@
 .pinkTheme {
   .header {
     background: #e1017e;
-    border-left-color: #ffe698;
-    border-bottom-color: #ffe698;
+    border-color: #ffe698;
 
     box-shadow: 2px -4px 26px 0px rgb(68, 13, 45);
   }
@@ -69,11 +67,11 @@
   position: absolute;
   background: #ffe698;
   top: 0;
-  right: 0;
+  right: -2px;
   padding: 10px 50px 30px 30px;
 
-  border-left: 2px dashed #e1017e;
-  border-bottom: 2px dashed #e1017e;
+  border: 2px dashed #e1017e;
+  border-top: none;
   box-shadow: 2px -4px 26px 0px rgb(225 1 126);
 }
 

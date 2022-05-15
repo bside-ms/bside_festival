@@ -2,6 +2,7 @@ import styles from 'components/PageHeader.module.scss';
 
 import Link from 'next/link';
 import type { ReactElement } from 'react';
+import ContentWrapper from 'components/ContentWrapper';
 
 type HeaderThemes = 'blue' | 'yellow' | 'pink';
 
@@ -19,20 +20,22 @@ const PageHeader = ({ theme = 'yellow' }: Props): ReactElement => {
 
     return (
         <div className={`${styles.headerContainer} ${themeClasses[theme]}`}>
-            <div className={styles.plusSigns}>
-                ++++ ++++ ++++ ++++
-            </div>
-            <div className={styles.header}>
-                <Link href="/" passHref={true}>
-                    <a className={styles.headerLink}>
-                        <div className={`${styles.content} font-display`}>
-                            <div>B-SIDE</div>
-                            <div>FESTIVAL</div>
-                            <div>16. - 18. SEP</div>
-                        </div>
-                    </a>
-                </Link>
-            </div>
+            <ContentWrapper>
+                <div className={styles.plusSigns}>
+                    ++++ ++++ ++++ ++++
+                </div>
+                <div className={styles.header}>
+                    <Link href="/" passHref={true}>
+                        <a className={styles.headerLink}>
+                            <div className={`${styles.content} font-display`}>
+                                <div>B-SIDE</div>
+                                <div>FESTIVAL</div>
+                                <div>16. - 18. SEP</div>
+                            </div>
+                        </a>
+                    </Link>
+                </div>
+            </ContentWrapper>
         </div>
     );
 };

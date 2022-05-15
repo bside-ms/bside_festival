@@ -12,7 +12,7 @@ const ApplicationFormFields = ({ currentApplicationType }: Props): ReactElement 
     const applicationFields = useApplicationFormFields(currentApplicationType);
 
     return (
-        <div className="space-y-5">
+        <div className="space-y-5 md:max-w-[550px]">
             {applicationFields.map(field => (
                 <ApplicationFormField
                     key={field.name}

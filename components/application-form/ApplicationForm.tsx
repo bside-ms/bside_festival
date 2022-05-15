@@ -11,6 +11,7 @@ import ApplicationFormFields from 'components/application-form/ApplicationFormFi
 import ApplicationFormInformation from 'components/application-form/ApplicationFormInformation';
 import ApplicationFormSubmitButton from 'components/application-form/ApplicationFormSubmitButton';
 import ApplicationFormWrapper from 'components/application-form/ApplicationFormWrapper';
+import ContentWrapper from 'components/ContentWrapper';
 import PageHeader from 'components/PageHeader';
 import type ApplicationType from 'lib/application-form/ApplicationType';
 import useApplicationTitle from 'lib/application-form/useApplicationTitle';
@@ -30,51 +31,55 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement => {
             <PageHeader theme="pink" />
 
             <div className={styles.header}>
-                <div className="text-2xl font-display">
-                    Bewerbung für
-                </div>
-                <div className="text-4xl font-display">
-                    {title}
-                </div>
+                <ContentWrapper>
+                    <div className="text-2xl font-display">
+                        Bewerbung für
+                    </div>
+                    <div className="text-4xl font-display">
+                        {title}
+                    </div>
+                </ContentWrapper>
             </div>
 
             <div className={styles.form}>
-                <div className={styles.backArrow}>
-                    <Link href="/bewerbung">
-                        <a>
-                            <ArrowBackIosNew sx={{ fontSize: 14 }} /> zurück zur Übersicht
-                        </a>
-                    </Link>
-                </div>
-
-                <div className="mb-4 space-y-2 text-[#3a1a85]">
-                    <div className="font-bold">
-                        Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!
-                    </div>
-                    <div>
-                        Die Bewerbungsphase für das B-Side Festival 2022 ist eröffnet.
+                <ContentWrapper>
+                    <div className={styles.backArrow}>
+                        <Link href="/bewerbung">
+                            <a>
+                                <ArrowBackIosNew sx={{ fontSize: 14 }} /> zurück zur Übersicht
+                            </a>
+                        </Link>
                     </div>
 
-                    <ApplicationFormInformation applicationType={applicationType} />
-                </div>
-
-                <ApplicationFormContextProvider applicationType={applicationType}>
-                    <ApplicationFormWrapper>
-                        <input type="hidden" name="applicationType" value={applicationType} />
-
-                        <ApplicationFormFields currentApplicationType={applicationType} />
-
-                        <ApplicationFormError />
-
-                        <div className="mt-4">
-                            <ApplicationFormSubmitButton />
+                    <div className="mb-4 space-y-2 text-[#3a1a85]">
+                        <div className="font-bold">
+                            Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!
+                        </div>
+                        <div>
+                            Die Bewerbungsphase für das B-Side Festival 2022 ist eröffnet.
                         </div>
 
-                        <ApplicationFormConfirmationOverlay />
-                    </ApplicationFormWrapper>
-                </ApplicationFormContextProvider>
+                        <ApplicationFormInformation applicationType={applicationType} />
+                    </div>
 
-                {showDisclaimer && <ApplicationFormDisclaimer />}
+                    <ApplicationFormContextProvider applicationType={applicationType}>
+                        <ApplicationFormWrapper>
+                            <input type="hidden" name="applicationType" value={applicationType} />
+
+                            <ApplicationFormFields currentApplicationType={applicationType} />
+
+                            <ApplicationFormError />
+
+                            <div className="mt-4 mb-8">
+                                <ApplicationFormSubmitButton />
+                            </div>
+
+                            <ApplicationFormConfirmationOverlay />
+                        </ApplicationFormWrapper>
+                    </ApplicationFormContextProvider>
+
+                    {showDisclaimer && <ApplicationFormDisclaimer />}
+                </ContentWrapper>
             </div>
         </>
     );

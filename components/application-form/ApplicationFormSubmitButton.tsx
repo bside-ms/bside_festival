@@ -1,5 +1,5 @@
-import { Button } from '@mui/material';
 import type { ReactElement } from 'react';
+import Button from 'components/Button';
 import useApplicationFormContext from 'lib/application-form/useApplicationFormContext';
 
 const ApplicationFormSubmitButton = (): ReactElement => {
@@ -9,8 +9,7 @@ const ApplicationFormSubmitButton = (): ReactElement => {
     return (
         <Button
             type="submit"
-            variant="contained"
-            disabled={isSubmitting}
+            isDisabled={isSubmitting}
         >
             Bewerbung absenden
         </Button>
