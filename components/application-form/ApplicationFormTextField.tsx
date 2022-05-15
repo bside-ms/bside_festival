@@ -23,6 +23,7 @@ const ApplicationFormTextField = ({ formField }: Props): ReactElement => {
             name={formField.name}
             onChange={handleChange}
             required={formField.mandatory}
+            helperText={formField.info}
         />
     );
 };
