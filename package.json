@@ -5,8 +5,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint -- --fix"
+    "lint": "next lint -c .eslintrc.js",
+    "lint:fix": "next lint -c .eslintrc.js -- --fix"
   },
   "dependencies": {
     "@emotion/react": "11.9.x",
