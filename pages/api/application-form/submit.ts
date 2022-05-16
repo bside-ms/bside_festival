@@ -22,8 +22,11 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
         );
 
         response.status(200).json({ success: successfullyCreated });
-    } catch {
+    } catch (error) {
         // TODO: Error handling
+
+        // eslint-disable-next-line no-console
+        console.error(error);
 
         response.status(200).json({ success: false });
     }

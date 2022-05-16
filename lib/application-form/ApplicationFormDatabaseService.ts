@@ -15,6 +15,10 @@ export default class ApplicationFormDatabaseService {
 
         if (applicationInsertResult.warningStatus !== 0) {
             // TODO: Error handling
+
+            // eslint-disable-next-line no-console
+            console.error(`Unable to insert into applications: ${applicationInsertResult.warningStatus}`);
+
             return false;
         }
 
@@ -32,6 +36,10 @@ export default class ApplicationFormDatabaseService {
 
         if (applicationsDataInsertResults.some(insertResult => insertResult.warningStatus !== 0)) {
             // TODO: Error handling
+
+            // eslint-disable-next-line no-console
+            console.error(`Unable to insert into applicationsData: ${applicationInsertResult.warningStatus}`);
+
             return false;
         }
 

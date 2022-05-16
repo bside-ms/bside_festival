@@ -25,8 +25,6 @@ const ApplicationFormWrapper = ({ children }: Props): ReactElement => {
 
         event.preventDefault();
 
-        formValues.delete('photo');
-
         try {
 
             const response = await fetch(
