@@ -1,8 +1,6 @@
 name: Docker Image CI
 on:
   push:
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 
@@ -10,13 +8,13 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-     - 
+     -
        name: Checkout
        uses: actions/checkout@v2
      -
        name: Install dependencies
        run: npm ci
-     - 
+     -
        name: Lint
        run: npm run lint
 
