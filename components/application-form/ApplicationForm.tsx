@@ -1,8 +1,8 @@
 import styles from './ApplicationForm.module.scss';
 
+import { ArrowBackIosNew } from '@mui/icons-material';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
-import { ArrowBackIosNew } from '@mui/icons-material';
 import ApplicationFormConfirmationOverlay from 'components/application-form/ApplicationFormConfirmationOverlay';
 import ApplicationFormContextProvider from 'components/application-form/ApplicationFormContextProvider';
 import ApplicationFormDisclaimer from 'components/application-form/ApplicationFormDisclaimer';

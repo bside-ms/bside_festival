@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
+import { PhotoCamera } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import Image from 'next/image';
 import type { ChangeEvent, ReactElement } from 'react';
-import { PhotoCamera } from '@mui/icons-material';
 import type ApplicationFormField from 'lib/application-form/ApplicationFormField';
 import useApplicationFormContext from 'lib/application-form/useApplicationFormContext';
 
