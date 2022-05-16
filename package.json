@@ -6,7 +6,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint -c .eslintrc.js",
-    "lint:fix": "next lint -c .eslintrc.js -- --fix"
+    "lint:fix": "next lint -c .eslintrc.js -- --fix",
+    "tsc": "tsc --noEmit",
+    "tsc:watch": "tsc --noEmit --watch"
   },
   "dependencies": {
     "@emotion/react": "11.9.x",
