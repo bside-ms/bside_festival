@@ -1,7 +1,7 @@
+import { Check } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
-import { Check } from '@mui/icons-material';
 import useApplicationFormContext from 'lib/application-form/useApplicationFormContext';
 
 const ApplicationFormConfirmationOverlay = (): ReactElement => {
