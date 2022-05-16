@@ -1,8 +1,9 @@
 import styles from './ApplicationForm.module.scss';
 
-import { ArrowBackIosNew } from '@mui/icons-material';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ApplicationFormConfirmationOverlay from 'components/application-form/ApplicationFormConfirmationOverlay';
 import ApplicationFormContextProvider from 'components/application-form/ApplicationFormContextProvider';
 import ApplicationFormDisclaimer from 'components/application-form/ApplicationFormDisclaimer';
@@ -46,7 +47,7 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement => {
                     <div className={styles.backArrow}>
                         <Link href="/bewerbung">
                             <a>
-                                <ArrowBackIosNew sx={{ fontSize: 14 }} /> zurück zur Übersicht
+                                <FontAwesomeIcon icon={faChevronLeft} /> zurück zur Übersicht
                             </a>
                         </Link>
                     </div>

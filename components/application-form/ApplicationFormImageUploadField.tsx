@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
-import { PhotoCamera } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import Image from 'next/image';
 import type { ChangeEvent, ReactElement } from 'react';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type ApplicationFormField from 'lib/application-form/ApplicationFormField';
 import useApplicationFormContext from 'lib/application-form/useApplicationFormContext';
 
@@ -57,7 +58,7 @@ const ApplicationFormImageUploadField = ({ formField }: Props): ReactElement => 
                     variant="contained"
                     component="span"
                     disabled={isSubmitting}
-                    startIcon={<PhotoCamera />}
+                    startIcon={<FontAwesomeIcon icon={faCamera} />}
                 >
                     {formField.label}
                 </Button>

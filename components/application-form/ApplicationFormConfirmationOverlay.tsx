@@ -1,7 +1,8 @@
-import { Check } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useApplicationFormContext from 'lib/application-form/useApplicationFormContext';
 
 const ApplicationFormConfirmationOverlay = (): ReactElement => {
@@ -11,7 +12,7 @@ const ApplicationFormConfirmationOverlay = (): ReactElement => {
     return (
         <Dialog open={wasSuccessfullySubmitted}>
             <DialogTitle>
-                <Check className="text-green-600 mr-1" fontSize="large" />
+                <FontAwesomeIcon icon={faCheck} className="text-green-600 mr-2 text-3xl align-text-bottom" />
                 Das hat geklappt!
             </DialogTitle>
 
