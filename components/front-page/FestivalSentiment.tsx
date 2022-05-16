@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import FestivalImageGrid from 'components/front-page/FestivalImageGrid';
 
 const FestivalSentiment = (): ReactElement => {
 
@@ -8,6 +9,8 @@ const FestivalSentiment = (): ReactElement => {
                 Ein Festival<br />
                 für Alle
             </div>
+
+            <FestivalImageGrid />
         </div>
     );
 };
