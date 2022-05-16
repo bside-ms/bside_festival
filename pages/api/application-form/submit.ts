@@ -32,4 +32,12 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
     }
 };
 
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: '10mb',
+        },
+    },
+};
+
 export default handler;
