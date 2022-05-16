@@ -12,7 +12,7 @@ const ApplicationEyecatcher = (): ReactElement => {
                 <div className={styles.box}>
                     <div className={`${styles.boxContent} space-y-5`}>
                         <div className={`${styles.title} font-display`}>
-                            ZURÜCK FÜR DIE ZUKUNFT!
+                            Zurück für die Zukunft!
                         </div>
 
                         <div className={`${styles.info} font-bold`}>

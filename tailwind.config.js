@@ -9,7 +9,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'display': ['Yatra One', 'cursive'],
+        'display': ['bdr-mono', 'sans-serif'],
       }
     }
   }

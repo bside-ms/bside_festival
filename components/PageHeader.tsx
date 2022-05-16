@@ -28,9 +28,9 @@ const PageHeader = ({ theme = 'yellow' }: Props): ReactElement => {
                     <Link href="/" passHref={true}>
                         <a className={styles.headerLink}>
                             <div className={`${styles.content} font-display`}>
-                                <div>B-SIDE</div>
-                                <div>FESTIVAL</div>
-                                <div>16. - 18. SEP</div>
+                                <div>B-Side</div>
+                                <div>Festival</div>
+                                <div>16. - 18. Sep</div>
                             </div>
                         </a>
                     </Link>
