@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@mui/material';
 import Image from 'next/image';
 import type { ChangeEvent, ReactElement } from 'react';
-import { faCamera } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type ApplicationFormField from 'lib/application-form/ApplicationFormField';
 import useApplicationFormContext from 'lib/application-form/useApplicationFormContext';
 

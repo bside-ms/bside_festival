@@ -1,8 +1,8 @@
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useApplicationFormContext from 'lib/application-form/useApplicationFormContext';
 
 const ApplicationFormConfirmationOverlay = (): ReactElement => {

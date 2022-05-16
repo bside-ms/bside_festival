@@ -1,9 +1,9 @@
 import styles from './ApplicationForm.module.scss';
 
-import Link from 'next/link';
-import type { ReactElement } from 'react';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Link from 'next/link';
+import type { ReactElement } from 'react';
 import ApplicationFormConfirmationOverlay from 'components/application-form/ApplicationFormConfirmationOverlay';
 import ApplicationFormContextProvider from 'components/application-form/ApplicationFormContextProvider';
 import ApplicationFormDisclaimer from 'components/application-form/ApplicationFormDisclaimer';
