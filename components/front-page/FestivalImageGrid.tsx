@@ -27,7 +27,7 @@ const FestivalImageGrid = (): ReactElement => {
                     return (
                         <div
                             key={imageRow[0]}
-                            className="col-span-2 bg-[#234324] h-48 bg-center bg-cover"
+                            className="col-span-2 bg-[#234324] h-48 md:h-80 bg-center bg-cover"
                             style={{ backgroundImage: `url(${imageRow[0]})` }}
                         />
                     );
@@ -36,11 +36,11 @@ const FestivalImageGrid = (): ReactElement => {
                 return (
                     <Fragment key={imageRow[0]}>
                         <div
-                            className="bg-[#234324] h-48 bg-center bg-cover"
+                            className="bg-[#234324] h-48 md:h-80 bg-center bg-cover"
                             style={{ backgroundImage: `url(${imageRow[0]})` }}
                         />
                         <div
-                            className="bg-[#234324] h-48 bg-center bg-cover"
+                            className="bg-[#234324] h-48 md:h-80 bg-center bg-cover"
                             style={{ backgroundImage: `url(${imageRow[1]})` }}
                         />
                     </Fragment>
