@@ -58,7 +58,7 @@ const ApplicationFormImageUploadField = ({ formField }: Props): ReactElement => 
 
             fileReader.readAsDataURL(imageFile);
         }
-    }, [onFileRead, formField.name, setFieldError]);
+    }, [onFileRead, setFieldError]);
 
     const handleRemoveUpload = useCallback(() => {
         setFormValue(formField.name, '');
