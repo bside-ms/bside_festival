@@ -1,8 +1,8 @@
 import styles from './ApplicationEyecatcher.module.scss';
 
 import type { ReactElement } from 'react';
-import Button from 'components/Button';
-import ContentWrapper from 'components/ContentWrapper';
+import Button from 'components/common/Button';
+import ContentWrapper from 'components/common/ContentWrapper';
 
 const ApplicationEyecatcher = (): ReactElement => {
 

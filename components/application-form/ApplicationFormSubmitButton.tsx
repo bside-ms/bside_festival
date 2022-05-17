@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import Button from 'components/Button';
+import Button from 'components/common/Button';
 import useApplicationFormContext from 'lib/application-form/useApplicationFormContext';
 
 const ApplicationFormSubmitButton = (): ReactElement => {

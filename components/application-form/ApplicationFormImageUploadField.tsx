@@ -18,6 +18,8 @@ const ApplicationFormImageUploadField = ({ formField }: Props): ReactElement => 
     const [imageUploadPreview, setImageUploadPreview] = useState('');
     const [fieldError, setFieldError] = useState<string>();
 
+    const isMandatory = formField.optional !== true;
+
     const onFileRead = useCallback((event: ProgressEvent<FileReader>): void => {
 
         const imageDataUrl = event.target?.result ?? null;
@@ -67,13 +69,15 @@ const ApplicationFormImageUploadField = ({ formField }: Props): ReactElement => 
     }, [formField, setFormValue]);
 
     return (
-        <div>
+        <div className="relative">
             <input
                 id={formField.name}
+                name={formField.name}
                 type="file"
                 onChange={handleChange}
-                hidden={true}
                 accept="image/*"
+                required={isMandatory}
+                className="opacity-0 absolute"
             />
 
             <label htmlFor={formField.name}>
@@ -83,7 +87,7 @@ const ApplicationFormImageUploadField = ({ formField }: Props): ReactElement => 
                     disabled={isSubmitting}
                     startIcon={<FontAwesomeIcon icon={faCamera} />}
                 >
-                    {formField.label}
+                    {formField.label} {isMandatory && '*'}
                 </Button>
             </label>
 

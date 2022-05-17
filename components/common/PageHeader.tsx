@@ -1,8 +1,8 @@
-import styles from 'components/PageHeader.module.scss';
+import styles from 'components/common/PageHeader.module.scss';
 
 import Link from 'next/link';
 import type { ReactElement } from 'react';
-import ContentWrapper from 'components/ContentWrapper';
+import ContentWrapper from 'components/common/ContentWrapper';
 
 type HeaderThemes = 'blue' | 'yellow' | 'pink';
 

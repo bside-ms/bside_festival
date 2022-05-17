@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 import ApplicationForm from 'components/application-form/ApplicationForm';
+import Footer from 'components/common/Footer';
 import useIsValidApplicationType from 'lib/application-form/useIsValidApplicationType';
 
 export default (): ReactElement => {
@@ -16,6 +17,10 @@ export default (): ReactElement => {
     }
 
     return (
-        <ApplicationForm applicationType={applicationType} />
+        <>
+            <ApplicationForm applicationType={applicationType} />
+
+            <Footer />
+        </>
     );
 };

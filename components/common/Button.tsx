@@ -1,4 +1,4 @@
-import styles from './Button.module.scss';
+import styles from 'components/common/Button.module.scss';
 
 import Link from 'next/link';
 import type { ButtonHTMLAttributes, ReactElement, ReactNode } from 'react';

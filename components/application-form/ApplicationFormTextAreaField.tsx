@@ -22,7 +22,7 @@ const ApplicationFormTextAreaField = ({ formField }: Props): ReactElement => {
             label={formField.label}
             name={formField.name}
             onChange={handleChange}
-            required={formField.mandatory}
+            required={formField.optional !== true}
             multiline={true}
             minRows={4}
             disabled={isSubmitting}

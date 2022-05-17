@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import ApplicationTypeCards from 'components/application-type-selection/ApplicationTypeCards';
-import PageHeader from 'components/PageHeader';
+import Footer from 'components/common/Footer';
+import PageHeader from 'components/common/PageHeader';
 
 export default (): ReactElement => {
 
@@ -9,6 +10,8 @@ export default (): ReactElement => {
             <PageHeader theme="blue" />
 
             <ApplicationTypeCards />
+
+            <Footer />
         </>
     );
 };

@@ -1,7 +1,8 @@
 import type { ReactElement } from 'react';
+import Footer from 'components/common/Footer';
+import PageHeader from 'components/common/PageHeader';
 import ApplicationEyecatcher from 'components/front-page/ApplicationEyecatcher';
 import FestivalSentiment from 'components/front-page/FestivalSentiment';
-import PageHeader from 'components/PageHeader';
 
 export default (): ReactElement => {
 
@@ -12,6 +13,8 @@ export default (): ReactElement => {
             <ApplicationEyecatcher />
 
             <FestivalSentiment />
+
+            <Footer />
         </>
     );
 };

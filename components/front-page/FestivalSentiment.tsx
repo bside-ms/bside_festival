@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import ContentWrapper from 'components/ContentWrapper';
+import ContentWrapper from 'components/common/ContentWrapper';
 import FestivalImageGrid from 'components/front-page/FestivalImageGrid';
 
 const FestivalSentiment = (): ReactElement => {

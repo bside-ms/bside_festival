@@ -12,8 +12,8 @@ import ApplicationFormFields from 'components/application-form/ApplicationFormFi
 import ApplicationFormInformation from 'components/application-form/ApplicationFormInformation';
 import ApplicationFormSubmitButton from 'components/application-form/ApplicationFormSubmitButton';
 import ApplicationFormWrapper from 'components/application-form/ApplicationFormWrapper';
-import ContentWrapper from 'components/ContentWrapper';
-import PageHeader from 'components/PageHeader';
+import ContentWrapper from 'components/common/ContentWrapper';
+import PageHeader from 'components/common/PageHeader';
 import type ApplicationType from 'lib/application-form/ApplicationType';
 import useApplicationTitle from 'lib/application-form/useApplicationTitle';
 import useShowApplicationFormDisclaimer from 'lib/application-form/useShowApplicationFormDisclaimer';

@@ -2,7 +2,7 @@ import styles from './ApplicationTypeCards.module.scss';
 
 import type { ReactElement } from 'react';
 import ApplicationTypeCard from 'components/application-type-selection/ApplicationTypeCard';
-import ContentWrapper from 'components/ContentWrapper';
+import ContentWrapper from 'components/common/ContentWrapper';
 import ApplicationType from 'lib/application-form/ApplicationType';
 
 const ApplicationTypeCards = (): ReactElement => {

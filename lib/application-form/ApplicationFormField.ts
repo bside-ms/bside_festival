@@ -4,7 +4,7 @@ interface ApplicationFormField {
     name: string;
     type: ApplicationFormFieldType;
     label: string;
-    mandatory?: boolean;
+    optional?: boolean;
     info?: string;
 }
 

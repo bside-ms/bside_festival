@@ -22,7 +22,7 @@ const ApplicationFormTextField = ({ formField }: Props): ReactElement => {
             label={formField.label}
             name={formField.name}
             onChange={handleChange}
-            required={formField.mandatory}
+            required={formField.optional !== true}
             helperText={formField.info}
             disabled={isSubmitting}
         />

@@ -6,7 +6,6 @@ const nameField: ApplicationFormField = {
     type: ApplicationFormFieldType.text,
     name: 'name',
     label: 'Name',
-    mandatory: true,
 };
 
 const participantsField: ApplicationFormField = {
@@ -38,28 +37,24 @@ const pressReleaseField: ApplicationFormField = {
     type: ApplicationFormFieldType.textArea,
     name: 'pressRelease',
     label: 'Erzählt uns was von euch (Pressetext)',
-    mandatory: true,
 };
 
 const contactPersonField: ApplicationFormField = {
     type: ApplicationFormFieldType.text,
     name: 'contactPerson',
     label: 'Ansprechperson',
-    mandatory: true,
 };
 
 const mailAddressField: ApplicationFormField = {
     type: ApplicationFormFieldType.text,
     name: 'mailAddress',
     label: 'E-Mail-Adresse',
-    mandatory: true,
 };
 
 const phoneNumberField: ApplicationFormField = {
     type: ApplicationFormFieldType.text,
     name: 'phoneNumber',
     label: 'Telefonnummer',
-    mandatory: true,
 };
 
 const contactFields = [contactPersonField, mailAddressField, phoneNumberField];
@@ -75,7 +70,7 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                 {
                     type: ApplicationFormFieldType.text,
                     name: 'link',
-                    label: 'Euer Link mit Bildbeispielen',
+                    label: 'Eure Links mit Bildbeispielen',
                     info: 'Website, Social Media, etc. (Bitte keine Download-Links)',
                 },
                 photoField,
@@ -98,7 +93,7 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                 {
                     type: ApplicationFormFieldType.text,
                     name: 'link',
-                    label: 'Euer Link mit Bild- und Tonbeispielen',
+                    label: 'Eure Links mit Bild- und Tonbeispielen',
                     info: ' Website, Social Media, Soundcloud, etc. (Bitte keine Download-Links)',
                 },
                 photoField,
@@ -107,7 +102,6 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                     type: ApplicationFormFieldType.textArea,
                     name: 'technicalRider',
                     label: 'Technical Rider',
-                    mandatory: true,
                 },
                 residenceField,
                 ...contactFields,
@@ -121,7 +115,7 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                 {
                     type: ApplicationFormFieldType.text,
                     name: 'link',
-                    label: 'Euer Link mit Tonbeispielen',
+                    label: 'Eure Links mit Tonbeispielen',
                     info: 'Website, Social Media, Soundcloud, etc. (Bitte keine Download-Links)',
                 },
                 photoField,
@@ -130,7 +124,6 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                     type: ApplicationFormFieldType.textArea,
                     name: 'technicalRider',
                     label: 'Technical Rider',
-                    mandatory: true,
                 },
                 residenceField,
                 ...contactFields,
@@ -188,7 +181,7 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                 {
                     type: ApplicationFormFieldType.text,
                     name: 'link',
-                    label: 'Euer Link mit Tonbeispielen',
+                    label: 'Eure Links mit Tonbeispielen',
                     info: 'Website, Social Media, Soundcloud, etc. (Bitte keine Download-Links)',
                 },
                 photoField,
@@ -229,7 +222,6 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                     type: ApplicationFormFieldType.textArea,
                     name: 'name',
                     label: 'Wer seid ihr?',
-                    mandatory: true,
                 },
                 {
                     type: ApplicationFormFieldType.textArea,

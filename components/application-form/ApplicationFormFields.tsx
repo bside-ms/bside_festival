@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import ApplicationFormField from 'components/application-form/ApplicationFormField';
+import ApplicationFormMandatoryCheckboxes from 'components/application-form/ApplicationFormMandatoryCheckboxes';
 import type ApplicationType from 'lib/application-form/ApplicationType';
 import { useApplicationFormFields } from 'lib/application-form/useApplicationFormFields';
 
@@ -19,6 +20,8 @@ const ApplicationFormFields = ({ currentApplicationType }: Props): ReactElement 
                     formField={field}
                 />
             ))}
+
+            <ApplicationFormMandatoryCheckboxes />
         </div>
     );
 };

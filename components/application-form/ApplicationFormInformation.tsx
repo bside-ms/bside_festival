@@ -32,7 +32,7 @@ const ApplicationFormInformation = ({ applicationType }: Props): ReactElement =>
                         kabarettistischen Beitrag bewerben?
                     </div>
                     <div>
-                        Wir bitten um vollständige & aussagekräftige Bewerbung, d.h. inklusive
+                        Wir bitten um vollständige & aussagekräftige Bewerbung, gerne inklusive
                         Aufzeichnungen in Bild und Ton zu euren Beiträgen.
                     </div>
                 </>
@@ -60,10 +60,17 @@ const ApplicationFormInformation = ({ applicationType }: Props): ReactElement =>
                         Du möchtest Dich mit einem Workshop oder einem (interaktiven) Infostand bewerben?
                     </div>
                     <div>
-                        Bitte beachte, dass wir insbesondere Bewerbungen berücksichtigen, die generationsübergreifend,
-                        interaktiv, kreativ & niedrigschwellig sind. Zudem bitten wir um vollständige & aussagekräftige
-                        Bewerbungen. Für wie viele Personen, welche Altersgruppen und welche Dauer ist Dein Vorschlag
+                        Bitte beachte, dass wir insbesondere Bewerbungen berücksichtigen, die interaktiv, kreativ &
+                        niedrigschwellig sind. Zudem bitten wir um vollständige & aussagekräftige Bewerbungen.
+                        Für wie viele Personen, welche Altersgruppen und welche Dauer ist Dein Vorschlag
                         geeignet? Welche technischen Voraussetzungen gibt es?
+                    </div>
+                    <div>
+                        Du kannst gerne Bezug nehmen zu unserem diesjährigen Motto "Zurück für die Zukunft".
+                        Workshops/Infostände im Bereich politischer Bildung können z.B. im Rahmen von Klimagerechtigkeit,
+                        sozialökologische Transformation, Recht auf Stadt, Feminismus, Rassismuskritik, Commons,
+                        soziale Gerechtigkeit, sozialer Zusammenhalt liegen. Wobei dies nur beispielhafte Themenbereiche
+                        sind und deiner Kreativität keine Grenzen gesetzt sind.
                     </div>
                 </>
             );
@@ -91,6 +98,13 @@ const ApplicationFormInformation = ({ applicationType }: Props): ReactElement =>
                     </div>
                     <div>
                         Wir bitten um vollständige & aussagekräftige Bewerbung, d.h. inklusive Text- & Hörproben.
+                    </div>
+                    <div>
+                        Du kannst gerne Bezug nehmen zu unserem diesjährigen Motto "Zurück für die Zukunft".
+                        Vorträge im Bereich politischer Bildung können z.B. im Rahmen von Klimagerechtigkeit,
+                        sozialökologische Transformation, Recht auf Stadt, Feminismus, Rassismuskritik,
+                        Commons, soziale Gerechtigkeit, sozialer Zusammenhalt liegen. Wobei dies nur beispielhafte
+                        Themenbereiche sind und deiner Kreativität keine Grenzen gesetzt sind.
                     </div>
                 </>
             );
