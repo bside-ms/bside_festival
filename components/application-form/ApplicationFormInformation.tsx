@@ -14,8 +14,8 @@ const ApplicationFormInformation = ({ applicationType }: Props): ReactElement =>
             return (
                 <>
                     <div>
-                        Du möchtest Deine künstlerischen Werke bei einer Vernissage, Ausstellung
-                        und/oder einem Kunstrundgang präsentieren?
+                        Du möchtest Deine künstlerischen Werke bei einer Ausstellung und/oder
+                        einem Kunstrundgang präsentieren?
                     </div>
                     <div>
                         Wir bitten um vollständige & aussagekräftige Bewerbung, denk bitte an einen
