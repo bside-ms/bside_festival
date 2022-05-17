@@ -12,11 +12,11 @@ const useApplicationTitle = (applicationType: ApplicationType): string => {
         case ApplicationType.workshop:
             return '/assets/images/festival/20-119-min.jpg';
         case ApplicationType.familienprogramm:
-            return 'https://place-puppy.com/550x401';
+            return '/assets/images/festival/favs/b_side_festival_2019_CVtvS.jpg';
         case ApplicationType.lesung:
             return '/assets/images/festival/19-577-min.jpg';
         case ApplicationType.essensstand:
-            return 'https://place-puppy.com/550x401';
+            return '/assets/images/falafel.jpg';
         case ApplicationType.nachbarschaft:
             return '/assets/images/festival/19-154-min.jpg';
     }
