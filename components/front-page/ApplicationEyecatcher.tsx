@@ -3,6 +3,7 @@ import styles from './ApplicationEyecatcher.module.scss';
 import type { ReactElement } from 'react';
 import Button from 'components/common/Button';
 import ContentWrapper from 'components/common/ContentWrapper';
+import BHeartGrid from 'components/front-page/BHeartGrid';
 
 const ApplicationEyecatcher = (): ReactElement => {
 
@@ -28,6 +29,10 @@ const ApplicationEyecatcher = (): ReactElement => {
                     <div className={styles.boxBackgroundLayer} />
                     <div className={styles.offsetBackgroundLayer1} />
                     <div className={styles.offsetBackgroundLayer2} />
+                </div>
+
+                <div className="absolute bottom-[-70px] -margin-y-4 right-4 z-10">
+                    <BHeartGrid />
                 </div>
             </ContentWrapper>
         </div>
