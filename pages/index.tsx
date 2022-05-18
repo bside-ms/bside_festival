@@ -1,5 +1,4 @@
 import type { ReactElement } from 'react';
-import BHeartSvg from 'components/common/BHeartSvg';
 import Footer from 'components/common/Footer';
 import PageHeader from 'components/common/PageHeader';
 import ApplicationEyecatcher from 'components/front-page/ApplicationEyecatcher';
@@ -14,8 +13,6 @@ export default (): ReactElement => {
             <ApplicationEyecatcher />
 
             <FestivalSentiment />
-
-            <BHeartSvg size={30} color="#000" />
 
             <Footer />
         </>
