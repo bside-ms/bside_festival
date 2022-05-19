@@ -9,7 +9,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'display': ['bdr-mono', 'sans-serif'],
+        'sans': ['Questrial', 'sans-serif'],
+        'display': ['bdr-mono', 'serif'],
       }
     }
   }

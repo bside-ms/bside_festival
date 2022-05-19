@@ -5,7 +5,7 @@ interface Props {
 }
 
 const ContentWrapper = ({ children }: Props): ReactElement => (
-    <div className="w-full md:w-2/3 max-w-5xl mx-auto relative">
+    <div className="w-full px-3 md:w-2/3 md:px-0 max-w-5xl mx-auto relative">
         {children}
     </div>
 );

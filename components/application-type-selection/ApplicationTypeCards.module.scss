@@ -23,6 +23,8 @@
   display: grid;
   grid-gap: 20px;
   grid-template-columns: minmax(0, 1fr);
+
+  margin-bottom: 16px;
 }
 
 @media screen and (min-width: 400px) {

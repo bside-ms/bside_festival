@@ -12,11 +12,15 @@ const ApplicationEyecatcher = (): ReactElement => {
             <ContentWrapper>
                 <div className={styles.box}>
                     <div className={`${styles.boxContent} space-y-5`}>
+                        <div>
+                            Endlich geht es wieder los: Das B-Side Festival ist kehrt zurück
+                        </div>
+
                         <div className={`${styles.title} font-display`}>
                             Zurück für die Zukunft!
                         </div>
 
-                        <div className={`${styles.info} font-bold`}>
+                        <div className={styles.info}>
                             Du willst mitmachen? Super! Dann bewirb dich jetzt!
                         </div>
 

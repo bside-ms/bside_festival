@@ -13,6 +13,10 @@ class MyDocument extends Document {
                         href="https://use.typekit.net/hvw2qua.css"
                         rel="stylesheet"
                     />
+                    <link
+                        href="https://fonts.googleapis.com/css2?family=Questrial&display=swap"
+                        rel="stylesheet"
+                    />
                 </Head>
 
                 <body>
