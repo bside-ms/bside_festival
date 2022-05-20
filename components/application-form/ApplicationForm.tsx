@@ -11,6 +11,7 @@ import ApplicationFormError from 'components/application-form/ApplicationFormErr
 import ApplicationFormFields from 'components/application-form/ApplicationFormFields';
 import ApplicationFormInformation from 'components/application-form/ApplicationFormInformation';
 import ApplicationFormSubmitButton from 'components/application-form/ApplicationFormSubmitButton';
+import ApplicationFormThemeProvider from 'components/application-form/ApplicationFormThemeProvider';
 import ApplicationFormWrapper from 'components/application-form/ApplicationFormWrapper';
 import ContentWrapper from 'components/common/ContentWrapper';
 import PageHeader from 'components/common/PageHeader';
@@ -34,7 +35,7 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement => {
             <div className={`${styles.header} font-display`}>
                 <ContentWrapper>
                     <div className="text-2xl">
-                        Bewerbung für
+                        Bewerbung
                     </div>
                     <div className="text-4xl">
                         {title}
@@ -63,21 +64,23 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement => {
                         <ApplicationFormInformation applicationType={applicationType} />
                     </div>
 
-                    <ApplicationFormContextProvider applicationType={applicationType}>
-                        <ApplicationFormWrapper>
-                            <input type="hidden" name="applicationType" value={applicationType} />
+                    <ApplicationFormThemeProvider>
+                        <ApplicationFormContextProvider applicationType={applicationType}>
+                            <ApplicationFormWrapper>
+                                <input type="hidden" name="applicationType" value={applicationType} />
 
-                            <ApplicationFormFields currentApplicationType={applicationType} />
+                                <ApplicationFormFields currentApplicationType={applicationType} />
 
-                            <ApplicationFormError />
+                                <ApplicationFormError />
 
-                            <div className="mt-4 mb-8">
-                                <ApplicationFormSubmitButton />
-                            </div>
+                                <div className="mt-4 mb-8">
+                                    <ApplicationFormSubmitButton />
+                                </div>
 
-                            <ApplicationFormConfirmationOverlay />
-                        </ApplicationFormWrapper>
-                    </ApplicationFormContextProvider>
+                                <ApplicationFormConfirmationOverlay />
+                            </ApplicationFormWrapper>
+                        </ApplicationFormContextProvider>
+                    </ApplicationFormThemeProvider>
 
                     {showDisclaimer && <ApplicationFormDisclaimer />}
                 </ContentWrapper>
