@@ -14,8 +14,7 @@ const ApplicationEyecatcher = (): ReactElement => {
                     <div className={styles.box}>
                         <div className={`${styles.boxContent} space-y-2`}>
                             <div>
-                                Endlich geht es wieder los: Das B-Side Festival ist
-                                kehrt zurück
+                                Endlich geht es wieder los: Das B-Side Festival kehrt zurück
                             </div>
 
                             <div className={`${styles.title} font-display`}>
