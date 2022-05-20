@@ -6,6 +6,7 @@ const nameField: ApplicationFormField = {
     type: ApplicationFormFieldType.text,
     name: 'name',
     label: 'Name',
+    info: 'Wie soll euer Programmpunkt im Programmheft heißen?',
 };
 
 const participantsField: ApplicationFormField = {
@@ -18,6 +19,11 @@ const photoField: ApplicationFormField = {
     type: ApplicationFormFieldType.imageUpload,
     name: 'photo',
     label: 'Euer Foto',
+    info: `
+        Beachtet: Dieses Foto wird auf unserer Webseite 
+        veröffentlicht, falls ihr beim B-Side Festival 
+        dabei sein werdet.
+    `,
 };
 
 const motivationField: ApplicationFormField = {
@@ -36,7 +42,13 @@ const residenceField: ApplicationFormField = {
 const pressReleaseField: ApplicationFormField = {
     type: ApplicationFormFieldType.textArea,
     name: 'pressRelease',
-    label: 'Erzählt uns was von euch (Pressetext)',
+    label: 'Erzählt uns was von euch',
+    info: `
+        Beachtet: Dies ist ein Pressetext. 
+        Dieser Text wird auf unserer Webseite 
+        veröffentlicht, falls ihr beim B-Side
+        Festival dabei sein werdet.
+    `,
 };
 
 const contactPersonField: ApplicationFormField = {
@@ -102,6 +114,11 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                     type: ApplicationFormFieldType.textArea,
                     name: 'technicalRider',
                     label: 'Technical Rider',
+                    info: `
+                        Welche technische Ausstattung braucht ihr? Zum Beispiel Mikrofone, Licht, … Wie viel Platz 
+                        braucht ihr auf der Bühne? Seid so genau wie möglich. Kennzeichnet was 
+                        ihr selber mitbringt und was ihr von uns braucht.
+                    `,
                 },
                 residenceField,
                 ...contactFields,
@@ -124,6 +141,12 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                     type: ApplicationFormFieldType.textArea,
                     name: 'technicalRider',
                     label: 'Technical Rider',
+                    info: `
+                        Welche Instrumente habt ihr auf der Bühne? Welche technische Ausstattung 
+                        braucht ihr? Zum Beispiel Verstärker, Mikrofone, Licht, … Wie viel Platz 
+                        braucht ihr auf der Bühne? Seid so genau wie möglich. Kennzeichnet was 
+                        ihr selber mitbringt und was ihr von uns braucht.
+                    `,
                 },
                 residenceField,
                 ...contactFields,
