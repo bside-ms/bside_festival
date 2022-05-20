@@ -4,8 +4,8 @@ import BHeartSvg from 'components/common/BHeartSvg';
 const BHeartGrid = (): ReactElement => {
 
     return (
-        <div className="grid grid-cols-9 gap-y-5">
-            {(new Array(3).fill('')).map((_outerItem, outerIndex) => {
+        <div className="grid grid-cols-9 gap-y-3">
+            {(new Array(2).fill('')).map((_outerItem, outerIndex) => {
 
                 const innerIndexCheck = outerIndex % 2 === 0 ? 0 : 1;
 

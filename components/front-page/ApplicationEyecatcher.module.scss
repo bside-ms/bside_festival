@@ -1,16 +1,16 @@
 .eyecatcher {
-  padding: 100px 0 50px;
+  padding: 100px 0 40px;
   background: #ffe698;
 }
 
 .box {
   position: relative;
   min-width: 300px;
-  width: 50%;
+  width: 70%;
   height: 500px;
   display: flex;
   flex-direction: column;
-  padding: 0 30px;
+  padding: 0 30px 30px;
 }
 
 .boxContent {
@@ -20,7 +20,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
 
   color: #fff;
 }
@@ -49,9 +49,9 @@
   left: 0;
   background: linear-gradient(
       180deg,
-      rgba(255, 230, 152, 0.9) 0%,
-      rgba(51, 187, 233, 0.9) 70%,
-      rgba(51, 187, 233, 0.9) 100%
+      rgba(255, 230, 152, 0.8) 0%,
+      rgba(39, 150, 192, 0.9) 70%,
+      rgba(39, 150, 192, 0.9) 100%
   );
   z-index: 4;
 }
@@ -82,4 +82,21 @@
       rgba(51, 187, 233, 1) 100%
   );
   z-index: 1;
+}
+
+.applicationBox {
+  margin-top: 40px;
+  padding: 40px 25px;
+
+  background: linear-gradient(
+      100deg,
+      rgb(44, 159, 201) 0%,
+      rgba(225, 1, 126, 1) 100%
+  );
+
+  color: #fff;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
