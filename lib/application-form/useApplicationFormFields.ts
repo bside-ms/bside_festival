@@ -117,8 +117,15 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                     info: `
                         Welche technische Ausstattung braucht ihr? Zum Beispiel Mikrofone, Licht, … Wie viel Platz 
                         braucht ihr auf der Bühne? Seid so genau wie möglich. Kennzeichnet was 
-                        ihr selber mitbringt und was ihr von uns braucht.
+                        ihr selber mitbringt und was ihr von uns braucht. Ladet optional zusätzlich
+                        eine PDF-Datei hoch.
                     `,
+                },
+                {
+                    type: ApplicationFormFieldType.pdfUpload,
+                    name: 'technicalRiderPdf',
+                    label: 'Technical Rider',
+                    optional: true,
                 },
                 residenceField,
                 ...contactFields,
@@ -145,8 +152,15 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                         Welche Instrumente habt ihr auf der Bühne? Welche technische Ausstattung 
                         braucht ihr? Zum Beispiel Verstärker, Mikrofone, Licht, … Wie viel Platz 
                         braucht ihr auf der Bühne? Seid so genau wie möglich. Kennzeichnet was 
-                        ihr selber mitbringt und was ihr von uns braucht.
+                        ihr selber mitbringt und was ihr von uns braucht. Ladet optional zusätzlich
+                        eine PDF-Datei hoch.
                     `,
+                },
+                {
+                    type: ApplicationFormFieldType.pdfUpload,
+                    name: 'technicalRiderPdf',
+                    label: 'Technical Rider',
+                    optional: true,
                 },
                 residenceField,
                 ...contactFields,
