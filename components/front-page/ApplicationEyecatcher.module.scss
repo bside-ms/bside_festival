@@ -7,10 +7,9 @@
   position: relative;
   min-width: 300px;
   width: 70%;
-  height: 500px;
   display: flex;
   flex-direction: column;
-  padding: 0 30px 30px;
+  padding: 130px 30px 30px;
 }
 
 .boxContent {
@@ -49,8 +48,8 @@
   left: 0;
   background: linear-gradient(
       180deg,
-      rgba(255, 230, 152, 0.8) 0%,
-      rgba(39, 150, 192, 0.9) 70%,
+      rgba(255, 230, 152, 0.7) 0%,
+      rgba(39, 150, 192, 0.9) 40%,
       rgba(39, 150, 192, 0.9) 100%
   );
   z-index: 4;
