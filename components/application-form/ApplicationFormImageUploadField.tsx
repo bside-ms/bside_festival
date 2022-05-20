@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button } from '@mui/material';
+import { Button, FormHelperText } from '@mui/material';
 import Image from 'next/image';
 import type { ChangeEvent, ReactElement } from 'react';
 import type ApplicationFormField from 'lib/application-form/ApplicationFormField';
@@ -77,7 +77,7 @@ const ApplicationFormImageUploadField = ({ formField }: Props): ReactElement => 
                 onChange={handleChange}
                 accept="image/*"
                 required={isMandatory}
-                className="opacity-0 absolute"
+                className="opacity-0 absolute w-[120px]"
             />
 
             <label htmlFor={formField.name}>
@@ -90,6 +90,14 @@ const ApplicationFormImageUploadField = ({ formField }: Props): ReactElement => 
                     {formField.label} {isMandatory && '*'}
                 </Button>
             </label>
+
+            {formField.info !== undefined && (
+                <div className="mx-[14px]">
+                    <FormHelperText>
+                        {formField.info}
+                    </FormHelperText>
+                </div>
+            )}
 
             {imageUploadPreview !== '' && (
                 <>
