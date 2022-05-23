@@ -68,7 +68,7 @@
   position: absolute;
   background: #ffe698;
   top: 0;
-  right: -2px;
+  right: 0;
   padding: 10px 30px 30px 30px;
 
   border: 2px dashed #e1017e;
@@ -102,5 +102,11 @@
     margin-top: 8px;
     font-size: 26px;
     color: #33bbe9;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    border-right: none;
   }
 }
