@@ -22,7 +22,8 @@ const photoField: ApplicationFormField = {
     info: `
         Beachtet: Dieses Foto wird auf unserer Webseite 
         veröffentlicht, falls ihr beim B-Side Festival 
-        dabei sein werdet.
+        dabei sein werdet. Bitte sendet nur neutrale Fotos 
+        ohne Text & Logos.
     `,
 };
 
