@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 import ApplicationForm from 'components/application-form/ApplicationForm';
 import Footer from 'components/common/Footer';
+import NextHead from 'components/common/NextHead';
 import useIsValidApplicationType from 'lib/application-form/useIsValidApplicationType';
 
 export default (): ReactElement => {
@@ -18,6 +19,8 @@ export default (): ReactElement => {
 
     return (
         <>
+            <NextHead title="B-Side Festival 2022 - Bewerbung" />
+
             <ApplicationForm applicationType={applicationType} />
 
             <Footer />
