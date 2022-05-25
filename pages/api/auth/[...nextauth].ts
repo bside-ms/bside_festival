@@ -1,15 +1,7 @@
 import NextAuth from 'next-auth';
 import Keycloak from 'next-auth/providers/keycloak';
 
-const issuer = process.env.KEYCLOAK_ISSUER_URL;
-const clientId = process.env.KEYCLOAK_CLIENT_ID;
-const clientSecret = process.env.KEYCLOAK_CLIENT_SECRET;
-
-if (issuer === undefined || clientId === undefined || clientSecret === undefined) {
-    throw new Error('Make sure to provide Keycloak environment variables');
-}
-
-const nextAuth = NextAuth({
+export default NextAuth({
     providers: [
         Keycloak({
             issuer: process.env.KEYCLOAK_ISSUER_URL,
@@ -17,6 +9,27 @@ const nextAuth = NextAuth({
             clientSecret: process.env.KEYCLOAK_CLIENT_SECRET ?? '',
         }),
     ],
-});
+    callbacks: {
+        signIn: async ({ user, account, profile, email, credentials }) => {
+            console.log('signIn', { user, account, profile, email, credentials });
 
-export default nextAuth;
+            return true;
+        },
+        redirect: async ({ url, baseUrl }) => {
+            console.log('redirect', { url, baseUrl });
+
+            return baseUrl;
+        },
+        session: async ({ session, token, user }) => {
+            console.log('session', { session, token, user });
+
+            return session;
+        },
+        jwt: ({ token, user, account, profile, isNewUser }) => {
+
+            console.log('jwt', { token, user, account, profile, isNewUser });
+
+            return token;
+        },
+    },
+});

@@ -1,6 +1,15 @@
 import type { Connection, UpsertResult } from 'mariadb';
 import mariadb from 'mariadb';
+import type ApplicationData from 'lib/application-form/ApplicationData';
 import type ApplicationType from 'lib/application-form/ApplicationType';
+
+interface ApplicationsJoinResult {
+    id: number;
+    type: ApplicationType;
+    createdAt: Date;
+    dataName: string;
+    dataValue: string;
+}
 
 export default class ApplicationFormDatabaseService {
 
@@ -44,6 +53,84 @@ export default class ApplicationFormDatabaseService {
         }
 
         return true;
+    }
+
+    public async getAllApplications(): Promise<Array<ApplicationData>> {
+
+        const connection = await this.createConnection();
+
+        const result: Array<ApplicationsJoinResult> = await connection.query(`
+            SELECT
+                ap.id,
+                ap.type,
+                ap.createdAt,
+                apD.dataName,
+                apD.dataValue
+            FROM
+                prod_festival.applications ap
+            LEFT JOIN prod_festival.applicationsData apD
+                ON ap.id = apD.applicationId
+            WHERE
+                apD.dataName NOT IN ('photo', 'technicalRiderPdf');
+        `);
+
+        const applicationData = new Array<ApplicationData>();
+
+        result.forEach(({ id, type, createdAt, dataName, dataValue }) => {
+
+            const application = applicationData.find(app => app.id === id);
+
+            if (application === undefined) {
+                applicationData.push({
+                    id,
+                    createdAt,
+                    type,
+                    data: { [dataName]: dataValue.toString() },
+                });
+            } else {
+                application.data[dataName] = dataValue.toString();
+            }
+        });
+
+        return applicationData;
+    }
+
+    public async getApplication(applicationId: string): Promise<ApplicationData | null> {
+
+        const connection = await this.createConnection();
+
+        const result: Array<ApplicationsJoinResult> = await connection.query(`
+            SELECT
+                ap.id,
+                ap.type,
+                ap.createdAt,
+                apD.dataName,
+                apD.dataValue
+            FROM
+                prod_festival.applications ap
+            LEFT JOIN prod_festival.applicationsData apD
+                ON ap.id = apD.applicationId
+            WHERE
+                ap.id = ?;
+        `, [applicationId]);
+
+        let application: ApplicationData | null = null;
+
+        result.forEach(({ id, type, createdAt, dataName, dataValue }) => {
+
+            if (application === null) {
+                application = {
+                    id,
+                    createdAt,
+                    type,
+                    data: { [dataName]: dataValue.toString() },
+                };
+            } else {
+                application.data[dataName] = dataValue.toString();
+            }
+        });
+
+        return application;
     }
 
     private createConnection(): Promise<Connection> {
