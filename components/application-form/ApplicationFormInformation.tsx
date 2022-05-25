@@ -149,6 +149,22 @@ const ApplicationFormInformation = ({ applicationType }: Props): ReactElement =>
                     </div>
                 </>
             );
+
+        case ApplicationType.anderes:
+            return (
+                <>
+                    <div>
+                        Du möchtest Dich mit etwas bewerben, was von den anderen Kategorien nicht wirklich abgedeckt ist?
+                        Dann nutze diese Kategorie "Sonstiges".
+                    </div>
+                    <div>
+                        Bitte beachte, dass wir insbesondere Bewerbungen berücksichtigen, die interaktiv, kreativ & niedrigschwellig
+                        sind. Zudem bitten wir um vollständige & aussagekräftige Bewerbungen. Für wie viele Personen, welche Altersgruppen
+                        und welche Dauer ist Dein Vorschlag geeignet? Welche technischen Voraussetzungen gibt es?
+                        Du kannst gerne Bezug nehmen zu unserem diesjährigen Motto "Zurück für die Zukunft".
+                    </div>
+                </>
+            );
     }
 };
 

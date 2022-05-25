@@ -20,7 +20,7 @@ const useApplicationTitle = (applicationType: ApplicationType): string => {
         case ApplicationType.nachbarschaft:
             return 'Nachbarschaft';
         case ApplicationType.anderes:
-            return 'Anderes';
+            return 'Sonstiges';
     }
 };
 
