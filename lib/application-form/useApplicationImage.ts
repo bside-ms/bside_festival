@@ -19,6 +19,8 @@ const useApplicationTitle = (applicationType: ApplicationType): string => {
             return '/assets/images/falafel.jpg';
         case ApplicationType.nachbarschaft:
             return '/assets/images/festival/19-154-min.jpg';
+        case ApplicationType.anderes:
+            return '/assets/images/festival/favs/b_side_festival_2019_mbYxg.jpg';
     }
 };
 

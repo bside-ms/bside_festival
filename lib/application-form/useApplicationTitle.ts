@@ -19,6 +19,8 @@ const useApplicationTitle = (applicationType: ApplicationType): string => {
             return 'Essensstand';
         case ApplicationType.nachbarschaft:
             return 'Nachbarschaft';
+        case ApplicationType.anderes:
+            return 'Anderes';
     }
 };
 
