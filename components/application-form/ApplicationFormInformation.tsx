@@ -125,6 +125,7 @@ const ApplicationFormInformation = ({ applicationType }: Props): ReactElement =>
                         Wichtig: Für Essensstände ist für alle Mitarbeitenden ein Gesundheitszeugnis notwendig
                         (für 25 € bei der Stadt Münster <Link href={link}><a className="underline">hier</a></Link> zu erhalten).
                     </div>
+                    {/* TODO: Hinweis auf Standgebühr */}
                 </>
             );
         }
