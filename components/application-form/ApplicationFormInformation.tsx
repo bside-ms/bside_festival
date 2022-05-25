@@ -122,10 +122,15 @@ const ApplicationFormInformation = ({ applicationType }: Props): ReactElement =>
                         Wir bitten um vollständige & aussagekräftige Bewerbungen.
                     </div>
                     <div>
+                        Als Beitrag zur Finanzierung des Festivals wird von Essensständen eine Standgebühr erhoben.
+                        Die genaue Höhe steht noch nicht fest, wird sich allerdings an Größe, Zeitraum und Standort
+                        des jeweiligen Essensstandes richten. Weitere Infos folgen und antworten wir euch auf eure
+                        Bewerbung.
+                    </div>
+                    <div>
                         Wichtig: Für Essensstände ist für alle Mitarbeitenden ein Gesundheitszeugnis notwendig
                         (für 25 € bei der Stadt Münster <Link href={link}><a className="underline">hier</a></Link> zu erhalten).
                     </div>
-                    {/* TODO: Hinweis auf Standgebühr */}
                 </>
             );
         }
