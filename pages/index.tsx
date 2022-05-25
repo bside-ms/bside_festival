@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import Footer from 'components/common/Footer';
+import Login from 'components/common/Login';
 import PageHeader from 'components/common/PageHeader';
 import ApplicationEyecatcher from 'components/front-page/ApplicationEyecatcher';
 import FestivalSentiment from 'components/front-page/FestivalSentiment';
@@ -11,6 +12,8 @@ export default (): ReactElement => {
             <PageHeader theme="yellow" />
 
             <ApplicationEyecatcher />
+
+            <Login />
 
             <FestivalSentiment />
 
