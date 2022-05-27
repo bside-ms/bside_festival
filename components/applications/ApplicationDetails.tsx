@@ -2,9 +2,15 @@ import { useCallback } from 'react';
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ReactElement, SyntheticEvent } from 'react';
-import ApplicationImage from 'components/applications/ApplicationImage';
+import ApplicationDetailsImage from 'components/applications/ApplicationDetailsImage';
+import ApplicationDetailsPdfDownload from 'components/applications/ApplicationDetailsPdfDownload';
+import ApplicationDetailsText from 'components/applications/ApplicationDetailsText';
+import ApplicationFormFieldType from 'lib/application-form/ApplicationFormFieldType';
+import type ApplicationResponse from 'lib/application-form/ApplicationResponse';
 import type ApplicationType from 'lib/application-form/ApplicationType';
 import useApplicationDetails from 'lib/applications/useApplicationDetails';
+import fetcher from 'lib/common/fetcher';
+import useSWR from 'swr';
 
 interface Props {
     id: number;
@@ -15,7 +21,11 @@ interface Props {
 
 const ApplicationDetails = ({ id, type, data, onCollapse }: Props): ReactElement => {
 
-    const [title, ...applicationDetails] = useApplicationDetails(type, data);
+    const { data: fetchData, error } = useSWR<ApplicationResponse, Error>(`/api/application/${id}`, fetcher);
+
+    const usedData = error !== undefined || fetchData === undefined || !fetchData.success ? data : fetchData.application.data;
+
+    const [title, ...applicationDetails] = useApplicationDetails(type, usedData);
 
     const handleCollapse = useCallback((event: SyntheticEvent<HTMLDivElement>) => {
         event.stopPropagation();
@@ -25,17 +35,33 @@ const ApplicationDetails = ({ id, type, data, onCollapse }: Props): ReactElement
     return (
         <div className="space-y-2 overflow-hidden">
             <div className="font-bold">
-                {title[1]}
+                {title.value}
             </div>
 
-            <ApplicationImage applicationId={id} />
+            {applicationDetails.map(detail => {
 
-            {applicationDetails.map(detail => (
-                <div key={detail[0]}>
-                    <div className="underline">{detail[0]}</div>
-                    <div>{detail[1]}</div>
-                </div>
-            ))}
+                switch (detail.type) {
+                    case ApplicationFormFieldType.text:
+                    case ApplicationFormFieldType.textArea:
+                        return (
+                            <ApplicationDetailsText key={detail.name} data={detail} />
+                        );
+
+                    case ApplicationFormFieldType.imageUpload:
+                        return (
+                            <ApplicationDetailsImage key={detail.name} data={detail} />
+                        );
+
+                    case ApplicationFormFieldType.pdfUpload:
+                        return (
+                            <ApplicationDetailsPdfDownload
+                                key={detail.name}
+                                titleData={title}
+                                data={detail}
+                            />
+                        );
+                }
+            })}
 
             <div className="mt-5 text-blue-600 cursor-pointer text-center" onClick={handleCollapse}>
                 <FontAwesomeIcon icon={faChevronUp} />

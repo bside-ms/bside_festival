@@ -1,22 +1,23 @@
+import type ApplicationDataRow from 'lib/application-form/ApplicationDataRow';
+import type ApplicationFormField from 'lib/application-form/ApplicationFormField';
 import type ApplicationType from 'lib/application-form/ApplicationType';
 import { useApplicationFormFields } from 'lib/application-form/useApplicationFormFields';
 
-const useApplicationDetails = (type: ApplicationType, data: Record<string, string>): Array<[string, string]> => {
+const useApplicationDetails = (type: ApplicationType, data: Record<string, string>): Array<ApplicationDataRow> => {
 
     const fields = useApplicationFormFields(type);
 
-    return fields.reduce<Array<[string, string]>>(
-        (prevValue, currValue) => {
+    return fields.map<ApplicationFormField & { value: string | null }>(
+        (field) => {
 
-            const dataPair = Object.entries(data).find(([key]) => key === currValue.name);
+            const dataPair = Object.entries(data).find(([key]) => key === field.name);
 
-            if (dataPair !== undefined) {
-                prevValue.push([currValue.label, dataPair[1]]);
-            }
+            const value = dataPair === undefined ? null : dataPair[1];
 
-            return prevValue;
-        },
-        []
+            return { ...field, value };
+        }
+    ).filter(
+        (field): field is ApplicationDataRow => field.value !== null
     );
 };
 

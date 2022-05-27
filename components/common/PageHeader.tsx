@@ -7,7 +7,7 @@ import ContentWrapper from 'components/common/ContentWrapper';
 type HeaderThemes = 'blue' | 'yellow' | 'pink';
 
 interface Props {
-    theme: HeaderThemes;
+    theme?: HeaderThemes;
 }
 
 const themeClasses: Record<HeaderThemes, string> = {

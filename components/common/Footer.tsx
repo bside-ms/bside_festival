@@ -1,9 +1,11 @@
 // Don't know atm what the problem is
- 
+
 import { faFacebookSquare, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
+import InternalLinks from 'components/common/InternalLinks';
+import Login from 'components/common/Login';
 
 const Footer = (): ReactElement => {
 
@@ -35,15 +37,21 @@ const Footer = (): ReactElement => {
     );
 
     return (
-        <div className="text-sm text-gray-400 text-center p-4 bg-gray-800">
+        <div className="text-sm text-gray-400 text-center p-4 bg-gray-800 space-y-1">
             <div>Veranstaltet durch den B-Side Kultur e.V.</div>
 
-            <div className="mt-1 flex gap-3 justify-center">
+            <div className="flex gap-3 justify-center">
                 <span>{instagramLink}</span> <span>{facebookLink}</span>
             </div>
 
-            <div className="mt-1 flex gap-3 justify-center">
+            <div className="flex gap-3 justify-center">
                 <span>{imprintLink}</span> <span>{privacyPolicyLink}</span>
+            </div>
+
+            <div className="space-y-1">
+                <Login />
+
+                <InternalLinks />
             </div>
         </div>
     );

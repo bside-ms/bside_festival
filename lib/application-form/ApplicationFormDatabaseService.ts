@@ -71,7 +71,7 @@ export default class ApplicationFormDatabaseService {
             LEFT JOIN prod_festival.applicationsData apD
                 ON ap.id = apD.applicationId
             WHERE
-                apD.dataName NOT IN ('photo', 'technicalRiderPdf');
+                apD.dataName NOT IN ('photo', 'technicalRiderPdf', 'contactPerson', 'mailAddress', 'phoneNumber', 'address');
         `);
 
         const applicationData = new Array<ApplicationData>();
@@ -111,7 +111,9 @@ export default class ApplicationFormDatabaseService {
             LEFT JOIN prod_festival.applicationsData apD
                 ON ap.id = apD.applicationId
             WHERE
-                ap.id = ?;
+                ap.id = ?
+            AND
+                apD.dataName NOT IN ('contactPerson', 'mailAddress', 'phoneNumber', 'address');
         `, [applicationId]);
 
         let application: ApplicationData | null = null;

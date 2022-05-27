@@ -1,3 +1,5 @@
+import styles from './ApplicationOverview.module.scss';
+
 import type { ReactElement } from 'react';
 import Application from 'components/applications/Application';
 import ContentWrapper from 'components/common/ContentWrapper';
@@ -24,7 +26,7 @@ const ApplicationsOverview = (): ReactElement => {
     }
 
     return (
-        <div className="bg-gray-500 py-5">
+        <div className={`bg-gray-500 py-5 ${styles.overview}`}>
             <ContentWrapper>
                 <div className="text-white text-3xl mb-1">
                     Übersicht aller Bewerbungen

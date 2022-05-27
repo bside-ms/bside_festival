@@ -1,0 +1,18 @@
+import type { ReactElement } from 'react';
+import type ApplicationDataRow from 'lib/application-form/ApplicationDataRow';
+
+interface Props {
+    data: ApplicationDataRow;
+}
+
+const ApplicationDetailsImage = ({ data: { label, value } }: Props): ReactElement => {
+
+    return (
+        <div className="md:w-2/3">
+            <div className="underline">{label}</div>
+            <img src={value} />
+        </div>
+    );
+};
+
+export default ApplicationDetailsImage;

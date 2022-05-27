@@ -26,9 +26,11 @@ const Application = ({ application: { id, type, createdAt, data } }: Props): Rea
     const residence = useApplicationResidence(data);
     const createdDate = useApplicationCreatedDate(createdAt);
 
+    const containerCursor = isExpanded ? 'cursor-default' : 'cursor-pointer';
+
     return (
         <div
-            className="rounded border-[1px] border-gray-700 bg-gray-50 p-3 drop-shadow-lg"
+            className={`rounded border-[1px] border-gray-700 bg-gray-50 p-3 drop-shadow-lg ${containerCursor}`}
             onClick={handleExpand}
         >
             <div className="flex mb-1 justify-between">

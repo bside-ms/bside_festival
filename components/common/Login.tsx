@@ -1,30 +1,30 @@
+import { useCallback } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 
 const Login = (): ReactElement | null => {
 
-    const { data, status } = useSession();
+    const { data: session, status } = useSession();
 
-    console.log('data', data);
-    console.log('status', status);
+    const handleLogIn = useCallback(() => signIn('keycloak'), [signIn]);
+    const handleLogOut = useCallback(() => signOut(), [signOut]);
 
-    if (data === undefined) {
+    if (status === 'loading') {
         return null;
     }
 
-    if (data === null) {
+    if (status === 'unauthenticated') {
         return (
-            <>
-                Not signed in <br />
-                <button onClick={() => signIn('keycloak')}>Sign in</button>
-            </>
+            <a className="underline cursor-pointer" onClick={handleLogIn}>Interner Log-In</a>
         );
     }
 
+    const userIdentifier = session?.user?.name ?? session?.user?.email ?? null;
+
     return (
         <>
-            Signed in as {data.user?.email ?? '~mail missing~'} <br />
-            <button onClick={() => signOut()}>Sign out</button>
+            Angemeldet {userIdentifier !== null ? `als ${userIdentifier}` : ''}<br />
+            <a className="underline cursor-pointer" onClick={handleLogOut}>Abmelden</a>
         </>
     );
 };
