@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ReactElement, SyntheticEvent } from 'react';
+import useSWR from 'swr';
 import ApplicationDetailsImage from 'components/applications/ApplicationDetailsImage';
 import ApplicationDetailsPdfDownload from 'components/applications/ApplicationDetailsPdfDownload';
 import ApplicationDetailsText from 'components/applications/ApplicationDetailsText';
@@ -10,7 +11,6 @@ import type ApplicationResponse from 'lib/application-form/ApplicationResponse';
 import type ApplicationType from 'lib/application-form/ApplicationType';
 import useApplicationDetails from 'lib/applications/useApplicationDetails';
 import fetcher from 'lib/common/fetcher';
-import useSWR from 'swr';
 
 interface Props {
     id: number;

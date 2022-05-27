@@ -6,6 +6,7 @@ import type { ReactElement } from 'react';
 import NextHead from 'components/common/NextHead';
 
 const MyApp = ({ Component, pageProps }: AppProps): ReactElement => (
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     <SessionProvider session={pageProps.session}>
         <NextHead title="B-Side Festival 2022" />
 

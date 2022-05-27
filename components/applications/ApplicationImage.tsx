@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
+import useSWR from 'swr';
 import type ApplicationResponse from 'lib/application-form/ApplicationResponse';
 import fetcher from 'lib/common/fetcher';
-import useSWR from 'swr';
 
 interface Props {
     applicationId: number;

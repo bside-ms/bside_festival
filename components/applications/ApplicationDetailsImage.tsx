@@ -10,6 +10,8 @@ const ApplicationDetailsImage = ({ data: { label, value } }: Props): ReactElemen
     return (
         <div className="md:w-2/3">
             <div className="underline">{label}</div>
+
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={value} />
         </div>
     );

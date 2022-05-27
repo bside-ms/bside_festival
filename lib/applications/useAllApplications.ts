@@ -1,7 +1,7 @@
+import useSWR from 'swr';
 import type AllApplicationsResponse from 'lib/application-form/AllApplicationsResponse';
 import type ApplicationData from 'lib/application-form/ApplicationData';
 import fetcher from 'lib/common/fetcher';
-import useSWR from 'swr';
 
 const useAllApplications = (): Array<ApplicationData> | null | Error => {
 
