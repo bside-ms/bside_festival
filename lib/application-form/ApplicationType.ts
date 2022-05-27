@@ -7,6 +7,7 @@ enum ApplicationType {
     lesung = 'lesung',
     essensstand = 'essensstand',
     nachbarschaft = 'nachbarschaft',
+    anderes = 'anderes',
 }
 
 export default ApplicationType;

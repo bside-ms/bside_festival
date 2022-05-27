@@ -122,6 +122,12 @@ const ApplicationFormInformation = ({ applicationType }: Props): ReactElement =>
                         Wir bitten um vollständige & aussagekräftige Bewerbungen.
                     </div>
                     <div>
+                        Als Beitrag zur Finanzierung des Festivals wird von Essensständen eine Standgebühr erhoben.
+                        Die genaue Höhe steht noch nicht fest, wird sich allerdings an Größe, Zeitraum und Standort
+                        des jeweiligen Essensstandes richten. Weitere Infos folgen und antworten wir euch auf eure
+                        Bewerbung.
+                    </div>
+                    <div>
                         Wichtig: Für Essensstände ist für alle Mitarbeitenden ein Gesundheitszeugnis notwendig
                         (für 25 € bei der Stadt Münster <Link href={link}><a className="underline">hier</a></Link> zu erhalten).
                     </div>
@@ -140,6 +146,22 @@ const ApplicationFormInformation = ({ applicationType }: Props): ReactElement =>
                         Wir bitten um vollständige und aussagekräftige Bewerbungen. Wo liegt der Hinterhof?
                         Wie viele Personen finden Platz? Welcher Programmpunkt ist geeignet? An welchen Tagen
                         können wir den Platz nutzen? Wer ist unser:e Ansprechperson?
+                    </div>
+                </>
+            );
+
+        case ApplicationType.anderes:
+            return (
+                <>
+                    <div>
+                        Du möchtest Dich mit etwas bewerben, was von den anderen Kategorien nicht wirklich abgedeckt ist?
+                        Dann nutze diese Kategorie "Sonstiges".
+                    </div>
+                    <div>
+                        Bitte beachte, dass wir insbesondere Bewerbungen berücksichtigen, die interaktiv, kreativ & niedrigschwellig
+                        sind. Zudem bitten wir um vollständige & aussagekräftige Bewerbungen. Für wie viele Personen, welche Altersgruppen
+                        und welche Dauer ist Dein Vorschlag geeignet? Welche technischen Voraussetzungen gibt es?
+                        Du kannst gerne Bezug nehmen zu unserem diesjährigen Motto "Zurück für die Zukunft".
                     </div>
                 </>
             );

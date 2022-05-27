@@ -1,6 +1,6 @@
 import ApplicationType from 'lib/application-form/ApplicationType';
 
-const useApplicationTitle = (applicationType: ApplicationType): string => {
+const useApplicationImage = (applicationType: ApplicationType): string => {
 
     switch (applicationType) {
         case ApplicationType.ausstellung:
@@ -19,7 +19,9 @@ const useApplicationTitle = (applicationType: ApplicationType): string => {
             return '/assets/images/falafel.jpg';
         case ApplicationType.nachbarschaft:
             return '/assets/images/festival/19-154-min.jpg';
+        case ApplicationType.anderes:
+            return '/assets/images/festival/favs/b_side_festival_2019_mbYxg.jpg';
     }
 };
 
-export default useApplicationTitle;
+export default useApplicationImage;

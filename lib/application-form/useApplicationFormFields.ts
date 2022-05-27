@@ -285,5 +285,21 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
                 mailAddressField,
                 phoneNumberField,
             ];
+
+        case ApplicationType.anderes:
+            return [
+                {
+                    type: ApplicationFormFieldType.textArea,
+                    name: 'name',
+                    label: 'Wer seid ihr?',
+                },
+                {
+                    type: ApplicationFormFieldType.textArea,
+                    name: 'info',
+                    label: 'Erzählt uns von eurer Idee!',
+                },
+                residenceField,
+                ...contactFields,
+            ];
     }
 };
