@@ -1,12 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
 import ApplicationFormDatabaseService from 'lib/application-form/ApplicationFormDatabaseService';
 
-const handler = async (_request: NextApiRequest, response: NextApiResponse): Promise<void> => {
+const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
+
+    const session = await getSession({ req: request });
 
     const applicationFormDatabaseService = new ApplicationFormDatabaseService();
 
     try {
-        const applications = await applicationFormDatabaseService.getAllApplications();
+        const applications = await applicationFormDatabaseService.getAllApplications(session);
 
         response.status(200).json({ success: true, applications });
     } catch (error) {

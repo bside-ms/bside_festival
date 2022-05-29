@@ -1,7 +1,9 @@
 import type { Connection, UpsertResult } from 'mariadb';
 import mariadb from 'mariadb';
+import type { Session } from 'next-auth';
 import type ApplicationData from 'lib/application-form/ApplicationData';
 import type ApplicationType from 'lib/application-form/ApplicationType';
+import useIsGroupMember from 'lib/next-auth/useIsGroupMember';
 
 interface ApplicationsJoinResult {
     id: number;
@@ -55,9 +57,20 @@ export default class ApplicationFormDatabaseService {
         return true;
     }
 
-    public async getAllApplications(): Promise<Array<ApplicationData>> {
+    public async getAllApplications(session: Session | null): Promise<Array<ApplicationData>> {
+
+        /* eslint-disable react-hooks/rules-of-hooks */
+        const isInFestivalGroup = useIsGroupMember('/kreise/festival/mitglieder', session);
+        const isInDataPrivacyGroup = useIsGroupMember('/kreise/festival/eingeschränkt/datenschutz', session);
+        /* eslint-enable react-hooks/rules-of-hooks */
+
+        if (!isInFestivalGroup) {
+            throw new Error('Access denied, needs to be member of group "Festival"');
+        }
 
         const connection = await this.createConnection();
+
+        const excludedApplicationFields = this.getExcludedApplicationFields(true, isInDataPrivacyGroup);
 
         const result: Array<ApplicationsJoinResult> = await connection.query(`
             SELECT
@@ -71,8 +84,8 @@ export default class ApplicationFormDatabaseService {
             LEFT JOIN prod_festival.applicationsData apD
                 ON ap.id = apD.applicationId
             WHERE
-                apD.dataName NOT IN ('photo', 'technicalRiderPdf', 'contactPerson', 'mailAddress', 'phoneNumber', 'address');
-        `);
+                apD.dataName NOT IN (?);
+        `, [excludedApplicationFields]);
 
         const applicationData = new Array<ApplicationData>();
 
@@ -95,9 +108,20 @@ export default class ApplicationFormDatabaseService {
         return applicationData;
     }
 
-    public async getApplication(applicationId: string): Promise<ApplicationData | null> {
+    public async getApplication(applicationId: string, session: Session | null): Promise<ApplicationData | null> {
+
+        /* eslint-disable react-hooks/rules-of-hooks */
+        const isInFestivalGroup = useIsGroupMember('/kreise/festival/mitglieder', session);
+        const isInDataPrivacyGroup = useIsGroupMember('/kreise/festival/eingeschränkt/datenschutz', session);
+        /* eslint-enable react-hooks/rules-of-hooks */
+
+        if (!isInFestivalGroup) {
+            throw new Error('Access denied, needs to be member of group "Festival"');
+        }
 
         const connection = await this.createConnection();
+
+        const excludedApplicationFields = this.getExcludedApplicationFields(false, isInDataPrivacyGroup);
 
         const result: Array<ApplicationsJoinResult> = await connection.query(`
             SELECT
@@ -113,8 +137,8 @@ export default class ApplicationFormDatabaseService {
             WHERE
                 ap.id = ?
             AND
-                apD.dataName NOT IN ('contactPerson', 'mailAddress', 'phoneNumber', 'address');
-        `, [applicationId]);
+                apD.dataName NOT IN (?);
+        `, [applicationId, excludedApplicationFields]);
 
         let application: ApplicationData | null = null;
 
@@ -143,5 +167,26 @@ export default class ApplicationFormDatabaseService {
             password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE,
         });
+    }
+
+    private getExcludedApplicationFields(isListCall: boolean, isUserInDataPrivacyGroup: boolean): Array<string> {
+
+        const largeDataFields = ['photo', 'technicalRiderPdf'];
+        const sensitiveDataFields = ['contactPerson', 'mailAddress', 'phoneNumber', 'address'];
+
+        if (isListCall) {
+            if (isUserInDataPrivacyGroup) {
+                return largeDataFields;
+            }
+
+            return [...largeDataFields, ...sensitiveDataFields];
+        }
+
+        if (isUserInDataPrivacyGroup) {
+            // Array can't be empty for valid SQL :p
+            return [''];
+        }
+
+        return sensitiveDataFields;
     }
 }
