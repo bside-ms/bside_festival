@@ -1,47 +1,9 @@
 import styles from './ApplicationsOverview.module.scss';
 
 import type { ReactElement } from 'react';
-import Application from 'components/applications/Application';
+import ApplicationOverviewList from 'components/applications/ApplicationOverviewList';
 import ContentWrapper from 'components/common/ContentWrapper';
-import type ApplicationData from 'lib/application-form/ApplicationData';
 import useAllApplications from 'lib/applications/useAllApplications';
-
-const Content = ({ allApplications }: { allApplications: Array<ApplicationData> | null | Error }): ReactElement => {
-
-    if (allApplications instanceof Error) {
-        return (
-            <div className="text-white">
-                Whoops, es gab einen Fehler..<br />
-                {allApplications.toString()}
-            </div>
-        );
-    }
-
-    if (allApplications === null) {
-        return (
-            <div className="text-white">
-                Wird geladen...
-            </div>
-        );
-    }
-
-    return (
-        <>
-            <div className="text-white mb-4">
-                Anzahl: {allApplications.length}
-            </div>
-
-            <div className="space-y-3">
-                {allApplications.map(application => (
-                    <Application
-                        key={application.id}
-                        application={application}
-                    />
-                ))}
-            </div>
-        </>
-    );
-};
 
 const ApplicationsOverview = (): ReactElement => {
 
@@ -54,7 +16,7 @@ const ApplicationsOverview = (): ReactElement => {
                     Übersicht aller Bewerbungen
                 </div>
 
-                <Content allApplications={allApplications} />
+                <ApplicationOverviewList allApplications={allApplications} />
             </ContentWrapper>
         </div>
     );

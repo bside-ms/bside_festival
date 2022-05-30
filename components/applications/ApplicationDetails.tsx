@@ -33,7 +33,7 @@ const ApplicationDetails = ({ id, type, data, onCollapse }: Props): ReactElement
     }, [onCollapse]);
 
     return (
-        <div className="space-y-2 overflow-hidden">
+        <div className="space-y-2">
             <div className="font-bold">
                 {title.value}
             </div>
@@ -63,10 +63,40 @@ const ApplicationDetails = ({ id, type, data, onCollapse }: Props): ReactElement
                 }
             })}
 
-            <div className="mt-5 text-blue-600 cursor-pointer text-center" onClick={handleCollapse}>
-                <FontAwesomeIcon icon={faChevronUp} />
-                <span className="underline mx-3">Einklappen</span>
-                <FontAwesomeIcon icon={faChevronUp} />
+            <div
+                className={`
+                    pt-2
+                    text-blue-600
+                    cursor-pointer
+                    sticky
+                    bottom-0
+                `}
+                onClick={handleCollapse}
+            >
+                <div
+                    className={`
+                        flex
+                        justify-center
+                        align-middle
+                    `}
+                >
+                    <div
+                        className={`
+                            rounded-t-lg
+                            border-[1px]
+                            border-b-0
+                            border-gray-700
+                            leading-4
+                            py-2
+                            px-3
+                            bg-gray-50
+                        `}
+                    >
+                        <FontAwesomeIcon icon={faChevronUp} />
+                        <span className="underline mx-3">Einklappen</span>
+                        <FontAwesomeIcon icon={faChevronUp} />
+                    </div>
+                </div>
             </div>
         </div>
     );
