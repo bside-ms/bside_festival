@@ -17,7 +17,6 @@ import ContentWrapper from 'components/common/ContentWrapper';
 import PageHeader from 'components/common/PageHeader';
 import type ApplicationType from 'lib/application-form/ApplicationType';
 import useApplicationTitle from 'lib/application-form/useApplicationTitle';
-import useShowApplicationFormDisclaimer from 'lib/application-form/useShowApplicationFormDisclaimer';
 
 interface Props {
     applicationType: ApplicationType;
@@ -25,7 +24,6 @@ interface Props {
 
 const ApplicationForm = ({ applicationType }: Props): ReactElement => {
 
-    const showDisclaimer = useShowApplicationFormDisclaimer(applicationType);
     const title = useApplicationTitle(applicationType);
 
     return (
@@ -82,7 +80,7 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement => {
                         </ApplicationFormContextProvider>
                     </ApplicationFormThemeProvider>
 
-                    {showDisclaimer && <ApplicationFormDisclaimer />}
+                    <ApplicationFormDisclaimer applicationType={applicationType} />
                 </ContentWrapper>
             </div>
         </>
