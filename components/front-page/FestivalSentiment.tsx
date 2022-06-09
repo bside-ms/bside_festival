@@ -9,7 +9,7 @@ const FestivalSentiment = (): ReactElement => {
             <ContentWrapper>
                 <div className="text-white font-display text-3xl mb-5 text-center">
                     Ein Festival<br />
-                    von Allen<br />
+                    von Vielen<br />
                     für Alle
                 </div>
 
