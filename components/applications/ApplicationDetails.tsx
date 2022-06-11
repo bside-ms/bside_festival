@@ -6,6 +6,7 @@ import useSWR from 'swr';
 import ApplicationDetailsImage from 'components/applications/ApplicationDetailsImage';
 import ApplicationDetailsPdfDownload from 'components/applications/ApplicationDetailsPdfDownload';
 import ApplicationDetailsText from 'components/applications/ApplicationDetailsText';
+import CopyApplicationLink from 'components/applications/CopyApplicationLink';
 import ApplicationFormFieldType from 'lib/application-form/ApplicationFormFieldType';
 import type ApplicationResponse from 'lib/application-form/ApplicationResponse';
 import type ApplicationType from 'lib/application-form/ApplicationType';
@@ -34,8 +35,12 @@ const ApplicationDetails = ({ id, type, data, onCollapse }: Props): ReactElement
 
     return (
         <div className="space-y-2">
-            <div className="font-bold">
-                {title.value}
+            <div className="flex justify-between">
+                <div className="font-bold">
+                    {title.value}
+                </div>
+
+                <CopyApplicationLink applicationId={id} />
             </div>
 
             {applicationDetails.map(detail => {
