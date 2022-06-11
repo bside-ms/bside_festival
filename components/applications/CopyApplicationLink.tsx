@@ -1,9 +1,10 @@
+/* eslint-disable simple-import-sort/imports */
 import { useCallback, useRef, useState } from 'react';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Popover } from '@mui/material';
-import type { ReactElement } from 'react';
 import copy from 'copy-to-clipboard';
+import type { ReactElement } from 'react';
 
 interface Props {
     applicationId: number;
@@ -27,12 +28,12 @@ const CopyApplicationLink = ({ applicationId }: Props): ReactElement => {
             () => handleHidePopOver(),
             600
         );
-    }, [applicationLink]);
+    }, [applicationLink, handleHidePopOver]);
 
     return (
         <>
             <a
-                className="space-x-2 text-gray-600 cursor-pointer hover:text-gray-800"
+                className="space-x-2 text-gray-600 cursor-pointer hover:text-gray-800 whitespace-nowrap"
                 onClick={handleCopy}
                 ref={popOverRefElement}
             >
