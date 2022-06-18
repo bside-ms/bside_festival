@@ -10,7 +10,7 @@ interface Props {
     theme?: HeaderThemes;
 }
 
-const themeClasses: Record<HeaderThemes, string> = {
+const themeClasses: Record<HeaderThemes, string | undefined> = {
     blue: styles.blueTheme,
     yellow: styles.yellowTheme,
     pink: styles.pinkTheme,
