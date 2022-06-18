@@ -5,13 +5,15 @@ import type { ReactElement } from 'react';
 import type ApplicationDataRow from 'lib/application-form/ApplicationDataRow';
 
 interface Props {
-    titleData: ApplicationDataRow;
+    titleData?: ApplicationDataRow;
     data: ApplicationDataRow;
 }
 
-const ApplicationDetailsPdfDownload = ({ titleData: { value: titleValue }, data: { label, value } }: Props): ReactElement => {
+const ApplicationDetailsPdfDownload = ({ titleData, data: { label, value } }: Props): ReactElement => {
 
-    const fileName = `B-Side Festival 2022 - ${titleValue.slice(0, 50)} - Technical Rider.pdf`;
+    const title = titleData?.value ?? '';
+
+    const fileName = `B-Side Festival 2022 - ${title.slice(0, 50)} - Technical Rider.pdf`;
 
     return (
         <Button

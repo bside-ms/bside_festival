@@ -37,7 +37,7 @@ const ApplicationDetails = ({ id, type, data, onCollapse }: Props): ReactElement
         <div className="space-y-2">
             <div className="flex justify-between">
                 <div className="font-bold">
-                    {title.value}
+                    {title?.value ?? 'Kein Titel'}
                 </div>
 
                 <CopyApplicationLink applicationId={id} />

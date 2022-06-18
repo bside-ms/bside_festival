@@ -48,7 +48,7 @@ const SingleApplication = ({ application: { id, type, createdAt, data } }: Props
             <div className="mt-3 space-y-2">
                 <div className="flex justify-between">
                     <div className="font-bold">
-                        {title.value}
+                        {title?.value ?? 'Kein Titel'}
                     </div>
 
                     <CopyApplicationLink applicationId={id} />

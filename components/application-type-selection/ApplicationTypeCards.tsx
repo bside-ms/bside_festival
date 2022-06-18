@@ -9,7 +9,7 @@ const ApplicationTypeCards = (): ReactElement => {
 
     return (
         <>
-            <div className={`${styles.title} font-display`}>
+            <div className={`${styles.title ?? ''} font-display`}>
                 Bewerbung
             </div>
 

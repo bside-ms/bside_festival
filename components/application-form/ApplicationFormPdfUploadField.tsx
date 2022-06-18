@@ -34,8 +34,7 @@ const ApplicationFormPdfUploadField = ({ formField }: Props): ReactElement => {
         const fileReader = new FileReader();
         fileReader.addEventListener('load', onFileRead);
 
-        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain,@typescript-eslint/no-unnecessary-condition
-        if (event.target.files !== null && event.target.files[0] !== undefined) {
+        if (event.target.files?.[0] !== undefined) {
 
             const pdfFile = event.target.files[0];
 

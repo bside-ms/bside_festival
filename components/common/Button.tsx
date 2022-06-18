@@ -15,7 +15,7 @@ const Button = ({ href, onClick, children, isDisabled = false, type = 'button' }
 
     const button = (
         <button
-            className={`${styles.button}`}
+            className={styles.button}
             type={type}
             disabled={isDisabled}
             onClick={onClick}
@@ -26,7 +26,7 @@ const Button = ({ href, onClick, children, isDisabled = false, type = 'button' }
 
     return (
         <div
-            className={`${styles.buttonContainer} ${isDisabled ? 'grayscale brightness-150' : ''}`}
+            className={`${styles.buttonContainer ?? ''} ${isDisabled ? 'grayscale brightness-150' : ''}`}
         >
             {href !== undefined ? (
                 <Link href={href} passHref={true}>
