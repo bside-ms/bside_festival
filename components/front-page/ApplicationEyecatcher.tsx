@@ -12,12 +12,12 @@ const ApplicationEyecatcher = (): ReactElement => {
             <ContentWrapper>
                 <div className="relative">
                     <div className={styles.box}>
-                        <div className={`${styles.boxContent} space-y-2`}>
+                        <div className={`${styles.boxContent ?? ''} space-y-2`}>
                             <div>
                                 Endlich geht es wieder los: Das B-Side Festival kehrt zurück
                             </div>
 
-                            <div className={`${styles.title} font-display`}>
+                            <div className={`${styles.title ?? ''} font-display`}>
                                 Zurück für die Zukunft!
                             </div>
 

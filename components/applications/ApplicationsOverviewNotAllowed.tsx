@@ -38,7 +38,7 @@ const ApplicationsOverviewNotAllowed = ({ reason }: Props): ReactElement => {
     };
 
     return (
-        <div className={`text-white bg-gray-500 py-5 text-2xl text-center h-screen ${styles.overview}`}>
+        <div className={`text-white bg-gray-500 py-5 text-2xl text-center h-screen ${styles.overview ?? ''}`}>
             <ContentWrapper>
                 {getContent()}
             </ContentWrapper>
