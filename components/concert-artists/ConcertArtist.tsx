@@ -19,19 +19,14 @@ const getThumbnailUrl = (concertArtist: ConcertArtist): string => {
 
     const imageAttributes = concertArtist.attributes.Images.data[0]?.attributes;
 
-    const thumbnailUrl = new URL(process.env.NEXT_PUBLIC_STRAPI_BASE_URL!);
-
     /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-    thumbnailUrl.pathname = (
+    return (
         imageAttributes.formats.thumbnail?.url ??
         imageAttributes.formats.small?.url ??
         imageAttributes.formats.medium?.url ??
         imageAttributes.formats.large?.url ??
         imageAttributes.url
     );
-    /* eslint-enable @typescript-eslint/no-unnecessary-condition */
-
-    return thumbnailUrl.toString();
 };
 
 const ConcertArtist = ({ concertArtist }: Props): ReactElement => {

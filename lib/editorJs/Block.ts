@@ -38,28 +38,17 @@ export interface ImageBlock extends BaseBlock {
             width: number;
             mime: string;
             alt: string;
-            formats: {
-                thumbnail: {
-                    ext: string;
-                    hash: string;
-                    height: number;
-                    mime: string;
-                    name: string;
-                    size: number;
-                    url: string;
-                    width: number;
-                };
-                small: {
-                    ext: string;
-                    hash: string;
-                    height: number;
-                    mime: string;
-                    name: string;
-                    size: number;
-                    url: string;
-                    width: number;
-                };
-            };
+            formats: Record<'thumbnail' | 'small' | 'medium' | 'large', {
+                url: string;
+                height: number;
+                width: number;
+                size: number;
+                ext: string;
+                hash: string;
+                mime: string;
+                name: string;
+                path: null;
+            }>;
         };
     };
 }

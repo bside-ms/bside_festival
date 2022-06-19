@@ -2,6 +2,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import qs from 'qs';
 import useIsGroupMember from 'lib/next-auth/useIsGroupMember';
+import fixImageUrls from 'lib/strapi/fixImageUrls';
+import type Location from 'lib/strapi/Location';
+import type StrapiResponse from 'lib/strapi/StrapiResponse';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
 
@@ -10,7 +13,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const isInFestivalGroup = useIsGroupMember('/kreise/festival/mitglieder', session);
 
-    const url = new URL(process.env.NEXT_PUBLIC_STRAPI_BASE_URL!);
+    const url = new URL(process.env.STRAPI_BASE_URL!);
 
     url.pathname = '/api/locations';
     url.search = qs.stringify({
@@ -32,9 +35,9 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
             }
         );
 
-        const jsonResponse = await fetchResponse.json();
+        const strapiResponse = await fetchResponse.json() as StrapiResponse<Array<Location>>;
 
-        response.status(200).json(jsonResponse);
+        response.status(200).json(fixImageUrls(strapiResponse));
     } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
