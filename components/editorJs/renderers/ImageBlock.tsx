@@ -7,7 +7,7 @@ interface Props {
 
 const ImageBlock = ({ data: { file, caption } }: Props): ReactElement => {
 
-    const baseUrl = process.env.NEXT_PUBLIC_STRAPI_BASE_URL!;
+    // TODO: Might need to change image URLs on the server
 
     const {
         url: mdUrl,
@@ -27,11 +27,11 @@ const ImageBlock = ({ data: { file, caption } }: Props): ReactElement => {
         <div>
             <div className="md:hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`${baseUrl}${smUrl}`} height={smHeight} width={smWidth} alt={alt} title={alt} />
+                <img src={smUrl} height={smHeight} width={smWidth} alt={alt} title={alt} />
             </div>
             <div className="hidden md:block">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`${baseUrl}${mdUrl}`} height={mdHeight} width={mdWidth} alt={alt} title={alt} />
+                <img src={mdUrl} height={mdHeight} width={mdWidth} alt={alt} title={alt} />
             </div>
             <div className="italic mt-1 text-sm text-gray-600">{caption}</div>
         </div>

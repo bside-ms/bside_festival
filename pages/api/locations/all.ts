@@ -10,7 +10,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const isInFestivalGroup = useIsGroupMember('/kreise/festival/mitglieder', session);
 
-    const url = new URL(process.env.NEXT_PUBLIC_STRAPI_BASE_URL!);
+    const url = new URL(process.env.STRAPI_BASE_URL!);
 
     url.pathname = '/api/locations';
     url.search = qs.stringify({
