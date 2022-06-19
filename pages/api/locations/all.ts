@@ -2,6 +2,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import qs from 'qs';
 import useIsGroupMember from 'lib/next-auth/useIsGroupMember';
+import fixImageUrls from 'lib/strapi/fixImageUrls';
+import type Location from 'lib/strapi/Location';
+import type StrapiResponse from 'lib/strapi/StrapiResponse';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
 
@@ -32,9 +35,9 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
             }
         );
 
-        const jsonResponse = await fetchResponse.json();
+        const strapiResponse = await fetchResponse.json() as StrapiResponse<Array<Location>>;
 
-        response.status(200).json(jsonResponse);
+        response.status(200).json(fixImageUrls(strapiResponse));
     } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
