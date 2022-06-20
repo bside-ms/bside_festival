@@ -30,7 +30,7 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement => {
         <>
             <PageHeader theme="pink" />
 
-            <div className={`${styles.header} font-display`}>
+            <div className={`${styles.header ?? ''} font-display`}>
                 <ContentWrapper>
                     <div className="text-2xl">
                         Bewerbung

@@ -1,4 +1,3 @@
-/* eslint-disable simple-import-sort/imports */
 import { useCallback, useRef, useState } from 'react';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

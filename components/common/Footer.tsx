@@ -2,6 +2,7 @@
 
 import { faFacebookSquare, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import InternalLinks from 'components/common/InternalLinks';
@@ -52,6 +53,17 @@ const Footer = (): ReactElement => {
                 <Login />
 
                 <InternalLinks />
+            </div>
+
+            <div className="flex justify-center pt-4">
+                <div className="w-64">
+                    <Image
+                        src="/assets/images/festival/delorean.png"
+                        width={1025}
+                        height={781}
+                        layout="responsive"
+                    />
+                </div>
             </div>
         </div>
     );

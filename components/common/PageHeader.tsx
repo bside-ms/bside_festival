@@ -10,7 +10,7 @@ interface Props {
     theme?: HeaderThemes;
 }
 
-const themeClasses: Record<HeaderThemes, string> = {
+const themeClasses: Record<HeaderThemes, string | undefined> = {
     blue: styles.blueTheme,
     yellow: styles.yellowTheme,
     pink: styles.pinkTheme,
@@ -19,7 +19,7 @@ const themeClasses: Record<HeaderThemes, string> = {
 const PageHeader = ({ theme = 'yellow' }: Props): ReactElement => {
 
     return (
-        <div className={`${styles.headerContainer} ${themeClasses[theme]}`}>
+        <div className={`${styles.headerContainer ?? ''} ${themeClasses[theme] ?? ''}`}>
             <ContentWrapper>
                 <div className={styles.plusSigns}>
                     ++++ ++++ ++++ ++++
@@ -27,7 +27,7 @@ const PageHeader = ({ theme = 'yellow' }: Props): ReactElement => {
                 <div className={styles.header}>
                     <Link href="/" passHref={true}>
                         <a className={styles.headerLink}>
-                            <div className={`${styles.content} font-display`}>
+                            <div className={`${styles.content ?? ''} font-display`}>
                                 <div>B-Side</div>
                                 <div>Festival</div>
                                 <div>16. - 18. Sep</div>

@@ -17,7 +17,7 @@ const ApplicationsOverview = ({ applicationId }: Props): ReactElement => {
     const allApplications = useAllApplications();
 
     return (
-        <div className={`bg-gray-500 py-5 min-h-screen ${styles.overview}`}>
+        <div className={`bg-gray-500 py-5 min-h-screen ${styles.overview ?? ''}`}>
             <ContentWrapper>
                 {applicationId === undefined ? (
                     <div className="text-white text-3xl mb-1">

@@ -18,7 +18,7 @@ const ParticipateEyecatcher = (): ReactElement => {
     return (
         <div className={styles.gridContainer}>
 
-            <div className={`grid md:hidden bg-red z-0 ${styles.smGrid}`}>
+            <div className={`grid md:hidden bg-red z-0 ${styles.smGrid ?? ''}`}>
                 {range(10).map(rowIdx => (
                     range(10).map(colIdx => (
                         <div key={`r${rowIdx}c${colIdx}`} />
@@ -26,7 +26,7 @@ const ParticipateEyecatcher = (): ReactElement => {
                 ))}
             </div>
 
-            <div className={`hidden md:grid bg-red z-0 ${styles.mdGrid}`}>
+            <div className={`hidden md:grid bg-red z-0 ${styles.mdGrid ?? ''}`}>
                 {range(30).map(rowIdx => (
                     range(30).map(colIdx => (
                         <div key={`r${rowIdx}c${colIdx}`} />
