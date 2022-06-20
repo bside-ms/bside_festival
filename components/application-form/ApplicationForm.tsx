@@ -35,7 +35,7 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement => {
                     <div className="text-2xl">
                         Bewerbung
                     </div>
-                    <div className="text-4xl">
+                    <div className="text-4xl line-clamp-2">
                         {title}
                     </div>
                 </ContentWrapper>
