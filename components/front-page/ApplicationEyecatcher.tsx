@@ -50,7 +50,7 @@ const ApplicationEyecatcher = (): ReactElement => {
                         und willst zum Beispiel deinen Hinterhof als Veranstaltungsort zur Verfügung
                         stellen? Du bietest mit deinem Foodtruck leckeres vegan-vegetarisches Essen an?
                         Du hast eine spannende Idee, auf die wir bisher noch gar nicht gekommen sind?
-                        Super! Dann bewirb dich jetzt!
+                        Super! Dann bewirb dich noch <span className="font-bold">bis zum 27. Juni 2022</span>!
                     </div>
 
                     <div className="mt-7">

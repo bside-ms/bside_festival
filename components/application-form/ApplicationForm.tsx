@@ -55,11 +55,12 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement => {
                         <div className="font-bold">
                             Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!
                         </div>
-                        <div>
-                            Die Bewerbungsphase für das B-Side Festival 2022 ist eröffnet.
-                        </div>
 
                         <ApplicationFormInformation applicationType={applicationType} />
+
+                        <div className="font-bold">
+                            Die Bewerbungsphase für das B-Side Festival endet am 27. Juni 2022.
+                        </div>
                     </div>
 
                     <ApplicationFormThemeProvider>
