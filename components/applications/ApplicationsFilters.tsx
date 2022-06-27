@@ -1,7 +1,8 @@
 import type { ReactElement } from 'react';
 import ApplicationFilter from 'components/applications/ApplicationFilter';
 import type ApplicationData from 'lib/application-form/ApplicationData';
-import ApplicationType from 'lib/application-form/ApplicationType';
+import type ApplicationType from 'lib/application-form/ApplicationType';
+import useAllApplicationTypes from 'lib/applications/useAllApplicationTypes';
 import useApplicationTypesWithCounts from 'lib/applications/useApplicationTypesWithCounts';
 
 interface Props {
@@ -12,12 +13,12 @@ interface Props {
 
 const ApplicationsFilters = ({ allApplications, onFilterToggle, filteredApplicationTypes }: Props): ReactElement => {
 
-    const applicationTypes = Object.values(ApplicationType) as Array<ApplicationType>;
+    const allApplicationTypes = useAllApplicationTypes();
     const applicationTypesWithCounts = useApplicationTypesWithCounts(allApplications);
 
     return (
         <div className="flex flex-wrap text-xs gap-2 mb-4">
-            {applicationTypes.map(applicationType => (
+            {allApplicationTypes.map(applicationType => (
                 <ApplicationFilter
                     key={applicationType}
                     applicationType={applicationType}

@@ -2,7 +2,9 @@ import styles from './ApplicationForm.module.scss';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isPast } from 'date-fns';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 import ApplicationFormConfirmationOverlay from 'components/application-form/ApplicationFormConfirmationOverlay';
 import ApplicationFormContextProvider from 'components/application-form/ApplicationFormContextProvider';
@@ -16,15 +18,29 @@ import ApplicationFormWrapper from 'components/application-form/ApplicationFormW
 import ContentWrapper from 'components/common/ContentWrapper';
 import PageHeader from 'components/common/PageHeader';
 import type ApplicationType from 'lib/application-form/ApplicationType';
+import useApplicationEndDate from 'lib/application-form/useApplicationEndDate';
 import useApplicationTitle from 'lib/application-form/useApplicationTitle';
+import useFormattedDate from 'lib/common/useFormattedDate';
 
 interface Props {
     applicationType: ApplicationType;
 }
 
-const ApplicationForm = ({ applicationType }: Props): ReactElement => {
+const ApplicationForm = ({ applicationType }: Props): ReactElement | null => {
+
+    const router = useRouter();
 
     const title = useApplicationTitle(applicationType);
+    const applicationEndDate = useApplicationEndDate(applicationType);
+
+    const hasApplicationPeriodEnded = isPast(applicationEndDate);
+
+    const formattedEndDate = useFormattedDate(applicationEndDate, 'd. MMMM \'um\' HH:mm \'Uhr\'');
+
+    if (hasApplicationPeriodEnded) {
+        router.push('/bewerbung');
+        return null;
+    }
 
     return (
         <>
@@ -59,7 +75,7 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement => {
                         <ApplicationFormInformation applicationType={applicationType} />
 
                         <div className="font-bold">
-                            Die Bewerbungsphase für das B-Side Festival endet am 27. Juni 2022.
+                            Die Bewerbungsphase für das B-Side Festival endet am {formattedEndDate}.
                         </div>
                     </div>
 

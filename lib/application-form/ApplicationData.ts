@@ -3,6 +3,6 @@ import type ApplicationType from 'lib/application-form/ApplicationType';
 export default interface ApplicationData {
     id: number;
     type: ApplicationType;
-    createdAt: Date;
+    createdAt: string;
     data: Record<string, string>;
 }

@@ -8,7 +8,7 @@ import useIsGroupMember from 'lib/next-auth/useIsGroupMember';
 interface ApplicationsJoinResult {
     id: number;
     type: ApplicationType;
-    createdAt: Date;
+    createdAt: string;
     dataName: string;
     dataValue: string;
 }

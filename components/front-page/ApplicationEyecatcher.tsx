@@ -4,8 +4,12 @@ import type { ReactElement } from 'react';
 import Button from 'components/common/Button';
 import ContentWrapper from 'components/common/ContentWrapper';
 import BHeartGrid from 'components/front-page/BHeartGrid';
+import useLatestApplicationEndDate from 'lib/application-form/useLatestApplicationEndDate';
+import useFormattedDate from 'lib/common/useFormattedDate';
 
 const ApplicationEyecatcher = (): ReactElement => {
+
+    const latestApplicationEndDate = useFormattedDate(useLatestApplicationEndDate(), 'd. MMMM');
 
     return (
         <div className={styles.eyecatcher}>
@@ -50,7 +54,7 @@ const ApplicationEyecatcher = (): ReactElement => {
                         und willst zum Beispiel deinen Hinterhof als Veranstaltungsort zur Verfügung
                         stellen? Du bietest mit deinem Foodtruck leckeres vegan-vegetarisches Essen an?
                         Du hast eine spannende Idee, auf die wir bisher noch gar nicht gekommen sind?
-                        Super! Dann bewirb dich noch <span className="font-bold">bis zum 27. Juni 2022</span>!
+                        Super! Dann bewirb dich noch <span className="font-bold">bis zum {latestApplicationEndDate}</span>!
                     </div>
 
                     <div className="mt-7">

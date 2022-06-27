@@ -1,11 +1,24 @@
 import styles from './ApplicationTypeCards.module.scss';
 
+import { isFuture } from 'date-fns';
 import type { ReactElement } from 'react';
 import ApplicationTypeCard from 'components/application-type-selection/ApplicationTypeCard';
 import ContentWrapper from 'components/common/ContentWrapper';
-import ApplicationType from 'lib/application-form/ApplicationType';
+import useApplicationEndDate from 'lib/application-form/useApplicationEndDate';
+import useAllApplicationTypes from 'lib/applications/useAllApplicationTypes';
 
 const ApplicationTypeCards = (): ReactElement => {
+
+    const availableApplicationTypes = useAllApplicationTypes().filter(
+        applicationType => {
+
+            // It's safe because we don't actually use any React hooks in there
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const endDate = useApplicationEndDate(applicationType);
+
+            return isFuture(endDate);
+        }
+    );
 
     return (
         <>
@@ -23,7 +36,7 @@ const ApplicationTypeCards = (): ReactElement => {
                     </div>
 
                     <div className={styles.cards}>
-                        {Object.values(ApplicationType).map(applicationType => (
+                        {availableApplicationTypes.map(applicationType => (
                             <ApplicationTypeCard
                                 key={applicationType}
                                 applicationType={applicationType}
