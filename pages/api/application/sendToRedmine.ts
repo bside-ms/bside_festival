@@ -11,6 +11,8 @@ import RedmineTicketsService from 'lib/redmine/RedmineTicketsService';
  * But eh.. ¯\_(ツ)_/¯
  */
 
+const dryRun = true;
+
 const applicationsStartDate = new Date('2022-05-20T00:20');
 const applicationsEndDate = new Date('2022-06-29T13:20');
 
@@ -20,10 +22,10 @@ const applicationTypeToProjectsMap = new Map<ApplicationType, string>([
     [ApplicationType.lesung, 'lesungs-bewerbungen'],
     [ApplicationType.essensstand, 'essenstand-bewerbungen'],
     [ApplicationType.ausstellung, 'ausstellungs-bewerbungen'],
-    [ApplicationType.familienprogramm, 'konzert-bewerbungen'],
-    [ApplicationType.nachbarschaft, 'konzert-bewerbungen'],
-    [ApplicationType.performance, 'konzert-bewerbungen'],
-    [ApplicationType.workshop, 'konzert-bewerbungen'],
+    [ApplicationType.familienprogramm, 'familienprogramm-bewerbungen'],
+    [ApplicationType.nachbarschaft, 'nachbarschaft-bewerbungen'],
+    [ApplicationType.performance, 'performance-bewerbungen'],
+    [ApplicationType.workshop, 'workshop-bewerbungen'],
 ]);
 
 const handler = async (_request: NextApiRequest, response: NextApiResponse): Promise<void> => {
@@ -54,7 +56,10 @@ const handler = async (_request: NextApiRequest, response: NextApiResponse): Pro
                 console.log('- issueDescription', issueDescription);
                 /* eslint-enable no-console */
 
-                redmineTicketsService.createIssue(projectName, issueName, issueDescription);
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                if (!dryRun) {
+                    redmineTicketsService.createIssue(projectName, issueName, issueDescription);
+                }
             });
 
         response.status(200).json({ success: true });
