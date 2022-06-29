@@ -6,7 +6,9 @@ import RedmineTicketsService from 'lib/redmine/RedmineTicketsService';
 
 /**
  * This "script" is just some lazy way to send a batch of applications
- * to Redmine. The applications are chosen by date.
+ * to Redmine. The applications are chosen by date. A better solution
+ * would have been to automatically send every new application to Redmine..
+ * But eh.. ¯\_(ツ)_/¯
  */
 
 const applicationsStartDate = new Date('2022-05-20T00:20');
