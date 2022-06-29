@@ -4,7 +4,7 @@ import type { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import type ConcertArtist from 'lib/strapi/ConcertArtist';
 import type LinksData from 'lib/strapi/LinksData';
 
-const getLabelAndIcon = (url: string): {label: string, icon: IconDefinition } => {
+const getLabelAndIcon = (url: string): { label: string, icon: IconDefinition } => {
 
     if (url.startsWith('https://open.spotify.com')) {
         return { label: 'Spotify', icon: faSpotify };

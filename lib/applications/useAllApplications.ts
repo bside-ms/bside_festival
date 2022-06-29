@@ -11,8 +11,12 @@ const useAllApplications = (): Array<ApplicationData> | null | Error => {
         return error;
     }
 
-    if (data === undefined || !data.success) {
+    if (data === undefined) {
         return null;
+    }
+
+    if (!data.success) {
+        return new Error('Unknown server error, probably authentication problems..');
     }
 
     return data.applications;

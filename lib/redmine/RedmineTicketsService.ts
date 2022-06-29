@@ -8,9 +8,9 @@ export default class RedmineTicketsService {
     private readonly redmineApiUrl = process.env.REDMINE_URL!;
     private readonly redmineApiKey = process.env.REDMINE_API_KEY!;
 
-    public async createIssue(issueTitle: string, issueDescription: string): Promise<object> {
+    public async createIssue(projectName: string, issueTitle: string, issueDescription: string): Promise<object> {
 
-        const projectId = await this.findProjectId('konzert-bewerbungen');
+        const projectId = await this.findProjectId(projectName);
 
         if (projectId === null) {
             throw new Error('Could not find project id');
