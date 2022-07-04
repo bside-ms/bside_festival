@@ -32,7 +32,7 @@ const Application = ({ application: { id, type, createdAt, data } }: Props): Rea
 
     return (
         <div
-            className={`rounded border-[1px] border-gray-700 bg-gray-50 drop-shadow-lg ${padding} ${containerCursor}`}
+            className={`rounded bg-gray-50 drop-shadow-lg ${padding} ${containerCursor}`}
             onClick={handleExpand}
         >
             <div className="flex mb-1 justify-between">

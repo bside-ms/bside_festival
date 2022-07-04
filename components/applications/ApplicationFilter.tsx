@@ -28,7 +28,7 @@ const ApplicationFilter = ({ applicationType, applicationTypesWithCounts, filter
 
     return (
         <div
-            className="bg-white border-[1px] border-gray-700 rounded cursor-pointer drop-shadow-lg overflow-hidden"
+            className="bg-white rounded cursor-pointer drop-shadow-lg overflow-hidden"
             onClick={handleClick}
         >
             <div
