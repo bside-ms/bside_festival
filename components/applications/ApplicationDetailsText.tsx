@@ -14,13 +14,36 @@ const NormalText = ({ text }: { text: string }): ReactElement => (
 
 const TextWithLinks = ({ text }: { text: string }): ReactElement => {
 
+    const urlRegExp = createUrlRegExp();
+
+    let matches = null;
     let shownText = text;
 
-    createUrlRegExp().exec(text)?.forEach(matchedUrl => {
-        shownText.split(matchedUrl);
+    do {
+        matches = urlRegExp.exec(text);
 
-        shownText = shownText.replace(matchedUrl, `<a href="${matchedUrl}" target="_blank" class="underline italic">${matchedUrl}</a>`);
-    });
+        if (matches === null) {
+            continue;
+        }
+
+        let matchedUrl = matches[0]!;
+
+        if (matchedUrl.endsWith(',')) {
+            matchedUrl = matchedUrl.slice(0, -1);
+        }
+
+        const usedUrl = (
+            !createUrlRegExp({ strict: true }).test(matchedUrl) &&
+            createUrlRegExp({ strict: true }).test(`https://${matchedUrl}`)
+                ? `http://${matchedUrl}`
+                : matchedUrl
+        );
+
+        shownText = shownText.replace(
+            matchedUrl,
+            `<a href="${usedUrl}" target="_blank" class="underline italic">${matchedUrl}</a>`
+        );
+    } while (matches !== null);
 
     // eslint-disable-next-line react/no-danger
     return <div className="break-all" dangerouslySetInnerHTML={{ __html: shownText }} />;
