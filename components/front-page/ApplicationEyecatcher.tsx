@@ -1,15 +1,10 @@
 import styles from './ApplicationEyecatcher.module.scss';
 
 import type { ReactElement } from 'react';
-import Button from 'components/common/Button';
 import ContentWrapper from 'components/common/ContentWrapper';
 import BHeartGrid from 'components/front-page/BHeartGrid';
-import useLatestApplicationEndDate from 'lib/application-form/useLatestApplicationEndDate';
-import useFormattedDate from 'lib/common/useFormattedDate';
 
 const ApplicationEyecatcher = (): ReactElement => {
-
-    const latestApplicationEndDate = useFormattedDate(useLatestApplicationEndDate(), 'd. MMMM');
 
     return (
         <div className={styles.eyecatcher}>
@@ -47,20 +42,14 @@ const ApplicationEyecatcher = (): ReactElement => {
 
             <ContentWrapper>
                 <div className={styles.applicationBox}>
-                    <div className="font-display text-2xl mb-3">Bewerbung</div>
+                    <div className="font-display text-1xl mb-3">Ende der Bewerbungsphase</div>
 
                     <div className={styles.applicationBoxInfo}>
-                        Du willst mit deiner Kunst Teil des bunten Programms werden? Du wohnst im Viertel
-                        und willst zum Beispiel deinen Hinterhof als Veranstaltungsort zur Verfügung
-                        stellen? Du bietest mit deinem Foodtruck leckeres vegan-vegetarisches Essen an?
-                        Du hast eine spannende Idee, auf die wir bisher noch gar nicht gekommen sind?
-                        Super! Dann bewirb dich noch <span className="font-bold">bis zum {latestApplicationEndDate}</span>!
-                    </div>
-
-                    <div className="mt-7">
-                        <Button href="/bewerbung">
-                            Jetzt bewerben!
-                        </Button>
+                        Unsere Bewerbungsphase für das B-Side Festival 2022 ist beendet. <strong>Vielen Dank für alle Einsendungen!</strong> Wir sind
+                        überwältigt von der Vielzahl an Menschen, die dieses schöne Festival mitgestalten wollen und machen uns nun an die Sichtung
+                        aller eurer Bewerbungen. Bitte gebt uns etwas Zeit, bis wir uns bei euch melden. Wir sind fleißig dabei, ein abwechslungsreiches,
+                        unterhaltsames und schönes Programm zu erstellen.<br />
+                        Wir freuen uns!
                     </div>
                 </div>
             </ContentWrapper>
