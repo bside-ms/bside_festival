@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { isFuture } from 'date-fns';
 import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
@@ -20,8 +21,14 @@ export default (): ReactElement | null => {
         }
     );
 
+    useEffect(() => {
+        if (availableApplicationTypes.length === 0) {
+            // Need to be done in here to prevent push in server-side pre-render
+            router.push('/');
+        }
+    }, [router, availableApplicationTypes]);
+
     if (availableApplicationTypes.length === 0) {
-        router.push('/');
         return null;
     }
 
