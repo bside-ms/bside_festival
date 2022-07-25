@@ -12,9 +12,16 @@ const InternalLinks = (): ReactElement | null => {
 
     return (
         <div className="space-y-1">
-            <Link href="/bewerbung/uebersicht">
-                <a className="underline cursor-pointer">Bewerbungsübersicht</a>
-            </Link>
+            <div>
+                <Link href="/bewerbung/uebersicht">
+                    <a className="underline cursor-pointer">Bewerbungsübersicht</a>
+                </Link>
+            </div>
+            <div>
+                <Link href="/programm/slotplan">
+                    <a className="underline cursor-pointer">Slotplan</a>
+                </Link>
+            </div>
         </div>
     );
 };

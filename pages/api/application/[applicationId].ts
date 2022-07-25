@@ -6,7 +6,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 
     const session = await getSession({ req: request });
 
-    const { applicationId } = request.query as {applicationId?: string};
+    const { applicationId } = request.query as { applicationId?: string };
 
     const applicationFormDatabaseService = new ApplicationFormDatabaseService();
 
