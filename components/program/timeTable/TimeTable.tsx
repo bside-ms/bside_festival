@@ -3,19 +3,23 @@ import type { ReactElement } from 'react';
 import TimeTableDateSelects from 'components/program/timeTable/TimeTableDateSelects';
 import TimeTableLocation from 'components/program/timeTable/TimeTableLocation';
 import TimeTableLocationHeadline from 'components/program/timeTable/TimeTableLocationHeadline';
-import type Concert from 'lib/strapi/Concert';
+import type Concert from 'lib/strapi/typings/Concert';
+import type Performance from 'lib/strapi/typings/Performance';
+import type Reading from 'lib/strapi/typings/Reading';
+import type Workshop from 'lib/strapi/typings/Workshop';
 import useAvailableDates from 'lib/strapi/useAvailableDates';
 import useConcertsFilteredByDate from 'lib/strapi/useConcertsFilteredByDate';
 import useLocationsFromTimeTableItems from 'lib/strapi/useLocationsFromTimeTableItems';
-import useWorkshopsFilteredByDate from 'lib/strapi/useWorkshopsFilteredByDate';
-import type Workshop from 'lib/strapi/Workshop';
+import useProgramItemFilteredByDate from 'lib/strapi/useProgramItemsFilteredByDate';
 
 interface Props {
     concerts: Array<Concert>;
     workshops: Array<Workshop>;
+    readings: Array<Reading>;
+    performances: Array<Performance>;
 }
 
-const TimeTable = ({ concerts, workshops }: Props): ReactElement => {
+const TimeTable = ({ concerts, workshops, readings, performances }: Props): ReactElement => {
 
     // TODO: use more context
 
@@ -24,9 +28,16 @@ const TimeTable = ({ concerts, workshops }: Props): ReactElement => {
     const [date, setDate] = useState<Date>(availableDates[0]);
 
     const concertsFilteredByDate = useConcertsFilteredByDate(concerts, date);
-    const workshopsFilteredByDate = useWorkshopsFilteredByDate(workshops, date);
+    const workshopsFilteredByDate = useProgramItemFilteredByDate<Workshop>(workshops, date);
+    const performancesFilteredByDate = useProgramItemFilteredByDate<Performance>(performances, date);
+    const readingsFilteredByDate = useProgramItemFilteredByDate<Reading>(readings, date);
 
-    const locations = useLocationsFromTimeTableItems([...concertsFilteredByDate, ...workshopsFilteredByDate]);
+    const locations = useLocationsFromTimeTableItems([
+        ...concertsFilteredByDate,
+        ...workshopsFilteredByDate,
+        ...performancesFilteredByDate,
+        ...readingsFilteredByDate,
+    ]);
 
     return (
         <div>
@@ -58,6 +69,8 @@ const TimeTable = ({ concerts, workshops }: Props): ReactElement => {
                                 location={location}
                                 concerts={concertsFilteredByDate}
                                 workshops={workshopsFilteredByDate}
+                                performances={performancesFilteredByDate}
+                                readings={readingsFilteredByDate}
                                 date={date}
                                 isFirstLocation={index === 0}
                             />

@@ -2,32 +2,38 @@ import { differenceInMinutes, endOfDay, format } from 'date-fns';
 import type { ReactElement } from 'react';
 import TimeTableConcert from 'components/program/timeTable/TimeTableConcert';
 import TimeTableHourDelimiter from 'components/program/timeTable/TimeTableHourDelimiter';
+import TimeTablePerformance from 'components/program/timeTable/TimeTablePerformance';
+import TimeTableReading from 'components/program/timeTable/TimeTableReading';
 import TimeTableWorkshop from 'components/program/timeTable/TimeTableWorkshop';
-import type Concert from 'lib/strapi/Concert';
-import type Location from 'lib/strapi/Location';
+import type Concert from 'lib/strapi/typings/Concert';
+import type Location from 'lib/strapi/typings/Location';
+import type Performance from 'lib/strapi/typings/Performance';
+import type Reading from 'lib/strapi/typings/Reading';
+import type Workshop from 'lib/strapi/typings/Workshop';
 import useConcertsFilteredByLocationId from 'lib/strapi/useConcertsFilteredByLocationId';
 import useOptimizedTimeTableBegin from 'lib/strapi/useOptimizedTimeTableBegin';
 import useOptimizedTimeTableEnd from 'lib/strapi/useOptimizedTimeTableEnd';
+import useProgramItemFilteredByLocationId from 'lib/strapi/useProgramItemFilteredByLocationId';
 import useScaledTimeTableMinutes from 'lib/strapi/useScaledTimeTableMinutes';
 import useTimeTableHours from 'lib/strapi/useTimeTableHours';
-import useWorkshopsFilteredByLocationId from 'lib/strapi/useWorkshopsFilteredByLocationId';
-import type Workshop from 'lib/strapi/Workshop';
 
 interface Props {
     date: Date;
     location: Location;
     concerts: Array<Concert>;
     workshops: Array<Workshop>;
+    performances: Array<Performance>;
+    readings: Array<Reading>;
     isFirstLocation: boolean;
 }
 
-const TimeTableLocation = ({ date, location, concerts, workshops, isFirstLocation }: Props): ReactElement => {
+const TimeTableLocation = ({ date, location, concerts, workshops, performances, readings, isFirstLocation }: Props): ReactElement => {
 
     const allMinutesOfDay = 60 * 24;
     const fullHeight = useScaledTimeTableMinutes(allMinutesOfDay);
 
-    const optimizedTimeTableBegin = useOptimizedTimeTableBegin(date, [...concerts, ...workshops]);
-    const optimizedTimeTableEnd = useOptimizedTimeTableEnd(date, [...concerts, ...workshops]);
+    const optimizedTimeTableBegin = useOptimizedTimeTableBegin(date, [...concerts, ...workshops, ...performances, ...readings]);
+    const optimizedTimeTableEnd = useOptimizedTimeTableEnd(date, [...concerts, ...workshops, ...performances, ...readings]);
 
     const diffTimeTableBeginToStartOfDay = useScaledTimeTableMinutes(differenceInMinutes(optimizedTimeTableBegin, date));
     const diffTimeTableEndToEndOfDay = useScaledTimeTableMinutes(differenceInMinutes(endOfDay(date), optimizedTimeTableEnd));
@@ -35,7 +41,9 @@ const TimeTableLocation = ({ date, location, concerts, workshops, isFirstLocatio
     const usedHeight = fullHeight - diffTimeTableBeginToStartOfDay - diffTimeTableEndToEndOfDay;
 
     const concertsFilteredByLocation = useConcertsFilteredByLocationId(concerts, location.id);
-    const workshopsFilteredByLocation = useWorkshopsFilteredByLocationId(workshops, location.id);
+    const workshopsFilteredByLocation = useProgramItemFilteredByLocationId(workshops, location.id);
+    const performancesFilteredByLocation = useProgramItemFilteredByLocationId(performances, location.id);
+    const readingsFilteredByLocation = useProgramItemFilteredByLocationId(readings, location.id);
 
     const timeTableHours = useTimeTableHours(optimizedTimeTableBegin, optimizedTimeTableEnd);
 
@@ -67,6 +75,22 @@ const TimeTableLocation = ({ date, location, concerts, workshops, isFirstLocatio
                         optimizedTimeTableBegin={optimizedTimeTableBegin}
                         optimizedTimeTableEnd={optimizedTimeTableEnd}
                         workshop={workshop}
+                    />
+                ))}
+                {performancesFilteredByLocation.map(performance => (
+                    <TimeTablePerformance
+                        key={performance.id}
+                        optimizedTimeTableBegin={optimizedTimeTableBegin}
+                        optimizedTimeTableEnd={optimizedTimeTableEnd}
+                        performance={performance}
+                    />
+                ))}
+                {readingsFilteredByLocation.map(reading => (
+                    <TimeTableReading
+                        key={reading.id}
+                        optimizedTimeTableBegin={optimizedTimeTableBegin}
+                        optimizedTimeTableEnd={optimizedTimeTableEnd}
+                        reading={reading}
                     />
                 ))}
             </div>

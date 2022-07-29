@@ -2,8 +2,8 @@ import { Alert, AlertTitle } from '@mui/material';
 import type { ReactElement } from 'react';
 import ContentWrapper from 'components/common/ContentWrapper';
 import Location from 'components/locations/Location';
-import type { default as LocationModel } from 'lib/strapi/Location';
-import type StrapiResponse from 'lib/strapi/StrapiResponse';
+import type { default as LocationModel } from 'lib/strapi/typings/Location';
+import type StrapiResponse from 'lib/strapi/typings/StrapiResponse';
 
 interface Props {
     data?: StrapiResponse<Array<LocationModel>>;

@@ -1,7 +1,7 @@
 import type { Session } from 'next-auth';
 import isExtendedSession from 'lib/next-auth/isExtendedSession';
 
-const useIsGroupMember = (group: string, session: Session | null | undefined): boolean => {
+const isGroupMember = (group: string, session: Session | null | undefined): boolean => {
 
     if (session === null || session === undefined) {
         return false;
@@ -18,4 +18,4 @@ const useIsGroupMember = (group: string, session: Session | null | undefined): b
     return session.user.keycloakGroups.includes(group);
 };
 
-export default useIsGroupMember;
+export default isGroupMember;

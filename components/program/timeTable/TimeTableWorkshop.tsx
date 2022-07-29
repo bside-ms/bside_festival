@@ -3,9 +3,9 @@ import type { ReactElement } from 'react';
 import ApplicationType from 'lib/application-form/ApplicationType';
 import useApplicationTypeColor from 'lib/applications/useApplicationTypeColor';
 import useFormattedDate from 'lib/common/useFormattedDate';
+import type Workshop from 'lib/strapi/typings/Workshop';
 import useScaledTimeTableMinutes from 'lib/strapi/useScaledTimeTableMinutes';
-import useStrapiWorkshopUrl from 'lib/strapi/useStrapiWorkshopUrl';
-import type Workshop from 'lib/strapi/Workshop';
+import useStrapiCollectionTypeUrl from 'lib/strapi/useStrapiCollectionTypeUrl';
 
 interface Props {
     optimizedTimeTableBegin: Date;
@@ -20,7 +20,7 @@ const TimeTableWorkshop = (
     const formattedBegin = useFormattedDate(new Date(`${WorkshopDate} ${Begin}`), 'HH:mm');
     const formattedEnd = useFormattedDate(new Date(`${WorkshopDate} ${End}`), 'HH:mm');
 
-    const strapiUrl = useStrapiWorkshopUrl(id);
+    const strapiUrl = useStrapiCollectionTypeUrl('workshop', id);
 
     const diffInMinutesFromStartOfDay = useScaledTimeTableMinutes(differenceInMinutes(new Date(`${WorkshopDate} ${Begin}`), optimizedTimeTableBegin));
     // eslint-disable-next-line max-len

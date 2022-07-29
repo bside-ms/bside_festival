@@ -1,8 +1,8 @@
 import { isBefore, isSameDay, startOfDay, startOfHour, subHours } from 'date-fns';
-import type TimeTableItem from 'lib/strapi/TimeTableItem';
+import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 import useBeginFromItem from 'lib/strapi/useBeginFromItem';
 
-const useOptimizedTimeTableBegin = (date: Date, timeTableItems: Array<TimeTableItem>): Date => {
+const useOptimizedTimeTableBegin = (date: Date, timeTableItems: Array<ProgramItem>): Date => {
 
     const earliestTimeTableItemBegin = timeTableItems.reduce<Date | null>(
         (currentEarliestTimeTableItemBegin, timeTableItem) => {

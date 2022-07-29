@@ -1,17 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import qs from 'qs';
-import useIsGroupMember from 'lib/next-auth/useIsGroupMember';
+import isGroupMember from 'lib/next-auth/isGroupMember';
 import fixImageUrls from 'lib/strapi/fixImageUrls';
-import type StrapiResponse from 'lib/strapi/StrapiResponse';
-import type WorkshopOrganizer from 'lib/strapi/WorkshopOrganizer';
+import type StrapiResponse from 'lib/strapi/typings/StrapiResponse';
+import type WorkshopOrganizer from 'lib/strapi/typings/WorkshopOrganizer';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
 
     const session = await getSession({ req: request });
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const isInFestivalGroup = useIsGroupMember('/kreise/festival/mitglieder', session);
+     
+    const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
 
     const url = new URL(process.env.STRAPI_BASE_URL!);
 

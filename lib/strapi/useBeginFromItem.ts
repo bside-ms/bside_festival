@@ -1,6 +1,6 @@
-import type TimeTableItem from 'lib/strapi/TimeTableItem';
+import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 
-const useBeginFromItem = (timeTableItem: TimeTableItem): Date => {
+const useBeginFromItem = (timeTableItem: ProgramItem): Date => {
 
     if ('Date' in timeTableItem.attributes) {
         return new Date(`${timeTableItem.attributes.Date}T${timeTableItem.attributes.Begin}Z`);

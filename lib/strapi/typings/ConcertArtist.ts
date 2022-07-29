@@ -1,7 +1,7 @@
-import type GenericImagesData from 'lib/strapi/GenericImagesData';
-import type GenericLinksData from 'lib/strapi/GenericLinksData';
+import type GenericImagesData from 'lib/strapi/typings/GenericImagesData';
+import type GenericLinksData from 'lib/strapi/typings/GenericLinksData';
 
-export default interface WorkshopOrganizer {
+export default interface ConcertArtist {
     id: number;
     attributes: {
         Name: string;

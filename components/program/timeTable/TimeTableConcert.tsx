@@ -3,11 +3,11 @@ import type { ReactElement } from 'react';
 import ApplicationType from 'lib/application-form/ApplicationType';
 import useApplicationTypeColor from 'lib/applications/useApplicationTypeColor';
 import useFormattedDate from 'lib/common/useFormattedDate';
-import type Concert from 'lib/strapi/Concert';
+import type Concert from 'lib/strapi/typings/Concert';
 import useBeginFromItem from 'lib/strapi/useBeginFromItem';
 import useEndFromItem from 'lib/strapi/useEndFromItem';
 import useScaledTimeTableMinutes from 'lib/strapi/useScaledTimeTableMinutes';
-import useStrapiConcertUrl from 'lib/strapi/useStrapiConcertUrl';
+import useStrapiCollectionTypeUrl from 'lib/strapi/useStrapiCollectionTypeUrl';
 
 interface Props {
     optimizedTimeTableBegin: Date;
@@ -25,7 +25,7 @@ const TimeTableConcert = ({ optimizedTimeTableBegin, concert }: Props): ReactEle
     const formattedBegin = useFormattedDate(concertBegin, 'HH:mm');
     const formattedEnd = useFormattedDate(concertEnd, 'HH:mm');
 
-    const strapiUrl = useStrapiConcertUrl(id);
+    const strapiUrl = useStrapiCollectionTypeUrl('concert', id);
 
     const diffInMinutesFromStartOfDay = useScaledTimeTableMinutes(differenceInMinutes(concertBegin, optimizedTimeTableBegin));
     const diffInMinutesFromBeginToEnd = useScaledTimeTableMinutes(differenceInMinutes(concertEnd, concertBegin));

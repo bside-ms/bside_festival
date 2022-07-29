@@ -3,19 +3,16 @@ import type { ReactElement } from 'react';
 import ApplicationsOverviewNotAllowed from 'components/applications/ApplicationsOverviewNotAllowed';
 import TimeTable from 'components/program/timeTable/TimeTable';
 import SwrResponseWrapper from 'components/strapi/SwrResponseWrapper';
-import useIsGroupMember from 'lib/next-auth/useIsGroupMember';
-import type Concert from 'lib/strapi/Concert';
-import useAllConcerts from 'lib/strapi/useAllConcerts';
-import useAllWorkshops from 'lib/strapi/useAllWorkshops';
-import type Workshop from 'lib/strapi/Workshop';
+import isGroupMember from 'lib/next-auth/isGroupMember';
+import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
+import useAllProgramItems from 'lib/strapi/useAllProgramItems';
 
 export default (): ReactElement => {
 
-    const swrConcertsResponse = useAllConcerts();
-    const swrWorkshopsResponse = useAllWorkshops();
+    const swrResponse = useAllProgramItems();
 
     const { data: session, status } = useSession();
-    const isInFestivalGroup = useIsGroupMember('/kreise/festival/mitglieder', session);
+    const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
 
     if (status !== 'authenticated') {
         return <ApplicationsOverviewNotAllowed reason={status} />;
@@ -28,16 +25,14 @@ export default (): ReactElement => {
     return (
         <div className="min-h-screen pt-8">
             <div className="w-full pl-5 mx-auto relative">
-                <SwrResponseWrapper<Array<Concert>> response={swrConcertsResponse}>
-                    {(concerts): ReactElement => (
-                        <SwrResponseWrapper<Array<Workshop>> response={swrWorkshopsResponse}>
-                            {(workshops): ReactElement => (
-                                <TimeTable
-                                    concerts={concerts}
-                                    workshops={workshops}
-                                />
-                            )}
-                        </SwrResponseWrapper>
+                <SwrResponseWrapper<AllProgramItems> response={swrResponse}>
+                    {({ concerts, workshops, performances, readings }): ReactElement => (
+                        <TimeTable
+                            concerts={concerts ?? []}
+                            workshops={workshops ?? []}
+                            performances={performances ?? []}
+                            readings={readings ?? []}
+                        />
                     )}
                 </SwrResponseWrapper>
             </div>

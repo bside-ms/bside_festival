@@ -1,8 +1,8 @@
 import { faFacebook, faInstagram, faSoundcloud, faSpotify, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import type ConcertArtist from 'lib/strapi/ConcertArtist';
-import type LinksData from 'lib/strapi/LinksData';
+import type ConcertArtist from 'lib/strapi/typings/ConcertArtist';
+import type LinksData from 'lib/strapi/typings/LinksData';
 
 const getLabelAndIcon = (url: string): { label: string, icon: IconDefinition } => {
 
@@ -31,12 +31,15 @@ const getLabelAndIcon = (url: string): { label: string, icon: IconDefinition } =
 
 const useLinksData = (links: ConcertArtist['attributes']['Links']): Array<LinksData> => {
 
-    return links.map<LinksData>(link => {
-        return {
-            url: link.Link,
-            ...getLabelAndIcon(link.Link),
-        };
-    });
+    return links
+        .map(link => link.Link)
+        .filter((link): link is string => link !== '' && link !== null)
+        .map<LinksData>(link => {
+            return {
+                url: link,
+                ...getLabelAndIcon(link),
+            };
+        });
 };
 
 export default useLinksData;

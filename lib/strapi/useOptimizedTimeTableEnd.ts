@@ -1,8 +1,8 @@
 import { addHours, endOfDay, isAfter, isSameDay, startOfHour } from 'date-fns';
-import type TimeTableItem from 'lib/strapi/TimeTableItem';
+import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 import useEndFromItem from 'lib/strapi/useEndFromItem';
 
-const useOptimizedTimeTableEnd = (date: Date, timeTableItems: Array<TimeTableItem>): Date => {
+const useOptimizedTimeTableEnd = (date: Date, timeTableItems: Array<ProgramItem>): Date => {
 
     const latestTimeTableItemEnd = timeTableItems.reduce<Date | null>(
         (currentLatestTimeTableItemEnd, timeTableItem) => {

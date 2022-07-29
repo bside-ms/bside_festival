@@ -1,8 +1,8 @@
 import useSWR from 'swr';
 import type { SWRResponse } from 'swr/dist/types';
 import fetcher from 'lib/common/fetcher';
-import type Location from 'lib/strapi/Location';
-import type StrapiResponse from 'lib/strapi/StrapiResponse';
+import type Location from 'lib/strapi/typings/Location';
+import type StrapiResponse from 'lib/strapi/typings/StrapiResponse';
 
 const useAllLocations = (): SWRResponse<StrapiResponse<Array<Location>>, Error> => {
 

@@ -3,7 +3,7 @@ import mariadb from 'mariadb';
 import type { Session } from 'next-auth';
 import type ApplicationData from 'lib/application-form/ApplicationData';
 import type ApplicationType from 'lib/application-form/ApplicationType';
-import useIsGroupMember from 'lib/next-auth/useIsGroupMember';
+import isGroupMember from 'lib/next-auth/isGroupMember';
 
 interface ApplicationsJoinResult {
     id: number;
@@ -58,10 +58,9 @@ export default class ApplicationFormDatabaseService {
     }
 
     public async getAllApplications(session: Session | null): Promise<Array<ApplicationData>> {
-
-        /* eslint-disable react-hooks/rules-of-hooks */
-        const isInFestivalGroup = useIsGroupMember('/kreise/festival/mitglieder', session);
-        const isInDataPrivacyGroup = useIsGroupMember('/kreise/festival/eingeschränkt/datenschutz', session);
+         
+        const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
+        const isInDataPrivacyGroup = isGroupMember('/kreise/festival/eingeschränkt/datenschutz', session);
         /* eslint-enable react-hooks/rules-of-hooks */
 
         if (!isInFestivalGroup) {
@@ -109,10 +108,9 @@ export default class ApplicationFormDatabaseService {
     }
 
     public async getApplication(applicationId: string, session: Session | null): Promise<ApplicationData | null> {
-
-        /* eslint-disable react-hooks/rules-of-hooks */
-        const isInFestivalGroup = useIsGroupMember('/kreise/festival/mitglieder', session);
-        const isInDataPrivacyGroup = useIsGroupMember('/kreise/festival/eingeschränkt/datenschutz', session);
+         
+        const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
+        const isInDataPrivacyGroup = isGroupMember('/kreise/festival/eingeschränkt/datenschutz', session);
         /* eslint-enable react-hooks/rules-of-hooks */
 
         if (!isInFestivalGroup) {

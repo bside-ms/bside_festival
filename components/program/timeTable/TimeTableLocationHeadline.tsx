@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import type Location from 'lib/strapi/Location';
+import type Location from 'lib/strapi/typings/Location';
 
 interface Props {
     location: Location;

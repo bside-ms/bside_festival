@@ -1,5 +1,5 @@
-import type ConcertArtist from 'lib/strapi/ConcertArtist';
-import type Location from 'lib/strapi/Location';
+import type ConcertArtist from 'lib/strapi/typings/ConcertArtist';
+import type Location from 'lib/strapi/typings/Location';
 
 export default interface Concert {
     id: number;

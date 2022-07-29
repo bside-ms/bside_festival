@@ -1,7 +1,7 @@
 import { Alert, AlertTitle } from '@mui/material';
 import type { ReactElement } from 'react';
 import type { SWRResponse } from 'swr/dist/types';
-import type StrapiResponse from 'lib/strapi/StrapiResponse';
+import type StrapiResponse from 'lib/strapi/typings/StrapiResponse';
 
 interface Props<T> {
     response: SWRResponse<StrapiResponse<T>, Error>;

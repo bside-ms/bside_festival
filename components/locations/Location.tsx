@@ -4,7 +4,7 @@ import Link from 'next/link';
 import type { ReactElement } from 'react';
 import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
 import useEditorJsData from 'lib/editorJs/useEditorJsData';
-import Location from 'lib/strapi/Location';
+import Location from 'lib/strapi/typings/Location';
 import useLinksData from 'lib/strapi/useLinksData';
 
 interface Props {

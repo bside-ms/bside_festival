@@ -1,5 +1,5 @@
-import type Location from 'lib/strapi/Location';
-import type WorkshopOrganizer from 'lib/strapi/WorkshopOrganizer';
+import type Location from 'lib/strapi/typings/Location';
+import type WorkshopOrganizer from 'lib/strapi/typings/WorkshopOrganizer';
 
 export default interface Workshop {
     id: number;

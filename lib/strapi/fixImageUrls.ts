@@ -1,5 +1,5 @@
-import type GenericImagesData from 'lib/strapi/GenericImagesData';
-import type StrapiResponse from 'lib/strapi/StrapiResponse';
+import type GenericImagesData from 'lib/strapi/typings/GenericImagesData';
+import type StrapiResponse from 'lib/strapi/typings/StrapiResponse';
 
 const fixImageUrls = <T extends StrapiResponse<Array<{ attributes: { Images: GenericImagesData }}>>>(strapiResponse: T): T => {
 
