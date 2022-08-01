@@ -4,7 +4,7 @@ import ApplicationsOverviewNotAllowed from 'components/applications/Applications
 import TimeTable from 'components/program/timeTable/TimeTable';
 import SwrResponseWrapper from 'components/strapi/SwrResponseWrapper';
 import isGroupMember from 'lib/next-auth/isGroupMember';
-import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
+import type AllProgramItemsResponse from 'lib/strapi/typings/AllProgramItemsResponse';
 import useAllProgramItems from 'lib/strapi/useAllProgramItems';
 
 export default (): ReactElement => {
@@ -25,13 +25,14 @@ export default (): ReactElement => {
     return (
         <div className="min-h-screen pt-8">
             <div className="w-full pl-5 mx-auto relative">
-                <SwrResponseWrapper<AllProgramItems> response={swrResponse}>
-                    {({ concerts, workshops, performances, readings }): ReactElement => (
+                <SwrResponseWrapper<AllProgramItemsResponse> response={swrResponse}>
+                    {({ allProgramItems: { concerts, workshops, performances, readings }, erroneousProgramItems }): ReactElement => (
                         <TimeTable
                             concerts={concerts ?? []}
                             workshops={workshops ?? []}
                             performances={performances ?? []}
                             readings={readings ?? []}
+                            erroneousProgramItems={erroneousProgramItems}
                         />
                     )}
                 </SwrResponseWrapper>

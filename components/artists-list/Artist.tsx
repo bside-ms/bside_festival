@@ -8,12 +8,13 @@ import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
 import useEditorJsData from 'lib/editorJs/useEditorJsData';
 import isGroupMember from 'lib/next-auth/isGroupMember';
 import type { default as ArtistModel } from 'lib/strapi/typings/Artist';
+import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
 import useLinksData from 'lib/strapi/useLinksData';
 import useStrapiCollectionTypeUrl from 'lib/strapi/useStrapiCollectionTypeUrl';
 
 interface Props {
     artist: ArtistModel;
-    strapiCollectionType: string;
+    strapiCollectionType: StrapiCollectionType;
 }
 
 const getThumbnailUrl = (artist: ArtistModel): string => {

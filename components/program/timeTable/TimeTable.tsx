@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import type { ReactElement } from 'react';
 import TimeTableDateSelects from 'components/program/timeTable/TimeTableDateSelects';
+import TimeTableErroneousProgramItems from 'components/program/timeTable/TimeTableErroneousProgramItems';
 import TimeTableLocation from 'components/program/timeTable/TimeTableLocation';
 import TimeTableLocationHeadline from 'components/program/timeTable/TimeTableLocationHeadline';
 import type Concert from 'lib/strapi/typings/Concert';
+import type ErroneousProgramItem from 'lib/strapi/typings/ErroneousProgramItem';
 import type Performance from 'lib/strapi/typings/Performance';
 import type Reading from 'lib/strapi/typings/Reading';
 import type Workshop from 'lib/strapi/typings/Workshop';
@@ -17,9 +19,10 @@ interface Props {
     workshops: Array<Workshop>;
     readings: Array<Reading>;
     performances: Array<Performance>;
+    erroneousProgramItems: Array<ErroneousProgramItem>;
 }
 
-const TimeTable = ({ concerts, workshops, readings, performances }: Props): ReactElement => {
+const TimeTable = ({ concerts, workshops, readings, performances, erroneousProgramItems }: Props): ReactElement => {
 
     // TODO: use more context
 
@@ -44,6 +47,14 @@ const TimeTable = ({ concerts, workshops, readings, performances }: Props): Reac
             <div className="text-4xl">
                 Slotplan
             </div>
+
+            {erroneousProgramItems.length > 0 && (
+                <div className="my-4">
+                    <TimeTableErroneousProgramItems
+                        erroneousProgramItems={erroneousProgramItems}
+                    />
+                </div>
+            )}
 
             <div className="my-4">
                 <TimeTableDateSelects

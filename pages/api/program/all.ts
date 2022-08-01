@@ -1,15 +1,22 @@
+import { endOfDay, isAfter, isBefore, isSameMinute, startOfDay } from 'date-fns';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import qs from 'qs';
 import isGroupMember from 'lib/next-auth/isGroupMember';
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
+import type AllProgramItemsResponse from 'lib/strapi/typings/AllProgramItemsResponse';
 import type Concert from 'lib/strapi/typings/Concert';
+import type ErroneousProgramItem from 'lib/strapi/typings/ErroneousProgramItem';
 import type Performance from 'lib/strapi/typings/Performance';
+import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 import type Reading from 'lib/strapi/typings/Reading';
+import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
 import type StrapiErrorResponse from 'lib/strapi/typings/StrapiErrorResponse';
 import type StrapiResponse from 'lib/strapi/typings/StrapiResponse';
 import type StrapiSuccessResponse from 'lib/strapi/typings/StrapiSuccessResponse';
 import type Workshop from 'lib/strapi/typings/Workshop';
+import useBeginFromItem from 'lib/strapi/useBeginFromItem';
+import useEndFromItem from 'lib/strapi/useEndFromItem';
 
 const createProgramItemFetchUrl = (
     pathName: string,
@@ -52,6 +59,103 @@ const fetchProgramItems = async <T>(fetchUrl: URL): Promise<StrapiResponse<Array
     return await fetchResponse.json() as StrapiResponse<Array<T>>;
 };
 
+const filterErroneousProgramItems = <T extends ProgramItem>(
+    programItems: Array<T>,
+    collectionType: StrapiCollectionType,
+    allResponseData: AllProgramItems,
+    erroneousProgramItems: Array<ErroneousProgramItem>
+): Array<T> => {
+
+    return programItems.filter(
+        (programItem): boolean => {
+
+            const itemBegin = useBeginFromItem(programItem);
+            const itemEnd = useEndFromItem(programItem);
+
+            if (isBefore(itemEnd, itemBegin)) {
+                erroneousProgramItems.push({
+                    collectionType,
+                    programItem,
+                    reason: 'Das Ende liegt vor dem Beginn',
+                });
+
+                return false;
+            }
+
+            if (programItem.attributes.location.data === null) {
+                erroneousProgramItems.push({
+                    collectionType,
+                    programItem,
+                    reason: 'Der Ort fehlt',
+                });
+
+                return false;
+            }
+
+            const doesOverlap = [
+                ...(allResponseData.concerts ?? []),
+                ...(allResponseData.workshops ?? []),
+                ...(allResponseData.performances ?? []),
+                ...(allResponseData.readings ?? []),
+            ].some(
+                otherProgramItem => {
+
+                    if (otherProgramItem.id === programItem.id) {
+                        return false;
+                    }
+
+                    if (programItem.attributes.location.data === null || otherProgramItem.attributes.location.data === null) {
+                        return false;
+                    }
+
+                    if (programItem.attributes.location.data.id !== otherProgramItem.attributes.location.data.id) {
+                        return false;
+                    }
+
+                    const otherItemBegin = useBeginFromItem(otherProgramItem);
+                    const otherItemEnd = useEndFromItem(otherProgramItem);
+
+                    if (isAfter(otherItemBegin, itemBegin) && isBefore(otherItemBegin, itemEnd)) {
+                        return true;
+                    }
+                    if (isAfter(otherItemEnd, itemBegin) && isBefore(otherItemEnd, itemEnd)) {
+                        return true;
+                    }
+                    if (isSameMinute(otherItemBegin, itemBegin) || isSameMinute(otherItemEnd, itemEnd)) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            );
+            if (doesOverlap) {
+                erroneousProgramItems.push({
+                    collectionType,
+                    programItem,
+                    reason: 'Zeitraum überschneidet sich mit Programm-Punkt in derselben Location',
+                });
+
+                return false;
+            }
+
+            const festivalBegin = startOfDay(new Date('2022-09-16'));
+            const festivalEnd = endOfDay(new Date('2022-09-18'));
+            if (isBefore(itemBegin, festivalBegin) || isAfter(itemBegin, festivalEnd) || isBefore(itemEnd, festivalBegin) || isAfter(itemEnd, festivalEnd)) {
+                erroneousProgramItems.push({
+                    collectionType,
+                    programItem,
+                    reason: 'Programmpunkt liegt außerhalb des Festival-Zeitraums',
+                });
+
+                return false;
+
+            }
+
+            return true;
+        }
+    );
+};
+
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
 
     const session = await getSession({ req: request });
@@ -70,34 +174,49 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
         const readingsResponse = await fetchProgramItems<Reading>(readingUrl);
         const workshopsResponse = await fetchProgramItems<Workshop>(workshopUrl);
 
-        const allResponseData: AllProgramItems = {
+        const allProgramItems: AllProgramItems = {
             concerts: null,
             performances: null,
             readings: null,
             workshops: null,
         };
 
+        const erroneousProgramItems = new Array<ErroneousProgramItem>();
+
         let responseError: StrapiErrorResponse['error'] | null = null;
 
         if ('error' in concertsResponse) {
             responseError = concertsResponse.error;
         } else {
-            allResponseData.concerts = concertsResponse.data;
+            allProgramItems.concerts = concertsResponse.data;
         }
         if ('error' in performancesResponse) {
             responseError = performancesResponse.error;
         } else {
-            allResponseData.performances = performancesResponse.data;
+            allProgramItems.performances = performancesResponse.data;
         }
         if ('error' in readingsResponse) {
             responseError = readingsResponse.error;
         } else {
-            allResponseData.readings = readingsResponse.data;
+            allProgramItems.readings = readingsResponse.data;
         }
         if ('error' in workshopsResponse) {
             responseError = workshopsResponse.error;
         } else {
-            allResponseData.workshops = workshopsResponse.data;
+            allProgramItems.workshops = workshopsResponse.data;
+        }
+
+        if (allProgramItems.concerts !== null) {
+            allProgramItems.concerts = filterErroneousProgramItems(allProgramItems.concerts, 'concert', allProgramItems, erroneousProgramItems);
+        }
+        if (allProgramItems.performances !== null) {
+            allProgramItems.performances = filterErroneousProgramItems(allProgramItems.performances, 'performance', allProgramItems, erroneousProgramItems);
+        }
+        if (allProgramItems.readings !== null) {
+            allProgramItems.readings = filterErroneousProgramItems(allProgramItems.readings, 'reading', allProgramItems, erroneousProgramItems);
+        }
+        if (allProgramItems.workshops !== null) {
+            allProgramItems.workshops = filterErroneousProgramItems(allProgramItems.workshops, 'workshop', allProgramItems, erroneousProgramItems);
         }
 
         if (responseError !== null) {
@@ -109,8 +228,13 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 
         } else {
 
+            const allProgramItemsResponse: AllProgramItemsResponse = {
+                allProgramItems,
+                erroneousProgramItems,
+            };
+
             response.status(200).json({
-                data: allResponseData,
+                data: allProgramItemsResponse,
                 meta: {
                     pagination: {
                         page: 0,
@@ -119,7 +243,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
                         total: 0,
                     },
                 },
-            } as StrapiSuccessResponse<AllProgramItems>);
+            } as StrapiSuccessResponse<AllProgramItemsResponse>);
         }
     } catch (error) {
         // eslint-disable-next-line no-console

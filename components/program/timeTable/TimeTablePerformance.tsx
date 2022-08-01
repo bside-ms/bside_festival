@@ -32,7 +32,7 @@ const TimeTablePerformance = (
 
     return (
         <a
-            className="absolute p-1 rounded drop-shadow-md"
+            className="absolute p-1 rounded-md drop-shadow-md"
             style={{
                 top: `${diffInMinutesFromStartOfDay}px`,
                 left: '5px',
