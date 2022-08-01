@@ -2,15 +2,14 @@ import { useState } from 'react';
 import type { ReactElement } from 'react';
 import TimeTableDateSelects from 'components/program/timeTable/TimeTableDateSelects';
 import TimeTableErroneousProgramItems from 'components/program/timeTable/TimeTableErroneousProgramItems';
-import TimeTableLocation from 'components/program/timeTable/TimeTableLocation';
-import TimeTableLocationHeadline from 'components/program/timeTable/TimeTableLocationHeadline';
+import TimeTableLocations from 'components/program/timeTable/TimeTableLocations';
 import type Concert from 'lib/strapi/typings/Concert';
 import type ErroneousProgramItem from 'lib/strapi/typings/ErroneousProgramItem';
 import type Performance from 'lib/strapi/typings/Performance';
+import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 import type Reading from 'lib/strapi/typings/Reading';
 import type Workshop from 'lib/strapi/typings/Workshop';
 import useAvailableDates from 'lib/strapi/useAvailableDates';
-import useConcertsFilteredByDate from 'lib/strapi/useConcertsFilteredByDate';
 import useLocationsFromTimeTableItems from 'lib/strapi/useLocationsFromTimeTableItems';
 import useProgramItemFilteredByDate from 'lib/strapi/useProgramItemsFilteredByDate';
 
@@ -28,9 +27,9 @@ const TimeTable = ({ concerts, workshops, readings, performances, erroneousProgr
 
     const availableDates = useAvailableDates();
 
-    const [date, setDate] = useState<Date>(availableDates[0]);
+    const [date, setDate] = useState<ProgramDate>(availableDates[0]);
 
-    const concertsFilteredByDate = useConcertsFilteredByDate(concerts, date);
+    const concertsFilteredByDate = useProgramItemFilteredByDate<Concert>(concerts, date);
     const workshopsFilteredByDate = useProgramItemFilteredByDate<Workshop>(workshops, date);
     const performancesFilteredByDate = useProgramItemFilteredByDate<Performance>(performances, date);
     const readingsFilteredByDate = useProgramItemFilteredByDate<Reading>(readings, date);
@@ -64,30 +63,14 @@ const TimeTable = ({ concerts, workshops, readings, performances, erroneousProgr
             </div>
 
             {locations.length > 0 ? (
-                <div className="mb-20 -ml-5 pl-10 pr-5 pb-3 overflow-x-auto">
-                    <div className="flex gap-[1px]">
-                        {locations.map(location => (
-                            <TimeTableLocationHeadline
-                                key={location.id}
-                                location={location}
-                            />
-                        ))}
-                    </div>
-                    <div className="flex gap-[1px] bg-gray-300">
-                        {locations.map((location, index) => (
-                            <TimeTableLocation
-                                key={location.id}
-                                location={location}
-                                concerts={concertsFilteredByDate}
-                                workshops={workshopsFilteredByDate}
-                                performances={performancesFilteredByDate}
-                                readings={readingsFilteredByDate}
-                                date={date}
-                                isFirstLocation={index === 0}
-                            />
-                        ))}
-                    </div>
-                </div>
+                <TimeTableLocations
+                    date={date}
+                    locations={locations}
+                    concerts={concertsFilteredByDate}
+                    readings={readingsFilteredByDate}
+                    performances={performancesFilteredByDate}
+                    workshops={workshopsFilteredByDate}
+                />
             ) : (
                 <div className="bg-orange-200 border-orange-700 text-orange-700 py-3 px-4 rounded">
                     Für diesen Tag gibt es noch keine Programmpunkte!

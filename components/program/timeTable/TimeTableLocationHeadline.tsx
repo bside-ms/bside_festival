@@ -9,7 +9,7 @@ const TimeTableLocationHeadline = ({ location }: Props): ReactElement => {
 
     return (
         <div className="w-[200px] shrink-0">
-            <div className="text-2xl mb-2 align-text-bottom">
+            <div className="text-2xl mb-2 mr-2 break-words align-text-bottom">
                 {location.attributes.Name}
             </div>
         </div>

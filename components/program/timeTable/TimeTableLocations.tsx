@@ -1,0 +1,81 @@
+import { differenceInMinutes } from 'date-fns';
+import type { ReactElement } from 'react';
+import TimeTableLocation from 'components/program/timeTable/TimeTableLocation';
+import TimeTableLocationHeadline from 'components/program/timeTable/TimeTableLocationHeadline';
+import type Concert from 'lib/strapi/typings/Concert';
+import type Location from 'lib/strapi/typings/Location';
+import type Performance from 'lib/strapi/typings/Performance';
+import type ProgramDate from 'lib/strapi/typings/ProgramDate';
+import type Reading from 'lib/strapi/typings/Reading';
+import type Workshop from 'lib/strapi/typings/Workshop';
+import useOptimizedTimeTableBegin from 'lib/strapi/useOptimizedTimeTableBegin';
+import useOptimizedTimeTableEnd from 'lib/strapi/useOptimizedTimeTableEnd';
+import useScaledTimeTableMinutes from 'lib/strapi/useScaledTimeTableMinutes';
+import useTimeTableHours from 'lib/strapi/useTimeTableHours';
+
+interface Props {
+    locations: Array<Location>;
+    date: ProgramDate;
+    concerts: Array<Concert>;
+    workshops: Array<Workshop>;
+    performances: Array<Performance>;
+    readings: Array<Reading>;
+}
+
+const TimeTableLocations = ({
+    locations,
+    date,
+    concerts,
+    workshops,
+    performances,
+    readings,
+}: Props): ReactElement => {
+
+    const allMinutesOfOneDay = 60 * 24;
+    const fullHeight = useScaledTimeTableMinutes(allMinutesOfOneDay);
+
+    const [begin, end] = date;
+
+    const optimizedTimeTableBegin = useOptimizedTimeTableBegin(begin, [...concerts, ...workshops, ...performances, ...readings]);
+    const optimizedTimeTableEnd = useOptimizedTimeTableEnd(end, [...concerts, ...workshops, ...performances, ...readings]);
+
+    const diffTimeTableBeginToStartOfDay = useScaledTimeTableMinutes(differenceInMinutes(optimizedTimeTableBegin, begin));
+    const diffTimeTableEndToEndOfDay = useScaledTimeTableMinutes(differenceInMinutes(end, optimizedTimeTableEnd));
+
+    const usedHeight = fullHeight - diffTimeTableBeginToStartOfDay - diffTimeTableEndToEndOfDay;
+
+    const timeTableHours = useTimeTableHours(optimizedTimeTableBegin, optimizedTimeTableEnd);
+
+    return (
+        <div className="mb-20 -ml-5 pl-10 pr-5 pb-3 overflow-x-auto">
+            <div className="flex gap-[1px]">
+                {locations.map(location => (
+                    <TimeTableLocationHeadline
+                        key={location.id}
+                        location={location}
+                    />
+                ))}
+            </div>
+            <div className="flex gap-[1px] bg-gray-300">
+                {locations.map((location, index) => (
+                    <TimeTableLocation
+                        date={[begin, end]}
+                        usedHeight={usedHeight}
+                        optimizedTimeTableBegin={optimizedTimeTableBegin}
+                        optimizedTimeTableEnd={optimizedTimeTableEnd}
+                        timeTableHours={timeTableHours}
+                        key={location.id}
+                        location={location}
+                        concerts={concerts}
+                        workshops={workshops}
+                        performances={performances}
+                        readings={readings}
+                        isFirstLocation={index === 0}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default TimeTableLocations;

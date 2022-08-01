@@ -1,9 +1,9 @@
-import { startOfDay } from 'date-fns';
+import type ProgramDates from 'lib/strapi/typings/ProgramDates';
 
-const useAvailableDates = (): [Date, Date, Date] => ([
-    new Date('2022-09-16'),
-    new Date('2022-09-17'),
-    new Date('2022-09-18'),
-].map(date => startOfDay(date)) as [Date, Date, Date]);
+const useAvailableDates = (): ProgramDates => ([
+    [new Date('2022-09-16 07:00'), new Date('2022-09-17 06:59')],
+    [new Date('2022-09-17 07:00'), new Date('2022-09-18 06:59')],
+    [new Date('2022-09-18 07:00'), new Date('2022-09-19 06:59')],
+]);
 
 export default useAvailableDates;

@@ -3,6 +3,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import qs from 'qs';
 import isGroupMember from 'lib/next-auth/isGroupMember';
+import getBeginFromItem from 'lib/strapi/getBeginFromItem';
+import getEndFromItem from 'lib/strapi/getEndFromItem';
+import getLabelFromCollectionType from 'lib/strapi/getLabelFromCollectionType';
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
 import type AllProgramItemsResponse from 'lib/strapi/typings/AllProgramItemsResponse';
 import type Concert from 'lib/strapi/typings/Concert';
@@ -15,8 +18,6 @@ import type StrapiErrorResponse from 'lib/strapi/typings/StrapiErrorResponse';
 import type StrapiResponse from 'lib/strapi/typings/StrapiResponse';
 import type StrapiSuccessResponse from 'lib/strapi/typings/StrapiSuccessResponse';
 import type Workshop from 'lib/strapi/typings/Workshop';
-import useBeginFromItem from 'lib/strapi/useBeginFromItem';
-import useEndFromItem from 'lib/strapi/useEndFromItem';
 
 const createProgramItemFetchUrl = (
     pathName: string,
@@ -69,8 +70,8 @@ const filterErroneousProgramItems = <T extends ProgramItem>(
     return programItems.filter(
         (programItem): boolean => {
 
-            const itemBegin = useBeginFromItem(programItem);
-            const itemEnd = useEndFromItem(programItem);
+            const itemBegin = getBeginFromItem(programItem);
+            const itemEnd = getEndFromItem(programItem);
 
             if (isBefore(itemEnd, itemBegin)) {
                 erroneousProgramItems.push({
@@ -97,42 +98,49 @@ const filterErroneousProgramItems = <T extends ProgramItem>(
                 ...(allResponseData.workshops ?? []),
                 ...(allResponseData.performances ?? []),
                 ...(allResponseData.readings ?? []),
-            ].some(
-                otherProgramItem => {
+            ].reduce<string | null>(
+                (errorMessage, otherProgramItem): string | null => {
+
+                    if (errorMessage !== null) {
+                        return errorMessage;
+                    }
 
                     if (otherProgramItem.id === programItem.id) {
-                        return false;
+                        return null;
                     }
 
                     if (programItem.attributes.location.data === null || otherProgramItem.attributes.location.data === null) {
-                        return false;
+                        return null;
                     }
 
                     if (programItem.attributes.location.data.id !== otherProgramItem.attributes.location.data.id) {
-                        return false;
+                        return null;
                     }
 
-                    const otherItemBegin = useBeginFromItem(otherProgramItem);
-                    const otherItemEnd = useEndFromItem(otherProgramItem);
+                    const otherItemBegin = getBeginFromItem(otherProgramItem);
+                    const otherItemEnd = getEndFromItem(otherProgramItem);
+
+                    const label = getLabelFromCollectionType(collectionType);
 
                     if (isAfter(otherItemBegin, itemBegin) && isBefore(otherItemBegin, itemEnd)) {
-                        return true;
+                        return `Zeitraum überschneidet sich mit ${label} #${otherProgramItem.id} in derselben Location`;
                     }
                     if (isAfter(otherItemEnd, itemBegin) && isBefore(otherItemEnd, itemEnd)) {
-                        return true;
+                        return `Zeitraum überschneidet sich mit ${label} #${otherProgramItem.id} in derselben Location`;
                     }
                     if (isSameMinute(otherItemBegin, itemBegin) || isSameMinute(otherItemEnd, itemEnd)) {
-                        return true;
+                        return `Zeitraum überschneidet sich mit ${label} #${otherProgramItem.id} in derselben Location`;
                     }
 
-                    return false;
-                }
+                    return null;
+                },
+                null
             );
-            if (doesOverlap) {
+            if (doesOverlap !== null) {
                 erroneousProgramItems.push({
                     collectionType,
                     programItem,
-                    reason: 'Zeitraum überschneidet sich mit Programm-Punkt in derselben Location',
+                    reason: doesOverlap,
                 });
 
                 return false;

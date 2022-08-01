@@ -1,14 +1,13 @@
-import { addHours, endOfDay, isAfter, isSameDay, startOfHour } from 'date-fns';
+import { addHours, endOfHour, isAfter, startOfHour } from 'date-fns';
+import getEndFromItem from 'lib/strapi/getEndFromItem';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
-import useEndFromItem from 'lib/strapi/useEndFromItem';
 
 const useOptimizedTimeTableEnd = (date: Date, timeTableItems: Array<ProgramItem>): Date => {
 
     const latestTimeTableItemEnd = timeTableItems.reduce<Date | null>(
         (currentLatestTimeTableItemEnd, timeTableItem) => {
 
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const timeTableItemEnd = useEndFromItem(timeTableItem);
+            const timeTableItemEnd = getEndFromItem(timeTableItem);
 
             if (currentLatestTimeTableItemEnd === null) {
                 return timeTableItemEnd;
@@ -22,11 +21,11 @@ const useOptimizedTimeTableEnd = (date: Date, timeTableItems: Array<ProgramItem>
     );
 
     if (latestTimeTableItemEnd === null) {
-        return endOfDay(date);
+        return endOfHour(date);
     }
 
-    if (!isSameDay(date, addHours(latestTimeTableItemEnd, 2))) {
-        return endOfDay(date);
+    if (isAfter(addHours(latestTimeTableItemEnd, 2), date)) {
+        return endOfHour(date);
     }
 
     return startOfHour(addHours(latestTimeTableItemEnd, 2));

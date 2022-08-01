@@ -1,11 +1,12 @@
 import { isSameDay } from 'date-fns';
 import type { ReactElement } from 'react';
 import TimeTableDateSelect from 'components/program/timeTable/TimeTableDateSelect';
+import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 import useAvailableDates from 'lib/strapi/useAvailableDates';
 
 interface Props {
-    date: Date;
-    handleDateChange: (date: Date) => void;
+    date: ProgramDate;
+    handleDateChange: (date: ProgramDate) => void;
 }
 
 const TimeTableDateSelects = ({ date: selectedDate, handleDateChange }: Props): ReactElement => {
@@ -19,7 +20,7 @@ const TimeTableDateSelects = ({ date: selectedDate, handleDateChange }: Props): 
                     key={date.toString()}
                     date={date}
                     handleDateChange={handleDateChange}
-                    isSelected={isSameDay(date, selectedDate)}
+                    isSelected={isSameDay(date[0], selectedDate[0])}
                 />
             ))}
         </div>

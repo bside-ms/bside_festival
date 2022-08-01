@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
 import type { ReactElement } from 'react';
 import useFormattedDate from 'lib/common/useFormattedDate';
+import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 
 interface Props {
-    date: Date;
-    handleDateChange: (date: Date) => void;
+    date: ProgramDate;
+    handleDateChange: (date: ProgramDate) => void;
     isSelected: boolean;
 }
 
@@ -15,7 +16,7 @@ const TimeTableDateSelect = ({ date, handleDateChange, isSelected }: Props): Rea
         [date, handleDateChange]
     );
 
-    const formattedDate = useFormattedDate(date, 'EEEE, dd.MM.yyyy');
+    const formattedDate = useFormattedDate(date[0], 'EEEE, dd.MM.yyyy');
 
     if (isSelected) {
         return (
