@@ -15,14 +15,8 @@ const TimeTableErroneousProgramItem = ({ erroneousProgramItem: { collectionType,
 
     const title = getLabelFromCollectionType(collectionType);
 
-    console.log('erroneousProgramItem', { collectionType, programItem, reason });
-
-    const beginFromItem1 = getBeginFromItem(programItem);
-    console.log('beginFromItem1', beginFromItem1);
-    const beginFromItem = useFormattedDate(beginFromItem1, 'dd.MM., HH:mm');
-    const endFromItem1 = getEndFromItem(programItem);
-    console.log('endFromItem1', endFromItem1);
-    const endFromItem = useFormattedDate(endFromItem1, 'dd.MM., HH:mm');
+    const beginFromItem = useFormattedDate(getBeginFromItem(programItem), 'dd.MM., HH:mm');
+    const endFromItem = useFormattedDate(getEndFromItem(programItem), 'dd.MM., HH:mm');
 
     const locationName = programItem.attributes.location.data?.attributes.Name ?? null;
 
