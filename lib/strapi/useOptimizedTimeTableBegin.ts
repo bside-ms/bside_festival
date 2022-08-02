@@ -1,5 +1,4 @@
 import { isBefore, startOfHour, subHours } from 'date-fns';
-import getBeginFromItem from 'lib/strapi/getBeginFromItem';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 
 const useOptimizedTimeTableBegin = (date: Date, timeTableItems: Array<ProgramItem>): Date => {
@@ -7,7 +6,7 @@ const useOptimizedTimeTableBegin = (date: Date, timeTableItems: Array<ProgramIte
     const earliestTimeTableItemBegin = timeTableItems.reduce<Date | null>(
         (currentEarliestTimeTableItemBegin, timeTableItem) => {
 
-            const timeTableItemBegin = getBeginFromItem(timeTableItem);
+            const timeTableItemBegin = new Date(timeTableItem.attributes.Begin);
 
             if (currentEarliestTimeTableItemBegin === null) {
                 return timeTableItemBegin;

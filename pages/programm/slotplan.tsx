@@ -26,13 +26,12 @@ export default (): ReactElement => {
         <div className="min-h-screen pt-8">
             <div className="w-full pl-5 mx-auto relative">
                 <SwrResponseWrapper<AllProgramItemsResponse> response={swrResponse}>
-                    {({ allProgramItems: { concerts, workshops, performances, readings }, erroneousProgramItems }): ReactElement => (
+                    {({ allProgramItems: { concerts, workshops, performances, readings } }): ReactElement => (
                         <TimeTable
                             concerts={concerts ?? []}
                             workshops={workshops ?? []}
                             performances={performances ?? []}
                             readings={readings ?? []}
-                            erroneousProgramItems={erroneousProgramItems}
                         />
                     )}
                 </SwrResponseWrapper>

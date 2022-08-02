@@ -1,19 +1,13 @@
-import { endOfDay, isAfter, isBefore, isSameMinute, startOfDay } from 'date-fns';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import qs from 'qs';
 import isGroupMember from 'lib/next-auth/isGroupMember';
-import getBeginFromItem from 'lib/strapi/getBeginFromItem';
-import getEndFromItem from 'lib/strapi/getEndFromItem';
-import getLabelFromCollectionType from 'lib/strapi/getLabelFromCollectionType';
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
 import type AllProgramItemsResponse from 'lib/strapi/typings/AllProgramItemsResponse';
 import type Concert from 'lib/strapi/typings/Concert';
-import type ErroneousProgramItem from 'lib/strapi/typings/ErroneousProgramItem';
 import type Performance from 'lib/strapi/typings/Performance';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 import type Reading from 'lib/strapi/typings/Reading';
-import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
 import type StrapiErrorResponse from 'lib/strapi/typings/StrapiErrorResponse';
 import type StrapiResponse from 'lib/strapi/typings/StrapiResponse';
 import type StrapiSuccessResponse from 'lib/strapi/typings/StrapiSuccessResponse';
@@ -60,108 +54,36 @@ const fetchProgramItems = async <T>(fetchUrl: URL): Promise<StrapiResponse<Array
     return await fetchResponse.json() as StrapiResponse<Array<T>>;
 };
 
-const filterErroneousProgramItems = <T extends ProgramItem>(
-    programItems: Array<T>,
-    collectionType: StrapiCollectionType,
-    allResponseData: AllProgramItems,
-    erroneousProgramItems: Array<ErroneousProgramItem>
-): Array<T> => {
+const fixDateTimeIssue = <T extends Exclude<ProgramItem, Concert>>(programItem: T): T => {
 
-    return programItems.filter(
-        (programItem): boolean => {
+    if (!('Date' in programItem.attributes)) {
+        return programItem;
+    }
 
-            const itemBegin = getBeginFromItem(programItem);
-            const itemEnd = getEndFromItem(programItem);
+    const beginHourMatch = /^(\d{1,2}):/.exec(programItem.attributes.Begin);
+    const endHourMatch = /^(\d{1,2}):/.exec(programItem.attributes.End);
 
-            if (isBefore(itemEnd, itemBegin)) {
-                erroneousProgramItems.push({
-                    collectionType,
-                    programItem,
-                    reason: 'Das Ende liegt vor dem Beginn',
-                });
+    if (beginHourMatch === null || endHourMatch === null) {
+        return programItem;
+    }
 
-                return false;
-            }
+    let newBeginHour = parseInt(beginHourMatch[1]!, 10);
+    newBeginHour = newBeginHour - 2;
+    if (newBeginHour < 0) {
+        newBeginHour = 24 + newBeginHour;
+    }
 
-            if (programItem.attributes.location.data === null) {
-                erroneousProgramItems.push({
-                    collectionType,
-                    programItem,
-                    reason: 'Der Ort fehlt',
-                });
+    let newEndHour = parseInt(endHourMatch[1]!, 10);
+    newEndHour = newEndHour - 2;
+    if (newEndHour < 0) {
+        newEndHour = 24 + newEndHour;
+    }
 
-                return false;
-            }
+    programItem.attributes.Begin = `${programItem.attributes.Date}T${newBeginHour}${programItem.attributes.Begin.slice(2)}Z`;
+    programItem.attributes.End = `${programItem.attributes.Date}T${newEndHour}${programItem.attributes.End.slice(2)}Z`;
+    programItem.attributes.Date = '';
 
-            const doesOverlap = [
-                ...(allResponseData.concerts ?? []),
-                ...(allResponseData.workshops ?? []),
-                ...(allResponseData.performances ?? []),
-                ...(allResponseData.readings ?? []),
-            ].reduce<string | null>(
-                (errorMessage, otherProgramItem): string | null => {
-
-                    if (errorMessage !== null) {
-                        return errorMessage;
-                    }
-
-                    if (otherProgramItem.id === programItem.id) {
-                        return null;
-                    }
-
-                    if (programItem.attributes.location.data === null || otherProgramItem.attributes.location.data === null) {
-                        return null;
-                    }
-
-                    if (programItem.attributes.location.data.id !== otherProgramItem.attributes.location.data.id) {
-                        return null;
-                    }
-
-                    const otherItemBegin = getBeginFromItem(otherProgramItem);
-                    const otherItemEnd = getEndFromItem(otherProgramItem);
-
-                    const label = getLabelFromCollectionType(collectionType);
-
-                    if (isAfter(otherItemBegin, itemBegin) && isBefore(otherItemBegin, itemEnd)) {
-                        return `Zeitraum überschneidet sich mit ${label} #${otherProgramItem.id} in derselben Location`;
-                    }
-                    if (isAfter(otherItemEnd, itemBegin) && isBefore(otherItemEnd, itemEnd)) {
-                        return `Zeitraum überschneidet sich mit ${label} #${otherProgramItem.id} in derselben Location`;
-                    }
-                    if (isSameMinute(otherItemBegin, itemBegin) || isSameMinute(otherItemEnd, itemEnd)) {
-                        return `Zeitraum überschneidet sich mit ${label} #${otherProgramItem.id} in derselben Location`;
-                    }
-
-                    return null;
-                },
-                null
-            );
-            if (doesOverlap !== null) {
-                erroneousProgramItems.push({
-                    collectionType,
-                    programItem,
-                    reason: doesOverlap,
-                });
-
-                return false;
-            }
-
-            const festivalBegin = startOfDay(new Date('2022-09-16'));
-            const festivalEnd = endOfDay(new Date('2022-09-18'));
-            if (isBefore(itemBegin, festivalBegin) || isAfter(itemBegin, festivalEnd) || isBefore(itemEnd, festivalBegin) || isAfter(itemEnd, festivalEnd)) {
-                erroneousProgramItems.push({
-                    collectionType,
-                    programItem,
-                    reason: 'Programmpunkt liegt außerhalb des Festival-Zeitraums',
-                });
-
-                return false;
-
-            }
-
-            return true;
-        }
-    );
+    return programItem;
 };
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
@@ -189,8 +111,6 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
             workshops: null,
         };
 
-        const erroneousProgramItems = new Array<ErroneousProgramItem>();
-
         let responseError: StrapiErrorResponse['error'] | null = null;
 
         if ('error' in concertsResponse) {
@@ -201,30 +121,17 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
         if ('error' in performancesResponse) {
             responseError = performancesResponse.error;
         } else {
-            allProgramItems.performances = performancesResponse.data;
+            allProgramItems.performances = performancesResponse.data.map(fixDateTimeIssue);
         }
         if ('error' in readingsResponse) {
             responseError = readingsResponse.error;
         } else {
-            allProgramItems.readings = readingsResponse.data;
+            allProgramItems.readings = readingsResponse.data.map(fixDateTimeIssue);
         }
         if ('error' in workshopsResponse) {
             responseError = workshopsResponse.error;
         } else {
-            allProgramItems.workshops = workshopsResponse.data;
-        }
-
-        if (allProgramItems.concerts !== null) {
-            allProgramItems.concerts = filterErroneousProgramItems(allProgramItems.concerts, 'concert', allProgramItems, erroneousProgramItems);
-        }
-        if (allProgramItems.performances !== null) {
-            allProgramItems.performances = filterErroneousProgramItems(allProgramItems.performances, 'performance', allProgramItems, erroneousProgramItems);
-        }
-        if (allProgramItems.readings !== null) {
-            allProgramItems.readings = filterErroneousProgramItems(allProgramItems.readings, 'reading', allProgramItems, erroneousProgramItems);
-        }
-        if (allProgramItems.workshops !== null) {
-            allProgramItems.workshops = filterErroneousProgramItems(allProgramItems.workshops, 'workshop', allProgramItems, erroneousProgramItems);
+            allProgramItems.workshops = workshopsResponse.data.map(fixDateTimeIssue);
         }
 
         if (responseError !== null) {
@@ -238,7 +145,6 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 
             const allProgramItemsResponse: AllProgramItemsResponse = {
                 allProgramItems,
-                erroneousProgramItems,
             };
 
             response.status(200).json({

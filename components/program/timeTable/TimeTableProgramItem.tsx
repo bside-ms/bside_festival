@@ -3,8 +3,6 @@ import type { ReactElement } from 'react';
 import ApplicationType from 'lib/application-form/ApplicationType';
 import useApplicationTypeColor from 'lib/applications/useApplicationTypeColor';
 import useFormattedDate from 'lib/common/useFormattedDate';
-import getBeginFromItem from 'lib/strapi/getBeginFromItem';
-import getEndFromItem from 'lib/strapi/getEndFromItem';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
 import useScaledTimeTableMinutes from 'lib/strapi/useScaledTimeTableMinutes';
@@ -52,8 +50,8 @@ const getDetailsFromProgramItem = (programItem: ProgramItem): [string | null, St
 
 const TimeTableProgramItem = ({ optimizedTimeTableBegin, programItem }: Props): ReactElement => {
 
-    const beginFromItem = getBeginFromItem(programItem);
-    const endFromItem = getEndFromItem(programItem);
+    const beginFromItem = new Date(programItem.attributes.Begin);
+    const endFromItem = new Date(programItem.attributes.End);
 
     const formattedBegin = useFormattedDate(beginFromItem, 'HH:mm');
     const formattedEnd = useFormattedDate(endFromItem, 'HH:mm');

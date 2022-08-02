@@ -1,5 +1,4 @@
 import { addHours, endOfHour, isAfter, startOfHour } from 'date-fns';
-import getEndFromItem from 'lib/strapi/getEndFromItem';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 
 const useOptimizedTimeTableEnd = (date: Date, timeTableItems: Array<ProgramItem>): Date => {
@@ -7,7 +6,7 @@ const useOptimizedTimeTableEnd = (date: Date, timeTableItems: Array<ProgramItem>
     const latestTimeTableItemEnd = timeTableItems.reduce<Date | null>(
         (currentLatestTimeTableItemEnd, timeTableItem) => {
 
-            const timeTableItemEnd = getEndFromItem(timeTableItem);
+            const timeTableItemEnd = new Date(timeTableItem.attributes.End);
 
             if (currentLatestTimeTableItemEnd === null) {
                 return timeTableItemEnd;

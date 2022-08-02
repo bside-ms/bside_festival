@@ -3,6 +3,8 @@ import type { ReactElement } from 'react';
 import TimeTableDateSelects from 'components/program/timeTable/TimeTableDateSelects';
 import TimeTableErroneousProgramItems from 'components/program/timeTable/TimeTableErroneousProgramItems';
 import TimeTableLocations from 'components/program/timeTable/TimeTableLocations';
+import filterErroneousProgramItems from 'lib/strapi/filterErroneousProgramItems';
+import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
 import type Concert from 'lib/strapi/typings/Concert';
 import type ErroneousProgramItem from 'lib/strapi/typings/ErroneousProgramItem';
 import type Performance from 'lib/strapi/typings/Performance';
@@ -18,10 +20,9 @@ interface Props {
     workshops: Array<Workshop>;
     readings: Array<Reading>;
     performances: Array<Performance>;
-    erroneousProgramItems: Array<ErroneousProgramItem>;
 }
 
-const TimeTable = ({ concerts, workshops, readings, performances, erroneousProgramItems }: Props): ReactElement => {
+const TimeTable = ({ concerts, workshops, readings, performances }: Props): ReactElement => {
 
     // TODO: use more context
 
@@ -29,10 +30,19 @@ const TimeTable = ({ concerts, workshops, readings, performances, erroneousProgr
 
     const [date, setDate] = useState<ProgramDate>(availableDates[0]);
 
-    const concertsFilteredByDate = useProgramItemFilteredByDate<Concert>(concerts, date);
-    const workshopsFilteredByDate = useProgramItemFilteredByDate<Workshop>(workshops, date);
-    const performancesFilteredByDate = useProgramItemFilteredByDate<Performance>(performances, date);
-    const readingsFilteredByDate = useProgramItemFilteredByDate<Reading>(readings, date);
+    const erroneousProgramItems = new Array<ErroneousProgramItem>();
+
+    const allProgramItems: AllProgramItems = { concerts, workshops, performances, readings };
+
+    const filteredConcerts = filterErroneousProgramItems(concerts, 'concert', allProgramItems, erroneousProgramItems);
+    const filteredPerformances = filterErroneousProgramItems(performances, 'performance', allProgramItems, erroneousProgramItems);
+    const filteredReadings = filterErroneousProgramItems(readings, 'reading', allProgramItems, erroneousProgramItems);
+    const filteredWorkshops = filterErroneousProgramItems(workshops, 'workshop', allProgramItems, erroneousProgramItems);
+
+    const concertsFilteredByDate = useProgramItemFilteredByDate(filteredConcerts, date);
+    const workshopsFilteredByDate = useProgramItemFilteredByDate(filteredWorkshops, date);
+    const performancesFilteredByDate = useProgramItemFilteredByDate(filteredPerformances, date);
+    const readingsFilteredByDate = useProgramItemFilteredByDate(filteredReadings, date);
 
     const locations = useLocationsFromTimeTableItems([
         ...concertsFilteredByDate,
