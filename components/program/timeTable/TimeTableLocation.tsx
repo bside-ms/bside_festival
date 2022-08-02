@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import TimeTableHourDelimiter from 'components/program/timeTable/TimeTableHourDelimiter';
 import TimeTableProgramItem from 'components/program/timeTable/TimeTableProgramItem';
 import type Concert from 'lib/strapi/typings/Concert';
+import type FamilyProgram from 'lib/strapi/typings/FamilyProgram';
 import type Location from 'lib/strapi/typings/Location';
 import type Performance from 'lib/strapi/typings/Performance';
 import type ProgramDate from 'lib/strapi/typings/ProgramDate';
@@ -19,6 +20,7 @@ interface Props {
     workshops: Array<Workshop>;
     performances: Array<Performance>;
     readings: Array<Reading>;
+    familyPrograms: Array<FamilyProgram>;
     isFirstLocation: boolean;
     optimizedTimeTableBegin: Date;
     optimizedTimeTableEnd: Date;
@@ -32,6 +34,7 @@ const TimeTableLocation = ({
     workshops,
     performances,
     readings,
+    familyPrograms,
     optimizedTimeTableBegin,
     optimizedTimeTableEnd,
     isFirstLocation,
@@ -41,6 +44,7 @@ const TimeTableLocation = ({
     const workshopsFilteredByLocation = useProgramItemFilteredByLocationId(workshops, location.id);
     const performancesFilteredByLocation = useProgramItemFilteredByLocationId(performances, location.id);
     const readingsFilteredByLocation = useProgramItemFilteredByLocationId(readings, location.id);
+    const familyProgramsFilteredByLocation = useProgramItemFilteredByLocationId(familyPrograms, location.id);
 
     return (
         <div className="w-[200px] shrink-0">
@@ -86,6 +90,14 @@ const TimeTableLocation = ({
                         optimizedTimeTableBegin={optimizedTimeTableBegin}
                         optimizedTimeTableEnd={optimizedTimeTableEnd}
                         programItem={reading}
+                    />
+                ))}
+                {familyProgramsFilteredByLocation.map(familyProgram => (
+                    <TimeTableProgramItem
+                        key={familyProgram.id}
+                        optimizedTimeTableBegin={optimizedTimeTableBegin}
+                        optimizedTimeTableEnd={optimizedTimeTableEnd}
+                        programItem={familyProgram}
                     />
                 ))}
             </div>

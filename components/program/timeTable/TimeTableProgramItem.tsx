@@ -44,6 +44,13 @@ const getDetailsFromProgramItem = (programItem: ProgramItem): [string | null, St
             ApplicationType.performance,
         ];
     }
+    if ('family_program_organizer' in programItem.attributes) {
+        return [
+            programItem.attributes.family_program_organizer.data?.attributes.Name ?? null,
+            'family-program',
+            ApplicationType.familienprogramm,
+        ];
+    }
 
     throw new Error(`Received unexpected program item: ${JSON.stringify(programItem)}`);
 };

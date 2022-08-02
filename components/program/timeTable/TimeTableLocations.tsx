@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import TimeTableLocation from 'components/program/timeTable/TimeTableLocation';
 import TimeTableLocationHeadline from 'components/program/timeTable/TimeTableLocationHeadline';
 import type Concert from 'lib/strapi/typings/Concert';
+import type FamilyProgram from 'lib/strapi/typings/FamilyProgram';
 import type Location from 'lib/strapi/typings/Location';
 import type Performance from 'lib/strapi/typings/Performance';
 import type ProgramDate from 'lib/strapi/typings/ProgramDate';
@@ -20,6 +21,7 @@ interface Props {
     workshops: Array<Workshop>;
     performances: Array<Performance>;
     readings: Array<Reading>;
+    familyPrograms: Array<FamilyProgram>;
 }
 
 const TimeTableLocations = ({
@@ -29,6 +31,7 @@ const TimeTableLocations = ({
     workshops,
     performances,
     readings,
+    familyPrograms,
 }: Props): ReactElement => {
 
     const allMinutesOfOneDay = 60 * 24;
@@ -36,8 +39,10 @@ const TimeTableLocations = ({
 
     const [begin, end] = date;
 
-    const optimizedTimeTableBegin = useOptimizedTimeTableBegin(begin, [...concerts, ...workshops, ...performances, ...readings]);
-    const optimizedTimeTableEnd = useOptimizedTimeTableEnd(end, [...concerts, ...workshops, ...performances, ...readings]);
+    const allTimeTableItems = [...concerts, ...workshops, ...performances, ...readings, ...familyPrograms];
+
+    const optimizedTimeTableBegin = useOptimizedTimeTableBegin(begin, allTimeTableItems);
+    const optimizedTimeTableEnd = useOptimizedTimeTableEnd(end, allTimeTableItems);
 
     const diffTimeTableBeginToStartOfDay = useScaledTimeTableMinutes(differenceInMinutes(optimizedTimeTableBegin, begin));
     const diffTimeTableEndToEndOfDay = useScaledTimeTableMinutes(differenceInMinutes(end, optimizedTimeTableEnd));
@@ -68,6 +73,7 @@ const TimeTableLocations = ({
                         location={location}
                         concerts={concerts}
                         workshops={workshops}
+                        familyPrograms={familyPrograms}
                         performances={performances}
                         readings={readings}
                         isFirstLocation={index === 0}

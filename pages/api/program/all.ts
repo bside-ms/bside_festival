@@ -5,6 +5,7 @@ import isGroupMember from 'lib/next-auth/isGroupMember';
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
 import type AllProgramItemsResponse from 'lib/strapi/typings/AllProgramItemsResponse';
 import type Concert from 'lib/strapi/typings/Concert';
+import type FamilyProgram from 'lib/strapi/typings/FamilyProgram';
 import type Performance from 'lib/strapi/typings/Performance';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 import type Reading from 'lib/strapi/typings/Reading';
@@ -96,6 +97,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
     const performanceUrl = createProgramItemFetchUrl('performances', true, 'performance_artist', isInFestivalGroup);
     const readingUrl = createProgramItemFetchUrl('readings', true, 'reading_artist', isInFestivalGroup);
     const workshopUrl = createProgramItemFetchUrl('workshops', true, 'workshop_organizer', isInFestivalGroup);
+    const familyProgramUrl = createProgramItemFetchUrl('family-programs', true, 'family_program_organizer', isInFestivalGroup);
 
     try {
 
@@ -103,12 +105,14 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
         const performancesResponse = await fetchProgramItems<Performance>(performanceUrl);
         const readingsResponse = await fetchProgramItems<Reading>(readingUrl);
         const workshopsResponse = await fetchProgramItems<Workshop>(workshopUrl);
+        const familyProgramResponse = await fetchProgramItems<FamilyProgram>(familyProgramUrl);
 
         const allProgramItems: AllProgramItems = {
             concerts: null,
             performances: null,
             readings: null,
             workshops: null,
+            familyPrograms: null,
         };
 
         let responseError: StrapiErrorResponse['error'] | null = null;
@@ -132,6 +136,11 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
             responseError = workshopsResponse.error;
         } else {
             allProgramItems.workshops = workshopsResponse.data.map(fixDateTimeIssue);
+        }
+        if ('error' in familyProgramResponse) {
+            responseError = familyProgramResponse.error;
+        } else {
+            allProgramItems.familyPrograms = familyProgramResponse.data.map(fixDateTimeIssue);
         }
 
         if (responseError !== null) {

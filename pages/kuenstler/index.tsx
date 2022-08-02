@@ -37,6 +37,10 @@ export default (): ReactElement => {
                                     artists={response.readingArtists}
                                     title={useApplicationTitle(ApplicationType.lesung)}
                                 />
+                                <ArtistsList
+                                    artists={response.familyProgramOrganizer}
+                                    title={useApplicationTitle(ApplicationType.familienprogramm)}
+                                />
                             </div>
                         </ContentWrapper>
                     )}

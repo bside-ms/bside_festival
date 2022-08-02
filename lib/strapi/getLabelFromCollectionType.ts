@@ -18,6 +18,10 @@ const getLabelFromCollectionType = (strapiCollectionType: StrapiCollectionType):
         case 'performance-artists':
         case 'performance':
             return 'Performance';
+
+        case 'family-program':
+        case 'family-program-organizers':
+            return 'Familienprogramm';
     }
 };
 

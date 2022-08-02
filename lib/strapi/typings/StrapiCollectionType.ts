@@ -6,6 +6,8 @@ type StrapiCollectionType =
     'concert-artists' |
     'performance-artists' |
     'reading-artists' |
-    'workshops-organizers';
+    'workshops-organizers' |
+    'family-program' |
+    'family-program-organizers';
 
 export default StrapiCollectionType;

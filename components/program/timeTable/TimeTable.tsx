@@ -7,6 +7,7 @@ import filterErroneousProgramItems from 'lib/strapi/filterErroneousProgramItems'
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
 import type Concert from 'lib/strapi/typings/Concert';
 import type ErroneousProgramItem from 'lib/strapi/typings/ErroneousProgramItem';
+import type FamilyProgram from 'lib/strapi/typings/FamilyProgram';
 import type Performance from 'lib/strapi/typings/Performance';
 import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 import type Reading from 'lib/strapi/typings/Reading';
@@ -20,9 +21,10 @@ interface Props {
     workshops: Array<Workshop>;
     readings: Array<Reading>;
     performances: Array<Performance>;
+    familyPrograms: Array<FamilyProgram>;
 }
 
-const TimeTable = ({ concerts, workshops, readings, performances }: Props): ReactElement => {
+const TimeTable = ({ concerts, workshops, readings, performances, familyPrograms }: Props): ReactElement => {
 
     // TODO: use more context
 
@@ -32,23 +34,26 @@ const TimeTable = ({ concerts, workshops, readings, performances }: Props): Reac
 
     const erroneousProgramItems = new Array<ErroneousProgramItem>();
 
-    const allProgramItems: AllProgramItems = { concerts, workshops, performances, readings };
+    const allProgramItems: AllProgramItems = { concerts, workshops, performances, readings, familyPrograms };
 
     const filteredConcerts = filterErroneousProgramItems(concerts, 'concert', allProgramItems, erroneousProgramItems);
     const filteredPerformances = filterErroneousProgramItems(performances, 'performance', allProgramItems, erroneousProgramItems);
     const filteredReadings = filterErroneousProgramItems(readings, 'reading', allProgramItems, erroneousProgramItems);
     const filteredWorkshops = filterErroneousProgramItems(workshops, 'workshop', allProgramItems, erroneousProgramItems);
+    const filteredFamilyPrograms = filterErroneousProgramItems(familyPrograms, 'family-program', allProgramItems, erroneousProgramItems);
 
     const concertsFilteredByDate = useProgramItemFilteredByDate(filteredConcerts, date);
     const workshopsFilteredByDate = useProgramItemFilteredByDate(filteredWorkshops, date);
     const performancesFilteredByDate = useProgramItemFilteredByDate(filteredPerformances, date);
     const readingsFilteredByDate = useProgramItemFilteredByDate(filteredReadings, date);
+    const familyProgramsFilteredByDate = useProgramItemFilteredByDate(filteredFamilyPrograms, date);
 
     const locations = useLocationsFromTimeTableItems([
         ...concertsFilteredByDate,
         ...workshopsFilteredByDate,
         ...performancesFilteredByDate,
         ...readingsFilteredByDate,
+        ...familyProgramsFilteredByDate,
     ]);
 
     return (
@@ -80,6 +85,7 @@ const TimeTable = ({ concerts, workshops, readings, performances }: Props): Reac
                     readings={readingsFilteredByDate}
                     performances={performancesFilteredByDate}
                     workshops={workshopsFilteredByDate}
+                    familyPrograms={familyProgramsFilteredByDate}
                 />
             ) : (
                 <div className="bg-orange-200 border-orange-700 text-orange-700 py-3 px-4 rounded">
