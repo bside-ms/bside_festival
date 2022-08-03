@@ -9,12 +9,14 @@ import type Concert from 'lib/strapi/typings/Concert';
 import type ErroneousProgramItem from 'lib/strapi/typings/ErroneousProgramItem';
 import type Exhibition from 'lib/strapi/typings/Exhibition';
 import type FamilyProgram from 'lib/strapi/typings/FamilyProgram';
+import type Food from 'lib/strapi/typings/Food';
+import type InformationBooth from 'lib/strapi/typings/InformationBooth';
 import type Performance from 'lib/strapi/typings/Performance';
 import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 import type Reading from 'lib/strapi/typings/Reading';
 import type Workshop from 'lib/strapi/typings/Workshop';
 import useAvailableDates from 'lib/strapi/useAvailableDates';
-import useExhibitionsFilteredByDate from 'lib/strapi/useExhibitionsFilteredByDate';
+import useFullTimeProgramItemsFilteredByDate from 'lib/strapi/useFullTimeProgramItemsFilteredByDate';
 import useLocationsFromTimeTableItems from 'lib/strapi/useLocationsFromTimeTableItems';
 import useProgramItemFilteredByDate from 'lib/strapi/useProgramItemsFilteredByDate';
 
@@ -25,9 +27,11 @@ interface Props {
     performances: Array<Performance>;
     familyPrograms: Array<FamilyProgram>;
     exhibitions: Array<Exhibition>;
+    foods: Array<Food>;
+    informationBooths: Array<InformationBooth>;
 }
 
-const TimeTable = ({ concerts, workshops, readings, performances, familyPrograms, exhibitions }: Props): ReactElement => {
+const TimeTable = ({ concerts, workshops, readings, performances, familyPrograms, exhibitions, foods, informationBooths }: Props): ReactElement => {
 
     // TODO: use more context
 
@@ -51,7 +55,9 @@ const TimeTable = ({ concerts, workshops, readings, performances, familyPrograms
     const readingsFilteredByDate = useProgramItemFilteredByDate(filteredReadings, date);
     const familyProgramsFilteredByDate = useProgramItemFilteredByDate(filteredFamilyPrograms, date);
 
-    const exhibitionsFilteredByDate = useExhibitionsFilteredByDate(exhibitions, date);
+    const exhibitionsFilteredByDate = useFullTimeProgramItemsFilteredByDate(exhibitions, date);
+    const foodsFilteredByDate = useFullTimeProgramItemsFilteredByDate(foods, date);
+    const informationBoothsFilteredByDate = useFullTimeProgramItemsFilteredByDate(informationBooths, date);
 
     const locations = useLocationsFromTimeTableItems([
         ...concertsFilteredByDate,
@@ -60,6 +66,8 @@ const TimeTable = ({ concerts, workshops, readings, performances, familyPrograms
         ...readingsFilteredByDate,
         ...familyProgramsFilteredByDate,
         ...exhibitionsFilteredByDate,
+        ...foodsFilteredByDate,
+        ...informationBoothsFilteredByDate,
     ]);
 
     return (
@@ -93,6 +101,8 @@ const TimeTable = ({ concerts, workshops, readings, performances, familyPrograms
                     workshops={workshopsFilteredByDate}
                     familyPrograms={familyProgramsFilteredByDate}
                     exhibitions={exhibitionsFilteredByDate}
+                    foods={foodsFilteredByDate}
+                    informationBooths={informationBoothsFilteredByDate}
                 />
             ) : (
                 <div className="bg-orange-200 border-orange-700 text-orange-700 py-3 px-4 rounded">

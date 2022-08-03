@@ -1,9 +1,9 @@
 import ApplicationType from 'lib/application-form/ApplicationType';
-import type Exhibition from 'lib/strapi/typings/Exhibition';
+import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
 
-const getDetailsFromProgramItem = (programItem: ProgramItem | Exhibition): [string | null, StrapiCollectionType, ApplicationType] => {
+const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramItem): [string | null, StrapiCollectionType, ApplicationType] => {
 
     if ('concert_artist' in programItem.attributes) {
         return [
@@ -45,6 +45,21 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | Exhibition): [stri
             programItem.attributes.exhibition_artist.data?.attributes.Name ?? null,
             'exhibition',
             ApplicationType.ausstellung,
+        ];
+    }
+    if ('information_booth_organizer' in programItem.attributes) {
+        return [
+            programItem.attributes.information_booth_organizer.data?.attributes.Name ?? null,
+            'information-booth',
+            // There's no application type for info booth
+            ApplicationType.workshop,
+        ];
+    }
+    if ('food_organizer' in programItem.attributes) {
+        return [
+            programItem.attributes.food_organizer.data?.attributes.Name ?? null,
+            'food',
+            ApplicationType.essensstand,
         ];
     }
 

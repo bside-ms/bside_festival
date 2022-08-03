@@ -1,12 +1,12 @@
 import { endOfDay, isAfter, isBefore, isSameDay, startOfDay } from 'date-fns';
-import type Exhibition from 'lib/strapi/typings/Exhibition';
+import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
 import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 
-const useExhibitionsFilteredByDate = (programItems: Array<Exhibition>, [begin]: ProgramDate): Array<Exhibition> => (
-    programItems.filter(exhibition => {
+const useFullTimeProgramItemsFilteredByDate = <T extends FullTimeProgramItem>(programItems: Array<T>, [begin]: ProgramDate): Array<T> => (
+    programItems.filter(programItem => {
 
-        const exhibitionBegin = startOfDay(new Date(exhibition.attributes.Begin));
-        const exhibitionEnd = endOfDay(new Date(exhibition.attributes.End));
+        const exhibitionBegin = startOfDay(new Date(programItem.attributes.Begin));
+        const exhibitionEnd = endOfDay(new Date(programItem.attributes.End));
 
         // Only using begin here on purpose, because end is next day
         return (
@@ -21,4 +21,4 @@ const useExhibitionsFilteredByDate = (programItems: Array<Exhibition>, [begin]: 
     })
 );
 
-export default useExhibitionsFilteredByDate;
+export default useFullTimeProgramItemsFilteredByDate;

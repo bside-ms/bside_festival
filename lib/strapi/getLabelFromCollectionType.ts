@@ -1,5 +1,6 @@
 import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
 
+// eslint-disable-next-line complexity
 const getLabelFromCollectionType = (strapiCollectionType: StrapiCollectionType): string => {
 
     switch (strapiCollectionType) {
@@ -26,6 +27,14 @@ const getLabelFromCollectionType = (strapiCollectionType: StrapiCollectionType):
         case 'exhibition':
         case 'exhibition-artist':
             return 'Ausstellung';
+
+        case 'food':
+        case 'food-organizers':
+            return 'Essensstand';
+
+        case 'information-booth':
+        case 'information-booth-organizers':
+            return 'Infostand';
     }
 };
 

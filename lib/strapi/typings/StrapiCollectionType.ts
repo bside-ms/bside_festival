@@ -10,6 +10,10 @@ type StrapiCollectionType =
     'family-program' |
     'family-program-organizers' |
     'exhibition' |
-    'exhibition-artist';
+    'exhibition-artist' |
+    'information-booth' |
+    'information-booth-organizers' |
+    'food' |
+    'food-organizers';
 
 export default StrapiCollectionType;

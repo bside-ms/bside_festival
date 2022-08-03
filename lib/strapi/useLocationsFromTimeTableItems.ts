@@ -1,8 +1,8 @@
-import type Exhibition from 'lib/strapi/typings/Exhibition';
+import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
 import type Location from 'lib/strapi/typings/Location';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 
-const useLocationsFromTimeTableItems = (timeTableItems: Array<ProgramItem | Exhibition>): Array<Location> => (
+const useLocationsFromTimeTableItems = (timeTableItems: Array<ProgramItem | FullTimeProgramItem>): Array<Location> => (
     timeTableItems
         .reduce(
             (locations, timeTableItem) => {
