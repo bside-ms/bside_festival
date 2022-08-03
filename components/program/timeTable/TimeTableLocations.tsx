@@ -1,8 +1,10 @@
 import { differenceInMinutes } from 'date-fns';
 import type { ReactElement } from 'react';
+import TimeTableExhibitions from 'components/program/timeTable/TimeTableExhibitions';
 import TimeTableLocation from 'components/program/timeTable/TimeTableLocation';
 import TimeTableLocationHeadline from 'components/program/timeTable/TimeTableLocationHeadline';
 import type Concert from 'lib/strapi/typings/Concert';
+import type Exhibition from 'lib/strapi/typings/Exhibition';
 import type FamilyProgram from 'lib/strapi/typings/FamilyProgram';
 import type Location from 'lib/strapi/typings/Location';
 import type Performance from 'lib/strapi/typings/Performance';
@@ -22,6 +24,7 @@ interface Props {
     performances: Array<Performance>;
     readings: Array<Reading>;
     familyPrograms: Array<FamilyProgram>;
+    exhibitions: Array<Exhibition>;
 }
 
 const TimeTableLocations = ({
@@ -32,6 +35,7 @@ const TimeTableLocations = ({
     performances,
     readings,
     familyPrograms,
+    exhibitions,
 }: Props): ReactElement => {
 
     const allMinutesOfOneDay = 60 * 24;
@@ -58,6 +62,15 @@ const TimeTableLocations = ({
                     <TimeTableLocationHeadline
                         key={location.id}
                         location={location}
+                    />
+                ))}
+            </div>
+            <div className="flex gap-[1px]">
+                {locations.map(location => (
+                    <TimeTableExhibitions
+                        key={location.id}
+                        location={location}
+                        exhibitions={exhibitions}
                     />
                 ))}
             </div>

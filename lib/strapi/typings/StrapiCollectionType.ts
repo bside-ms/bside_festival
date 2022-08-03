@@ -8,6 +8,8 @@ type StrapiCollectionType =
     'reading-artists' |
     'workshops-organizers' |
     'family-program' |
-    'family-program-organizers';
+    'family-program-organizers' |
+    'exhibition' |
+    'exhibition-artist';
 
 export default StrapiCollectionType;

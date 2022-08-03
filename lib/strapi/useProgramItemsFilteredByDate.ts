@@ -10,11 +10,11 @@ const useProgramItemFilteredByDate = <T extends ProgramItem>(programItems: Array
 
         return (
             (
-                isSameMinute(new Date(beginFromItem), begin) ||
-                isAfter(new Date(beginFromItem), begin)
+                isSameMinute(beginFromItem, begin) ||
+                isAfter(beginFromItem, begin)
             ) && (
-                isSameMinute(new Date(endFromItem), end) ||
-                isBefore(new Date(endFromItem), end)
+                isSameMinute(endFromItem, end) ||
+                isBefore(endFromItem, end)
             )
         );
     })

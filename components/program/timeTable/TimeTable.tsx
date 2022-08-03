@@ -7,12 +7,14 @@ import filterErroneousProgramItems from 'lib/strapi/filterErroneousProgramItems'
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
 import type Concert from 'lib/strapi/typings/Concert';
 import type ErroneousProgramItem from 'lib/strapi/typings/ErroneousProgramItem';
+import type Exhibition from 'lib/strapi/typings/Exhibition';
 import type FamilyProgram from 'lib/strapi/typings/FamilyProgram';
 import type Performance from 'lib/strapi/typings/Performance';
 import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 import type Reading from 'lib/strapi/typings/Reading';
 import type Workshop from 'lib/strapi/typings/Workshop';
 import useAvailableDates from 'lib/strapi/useAvailableDates';
+import useExhibitionsFilteredByDate from 'lib/strapi/useExhibitionsFilteredByDate';
 import useLocationsFromTimeTableItems from 'lib/strapi/useLocationsFromTimeTableItems';
 import useProgramItemFilteredByDate from 'lib/strapi/useProgramItemsFilteredByDate';
 
@@ -22,9 +24,10 @@ interface Props {
     readings: Array<Reading>;
     performances: Array<Performance>;
     familyPrograms: Array<FamilyProgram>;
+    exhibitions: Array<Exhibition>;
 }
 
-const TimeTable = ({ concerts, workshops, readings, performances, familyPrograms }: Props): ReactElement => {
+const TimeTable = ({ concerts, workshops, readings, performances, familyPrograms, exhibitions }: Props): ReactElement => {
 
     // TODO: use more context
 
@@ -48,12 +51,15 @@ const TimeTable = ({ concerts, workshops, readings, performances, familyPrograms
     const readingsFilteredByDate = useProgramItemFilteredByDate(filteredReadings, date);
     const familyProgramsFilteredByDate = useProgramItemFilteredByDate(filteredFamilyPrograms, date);
 
+    const exhibitionsFilteredByDate = useExhibitionsFilteredByDate(exhibitions, date);
+
     const locations = useLocationsFromTimeTableItems([
         ...concertsFilteredByDate,
         ...workshopsFilteredByDate,
         ...performancesFilteredByDate,
         ...readingsFilteredByDate,
         ...familyProgramsFilteredByDate,
+        ...exhibitionsFilteredByDate,
     ]);
 
     return (
@@ -86,6 +92,7 @@ const TimeTable = ({ concerts, workshops, readings, performances, familyPrograms
                     performances={performancesFilteredByDate}
                     workshops={workshopsFilteredByDate}
                     familyPrograms={familyProgramsFilteredByDate}
+                    exhibitions={exhibitionsFilteredByDate}
                 />
             ) : (
                 <div className="bg-orange-200 border-orange-700 text-orange-700 py-3 px-4 rounded">

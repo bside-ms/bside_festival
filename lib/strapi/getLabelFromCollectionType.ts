@@ -22,6 +22,10 @@ const getLabelFromCollectionType = (strapiCollectionType: StrapiCollectionType):
         case 'family-program':
         case 'family-program-organizers':
             return 'Familienprogramm';
+
+        case 'exhibition':
+        case 'exhibition-artist':
+            return 'Ausstellung';
     }
 };
 
