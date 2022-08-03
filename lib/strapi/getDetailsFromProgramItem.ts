@@ -3,6 +3,7 @@ import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
 
+// eslint-disable-next-line complexity
 const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramItem): [string | null, StrapiCollectionType, ApplicationType] => {
 
     if ('concert_artist' in programItem.attributes) {
