@@ -5,6 +5,7 @@ import isGroupMember from 'lib/next-auth/isGroupMember';
 import fixImageUrls from 'lib/strapi/fixImageUrls';
 import type AllArtists from 'lib/strapi/typings/AllArtists';
 import type ConcertArtist from 'lib/strapi/typings/ConcertArtist';
+import type ExhibitionArtist from 'lib/strapi/typings/ExhibitionArtist';
 import type FamilyProgramOrganizer from 'lib/strapi/typings/FamilyProgramOrganizer';
 import type PerformanceArtist from 'lib/strapi/typings/PerformanceArtist';
 import type ReadingArtist from 'lib/strapi/typings/ReadingArtist';
@@ -54,25 +55,28 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 
     const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
 
-    const concertArtistUrl = createArtistsFetchUrl('concert-artists', isInFestivalGroup);
-    const performanceArtistUrl = createArtistsFetchUrl('performance-artists', isInFestivalGroup);
-    const readingArtistUrl = createArtistsFetchUrl('reading-artists', isInFestivalGroup);
-    const workshopOrganizerUrl = createArtistsFetchUrl('workshop-organizers', isInFestivalGroup);
-    const familyProgramOrganizerUrl = createArtistsFetchUrl('family-program-organizers', isInFestivalGroup);
+    const concertArtistsUrl = createArtistsFetchUrl('concert-artists', isInFestivalGroup);
+    const performanceArtistsUrl = createArtistsFetchUrl('performance-artists', isInFestivalGroup);
+    const readingArtistsUrl = createArtistsFetchUrl('reading-artists', isInFestivalGroup);
+    const workshopOrganizersUrl = createArtistsFetchUrl('workshop-organizers', isInFestivalGroup);
+    const familyProgramsOrganizerUrl = createArtistsFetchUrl('family-program-organizers', isInFestivalGroup);
+    const exhibitionArtistsUrl = createArtistsFetchUrl('exhibition-artists', isInFestivalGroup);
 
     try {
-        const concertArtistsResponse = await fetchArtists<ConcertArtist>(concertArtistUrl);
-        const performanceArtistsResponse = await fetchArtists<PerformanceArtist>(performanceArtistUrl);
-        const readingArtistsResponse = await fetchArtists<ReadingArtist>(readingArtistUrl);
-        const workshopOrganizerResponse = await fetchArtists<WorkshopOrganizer>(workshopOrganizerUrl);
-        const familyProgramOrganizerResponse = await fetchArtists<FamilyProgramOrganizer>(familyProgramOrganizerUrl);
+        const concertArtistsResponse = await fetchArtists<ConcertArtist>(concertArtistsUrl);
+        const performanceArtistsResponse = await fetchArtists<PerformanceArtist>(performanceArtistsUrl);
+        const readingArtistsResponse = await fetchArtists<ReadingArtist>(readingArtistsUrl);
+        const workshopOrganizersResponse = await fetchArtists<WorkshopOrganizer>(workshopOrganizersUrl);
+        const familyProgramOrganizersResponse = await fetchArtists<FamilyProgramOrganizer>(familyProgramsOrganizerUrl);
+        const exhibitionArtistsResponse = await fetchArtists<ExhibitionArtist>(exhibitionArtistsUrl);
 
         const allArtistsResponseData: AllArtists = {
             concertArtists: null,
             performanceArtists: null,
             readingArtists: null,
             workshopsOrganizers: null,
-            familyProgramOrganizer: null,
+            familyProgramOrganizers: null,
+            exhibitionArtists: null,
         };
 
         let responseError: StrapiErrorResponse['error'] | null = null;
@@ -92,15 +96,20 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
         } else {
             allArtistsResponseData.readingArtists = fixImageUrls(readingArtistsResponse).data;
         }
-        if ('error' in workshopOrganizerResponse) {
-            responseError = workshopOrganizerResponse.error;
+        if ('error' in workshopOrganizersResponse) {
+            responseError = workshopOrganizersResponse.error;
         } else {
-            allArtistsResponseData.workshopsOrganizers = fixImageUrls(workshopOrganizerResponse).data;
+            allArtistsResponseData.workshopsOrganizers = fixImageUrls(workshopOrganizersResponse).data;
         }
-        if ('error' in familyProgramOrganizerResponse) {
-            responseError = familyProgramOrganizerResponse.error;
+        if ('error' in familyProgramOrganizersResponse) {
+            responseError = familyProgramOrganizersResponse.error;
         } else {
-            allArtistsResponseData.familyProgramOrganizer = fixImageUrls(familyProgramOrganizerResponse).data;
+            allArtistsResponseData.familyProgramOrganizers = fixImageUrls(familyProgramOrganizersResponse).data;
+        }
+        if ('error' in exhibitionArtistsResponse) {
+            responseError = exhibitionArtistsResponse.error;
+        } else {
+            allArtistsResponseData.exhibitionArtists = fixImageUrls(exhibitionArtistsResponse).data;
         }
 
         if (responseError !== null) {

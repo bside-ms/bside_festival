@@ -1,4 +1,5 @@
 import type ConcertArtist from 'lib/strapi/typings/ConcertArtist';
+import type ExhibitionArtist from 'lib/strapi/typings/ExhibitionArtist';
 import type FamilyProgramOrganizer from 'lib/strapi/typings/FamilyProgramOrganizer';
 import type PerformanceArtist from 'lib/strapi/typings/PerformanceArtist';
 import type ReadingArtist from 'lib/strapi/typings/ReadingArtist';
@@ -9,5 +10,6 @@ export default interface AllArtists {
   workshopsOrganizers: Array<WorkshopOrganizer> | null;
   readingArtists: Array<ReadingArtist> | null;
   performanceArtists: Array<PerformanceArtist> | null;
-  familyProgramOrganizer: Array<FamilyProgramOrganizer> | null;
+  familyProgramOrganizers: Array<FamilyProgramOrganizer> | null;
+  exhibitionArtists: Array<ExhibitionArtist> | null;
 }

@@ -34,11 +34,15 @@ export default (): ReactElement => {
                                     title={useApplicationTitle(ApplicationType.workshop)}
                                 />
                                 <ArtistsList
+                                    artists={response.exhibitionArtists}
+                                    title={useApplicationTitle(ApplicationType.ausstellung)}
+                                />
+                                <ArtistsList
                                     artists={response.readingArtists}
                                     title={useApplicationTitle(ApplicationType.lesung)}
                                 />
                                 <ArtistsList
-                                    artists={response.familyProgramOrganizer}
+                                    artists={response.familyProgramOrganizers}
                                     title={useApplicationTitle(ApplicationType.familienprogramm)}
                                 />
                             </div>
