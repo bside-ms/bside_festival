@@ -1,6 +1,6 @@
 import { Link } from '@mui/material';
 import type { ReactElement } from 'react';
-import useFormattedDate from 'lib/common/useFormattedDate';
+import formatDate from 'lib/common/formatDate';
 import getLabelFromCollectionType from 'lib/strapi/getLabelFromCollectionType';
 import type ErroneousProgramItem from 'lib/strapi/typings/ErroneousProgramItem';
 import useStrapiCollectionTypeUrl from 'lib/strapi/useStrapiCollectionTypeUrl';
@@ -13,8 +13,8 @@ const TimeTableErroneousProgramItem = ({ erroneousProgramItem: { collectionType,
 
     const title = getLabelFromCollectionType(collectionType);
 
-    const beginFromItem = useFormattedDate(new Date(programItem.attributes.Begin), 'dd.MM., HH:mm');
-    const endFromItem = useFormattedDate(new Date(programItem.attributes.End), 'dd.MM., HH:mm');
+    const beginFromItem = formatDate(new Date(programItem.attributes.Begin), 'dd.MM., HH:mm');
+    const endFromItem = formatDate(new Date(programItem.attributes.End), 'dd.MM., HH:mm');
 
     const locationName = programItem.attributes.location.data?.attributes.Name ?? null;
 

@@ -1,7 +1,7 @@
-import useFormattedDate from 'lib/common/useFormattedDate';
+import formatDate from 'lib/common/formatDate';
 
 const useApplicationCreatedDate = (createdAt: string): string => (
-    useFormattedDate(new Date(createdAt), 'dd.MM.yyyy, HH:mm \'Uhr\'')
+    formatDate(new Date(createdAt), 'dd.MM.yyyy, HH:mm \'Uhr\'')
 );
 
 export default useApplicationCreatedDate;

@@ -1,6 +1,6 @@
 import { differenceInMinutes } from 'date-fns';
 import type { ReactElement } from 'react';
-import useFormattedDate from 'lib/common/useFormattedDate';
+import formatDate from 'lib/common/formatDate';
 import useScaledTimeTableMinutes from 'lib/strapi/useScaledTimeTableMinutes';
 
 interface Props {
@@ -13,7 +13,7 @@ const TimeTableHourDelimiter = ({ optimizedTimeTableBegin, hour, withHourText }:
 
     const diffInMinutesFromStartOfDay = useScaledTimeTableMinutes(differenceInMinutes(hour, optimizedTimeTableBegin));
 
-    const formattedHour = useFormattedDate(hour, 'HH');
+    const formattedHour = formatDate(hour, 'HH');
 
     return (
         <>

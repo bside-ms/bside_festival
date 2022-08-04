@@ -20,7 +20,7 @@ import PageHeader from 'components/common/PageHeader';
 import type ApplicationType from 'lib/application-form/ApplicationType';
 import useApplicationEndDate from 'lib/application-form/useApplicationEndDate';
 import useApplicationTitle from 'lib/application-form/useApplicationTitle';
-import useFormattedDate from 'lib/common/useFormattedDate';
+import formatDate from 'lib/common/formatDate';
 
 interface Props {
     applicationType: ApplicationType;
@@ -35,7 +35,7 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement | null => {
 
     const hasApplicationPeriodEnded = isPast(applicationEndDate);
 
-    const formattedEndDate = useFormattedDate(applicationEndDate, 'd. MMMM \'um\' HH:mm \'Uhr\'');
+    const formattedEndDate = formatDate(applicationEndDate, 'd. MMMM \'um\' HH:mm \'Uhr\'');
 
     if (hasApplicationPeriodEnded) {
         router.push('/bewerbung');

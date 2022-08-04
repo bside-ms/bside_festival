@@ -1,7 +1,7 @@
 import { differenceInMinutes } from 'date-fns';
 import type { ReactElement } from 'react';
 import useApplicationTypeColor from 'lib/applications/useApplicationTypeColor';
-import useFormattedDate from 'lib/common/useFormattedDate';
+import formatDate from 'lib/common/formatDate';
 import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 import useScaledTimeTableMinutes from 'lib/strapi/useScaledTimeTableMinutes';
@@ -18,8 +18,8 @@ const TimeTableProgramItem = ({ optimizedTimeTableBegin, programItem }: Props): 
     const beginFromItem = new Date(programItem.attributes.Begin);
     const endFromItem = new Date(programItem.attributes.End);
 
-    const formattedBegin = useFormattedDate(beginFromItem, 'HH:mm');
-    const formattedEnd = useFormattedDate(endFromItem, 'HH:mm');
+    const formattedBegin = formatDate(beginFromItem, 'HH:mm');
+    const formattedEnd = formatDate(endFromItem, 'HH:mm');
 
     const diffInMinutesFromStartOfDay = useScaledTimeTableMinutes(differenceInMinutes(beginFromItem, optimizedTimeTableBegin));
     const diffInMinutesFromBeginToEnd = useScaledTimeTableMinutes(differenceInMinutes(endFromItem, beginFromItem));
