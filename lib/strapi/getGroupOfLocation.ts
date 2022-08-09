@@ -8,6 +8,7 @@ const getGroupOfLocation = (location: Location, locationGroups: Array<LocationGr
     );
 
     if (matchingLocationGroups.length > 1) {
+        // eslint-disable-next-line no-console
         console.error('A location must only be associated with one location group');
     }
 
