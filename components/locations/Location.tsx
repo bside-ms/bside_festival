@@ -1,17 +1,30 @@
+import { faWrench } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Chip } from '@mui/material';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
 import useEditorJsData from 'lib/editorJs/useEditorJsData';
+import isGroupMember from 'lib/next-auth/isGroupMember';
+import getGroupOfLocation from 'lib/strapi/getGroupOfLocation';
+import getThumbnailUrl from 'lib/strapi/getThumbnailUrl';
 import Location from 'lib/strapi/typings/Location';
+import type LocationGroup from 'lib/strapi/typings/LocationGroup';
 import useLinksData from 'lib/strapi/useLinksData';
+import useStrapiCollectionTypeUrl from 'lib/strapi/useStrapiCollectionTypeUrl';
 
 interface Props {
     location: Location;
+    locationGroups: Array<LocationGroup>;
 }
 
-const Location = ({ location }: Props): ReactElement => {
+const Location = ({ location, locationGroups }: Props): ReactElement => {
+
+    const { data: session } = useSession();
+    const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
+
+    const groupOfLocation = getGroupOfLocation(location, locationGroups);
 
     const { Coordinates, Description, Address, Links, Name, publishedAt } = location.attributes;
 
@@ -21,13 +34,16 @@ const Location = ({ location }: Props): ReactElement => {
 
     const locationInfo = Address ?? Coordinates ?? null;
 
+    const strapiUrl = useStrapiCollectionTypeUrl('location', location.id);
+
     return (
         <div key={location.id} className="p-4 bg-gradient-to-b from-gray-200 to-gray-50 rounded space-y-3">
             <div className="flex space-x-4">
-                <div className="space-y-3">
-                    <div className="font-display">
-                        {Name}
-                    </div>
+                <div className="flex flex-col space-y-3">
+                    <div
+                        className="rounded-full h-32 w-32 bg-center bg-cover"
+                        style={{ backgroundImage: `url(${getThumbnailUrl(location)})` }}
+                    />
 
                     {publishedAt === null && (
                         <Chip
@@ -35,6 +51,29 @@ const Location = ({ location }: Props): ReactElement => {
                             variant="outlined"
                         />
                     )}
+
+                    {isInFestivalGroup && (
+                        <div className="text-center">
+                            <Link href={strapiUrl}>
+                                <a className="text-blue-500 hover:text-blue-700" target="_blank">
+                                    <FontAwesomeIcon icon={faWrench} /> Bearbeiten
+                                </a>
+                            </Link>
+                        </div>
+                    )}
+                </div>
+
+                <div className="space-y-3">
+
+                    <div className="font-display">
+                        {groupOfLocation !== null && (
+                            <div className="uppercase text-xs font-sans">
+                                {groupOfLocation.attributes.Name}
+                            </div>
+                        )}
+
+                        {Name}
+                    </div>
 
                     {locationInfo !== null && (
                         <div className="text-gray-700">

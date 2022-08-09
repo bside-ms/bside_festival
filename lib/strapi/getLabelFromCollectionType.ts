@@ -35,6 +35,9 @@ const getLabelFromCollectionType = (strapiCollectionType: StrapiCollectionType):
         case 'information-booth':
         case 'information-booth-organizers':
             return 'Infostand';
+
+        case 'location':
+            return 'Ort';
     }
 };
 

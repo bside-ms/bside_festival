@@ -1,3 +1,15 @@
+interface ImageSpecs {
+    url: string;
+    height: number;
+    width: number;
+    size: number;
+    ext: string;
+    hash: string;
+    mime: string;
+    name: string;
+    path: null;
+}
+
 export default interface GenericImagesData {
     data: null | Array<{
         id: number;
@@ -8,17 +20,12 @@ export default interface GenericImagesData {
             size: number;
             caption: string;
             alternativeText: string;
-            formats: Record<'thumbnail' | 'small' | 'medium' | 'large', {
-                url: string;
-                height: number;
-                width: number;
-                size: number;
-                ext: string;
-                hash: string;
-                mime: string;
-                name: string;
-                path: null;
-            }>;
+            formats: {
+                thumbnail?: ImageSpecs;
+                small?: ImageSpecs;
+                medium?: ImageSpecs;
+                large?: ImageSpecs;
+            };
             createdAt: string;
             ext: string;
             hash: string;

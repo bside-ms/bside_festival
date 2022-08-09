@@ -7,6 +7,7 @@ import type { ReactElement } from 'react';
 import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
 import useEditorJsData from 'lib/editorJs/useEditorJsData';
 import isGroupMember from 'lib/next-auth/isGroupMember';
+import getThumbnailUrl from 'lib/strapi/getThumbnailUrl';
 import type { default as ArtistModel } from 'lib/strapi/typings/Artist';
 import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
 import useLinksData from 'lib/strapi/useLinksData';
@@ -16,24 +17,6 @@ interface Props {
     artist: ArtistModel;
     strapiCollectionType: StrapiCollectionType;
 }
-
-const getThumbnailUrl = (artist: ArtistModel): string => {
-
-    if (artist.attributes.Images.data === null || artist.attributes.Images.data[0]?.attributes === undefined) {
-        return 'https://place-puppy.com/300x300';
-    }
-
-    const imageAttributes = artist.attributes.Images.data[0]?.attributes;
-
-    /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-    return (
-        imageAttributes.formats.thumbnail?.url ??
-        imageAttributes.formats.small?.url ??
-        imageAttributes.formats.medium?.url ??
-        imageAttributes.formats.large?.url ??
-        imageAttributes.url
-    );
-};
 
 const Artist = ({ artist, strapiCollectionType }: Props): ReactElement => {
 

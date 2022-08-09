@@ -14,6 +14,7 @@ type StrapiCollectionType =
     'information-booth' |
     'information-booth-organizers' |
     'food' |
-    'food-organizers';
+    'food-organizers' |
+    'location';
 
 export default StrapiCollectionType;

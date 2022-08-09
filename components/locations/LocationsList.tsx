@@ -1,61 +1,33 @@
-import { Alert, AlertTitle } from '@mui/material';
+import { useMemo } from 'react';
 import type { ReactElement } from 'react';
 import ContentWrapper from 'components/common/ContentWrapper';
 import Location from 'components/locations/Location';
+import orderLocations from 'lib/strapi/orderLocations';
 import type { default as LocationModel } from 'lib/strapi/typings/Location';
-import type StrapiResponse from 'lib/strapi/typings/StrapiResponse';
+import type LocationGroup from 'lib/strapi/typings/LocationGroup';
 
 interface Props {
-    data?: StrapiResponse<Array<LocationModel>>;
-    error?: Error;
+    allLocations: Array<LocationModel>;
+    allLocationGroups: Array<LocationGroup>;
 }
 
-const LocationsList = ({ data, error }: Props): ReactElement => {
+const LocationsList = ({ allLocations, allLocationGroups }: Props): ReactElement => {
 
-    if (error !== undefined) {
-        return (
-            <div className="my-8">
-                <ContentWrapper>
-                    <Alert severity="error">
-                        <AlertTitle>Es ist ein Fehler aufgetreten</AlertTitle>
-                        {error.message}
-                    </Alert>
-                </ContentWrapper>
-            </div>
-        );
-    }
-
-    if (data === undefined) {
-        return (
-            <div className="my-8">
-                <ContentWrapper>
-                    <div>Wird geladen...</div>
-                </ContentWrapper>
-            </div>
-        );
-    }
-
-    if ('error' in data) {
-        return (
-            <div className="my-8">
-                <ContentWrapper>
-                    <Alert severity="error">
-                        <AlertTitle>{data.error.name} ({data.error.status})</AlertTitle>
-                        {data.error.message}
-                    </Alert>
-                </ContentWrapper>
-            </div>
-        );
-    }
-
-    const allLocations = data.data;
+    const orderedLocations = useMemo(
+        () => orderLocations(allLocations, allLocationGroups),
+        [allLocations, allLocationGroups]
+    );
 
     return (
         <div className="my-8">
             <ContentWrapper>
                 <div className="space-y-5">
-                    {allLocations.map(concertArtist => (
-                        <Location key={concertArtist.id} location={concertArtist} />
+                    {orderedLocations.map(location => (
+                        <Location
+                            key={location.id}
+                            location={location}
+                            locationGroups={allLocationGroups}
+                        />
                     ))}
                 </div>
             </ContentWrapper>
