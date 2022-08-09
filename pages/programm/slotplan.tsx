@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import ApplicationsOverviewNotAllowed from 'components/applications/ApplicationsOverviewNotAllowed';
 import TimeTable from 'components/program/timeTable/TimeTable';
 import SwrResponseWrapper from 'components/strapi/SwrResponseWrapper';
+import { LocationGroupsContextProvider } from 'lib/context/LocationGroupsContext';
 import isGroupMember from 'lib/next-auth/isGroupMember';
 import type AllFullTimeProgramItemsResponse from 'lib/strapi/typings/AllFullTimeProgramItemsResponse';
 import type AllProgramItemsResponse from 'lib/strapi/typings/AllProgramItemsResponse';
@@ -33,25 +34,26 @@ export default (): ReactElement => {
             <div className="w-full pl-5 mx-auto relative">
                 <SwrResponseWrapper<Array<LocationGroup>> response={swrAllLocationGroupsResponse}>
                     {(allLocationGroups): ReactElement => (
-                        <SwrResponseWrapper<AllFullTimeProgramItemsResponse> response={swrFullTimeProgramItemsResponse}>
-                            {({ allFullTimeProgramItems: { exhibitions, foods, informationBooths } }): ReactElement => (
-                                <SwrResponseWrapper<AllProgramItemsResponse> response={swrProgramItemsResponse}>
-                                    {({ allProgramItems: { concerts, workshops, performances, readings, familyPrograms } }): ReactElement => (
-                                        <TimeTable
-                                            concerts={concerts ?? []}
-                                            workshops={workshops ?? []}
-                                            performances={performances ?? []}
-                                            readings={readings ?? []}
-                                            familyPrograms={familyPrograms ?? []}
-                                            exhibitions={exhibitions ?? []}
-                                            foods={foods ?? []}
-                                            informationBooths={informationBooths ?? []}
-                                            allLocationGroups={allLocationGroups}
-                                        />
-                                    )}
-                                </SwrResponseWrapper>
-                            )}
-                        </SwrResponseWrapper>
+                        <LocationGroupsContextProvider locationGroups={allLocationGroups}>
+                            <SwrResponseWrapper<AllFullTimeProgramItemsResponse> response={swrFullTimeProgramItemsResponse}>
+                                {({ allFullTimeProgramItems: { exhibitions, foods, informationBooths } }): ReactElement => (
+                                    <SwrResponseWrapper<AllProgramItemsResponse> response={swrProgramItemsResponse}>
+                                        {({ allProgramItems: { concerts, workshops, performances, readings, familyPrograms } }): ReactElement => (
+                                            <TimeTable
+                                                concerts={concerts ?? []}
+                                                workshops={workshops ?? []}
+                                                performances={performances ?? []}
+                                                readings={readings ?? []}
+                                                familyPrograms={familyPrograms ?? []}
+                                                exhibitions={exhibitions ?? []}
+                                                foods={foods ?? []}
+                                                informationBooths={informationBooths ?? []}
+                                            />
+                                        )}
+                                    </SwrResponseWrapper>
+                                )}
+                            </SwrResponseWrapper>
+                        </LocationGroupsContextProvider>
                     )}
                 </SwrResponseWrapper>
             </div>

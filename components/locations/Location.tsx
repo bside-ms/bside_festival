@@ -5,26 +5,24 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
+import { useLocationGroupOfLocation } from 'lib/context/LocationGroupsContext';
 import useEditorJsData from 'lib/editorJs/useEditorJsData';
 import isGroupMember from 'lib/next-auth/isGroupMember';
-import getGroupOfLocation from 'lib/strapi/getGroupOfLocation';
 import getThumbnailUrl from 'lib/strapi/getThumbnailUrl';
 import Location from 'lib/strapi/typings/Location';
-import type LocationGroup from 'lib/strapi/typings/LocationGroup';
 import useLinksData from 'lib/strapi/useLinksData';
 import useStrapiCollectionTypeUrl from 'lib/strapi/useStrapiCollectionTypeUrl';
 
 interface Props {
     location: Location;
-    locationGroups: Array<LocationGroup>;
 }
 
-const Location = ({ location, locationGroups }: Props): ReactElement => {
+const Location = ({ location }: Props): ReactElement => {
 
     const { data: session } = useSession();
     const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
 
-    const groupOfLocation = getGroupOfLocation(location, locationGroups);
+    const groupOfLocation = useLocationGroupOfLocation(location);
 
     const { Coordinates, Description, Address, Links, Name, publishedAt } = location.attributes;
 

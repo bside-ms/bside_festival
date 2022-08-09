@@ -2,20 +2,18 @@ import { useMemo } from 'react';
 import type { ReactElement } from 'react';
 import ContentWrapper from 'components/common/ContentWrapper';
 import Location from 'components/locations/Location';
-import orderLocations from 'lib/strapi/orderLocations';
 import type { default as LocationModel } from 'lib/strapi/typings/Location';
-import type LocationGroup from 'lib/strapi/typings/LocationGroup';
+import useLocationsSortingCallback from 'lib/strapi/useLocationsSortingCallback';
 
 interface Props {
     allLocations: Array<LocationModel>;
-    allLocationGroups: Array<LocationGroup>;
 }
 
-const LocationsList = ({ allLocations, allLocationGroups }: Props): ReactElement => {
+const LocationsList = ({ allLocations }: Props): ReactElement => {
 
     const orderedLocations = useMemo(
-        () => orderLocations(allLocations, allLocationGroups),
-        [allLocations, allLocationGroups]
+        () => allLocations.sort(useLocationsSortingCallback),
+        [allLocations]
     );
 
     return (
@@ -26,7 +24,6 @@ const LocationsList = ({ allLocations, allLocationGroups }: Props): ReactElement
                         <Location
                             key={location.id}
                             location={location}
-                            locationGroups={allLocationGroups}
                         />
                     ))}
                 </div>

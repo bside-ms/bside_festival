@@ -11,7 +11,6 @@ import type Exhibition from 'lib/strapi/typings/Exhibition';
 import type FamilyProgram from 'lib/strapi/typings/FamilyProgram';
 import type Food from 'lib/strapi/typings/Food';
 import type InformationBooth from 'lib/strapi/typings/InformationBooth';
-import type LocationGroup from 'lib/strapi/typings/LocationGroup';
 import type Performance from 'lib/strapi/typings/Performance';
 import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 import type Reading from 'lib/strapi/typings/Reading';
@@ -30,7 +29,6 @@ interface Props {
     exhibitions: Array<Exhibition>;
     foods: Array<Food>;
     informationBooths: Array<InformationBooth>;
-    allLocationGroups: Array<LocationGroup>;
 }
 
 const TimeTable = ({
@@ -42,7 +40,6 @@ const TimeTable = ({
     exhibitions,
     foods,
     informationBooths,
-    allLocationGroups,
 }: Props): ReactElement => {
 
     // TODO: use more context
@@ -71,19 +68,16 @@ const TimeTable = ({
     const foodsFilteredByDate = useFullTimeProgramItemsFilteredByDate(foods, date);
     const informationBoothsFilteredByDate = useFullTimeProgramItemsFilteredByDate(informationBooths, date);
 
-    const locations = useLocationsFromTimeTableItems(
-        [
-            ...concertsFilteredByDate,
-            ...workshopsFilteredByDate,
-            ...performancesFilteredByDate,
-            ...readingsFilteredByDate,
-            ...familyProgramsFilteredByDate,
-            ...exhibitionsFilteredByDate,
-            ...foodsFilteredByDate,
-            ...informationBoothsFilteredByDate,
-        ],
-        allLocationGroups
-    );
+    const locations = useLocationsFromTimeTableItems([
+        ...concertsFilteredByDate,
+        ...workshopsFilteredByDate,
+        ...performancesFilteredByDate,
+        ...readingsFilteredByDate,
+        ...familyProgramsFilteredByDate,
+        ...exhibitionsFilteredByDate,
+        ...foodsFilteredByDate,
+        ...informationBoothsFilteredByDate,
+    ]);
 
     return (
         <div>
@@ -110,7 +104,6 @@ const TimeTable = ({
                 <TimeTableLocations
                     date={date}
                     locations={locations}
-                    locationGroups={allLocationGroups}
                     concerts={concertsFilteredByDate}
                     readings={readingsFilteredByDate}
                     performances={performancesFilteredByDate}

@@ -3,6 +3,7 @@ import Footer from 'components/common/Footer';
 import NextHead from 'components/common/NextHead';
 import LocationsList from 'components/locations/LocationsList';
 import SwrResponseWrapper from 'components/strapi/SwrResponseWrapper';
+import { LocationGroupsContextProvider } from 'lib/context/LocationGroupsContext';
 import useAllLocationGroups from 'lib/strapi/useAllLocationGroups';
 import useAllLocations from 'lib/strapi/useAllLocations';
 
@@ -20,10 +21,11 @@ export default (): ReactElement => {
                     {(allLocations): ReactElement => (
                         <SwrResponseWrapper response={allLocationGroupsResponse}>
                             {(allLocationGroups): ReactElement => (
-                                <LocationsList
-                                    allLocations={allLocations}
-                                    allLocationGroups={allLocationGroups}
-                                />
+                                <LocationGroupsContextProvider locationGroups={allLocationGroups}>
+                                    <LocationsList
+                                        allLocations={allLocations}
+                                    />
+                                </LocationGroupsContextProvider>
                             )}
                         </SwrResponseWrapper>
                     )}

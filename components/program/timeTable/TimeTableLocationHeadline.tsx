@@ -1,16 +1,14 @@
 import type { ReactElement } from 'react';
-import getGroupOfLocation from 'lib/strapi/getGroupOfLocation';
+import { useLocationGroupOfLocation } from 'lib/context/LocationGroupsContext';
 import type Location from 'lib/strapi/typings/Location';
-import type LocationGroup from 'lib/strapi/typings/LocationGroup';
 
 interface Props {
     location: Location;
-    locationGroups: Array<LocationGroup>;
 }
 
-const TimeTableLocationHeadline = ({ location, locationGroups }: Props): ReactElement => {
+const TimeTableLocationHeadline = ({ location }: Props): ReactElement => {
 
-    const groupOfLocation = getGroupOfLocation(location, locationGroups);
+    const groupOfLocation = useLocationGroupOfLocation(location);
 
     return (
         <div className="w-[200px] shrink-0">

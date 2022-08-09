@@ -9,7 +9,6 @@ import type FamilyProgram from 'lib/strapi/typings/FamilyProgram';
 import type Food from 'lib/strapi/typings/Food';
 import type InformationBooth from 'lib/strapi/typings/InformationBooth';
 import type Location from 'lib/strapi/typings/Location';
-import type LocationGroup from 'lib/strapi/typings/LocationGroup';
 import type Performance from 'lib/strapi/typings/Performance';
 import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 import type Reading from 'lib/strapi/typings/Reading';
@@ -21,7 +20,6 @@ import useTimeTableHours from 'lib/strapi/useTimeTableHours';
 
 interface Props {
     locations: Array<Location>;
-    locationGroups: Array<LocationGroup>;
     date: ProgramDate;
     concerts: Array<Concert>;
     workshops: Array<Workshop>;
@@ -35,7 +33,6 @@ interface Props {
 
 const TimeTableLocations = ({
     locations,
-    locationGroups,
     date,
     concerts,
     workshops,
@@ -71,7 +68,6 @@ const TimeTableLocations = ({
                     <TimeTableLocationHeadline
                         key={location.id}
                         location={location}
-                        locationGroups={locationGroups}
                     />
                 ))}
             </div>
