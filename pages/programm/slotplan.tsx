@@ -4,6 +4,7 @@ import ApplicationsOverviewNotAllowed from 'components/applications/Applications
 import TimeTable from 'components/program/timeTable/TimeTable';
 import SwrResponseWrapper from 'components/strapi/SwrResponseWrapper';
 import { LocationGroupsContextProvider } from 'lib/context/LocationGroupsContext';
+import { ProgramItemTypeFiltersContextProvider } from 'lib/context/ProgramItemTypeFiltersContext';
 import isGroupMember from 'lib/next-auth/isGroupMember';
 import type AllFullTimeProgramItemsResponse from 'lib/strapi/typings/AllFullTimeProgramItemsResponse';
 import type AllProgramItemsResponse from 'lib/strapi/typings/AllProgramItemsResponse';
@@ -39,16 +40,18 @@ export default (): ReactElement => {
                                 {({ allFullTimeProgramItems: { exhibitions, foods, informationBooths } }): ReactElement => (
                                     <SwrResponseWrapper<AllProgramItemsResponse> response={swrProgramItemsResponse}>
                                         {({ allProgramItems: { concerts, workshops, performances, readings, familyPrograms } }): ReactElement => (
-                                            <TimeTable
-                                                concerts={concerts ?? []}
-                                                workshops={workshops ?? []}
-                                                performances={performances ?? []}
-                                                readings={readings ?? []}
-                                                familyPrograms={familyPrograms ?? []}
-                                                exhibitions={exhibitions ?? []}
-                                                foods={foods ?? []}
-                                                informationBooths={informationBooths ?? []}
-                                            />
+                                            <ProgramItemTypeFiltersContextProvider>
+                                                <TimeTable
+                                                    concerts={concerts ?? []}
+                                                    workshops={workshops ?? []}
+                                                    performances={performances ?? []}
+                                                    readings={readings ?? []}
+                                                    familyPrograms={familyPrograms ?? []}
+                                                    exhibitions={exhibitions ?? []}
+                                                    foods={foods ?? []}
+                                                    informationBooths={informationBooths ?? []}
+                                                />
+                                            </ProgramItemTypeFiltersContextProvider>
                                         )}
                                     </SwrResponseWrapper>
                                 )}

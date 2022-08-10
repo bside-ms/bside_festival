@@ -1,23 +1,14 @@
-import { isAfter, isBefore, isSameMinute } from 'date-fns';
 import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
+import useProgramItemFilteredByDateFunction from 'lib/strapi/useProgramItemFilteredByDateFunction';
 
-const useProgramItemFilteredByDate = <T extends ProgramItem>(programItems: Array<T>, [begin, end]: ProgramDate): Array<T> => (
-    programItems.filter(programItem => {
+const useProgramItemFilteredByDate = <T extends ProgramItem>(programItems: Array<T>, date: ProgramDate): Array<T> => {
 
-        const beginFromItem = new Date(programItem.attributes.Begin);
-        const endFromItem = new Date(programItem.attributes.End);
+    const programItemFilteredByDateFunction = useProgramItemFilteredByDateFunction();
 
-        return (
-            (
-                isSameMinute(beginFromItem, begin) ||
-                isAfter(beginFromItem, begin)
-            ) && (
-                isSameMinute(endFromItem, end) ||
-                isBefore(endFromItem, end)
-            )
-        );
-    })
-);
+    return programItems.filter(
+        programItem => programItemFilteredByDateFunction(programItem, date)
+    );
+};
 
 export default useProgramItemFilteredByDate;

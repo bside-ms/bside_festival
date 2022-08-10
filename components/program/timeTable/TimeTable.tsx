@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import TimeTableDateSelects from 'components/program/timeTable/TimeTableDateSelects';
 import TimeTableErroneousProgramItems from 'components/program/timeTable/TimeTableErroneousProgramItems';
 import TimeTableLocations from 'components/program/timeTable/TimeTableLocations';
+import TimeTableProgramItemFilters from 'components/program/timeTable/TimeTableProgramItemFilters';
 import filterErroneousProgramItems from 'lib/strapi/filterErroneousProgramItems';
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
 import type Concert from 'lib/strapi/typings/Concert';
@@ -98,6 +99,10 @@ const TimeTable = ({
                     date={date}
                     handleDateChange={setDate}
                 />
+            </div>
+
+            <div className="my-4">
+                <TimeTableProgramItemFilters />
             </div>
 
             {locations.length > 0 ? (
