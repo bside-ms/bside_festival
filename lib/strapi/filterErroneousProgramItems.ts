@@ -1,4 +1,5 @@
-import { endOfDay, isAfter, isBefore, isSameMinute, startOfDay } from 'date-fns';
+import { isAfter, isBefore, isSameMinute } from 'date-fns';
+import getAvailableDates from 'lib/strapi/getAvailableDates';
 import getLabelFromCollectionType from 'lib/strapi/getLabelFromCollectionType';
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
 import type ErroneousProgramItem from 'lib/strapi/typings/ErroneousProgramItem';
@@ -11,6 +12,12 @@ const filterErroneousProgramItems = <T extends ProgramItem>(
     allResponseData: AllProgramItems,
     erroneousProgramItems: Array<ErroneousProgramItem>
 ): Array<T> => {
+
+    const availableDates = getAvailableDates();
+
+    // Those dates will definitely be set, so NNAO is fine here.
+    const festivalBegin = availableDates.slice(0, 1)[0]![0];
+    const festivalEnd = availableDates.slice(-1)[0]![1];
 
     return programItems.filter(
         (programItem): boolean => {
@@ -91,8 +98,6 @@ const filterErroneousProgramItems = <T extends ProgramItem>(
                 return false;
             }
 
-            const festivalBegin = startOfDay(new Date('2022-09-16'));
-            const festivalEnd = endOfDay(new Date('2022-09-18'));
             if (isBefore(itemBegin, festivalBegin) || isAfter(itemBegin, festivalEnd) || isBefore(itemEnd, festivalBegin) || isAfter(itemEnd, festivalEnd)) {
                 erroneousProgramItems.push({
                     collectionType,
