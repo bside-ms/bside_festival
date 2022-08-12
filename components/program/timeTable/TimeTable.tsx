@@ -5,6 +5,7 @@ import TimeTableErroneousProgramItems from 'components/program/timeTable/TimeTab
 import TimeTableLocations from 'components/program/timeTable/TimeTableLocations';
 import TimeTableProgramItemFilters from 'components/program/timeTable/TimeTableProgramItemFilters';
 import filterErroneousProgramItems from 'lib/strapi/filterErroneousProgramItems';
+import getAvailableDates from 'lib/strapi/getAvailableDates';
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
 import type Concert from 'lib/strapi/typings/Concert';
 import type ErroneousProgramItem from 'lib/strapi/typings/ErroneousProgramItem';
@@ -16,7 +17,6 @@ import type Performance from 'lib/strapi/typings/Performance';
 import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 import type Reading from 'lib/strapi/typings/Reading';
 import type Workshop from 'lib/strapi/typings/Workshop';
-import useAvailableDates from 'lib/strapi/useAvailableDates';
 import useFullTimeProgramItemsFilteredByDate from 'lib/strapi/useFullTimeProgramItemsFilteredByDate';
 import useLocationsFromTimeTableItems from 'lib/strapi/useLocationsFromTimeTableItems';
 import useProgramItemFilteredByDate from 'lib/strapi/useProgramItemsFilteredByDate';
@@ -45,7 +45,7 @@ const TimeTable = ({
 
     // TODO: use more context
 
-    const availableDates = useAvailableDates();
+    const availableDates = getAvailableDates();
 
     const [date, setDate] = useState<ProgramDate>(availableDates[0]);
 

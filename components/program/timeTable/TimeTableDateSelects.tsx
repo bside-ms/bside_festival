@@ -1,8 +1,8 @@
 import { isSameDay } from 'date-fns';
 import type { ReactElement } from 'react';
 import TimeTableDateSelect from 'components/program/timeTable/TimeTableDateSelect';
+import getAvailableDates from 'lib/strapi/getAvailableDates';
 import type ProgramDate from 'lib/strapi/typings/ProgramDate';
-import useAvailableDates from 'lib/strapi/useAvailableDates';
 
 interface Props {
     date: ProgramDate;
@@ -11,7 +11,7 @@ interface Props {
 
 const TimeTableDateSelects = ({ date: selectedDate, handleDateChange }: Props): ReactElement => {
 
-    const availableDates = useAvailableDates();
+    const availableDates = getAvailableDates();
 
     return (
         <div className="flex gap-2">
