@@ -28,7 +28,14 @@ const InfoBox = ({ infoNumber, children, className }: { infoNumber: number, chil
 
 const HeartSeparator = ({ className }: { className?: string }): ReactElement => (
     <div className={`flex gap-7 mt-9 justify-center ${className ?? ''}`}>
-        {range(8).map(index => <BHeartSvg key={index} size={22} color="#ffe698" />)}
+        {range(9).map(index => (
+            <div
+                key={index}
+                className={index > 4 ? 'hidden md:block' : undefined}
+            >
+                <BHeartSvg size={22} color="#ffe698" />
+            </div>
+        ))}
     </div>
 );
 
@@ -48,7 +55,7 @@ const AwarenessOverview = (): ReactElement => {
             <ContentWrapper>
                 <div className="px-4">
                     <Title>
-                        Ansprechpersonen
+                        Ansprech&shy;personen
                     </Title>
 
                     <TextBlock className="mt-7">
