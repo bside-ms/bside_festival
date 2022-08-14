@@ -58,10 +58,9 @@ export default class ApplicationFormDatabaseService {
     }
 
     public async getAllApplications(session: Session | null): Promise<Array<ApplicationData>> {
-         
+
         const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
         const isInDataPrivacyGroup = isGroupMember('/kreise/festival/eingeschränkt/datenschutz', session);
-        /* eslint-enable react-hooks/rules-of-hooks */
 
         if (!isInFestivalGroup) {
             throw new Error('Access denied, needs to be member of group "Festival"');
@@ -108,10 +107,9 @@ export default class ApplicationFormDatabaseService {
     }
 
     public async getApplication(applicationId: string, session: Session | null): Promise<ApplicationData | null> {
-         
+
         const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
         const isInDataPrivacyGroup = isGroupMember('/kreise/festival/eingeschränkt/datenschutz', session);
-        /* eslint-enable react-hooks/rules-of-hooks */
 
         if (!isInFestivalGroup) {
             throw new Error('Access denied, needs to be member of group "Festival"');
