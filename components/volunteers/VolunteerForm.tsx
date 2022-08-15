@@ -12,6 +12,7 @@ import VolunteerFormPrivacyTermsCheckbox from 'components/volunteers/VolunteerFo
 import VolunteerFormSubmitButton from 'components/volunteers/VolunteerFormSubmitButton';
 import VolunteerFormThemeProvider from 'components/volunteers/VolunteerFormThemeProvider';
 import VolunteerFormWrapper from 'components/volunteers/VolunteerFormWrapper';
+import VolunteerPriorDates from 'components/volunteers/VolunteerPriorDates';
 
 const VolunteerForm = (): ReactElement => {
 
@@ -64,6 +65,8 @@ const VolunteerForm = (): ReactElement => {
                                 <div className="mt-4 mb-8">
                                     <VolunteerFormSubmitButton />
                                 </div>
+
+                                <VolunteerPriorDates />
 
                                 <VolunteerFormConfirmationOverlay />
                             </VolunteerFormWrapper>
