@@ -11,7 +11,7 @@ interface Props {
 
 const VolunteerFormCheckboxField = ({ children, fieldName, onToggle }: Props): ReactElement => {
 
-    const { isSubmitting } = useVolunteerFormContext();
+    const { isSubmitting, formValues } = useVolunteerFormContext();
 
     const handleClick = useCallback((event: SyntheticEvent<HTMLButtonElement>) => {
 
@@ -28,6 +28,7 @@ const VolunteerFormCheckboxField = ({ children, fieldName, onToggle }: Props): R
                     sx={{ paddingY: 0, paddingX: 1 }}
                     disabled={isSubmitting}
                     onClick={handleClick}
+                    checked={formValues.confirmedQuestions.split(';').includes(fieldName)}
                 />
             </div>
 

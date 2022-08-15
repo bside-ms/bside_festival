@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useState } from 'react';
 import type { ReactElement, ReactNode } from 'react';
 import type Volunteer from 'lib/volunteers/Volunteer';
+import volunteerDayPreferences from 'lib/volunteers/volunteerDayPreferences';
 
 export type VolunteerFormValues = Pick<
     Volunteer,
@@ -28,12 +29,17 @@ const VolunteerFormContext = createContext<VolunteerFormContextData | null>(null
 
 const VolunteerFormContextProvider = ({ children }: { children: ReactNode }): ReactElement => {
 
+    const dayPreferences = volunteerDayPreferences.reduce(
+        (previousValue, currentValue) => ([...previousValue, currentValue.key]),
+        new Array<string>()
+    ).join(';');
+
     const [formValues, setFormValues] = useState<VolunteerFormValues>({
         fullName: '',
         phoneNumber: '',
         preferredMessengers: '',
         mailAddress: '',
-        confirmedQuestions: '',
+        confirmedQuestions: dayPreferences,
         additionalInformation: '',
     });
 

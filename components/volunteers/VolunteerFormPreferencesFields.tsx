@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import VolunteerFormCheckboxField from 'components/volunteers/VolunteerFormCheckboxField';
 import { useVolunteerFormContext } from 'components/volunteers/VolunteerFormContext';
 import VolunteerFormTextAreaField from 'components/volunteers/VolunteerFormTextAreaField';
+import volunteerDayPreferences from 'lib/volunteers/volunteerDayPreferences';
 import volunteerPreferences from 'lib/volunteers/volunteerPreferences';
 
 const VolunteerFormPreferencesFields = (): ReactElement => {
@@ -50,6 +51,22 @@ const VolunteerFormPreferencesFields = (): ReactElement => {
                 label="Was sollten wir noch wissen?"
                 isOptional={true}
             />
+
+            <div className="mt-3">
+                Ich habe Zeit am ...
+
+                <div className="flex flex-row">
+                    {volunteerDayPreferences.map(({ key, label }) => (
+                        <VolunteerFormCheckboxField
+                            fieldName={key}
+                            key={key}
+                            onToggle={handleToggle}
+                        >
+                            {label}
+                        </VolunteerFormCheckboxField>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };
