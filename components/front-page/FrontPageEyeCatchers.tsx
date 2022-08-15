@@ -1,10 +1,12 @@
-import styles from './ApplicationEyecatcher.module.scss';
+import styles from './FrontPageEyeCatchers.module.scss';
 
+import Link from 'next/link';
 import type { ReactElement } from 'react';
+import Button from 'components/common/Button';
 import ContentWrapper from 'components/common/ContentWrapper';
 import BHeartGrid from 'components/front-page/BHeartGrid';
 
-const ApplicationEyecatcher = (): ReactElement => {
+const FrontPageEyeCatchers = (): ReactElement => {
 
     return (
         <div className={styles.eyecatcher}>
@@ -41,15 +43,25 @@ const ApplicationEyecatcher = (): ReactElement => {
             </ContentWrapper>
 
             <ContentWrapper>
-                <div className={styles.applicationBox}>
-                    <div className="font-display text-1xl mb-3">Ende der Bewerbungsphase</div>
-
-                    <div className={styles.applicationBoxInfo}>
-                        Unsere Bewerbungsphase für das B-Side Festival 2022 ist beendet. <strong>Vielen Dank für alle Einsendungen!</strong> Wir sind
-                        überwältigt von der Vielzahl an Menschen, die dieses schöne Festival mitgestalten wollen und machen uns nun an die Sichtung
-                        aller eurer Bewerbungen. Bitte gebt uns etwas Zeit, bis wir uns bei euch melden. Wir sind fleißig dabei, ein abwechslungsreiches,
-                        unterhaltsames und schönes Programm zu erstellen.<br />
-                        Wir freuen uns!
+                <div className={`flex flex-col gap-3 ${styles.bigBox ?? ''}`}>
+                    <div>
+                        In weniger als zwei Monaten geht es im Hansaviertel rund! Für unserer B-Side Festival 2022
+                        „Zurück für die Zukunft“ brauchen wir euch! Wir suchen tatkräftige Helfer*innen. Dabei gibt
+                        es verschiedene Aufgaben, bei denen ihr euch einbringen könnt: Die Betreuung von  Konzerten,
+                        Workshops, Ausstellungen und Lesungen, die Verpflegung für das Helfer*innen- und B-Side-Team,
+                        Hilfe beim Auf- und Abbau und der Technik des Festivals, Unterstützung des Awareness-Teams
+                        auf dem gesamten Festival und beim Spendensammeln.
+                    </div>
+                    <div>
+                        Mit allen Stärken und Interessen seid ihr herzlich willkommen uns zu unterstützen! Denn nur
+                        mit euch kann das Festival so toll wie die letzten Jahre werden!
+                    </div>
+                    <div>
+                        <Link href="/mithelfen">
+                            <Button>
+                                Jetzt mithelfen
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </ContentWrapper>
@@ -57,4 +69,4 @@ const ApplicationEyecatcher = (): ReactElement => {
     );
 };
 
-export default ApplicationEyecatcher;
+export default FrontPageEyeCatchers;
