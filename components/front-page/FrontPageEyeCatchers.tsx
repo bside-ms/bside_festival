@@ -57,7 +57,7 @@ const FrontPageEyeCatchers = (): ReactElement => {
                         mit euch kann das Festival so toll wie die letzten Jahre werden!
                     </div>
                     <div>
-                        <Link href="/mithelfen">
+                        <Link href="/mithelfen" passHref={true}>
                             <Button>
                                 Jetzt mithelfen
                             </Button>
