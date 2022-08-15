@@ -9,6 +9,7 @@ const volunteerPreferences = new Array<VolunteerPreference>(
     { key: 'artist', label: 'Ich unterstütze gerne Künstler:innen' },
     { key: 'multi', label: 'Ich bin ein Multitalent' },
     { key: 'kids', label: 'Ich mache gerne etwas mit Kindern' },
+    { key: 'cleanup', label: 'Ich räume gerne nach dem Festival auf' },
 );
 
 export default volunteerPreferences;
