@@ -5,6 +5,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 import ContentWrapper from 'components/common/ContentWrapper';
 import { useNavigationOverlayContext } from 'components/navigation/NavigationOverlayContext';
@@ -17,9 +18,16 @@ const links = new Array<{label: string, link: string}>(
     // { label: 'Orte', link: '/orte' },
 );
 
+const internalLinks = new Array<{label: string, link: string}>(
+    { label: 'Bewerbungsübersicht', link: '/bewerbung/uebersicht' },
+    { label: 'Slotplan', link: '/programm/slotplan' },
+);
+
 const NavigationOverlay = (): ReactElement | null => {
 
     const { events } = useRouter();
+
+    const { status } = useSession();
 
     const { toggleOverlay, closeOverlay, isOverlayShown } = useNavigationOverlayContext();
 
@@ -64,6 +72,24 @@ const NavigationOverlay = (): ReactElement | null => {
                         </div>
                     ))}
                 </div>
+
+                {status === 'authenticated' && (
+                    <div className="pt-20 flex flex-col space-y-1 text-2xl text-center">
+                        <div className="text-white">
+                            Interne Links:
+                        </div>
+
+                        {internalLinks.map(link => (
+                            <div key={link.link}>
+                                <Link href={link.link}>
+                                    <a className="text-white underline">
+                                        {link.label}
+                                    </a>
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </ContentWrapper>
         </div>
     );
