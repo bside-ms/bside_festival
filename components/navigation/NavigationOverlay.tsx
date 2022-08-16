@@ -1,5 +1,6 @@
 import styles from './NavigationOverlay.module.scss';
 
+import { useEffect } from 'react';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
@@ -25,6 +26,14 @@ const NavigationOverlay = (): ReactElement | null => {
     // Making sure overlay closes after link changed
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     events?.on('routeChangeComplete', () => closeOverlay());
+
+    useEffect(() => {
+        if (isOverlayShown) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    });
 
     if (!isOverlayShown) {
         return null;
