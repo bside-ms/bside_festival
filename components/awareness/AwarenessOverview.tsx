@@ -12,6 +12,12 @@ const Title = ({ children, className }: { children: ReactNode, className?: strin
     </div>
 );
 
+const SmallerTitle = ({ children, className }: { children: ReactNode, className?: string }): ReactElement => (
+    <div className={`font-display text-[#ffe698] text-xl font-bold mt-7 ${className ?? ''}`}>
+        {children}
+    </div>
+);
+
 const TextBlock = ({ children, className }: { children: ReactNode, className?: string }): ReactElement => (
     <div className={`text-white text-lg md:text-xl ${className ?? ''}`}>
         {children}
@@ -59,19 +65,53 @@ const AwarenessOverview = (): ReactElement => {
                     </Title>
 
                     <TextBlock className="mt-7">
-                        Auf dem B-Side Festival wird es ein Awareness-Team geben. Das Team hilft dir, wenn
-                        Menschen dich belästigen und beleidigen.
+                        Auf dem B-Side Festival wird es ein Awareness-Team geben. Wir helfen dir, wenn
+                        Menschen dich bedrängen oder beleidigen. Auch wenn du dich aus anderen Grünen
+                        unwohl fühlst, ist das Awareness-Team für dich da!
                     </TextBlock>
 
                     <TextBlock className="mt-4">
-                        Du erkennst das Awareness-Team an neon-pinken
-                        Westen. Du kannst die Menschen jederzeit ansprechen, wenn du dich unwohl fühlst
-                        oder Fragen hast! Du kannst das Awareness-Team jederzeit unter dieser Nummer erreichen:
+                        Du erkennst das Awareness-Team an neon-pinken Westen. Du kannst die Menschen jederzeit
+                        ansprechen! Du kannst das Awareness-Team während des Festivals* unter dieser Nummer erreichen:
                     </TextBlock>
 
                     <TextBlock className="text-[#ffe698] leading-4 mt-3">
                         ************<br />
                         während des Festivals hier sichtbar
+                    </TextBlock>
+
+                    <TextBlock className="mt-4">
+                        * Erreichbarkeit garantiert:<br />
+                        Freitag, 16.09., 18:00 – 22:00<br />
+                        Samstag, 17.09., 14:00 – 04:00<br />
+                        Sonntag, 18.09., 14:00 – 17:00
+                    </TextBlock>
+
+                    <SmallerTitle>
+                        English
+                    </SmallerTitle>
+
+                    <TextBlock className="mt-4">
+                        There will be an awareness team at the B-Side Festival. We will help you when
+                        people harass or insult you. If you feel uncomfortable for other reasons, the
+                        awareness team is there for you, too!
+                    </TextBlock>
+
+                    <TextBlock className="mt-4">
+                        You can recognize the awareness team by their neon pink vests. You can speak to
+                        us at any time! You can reach the awareness team during the festival* on this number:
+                    </TextBlock>
+
+                    <TextBlock className="text-[#ffe698] leading-4 mt-3">
+                        ************<br />
+                        You can find the number here during the festival
+                    </TextBlock>
+
+                    <TextBlock className="mt-4">
+                        * Availability guaranteed:<br />
+                        Friday, 16.09., 18:00 – 22:00<br />
+                        Saturday, 17.09., 14:00 – 04:00<br />
+                        Sunday, 18.09., 14:00 – 17:00
                     </TextBlock>
 
                     <div className="relative">
@@ -162,19 +202,14 @@ const AwarenessOverview = (): ReactElement => {
                     <HeartSeparator className="mt-14" />
 
                     <TextBlock className="mt-9">
-                        Wichtig: Das Awareness-Team ersetzt nicht die Arbeit von Polizei und
-                        Rettungsdienst. In Notfällen, die Gewalt oder Gesundheit betreffen,
-                        bitten wir euch 110 oder 112 anzurufen. Wir (Das Awareness-Team)
-                        sind uns darüber bewusst, dass auch von diesen Institutionen strukturelle
-                        Diskriminierung ausgeht und nicht ansatzweise allen Menschen gleichermaßen
-                        geholfen wird. Solltest du Kontakt mit der Polizei vermeiden wollen,
-                        kann das Awareness-Team für dich mit der Polizei sprechen.
+                        Wichtig: Das Awareness-Team ersetzt nicht die Arbeit des Rettungsdiensts.
+                        In gesundheitlichen Notfällen bitten wir euch 112 anzurufen.
                     </TextBlock>
 
                     <TextBlock className="mt-7">
                         Hast du Fragen oder Anregungen bezüglich der Festival-Awareness oder
                         möchtest im Awareness-Team mithelfen? Dann schreib uns eine E-Mail
-                        an <a href="mailto:willkommen@b-side.ms" className="text-[#ffe698]">willkommen@b-side.ms</a>
+                        an <a href="mailto:willkommen@b-side.ms" className="text-[#ffe698]">willkommen@b-side.ms</a>.
                     </TextBlock>
                 </div>
             </ContentWrapper>
