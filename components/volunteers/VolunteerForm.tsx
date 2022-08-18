@@ -32,7 +32,7 @@ const VolunteerForm = (): ReactElement => {
                 <ContentWrapper>
                     <div className="mb-4 space-y-2 text-[#3a1a85]">
                         <div>
-                            In weniger als zwei Monaten geht es im Hansaviertel rund! Für unserer B-Side Festival 2022
+                            Schon sehr bald geht es im Hansaviertel rund! Für unserer B-Side Festival 2022
                             „Zurück für die Zukunft“ brauchen wir euch! Wir suchen tatkräftige Helfer*innen. Dabei gibt
                             es verschiedene Aufgaben, bei denen ihr euch einbringen könnt: Die Betreuung von  Konzerten,
                             Workshops, Ausstellungen und Lesungen, die Verpflegung für das Helfer*innen- und B-Side-Team,
