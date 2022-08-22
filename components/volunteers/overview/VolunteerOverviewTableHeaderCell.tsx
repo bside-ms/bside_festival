@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import type { HeaderGroup } from 'react-table';
 import type { ReactElement } from 'react';
+import type { HeaderGroup } from 'react-table';
 import slimColumns from 'lib/volunteers/slimColumns';
 import type VolunteerTableData from 'lib/volunteers/VolunteerTableData';
 
