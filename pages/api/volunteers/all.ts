@@ -11,12 +11,12 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
     try {
         const volunteers = await volunteersDatabaseService.getAllVolunteers(session);
 
-        response.status(200).json({ success: true, volunteers });
+        response.status(200).json({ data: volunteers });
     } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
 
-        response.status(200).json({ success: false, volunteers: [] });
+        response.status(200).json({ data: null, error });
     }
 };
 

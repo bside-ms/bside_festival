@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 import ApplicationForm from 'components/application-form/ApplicationForm';
-import ApplicationsOverviewWrapper from 'components/applications/ApplicationsOverviewWrapper';
+import ApplicationsOverview from 'components/applications/ApplicationsOverview';
 import Footer from 'components/common/Footer';
 import NextHead from 'components/common/NextHead';
 import PageHeader from 'components/common/PageHeader';
+import RestrictedAccess from 'components/common/RestrictedAccess';
 import useIsValidApplicationType from 'lib/application-form/useIsValidApplicationType';
 
 export default (): ReactElement | null => {
@@ -27,7 +28,9 @@ export default (): ReactElement | null => {
 
                 <PageHeader />
 
-                <ApplicationsOverviewWrapper applicationId={applicationId} />
+                <RestrictedAccess>
+                    <ApplicationsOverview applicationId={applicationId} />
+                </RestrictedAccess>
 
                 <Footer />
             </>

@@ -72,8 +72,8 @@ export default class VolunteersDatabaseService {
 
         if (!isInDataPrivacyGroup) {
             return volunteers.map(volunteer => {
-                volunteer.phoneNumber = '*****';
-                volunteer.mailAddress = '*****';
+                volunteer.phoneNumber = '**********';
+                volunteer.mailAddress = '**********';
 
                 return volunteer;
             });

@@ -9,7 +9,7 @@ import ContentWrapper from 'components/common/ContentWrapper';
 import useAllApplications from 'lib/applications/useAllApplications';
 
 interface Props {
-    applicationId: number | undefined;
+    applicationId?: number;
 }
 
 const ApplicationsOverview = ({ applicationId }: Props): ReactElement => {

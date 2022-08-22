@@ -21,6 +21,7 @@ const links = new Array<{label: string, link: string}>(
 const internalLinks = new Array<{label: string, link: string}>(
     { label: 'Bewerbungsübersicht', link: '/bewerbung/uebersicht' },
     { label: 'Slotplan', link: '/programm/slotplan' },
+    { label: 'Helfer:innen', link: '/mithelfen/uebersicht' },
 );
 
 const NavigationOverlay = (): ReactElement | null => {
@@ -74,15 +75,15 @@ const NavigationOverlay = (): ReactElement | null => {
                 </div>
 
                 {status === 'authenticated' && (
-                    <div className="pt-20 flex flex-col space-y-1 text-2xl text-center">
-                        <div className="text-white">
-                            Interne Links:
-                        </div>
+                    <div className="mt-14 flex flex-col justify-center space-y-1 text-2xl text-center">
+                        <span className="text-white underline">
+                            Interne Links
+                        </span>
 
                         {internalLinks.map(link => (
                             <div key={link.link}>
                                 <Link href={link.link}>
-                                    <a className="text-white underline">
+                                    <a className="font-display text-white">
                                         {link.label}
                                     </a>
                                 </Link>

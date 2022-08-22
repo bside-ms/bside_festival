@@ -14,7 +14,7 @@ type HeaderThemes = 'blue' | 'yellow' | 'pink' | 'yellowOnPink';
 
 interface Props {
     theme?: HeaderThemes;
-    symbols?: 'plusSigns' | 'hearts';
+    symbols?: 'plusSigns' | 'hearts' | 'none';
 }
 
 const themeClasses: Record<HeaderThemes, string | undefined> = {
@@ -24,7 +24,7 @@ const themeClasses: Record<HeaderThemes, string | undefined> = {
     yellowOnPink: styles.yellowOnPink,
 };
 
-const Symbols = ({ symbols }: { symbols: NonNullable<Props['symbols']>}): ReactElement => {
+const Symbols = ({ symbols }: { symbols: NonNullable<Props['symbols']>}): ReactElement | null => {
 
     switch (symbols) {
         case 'plusSigns':
@@ -50,6 +50,9 @@ const Symbols = ({ symbols }: { symbols: NonNullable<Props['symbols']>}): ReactE
                 </div>
             );
         }
+
+        case 'none':
+            return <div />;
     }
 };
 

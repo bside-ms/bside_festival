@@ -1,20 +1,20 @@
 import type { ReactElement } from 'react';
-import ApplicationsOverview from 'components/applications/ApplicationsOverview';
 import Footer from 'components/common/Footer';
 import NextHead from 'components/common/NextHead';
 import PageHeader from 'components/common/PageHeader';
 import RestrictedAccess from 'components/common/RestrictedAccess';
+import VolunteersOverview from 'components/volunteers/overview/VolunteersOverview';
 
-export default (): ReactElement => {
+export default (): ReactElement | null => {
 
     return (
         <>
-            <NextHead title="B-Side Festival 2022 - Bewerbungsübersicht" />
+            <NextHead title="B-Side Festival 2022 - Helfer:innen" />
 
-            <PageHeader />
+            <PageHeader theme="yellow" symbols="hearts" />
 
             <RestrictedAccess>
-                <ApplicationsOverview />
+                <VolunteersOverview />
             </RestrictedAccess>
 
             <Footer />
