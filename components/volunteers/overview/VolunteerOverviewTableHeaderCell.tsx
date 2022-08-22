@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import type { ReactElement } from 'react';
 import type { HeaderGroup } from 'react-table';
+import type { ReactElement } from 'react';
 import slimColumns from 'lib/volunteers/slimColumns';
 import type VolunteerTableData from 'lib/volunteers/VolunteerTableData';
 
@@ -53,7 +53,7 @@ const VolunteerOverviewTableHeaderCell = ({ column }: Props): ReactElement => {
                 scope="col"
                 className="font-medium text-gray-900 px-4 py-2 text-left w-2/12"
             >
-                {column.render('Header')} <span className="font-bold text-red-700">*</span>
+                {column.render('Header')}
             </th>
         );
     }
