@@ -13,6 +13,14 @@ const ProgramItemWrapper = ({ programItem, children }: Props): ReactElement => {
 
     const { artistId, applicationType } = getDetailsFromProgramItem(programItem);
 
+    if (artistId === null) {
+        return (
+            <div className="relative grow h-[120px] md:h-[250px]">
+                {children}
+            </div>
+        );
+    }
+
     const url = `/kuenstler/${applicationType}/${artistId}`;
 
     return (

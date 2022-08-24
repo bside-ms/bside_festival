@@ -1,5 +1,5 @@
-import TruncateMarkup from 'react-truncate-markup';
 import type { ReactElement } from 'react';
+import TruncateMarkup from 'react-truncate-markup';
 import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
 import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';

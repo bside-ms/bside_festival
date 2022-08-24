@@ -40,7 +40,7 @@ const Location = ({ location }: Props): ReactElement => {
                 <div className="flex flex-col space-y-3">
                     <div
                         className="rounded-full h-32 w-32 bg-center bg-cover"
-                        style={{ backgroundImage: `url(${getThumbnailUrl(location)})` }}
+                        style={{ backgroundImage: `url(${getThumbnailUrl(location)!})` }}
                     />
 
                     {publishedAt === null && (
