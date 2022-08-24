@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import type Volunteer from 'lib/volunteers/Volunteer';
 import type VolunteerTableData from 'lib/volunteers/VolunteerTableData';
 
@@ -9,7 +10,7 @@ const useVolunteersTableData = (volunteers: Array<Volunteer>): Array<VolunteerTa
         return preferences.includes(preferenceKey) ? '✅' : '❌';
     };
 
-    return volunteers.map<VolunteerTableData>(volunteer => {
+    return useMemo(() => volunteers.map<VolunteerTableData>(volunteer => {
 
         return {
             ...volunteer,
@@ -28,7 +29,7 @@ const useVolunteersTableData = (volunteers: Array<Volunteer>): Array<VolunteerTa
             isSaturdayChecked: getPreferenceData(volunteer, 'saturday'),
             isSundayChecked: getPreferenceData(volunteer, 'sunday'),
         };
-    });
+    }), [volunteers]);
 
 };
 

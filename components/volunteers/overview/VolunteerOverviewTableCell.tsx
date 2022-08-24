@@ -25,7 +25,7 @@ const VolunteerOverviewTableCell = ({ cell: { column, getCellProps, render }, vo
             return (
                 <td
                     {...getCellProps()}
-                    className="text-gray-900 px-4 py-2 max-w-[300px] hover:bg-gray-50 cursor-pointer"
+                    className="px-4 py-2 max-w-[300px] hover:bg-gray-50 cursor-pointer"
                     onClick={handleCellClick}
                 >
                     {volunteer.additionalInformation}
@@ -34,22 +34,18 @@ const VolunteerOverviewTableCell = ({ cell: { column, getCellProps, render }, vo
         }
 
         return (
-            <>
-                <td
-                    {...getCellProps()}
-                    className="text-gray-900 px-4 py-2 max-w-[300px] hover:bg-gray-50 cursor-pointer hidden lg:table-cell"
-                    onClick={handleCellClick}
-                >
+            <td
+                {...getCellProps()}
+                className="px-4 py-2 max-w-[300px] hover:bg-gray-50 cursor-pointer"
+                onClick={handleCellClick}
+            >
+                <span className="hidden lg:inline-block">
                     {truncate(volunteer.additionalInformation, { length: 35 })}
-                </td>
-                <td
-                    {...getCellProps()}
-                    className="text-gray-900 px-4 py-2 max-w-[300px] hover:bg-gray-50 cursor-pointer lg:hidden"
-                    onClick={handleCellClick}
-                >
+                </span>
+                <span className="lg:hidden">
                     {truncate(volunteer.additionalInformation, { length: 15 })}
-                </td>
-            </>
+                </span>
+            </td>
         );
     }
 
@@ -57,18 +53,19 @@ const VolunteerOverviewTableCell = ({ cell: { column, getCellProps, render }, vo
         return (
             <td
                 {...getCellProps()}
-                className="text-gray-900 px-4 py-2 whitespace-nowrap sticky left-0 bg-gray-200"
+                className="px-4 py-2 whitespace-nowrap sticky left-0 bg-gray-200"
             >
                 {render('Cell')}
             </td>
         );
     }
 
+    // @ts-expect-error | If it really will be a string someday it won't break anything
     if (slimColumns.includes(column.id)) {
         return (
             <td
                 {...getCellProps()}
-                className="text-gray-900 px-1 py-2"
+                className="w-[50px] px-1 py-2 text-center"
             >
                 {render('Cell')}
             </td>
@@ -79,7 +76,7 @@ const VolunteerOverviewTableCell = ({ cell: { column, getCellProps, render }, vo
         return (
             <td
                 {...getCellProps()}
-                className="text-gray-900 px-4 py-2 hidden md:block"
+                className="px-4 py-2 hidden md:block"
             >
                 {render('Cell')}
             </td>
@@ -89,7 +86,7 @@ const VolunteerOverviewTableCell = ({ cell: { column, getCellProps, render }, vo
     return (
         <td
             {...getCellProps()}
-            className="text-gray-900 px-4 py-2"
+            className="px-4 py-2"
         >
             {render('Cell')}
         </td>

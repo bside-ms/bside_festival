@@ -1,21 +1,22 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import type { ReactElement } from 'react';
-import type { HeaderGroup } from 'react-table';
+import type { HeaderGroup, UseSortByColumnProps } from 'react-table';
 import slimColumns from 'lib/volunteers/slimColumns';
 import type VolunteerTableData from 'lib/volunteers/VolunteerTableData';
 
 interface Props {
-    column: HeaderGroup<VolunteerTableData>;
+    column: HeaderGroup<VolunteerTableData> & UseSortByColumnProps<VolunteerTableData>;
 }
 
 const VolunteerOverviewTableHeaderCell = ({ column }: Props): ReactElement => {
 
+    // @ts-expect-error | If it really will be a string someday it won't break anything
     if (slimColumns.includes(column.id)) {
         return (
             <th
-                {...column.getHeaderProps()}
+                {...column.getHeaderProps(column.getSortByToggleProps)}
                 scope="col"
-                className="font-medium text-gray-900 text-left py-2 px-1"
+                className="w-[50px] py-2 px-1 text-center"
             >
                 {column.render('Header')}
             </th>
@@ -27,7 +28,7 @@ const VolunteerOverviewTableHeaderCell = ({ column }: Props): ReactElement => {
             <th
                 {...column.getHeaderProps()}
                 scope="col"
-                className="font-medium text-gray-900 px-4 py-2 text-left w-1/12 hidden md:table-cell"
+                className="w-1/12 px-4 py-2 hidden md:table-cell"
             >
                 {column.render('Header')}
             </th>
@@ -39,9 +40,9 @@ const VolunteerOverviewTableHeaderCell = ({ column }: Props): ReactElement => {
             <th
                 {...column.getHeaderProps()}
                 scope="col"
-                className="font-medium text-gray-900 px-4 py-2 text-left w-1/12"
+                className="w-1/12 px-4 py-2"
             >
-                {column.render('Header')} <span className="font-bold text-red-700">*</span>
+                {column.render('Header')}
             </th>
         );
     }
@@ -51,7 +52,19 @@ const VolunteerOverviewTableHeaderCell = ({ column }: Props): ReactElement => {
             <th
                 {...column.getHeaderProps()}
                 scope="col"
-                className="font-medium text-gray-900 px-4 py-2 text-left w-2/12"
+                className="px-4 py-2"
+            >
+                {column.render('Header')}
+            </th>
+        );
+    }
+
+    if (column.id === 'fullName') {
+        return (
+            <th
+                {...column.getHeaderProps(column.getSortByToggleProps)}
+                scope="col"
+                className="px-4 py-2 text-left"
             >
                 {column.render('Header')}
             </th>
@@ -62,7 +75,7 @@ const VolunteerOverviewTableHeaderCell = ({ column }: Props): ReactElement => {
         <th
             {...column.getHeaderProps()}
             scope="col"
-            className="font-medium text-gray-900 px-4 py-2 text-left"
+            className="px-4 py-2 text-left"
         >
             {column.render('Header')}
         </th>
