@@ -25,7 +25,7 @@ const getLabelFromCollectionType = (strapiCollectionType: StrapiCollectionType):
             return 'Familienprogramm';
 
         case 'exhibition':
-        case 'exhibition-artist':
+        case 'exhibition-artists':
             return 'Ausstellung';
 
         case 'food':

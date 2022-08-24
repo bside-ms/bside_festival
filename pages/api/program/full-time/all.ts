@@ -24,7 +24,10 @@ const createProgramItemFetchUrl = (
     url.search = qs.stringify({
         fields: ['Begin', 'End', 'publishedAt'],
         sort: ['Begin'],
-        populate: [artistFieldName, 'location'],
+        populate: {
+            [artistFieldName]: { populate: 'Images' },
+            location: { populate: 'Images' },
+        },
         publicationState: isInFestivalGroup ? 'preview' : 'live',
         pagination: {
             page: 1,

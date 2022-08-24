@@ -26,12 +26,13 @@ interface Props {
     informationBooths: Array<InformationBooth>;
 }
 
-const TimeTableRawRow = ({ programItem }: { programItem: ProgramItem }): ReactElement | null => {
+const TimeTableRawRow = (
+    { name, applicationType, programItem }: { name: string | null, applicationType: ApplicationType, programItem: ProgramItem }
+): ReactElement | null => {
 
     const date = formatDate(new Date(programItem.attributes.Begin), 'dd.MM.yyyy');
     const begin = formatDate(new Date(programItem.attributes.Begin), 'HH:mm');
     const end = formatDate(new Date(programItem.attributes.End), 'HH:mm');
-    const [name, _collectionType, applicationType] = getDetailsFromProgramItem(programItem);
     const location = programItem.attributes.location.data?.attributes.Name ?? null;
 
     if (name === null || location === null) {
@@ -39,7 +40,7 @@ const TimeTableRawRow = ({ programItem }: { programItem: ProgramItem }): ReactEl
     }
 
     return (
-        <tr>
+        <tr key={`${applicationType}_${programItem.id}`}>
             <td className="px-4 border py-1">{date}</td>
             <td className="px-4 border py-1">{begin}</td>
             <td className="px-4 border py-1">{end}</td>
@@ -50,11 +51,12 @@ const TimeTableRawRow = ({ programItem }: { programItem: ProgramItem }): ReactEl
     );
 };
 
-const TimeTableRawFullTimeRow = ({ programItem }: { programItem: FullTimeProgramItem }): ReactElement | null => {
+const TimeTableRawFullTimeRow = (
+    { name, applicationType, programItem }: { name: string | null, applicationType: ApplicationType, programItem: FullTimeProgramItem }
+): ReactElement | null => {
 
     const begin = formatDate(new Date(programItem.attributes.Begin), 'dd.MM.yyyy');
     const end = formatDate(new Date(programItem.attributes.End), 'dd.MM.yyyy');
-    const [name, _collectionType, applicationType] = getDetailsFromProgramItem(programItem);
     const location = programItem.attributes.location.data?.attributes.Name ?? null;
 
     if (name === null || location === null) {
@@ -118,9 +120,19 @@ const TimeTableRaw = ({
                                 </tr>
                             </thead>
                             <tbody>
-                                {allProgramItems.map(programItem => (
-                                    <TimeTableRawRow key={programItem.id} programItem={programItem} />
-                                ))}
+                                {allProgramItems.map(programItem => {
+
+                                    const { artistName, applicationType } = getDetailsFromProgramItem(programItem);
+
+                                    return (
+                                        <TimeTableRawRow
+                                            key={`${applicationType}_${programItem.id}`}
+                                            name={artistName}
+                                            applicationType={applicationType}
+                                            programItem={programItem}
+                                        />
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>
@@ -138,9 +150,19 @@ const TimeTableRaw = ({
                                 </tr>
                             </thead>
                             <tbody>
-                                {allFullTimeProgramItems.map(programItem => (
-                                    <TimeTableRawFullTimeRow key={programItem.id} programItem={programItem} />
-                                ))}
+                                {allFullTimeProgramItems.map(programItem => {
+
+                                    const { artistName, applicationType } = getDetailsFromProgramItem(programItem);
+
+                                    return (
+                                        <TimeTableRawFullTimeRow
+                                            key={`${applicationType}_${programItem.id}`}
+                                            name={artistName}
+                                            applicationType={applicationType}
+                                            programItem={programItem}
+                                        />
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>

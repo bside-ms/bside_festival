@@ -1,0 +1,23 @@
+import type { ReactElement } from 'react';
+import Footer from 'components/common/Footer';
+import NextHead from 'components/common/NextHead';
+import PageHeader from 'components/common/PageHeader';
+import Program from 'components/program/program/Program';
+import { ProgramContextProvider } from 'components/program/program/ProgramContext';
+
+export default (): ReactElement => {
+
+    return (
+        <>
+            <NextHead title="B-Side Festival 2022 - Slotplan" />
+
+            <PageHeader theme="pink" symbols="hearts" />
+
+            <ProgramContextProvider>
+                <Program />
+            </ProgramContextProvider>
+
+            <Footer />
+        </>
+    );
+};

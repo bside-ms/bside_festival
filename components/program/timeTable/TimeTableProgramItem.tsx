@@ -24,7 +24,7 @@ const TimeTableProgramItem = ({ optimizedTimeTableBegin, programItem }: Props): 
     const diffInMinutesFromStartOfDay = useScaledTimeTableMinutes(differenceInMinutes(beginFromItem, optimizedTimeTableBegin));
     const diffInMinutesFromBeginToEnd = useScaledTimeTableMinutes(differenceInMinutes(endFromItem, beginFromItem));
 
-    const [name, collectionType, applicationType] = getDetailsFromProgramItem(programItem);
+    const { artistName, collectionType, applicationType } = getDetailsFromProgramItem(programItem);
 
     const strapiUrl = useStrapiCollectionTypeUrl(collectionType, programItem.id);
 
@@ -43,7 +43,7 @@ const TimeTableProgramItem = ({ optimizedTimeTableBegin, programItem }: Props): 
             href={strapiUrl}
             target="_blank"
         >
-            {formattedBegin} - {formattedEnd} {name === null ? null : ` - ${name}`}
+            {formattedBegin} - {formattedEnd} {artistName === null ? null : ` - ${artistName}`}
         </a>
     );
 };

@@ -10,7 +10,7 @@ type StrapiCollectionType =
     'family-program' |
     'family-program-organizers' |
     'exhibition' |
-    'exhibition-artist' |
+    'exhibition-artists' |
     'information-booth' |
     'information-booth-organizers' |
     'food' |

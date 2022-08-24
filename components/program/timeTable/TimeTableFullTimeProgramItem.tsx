@@ -10,7 +10,7 @@ interface Props {
 
 const TimeTableFullTimeProgramItem = ({ fullTimeProgramItem }: Props): ReactElement => {
 
-    const [name, collectionType, applicationType] = getDetailsFromProgramItem(fullTimeProgramItem);
+    const { artistName, collectionType, applicationType } = getDetailsFromProgramItem(fullTimeProgramItem);
 
     const strapiUrl = useStrapiCollectionTypeUrl(collectionType, fullTimeProgramItem.id);
 
@@ -23,7 +23,7 @@ const TimeTableFullTimeProgramItem = ({ fullTimeProgramItem }: Props): ReactElem
             href={strapiUrl}
             target="_blank"
         >
-            Ganztägig - {name}
+            Ganztägig - {artistName}
         </a>
     );
 };

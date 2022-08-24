@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import qs from 'qs';
 import isGroupMember from 'lib/next-auth/isGroupMember';
+import createArtistsFetchUrl from 'lib/strapi/createArtistsFetchUrl';
+import fetchArtists from 'lib/strapi/fetchArtist';
 import fixImageUrls from 'lib/strapi/fixImageUrls';
 import type AllArtists from 'lib/strapi/typings/AllArtists';
 import type ConcertArtist from 'lib/strapi/typings/ConcertArtist';
@@ -10,44 +11,8 @@ import type FamilyProgramOrganizer from 'lib/strapi/typings/FamilyProgramOrganiz
 import type PerformanceArtist from 'lib/strapi/typings/PerformanceArtist';
 import type ReadingArtist from 'lib/strapi/typings/ReadingArtist';
 import type StrapiErrorResponse from 'lib/strapi/typings/StrapiErrorResponse';
-import type StrapiResponse from 'lib/strapi/typings/StrapiResponse';
 import type StrapiSuccessResponse from 'lib/strapi/typings/StrapiSuccessResponse';
 import type WorkshopOrganizer from 'lib/strapi/typings/WorkshopOrganizer';
-
-const createArtistsFetchUrl = (pathName: string, isInFestivalGroup: boolean): URL => {
-
-    const url = new URL(process.env.STRAPI_BASE_URL!);
-
-    url.pathname = `/api/${pathName}`;
-    url.search = qs.stringify({
-        fields: ['Name', 'Description', 'publishedAt'],
-        sort: ['Name'],
-        populate: ['Images', 'Links'],
-        publicationState: isInFestivalGroup ? 'preview' : 'live',
-        pagination: {
-            page: 1,
-            pageSize: 1000,
-        },
-    }, {
-        encodeValuesOnly: true,
-    });
-
-    return url;
-};
-
-const fetchArtists = async <T>(fetchUrl: URL): Promise<StrapiResponse<Array<T>>> => {
-
-    const fetchResponse = await fetch(
-        fetchUrl.toString(),
-        {
-            headers: new Headers({
-                Authorization: `Bearer ${process.env.STRAPI_API_TOKEN!}`,
-            }),
-        }
-    );
-
-    return await fetchResponse.json() as StrapiResponse<Array<T>>;
-};
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
 

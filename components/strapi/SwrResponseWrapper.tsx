@@ -27,6 +27,15 @@ const SwrResponseWrapper = <T, >({ response: { data, error }, children }: Props<
     }
 
     if ('error' in data) {
+        if (typeof data.error === 'string') {
+            return (
+                <Alert severity="error">
+                    <AlertTitle>Es ist ein Fehler aufgetreten</AlertTitle>
+                    {data.error}
+                </Alert>
+            );
+        }
+
         return (
             <Alert severity="error">
                 <AlertTitle>{data.error.name} ({data.error.status})</AlertTitle>
