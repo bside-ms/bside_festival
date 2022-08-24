@@ -4,6 +4,7 @@ import TimeTableDateSelects from 'components/program/timeTable/TimeTableDateSele
 import TimeTableErroneousProgramItems from 'components/program/timeTable/TimeTableErroneousProgramItems';
 import TimeTableLocations from 'components/program/timeTable/TimeTableLocations';
 import TimeTableProgramItemFilters from 'components/program/timeTable/TimeTableProgramItemFilters';
+import TimeTableRaw from 'components/program/timeTable/TimeTableRaw';
 import filterErroneousProgramItems from 'lib/strapi/filterErroneousProgramItems';
 import getAvailableDates from 'lib/strapi/getAvailableDates';
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
@@ -124,6 +125,16 @@ const TimeTable = ({
                 </div>
             )}
 
+            <TimeTableRaw
+                concerts={concerts}
+                workshops={workshops}
+                familyPrograms={familyPrograms}
+                performances={performances}
+                readings={readings}
+                foods={foods}
+                informationBooths={informationBooths}
+                exhibitions={exhibitions}
+            />
         </div>
     );
 };
