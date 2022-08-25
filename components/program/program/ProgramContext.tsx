@@ -35,11 +35,11 @@ const ProgramContextProvider = ({ children }: { children: ReactNode }): ReactEle
 
     useEffect(() => {
 
-        console.log('using effect');
-
         const initialDay = getInitialDay();
 
         setProgramDate(initialDay === null ? null : availableDates[initialDay - 1]!);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const setProgramDay = useCallback((day: 1 | 2 | 3): void => {

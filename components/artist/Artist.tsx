@@ -35,7 +35,7 @@ const Artist = ({ artist, strapiCollectionType }: Props): ReactElement => {
     const thumbnailUrl = thumbnailRelativeUrl === null ? null : `https://cms.b-side.ms${thumbnailRelativeUrl}`;
 
     return (
-        <div key={artist.id} className={`space-y-3 relative z-50 ${styles.artist}`}>
+        <div key={artist.id} className={`space-y-3 relative z-50 ${styles.artist ?? ''}`}>
             <div className="flex flex-col space-x-4 md:flex-row z-50 relative bg-white">
                 <div
                     className="h-[400px] w-full md:min-h-[500px] md:shrink-0 md:w-1/3 bg-center bg-cover"

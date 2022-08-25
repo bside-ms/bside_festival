@@ -4,11 +4,11 @@ import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 
 const useProgramItemFilteredByDate = <T extends ProgramItem>(programItems: Array<T>, date: ProgramDate | null): Array<T> => {
 
+    const programItemFilteredByDateFunction = useProgramItemFilteredByDateFunction();
+
     if (date === null) {
         return [];
     }
-
-    const programItemFilteredByDateFunction = useProgramItemFilteredByDateFunction();
 
     return programItems.filter(
         programItem => programItemFilteredByDateFunction(programItem, date)

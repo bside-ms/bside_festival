@@ -21,8 +21,6 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 
         const artistFetchUrl = createArtistFetchUrl(collectionType, artistId, isInFestivalGroup);
 
-        console.log('artistFetchUrl', artistFetchUrl.toString());
-
         const artistsResponse = await fetchArtists<Artist>(artistFetchUrl);
 
         if (!('error' in artistsResponse) && artistsResponse.meta.pagination.total === 0) {
