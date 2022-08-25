@@ -3,6 +3,7 @@ enum ApplicationType {
     performance = 'performance',
     konzert = 'konzert',
     workshop = 'workshop',
+    infostand = 'infostand',
     familienprogramm = 'familienprogramm',
     lesung = 'lesung',
     essensstand = 'essensstand',

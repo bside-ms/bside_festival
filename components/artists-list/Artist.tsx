@@ -7,7 +7,7 @@ import type { ReactElement } from 'react';
 import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
 import useEditorJsData from 'lib/editorJs/useEditorJsData';
 import isGroupMember from 'lib/next-auth/isGroupMember';
-import getThumbnailUrl from 'lib/strapi/getThumbnailUrl';
+import getImageUrl from 'lib/strapi/getImageUrl';
 import type { default as ArtistModel } from 'lib/strapi/typings/Artist';
 import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
 import useLinksData from 'lib/strapi/useLinksData';
@@ -35,7 +35,7 @@ const Artist = ({ artist, strapiCollectionType }: Props): ReactElement => {
                 <div className="flex flex-col space-y-3">
                     <div
                         className="rounded-full h-32 w-32 bg-center bg-cover"
-                        style={{ backgroundImage: `url(${getThumbnailUrl(artist)!})` }}
+                        style={{ backgroundImage: `url(${getImageUrl(artist)!})` }}
                     />
 
                     {artist.attributes.publishedAt === null && (

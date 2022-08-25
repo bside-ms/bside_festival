@@ -9,7 +9,7 @@ const getLabelFromCollectionType = (strapiCollectionType: StrapiCollectionType):
             return 'Konzert';
 
         case 'workshop':
-        case 'workshops-organizers':
+        case 'workshop-organizers':
             return 'Workshop';
 
         case 'reading':

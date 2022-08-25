@@ -5,11 +5,12 @@ import type StrapiResponse from 'lib/strapi/typings/StrapiResponse';
 
 interface Props<T> {
     response: SWRResponse<StrapiResponse<T>, Error>;
+    loadingPlaceholder?: ReactElement;
     children: (response: T) => ReactElement;
 }
 
 // eslint-disable-next-line @typescript-eslint/comma-dangle
-const SwrResponseWrapper = <T, >({ response: { data, error }, children }: Props<T>): ReactElement => {
+const SwrResponseWrapper = <T, >({ response: { data, error }, loadingPlaceholder, children }: Props<T>): ReactElement => {
 
     if (error !== undefined) {
         return (
@@ -21,6 +22,10 @@ const SwrResponseWrapper = <T, >({ response: { data, error }, children }: Props<
     }
 
     if (data === undefined) {
+        if (loadingPlaceholder !== undefined) {
+            return loadingPlaceholder;
+        }
+
         return (
             <div>Wird geladen...</div>
         );

@@ -9,7 +9,7 @@ export default (): ReactElement => {
 
     return (
         <>
-            <NextHead title="B-Side Festival 2022 - Slotplan" />
+            <NextHead title="B-Side Festival 2022 - Programm" />
 
             <PageHeader theme="pink" symbols="hearts" />
 

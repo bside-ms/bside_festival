@@ -10,7 +10,9 @@ const useApplicationTitle = (applicationType: ApplicationType): string => {
         case ApplicationType.konzert:
             return 'Konzert';
         case ApplicationType.workshop:
-            return 'Workshop / (interaktiver) Infostand';
+            return 'Workshop';
+        case ApplicationType.infostand:
+            return '(interaktiver) Infostand';
         case ApplicationType.familienprogramm:
             return 'Familienprogramm';
         case ApplicationType.lesung:

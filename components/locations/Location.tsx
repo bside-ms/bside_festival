@@ -8,7 +8,7 @@ import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
 import { useLocationGroupOfLocation } from 'lib/context/LocationGroupsContext';
 import useEditorJsData from 'lib/editorJs/useEditorJsData';
 import isGroupMember from 'lib/next-auth/isGroupMember';
-import getThumbnailUrl from 'lib/strapi/getThumbnailUrl';
+import getImageUrl from 'lib/strapi/getImageUrl';
 import Location from 'lib/strapi/typings/Location';
 import useLinksData from 'lib/strapi/useLinksData';
 import useStrapiCollectionTypeUrl from 'lib/strapi/useStrapiCollectionTypeUrl';
@@ -40,7 +40,7 @@ const Location = ({ location }: Props): ReactElement => {
                 <div className="flex flex-col space-y-3">
                     <div
                         className="rounded-full h-32 w-32 bg-center bg-cover"
-                        style={{ backgroundImage: `url(${getThumbnailUrl(location)!})` }}
+                        style={{ backgroundImage: `url(${getImageUrl(location)!})` }}
                     />
 
                     {publishedAt === null && (

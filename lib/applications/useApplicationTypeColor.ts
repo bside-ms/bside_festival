@@ -11,6 +11,8 @@ const useApplicationTypeColor = (type: ApplicationType): string => {
             return '#ee7f5d';
         case ApplicationType.workshop:
             return '#84dcc6';
+        case ApplicationType.infostand:
+            return '#dc84cd';
         case ApplicationType.familienprogramm:
             return '#4993a9';
         case ApplicationType.lesung:

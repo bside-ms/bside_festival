@@ -6,7 +6,7 @@ type StrapiCollectionType =
     'concert-artists' |
     'performance-artists' |
     'reading-artists' |
-    'workshops-organizers' |
+    'workshop-organizers' |
     'family-program' |
     'family-program-organizers' |
     'exhibition' |

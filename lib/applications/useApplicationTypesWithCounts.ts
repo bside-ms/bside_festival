@@ -8,6 +8,7 @@ const useApplicationTypesWithCounts = (allApplication: Array<ApplicationData>): 
         [ApplicationType.performance]: 0,
         [ApplicationType.konzert]: 0,
         [ApplicationType.workshop]: 0,
+        [ApplicationType.infostand]: 0,
         [ApplicationType.familienprogramm]: 0,
         [ApplicationType.lesung]: 0,
         [ApplicationType.essensstand]: 0,

@@ -1,3 +1,5 @@
+import styles from './Artist.module.scss';
+
 import { faWrench } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Chip } from '@mui/material';
@@ -7,7 +9,7 @@ import type { ReactElement } from 'react';
 import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
 import useEditorJsData from 'lib/editorJs/useEditorJsData';
 import isGroupMember from 'lib/next-auth/isGroupMember';
-import getThumbnailUrl from 'lib/strapi/getThumbnailUrl';
+import getImageUrl from 'lib/strapi/getImageUrl';
 import type { default as ArtistModel } from 'lib/strapi/typings/Artist';
 import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
 import useLinksData from 'lib/strapi/useLinksData';
@@ -29,18 +31,18 @@ const Artist = ({ artist, strapiCollectionType }: Props): ReactElement => {
 
     const strapiUrl = useStrapiCollectionTypeUrl(strapiCollectionType, artist.id);
 
-    const thumbnailRelativeUrl = getThumbnailUrl(artist, false);
+    const thumbnailRelativeUrl = getImageUrl(artist, false, 'medium');
     const thumbnailUrl = thumbnailRelativeUrl === null ? null : `https://cms.b-side.ms${thumbnailRelativeUrl}`;
 
     return (
-        <div key={artist.id} className="p-4 bg-gradient-to-b from-gray-200 to-gray-50 rounded space-y-3">
-            <div className="flex space-x-4">
-                <div className="flex flex-col space-y-3">
-                    <div
-                        className="rounded-full h-32 w-32 bg-center bg-cover"
-                        style={{ backgroundImage: thumbnailUrl === null ? undefined : `url(${thumbnailUrl})` }}
-                    />
+        <div key={artist.id} className={`space-y-3 relative z-50 ${styles.artist}`}>
+            <div className="flex flex-col space-x-4 md:flex-row z-50 relative bg-white">
+                <div
+                    className="h-[400px] w-full md:min-h-[500px] md:shrink-0 md:w-1/3 bg-center bg-cover"
+                    style={{ backgroundImage: thumbnailUrl === null ? undefined : `url(${thumbnailUrl})` }}
+                />
 
+                <div className="p-4 space-y-3 z-50 relative">
                     {artist.attributes.publishedAt === null && (
                         <Chip
                             label="Unveröffentlicht"
@@ -57,9 +59,7 @@ const Artist = ({ artist, strapiCollectionType }: Props): ReactElement => {
                             </Link>
                         </div>
                     )}
-                </div>
 
-                <div className="space-y-3">
                     <div className="font-display">
                         {artist.attributes.Name}
                     </div>

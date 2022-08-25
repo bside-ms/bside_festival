@@ -54,6 +54,7 @@ const ApplicationFormInformation = ({ applicationType }: Props): ReactElement =>
             );
 
         case ApplicationType.workshop:
+        case ApplicationType.infostand:
             return (
                 <>
                     <div>

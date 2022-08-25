@@ -11,6 +11,8 @@ const useApplicationImage = (applicationType: ApplicationType): string => {
             return '/assets/images/festival/19-105-min.jpg';
         case ApplicationType.workshop:
             return '/assets/images/festival/20-119-min.jpg';
+        case ApplicationType.infostand:
+            return '/assets/images/festival/20-119-min.jpg';
         case ApplicationType.familienprogramm:
             return '/assets/images/festival/favs/b_side_festival_2019_CVtvS.jpg';
         case ApplicationType.lesung:

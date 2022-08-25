@@ -22,7 +22,9 @@ const getCollectionType = (applicationType: ApplicationType): StrapiCollectionTy
         case ApplicationType.konzert:
             return 'concert-artists';
         case ApplicationType.workshop:
-            return 'workshops-organizers';
+            return 'workshop-organizers';
+        case ApplicationType.infostand:
+            return 'information-booth-organizers';
         case ApplicationType.familienprogramm:
             return 'family-program-organizers';
         case ApplicationType.lesung:
@@ -43,7 +45,7 @@ const ArtistInfoWrapper = ({ applicationType, artistId }: Props): ReactElement =
     const artistResponse = useArtist(collectionType, artistId);
 
     return (
-        <div className="pt-[250px] pb-20">
+        <div className="pt-[250px] pb-20 bg-black">
             <ContentWrapper>
                 <SwrResponseWrapper<Array<ArtistModel>> response={artistResponse}>
                     {(artists): ReactElement => (

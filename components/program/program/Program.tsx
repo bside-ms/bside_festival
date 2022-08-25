@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import FullTimeProgramTypesWrapper from 'components/program/program/FullTimeProgramTypesWrapper';
 import ProgramDatesSelect from 'components/program/program/ProgramDatesSelect';
+import ProgramItemPlaceholders from 'components/program/program/ProgramItemPlaceholders';
 import ProgramTypesWrapper from 'components/program/program/ProgramTypesWrapper';
 import SwrResponseWrapper from 'components/strapi/SwrResponseWrapper';
 import type AllFullTimeProgramItemsResponse from 'lib/strapi/typings/AllFullTimeProgramItemsResponse';
@@ -18,17 +19,25 @@ const Program = (): ReactElement => {
             <ProgramDatesSelect />
 
             <div className="space-y-5 mt-7">
-                <SwrResponseWrapper<AllProgramItemsResponse> response={swrProgramItemsResponse}>
+                <SwrResponseWrapper<AllProgramItemsResponse>
+                    response={swrProgramItemsResponse}
+                    loadingPlaceholder={<ProgramItemPlaceholders />}
+                >
                     {({ allProgramItems }): ReactElement => (
-                        <ProgramTypesWrapper allProgramItems={allProgramItems} />
+                        <SwrResponseWrapper<AllFullTimeProgramItemsResponse>
+                            response={swrFullTimeProgramItemsResponse}
+                            loadingPlaceholder={<ProgramItemPlaceholders />}
+                        >
+                            {({ allFullTimeProgramItems }): ReactElement => (
+                                <>
+                                    <ProgramTypesWrapper allProgramItems={allProgramItems} />
+                                    <FullTimeProgramTypesWrapper allProgramItems={allFullTimeProgramItems} />
+                                </>
+                            )}
+                        </SwrResponseWrapper>
                     )}
                 </SwrResponseWrapper>
 
-                <SwrResponseWrapper<AllFullTimeProgramItemsResponse> response={swrFullTimeProgramItemsResponse}>
-                    {({ allFullTimeProgramItems }): ReactElement => (
-                        <FullTimeProgramTypesWrapper allProgramItems={allFullTimeProgramItems} />
-                    )}
-                </SwrResponseWrapper>
             </div>
         </div>
     );

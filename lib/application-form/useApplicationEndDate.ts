@@ -9,6 +9,7 @@ const useApplicationEndDate = (applicationType: ApplicationType): Date => {
 
         case ApplicationType.performance:
         case ApplicationType.workshop:
+        case ApplicationType.infostand:
         case ApplicationType.familienprogramm:
         case ApplicationType.lesung:
         case ApplicationType.essensstand:

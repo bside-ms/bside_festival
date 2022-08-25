@@ -21,7 +21,7 @@ const ProgramItemWrapper = ({ programItem, children }: Props): ReactElement => {
         );
     }
 
-    const url = `/kuenstler/${applicationType}/${artistId}`;
+    const url = `/artists/${applicationType}/${artistId}`;
 
     return (
         <Link href={url}>

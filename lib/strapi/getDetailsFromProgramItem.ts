@@ -75,8 +75,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artistName: programItem.attributes.information_booth_organizer.data?.attributes.Name ?? null,
             artistImages: programItem.attributes.information_booth_organizer.data?.attributes.Images.data ?? null,
             collectionType: 'information-booth',
-            // There's no application type for info booth
-            applicationType: ApplicationType.workshop,
+            applicationType: ApplicationType.infostand,
         };
     }
     if ('food_organizer' in programItem.attributes) {

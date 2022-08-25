@@ -33,6 +33,7 @@ const ApplicationFormDisclaimer = ({ applicationType }: Props): ReactElement | n
             );
 
         case ApplicationType.workshop:
+        case ApplicationType.infostand:
             return (
                 <div className=" text-[#3a1a85] text-sm space-y-3 mt-4">
                     <div>

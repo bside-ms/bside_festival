@@ -2,7 +2,11 @@ import useFullTimeProgramItemFilteredByDateFunction from 'lib/program/useFullTim
 import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
 import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 
-const useFullTimeProgramItemsFilteredByDate = <T extends FullTimeProgramItem>(programItems: Array<T>, date: ProgramDate): Array<T> => {
+const useFullTimeProgramItemsFilteredByDate = <T extends FullTimeProgramItem>(programItems: Array<T>, date: ProgramDate | null): Array<T> => {
+
+    if (date === null) {
+        return [];
+    }
 
     const fullTimeProgramItemFilteredByDateFunction = useFullTimeProgramItemFilteredByDateFunction();
 

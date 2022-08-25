@@ -168,6 +168,7 @@ export const useApplicationFormFields = (applicationType: ApplicationType): Arra
             ];
 
         case ApplicationType.workshop:
+        case ApplicationType.infostand:
             return [
                 nameField,
                 participantsField,
