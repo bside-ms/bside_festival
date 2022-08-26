@@ -2,6 +2,10 @@
   position: relative;
   height: 55px;
   width: 200px;
+
+  &.withFullWidth {
+    width: 100%;
+  }
 }
 
 .button {

@@ -38,7 +38,7 @@ const Artist = ({ artist, strapiCollectionType, onCloseClick }: Props): ReactEle
 
     return (
         <div key={artist.id} className={`space-y-3 relative z-50 ${styles.artist ?? ''}`}>
-            <div className="flex flex-col space-x-4 md:flex-row z-50 relative bg-white">
+            <div className="flex flex-col md:space-x-4 md:flex-row z-50 relative bg-white">
                 <div
                     className="h-[400px] w-full md:min-h-[500px] md:shrink-0 md:w-1/3 bg-center bg-cover"
                     style={{ backgroundImage: thumbnailUrl === null ? undefined : `url(${thumbnailUrl})` }}
@@ -81,15 +81,15 @@ const Artist = ({ artist, strapiCollectionType, onCloseClick }: Props): ReactEle
                             </Link>
                         ))}
                     </div>
-                </div>
 
-                {onCloseClick !== undefined && (
-                    <div className="my-4 md:hidden">
-                        <Button onClick={onCloseClick}>
-                            Zurück zur Liste
-                        </Button>
-                    </div>
-                )}
+                    {onCloseClick !== undefined && (
+                        <div className="my-4 md:hidden">
+                            <Button onClick={onCloseClick} withFullWidth={true}>
+                                Zurück zur Liste
+                            </Button>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

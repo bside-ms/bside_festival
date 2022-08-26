@@ -43,11 +43,8 @@ const ArtistModal = (): ReactElement | null => {
                 content: {},
             }}
         >
-            <div className="flex justify-end">
-                <div
-                    onClick={handleClose}
-                    className="text-white rounded-full flex items-center justify-center text-4xl text-white cursor-pointer hover:text-gray-400 pb-4"
-                >
+            <div className="flex justify-end" onClick={handleClose}>
+                <div className="text-white rounded-full flex items-center justify-center text-4xl text-white cursor-pointer hover:text-gray-400 pb-4">
                     <FontAwesomeIcon icon={faTimesCircle} />
                 </div>
             </div>

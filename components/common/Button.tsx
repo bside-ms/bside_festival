@@ -8,10 +8,11 @@ interface Props {
     href?: string;
     onClick?: () => void;
     isDisabled?: boolean;
+    withFullWidth?: boolean;
     type?: ButtonHTMLAttributes<HTMLButtonElement>['type'];
 }
 
-const Button = ({ href, onClick, children, isDisabled = false, type = 'button' }: Props): ReactElement => {
+const Button = ({ href, onClick, children, isDisabled = false, withFullWidth = false, type = 'button' }: Props): ReactElement => {
 
     const button = (
         <button
@@ -26,7 +27,7 @@ const Button = ({ href, onClick, children, isDisabled = false, type = 'button' }
 
     return (
         <div
-            className={`${styles.buttonContainer ?? ''} ${isDisabled ? 'grayscale brightness-150' : ''}`}
+            className={`${styles.buttonContainer ?? ''} ${withFullWidth ? styles.withFullWidth ?? '' : ''} ${isDisabled ? 'grayscale brightness-150' : ''}`}
         >
             {href !== undefined ? (
                 <Link href={href} passHref={true}>
