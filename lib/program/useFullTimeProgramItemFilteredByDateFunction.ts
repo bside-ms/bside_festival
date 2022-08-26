@@ -1,10 +1,18 @@
 import { endOfDay, isAfter, isBefore, isSameDay, startOfDay } from 'date-fns';
+import { useProgramContext } from 'components/program/program/ProgramContext';
 import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
-import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 
-const useFullTimeProgramItemFilteredByDateFunction = <T extends FullTimeProgramItem>(): (programItem: T, [begin]: ProgramDate) => boolean => {
+const useFullTimeProgramItemFilteredByDateFunction = <T extends FullTimeProgramItem>(): (programItem: T) => boolean => {
 
-    return (programItem: T, [begin]: ProgramDate): boolean => {
+    const { programDate } = useProgramContext();
+
+    return (programItem: T): boolean => {
+
+        if (programDate === null) {
+            return false;
+        }
+
+        const [begin] = programDate;
 
         const programItemBegin = startOfDay(new Date(programItem.attributes.Begin));
         const programItemEnd = endOfDay(new Date(programItem.attributes.End));

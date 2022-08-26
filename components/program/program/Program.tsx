@@ -1,5 +1,7 @@
 import type { ReactElement } from 'react';
+import EmptyProgramHint from 'components/program/program/EmptyProgramHint';
 import FullTimeProgramTypesWrapper from 'components/program/program/FullTimeProgramTypesWrapper';
+import GrowingProgramHint from 'components/program/program/GrowingProgramHint';
 import ProgramDatesSelect from 'components/program/program/ProgramDatesSelect';
 import ProgramItemPlaceholders from 'components/program/program/ProgramItemPlaceholders';
 import ProgramTypesWrapper from 'components/program/program/ProgramTypesWrapper';
@@ -15,7 +17,7 @@ const Program = (): ReactElement => {
     const swrFullTimeProgramItemsResponse = useAllFullTimeProgramItems();
 
     return (
-        <div className="min-h-screen bg-black pt-[200px] pb-11">
+        <div className="bg-black pt-[200px] pb-11">
             <ProgramDatesSelect />
 
             <div className="space-y-5 mt-7">
@@ -30,14 +32,21 @@ const Program = (): ReactElement => {
                         >
                             {({ allFullTimeProgramItems }): ReactElement => (
                                 <>
+                                    <EmptyProgramHint
+                                        allProgramItems={allProgramItems}
+                                        allFullTimeProgramItems={allFullTimeProgramItems}
+                                    />
                                     <ProgramTypesWrapper allProgramItems={allProgramItems} />
                                     <FullTimeProgramTypesWrapper allProgramItems={allFullTimeProgramItems} />
+                                    <GrowingProgramHint
+                                        allProgramItems={allProgramItems}
+                                        allFullTimeProgramItems={allFullTimeProgramItems}
+                                    />
                                 </>
                             )}
                         </SwrResponseWrapper>
                     )}
                 </SwrResponseWrapper>
-
             </div>
         </div>
     );

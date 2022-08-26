@@ -1,10 +1,9 @@
 import type { ReactElement } from 'react';
 import ContentWrapper from 'components/common/ContentWrapper';
 import FullTimeProgramItem from 'components/program/program/FullTimeProgramItem';
-import { useProgramContext } from 'components/program/program/ProgramContext';
 import ProgramItemWrapper from 'components/program/program/ProgramItemWrapper';
 import ProgramTypeTitle from 'components/program/program/ProgramTypeTitle';
-import useFullTimeProgramItemsFilteredByDate from 'lib/program/useFullTimeProgramItemsFilteredByDate';
+import useFullTimeProgramItemFilteredByDateFunction from 'lib/program/useFullTimeProgramItemFilteredByDateFunction';
 import type { default as FullTimeProgramItemModel } from 'lib/strapi/typings/FullTimeProgramItem';
 
 interface Props {
@@ -14,9 +13,13 @@ interface Props {
 
 const FullTimeProgramTypeWrapper = ({ title, programItems }: Props): ReactElement | null => {
 
-    const { programDate } = useProgramContext();
+    const fullTimeProgramItemFilteredByDateFunction = useFullTimeProgramItemFilteredByDateFunction();
 
-    const programItemsFilteredByDate = useFullTimeProgramItemsFilteredByDate(programItems ?? [], programDate);
+    if (programItems === null) {
+        return null;
+    }
+
+    const programItemsFilteredByDate = programItems.filter(programItem => fullTimeProgramItemFilteredByDateFunction(programItem));
 
     if (programItemsFilteredByDate.length === 0) {
         return null;
