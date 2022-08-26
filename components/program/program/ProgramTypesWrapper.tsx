@@ -26,8 +26,12 @@ const ProgramTypesWrapper = ({ allProgramItems }: Props): ReactElement => {
 
     const { updateScroll } = useRouterScroll();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => updateScroll(), []);
+    useEffect(() => {
+        // Trying everything here to restore scroll position..
+        updateScroll();
+        window.requestAnimationFrame(() => updateScroll());
+        window.setTimeout(() => updateScroll(), 400);
+    });
 
     return (
         <div className="space-y-5">
