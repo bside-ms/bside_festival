@@ -1,5 +1,6 @@
-import Link from 'next/link';
+import { useCallback } from 'react';
 import type { ReactElement, ReactNode } from 'react';
+import { useProgramContext } from 'components/program/program/ProgramContext';
 import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
 import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
@@ -11,9 +12,13 @@ interface Props {
 
 const ProgramItemWrapper = ({ programItem, children }: Props): ReactElement => {
 
-    const { artistId, applicationType } = getDetailsFromProgramItem(programItem);
+    const { setProgramItemForModal } = useProgramContext();
 
-    if (artistId === null) {
+    const { artistId, artist } = getDetailsFromProgramItem(programItem);
+
+    const showModal = useCallback(() => setProgramItemForModal(programItem), [programItem, setProgramItemForModal]);
+
+    if (artistId === null || artist === null) {
         return (
             <div className="relative grow h-[120px] md:h-[250px]">
                 {children}
@@ -21,14 +26,10 @@ const ProgramItemWrapper = ({ programItem, children }: Props): ReactElement => {
         );
     }
 
-    const url = `/artists/${applicationType}/${artistId}`;
-
     return (
-        <Link href={url}>
-            <a className="block cursor-pointer relative grow h-[120px] md:h-[250px]">
-                {children}
-            </a>
-        </Link>
+        <div className="block cursor-pointer relative grow h-[120px] md:h-[250px]" onClick={showModal}>
+            {children}
+        </div>
     );
 };
 

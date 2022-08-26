@@ -2,12 +2,16 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import { toNumber } from 'lodash';
 import type { ReactElement, ReactNode } from 'react';
 import getAvailableDates from 'lib/strapi/getAvailableDates';
+import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
 import type ProgramDate from 'lib/strapi/typings/ProgramDate';
+import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 
 interface ProgramContextData {
     // Server-side it's null
     programDate: ProgramDate | null;
     setProgramDay: (day: 1 | 2 | 3) => void;
+    programItemForModal: ProgramItem | FullTimeProgramItem | null;
+    setProgramItemForModal: (programItem: ProgramItem | FullTimeProgramItem | null) => void;
 }
 
 const ProgramContext = createContext<ProgramContextData | null>(null);
@@ -33,6 +37,8 @@ const ProgramContextProvider = ({ children }: { children: ReactNode }): ReactEle
 
     const [programDate, setProgramDate] = useState<ProgramDate | null>(null);
 
+    const [programItemForModal, setProgramItemForModal] = useState<ProgramItem | FullTimeProgramItem | null>(null);
+
     useEffect(() => {
 
         const initialDay = getInitialDay();
@@ -50,7 +56,7 @@ const ProgramContextProvider = ({ children }: { children: ReactNode }): ReactEle
     }, [availableDates]);
 
     return (
-        <ProgramContext.Provider value={{ programDate, setProgramDay }}>
+        <ProgramContext.Provider value={{ programDate, setProgramDay, programItemForModal, setProgramItemForModal }}>
             {children}
         </ProgramContext.Provider>
     );

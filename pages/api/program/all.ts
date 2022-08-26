@@ -29,7 +29,7 @@ const createProgramItemFetchUrl = (
         fields: withDateField ? ['Date', 'Begin', 'End', 'publishedAt'] : ['Begin', 'End', 'publishedAt'],
         sort: withDateField ? ['Date', 'Begin'] : ['Begin'],
         populate: {
-            [artistFieldName]: { populate: 'Images' },
+            [artistFieldName]: { populate: ['Images', 'Links'] },
             location: { populate: 'Images' },
         },
         publicationState: isInFestivalGroup ? 'preview' : 'live',

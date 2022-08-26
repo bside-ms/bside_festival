@@ -6,6 +6,7 @@ import { Chip } from '@mui/material';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
+import Button from 'components/common/Button';
 import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
 import useEditorJsData from 'lib/editorJs/useEditorJsData';
 import isGroupMember from 'lib/next-auth/isGroupMember';
@@ -18,9 +19,10 @@ import useStrapiCollectionTypeUrl from 'lib/strapi/useStrapiCollectionTypeUrl';
 interface Props {
     artist: ArtistModel;
     strapiCollectionType: StrapiCollectionType;
+    onCloseClick?: () => void;
 }
 
-const Artist = ({ artist, strapiCollectionType }: Props): ReactElement => {
+const Artist = ({ artist, strapiCollectionType, onCloseClick }: Props): ReactElement => {
 
     const { data: session } = useSession();
     const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
@@ -80,6 +82,14 @@ const Artist = ({ artist, strapiCollectionType }: Props): ReactElement => {
                         ))}
                     </div>
                 </div>
+
+                {onCloseClick !== undefined && (
+                    <div className="my-4 md:hidden">
+                        <Button onClick={onCloseClick}>
+                            Zurück zur Liste
+                        </Button>
+                    </div>
+                )}
             </div>
         </div>
     );

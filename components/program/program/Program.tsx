@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import ArtistModal from 'components/program/program/ArtistModal';
 import EmptyProgramHint from 'components/program/program/EmptyProgramHint';
 import FullTimeProgramTypesWrapper from 'components/program/program/FullTimeProgramTypesWrapper';
 import GrowingProgramHint from 'components/program/program/GrowingProgramHint';
@@ -18,6 +19,8 @@ const Program = (): ReactElement => {
 
     return (
         <div className="bg-black pt-[200px] pb-11">
+            <ArtistModal />
+
             <ProgramDatesSelect />
 
             <div className="space-y-5 mt-7">

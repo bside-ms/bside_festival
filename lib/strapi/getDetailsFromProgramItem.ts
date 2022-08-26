@@ -1,4 +1,5 @@
 import ApplicationType from 'lib/application-form/ApplicationType';
+import type Artist from 'lib/strapi/typings/Artist';
 import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
 import type GenericImagesData from 'lib/strapi/typings/GenericImagesData';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
@@ -8,6 +9,7 @@ interface ProgramItemDetails {
     artistId: number | null;
     artistName: string | null;
     artistImages: GenericImagesData['data'];
+    artist: Artist | null;
     collectionType: StrapiCollectionType;
     applicationType: ApplicationType;
 }
@@ -20,6 +22,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artistId: programItem.attributes.concert_artist.data?.id ?? null,
             artistName: programItem.attributes.concert_artist.data?.attributes.Name ?? null,
             artistImages: programItem.attributes.concert_artist.data?.attributes.Images.data ?? null,
+            artist: programItem.attributes.concert_artist.data,
             collectionType: 'concert',
             applicationType: ApplicationType.konzert,
         };
@@ -29,6 +32,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artistId: programItem.attributes.workshop_organizer.data?.id ?? null,
             artistName: programItem.attributes.workshop_organizer.data?.attributes.Name ?? null,
             artistImages: programItem.attributes.workshop_organizer.data?.attributes.Images.data ?? null,
+            artist: programItem.attributes.workshop_organizer.data,
             collectionType: 'workshop',
             applicationType: ApplicationType.workshop,
         };
@@ -38,6 +42,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artistId: programItem.attributes.reading_artist.data?.id ?? null,
             artistName: programItem.attributes.reading_artist.data?.attributes.Name ?? null,
             artistImages: programItem.attributes.reading_artist.data?.attributes.Images.data ?? null,
+            artist: programItem.attributes.reading_artist.data,
             collectionType: 'reading',
             applicationType: ApplicationType.lesung,
         };
@@ -47,6 +52,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artistId: programItem.attributes.performance_artist.data?.id ?? null,
             artistName: programItem.attributes.performance_artist.data?.attributes.Name ?? null,
             artistImages: programItem.attributes.performance_artist.data?.attributes.Images.data ?? null,
+            artist: programItem.attributes.performance_artist.data,
             collectionType: 'performance',
             applicationType: ApplicationType.performance,
         };
@@ -56,6 +62,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artistId: programItem.attributes.family_program_organizer.data?.id ?? null,
             artistName: programItem.attributes.family_program_organizer.data?.attributes.Name ?? null,
             artistImages: programItem.attributes.family_program_organizer.data?.attributes.Images.data ?? null,
+            artist: programItem.attributes.family_program_organizer.data,
             collectionType: 'family-program',
             applicationType: ApplicationType.familienprogramm,
         };
@@ -65,6 +72,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artistId: programItem.attributes.exhibition_artist.data?.id ?? null,
             artistName: programItem.attributes.exhibition_artist.data?.attributes.Name ?? null,
             artistImages: programItem.attributes.exhibition_artist.data?.attributes.Images.data ?? null,
+            artist: programItem.attributes.exhibition_artist.data,
             collectionType: 'exhibition',
             applicationType: ApplicationType.ausstellung,
         };
@@ -74,6 +82,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artistId: programItem.attributes.information_booth_organizer.data?.id ?? null,
             artistName: programItem.attributes.information_booth_organizer.data?.attributes.Name ?? null,
             artistImages: programItem.attributes.information_booth_organizer.data?.attributes.Images.data ?? null,
+            artist: programItem.attributes.information_booth_organizer.data,
             collectionType: 'information-booth',
             applicationType: ApplicationType.infostand,
         };
@@ -83,6 +92,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artistId: programItem.attributes.food_organizer.data?.id ?? null,
             artistName: programItem.attributes.food_organizer.data?.attributes.Name ?? null,
             artistImages: programItem.attributes.food_organizer.data?.attributes.Images.data ?? null,
+            artist: programItem.attributes.food_organizer.data,
             collectionType: 'food',
             applicationType: ApplicationType.essensstand,
         };
