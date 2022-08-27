@@ -6,9 +6,8 @@ import { Chip } from '@mui/material';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
+import ArtistDescription from 'components/artist/ArtistDescription';
 import Button from 'components/common/Button';
-import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
-import useEditorJsData from 'lib/editorJs/useEditorJsData';
 import isGroupMember from 'lib/next-auth/isGroupMember';
 import getImageUrl from 'lib/strapi/getImageUrl';
 import type { default as ArtistModel } from 'lib/strapi/typings/Artist';
@@ -27,11 +26,11 @@ const Artist = ({ artist, strapiCollectionType, onCloseClick }: Props): ReactEle
     const { data: session } = useSession();
     const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
 
-    const descriptionData = useEditorJsData(artist.attributes.Description);
-
     const linksData = useLinksData(artist.attributes.Links);
 
-    const strapiUrl = useStrapiCollectionTypeUrl(strapiCollectionType, artist.id);
+    const singularCollectionType = strapiCollectionType.replace(/s$/, '');
+    // @ts-expect-error | I mixed up plural and singular collection types.. it's too late to fix that x)
+    const strapiUrl = useStrapiCollectionTypeUrl(singularCollectionType, artist.id);
 
     const thumbnailRelativeUrl = getImageUrl(artist, false, 'medium');
     const thumbnailUrl = thumbnailRelativeUrl === null ? null : `https://cms.b-side.ms${thumbnailRelativeUrl}`;
@@ -66,11 +65,7 @@ const Artist = ({ artist, strapiCollectionType, onCloseClick }: Props): ReactEle
                         {artist.attributes.Name}
                     </div>
 
-                    {descriptionData !== null && (
-                        <div>
-                            <EditorJsBlocks blocks={descriptionData.blocks} />
-                        </div>
-                    )}
+                    <ArtistDescription artist={artist} />
 
                     <div className="space-x-4">
                         {linksData.map(link => (
@@ -85,7 +80,7 @@ const Artist = ({ artist, strapiCollectionType, onCloseClick }: Props): ReactEle
                     {onCloseClick !== undefined && (
                         <div className="my-4 md:hidden">
                             <Button onClick={onCloseClick} withFullWidth={true}>
-                                Zurück zur Liste
+                                Zurück zum Programm
                             </Button>
                         </div>
                     )}

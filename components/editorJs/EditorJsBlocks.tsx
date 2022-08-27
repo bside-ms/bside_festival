@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import TruncateMarkup from 'react-truncate-markup';
 import EditorJsBlock from 'components/editorJs/EditorJsBlock';
 import type { Block } from 'lib/editorJs/Block';
 
@@ -11,10 +12,9 @@ const EditorJsBlocks = ({ blocks }: Props): ReactElement => {
     return (
         <div className="space-y-2">
             {blocks.map(block => (
-                <EditorJsBlock
-                    key={block.id}
-                    block={block}
-                />
+                <TruncateMarkup.Atom key={block.id}>
+                    <EditorJsBlock block={block} />
+                </TruncateMarkup.Atom>
             ))}
         </div>
     );

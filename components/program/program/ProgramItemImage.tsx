@@ -30,7 +30,7 @@ const ProgramItemImage = ({ programItem }: Props): ReactElement => {
     return (
         <div>
             <div
-                className="w-[120px] h-full bg-center bg-cover md:hidden"
+                className="w-[150px] h-full bg-center bg-cover md:hidden"
                 style={{ backgroundImage: thumbnailUrl === null ? undefined : `url(${thumbnailUrl}` }}
             />
             <div

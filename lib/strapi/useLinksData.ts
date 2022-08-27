@@ -1,7 +1,7 @@
 import { faFacebook, faInstagram, faSoundcloud, faSpotify, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import type ConcertArtist from 'lib/strapi/typings/ConcertArtist';
+import type GenericLinksData from 'lib/strapi/typings/GenericLinksData';
 import type LinksData from 'lib/strapi/typings/LinksData';
 
 const getLabelAndIcon = (url: string): { label: string, icon: IconDefinition } => {
@@ -29,7 +29,7 @@ const getLabelAndIcon = (url: string): { label: string, icon: IconDefinition } =
     return { label: 'Website', icon: faGlobe };
 };
 
-const useLinksData = (links: ConcertArtist['attributes']['Links']): Array<LinksData> => {
+const useLinksData = (links: GenericLinksData): Array<LinksData> => {
 
     return links
         .map(link => link.Link)
