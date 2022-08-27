@@ -1,19 +1,15 @@
 import styles from './Artist.module.scss';
 
-import { faWrench } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Chip } from '@mui/material';
-import Link from 'next/link';
-import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 import ArtistDescription from 'components/artist/ArtistDescription';
+import ArtistEditButton from 'components/artist/ArtistEditButton';
+import ArtistLinks from 'components/artist/ArtistLinks';
+import ArtistName from 'components/artist/ArtistName';
+import ArtistUnpublishedTag from 'components/artist/ArtistUnpublishedTag';
 import Button from 'components/common/Button';
-import isGroupMember from 'lib/next-auth/isGroupMember';
 import getImageUrl from 'lib/strapi/getImageUrl';
 import type { default as ArtistModel } from 'lib/strapi/typings/Artist';
 import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
-import useLinksData from 'lib/strapi/useLinksData';
-import useStrapiCollectionTypeUrl from 'lib/strapi/useStrapiCollectionTypeUrl';
 
 interface Props {
     artist: ArtistModel;
@@ -22,15 +18,6 @@ interface Props {
 }
 
 const Artist = ({ artist, strapiCollectionType, onCloseClick }: Props): ReactElement => {
-
-    const { data: session } = useSession();
-    const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
-
-    const linksData = useLinksData(artist.attributes.Links);
-
-    const singularCollectionType = strapiCollectionType.replace(/s$/, '');
-    // @ts-expect-error | I mixed up plural and singular collection types.. it's too late to fix that x)
-    const strapiUrl = useStrapiCollectionTypeUrl(singularCollectionType, artist.id);
 
     const thumbnailRelativeUrl = getImageUrl(artist, false, 'medium');
     const thumbnailUrl = thumbnailRelativeUrl === null ? null : `https://cms.b-side.ms${thumbnailRelativeUrl}`;
@@ -44,38 +31,15 @@ const Artist = ({ artist, strapiCollectionType, onCloseClick }: Props): ReactEle
                 />
 
                 <div className="p-4 space-y-3 z-50 relative">
-                    {artist.attributes.publishedAt === null && (
-                        <Chip
-                            label="Unveröffentlicht"
-                            variant="outlined"
-                        />
-                    )}
+                    <ArtistUnpublishedTag artist={artist} />
 
-                    {isInFestivalGroup && (
-                        <div className="text-center">
-                            <Link href={strapiUrl}>
-                                <a className="text-blue-500 hover:text-blue-700" target="_blank">
-                                    <FontAwesomeIcon icon={faWrench} /> Bearbeiten
-                                </a>
-                            </Link>
-                        </div>
-                    )}
+                    <ArtistEditButton artist={artist} strapiCollectionType={strapiCollectionType} />
 
-                    <div className="font-display">
-                        {artist.attributes.Name}
-                    </div>
+                    <ArtistName artist={artist} />
 
                     <ArtistDescription artist={artist} />
 
-                    <div className="space-x-4">
-                        {linksData.map(link => (
-                            <Link href={link.url} key={link.url}>
-                                <a className="text-blue-500 hover:text-blue-700 space-x-1 align-middle leading-4" target="_blank">
-                                    <FontAwesomeIcon icon={link.icon} /> <span>{link.label}</span>
-                                </a>
-                            </Link>
-                        ))}
-                    </div>
+                    <ArtistLinks artist={artist} />
 
                     {onCloseClick !== undefined && (
                         <div className="my-4 md:hidden">

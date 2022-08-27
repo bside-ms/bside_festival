@@ -34,7 +34,7 @@ const TextWithLinks = ({ text }: { text: string }): ReactElement => {
 
         const usedUrl = (
             !createUrlRegExp({ strict: true }).test(matchedUrl) &&
-            createUrlRegExp({ strict: true }).test(`https://${matchedUrl}`)
+            createUrlRegExp({ strict: true }).test(`http://${matchedUrl}`)
                 ? `http://${matchedUrl}`
                 : matchedUrl
         );

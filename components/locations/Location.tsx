@@ -9,9 +9,9 @@ import { useLocationGroupOfLocation } from 'lib/context/LocationGroupsContext';
 import useEditorJsData from 'lib/editorJs/useEditorJsData';
 import isGroupMember from 'lib/next-auth/isGroupMember';
 import getImageUrl from 'lib/strapi/getImageUrl';
+import getLinksData from 'lib/strapi/getLinksData';
+import getStrapiCollectionTypeUrl from 'lib/strapi/getStrapiCollectionTypeUrl';
 import Location from 'lib/strapi/typings/Location';
-import useLinksData from 'lib/strapi/useLinksData';
-import useStrapiCollectionTypeUrl from 'lib/strapi/useStrapiCollectionTypeUrl';
 
 interface Props {
     location: Location;
@@ -28,11 +28,11 @@ const Location = ({ location }: Props): ReactElement => {
 
     const descriptionData = useEditorJsData(Description);
 
-    const linksData = useLinksData(Links);
+    const linksData = getLinksData(Links);
 
     const locationInfo = Address ?? Coordinates ?? null;
 
-    const strapiUrl = useStrapiCollectionTypeUrl('location', location.id);
+    const strapiUrl = getStrapiCollectionTypeUrl('location', location.id);
 
     return (
         <div key={location.id} className="p-4 bg-gradient-to-b from-gray-200 to-gray-50 rounded space-y-3">

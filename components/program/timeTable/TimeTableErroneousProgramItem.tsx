@@ -2,8 +2,8 @@ import { Link } from '@mui/material';
 import type { ReactElement } from 'react';
 import formatDate from 'lib/common/formatDate';
 import getLabelFromCollectionType from 'lib/strapi/getLabelFromCollectionType';
+import getStrapiCollectionTypeUrl from 'lib/strapi/getStrapiCollectionTypeUrl';
 import type ErroneousProgramItem from 'lib/strapi/typings/ErroneousProgramItem';
-import useStrapiCollectionTypeUrl from 'lib/strapi/useStrapiCollectionTypeUrl';
 
 interface Props {
     erroneousProgramItem: ErroneousProgramItem;
@@ -18,7 +18,7 @@ const TimeTableErroneousProgramItem = ({ erroneousProgramItem: { collectionType,
 
     const locationName = programItem.attributes.location.data?.attributes.Name ?? null;
 
-    const strapiUrl = useStrapiCollectionTypeUrl(collectionType, programItem.id);
+    const strapiUrl = getStrapiCollectionTypeUrl(collectionType, programItem.id);
 
     return (
         <div className="space-x-1.5">

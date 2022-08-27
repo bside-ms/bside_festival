@@ -3,9 +3,9 @@ import type { ReactElement } from 'react';
 import useApplicationTypeColor from 'lib/applications/useApplicationTypeColor';
 import formatDate from 'lib/common/formatDate';
 import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
+import getStrapiCollectionTypeUrl from 'lib/strapi/getStrapiCollectionTypeUrl';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 import useScaledTimeTableMinutes from 'lib/strapi/useScaledTimeTableMinutes';
-import useStrapiCollectionTypeUrl from 'lib/strapi/useStrapiCollectionTypeUrl';
 
 interface Props {
     optimizedTimeTableBegin: Date;
@@ -26,7 +26,7 @@ const TimeTableProgramItem = ({ optimizedTimeTableBegin, programItem }: Props): 
 
     const { artistName, collectionType, applicationType } = getDetailsFromProgramItem(programItem);
 
-    const strapiUrl = useStrapiCollectionTypeUrl(collectionType, programItem.id);
+    const strapiUrl = getStrapiCollectionTypeUrl(collectionType, programItem.id);
 
     const backgroundColor = useApplicationTypeColor(applicationType);
 

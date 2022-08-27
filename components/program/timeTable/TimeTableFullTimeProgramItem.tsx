@@ -1,8 +1,8 @@
 import type { ReactElement } from 'react';
 import useApplicationTypeColor from 'lib/applications/useApplicationTypeColor';
 import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
+import getStrapiCollectionTypeUrl from 'lib/strapi/getStrapiCollectionTypeUrl';
 import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
-import useStrapiCollectionTypeUrl from 'lib/strapi/useStrapiCollectionTypeUrl';
 
 interface Props {
     fullTimeProgramItem: FullTimeProgramItem;
@@ -12,7 +12,7 @@ const TimeTableFullTimeProgramItem = ({ fullTimeProgramItem }: Props): ReactElem
 
     const { artistName, collectionType, applicationType } = getDetailsFromProgramItem(fullTimeProgramItem);
 
-    const strapiUrl = useStrapiCollectionTypeUrl(collectionType, fullTimeProgramItem.id);
+    const strapiUrl = getStrapiCollectionTypeUrl(collectionType, fullTimeProgramItem.id);
 
     const backgroundColor = useApplicationTypeColor(applicationType);
 
