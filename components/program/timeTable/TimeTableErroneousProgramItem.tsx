@@ -13,8 +13,8 @@ const TimeTableErroneousProgramItem = ({ erroneousProgramItem: { collectionType,
 
     const title = getLabelFromCollectionType(collectionType);
 
-    const beginFromItem = formatDate(new Date(programItem.attributes.Begin), 'dd.MM., HH:mm');
-    const endFromItem = formatDate(new Date(programItem.attributes.End), 'dd.MM., HH:mm');
+    const beginFromItem = formatDate(new Date(programItem.attributes.Begin), 'dd.MM.yyyy, HH:mm \'Uhr\'');
+    const endFromItem = formatDate(new Date(programItem.attributes.End), 'dd.MM.yyyy, HH:mm \'Uhr\'');
 
     const locationName = programItem.attributes.location.data?.attributes.Name ?? null;
 

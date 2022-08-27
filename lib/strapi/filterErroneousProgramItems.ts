@@ -1,5 +1,6 @@
 import { isAfter, isBefore, isSameMinute } from 'date-fns';
 import getAvailableDates from 'lib/strapi/getAvailableDates';
+import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
 import getLabelFromCollectionType from 'lib/strapi/getLabelFromCollectionType';
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
 import type ErroneousProgramItem from 'lib/strapi/typings/ErroneousProgramItem';
@@ -40,6 +41,18 @@ const filterErroneousProgramItems = <T extends ProgramItem>(
                     collectionType,
                     programItem,
                     reason: 'Der Ort fehlt',
+                });
+
+                return false;
+            }
+
+            const { artist } = getDetailsFromProgramItem(programItem);
+
+            if (artist === null) {
+                erroneousProgramItems.push({
+                    collectionType,
+                    programItem,
+                    reason: 'Der/die Künstler:in fehlt',
                 });
 
                 return false;
