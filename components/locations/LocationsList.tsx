@@ -9,7 +9,7 @@ interface Props {
     allLocations: Array<LocationModel>;
 }
 
-const LocationsMap = dynamic(() => import('components/locations/LocationsMap'), { ssr: false });
+const LocationsMap = dynamic(() => import('components/locations/map/LocationsMap'), { ssr: false });
 
 const LocationsList = ({ allLocations }: Props): ReactElement => {
 
