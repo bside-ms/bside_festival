@@ -19,15 +19,15 @@ interface Props {
 
 const Artist = ({ artist, strapiCollectionType, onCloseClick }: Props): ReactElement => {
 
-    const thumbnailRelativeUrl = getImageUrl(artist, false, 'medium');
-    const thumbnailUrl = thumbnailRelativeUrl === null ? null : `https://cms.b-side.ms${thumbnailRelativeUrl}`;
+    const imageRelativeUrl = getImageUrl(artist, false, 'medium');
+    const imageUrl = imageRelativeUrl === null ? null : `https://cms.b-side.ms${imageRelativeUrl}`;
 
     return (
         <div key={artist.id} className={`space-y-3 relative z-50 ${styles.artist ?? ''}`}>
             <div className="flex flex-col md:space-x-4 md:flex-row z-50 relative bg-white">
                 <div
                     className="h-[400px] w-full md:min-h-[500px] md:shrink-0 md:w-1/3 bg-center bg-cover"
-                    style={{ backgroundImage: thumbnailUrl === null ? undefined : `url(${thumbnailUrl})` }}
+                    style={{ backgroundImage: imageUrl === null ? undefined : `url(${imageUrl})` }}
                 />
 
                 <div className="p-4 space-y-3 z-50 relative">

@@ -31,9 +31,7 @@ const useLocationGroupsContext = (): LocationGroupsContextData => {
     return locationGroupsContext;
 };
 
-const useLocationGroupOfLocation = (location: Location): LocationGroup | null => {
-
-    const { locationGroups } = useLocationGroupsContext();
+const getLocationGroupOfLocation = (locationGroups: Array<LocationGroup>, location: Location): LocationGroup | null => {
 
     const matchingLocationGroups = locationGroups.filter(
         locationGroup => locationGroup.attributes.locations.data.some(locationItem => locationItem.id === location.id)
@@ -47,8 +45,16 @@ const useLocationGroupOfLocation = (location: Location): LocationGroup | null =>
     return matchingLocationGroups[0] ?? null;
 };
 
+const useLocationGroupOfLocation = (location: Location): LocationGroup | null => {
+
+    const { locationGroups } = useLocationGroupsContext();
+
+    return getLocationGroupOfLocation(locationGroups, location);
+};
+
 export {
     LocationGroupsContextProvider,
     useLocationGroupsContext,
+    getLocationGroupOfLocation,
     useLocationGroupOfLocation,
 };

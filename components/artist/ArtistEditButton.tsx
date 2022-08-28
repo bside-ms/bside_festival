@@ -27,13 +27,11 @@ const ArtistEditButton = ({ strapiCollectionType, artist }: Props): ReactElement
     const strapiUrl = getStrapiCollectionTypeUrl(singularCollectionType, artist.id);
 
     return (
-        <div className="text-center">
-            <Link href={strapiUrl}>
-                <a className="text-blue-500 hover:text-blue-700" target="_blank">
-                    <FontAwesomeIcon icon={faWrench} /> Bearbeiten
-                </a>
-            </Link>
-        </div>
+        <Link href={strapiUrl}>
+            <a className="text-blue-500 hover:text-blue-700" target="_blank">
+                <FontAwesomeIcon icon={faWrench} /> Bearbeiten
+            </a>
+        </Link>
     );
 };
 

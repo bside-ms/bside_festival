@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import type { ReactElement } from 'react';
 import ContentWrapper from 'components/common/ContentWrapper';
 import Location from 'components/locations/Location';
@@ -9,16 +9,19 @@ interface Props {
     allLocations: Array<LocationModel>;
 }
 
+const LocationsMap = dynamic(() => import('components/locations/LocationsMap'), { ssr: false });
+
 const LocationsList = ({ allLocations }: Props): ReactElement => {
 
-    const orderedLocations = useMemo(
-        () => allLocations.sort(useLocationsSortingCallback),
-        [allLocations]
-    );
+    const locationsSortingCallback = useLocationsSortingCallback;
+
+    const orderedLocations = allLocations.sort(locationsSortingCallback);
 
     return (
-        <div className="my-8">
+        <div>
             <ContentWrapper>
+                <LocationsMap allLocations={orderedLocations} />
+
                 <div className="space-y-5">
                     {orderedLocations.map(location => (
                         <Location

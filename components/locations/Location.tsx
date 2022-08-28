@@ -1,3 +1,5 @@
+import styles from './Location.module.scss';
+
 import { faWrench } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Chip } from '@mui/material';
@@ -24,25 +26,31 @@ const Location = ({ location }: Props): ReactElement => {
 
     const groupOfLocation = useLocationGroupOfLocation(location);
 
-    const { Coordinates, Description, Address, Links, Name, publishedAt } = location.attributes;
+    const { Description, Address, Links, Name, publishedAt } = location.attributes;
 
     const descriptionData = useEditorJsData(Description);
 
     const linksData = getLinksData(Links);
 
-    const locationInfo = Address ?? Coordinates ?? null;
+    const imageUrl = getImageUrl(location, false, 'medium');
 
     const strapiUrl = getStrapiCollectionTypeUrl('location', location.id);
 
     return (
-        <div key={location.id} className="p-4 bg-gradient-to-b from-gray-200 to-gray-50 rounded space-y-3">
-            <div className="flex space-x-4">
-                <div className="flex flex-col space-y-3">
+        <div key={location.id} className={`space-y-3 relative z-50 ${styles.location ?? ''}`}>
+            <div className="flex flex-col md:space-x-4 md:flex-row z-50 relative bg-white">
+                {imageUrl === null ? (
                     <div
-                        className="rounded-full h-32 w-32 bg-center bg-cover"
-                        style={{ backgroundImage: `url(${getImageUrl(location)!})` }}
+                        className="h-[0] w-full md:min-h-[500px] md:shrink-0 md:w-1/3"
                     />
+                ) : (
+                    <div
+                        className="h-[400px] w-full md:min-h-[500px] md:shrink-0 md:w-1/3 bg-center bg-cover"
+                        style={{ backgroundImage: `url(${imageUrl})` }}
+                    />
+                )}
 
+                <div className="p-4 space-y-3 z-50 relative">
                     {publishedAt === null && (
                         <Chip
                             label="Unveröffentlicht"
@@ -51,7 +59,7 @@ const Location = ({ location }: Props): ReactElement => {
                     )}
 
                     {isInFestivalGroup && (
-                        <div className="text-center">
+                        <div>
                             <Link href={strapiUrl}>
                                 <a className="text-blue-500 hover:text-blue-700" target="_blank">
                                     <FontAwesomeIcon icon={faWrench} /> Bearbeiten
@@ -59,9 +67,6 @@ const Location = ({ location }: Props): ReactElement => {
                             </Link>
                         </div>
                     )}
-                </div>
-
-                <div className="space-y-3">
 
                     <div className="font-display">
                         {groupOfLocation !== null && (
@@ -73,9 +78,9 @@ const Location = ({ location }: Props): ReactElement => {
                         {Name}
                     </div>
 
-                    {locationInfo !== null && (
+                    {Address !== null && (
                         <div className="text-gray-700">
-                            {locationInfo}
+                            {Address}
                         </div>
                     )}
 
@@ -85,15 +90,17 @@ const Location = ({ location }: Props): ReactElement => {
                         </div>
                     )}
 
-                    <div className="space-x-4">
-                        {linksData.map(link => (
-                            <Link href={link.url} key={link.url}>
-                                <a className="text-blue-500 hover:text-blue-700 space-x-1 align-middle leading-4" target="_blank">
-                                    <FontAwesomeIcon icon={link.icon} /> <span>{link.label}</span>
-                                </a>
-                            </Link>
-                        ))}
-                    </div>
+                    {linksData.length > 0 && (
+                        <div className="space-x-4">
+                            {linksData.map(link => (
+                                <Link href={link.url} key={link.url}>
+                                    <a className="text-blue-500 hover:text-blue-700 space-x-1 align-middle leading-4" target="_blank">
+                                        <FontAwesomeIcon icon={link.icon} /> <span>{link.label}</span>
+                                    </a>
+                                </Link>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

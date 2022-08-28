@@ -9,9 +9,13 @@ interface Props {
     artist: ArtistModel;
 }
 
-const ArtistLinks = ({ artist }: Props): ReactElement => {
+const ArtistLinks = ({ artist }: Props): ReactElement | null => {
 
     const linksData = getLinksData(artist.attributes.Links);
+
+    if (linksData.length === 0) {
+        return null;
+    }
 
     return (
         <div className="space-x-4">
