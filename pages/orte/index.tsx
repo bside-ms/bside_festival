@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import ContentWrapper from 'components/common/ContentWrapper';
 import Footer from 'components/common/Footer';
 import NextHead from 'components/common/NextHead';
 import PageHeader from 'components/common/PageHeader';
@@ -20,19 +21,21 @@ export default (): ReactElement => {
             <PageHeader theme="blue" symbols="hearts" />
 
             <div className="pt-[200px] pb-8 min-h-screen bg-gradient-to-b from-amber-100 to-pink-400">
-                <SwrResponseWrapper response={allLocationsResponse}>
-                    {(allLocations): ReactElement => (
-                        <SwrResponseWrapper response={allLocationGroupsResponse}>
-                            {(allLocationGroups): ReactElement => (
-                                <LocationGroupsContextProvider locationGroups={allLocationGroups}>
-                                    <LocationsList
-                                        allLocations={allLocations}
-                                    />
-                                </LocationGroupsContextProvider>
-                            )}
-                        </SwrResponseWrapper>
-                    )}
-                </SwrResponseWrapper>
+                <ContentWrapper>
+                    <SwrResponseWrapper response={allLocationsResponse}>
+                        {(allLocations): ReactElement => (
+                            <SwrResponseWrapper response={allLocationGroupsResponse}>
+                                {(allLocationGroups): ReactElement => (
+                                    <LocationGroupsContextProvider locationGroups={allLocationGroups}>
+                                        <LocationsList
+                                            allLocations={allLocations}
+                                        />
+                                    </LocationGroupsContextProvider>
+                                )}
+                            </SwrResponseWrapper>
+                        )}
+                    </SwrResponseWrapper>
+                </ContentWrapper>
             </div>
 
             <Footer />

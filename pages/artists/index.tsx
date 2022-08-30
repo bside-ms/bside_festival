@@ -3,6 +3,7 @@ import ArtistsList from 'components/artists-list/ArtistsList';
 import ContentWrapper from 'components/common/ContentWrapper';
 import Footer from 'components/common/Footer';
 import NextHead from 'components/common/NextHead';
+import PageHeader from 'components/common/PageHeader';
 import SwrResponseWrapper from 'components/strapi/SwrResponseWrapper';
 import ApplicationType from 'lib/application-form/ApplicationType';
 import useApplicationTitle from 'lib/application-form/useApplicationTitle';
@@ -16,10 +17,12 @@ export default (): ReactElement => {
         <>
             <NextHead title="B-Side Festival 2022 - Bewerbungsübersicht" />
 
-            <div className="min-h-screen">
-                <SwrResponseWrapper response={swrResponse}>
-                    {(response): ReactElement => (
-                        <ContentWrapper>
+            <PageHeader theme="pink" symbols="hearts" />
+
+            <div className="min-h-screen pt-[200px]">
+                <ContentWrapper>
+                    <SwrResponseWrapper response={swrResponse}>
+                        {(response): ReactElement => (
                             <div className="my-5 space-y-9">
                                 <ArtistsList
                                     artists={response.concertArtists}
@@ -46,9 +49,9 @@ export default (): ReactElement => {
                                     title={useApplicationTitle(ApplicationType.familienprogramm)}
                                 />
                             </div>
-                        </ContentWrapper>
-                    )}
-                </SwrResponseWrapper>
+                        )}
+                    </SwrResponseWrapper>
+                </ContentWrapper>
             </div>
 
             <Footer />

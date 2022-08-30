@@ -1,6 +1,5 @@
 import dynamic from 'next/dynamic';
 import type { ReactElement } from 'react';
-import ContentWrapper from 'components/common/ContentWrapper';
 import Location from 'components/locations/Location';
 import type { default as LocationModel } from 'lib/strapi/typings/Location';
 import useLocationsSortingCallback from 'lib/strapi/useLocationsSortingCallback';
@@ -19,18 +18,16 @@ const LocationsList = ({ allLocations }: Props): ReactElement => {
 
     return (
         <div>
-            <ContentWrapper>
-                <LocationsMap allLocations={orderedLocations} />
+            <LocationsMap allLocations={orderedLocations} />
 
-                <div className="space-y-5">
-                    {orderedLocations.map(location => (
-                        <Location
-                            key={location.id}
-                            location={location}
-                        />
-                    ))}
-                </div>
-            </ContentWrapper>
+            <div className="space-y-5">
+                {orderedLocations.map(location => (
+                    <Location
+                        key={location.id}
+                        location={location}
+                    />
+                ))}
+            </div>
         </div>
     );
 };
