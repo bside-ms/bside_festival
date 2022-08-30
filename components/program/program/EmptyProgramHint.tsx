@@ -26,9 +26,9 @@ const EmptyProgramHint = ({ allFullTimeProgramItems, allProgramItems }: Props): 
                         <BHeartSvg size={70} color="#343422" />
                     </div>
                     <div>
-                        Aktuell ist die Liste für diesen Tag noch leer, aber in Kürze findest du hier ein
-                        buntes Programm aus Konzerten, Workshops, Ausstellungen und vielem mehr.
-                        Schau daher schon bald wieder vorbei!
+                        Für diesen Tag erarbeiten wir gerade mit Hochdruck das Programm. In Kürze findest du hier ein
+                        vielfältige Auswahl an Konzerten, Workshops, Ausstellungen und vielem mehr.
+                        Schau schon bald wieder rein!
                     </div>
                 </div>
                 <div className="absolute top-1 left-1 -right-1 -bottom-1 bg-gradient-to-r from-[#e1017e] to-[#33bbe9] z-10" />
