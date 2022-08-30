@@ -13,6 +13,7 @@ import { useNavigationOverlayContext } from 'components/navigation/NavigationOve
 const links = new Array<{label: string, link: string}>(
     { label: 'Start', link: '/' },
     { label: 'Mithelfen', link: '/mithelfen' },
+    { label: 'Programm', link: '/programm' },
     { label: 'Awareness', link: '/awareness' },
 );
 
@@ -20,7 +21,6 @@ const internalLinks = new Array<{label: string, link: string}>(
     { label: 'Bewerbungsübersicht', link: '/bewerbung/uebersicht' },
     { label: 'Slotplan', link: '/programm/slotplan' },
     { label: 'Helfer:innen', link: '/mithelfen/uebersicht' },
-    { label: 'Programm', link: '/programm' },
     { label: 'Künstler:innen', link: '/artists' },
     { label: 'Orte', link: '/orte' },
 );
