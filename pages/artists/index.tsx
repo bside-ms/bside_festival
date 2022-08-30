@@ -15,7 +15,7 @@ export default (): ReactElement => {
 
     return (
         <>
-            <NextHead title="B-Side Festival 2022 - Bewerbungsübersicht" />
+            <NextHead title="B-Side Festival 2022 - Künstler:innen" />
 
             <PageHeader theme="pink" symbols="hearts" />
 
