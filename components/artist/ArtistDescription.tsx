@@ -16,7 +16,7 @@ const ArtistDescription = ({ artist, truncateAfterLines }: Props): ReactElement 
     const descriptionData = useEditorJsData(artist.attributes.Description);
 
     if (descriptionData === null) {
-        return <div />;
+        return null;
     }
 
     if (truncateAfterLines === undefined) {
