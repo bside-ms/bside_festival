@@ -27,16 +27,33 @@ const ProgramItemImage = ({ programItem }: Props): ReactElement => {
     const thumbnailUrl = getImageUrl(artistImages, 'thumbnail');
     const imageUrl = getImageUrl(artistImages, 'small');
 
+    const fallbackImageUrl = '/assets/images/festival/delorean.png';
+
     return (
         <div>
-            <div
-                className="w-[150px] h-full bg-center bg-cover md:hidden"
-                style={{ backgroundImage: thumbnailUrl === null ? undefined : `url(${thumbnailUrl}` }}
-            />
-            <div
-                className="w-[250px] h-full bg-center bg-cover hidden md:block"
-                style={{ backgroundImage: imageUrl === null ? undefined : `url(${imageUrl}` }}
-            />
+            {thumbnailUrl === null ? (
+                <div
+                    className="w-[150px] h-full bg-center bg-contain bg-no-repeat bg-black md:hidden"
+                    style={{ backgroundImage: `url(${fallbackImageUrl}` }}
+                />
+            ) : (
+                <div
+                    className="w-[150px] h-full bg-center bg-cover md:hidden"
+                    style={{ backgroundImage: `url(${thumbnailUrl})` }}
+                />
+            )}
+
+            {imageUrl === null ? (
+                <div
+                    className="w-[250px] h-full bg-center bg-contain bg-no-repeat bg-black hidden md:block"
+                    style={{ backgroundImage: `url(${fallbackImageUrl}` }}
+                />
+            ) : (
+                <div
+                    className="w-[250px] h-full bg-center bg-cover hidden md:block"
+                    style={{ backgroundImage: `url(${imageUrl})` }}
+                />
+            )}
         </div>
     );
 };
