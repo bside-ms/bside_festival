@@ -1,3 +1,4 @@
+import { Chip } from '@mui/material';
 import type { ReactElement } from 'react';
 import ArtistDescription from 'components/artist/ArtistDescription';
 import formatDate from 'lib/common/formatDate';
@@ -22,11 +23,27 @@ const ProgramItemDetails = ({ programItem }: Props): ReactElement => {
 
     return (
         <div className="leading-5 mt-2">
-            <div>{formattedBegin} - {formattedEnd}</div>
 
-            {location !== null && (
-                <div>{location}</div>
-            )}
+            <div className="flex flex-row gap-3">
+                <div>
+                    <div>{formattedBegin} - {formattedEnd}</div>
+
+                    {location !== null && (
+                        <div>{location}</div>
+                    )}
+                </div>
+
+                {programItem.attributes.publishedAt === null && (
+                    <div>
+                        <Chip
+                            className="mb-3"
+                            label="Unveröffentlicht"
+                            variant="outlined"
+                            color="warning"
+                        />
+                    </div>
+                )}
+            </div>
 
             {artist !== null && (
                 <>
