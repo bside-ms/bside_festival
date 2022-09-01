@@ -27,7 +27,9 @@ const FullTimeProgramTypeWrapper = ({ title, programItems }: Props): ReactElemen
 
     return (
         <div>
-            <ProgramTypeTitle title={title} />
+            <div className="sticky top-0 z-50">
+                <ProgramTypeTitle title={title} />
+            </div>
 
             <ContentWrapper>
                 <div className="space-y-5 py-5">
