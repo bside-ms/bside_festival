@@ -45,7 +45,7 @@ const FrontPageEyeCatchers = (): ReactElement => {
             <ContentWrapper>
                 <div className={`flex flex-col gap-3 ${styles.bigBox ?? ''}`}>
                     <div>
-                        In weniger als zwei Monaten geht es im Hansaviertel rund! Für unserer B-Side Festival 2022
+                        Schon sehr bald geht es im Hansaviertel rund! Für unser B-Side Festival 2022
                         „Zurück für die Zukunft“ brauchen wir euch! Wir suchen tatkräftige Helfer*innen. Dabei gibt
                         es verschiedene Aufgaben, bei denen ihr euch einbringen könnt: Die Betreuung von  Konzerten,
                         Workshops, Ausstellungen und Lesungen, die Verpflegung für das Helfer*innen- und B-Side-Team,
