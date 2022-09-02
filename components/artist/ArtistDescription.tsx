@@ -29,6 +29,11 @@ const ArtistDescription = ({ artist, truncateAfterLines }: Props): ReactElement 
 
     const editorJsDataAsHtml = getEditorJsParagraphsAsHtml(descriptionData);
 
+    if (['<br>', '.<br>', '.'].includes(editorJsDataAsHtml.trim())) {
+        // Just dealing with some empty CMS data
+        return null;
+    }
+
     return (
         <TruncateMarkup lines={truncateAfterLines}>
             <div>
