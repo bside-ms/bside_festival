@@ -31,6 +31,7 @@ const createProgramItemFetchUrl = (
         populate: {
             [artistFieldName]: { populate: ['Images', 'Links'] },
             location: { populate: 'Images' },
+            Registration: { populate: '*' },
         },
         publicationState: isInFestivalGroup ? 'preview' : 'live',
         pagination: {
@@ -58,6 +59,10 @@ const fetchProgramItems = async <T>(fetchUrl: URL): Promise<StrapiResponse<Array
     return await fetchResponse.json() as StrapiResponse<Array<T>>;
 };
 
+/**
+ * The logic in this function is without a doubt the ugliest part of this
+ * whole application, and we shall never speak about it.
+ */
 const fixDateTimeIssue = <T extends Exclude<ProgramItem, Concert>>(programItem: T): T => {
 
     if (!('Date' in programItem.attributes)) {
@@ -71,17 +76,23 @@ const fixDateTimeIssue = <T extends Exclude<ProgramItem, Concert>>(programItem: 
         return programItem;
     }
 
-    let newBeginHour = parseInt(beginHourMatch[1]!, 10);
+    let newBeginHour: string | number = parseInt(beginHourMatch[1]!, 10);
     newBeginHour = newBeginHour - 2;
     if (newBeginHour < 0) {
         newBeginHour = 24 + newBeginHour;
     }
 
-    let newEndHour = parseInt(endHourMatch[1]!, 10);
+    let newEndHour: string | number = parseInt(endHourMatch[1]!, 10);
     newEndHour = newEndHour - 2;
     if (newEndHour < 0) {
         newEndHour = 24 + newEndHour;
     }
+
+    newBeginHour = newBeginHour.toString();
+    newBeginHour = newBeginHour.length === 1 ? `0${newBeginHour}` : newBeginHour;
+
+    newEndHour = newEndHour.toString();
+    newEndHour = newEndHour.length === 1 ? `0${newEndHour}` : newEndHour;
 
     programItem.attributes.Begin = `${programItem.attributes.Date}T${newBeginHour}${programItem.attributes.Begin.slice(2)}Z`;
     programItem.attributes.End = `${programItem.attributes.Date}T${newEndHour}${programItem.attributes.End.slice(2)}Z`;
