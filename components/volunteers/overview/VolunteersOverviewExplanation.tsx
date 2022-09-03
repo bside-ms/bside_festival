@@ -10,18 +10,6 @@ const PortalLink = ({ children }: { children: string }): ReactElement => (
     </Link>
 );
 
-const explainedIcons = new Array<{icon: string, key: string}>(
-    { icon: '💪', key: 'muscles' },
-    { icon: '🚗', key: 'car' },
-    { icon: '👥', key: 'social' },
-    { icon: '🧑‍🔧', key: 'technician' },
-    { icon: '🧑‍🍳', key: 'cook' },
-    { icon: '🧑‍🎨', key: 'artist' },
-    { icon: '🧒', key: 'kids' },
-    { icon: '🧹', key: 'cleanup' },
-    { icon: '🌟', key: 'multi' },
-);
-
 const getExplanation = (key: string): string => volunteerPreferences.find(preference => preference.key === key)!.label;
 
 const VolunteersOverviewExplanation = (): ReactElement => {
@@ -35,14 +23,11 @@ const VolunteersOverviewExplanation = (): ReactElement => {
 
             <div className="flex flex-col items-start">
                 <div className="px-3 py-2 bg-white">
-                    {explainedIcons.map(({ icon, key }) => {
-
-                        return (
-                            <div className="flex gap-4 leading-8" key={key}>
-                                <div>{icon}</div><div>{getExplanation(key)}</div>
-                            </div>
-                        );
-                    })}
+                    {volunteerPreferences.map(({ emoji, key }) => (
+                        <div className="flex gap-4 leading-8" key={key}>
+                            <div>{emoji}</div><div>{getExplanation(key)}</div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

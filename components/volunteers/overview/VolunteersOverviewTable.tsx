@@ -9,6 +9,7 @@ import VolunteerOverviewTableHeaderCell from 'components/volunteers/overview/Vol
 import VolunteersOverviewTableRow from 'components/volunteers/overview/VolunteersOverviewTableRow';
 import useVolunteersTableData from 'lib/volunteers/useVolunteersTableData';
 import type Volunteer from 'lib/volunteers/Volunteer';
+import volunteerPreferences from 'lib/volunteers/volunteerPreferences';
 import type VolunteerTableData from 'lib/volunteers/VolunteerTableData';
 
 interface Props {
@@ -42,12 +43,51 @@ const getSensitiveColumnProps = (label: string, accessor: StringKey<VolunteerTab
     Footer: () => <div>{label} <span className="font-bold text-red-700">*</span></div>,
 });
 
-const getCheckboxColumnProps = (label: string, accessor: StringKey<VolunteerTableData>): Column<VolunteerTableData> => ({
+const getPreferencesColumnProps = (preferenceKey: StringKey<VolunteerTableData>): Column<VolunteerTableData> => {
+
+    const volunteerPreference = volunteerPreferences.find(preference => preference.key === preferenceKey);
+
+    const emoji = volunteerPreference?.emoji ?? '';
+    const label = volunteerPreference?.label ?? '';
+
+    return {
+        Header: (props): ReactElement => {
+
+            const sortByColumnProps = props.column as unknown as UseSortByColumnProps<VolunteerTableData>;
+
+            if (sortByColumnProps.isSorted) {
+                const sortIcon = sortByColumnProps.isSortedDesc === true ? faCaretDown : faCaretUp;
+
+                return (
+                    <div title={label}>
+                        {emoji} <FontAwesomeIcon icon={sortIcon} />
+                    </div>
+                );
+            }
+
+            return <div title={label}>{emoji}</div>;
+        },
+        accessor: preferenceKey,
+        Footer: (props): ReactElement => {
+
+            const checkedRows = props.rows.filter(row => {
+                return row.original[preferenceKey] === '✅';
+            });
+
+            return (
+                <div title={label}>
+                    {emoji}<br />
+                    <span className="font-bold">{checkedRows.length}</span>
+                </div>
+            );
+        },
+    };
+};
+
+const getDayPreferencesColumnProps = (label: string, accessor: StringKey<VolunteerTableData>): Column<VolunteerTableData> => ({
     Header: (props): ReactElement => {
 
         const sortByColumnProps = props.column as unknown as UseSortByColumnProps<VolunteerTableData>;
-
-        // TODO: title
 
         if (sortByColumnProps.isSorted) {
             const sortIcon = sortByColumnProps.isSortedDesc === true ? faCaretDown : faCaretUp;
@@ -85,18 +125,18 @@ const VolunteersOverviewTable = ({ allVolunteers }: Props): ReactElement => {
         getColumnProps('Name', 'fullName'),
         getSensitiveColumnProps('Telefon', 'phoneNumber'),
         getColumnProps('Messenger', 'preferredMessengers'),
-        getCheckboxColumnProps('💪', 'muscles'),
-        getCheckboxColumnProps('🚗', 'car'),
-        getCheckboxColumnProps('👥', 'social'),
-        getCheckboxColumnProps('🧑‍🔧', 'technician'),
-        getCheckboxColumnProps('🧑‍🍳', 'cook'),
-        getCheckboxColumnProps('🧑‍🎨', 'artist'),
-        getCheckboxColumnProps('🧒', 'kids'),
-        getCheckboxColumnProps('🧹', 'cleanup'),
-        getCheckboxColumnProps('🌟', 'multi'),
-        getCheckboxColumnProps('Fr', 'isFridayChecked'),
-        getCheckboxColumnProps('Sa', 'isSaturdayChecked'),
-        getCheckboxColumnProps('So', 'isSundayChecked'),
+        getPreferencesColumnProps('muscles'),
+        getPreferencesColumnProps('car'),
+        getPreferencesColumnProps('social'),
+        getPreferencesColumnProps('technician'),
+        getPreferencesColumnProps('cook'),
+        getPreferencesColumnProps('artist'),
+        getPreferencesColumnProps('kids'),
+        getPreferencesColumnProps('cleanup'),
+        getPreferencesColumnProps('multi'),
+        getDayPreferencesColumnProps('Fr', 'isFridayChecked'),
+        getDayPreferencesColumnProps('Sa', 'isSaturdayChecked'),
+        getDayPreferencesColumnProps('So', 'isSundayChecked'),
         getColumnProps('Infos', 'additionalInformation'),
     ]), []);
 
