@@ -50,7 +50,7 @@ const NavigationOverlay = (): ReactElement | null => {
     }
 
     return (
-        <div className="fixed top-0 right-0 bottom-0 left-0 z-[400]">
+        <div className="fixed top-0 right-0 bottom-0 left-0 z-[4000]">
             <div className={`absolute top-0 right-0 bottom-0 left-0 ${styles.background ?? ''}`} />
 
             <ContentWrapper>
