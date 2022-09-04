@@ -3,6 +3,7 @@ import type Artist from 'lib/strapi/typings/Artist';
 import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
 import type GenericImagesData from 'lib/strapi/typings/GenericImagesData';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
+import type Registration from 'lib/strapi/typings/Registration';
 import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
 
 interface ProgramItemDetails {
@@ -12,10 +13,13 @@ interface ProgramItemDetails {
     artist: Artist | null;
     collectionType: StrapiCollectionType;
     applicationType: ApplicationType;
+    registration: Registration | null;
 }
 
 // eslint-disable-next-line complexity
 const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramItem): ProgramItemDetails => {
+
+    const registration = 'Registration' in programItem.attributes ? programItem.attributes.Registration : null;
 
     if ('concert_artist' in programItem.attributes) {
         return {
@@ -25,6 +29,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artist: programItem.attributes.concert_artist.data,
             collectionType: 'concert',
             applicationType: ApplicationType.konzert,
+            registration,
         };
     }
     if ('workshop_organizer' in programItem.attributes) {
@@ -35,6 +40,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artist: programItem.attributes.workshop_organizer.data,
             collectionType: 'workshop',
             applicationType: ApplicationType.workshop,
+            registration,
         };
     }
     if ('reading_artist' in programItem.attributes) {
@@ -45,6 +51,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artist: programItem.attributes.reading_artist.data,
             collectionType: 'reading',
             applicationType: ApplicationType.lesung,
+            registration,
         };
     }
     if ('performance_artist' in programItem.attributes) {
@@ -55,6 +62,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artist: programItem.attributes.performance_artist.data,
             collectionType: 'performance',
             applicationType: ApplicationType.performance,
+            registration,
         };
     }
     if ('family_program_organizer' in programItem.attributes) {
@@ -65,6 +73,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artist: programItem.attributes.family_program_organizer.data,
             collectionType: 'family-program',
             applicationType: ApplicationType.familienprogramm,
+            registration,
         };
     }
     if ('exhibition_artist' in programItem.attributes) {
@@ -75,6 +84,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artist: programItem.attributes.exhibition_artist.data,
             collectionType: 'exhibition',
             applicationType: ApplicationType.ausstellung,
+            registration,
         };
     }
     if ('information_booth_organizer' in programItem.attributes) {
@@ -85,6 +95,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artist: programItem.attributes.information_booth_organizer.data,
             collectionType: 'information-booth',
             applicationType: ApplicationType.infostand,
+            registration,
         };
     }
     if ('food_organizer' in programItem.attributes) {
@@ -95,6 +106,7 @@ const getDetailsFromProgramItem = (programItem: ProgramItem | FullTimeProgramIte
             artist: programItem.attributes.food_organizer.data,
             collectionType: 'food',
             applicationType: ApplicationType.essensstand,
+            registration,
         };
     }
 

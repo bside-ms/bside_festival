@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import ProgramItemDetails from 'components/program/program/ProgramItemDetails';
 import ProgramItemImage from 'components/program/program/ProgramItemImage';
 import ProgramItemName from 'components/program/program/ProgramItemName';
+import ProgramItemRegistrationHint from 'components/program/program/ProgramItemRegistrationHint';
 import type { default as ProgramItemModel } from 'lib/strapi/typings/ProgramItem';
 
 interface Props {
@@ -12,13 +13,15 @@ const ProgramItem = ({ programItem }: Props): ReactElement => {
 
     return (
         <>
-            <div className="absolute z-20 bg-white hover:bg-gray-200 top-0 right-0 bottom-0 left-0 flex">
+            <div className="absolute z-20 bg-white hover:bg-gray-200 top-0 right-0 bottom-0 left-0 flex max-w-full">
                 <ProgramItemImage programItem={programItem} />
 
                 <div className="p-2 md:p-5">
                     <ProgramItemName programItem={programItem} />
 
                     <ProgramItemDetails programItem={programItem} />
+
+                    <ProgramItemRegistrationHint programItem={programItem} />
                 </div>
             </div>
 

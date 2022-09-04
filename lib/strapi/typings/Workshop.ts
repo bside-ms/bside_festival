@@ -1,4 +1,5 @@
 import type Location from 'lib/strapi/typings/Location';
+import type Registration from 'lib/strapi/typings/Registration';
 import type WorkshopOrganizer from 'lib/strapi/typings/WorkshopOrganizer';
 
 export default interface Workshop {
@@ -10,5 +11,6 @@ export default interface Workshop {
         workshop_organizer: { data: WorkshopOrganizer | null };
         location: { data: Location | null };
         publishedAt: string | null;
+        Registration: Registration | null;
     };
 }

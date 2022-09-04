@@ -16,15 +16,15 @@ const FullTimeProgramItemDetails = ({ programItem }: Props): ReactElement => {
 
     return (
         <div className="leading-5 mt-2">
-            <div className="flex flex-row gap-3">
-                <div>
-                    <div>Ganztägig</div>
+            <div className="flex flex-row">
+                <div>Ganztägig</div>
 
-                    {location !== null && (
-                        <div>{location}</div>
-                    )}
-                </div>
+                {location !== null && (
+                    <div>, {location}</div>
+                )}
+            </div>
 
+            <div>
                 {programItem.attributes.publishedAt === null && (
                     <div>
                         <Chip

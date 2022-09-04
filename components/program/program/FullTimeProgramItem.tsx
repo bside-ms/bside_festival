@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import FullTimeProgramItemDetails from 'components/program/program/FullTimeProgramItemDetails';
 import ProgramItemImage from 'components/program/program/ProgramItemImage';
 import ProgramItemName from 'components/program/program/ProgramItemName';
+import ProgramItemRegistrationHint from 'components/program/program/ProgramItemRegistrationHint';
 import type { default as FullTimeProgramItemModel } from 'lib/strapi/typings/FullTimeProgramItem';
 
 interface Props {
@@ -19,6 +20,8 @@ const FullTimeProgramItem = ({ programItem }: Props): ReactElement => {
                     <ProgramItemName programItem={programItem} />
 
                     <FullTimeProgramItemDetails programItem={programItem} />
+
+                    <ProgramItemRegistrationHint programItem={programItem} />
                 </div>
             </div>
 
