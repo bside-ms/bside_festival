@@ -15,6 +15,7 @@ const links = new Array<{label: string, link: string}>(
     { label: 'Mithelfen', link: '/mithelfen' },
     { label: 'Programm', link: '/programm' },
     { label: 'Awareness', link: '/awareness' },
+    { label: 'Orte', link: '/orte' },
 );
 
 const internalLinks = new Array<{label: string, link: string}>(
@@ -22,7 +23,6 @@ const internalLinks = new Array<{label: string, link: string}>(
     { label: 'Slotplan', link: '/programm/slotplan' },
     { label: 'Helfer:innen', link: '/mithelfen/uebersicht' },
     { label: 'Künstler:innen', link: '/artists' },
-    { label: 'Orte', link: '/orte' },
 );
 
 const NavigationOverlay = (): ReactElement | null => {
