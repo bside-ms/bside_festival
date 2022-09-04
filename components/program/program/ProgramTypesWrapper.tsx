@@ -17,7 +17,7 @@ interface ProgramType {
 const ProgramTypesWrapper = ({ allProgramItems }: Props): ReactElement => {
 
     const programTypes = new Array<ProgramType>(
-        { title: 'Konzerte', programItems: allProgramItems.concerts },
+        { title: 'Musik', programItems: allProgramItems.concerts },
         { title: 'Workshops', programItems: allProgramItems.workshops },
         { title: 'Lesungen', programItems: allProgramItems.readings },
         { title: 'Performances, Theater & Kabarett', programItems: allProgramItems.performances },
