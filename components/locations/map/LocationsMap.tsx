@@ -46,29 +46,31 @@ const LocationsMap = ({ allLocations }: Props): ReactElement => {
                     addLookUpHint
                 );
 
-                if (latLng !== null) {
-                    setMapMarkers(prevState => {
-
-                        if (prevState.findIndex(marker => marker.locationId === location.id) !== -1) {
-                            return prevState;
-                        }
-
-                        const nameOnMarker = `
-                            ${location.attributes.Name}
-                            ${groupOfLocation?.attributes.Name === undefined ? '' : ` (${groupOfLocation.attributes.Name})`}
-                        `;
-
-                        return [
-                            ...prevState,
-                            {
-                                locationId: location.id,
-                                name: nameOnMarker,
-                                address: location.attributes.Address,
-                                ...latLng,
-                            },
-                        ];
-                    });
+                if (latLng === null) {
+                    return;
                 }
+
+                setMapMarkers(prevState => {
+
+                    if (prevState.findIndex(marker => marker.locationId === location.id) !== -1) {
+                        return prevState;
+                    }
+
+                    const nameOnMarker = `
+                        ${location.attributes.Name}
+                        ${groupOfLocation?.attributes.Name === undefined ? '' : ` (${groupOfLocation.attributes.Name})`}
+                    `;
+
+                    return [
+                        ...prevState,
+                        {
+                            locationId: location.id,
+                            name: nameOnMarker,
+                            address: location.attributes.Address,
+                            ...latLng,
+                        },
+                    ];
+                });
             });
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps

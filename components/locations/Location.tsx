@@ -1,18 +1,15 @@
 import styles from './Location.module.scss';
 
-import { faWrench } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Chip } from '@mui/material';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
+import LocationEditLink from 'components/locations/LocationEditLink';
 import { useLocationGroupOfLocation } from 'lib/context/LocationGroupsContext';
 import useEditorJsData from 'lib/editorJs/useEditorJsData';
-import isGroupMember from 'lib/next-auth/isGroupMember';
 import getImageUrl from 'lib/strapi/getImageUrl';
 import getLinksData from 'lib/strapi/getLinksData';
-import getStrapiCollectionTypeUrl from 'lib/strapi/getStrapiCollectionTypeUrl';
 import Location from 'lib/strapi/typings/Location';
 
 interface Props {
@@ -20,9 +17,6 @@ interface Props {
 }
 
 const Location = ({ location }: Props): ReactElement => {
-
-    const { data: session } = useSession();
-    const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
 
     const groupOfLocation = useLocationGroupOfLocation(location);
 
@@ -33,8 +27,6 @@ const Location = ({ location }: Props): ReactElement => {
     const linksData = getLinksData(Links);
 
     const imageUrl = getImageUrl(location, false, 'medium');
-
-    const strapiUrl = getStrapiCollectionTypeUrl('location', location.id);
 
     return (
         <div key={location.id} className={`space-y-3 relative z-50 ${styles.location ?? ''}`}>
@@ -58,15 +50,7 @@ const Location = ({ location }: Props): ReactElement => {
                         />
                     )}
 
-                    {isInFestivalGroup && (
-                        <div>
-                            <Link href={strapiUrl}>
-                                <a className="text-blue-500 hover:text-blue-700" target="_blank">
-                                    <FontAwesomeIcon icon={faWrench} /> Bearbeiten
-                                </a>
-                            </Link>
-                        </div>
-                    )}
+                    <LocationEditLink locationId={location.id} />
 
                     <div className="font-display">
                         {groupOfLocation !== null && (
