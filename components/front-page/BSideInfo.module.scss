@@ -1,0 +1,67 @@
+.box {
+  position: relative;
+  min-width: 300px;
+  width: 90%;
+  padding: 30px;
+}
+
+.boxContent {
+  position: relative;
+  z-index: 6;
+  color: #fff;
+}
+
+.boxBackground {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: url("/assets/images/festival/19-154-min.jpg");
+  background-size: cover;
+  z-index: 3;
+}
+
+.boxBackgroundLayer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+      180deg,
+      rgba(101, 88, 52, 0.7) 0%,
+      rgba(34, 125, 157, 0.9) 40%,
+      rgba(34, 125, 157, 0.9) 100%
+  );
+  z-index: 4;
+}
+
+.offsetBackgroundLayer1 {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(
+    180deg,
+    rgba(225, 1, 126, 1) 0%,
+    rgba(51, 187, 233, 1) 100%
+  );
+  z-index: 2;
+}
+
+.offsetBackgroundLayer2 {
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  bottom: 40px;
+  right: 40px;
+  background: linear-gradient(
+      214deg,
+      rgba(255, 230, 152, 1) 0%,
+      rgba(51, 187, 233, 1) 100%
+  );
+  z-index: 1;
+}
+

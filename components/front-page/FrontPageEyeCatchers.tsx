@@ -5,6 +5,7 @@ import type { ReactElement } from 'react';
 import Button from 'components/common/Button';
 import ContentWrapper from 'components/common/ContentWrapper';
 import BHeartGrid from 'components/front-page/BHeartGrid';
+import BSideInfo from 'components/front-page/BSideInfo';
 
 const FrontPageEyeCatchers = (): ReactElement => {
 
@@ -22,7 +23,7 @@ const FrontPageEyeCatchers = (): ReactElement => {
                                 Zurück für die Zukunft!
                             </div>
 
-                            <div className={styles.info}>
+                            <div>
                                 Nachdem wir 2021 wegen der Corona-Pandemie einen Pause eingelegt haben, freuen wir
                                 uns umso mehr auf diesen September. Denn vom 16. bis zum 18.09.2022 werden die
                                 Straßen, Kneipen und Hinterhöfe des Hansaviertels wieder mit Kunst, Musik,
@@ -65,6 +66,8 @@ const FrontPageEyeCatchers = (): ReactElement => {
                     </div>
                 </div>
             </ContentWrapper>
+
+            <BSideInfo />
         </div>
     );
 };
