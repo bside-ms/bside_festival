@@ -11,7 +11,7 @@ const ArtistProgramRegistrationHint = ({ programItem }: Props): ReactElement | n
 
     const { registration } = getDetailsFromProgramItem(programItem);
 
-    if (registration === null) {
+    if (registration === null || !registration.registrationNecessary) {
         return null;
     }
 
