@@ -7,9 +7,9 @@ const volunteerPreferences = new Array<VolunteerPreference>(
     { key: 'technician', label: 'Ich möchte die Technik unterstützen', emoji: '🧑‍🔧' },
     { key: 'cook', label: 'Ich koche gerne', emoji: '🧑‍🍳' },
     { key: 'artist', label: 'Ich unterstütze gerne Künstler:innen', emoji: '🧑‍🎨' },
-    { key: 'multi', label: 'Ich bin ein Multitalent', emoji: '🧒' },
-    { key: 'kids', label: 'Ich mache gerne etwas mit Kindern', emoji: '🧹' },
-    { key: 'cleanup', label: 'Ich räume gerne nach dem Festival auf', emoji: '🌟' },
+    { key: 'kids', label: 'Ich mache gerne etwas mit Kindern', emoji: '🧒' },
+    { key: 'cleanup', label: 'Ich räume gerne nach dem Festival auf', emoji: '🧹' },
+    { key: 'multi', label: 'Ich bin ein Multitalent', emoji: '🌟' },
 );
 
 export default volunteerPreferences;
