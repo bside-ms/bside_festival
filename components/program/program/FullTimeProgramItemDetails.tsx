@@ -1,6 +1,7 @@
 import { Chip } from '@mui/material';
 import type { ReactElement } from 'react';
 import ArtistDescription from 'components/artist/ArtistDescription';
+import { usePreferredLocationName } from 'lib/context/LocationGroupsContext';
 import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
 import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
 
@@ -12,15 +13,15 @@ const FullTimeProgramItemDetails = ({ programItem }: Props): ReactElement => {
 
     const { artist } = getDetailsFromProgramItem(programItem);
 
-    const location = programItem.attributes.location.data?.attributes.Name ?? null;
+    const preferredLocationName = usePreferredLocationName(programItem.attributes.location.data);
 
     return (
         <div className="leading-5 mt-2">
             <div className="flex flex-row">
                 <div>Ganztägig</div>
 
-                {location !== null && (
-                    <div>, {location}</div>
+                {preferredLocationName !== null && (
+                    <div>, {preferredLocationName}</div>
                 )}
             </div>
 

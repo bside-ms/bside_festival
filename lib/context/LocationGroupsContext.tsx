@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import type Location from 'lib/strapi/typings/Location';
 import type LocationGroup from 'lib/strapi/typings/LocationGroup';
 
@@ -10,7 +10,7 @@ interface LocationGroupsContextData {
 const LocationGroupsContext = createContext<LocationGroupsContextData | null>(null);
 
 interface Props {
-    children: ReactElement;
+    children: ReactNode;
     locationGroups: Array<LocationGroup>;
 }
 
@@ -52,9 +52,33 @@ const useLocationGroupOfLocation = (location: Location): LocationGroup | null =>
     return getLocationGroupOfLocation(locationGroups, location);
 };
 
+const usePreferredLocationName = (location: Location | null, realLocationInParens = false): string | null => {
+
+    const { locationGroups } = useLocationGroupsContext();
+
+    if (location === null) {
+        return null;
+    }
+
+    const locationGroupNameOfLocation = getLocationGroupOfLocation(locationGroups, location)?.attributes.Name ?? null;
+
+    const locationName = location.attributes.Name;
+
+    if (locationGroupNameOfLocation === null) {
+        return locationName;
+    }
+
+    if (realLocationInParens && locationGroupNameOfLocation !== locationName) {
+        return `${locationGroupNameOfLocation} (${locationName})`;
+    }
+
+    return locationGroupNameOfLocation;
+};
+
 export {
     LocationGroupsContextProvider,
     useLocationGroupsContext,
     getLocationGroupOfLocation,
     useLocationGroupOfLocation,
+    usePreferredLocationName,
 };

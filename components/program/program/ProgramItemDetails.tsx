@@ -2,6 +2,7 @@ import { Chip } from '@mui/material';
 import type { ReactElement } from 'react';
 import ArtistDescription from 'components/artist/ArtistDescription';
 import formatDate from 'lib/common/formatDate';
+import { usePreferredLocationName } from 'lib/context/LocationGroupsContext';
 import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
 import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 
@@ -13,21 +14,18 @@ const ProgramItemDetails = ({ programItem }: Props): ReactElement => {
 
     const { artist } = getDetailsFromProgramItem(programItem);
 
-    const beginFromItem = new Date(programItem.attributes.Begin);
-    const endFromItem = new Date(programItem.attributes.End);
+    const formattedBegin = formatDate(programItem.attributes.Begin, 'HH:mm');
+    const formattedEnd = formatDate(programItem.attributes.End, 'HH:mm');
 
-    const formattedBegin = formatDate(beginFromItem, 'HH:mm');
-    const formattedEnd = formatDate(endFromItem, 'HH:mm');
-
-    const location = programItem.attributes.location.data?.attributes.Name ?? null;
+    const preferredLocationName = usePreferredLocationName(programItem.attributes.location.data);
 
     return (
         <div className="leading-5 mt-2">
             <div className="flex flex-row">
                 <div>{formattedBegin} - {formattedEnd}</div>
 
-                {location !== null && (
-                    <div>, {location}</div>
+                {preferredLocationName !== null && (
+                    <div>, {preferredLocationName}</div>
                 )}
             </div>
 

@@ -1,23 +1,28 @@
 import styles from './Artist.module.scss';
 
+import { isNil } from 'lodash';
 import type { ReactElement } from 'react';
 import ArtistDescription from 'components/artist/ArtistDescription';
 import ArtistEditButton from 'components/artist/ArtistEditButton';
 import ArtistLinks from 'components/artist/ArtistLinks';
 import ArtistName from 'components/artist/ArtistName';
+import ArtistProgram from 'components/artist/ArtistProgram';
 import ArtistUnpublishedTag from 'components/artist/ArtistUnpublishedTag';
 import Button from 'components/common/Button';
 import getImageUrl from 'lib/strapi/getImageUrl';
 import type { default as ArtistModel } from 'lib/strapi/typings/Artist';
+import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
+import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
 
 interface Props {
     artist: ArtistModel;
     strapiCollectionType: StrapiCollectionType;
     onCloseClick?: () => void;
+    programItem?: ProgramItem | FullTimeProgramItem;
 }
 
-const Artist = ({ artist, strapiCollectionType, onCloseClick }: Props): ReactElement => {
+const Artist = ({ artist, strapiCollectionType, onCloseClick, programItem }: Props): ReactElement => {
 
     const imageRelativeUrl = getImageUrl(artist, false, 'medium');
     const imageUrl = imageRelativeUrl === null ? null : `https://cms.b-side.ms${imageRelativeUrl}`;
@@ -40,6 +45,10 @@ const Artist = ({ artist, strapiCollectionType, onCloseClick }: Props): ReactEle
                     <ArtistName artist={artist} />
 
                     <ArtistDescription artist={artist} />
+
+                    {!isNil(programItem) && (
+                        <ArtistProgram programItem={programItem} />
+                    )}
 
                     <ArtistLinks artist={artist} />
 
