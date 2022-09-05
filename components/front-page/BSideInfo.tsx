@@ -20,8 +20,8 @@ const BSideInfo = (): ReactElement => {
                         <div>
                             Der offene <span className="font-display pl-1">B-Side Kultur e.V.</span> veranstaltet in einem umfangreichen
                             soziokulturellen Prozess das B-Side Festival mit ca. 30 Ehrenamtlichen im Orga-Team und ca. 100 freiwilligen
-                            Helfer:innen. Daneben gibt es zahlreiche weitere Möglichkeiten sich im gemeinnützigen Programm des
-                            Vereins einzubringen: Konzerte, künstlerische Workshops, Ausstellungen, Theater, politische Bildung, eigene Ideen...
+                            Helfer:innen. Daneben gibt es zahlreiche weitere Möglichkeiten, sich im gemeinnützigen Programm einzubringen:
+                            Konzerte, künstlerische Workshops, Ausstellungen, Theater, politische Bildung, mit eigene Ideen...
                         </div>
                         <div>
                             Ihr möchtet euch engagieren? Dann meldet euch einfach unter {mailTo} oder
