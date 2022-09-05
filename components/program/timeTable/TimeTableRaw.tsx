@@ -30,9 +30,9 @@ const TimeTableRawRow = (
     { name, applicationType, programItem }: { name: string | null, applicationType: ApplicationType, programItem: ProgramItem }
 ): ReactElement | null => {
 
-    const date = formatDate(new Date(programItem.attributes.Begin), 'dd.MM.yyyy');
-    const begin = formatDate(new Date(programItem.attributes.Begin), 'HH:mm');
-    const end = formatDate(new Date(programItem.attributes.End), 'HH:mm');
+    const date = formatDate(programItem.attributes.Begin, 'dd.MM.yyyy');
+    const begin = formatDate(programItem.attributes.Begin, 'HH:mm');
+    const end = formatDate(programItem.attributes.End, 'HH:mm');
     const location = programItem.attributes.location.data?.attributes.Name ?? null;
 
     if (name === null || location === null) {
@@ -55,8 +55,8 @@ const TimeTableRawFullTimeRow = (
     { name, applicationType, programItem }: { name: string | null, applicationType: ApplicationType, programItem: FullTimeProgramItem }
 ): ReactElement | null => {
 
-    const begin = formatDate(new Date(programItem.attributes.Begin), 'dd.MM.yyyy');
-    const end = formatDate(new Date(programItem.attributes.End), 'dd.MM.yyyy');
+    const begin = formatDate(programItem.attributes.Begin, 'dd.MM.yyyy');
+    const end = formatDate(programItem.attributes.End, 'dd.MM.yyyy');
     const location = programItem.attributes.location.data?.attributes.Name ?? null;
 
     if (name === null || location === null) {
