@@ -1,58 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import qs from 'qs';
 import isGroupMember from 'lib/next-auth/isGroupMember';
+import createFullTimeProgramItemFetchUrl from 'lib/strapi/createFullTimeProgramItemFetchUrl';
+import fetchProgramItems from 'lib/strapi/fetchProgramItems';
 import type AllFullTimeProgramItems from 'lib/strapi/typings/AllFullTimeProgramItems';
 import type AllFullTimeProgramItemsResponse from 'lib/strapi/typings/AllFullTimeProgramItemsResponse';
 import type Exhibition from 'lib/strapi/typings/Exhibition';
 import type Food from 'lib/strapi/typings/Food';
 import type InformationBooth from 'lib/strapi/typings/InformationBooth';
 import type StrapiErrorResponse from 'lib/strapi/typings/StrapiErrorResponse';
-import type StrapiResponse from 'lib/strapi/typings/StrapiResponse';
 import type StrapiSuccessResponse from 'lib/strapi/typings/StrapiSuccessResponse';
-
-const createProgramItemFetchUrl = (
-    pathName: string,
-    artistFieldName: string,
-    isInFestivalGroup: boolean
-): URL => {
-
-    const url = new URL(process.env.STRAPI_BASE_URL!);
-
-    url.pathname = `/api/${pathName}`;
-
-    url.search = qs.stringify({
-        fields: ['Begin', 'End', 'publishedAt'],
-        sort: ['Begin'],
-        populate: {
-            [artistFieldName]: { populate: ['Images', 'Links'] },
-            location: { populate: 'Images' },
-        },
-        publicationState: isInFestivalGroup ? 'preview' : 'live',
-        pagination: {
-            page: 1,
-            pageSize: 1000,
-        },
-    }, {
-        encodeValuesOnly: true,
-    });
-
-    return url;
-};
-
-const fetchProgramItems = async <T>(fetchUrl: URL): Promise<StrapiResponse<Array<T>>> => {
-
-    const fetchResponse = await fetch(
-        fetchUrl.toString(),
-        {
-            headers: new Headers({
-                Authorization: `Bearer ${process.env.STRAPI_API_TOKEN!}`,
-            }),
-        }
-    );
-
-    return await fetchResponse.json() as StrapiResponse<Array<T>>;
-};
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
 
@@ -60,9 +17,9 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 
     const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
 
-    const exhibitionsUrl = createProgramItemFetchUrl('exhibitions', 'exhibition_artist', isInFestivalGroup);
-    const foodsUrl = createProgramItemFetchUrl('foods', 'food_organizer', isInFestivalGroup);
-    const informationBoothsUrl = createProgramItemFetchUrl('information-booths', 'information_booth_organizer', isInFestivalGroup);
+    const exhibitionsUrl = createFullTimeProgramItemFetchUrl('exhibitions', 'exhibition_artist', isInFestivalGroup);
+    const foodsUrl = createFullTimeProgramItemFetchUrl('foods', 'food_organizer', isInFestivalGroup);
+    const informationBoothsUrl = createFullTimeProgramItemFetchUrl('information-booths', 'information_booth_organizer', isInFestivalGroup);
 
     try {
 

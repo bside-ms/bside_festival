@@ -1,105 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import qs from 'qs';
 import isGroupMember from 'lib/next-auth/isGroupMember';
+import createProgramItemFetchUrl from 'lib/strapi/createProgramItemFetchUrl';
+import fetchProgramItems from 'lib/strapi/fetchProgramItems';
+import fixDateTimeIssue from 'lib/strapi/fixDateTimeIssue';
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
 import type AllProgramItemsResponse from 'lib/strapi/typings/AllProgramItemsResponse';
 import type Concert from 'lib/strapi/typings/Concert';
 import type FamilyProgram from 'lib/strapi/typings/FamilyProgram';
 import type Performance from 'lib/strapi/typings/Performance';
-import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 import type Reading from 'lib/strapi/typings/Reading';
 import type StrapiErrorResponse from 'lib/strapi/typings/StrapiErrorResponse';
-import type StrapiResponse from 'lib/strapi/typings/StrapiResponse';
 import type StrapiSuccessResponse from 'lib/strapi/typings/StrapiSuccessResponse';
 import type Workshop from 'lib/strapi/typings/Workshop';
-
-const createProgramItemFetchUrl = (
-    pathName: string,
-    withDateField: boolean,
-    artistFieldName: string,
-    isInFestivalGroup: boolean
-): URL => {
-
-    const url = new URL(process.env.STRAPI_BASE_URL!);
-
-    url.pathname = `/api/${pathName}`;
-
-    url.search = qs.stringify({
-        fields: withDateField ? ['Date', 'Begin', 'End', 'publishedAt'] : ['Begin', 'End', 'publishedAt'],
-        sort: withDateField ? ['Date', 'Begin'] : ['Begin'],
-        populate: {
-            [artistFieldName]: { populate: ['Images', 'Links'] },
-            location: { populate: 'Images' },
-            Registration: { populate: '*' },
-        },
-        publicationState: isInFestivalGroup ? 'preview' : 'live',
-        pagination: {
-            page: 1,
-            pageSize: 1000,
-        },
-    }, {
-        encodeValuesOnly: true,
-    });
-
-    return url;
-};
-
-const fetchProgramItems = async <T>(fetchUrl: URL): Promise<StrapiResponse<Array<T>>> => {
-
-    const fetchResponse = await fetch(
-        fetchUrl.toString(),
-        {
-            headers: new Headers({
-                Authorization: `Bearer ${process.env.STRAPI_API_TOKEN!}`,
-            }),
-        }
-    );
-
-    return await fetchResponse.json() as StrapiResponse<Array<T>>;
-};
-
-/**
- * The logic in this function is without a doubt the ugliest part of this
- * whole application, and we shall never speak about it.
- */
-const fixDateTimeIssue = <T extends Exclude<ProgramItem, Concert>>(programItem: T): T => {
-
-    if (!('Date' in programItem.attributes)) {
-        return programItem;
-    }
-
-    const beginHourMatch = /^(\d{1,2}):/.exec(programItem.attributes.Begin);
-    const endHourMatch = /^(\d{1,2}):/.exec(programItem.attributes.End);
-
-    if (beginHourMatch === null || endHourMatch === null) {
-        return programItem;
-    }
-
-    let newBeginHour: string | number = parseInt(beginHourMatch[1]!, 10);
-    newBeginHour = newBeginHour - 2;
-    if (newBeginHour < 0) {
-        newBeginHour = 24 + newBeginHour;
-    }
-
-    let newEndHour: string | number = parseInt(endHourMatch[1]!, 10);
-    newEndHour = newEndHour - 2;
-    if (newEndHour < 0) {
-        newEndHour = 24 + newEndHour;
-    }
-
-    newBeginHour = newBeginHour.toString();
-    newBeginHour = newBeginHour.length === 1 ? `0${newBeginHour}` : newBeginHour;
-
-    newEndHour = newEndHour.toString();
-    newEndHour = newEndHour.length === 1 ? `0${newEndHour}` : newEndHour;
-
-    programItem.attributes.Begin = `${programItem.attributes.Date}T${newBeginHour}${programItem.attributes.Begin.slice(2)}Z`;
-    programItem.attributes.End = `${programItem.attributes.Date}T${newEndHour}${programItem.attributes.End.slice(2)}Z`;
-    programItem.attributes.Date = '';
-
-    return programItem;
-};
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
 

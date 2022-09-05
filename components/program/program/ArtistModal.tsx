@@ -53,7 +53,7 @@ const ArtistModal = (): ReactElement | null => {
                 artist={artist}
                 strapiCollectionType={collectionType}
                 onCloseClick={handleClose}
-                programItem={programItemForModal}
+                programItems={[programItemForModal]}
             />
         </Modal>
     );

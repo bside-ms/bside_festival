@@ -19,10 +19,10 @@ interface Props {
     artist: ArtistModel;
     strapiCollectionType: StrapiCollectionType;
     onCloseClick?: () => void;
-    programItem?: ProgramItem | FullTimeProgramItem;
+    programItems?: Array<ProgramItem | FullTimeProgramItem>;
 }
 
-const Artist = ({ artist, strapiCollectionType, onCloseClick, programItem }: Props): ReactElement => {
+const Artist = ({ artist, strapiCollectionType, onCloseClick, programItems }: Props): ReactElement => {
 
     const imageRelativeUrl = getImageUrl(artist, false, 'medium');
     const imageUrl = imageRelativeUrl === null ? null : `https://cms.b-side.ms${imageRelativeUrl}`;
@@ -46,8 +46,13 @@ const Artist = ({ artist, strapiCollectionType, onCloseClick, programItem }: Pro
 
                     <ArtistDescription artist={artist} />
 
-                    {!isNil(programItem) && (
-                        <ArtistProgram programItem={programItem} />
+                    {!isNil(programItems) && (
+                        programItems.map(programItem => (
+                            <ArtistProgram
+                                key={programItem.id}
+                                programItem={programItem}
+                            />
+                        ))
                     )}
 
                     <ArtistLinks artist={artist} />
