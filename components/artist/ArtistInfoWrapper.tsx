@@ -41,6 +41,7 @@ const ArtistInfoWrapper = ({ applicationType, artistId }: Props): ReactElement =
                                                 artist={artists[0]!}
                                                 strapiCollectionType={collectionType}
                                                 programItems={artistProgramItems}
+                                                applicationType={applicationType}
                                             />
                                         </LocationGroupsContextProvider>
                                     )}

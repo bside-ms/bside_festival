@@ -1,5 +1,6 @@
 import styles from './Artist.module.scss';
 
+import { Fragment } from 'react';
 import { isNil } from 'lodash';
 import type { ReactElement } from 'react';
 import ArtistDescription from 'components/artist/ArtistDescription';
@@ -7,6 +8,8 @@ import ArtistEditButton from 'components/artist/ArtistEditButton';
 import ArtistLinks from 'components/artist/ArtistLinks';
 import ArtistName from 'components/artist/ArtistName';
 import ArtistProgram from 'components/artist/ArtistProgram';
+import ArtistProgramRegistrationHint from 'components/artist/ArtistProgramRegistrationHint';
+import ArtistShareLink from 'components/artist/ArtistShareLink';
 import ArtistUnpublishedTag from 'components/artist/ArtistUnpublishedTag';
 import Button from 'components/common/Button';
 import getImageUrl from 'lib/strapi/getImageUrl';
@@ -17,12 +20,13 @@ import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
 
 interface Props {
     artist: ArtistModel;
+    applicationType: string;
     strapiCollectionType: StrapiCollectionType;
     onCloseClick?: () => void;
     programItems?: Array<ProgramItem | FullTimeProgramItem>;
 }
 
-const Artist = ({ artist, strapiCollectionType, onCloseClick, programItems }: Props): ReactElement => {
+const Artist = ({ artist, applicationType, strapiCollectionType, onCloseClick, programItems }: Props): ReactElement => {
 
     const imageRelativeUrl = getImageUrl(artist, false, 'medium');
     const imageUrl = imageRelativeUrl === null ? null : `https://cms.b-side.ms${imageRelativeUrl}`;
@@ -48,20 +52,30 @@ const Artist = ({ artist, strapiCollectionType, onCloseClick, programItems }: Pr
 
                     {!isNil(programItems) && (
                         programItems.map(programItem => (
-                            <ArtistProgram
-                                key={programItem.id}
-                                programItem={programItem}
-                            />
+                            <Fragment key={programItem.id}>
+                                <ArtistProgram programItem={programItem} />
+                                <ArtistProgramRegistrationHint programItem={programItem} />
+                            </Fragment>
                         ))
                     )}
 
                     <ArtistLinks artist={artist} />
 
-                    {onCloseClick !== undefined && (
-                        <div className="my-4 md:hidden">
-                            <Button onClick={onCloseClick} withFullWidth={true}>
-                                Zurück zum Programm
-                            </Button>
+                    {onCloseClick !== undefined ? (
+                        <>
+                            <div className="my-4 md:hidden">
+                                <Button onClick={onCloseClick} withFullWidth={true}>
+                                    Zurück zum Programm
+                                </Button>
+                            </div>
+
+                            <div className="text-center md:text-left text-lg pt-3 md:pt-0">
+                                <ArtistShareLink artist={artist} applicationType={applicationType} />
+                            </div>
+                        </>
+                    ) : (
+                        <div className="text-lg">
+                            <ArtistShareLink artist={artist} applicationType={applicationType} />
                         </div>
                     )}
                 </div>
