@@ -4,16 +4,16 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 import isGroupMember from 'lib/next-auth/isGroupMember';
+import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
 import getStrapiCollectionTypeUrl from 'lib/strapi/getStrapiCollectionTypeUrl';
-import type Artist from 'lib/strapi/typings/Artist';
-import type StrapiCollectionType from 'lib/strapi/typings/StrapiCollectionType';
+import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
+import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 
 interface Props {
-    artist: Artist;
-    strapiCollectionType: StrapiCollectionType;
+    programItem: ProgramItem | FullTimeProgramItem;
 }
 
-const ArtistEditButton = ({ strapiCollectionType, artist }: Props): ReactElement | null => {
+const ArtistProgramEditButton = ({ programItem }: Props): ReactElement | null => {
 
     const { data: session } = useSession();
     const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
@@ -22,19 +22,21 @@ const ArtistEditButton = ({ strapiCollectionType, artist }: Props): ReactElement
         return null;
     }
 
-    const singularCollectionType = strapiCollectionType.replace(/s$/, '');
-    // @ts-expect-error | I mixed up plural and singular collection types.. it's too late to fix that x)
-    const strapiUrl = getStrapiCollectionTypeUrl(singularCollectionType, artist.id);
+    const { collectionType } = getDetailsFromProgramItem(programItem);
+
+    getStrapiCollectionTypeUrl(collectionType, programItem.id);
+
+    const strapiUrl = getStrapiCollectionTypeUrl(collectionType, programItem.id);
 
     return (
         <div>
             <Link href={strapiUrl}>
                 <a className="text-blue-500 hover:text-blue-700" target="_blank">
-                    <FontAwesomeIcon icon={faWrench} /> Künstler:in bearbeiten
+                    <FontAwesomeIcon icon={faWrench} /> Programmpunkt bearbeiten
                 </a>
             </Link>
         </div>
     );
 };
 
-export default ArtistEditButton;
+export default ArtistProgramEditButton;

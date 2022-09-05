@@ -8,6 +8,7 @@ import ArtistEditButton from 'components/artist/ArtistEditButton';
 import ArtistLinks from 'components/artist/ArtistLinks';
 import ArtistName from 'components/artist/ArtistName';
 import ArtistProgram from 'components/artist/ArtistProgram';
+import ArtistProgramEditButton from 'components/artist/ArtistProgramEditButton';
 import ArtistProgramRegistrationHint from 'components/artist/ArtistProgramRegistrationHint';
 import ArtistShareLink from 'components/artist/ArtistShareLink';
 import ArtistUnpublishedTag from 'components/artist/ArtistUnpublishedTag';
@@ -45,6 +46,15 @@ const Artist = ({ artist, applicationType, strapiCollectionType, onCloseClick, p
                     <ArtistUnpublishedTag artist={artist} />
 
                     <ArtistEditButton artist={artist} strapiCollectionType={strapiCollectionType} />
+
+                    {!isNil(programItems) && (
+                        programItems.map(programItem => (
+                            <ArtistProgramEditButton
+                                key={programItem.id}
+                                programItem={programItem}
+                            />
+                        ))
+                    )}
 
                     <ArtistName artist={artist} />
 
