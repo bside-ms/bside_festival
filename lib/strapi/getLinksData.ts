@@ -1,7 +1,7 @@
+import type { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faFacebook, faInstagram, faSoundcloud, faSpotify, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import createUrlRegExp from 'url-regex-safe';
-import type { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import type GenericLinksData from 'lib/strapi/typings/GenericLinksData';
 import type LinksData from 'lib/strapi/typings/LinksData';
 
