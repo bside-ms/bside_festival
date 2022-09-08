@@ -23,7 +23,7 @@ const Line = ({ icon, text }: { icon: IconDefinition, text: string }): ReactElem
 
 const LocationLine = ({ programItem }: { programItem: ProgramItem | FullTimeProgramItem }): ReactElement | null => {
 
-    const preferredLocationName = usePreferredLocationName(programItem.attributes.location.data, true);
+    const preferredLocationName = usePreferredLocationName(programItem.attributes.location.data);
 
     if (preferredLocationName === null) {
         return null;
