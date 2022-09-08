@@ -52,7 +52,7 @@ const useLocationGroupOfLocation = (location: Location): LocationGroup | null =>
     return getLocationGroupOfLocation(locationGroups, location);
 };
 
-const usePreferredLocationName = (location: Location | null, realLocationInParens = false): string | null => {
+const usePreferredLocationName = (location: Location | null): string | null => {
 
     const { locationGroups } = useLocationGroupsContext();
 
@@ -66,10 +66,6 @@ const usePreferredLocationName = (location: Location | null, realLocationInParen
 
     if (locationGroupNameOfLocation === null) {
         return locationName;
-    }
-
-    if (realLocationInParens && locationGroupNameOfLocation !== locationName) {
-        return `${locationGroupNameOfLocation} (${locationName})`;
     }
 
     return locationGroupNameOfLocation;
