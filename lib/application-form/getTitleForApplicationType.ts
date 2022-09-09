@@ -1,6 +1,6 @@
 import ApplicationType from 'lib/application-form/ApplicationType';
 
-const useApplicationTitle = (applicationType: ApplicationType): string => {
+const getTitleForApplicationType = (applicationType: ApplicationType): string => {
 
     switch (applicationType) {
         case ApplicationType.ausstellung:
@@ -26,4 +26,4 @@ const useApplicationTitle = (applicationType: ApplicationType): string => {
     }
 };
 
-export default useApplicationTitle;
+export default getTitleForApplicationType;

@@ -6,7 +6,7 @@ import NextHead from 'components/common/NextHead';
 import PageHeader from 'components/common/PageHeader';
 import SwrResponseWrapper from 'components/strapi/SwrResponseWrapper';
 import ApplicationType from 'lib/application-form/ApplicationType';
-import useApplicationTitle from 'lib/application-form/useApplicationTitle';
+import getTitleForApplicationType from 'lib/application-form/getTitleForApplicationType';
 import useAllArtists from 'lib/strapi/useAllArtists';
 
 export default (): ReactElement => {
@@ -26,27 +26,27 @@ export default (): ReactElement => {
                             <div className="my-5 space-y-9">
                                 <ArtistsList
                                     artists={response.concertArtists}
-                                    title={useApplicationTitle(ApplicationType.konzert)}
+                                    title={getTitleForApplicationType(ApplicationType.konzert)}
                                 />
                                 <ArtistsList
                                     artists={response.performanceArtists}
-                                    title={useApplicationTitle(ApplicationType.performance)}
+                                    title={getTitleForApplicationType(ApplicationType.performance)}
                                 />
                                 <ArtistsList
                                     artists={response.workshopsOrganizers}
-                                    title={useApplicationTitle(ApplicationType.workshop)}
+                                    title={getTitleForApplicationType(ApplicationType.workshop)}
                                 />
                                 <ArtistsList
                                     artists={response.exhibitionArtists}
-                                    title={useApplicationTitle(ApplicationType.ausstellung)}
+                                    title={getTitleForApplicationType(ApplicationType.ausstellung)}
                                 />
                                 <ArtistsList
                                     artists={response.readingArtists}
-                                    title={useApplicationTitle(ApplicationType.lesung)}
+                                    title={getTitleForApplicationType(ApplicationType.lesung)}
                                 />
                                 <ArtistsList
                                     artists={response.familyProgramOrganizers}
-                                    title={useApplicationTitle(ApplicationType.familienprogramm)}
+                                    title={getTitleForApplicationType(ApplicationType.familienprogramm)}
                                 />
                             </div>
                         )}

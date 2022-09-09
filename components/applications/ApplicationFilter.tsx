@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import type { ReactElement } from 'react';
 import type ApplicationType from 'lib/application-form/ApplicationType';
-import useApplicationTitle from 'lib/application-form/useApplicationTitle';
+import getTitleForApplicationType from 'lib/application-form/getTitleForApplicationType';
 import useApplicationTypeColor from 'lib/applications/useApplicationTypeColor';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 
 const ApplicationFilter = ({ applicationType, applicationTypesWithCounts, filteredApplicationTypes, onClick }: Props): ReactElement => {
 
-    const title = useApplicationTitle(applicationType);
+    const title = getTitleForApplicationType(applicationType);
     const color = useApplicationTypeColor(applicationType);
 
     const handleClick = useCallback(

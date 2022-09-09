@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import type { ReactElement } from 'react';
 import ApplicationDetails from 'components/applications/ApplicationDetails';
 import type ApplicationData from 'lib/application-form/ApplicationData';
-import useApplicationTitle from 'lib/application-form/useApplicationTitle';
+import getTitleForApplicationType from 'lib/application-form/getTitleForApplicationType';
 import useApplicationCreatedDate from 'lib/applications/useApplicationCreatedDate';
 import useApplicationName from 'lib/applications/useApplicationName';
 import useApplicationResidence from 'lib/applications/useApplicationResidence';
@@ -19,7 +19,7 @@ const Application = ({ application: { id, type, createdAt, data } }: Props): Rea
     const handleExpand = useCallback(() => setIsExpanded(true), [setIsExpanded]);
     const handleCollapse = useCallback(() => setIsExpanded(false), [setIsExpanded]);
 
-    const applicationTitle = useApplicationTitle(type);
+    const applicationTitle = getTitleForApplicationType(type);
     const applicationTypeColor = useApplicationTypeColor(type);
 
     const name = useApplicationName(type, data);

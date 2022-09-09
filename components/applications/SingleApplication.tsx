@@ -7,7 +7,7 @@ import CopyApplicationLink from 'components/applications/CopyApplicationLink';
 import type ApplicationData from 'lib/application-form/ApplicationData';
 import ApplicationFormFieldType from 'lib/application-form/ApplicationFormFieldType';
 import type ApplicationResponse from 'lib/application-form/ApplicationResponse';
-import useApplicationTitle from 'lib/application-form/useApplicationTitle';
+import getTitleForApplicationType from 'lib/application-form/getTitleForApplicationType';
 import useApplicationCreatedDate from 'lib/applications/useApplicationCreatedDate';
 import useApplicationDetails from 'lib/applications/useApplicationDetails';
 import useApplicationTypeColor from 'lib/applications/useApplicationTypeColor';
@@ -19,7 +19,7 @@ interface Props {
 
 const SingleApplication = ({ application: { id, type, createdAt, data } }: Props): ReactElement => {
 
-    const applicationTitle = useApplicationTitle(type);
+    const applicationTitle = getTitleForApplicationType(type);
     const applicationTypeColor = useApplicationTypeColor(type);
 
     const createdDate = useApplicationCreatedDate(createdAt);

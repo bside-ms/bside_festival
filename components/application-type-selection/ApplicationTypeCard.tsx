@@ -3,8 +3,8 @@ import styles from './ApplicationTypeCard.module.scss';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import type ApplicationType from 'lib/application-form/ApplicationType';
+import getTitleForApplicationType from 'lib/application-form/getTitleForApplicationType';
 import useApplicationImage from 'lib/application-form/useApplicationImage';
-import useApplicationTitle from 'lib/application-form/useApplicationTitle';
 
 interface Props {
     applicationType: ApplicationType;
@@ -12,7 +12,7 @@ interface Props {
 
 const ApplicationTypeCard = ({ applicationType }: Props): ReactElement => {
 
-    const title = useApplicationTitle(applicationType);
+    const title = getTitleForApplicationType(applicationType);
     const imageUrl = useApplicationImage(applicationType);
 
     return (

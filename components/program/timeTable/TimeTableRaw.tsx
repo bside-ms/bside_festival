@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { isBefore } from 'date-fns';
 import type { ReactElement } from 'react';
+import TimeTableRawList from 'components/program/timeTable/TimeTableRawList';
 import ApplicationType from 'lib/application-form/ApplicationType';
 import formatDate from 'lib/common/formatDate';
 import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
@@ -105,68 +106,77 @@ const TimeTableRaw = ({
             </div>
 
             {showRawTimeTable && (
-                <div className="space-y-5">
-                    <div>
-                        <div className="font-bold text-2xl mb-1">Programmpunkte</div>
-                        <table>
-                            <thead>
-                                <tr className="sticky top-0">
-                                    <th className="bg-pink-200 border text-left px-4 py-1">Datum</th>
-                                    <th className="bg-pink-200 border text-left px-4 py-1">Begin</th>
-                                    <th className="bg-pink-200 border text-left px-4 py-1">Ende</th>
-                                    <th className="bg-pink-200 border text-left px-4 py-1">Typ</th>
-                                    <th className="bg-pink-200 border text-left px-4 py-1">Name</th>
-                                    <th className="bg-pink-200 border text-left px-4 py-1">Ort</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {allProgramItems.map(programItem => {
+                <>
+                    <div className="space-y-5">
+                        <div>
+                            <div className="font-bold text-2xl mb-1">Programmpunkte</div>
+                            <table>
+                                <thead>
+                                    <tr className="sticky top-0">
+                                        <th className="bg-pink-200 border text-left px-4 py-1">Datum</th>
+                                        <th className="bg-pink-200 border text-left px-4 py-1">Begin</th>
+                                        <th className="bg-pink-200 border text-left px-4 py-1">Ende</th>
+                                        <th className="bg-pink-200 border text-left px-4 py-1">Typ</th>
+                                        <th className="bg-pink-200 border text-left px-4 py-1">Name</th>
+                                        <th className="bg-pink-200 border text-left px-4 py-1">Ort</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {allProgramItems.map(programItem => {
 
-                                    const { artistName, applicationType } = getDetailsFromProgramItem(programItem);
+                                        const { artistName, applicationType } = getDetailsFromProgramItem(programItem);
 
-                                    return (
-                                        <TimeTableRawRow
-                                            key={`${applicationType}_${programItem.id}`}
-                                            name={artistName}
-                                            applicationType={applicationType}
-                                            programItem={programItem}
-                                        />
-                                    );
-                                })}
-                            </tbody>
-                        </table>
+                                        return (
+                                            <TimeTableRawRow
+                                                key={`${applicationType}_${programItem.id}`}
+                                                name={artistName}
+                                                applicationType={applicationType}
+                                                programItem={programItem}
+                                            />
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div>
+                            <div className="font-bold text-2xl mb-1">Ganztägige Programmpunkte</div>
+                            <table>
+                                <thead>
+                                    <tr className="sticky top-0">
+                                        <th className="bg-pink-200 border text-left px-4 py-1">Begin</th>
+                                        <th className="bg-pink-200 border text-left px-4 py-1">Ende</th>
+                                        <th className="bg-pink-200 border text-left px-4 py-1">Typ</th>
+                                        <th className="bg-pink-200 border text-left px-4 py-1">Name</th>
+                                        <th className="bg-pink-200 border text-left px-4 py-1">Ort</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {allFullTimeProgramItems.map(programItem => {
+
+                                        const { artistName, applicationType } = getDetailsFromProgramItem(programItem);
+
+                                        return (
+                                            <TimeTableRawFullTimeRow
+                                                key={`${applicationType}_${programItem.id}`}
+                                                name={artistName}
+                                                applicationType={applicationType}
+                                                programItem={programItem}
+                                            />
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <div>
-                        <div className="font-bold text-2xl mb-1">Ganztägige Programmpunkte</div>
-                        <table>
-                            <thead>
-                                <tr className="sticky top-0">
-                                    <th className="bg-pink-200 border text-left px-4 py-1">Begin</th>
-                                    <th className="bg-pink-200 border text-left px-4 py-1">Ende</th>
-                                    <th className="bg-pink-200 border text-left px-4 py-1">Typ</th>
-                                    <th className="bg-pink-200 border text-left px-4 py-1">Name</th>
-                                    <th className="bg-pink-200 border text-left px-4 py-1">Ort</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {allFullTimeProgramItems.map(programItem => {
-
-                                    const { artistName, applicationType } = getDetailsFromProgramItem(programItem);
-
-                                    return (
-                                        <TimeTableRawFullTimeRow
-                                            key={`${applicationType}_${programItem.id}`}
-                                            name={artistName}
-                                            applicationType={applicationType}
-                                            programItem={programItem}
-                                        />
-                                    );
-                                })}
-                            </tbody>
-                        </table>
+                        <TimeTableRawList
+                            programItems={allProgramItems}
+                            fullTimeProgramItems={allFullTimeProgramItems}
+                        />
                     </div>
-                </div>
+                </>
             )}
         </div>
     );

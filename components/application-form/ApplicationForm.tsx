@@ -18,8 +18,8 @@ import ApplicationFormWrapper from 'components/application-form/ApplicationFormW
 import ContentWrapper from 'components/common/ContentWrapper';
 import PageHeader from 'components/common/PageHeader';
 import type ApplicationType from 'lib/application-form/ApplicationType';
+import getTitleForApplicationType from 'lib/application-form/getTitleForApplicationType';
 import useApplicationEndDate from 'lib/application-form/useApplicationEndDate';
-import useApplicationTitle from 'lib/application-form/useApplicationTitle';
 import formatDate from 'lib/common/formatDate';
 
 interface Props {
@@ -30,7 +30,7 @@ const ApplicationForm = ({ applicationType }: Props): ReactElement | null => {
 
     const router = useRouter();
 
-    const title = useApplicationTitle(applicationType);
+    const title = getTitleForApplicationType(applicationType);
     const applicationEndDate = useApplicationEndDate(applicationType);
 
     const hasApplicationPeriodEnded = isPast(applicationEndDate);
