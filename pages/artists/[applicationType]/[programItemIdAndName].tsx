@@ -36,7 +36,6 @@ export default (): ReactElement | null => {
                 <Footer />
             </>
         );
-
     }
 
     return (
@@ -45,12 +44,14 @@ export default (): ReactElement | null => {
 
             <PageHeader />
 
-            <ArtistInfoWrapper
-                applicationType={applicationType as ApplicationType}
-                artistId={artistId}
-            />
+            <div className="bg-gray-800 min-h-screen">
+                <ArtistInfoWrapper
+                    applicationType={applicationType as ApplicationType}
+                    artistId={artistId}
+                />
 
-            <Footer />
+                <Footer />
+            </div>
         </>
     );
 };
