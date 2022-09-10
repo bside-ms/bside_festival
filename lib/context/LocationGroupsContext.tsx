@@ -45,9 +45,13 @@ const getLocationGroupOfLocation = (locationGroups: Array<LocationGroup>, locati
     return matchingLocationGroups[0] ?? null;
 };
 
-const useLocationGroupOfLocation = (location: Location): LocationGroup | null => {
+const useLocationGroupOfLocation = (location: Location | null): LocationGroup | null => {
 
     const { locationGroups } = useLocationGroupsContext();
+
+    if (location === null) {
+        return null;
+    }
 
     return getLocationGroupOfLocation(locationGroups, location);
 };
