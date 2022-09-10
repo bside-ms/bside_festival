@@ -1,8 +1,6 @@
 import type { ReactElement } from 'react';
 import ArtistModal from 'components/program/program/ArtistModal';
-import EmptyProgramHint from 'components/program/program/EmptyProgramHint';
 import FullTimeProgramTypesWrapper from 'components/program/program/FullTimeProgramTypesWrapper';
-import GrowingProgramHint from 'components/program/program/GrowingProgramHint';
 import ProgramDatesSelect from 'components/program/program/ProgramDatesSelect';
 import ProgramItemPlaceholders from 'components/program/program/ProgramItemPlaceholders';
 import ProgramTypesWrapper from 'components/program/program/ProgramTypesWrapper';
@@ -43,16 +41,8 @@ const Program = (): ReactElement => {
                                     {({ allFullTimeProgramItems }): ReactElement => (
                                         <LocationGroupsContextProvider locationGroups={allLocationGroups}>
                                             <ArtistModal />
-                                            <EmptyProgramHint
-                                                allProgramItems={allProgramItems}
-                                                allFullTimeProgramItems={allFullTimeProgramItems}
-                                            />
                                             <ProgramTypesWrapper allProgramItems={allProgramItems} />
                                             <FullTimeProgramTypesWrapper allProgramItems={allFullTimeProgramItems} />
-                                            <GrowingProgramHint
-                                                allProgramItems={allProgramItems}
-                                                allFullTimeProgramItems={allFullTimeProgramItems}
-                                            />
                                         </LocationGroupsContextProvider>
                                     )}
                                 </SwrResponseWrapper>
