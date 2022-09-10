@@ -20,8 +20,8 @@ const RegistrationSuccessfullySubmittedHint = (): ReactElement => {
                 <FontAwesomeIcon icon={faThumbsUp} />
             </div>
             <div>
-                Die Anmeldung war erfolgreich. Wir senden dir eine Bestätigung an {mailAddress}
-                (dies kann unter Umständen einen Moment dauern). In der Mail findest du einen Link, den du
+                Die Anmeldung war erfolgreich. Wir senden dir eine Bestätigung an {mailAddress} (dies
+                kann unter Umständen einen Moment dauern). In der Mail findest du einen Link, den du
                 zur Abmeldung nutzen kannst, wenn du unerwartet doch nicht teilnehmen kannst.
             </div>
         </div>
