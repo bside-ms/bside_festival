@@ -7,8 +7,6 @@ interface Props {
 
 const ImageBlock = ({ data: { file, caption } }: Props): ReactElement => {
 
-    // TODO: Might need to change image URLs on the server
-
     const {
         url: mdUrl,
         height: mdHeight,
