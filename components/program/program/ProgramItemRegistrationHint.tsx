@@ -19,7 +19,7 @@ const ProgramItemRegistrationHint = ({ programItem }: Props): ReactElement | nul
     return (
         <div className="mt-2 text-sm text-pink-600">
             <TruncateMarkup>
-                <div>Anmeldung erforderlich, Infos folgen!</div>
+                <div>Anmeldung erforderlich!</div>
             </TruncateMarkup>
         </div>
     );
