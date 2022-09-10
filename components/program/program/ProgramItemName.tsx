@@ -13,7 +13,7 @@ const ProgramItemName = ({ programItem }: Props): ReactElement => {
     const { artistName } = getDetailsFromProgramItem(programItem);
 
     return (
-        <div className="font-display text-base md:text-2xl">
+        <div className="font-display text-base break-all md:break-normal md:text-2xl">
             <TruncateMarkup lines={2}>
                 <div>{artistName}</div>
             </TruncateMarkup>

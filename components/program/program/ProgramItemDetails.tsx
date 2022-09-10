@@ -1,5 +1,6 @@
 import { Chip } from '@mui/material';
 import type { ReactElement } from 'react';
+import TruncateMarkup from 'react-truncate-markup';
 import ArtistDescription from 'components/artist/ArtistDescription';
 import formatDate from 'lib/common/formatDate';
 import { usePreferredLocationName } from 'lib/context/LocationGroupsContext';
@@ -21,11 +22,21 @@ const ProgramItemDetails = ({ programItem }: Props): ReactElement => {
 
     return (
         <div className="leading-5 mt-2">
-            <div className="flex flex-row">
-                <div>{formattedBegin} - {formattedEnd}</div>
-
+            <div className="md:hidden">
+                <TruncateMarkup lines={1}>
+                    <div>
+                        {formattedBegin}{preferredLocationName !== null && (
+                            <>, {preferredLocationName}</>
+                        )}
+                    </div>
+                </TruncateMarkup>
+            </div>
+            <div className="hidden md:block">
+                <div>
+                    {formattedBegin} - {formattedEnd}
+                </div>
                 {preferredLocationName !== null && (
-                    <div>, {preferredLocationName}</div>
+                    <div>{preferredLocationName}</div>
                 )}
             </div>
 
@@ -43,7 +54,7 @@ const ProgramItemDetails = ({ programItem }: Props): ReactElement => {
             {programItem.attributes.publishedAt !== null && artist !== null && (
                 <>
                     <div className="mt-2 hidden md:block">
-                        <ArtistDescription artist={artist} truncateAfterLines={5} />
+                        <ArtistDescription artist={artist} truncateAfterLines={3} />
                     </div>
                     <div className="mt-2 md:hidden">
                         <ArtistDescription artist={artist} truncateAfterLines={2} />

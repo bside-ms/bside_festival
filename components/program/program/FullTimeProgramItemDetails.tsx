@@ -1,5 +1,6 @@
 import { Chip } from '@mui/material';
 import type { ReactElement } from 'react';
+import TruncateMarkup from 'react-truncate-markup';
 import ArtistDescription from 'components/artist/ArtistDescription';
 import { usePreferredLocationName } from 'lib/context/LocationGroupsContext';
 import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
@@ -17,28 +18,26 @@ const FullTimeProgramItemDetails = ({ programItem }: Props): ReactElement => {
 
     return (
         <div className="leading-5 mt-2">
-            <div className="flex flex-row">
-                <div>Ganztägig</div>
+            <TruncateMarkup lines={1}>
+                <div>
+                    Ganztägig{preferredLocationName !== null && (
+                        <>, {preferredLocationName}</>
+                    )}
+                </div>
+            </TruncateMarkup>
 
-                {preferredLocationName !== null && (
-                    <div>, {preferredLocationName}</div>
-                )}
-            </div>
+            {programItem.attributes.publishedAt === null && (
+                <div className="mt-2">
+                    <Chip
+                        className="mb-3"
+                        label="Unveröffentlicht"
+                        variant="outlined"
+                        color="warning"
+                    />
+                </div>
+            )}
 
-            <div>
-                {programItem.attributes.publishedAt === null && (
-                    <div>
-                        <Chip
-                            className="mb-3"
-                            label="Unveröffentlicht"
-                            variant="outlined"
-                            color="warning"
-                        />
-                    </div>
-                )}
-            </div>
-
-            {artist !== null && (
+            {programItem.attributes.publishedAt !== null && artist !== null && (
                 <>
                     <div className="mt-2 hidden md:block">
                         <ArtistDescription artist={artist} truncateAfterLines={5} />
