@@ -2,6 +2,6 @@ export default interface Registration {
     id: number;
     registrationNecessary: boolean;
     maxParticipants: number | null;
-    consentAgreement: string | null;
+    concentAgreement: string | null;
     registrationEnd: number | null;
 }

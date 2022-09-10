@@ -9,9 +9,9 @@ import ArtistLinks from 'components/artist/ArtistLinks';
 import ArtistName from 'components/artist/ArtistName';
 import ArtistProgram from 'components/artist/ArtistProgram';
 import ArtistProgramEditButton from 'components/artist/ArtistProgramEditButton';
-import ArtistProgramRegistrationHint from 'components/artist/ArtistProgramRegistrationHint';
 import ArtistShareLink from 'components/artist/ArtistShareLink';
 import ArtistUnpublishedTag from 'components/artist/ArtistUnpublishedTag';
+import RegistrationWrapper from 'components/artist/registration/RegistrationWrapper';
 import Button from 'components/common/Button';
 import getImageUrl from 'lib/strapi/getImageUrl';
 import type { default as ArtistModel } from 'lib/strapi/typings/Artist';
@@ -64,7 +64,8 @@ const Artist = ({ artist, applicationType, strapiCollectionType, onCloseClick, p
                         programItems.map(programItem => (
                             <Fragment key={programItem.id}>
                                 <ArtistProgram programItem={programItem} />
-                                <ArtistProgramRegistrationHint programItem={programItem} />
+
+                                <RegistrationWrapper programItem={programItem} />
                             </Fragment>
                         ))
                     )}

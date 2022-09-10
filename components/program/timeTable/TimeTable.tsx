@@ -44,8 +44,6 @@ const TimeTable = ({
     informationBooths,
 }: Props): ReactElement => {
 
-    // TODO: use more context
-
     const availableDates = getAvailableDates();
 
     const [date, setDate] = useState<ProgramDate>(availableDates[0]);
