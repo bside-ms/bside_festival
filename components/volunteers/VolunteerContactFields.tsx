@@ -21,12 +21,6 @@ const VolunteerContactFields = (): ReactElement => {
                 helperText="WhatsApp, Signal, Telegram, etc."
                 isOptional={true}
             />
-
-            {/* <VolunteerFormTextField*/}
-            {/*    fieldName="mailAddress"*/}
-            {/*    label="E-Mail-Adresse"*/}
-            {/*    isOptional={true}*/}
-            {/* />*/}
         </div>
     );
 };
