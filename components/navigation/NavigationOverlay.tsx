@@ -22,6 +22,7 @@ const internalLinks = new Array<{label: string, link: string}>(
     { label: 'Bewerbungsübersicht', link: '/bewerbung/uebersicht' },
     { label: 'Slotplan', link: '/programm/slotplan' },
     { label: 'Helfer:innen', link: '/mithelfen/uebersicht' },
+    { label: 'Anmeldungen', link: '/programm/anmeldungen' },
     { label: 'Künstler:innen', link: '/artists' },
 );
 
