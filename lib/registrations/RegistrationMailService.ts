@@ -1,3 +1,4 @@
+import { addHours } from 'date-fns';
 import dedent from 'dedent';
 import type { Transporter } from 'nodemailer';
 import { createTransport } from 'nodemailer';
@@ -103,11 +104,15 @@ export default class RegistrationMailService {
 
     private getProgramDateInfo({ programItem }: RegistrationAddRequest): string {
 
-        const date = formatDate(programItem.attributes.Begin, 'dd.MM.yyyy');
-        const begin = formatDate(programItem.attributes.Begin, 'HH:mm');
-        const end = formatDate(programItem.attributes.End, 'HH:mm');
+        // You guessed right, need to fix time zone difference again..
+        const begin = addHours(new Date(programItem.attributes.Begin), 2);
+        const end = addHours(new Date(programItem.attributes.End), 2);
 
-        return `${date}, ${begin} - ${end}`;
+        const formattedDate = formatDate(begin, 'dd.MM.yyyy');
+        const formattedBegin = formatDate(begin, 'HH:mm');
+        const formattedEnd = formatDate(end, 'HH:mm');
+
+        return `${formattedDate}, ${formattedBegin} - ${formattedEnd}`;
     }
 
     private getLocationName(registration: RegistrationAddRequest): string | null {
