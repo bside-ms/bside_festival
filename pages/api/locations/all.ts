@@ -16,7 +16,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 
     url.pathname = '/api/locations';
     url.search = qs.stringify({
-        fields: ['Name', 'Description', 'Address', 'Coordinates', 'publishedAt'],
+        fields: ['Name', 'Description', 'accessibilityHint', 'Address', 'Coordinates', 'publishedAt'],
         sort: ['Name'],
         populate: ['Images', 'Links'],
         publicationState: isInFestivalGroup ? 'preview' : 'live',

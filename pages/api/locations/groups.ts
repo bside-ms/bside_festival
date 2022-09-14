@@ -16,7 +16,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 
     url.pathname = '/api/location-groups';
     url.search = qs.stringify({
-        fields: ['Name', 'Description', 'publishedAt'],
+        fields: ['Name', 'Description', 'accessibilityHint', 'publishedAt'],
         sort: ['Name'],
         populate: {
             locations: { populate: ['Images', 'Links'] },

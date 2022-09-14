@@ -7,6 +7,7 @@ export default interface Location {
         Name: string;
         Images: GenericImagesData;
         Description: string;
+        accessibilityHint: string | null;
         Address: string | null;
         Coordinates: string | null;
         Links: GenericLinksData;

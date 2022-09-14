@@ -9,6 +9,7 @@ export default interface LocationGroup {
         locations: { data: Array<Location> };
         Images: GenericImagesData;
         Description: string;
+        accessibilityHint: string | null;
         Links: GenericLinksData;
         publishedAt: string | null;
     };

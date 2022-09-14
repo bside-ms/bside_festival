@@ -1,5 +1,6 @@
 import styles from './Location.module.scss';
 
+import { faWheelchair } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Chip } from '@mui/material';
 import Link from 'next/link';
@@ -20,7 +21,7 @@ const Location = ({ locationGroup }: Props): ReactElement => {
     const location = locationGroup.attributes.locations.data[0]!;
 
     const { Description: groupDescription, Links: groupLinks, Name: groupName } = locationGroup.attributes;
-    const { Description, Address, Links, Name, publishedAt } = location.attributes;
+    const { Description, accessibilityHint, Address, Links, Name, publishedAt } = location.attributes;
 
     const descriptionData = useEditorJsData(groupDescription || Description);
 
@@ -59,6 +60,12 @@ const Location = ({ locationGroup }: Props): ReactElement => {
                     {Address !== null && (
                         <div className="text-gray-700">
                             {Address}
+                        </div>
+                    )}
+
+                    {accessibilityHint !== null && accessibilityHint !== '' && (
+                        <div className="text-orange-600">
+                            <FontAwesomeIcon icon={faWheelchair} /> {accessibilityHint}
                         </div>
                     )}
 
