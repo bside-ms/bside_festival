@@ -29,7 +29,7 @@ interface Props {
 
 const Artist = ({ artist, applicationType, strapiCollectionType, onCloseClick, programItems }: Props): ReactElement => {
 
-    const imageRelativeUrl = getImageUrl(artist, false, 'medium');
+    const imageRelativeUrl = getImageUrl(artist.attributes.Images, false, 'medium');
     const imageUrl = imageRelativeUrl === null ? null : `https://cms.b-side.ms${imageRelativeUrl}`;
 
     return (

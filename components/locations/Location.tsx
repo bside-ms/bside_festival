@@ -6,27 +6,27 @@ import Link from 'next/link';
 import type { ReactElement } from 'react';
 import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
 import LocationEditLink from 'components/locations/LocationEditLink';
-import { useLocationGroupOfLocation } from 'lib/context/LocationGroupsContext';
 import useEditorJsData from 'lib/editorJs/useEditorJsData';
 import getImageUrl from 'lib/strapi/getImageUrl';
 import getLinksData from 'lib/strapi/getLinksData';
-import Location from 'lib/strapi/typings/Location';
+import type LocationGroup from 'lib/strapi/typings/LocationGroup';
 
 interface Props {
-    location: Location;
+    locationGroup: LocationGroup;
 }
 
-const Location = ({ location }: Props): ReactElement => {
+const Location = ({ locationGroup }: Props): ReactElement => {
 
-    const groupOfLocation = useLocationGroupOfLocation(location);
+    const location = locationGroup.attributes.locations.data[0]!;
 
+    const { Description: groupDescription, Links: groupLinks, Name: groupName } = locationGroup.attributes;
     const { Description, Address, Links, Name, publishedAt } = location.attributes;
 
-    const descriptionData = useEditorJsData(Description);
+    const descriptionData = useEditorJsData(groupDescription || Description);
 
-    const linksData = getLinksData(Links);
+    const linksData = getLinksData(groupLinks.length > 0 ? groupLinks : Links);
 
-    const imageUrl = getImageUrl(location, false, 'medium');
+    const imageUrl = getImageUrl(location.attributes.Images, false, 'medium', locationGroup.id < 600);
 
     return (
         <div key={location.id} className={`space-y-3 relative z-50 ${styles.location ?? ''}`}>
@@ -53,13 +53,7 @@ const Location = ({ location }: Props): ReactElement => {
                     <LocationEditLink locationId={location.id} />
 
                     <div className="font-display">
-                        {groupOfLocation !== null && (
-                            <div className="uppercase text-xs font-sans">
-                                {groupOfLocation.attributes.Name}
-                            </div>
-                        )}
-
-                        {Name}
+                        {groupName || Name}
                     </div>
 
                     {Address !== null && (

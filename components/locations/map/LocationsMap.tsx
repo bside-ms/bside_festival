@@ -37,10 +37,9 @@ const LocationsMap = ({ allLocations }: Props): ReactElement => {
             allLocations.forEach(async location => {
                 const groupOfLocation = getLocationGroupOfLocation(locationGroups, location);
 
-                const locationNameForGeoCoding = groupOfLocation?.attributes.Name ?? location.attributes.Name;
-
                 const latLng = await getLocationCoordinates(
-                    locationNameForGeoCoding,
+                    location.attributes.Name,
+                    groupOfLocation?.attributes.Name ?? null,
                     location.attributes.Address,
                     location.attributes.Coordinates,
                     addLookUpHint

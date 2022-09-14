@@ -18,7 +18,11 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
     url.search = qs.stringify({
         fields: ['Name', 'Description', 'publishedAt'],
         sort: ['Name'],
-        populate: ['locations', 'Images', 'Links'],
+        populate: {
+            locations: { populate: ['Images', 'Links'] },
+            Links: { populate: '*' },
+            Images: { populate: '*' },
+        },
         publicationState: isInFestivalGroup ? 'preview' : 'live',
         pagination: {
             page: 1,

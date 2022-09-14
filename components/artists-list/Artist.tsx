@@ -21,7 +21,7 @@ const Artist = ({ artist, strapiCollectionType }: Props): ReactElement => {
                 <div className="flex flex-col space-y-3">
                     <div
                         className="rounded-full h-32 w-32 bg-center bg-cover"
-                        style={{ backgroundImage: `url(${getImageUrl(artist)!})` }}
+                        style={{ backgroundImage: `url(${getImageUrl(artist.attributes.Images)!})` }}
                     />
 
                     <ArtistUnpublishedTag artist={artist} />
