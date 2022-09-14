@@ -1,5 +1,6 @@
 import styles from './Location.module.scss';
 
+import { useMemo } from 'react';
 import { faWheelchair } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Chip } from '@mui/material';
@@ -20,7 +21,7 @@ const Location = ({ locationGroup }: Props): ReactElement => {
 
     const location = locationGroup.attributes.locations.data[0]!;
 
-    const { Description: groupDescription, Links: groupLinks, Name: groupName } = locationGroup.attributes;
+    const { Description: groupDescription, accessibilityHint: groupAccessibilityHint, Links: groupLinks, Name: groupName } = locationGroup.attributes;
     const { Description, accessibilityHint, Address, Links, Name, publishedAt } = location.attributes;
 
     const descriptionData = useEditorJsData(groupDescription || Description);
@@ -28,6 +29,19 @@ const Location = ({ locationGroup }: Props): ReactElement => {
     const linksData = getLinksData(groupLinks.length > 0 ? groupLinks : Links);
 
     const imageUrl = getImageUrl(location.attributes.Images, false, 'medium', locationGroup.id < 600);
+
+    const usedAccessibilityHint = useMemo(() => {
+
+        if (groupAccessibilityHint !== null && groupAccessibilityHint !== '') {
+            return groupAccessibilityHint;
+        }
+
+        if (accessibilityHint === null || accessibilityHint === '') {
+            return null;
+        }
+
+        return accessibilityHint;
+    }, [accessibilityHint, groupAccessibilityHint]);
 
     return (
         <div key={location.id} className={`space-y-3 relative z-50 ${styles.location ?? ''}`}>
@@ -63,7 +77,7 @@ const Location = ({ locationGroup }: Props): ReactElement => {
                         </div>
                     )}
 
-                    {accessibilityHint !== null && accessibilityHint !== '' && (
+                    {usedAccessibilityHint !== null && (
                         <div className="text-orange-600">
                             <FontAwesomeIcon icon={faWheelchair} /> {accessibilityHint}
                         </div>
