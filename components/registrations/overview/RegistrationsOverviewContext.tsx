@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react';
 import type { ReactElement, ReactNode } from 'react';
 import type Registration from 'lib/registrations/Registration';
+import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
 import type AllFullTimeProgramItems from 'lib/strapi/typings/AllFullTimeProgramItems';
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
 import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
@@ -44,39 +45,71 @@ const useRegistrationsOverviewContext = (): RegistrationsOverviewContextData => 
     return RegistrationsOverviewContextContext;
 };
 
-interface RegistrationProgramGroup {
-    programType: string;
-    programId: number;
-    registrations: Array<Registration>;
-}
-
-const useRegistrationsGroupedByProgram = (): Array<RegistrationProgramGroup> => {
+const useUniqueRegisteredNames = (): Array<string> => {
 
     const { allRegistrations } = useRegistrationsOverviewContext();
 
     return allRegistrations.reduce(
-        (registrationsGroupedByProgram, registration) => {
+        (currentUniqueRegisteredNames, registration) => {
 
-            const registrationProgramGroup = registrationsGroupedByProgram.find(
-                reg => (
-                    reg.programId === registration.programId &&
-                    reg.programType === registration.programType
-                )
-            );
-
-            if (registrationProgramGroup !== undefined) {
-                registrationProgramGroup.registrations.push(registration);
-            } else {
-                registrationsGroupedByProgram.push({
-                    programId: registration.programId,
-                    programType: registration.programType,
-                    registrations: [registration],
-                });
+            if (!currentUniqueRegisteredNames.includes(registration.fullName)) {
+                currentUniqueRegisteredNames.push(registration.fullName);
             }
 
-            return registrationsGroupedByProgram;
+            return currentUniqueRegisteredNames;
         },
-        new Array<RegistrationProgramGroup>()
+        new Array<string>()
+    );
+};
+
+const useMostLoyalRegisteredNames = (): Array<{ name: string, amount: number }> => {
+
+    const { allRegistrations } = useRegistrationsOverviewContext();
+
+    return allRegistrations.reduce(
+        (currentMostLoyalNames, registration) => {
+
+            if (!currentMostLoyalNames.some(loyalNames => loyalNames.name === registration.fullName)) {
+                currentMostLoyalNames.push({ name: registration.fullName, amount: 0 });
+            }
+
+            currentMostLoyalNames.find(loyalNames => loyalNames.name === registration.fullName)!.amount++;
+
+            return currentMostLoyalNames;
+        },
+        new Array<{ name: string, amount: number }>()
+    );
+};
+
+const useProgramItemsWithNeedToRegister = (): Array<ProgramItem | FullTimeProgramItem> => {
+
+    const { allProgramItems, allFullTimeProgramItems } = useRegistrationsOverviewContext();
+
+    return [
+        ...(allProgramItems.concerts ?? []),
+        ...(allProgramItems.workshops ?? []),
+        ...(allProgramItems.readings ?? []),
+        ...(allProgramItems.familyPrograms ?? []),
+        ...(allProgramItems.performances ?? []),
+        ...(allFullTimeProgramItems.exhibitions ?? []),
+        ...(allFullTimeProgramItems.informationBooths ?? []),
+        ...(allFullTimeProgramItems.foods ?? []),
+    ].filter(programItem => {
+
+        const { registration } = getDetailsFromProgramItem(programItem);
+
+        return registration?.registrationNecessary === true;
+    });
+};
+
+const useRegistrationsForProgram = (programItem: ProgramItem | FullTimeProgramItem): Array<Registration> => {
+
+    const { allRegistrations } = useRegistrationsOverviewContext();
+
+    const { collectionType } = getDetailsFromProgramItem(programItem);
+
+    return allRegistrations.filter(
+        registration => registration.programId === programItem.id && registration.programType === collectionType
     );
 };
 
@@ -117,6 +150,9 @@ const useRegistrationProgramItem = (programType: string, programId: number): Pro
 export {
     RegistrationsOverviewContextProvider,
     useRegistrationsOverviewContext,
-    useRegistrationsGroupedByProgram,
     useRegistrationProgramItem,
+    useProgramItemsWithNeedToRegister,
+    useRegistrationsForProgram,
+    useUniqueRegisteredNames,
+    useMostLoyalRegisteredNames,
 };

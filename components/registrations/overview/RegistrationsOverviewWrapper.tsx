@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import ContentWrapper from 'components/common/ContentWrapper';
+import RegistrationsHeadline from 'components/registrations/overview/RegistrationsHeadline';
 import RegistrationsOverview from 'components/registrations/overview/RegistrationsOverview';
 import { RegistrationsOverviewContextProvider } from 'components/registrations/overview/RegistrationsOverviewContext';
 import SwrResponseWrapper from 'components/strapi/SwrResponseWrapper';
@@ -22,15 +23,13 @@ const RegistrationsOverviewWrapper = (): ReactElement => {
                             <SwrResponseWrapper response={allFullTimeProgramItemsResponse}>
                                 {(allFullTimeProgramItems): ReactElement => (
                                     <ContentWrapper>
-                                        <div className="text-xl font-bold mb-3">
-                                            {allRegistrations.length} Anmeldungen
-                                        </div>
-
                                         <RegistrationsOverviewContextProvider
                                             allRegistrations={allRegistrations}
                                             allProgramItems={allProgramItems.allProgramItems}
                                             allFullTimeProgramItems={allFullTimeProgramItems.allFullTimeProgramItems}
                                         >
+                                            <RegistrationsHeadline />
+
                                             <RegistrationsOverview />
                                         </RegistrationsOverviewContextProvider>
                                     </ContentWrapper>

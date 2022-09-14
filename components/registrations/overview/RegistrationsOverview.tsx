@@ -1,21 +1,24 @@
 import type { ReactElement } from 'react';
-import ProgramRegistrationsOverview from 'components/registrations/overview/ProgramRegistrationsOverview';
-import { useRegistrationsGroupedByProgram } from 'components/registrations/overview/RegistrationsOverviewContext';
+import { useProgramItemsWithNeedToRegister } from 'components/registrations/overview/RegistrationsOverviewContext';
+import RegistrationsProgramWrapper from 'components/registrations/overview/RegistrationsProgramWrapper';
+import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
 
 const RegistrationsOverview = (): ReactElement => {
 
-    const registrationsGroupedByProgram = useRegistrationsGroupedByProgram();
+    const programItemsWithNeedToRegister = useProgramItemsWithNeedToRegister();
 
     return (
         <div>
-            {registrationsGroupedByProgram.map(({ programId, programType, registrations }) => (
-                <ProgramRegistrationsOverview
-                    key={`${programType}${programId}`}
-                    programType={programType}
-                    programId={programId}
-                    registrations={registrations}
-                />
-            ))}
+            {programItemsWithNeedToRegister.map(programItem => {
+                const { collectionType } = getDetailsFromProgramItem(programItem);
+
+                return (
+                    <RegistrationsProgramWrapper
+                        key={`${programItem.id}_${collectionType}`}
+                        programItem={programItem}
+                    />
+                );
+            })}
         </div>
     );
 };

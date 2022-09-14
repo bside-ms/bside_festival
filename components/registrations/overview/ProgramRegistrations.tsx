@@ -1,8 +1,10 @@
-import { faLock } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { addHours } from 'date-fns';
 import { ceil } from 'lodash';
+import Link from 'next/link';
 import type { ReactElement } from 'react';
+import type { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import formatDate from 'lib/common/formatDate';
 import type Registration from 'lib/registrations/Registration';
 import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
@@ -20,6 +22,21 @@ const ProgramTitle = ({ programItem }: { programItem: ProgramItem | FullTimeProg
     const { artistName, collectionType } = getDetailsFromProgramItem(programItem);
 
     return <div className="text-lg font-bold">{getLabelFromCollectionType(collectionType)}: {artistName}</div>;
+};
+
+const ProgramLink = ({ programItem }: { programItem: ProgramItem | FullTimeProgramItem }): ReactElement => {
+
+    const { artistId, applicationType } = getDetailsFromProgramItem(programItem);
+
+    return (
+        <div className="">
+            <Link href={`/artists/${applicationType}/${artistId ?? ''}`}>
+                <a className="underline text-blue-600 cursor-pointer">
+                    zum Programm-Punkt
+                </a>
+            </Link>
+        </div>
+    );
 };
 
 const DateAndTime = ({ programItem }: { programItem: ProgramItem | FullTimeProgramItem }): ReactElement => {
@@ -67,16 +84,20 @@ const ParticipantsCounts = (
         bgColor = 'bg-orange-300';
     }
 
-    const lockIcon = occupancyRate === 100 ? <FontAwesomeIcon icon={faLock} /> : null;
+    const LabeledIcon = ({ icon, label, color }: { icon: IconDefinition, label: string, color: string }): ReactElement => (
+        <div className={`px-2 py-1 ${color}`}>
+            <span className="pr-[4px]"><FontAwesomeIcon icon={icon} /></span> {label}
+        </div>
+    );
 
     return (
         <>
             <div className={`px-2 py-1 rounded ${bgColor}`}>
                 Anmeldungen: {registrations.length} / {maxParticipants} - {occupancyRate}%
             </div>
-            <div className="px-2 py-1 text-red-700">
-                {lockIcon}
-            </div>
+
+            {occupancyRate === 100 && <LabeledIcon icon={faLock} label="ausgebucht" color="text-red-700" />}
+            {occupancyRate === 0 && <LabeledIcon icon={faBell} label="ohne Anmeldungen" color="text-green-600" />}
         </>
     );
 };
@@ -101,6 +122,7 @@ const ProgramRegistrations = ({ programItem, registrations }: Props): ReactEleme
         <div className="mb-5 border border-pink-300 p-5">
             <div>
                 <ProgramTitle programItem={programItem} />
+                <ProgramLink programItem={programItem} />
                 <DateAndTime programItem={programItem} />
                 <LocationName programItem={programItem} />
                 <div className="flex">
