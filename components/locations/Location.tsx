@@ -33,11 +33,11 @@ const Location = ({ locationGroup }: Props): ReactElement => {
             <div className="flex flex-col md:space-x-4 md:flex-row z-50 relative bg-white">
                 {imageUrl === null ? (
                     <div
-                        className="h-[0] w-full md:min-h-[500px] md:shrink-0 md:w-1/3"
+                        className="h-[0] w-full md:min-h-[150px] md:shrink-0 md:w-1/3"
                     />
                 ) : (
                     <div
-                        className="h-[400px] w-full md:min-h-[500px] md:shrink-0 md:w-1/3 bg-center bg-cover"
+                        className="h-[300px] md:h-auto w-full md:min-h-[250px] md:shrink-0 md:w-1/3 bg-center bg-cover"
                         style={{ backgroundImage: `url(${imageUrl})` }}
                     />
                 )}
