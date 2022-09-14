@@ -62,25 +62,6 @@ const useUniqueRegisteredNames = (): Array<string> => {
     );
 };
 
-const useMostLoyalRegisteredNames = (): Array<{ name: string, amount: number }> => {
-
-    const { allRegistrations } = useRegistrationsOverviewContext();
-
-    return allRegistrations.reduce(
-        (currentMostLoyalNames, registration) => {
-
-            if (!currentMostLoyalNames.some(loyalNames => loyalNames.name === registration.fullName)) {
-                currentMostLoyalNames.push({ name: registration.fullName, amount: 0 });
-            }
-
-            currentMostLoyalNames.find(loyalNames => loyalNames.name === registration.fullName)!.amount++;
-
-            return currentMostLoyalNames;
-        },
-        new Array<{ name: string, amount: number }>()
-    );
-};
-
 const useProgramItemsWithNeedToRegister = (): Array<ProgramItem | FullTimeProgramItem> => {
 
     const { allProgramItems, allFullTimeProgramItems } = useRegistrationsOverviewContext();

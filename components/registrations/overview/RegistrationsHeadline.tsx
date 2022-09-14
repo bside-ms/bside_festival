@@ -1,12 +1,10 @@
 import type { ReactElement } from 'react';
-import { useMostLoyalRegisteredNames, useRegistrationsOverviewContext, useUniqueRegisteredNames } from 'components/registrations/overview/RegistrationsOverviewContext';
+import { useRegistrationsOverviewContext, useUniqueRegisteredNames } from 'components/registrations/overview/RegistrationsOverviewContext';
 
 const RegistrationsHeadline = (): ReactElement => {
 
     const { allRegistrations } = useRegistrationsOverviewContext();
     const uniqueRegisteredNames = useUniqueRegisteredNames();
-
-    const mostLoyalRegisteredNames = useMostLoyalRegisteredNames();
 
     return (
         <div className="mb-3">
