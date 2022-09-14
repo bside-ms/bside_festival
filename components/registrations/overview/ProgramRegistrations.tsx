@@ -1,3 +1,5 @@
+import { faLock } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { addHours } from 'date-fns';
 import { ceil } from 'lodash';
 import type { ReactElement } from 'react';
@@ -58,17 +60,24 @@ const ParticipantsCounts = (
     if (occupancyRate > 90) {
         bgColor = 'bg-red-500';
     } else if (occupancyRate > 80) {
-        bgColor = 'bg-red-300';
+        bgColor = 'bg-red-400';
     } else if (occupancyRate > 70) {
-        bgColor = 'bg-orange-500';
+        bgColor = 'bg-orange-400';
     } else if (occupancyRate > 50) {
         bgColor = 'bg-orange-300';
     }
 
+    const lockIcon = occupancyRate === 100 ? <FontAwesomeIcon icon={faLock} /> : null;
+
     return (
-        <div className={`bg-green-200 px-2 py-1 rounded ${bgColor}`}>
-            Anmeldungen: {registrations.length} / {maxParticipants} - {occupancyRate}%
-        </div>
+        <>
+            <div className={`px-2 py-1 rounded ${bgColor}`}>
+                Anmeldungen: {registrations.length} / {maxParticipants} - {occupancyRate}%
+            </div>
+            <div className="px-2 py-1 text-red-700">
+                {lockIcon}
+            </div>
+        </>
     );
 };
 
