@@ -135,5 +135,4 @@ export {
     useProgramItemsWithNeedToRegister,
     useRegistrationsForProgram,
     useUniqueRegisteredNames,
-    useMostLoyalRegisteredNames,
 };
