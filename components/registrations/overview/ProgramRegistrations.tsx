@@ -63,11 +63,20 @@ const ParticipantsCounts = (
 
     const maxParticipants = registration?.maxParticipants ?? null;
 
+    const LabeledIcon = ({ icon, label, color }: { icon: IconDefinition, label: string, color: string }): ReactElement => (
+        <div className={`px-2 py-1 ${color}`}>
+            <span className="pr-[4px]"><FontAwesomeIcon icon={icon} /></span> {label}
+        </div>
+    );
+
     if (maxParticipants === null) {
         return (
-            <div className="bg-green-200 px-2 py-1 rounded">
-                Anmeldungen: {registrations.length} - keine Begrenzung
-            </div>
+            <>
+                <div className="bg-green-200 px-2 py-1 rounded">
+                    Anmeldungen: {registrations.length} (keine Begrenzung)
+                </div>
+                {registrations.length === 0 && <LabeledIcon icon={faBell} label="ohne Anmeldungen" color="text-green-600" />}
+            </>
         );
     }
 
@@ -83,12 +92,6 @@ const ParticipantsCounts = (
     } else if (occupancyRate > 50) {
         bgColor = 'bg-orange-300';
     }
-
-    const LabeledIcon = ({ icon, label, color }: { icon: IconDefinition, label: string, color: string }): ReactElement => (
-        <div className={`px-2 py-1 ${color}`}>
-            <span className="pr-[4px]"><FontAwesomeIcon icon={icon} /></span> {label}
-        </div>
-    );
 
     return (
         <>
