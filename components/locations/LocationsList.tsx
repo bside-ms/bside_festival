@@ -1,4 +1,7 @@
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import type { ReactElement } from 'react';
 import Location from 'components/locations/Location';
 import { getLocationGroupOfLocation, useLocationGroupsContext } from 'lib/context/LocationGroupsContext';
@@ -8,17 +11,20 @@ import useLocationsSortingCallback from 'lib/strapi/useLocationsSortingCallback'
 
 interface Props {
     allLocations: Array<LocationModel>;
+    locationId?: number;
 }
 
 const LocationsMap = dynamic(() => import('components/locations/map/LocationsMap'), { ssr: false });
 
-const LocationsList = ({ allLocations }: Props): ReactElement => {
+const LocationsList = ({ allLocations, locationId }: Props): ReactElement => {
 
     const { locationGroups } = useLocationGroupsContext();
 
     const locationsSortingCallback = useLocationsSortingCallback;
 
-    const orderedLocations = allLocations.sort(locationsSortingCallback);
+    const orderedLocations = allLocations
+        .filter(location => locationId === undefined ? true : location.id === locationId)
+        .sort(locationsSortingCallback);
 
     const allLocationGroups = orderedLocations.reduce<Array<LocationGroup>>(
         (currentLocationGroups, location) => {
@@ -58,6 +64,16 @@ const LocationsList = ({ allLocations }: Props): ReactElement => {
     return (
         <div>
             <LocationsMap allLocations={orderedLocations} />
+
+            {locationId !== undefined && (
+                <div className="my-3">
+                    <Link href="/orte">
+                        <a className="text-blue-800 hover:text-blue-600 cursor-pointer leading-4">
+                            <FontAwesomeIcon icon={faChevronLeft} /> <span className="text-lg">alle Locations ansehen</span>
+                        </a>
+                    </Link>
+                </div>
+            )}
 
             <div className="space-y-5">
                 {allLocationGroups.map(locationGroup => (

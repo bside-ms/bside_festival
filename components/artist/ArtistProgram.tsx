@@ -1,6 +1,7 @@
 import { faCalendarAlt, faClock, faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isSameDay } from 'date-fns';
+import Link from 'next/link';
 import type { ReactElement } from 'react';
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import ApplicationType from 'lib/application-form/ApplicationType';
@@ -14,7 +15,7 @@ interface Props {
     programItem: ProgramItem | FullTimeProgramItem;
 }
 
-const Line = ({ icon, text }: { icon: IconDefinition, text: string }): ReactElement => (
+const Line = ({ icon, text }: { icon: IconDefinition, text: ReactElement | string }): ReactElement => (
     <div className="flex gap-2">
         <div className="w-6 text-center"><FontAwesomeIcon icon={icon} /></div>
         <div>{text}</div>
@@ -23,13 +24,25 @@ const Line = ({ icon, text }: { icon: IconDefinition, text: string }): ReactElem
 
 const LocationLine = ({ programItem }: { programItem: ProgramItem | FullTimeProgramItem }): ReactElement | null => {
 
+    const locationId = programItem.attributes.location.data?.id ?? null;
     const preferredLocationName = usePreferredLocationName(programItem.attributes.location.data);
 
-    if (preferredLocationName === null) {
+    if (locationId === null || preferredLocationName === null) {
         return null;
     }
 
-    return <Line icon={faMapMarkedAlt} text={preferredLocationName} />;
+    return (
+        <Line
+            icon={faMapMarkedAlt}
+            text={(
+                <Link href={`/orte/${locationId}`}>
+                    <a className="text-blue-500 hover:text-blue-700 cursor-pointer leading-4">
+                        {preferredLocationName}
+                    </a>
+                </Link>
+            )}
+        />
+    );
 
 };
 
