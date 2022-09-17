@@ -2,13 +2,13 @@ import type { ReactElement } from 'react';
 import ContentWrapper from 'components/common/ContentWrapper';
 import Footer from 'components/common/Footer';
 import NextHead from 'components/common/NextHead';
+import PageAlert from 'components/common/PageAlert';
 import PageHeader from 'components/common/PageHeader';
 import LocationsList from 'components/locations/LocationsList';
 import SwrResponseWrapper from 'components/strapi/SwrResponseWrapper';
 import { LocationGroupsContextProvider } from 'lib/context/LocationGroupsContext';
 import useAllLocationGroups from 'lib/strapi/useAllLocationGroups';
 import useAllLocations from 'lib/strapi/useAllLocations';
-import PageAlert from 'components/common/PageAlert';
 
 export default (): ReactElement => {
 

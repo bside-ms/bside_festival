@@ -1,10 +1,10 @@
 import type { ReactElement } from 'react';
 import Footer from 'components/common/Footer';
 import NextHead from 'components/common/NextHead';
+import PageAlert from 'components/common/PageAlert';
 import PageHeader from 'components/common/PageHeader';
 import Program from 'components/program/program/Program';
 import { ProgramContextProvider } from 'components/program/program/ProgramContext';
-import PageAlert from 'components/common/PageAlert';
 
 export default (): ReactElement => {
 
