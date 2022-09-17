@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 import ArtistInfoWrapper from 'components/artist/ArtistInfoWrapper';
+import ContentWrapper from 'components/common/ContentWrapper';
 import Footer from 'components/common/Footer';
 import NextHead from 'components/common/NextHead';
 import PageHeader from 'components/common/PageHeader';
@@ -17,7 +18,7 @@ export default (): ReactElement | null => {
             <>
                 <NextHead title="B-Side Festival 2022" />
 
-                <div>Whoops, da ging leider etwas schief!</div>
+                <ContentWrapper>Whoops, da ging leider etwas schief!</ContentWrapper>
 
                 <Footer />
             </>
@@ -31,7 +32,7 @@ export default (): ReactElement | null => {
             <>
                 <NextHead title="B-Side Festival 2022" />
 
-                <div>Whoops, da ging leider etwas schief!</div>
+                <ContentWrapper>Whoops, da ging leider etwas schief!</ContentWrapper>
 
                 <Footer />
             </>

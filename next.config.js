@@ -14,6 +14,11 @@ module.exports = {
       { source: '/marker-icon-2x.png', destination: '/assets/leaflet/marker-icon-2x.png', permanent: true },
       { source: '/marker-icon.png', destination: '/assets/leaflet/marker-icon.png', permanent: true },
       { source: '/marker-shadow.png', destination: '/assets/leaflet/marker-shadow.png', permanent: true },
+      { source: '/orte/layers-2x.png', destination: '/assets/leaflet/layers-2x.png', permanent: true },
+      { source: '/orte/layers.png', destination: '/assets/leaflet/layers.png', permanent: true },
+      { source: '/orte/marker-icon-2x.png', destination: '/assets/leaflet/marker-icon-2x.png', permanent: true },
+      { source: '/orte/marker-icon.png', destination: '/assets/leaflet/marker-icon.png', permanent: true },
+      { source: '/orte/marker-shadow.png', destination: '/assets/leaflet/marker-shadow.png', permanent: true },
     ]
   }
 };
