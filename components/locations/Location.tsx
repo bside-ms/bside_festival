@@ -8,16 +8,20 @@ import Link from 'next/link';
 import type { ReactElement } from 'react';
 import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
 import LocationEditLink from 'components/locations/LocationEditLink';
+import LocationProgram from 'components/locations/LocationProgram';
 import useEditorJsData from 'lib/editorJs/useEditorJsData';
 import getImageUrl from 'lib/strapi/getImageUrl';
 import getLinksData from 'lib/strapi/getLinksData';
+import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
 import type LocationGroup from 'lib/strapi/typings/LocationGroup';
+import type ProgramItem from 'lib/strapi/typings/ProgramItem';
 
 interface Props {
     locationGroup: LocationGroup;
+    programItems?: Array<ProgramItem | FullTimeProgramItem>;
 }
 
-const Location = ({ locationGroup }: Props): ReactElement => {
+const Location = ({ locationGroup, programItems }: Props): ReactElement => {
 
     const location = locationGroup.attributes.locations.data[0]!;
 
@@ -52,7 +56,7 @@ const Location = ({ locationGroup }: Props): ReactElement => {
                     />
                 ) : (
                     <div
-                        className="h-[300px] md:h-auto w-full md:min-h-[250px] md:shrink-0 md:w-1/3 bg-center bg-cover"
+                        className="h-[300px] md:h-auto w-full md:min-h-[250px] md:max-h-[400px] md:shrink-0 md:w-1/3 bg-center bg-cover"
                         style={{ backgroundImage: `url(${imageUrl})` }}
                     />
                 )}
@@ -99,6 +103,13 @@ const Location = ({ locationGroup }: Props): ReactElement => {
                                 </Link>
                             ))}
                         </div>
+                    )}
+
+                    {programItems !== undefined && (
+                        <LocationProgram
+                            locationGroup={locationGroup}
+                            programItems={programItems}
+                        />
                     )}
                 </div>
             </div>
