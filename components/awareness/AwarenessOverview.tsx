@@ -75,10 +75,11 @@ const AwarenessOverview = (): ReactElement => {
                         ansprechen! Du kannst das Awareness-Team während des Festivals* unter dieser Nummer erreichen:
                     </TextBlock>
 
-                    <TextBlock className="text-[#ffe698] leading-4 mt-3">
-                        ************<br />
-                        während des Festivals hier sichtbar
-                    </TextBlock>
+                    <div className="text-[#2b9bbe] mt-3 text-2xl flex">
+                        <div className="bg-[#ffe698] px-5 py-3 rounded">
+                            01771572053
+                        </div>
+                    </div>
 
                     <TextBlock className="mt-4">
                         * Erreichbarkeit garantiert:<br />
