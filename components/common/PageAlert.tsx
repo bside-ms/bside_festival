@@ -1,11 +1,11 @@
+import { type ReactElement, useState } from 'react';
+import Image from 'next/image';
+
 // import styles from 'components/common/PageHeader.module.scss';
-import React, { useEffect, useState } from 'react';
 // import { faBars } from '@fortawesome/free-solid-svg-icons';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { range } from 'lodash';
 // import Link from 'next/link';
-import type { ReactElement } from 'react';
-import Image from 'next/image';
 // import BHeartSvg from 'components/common/BHeartSvg';
 // import ContentWrapper from 'components/common/ContentWrapper';
 // import NavigationOverlay from 'components/navigation/NavigationOverlay';
@@ -20,7 +20,7 @@ export default function PageAlert(): ReactElement {
     // }, [show]);
     
     return (
-        <>
+        <div>
             {show && (
                 <div className="flex flex-col lg:flex-row bg-gradient-to-r from-[#2c9fc9] to-[#e1017e] p-4 text-white lg:p-8 lg:text-x lg:space-x-4">
                     <div className="block w-20">
@@ -45,6 +45,6 @@ export default function PageAlert(): ReactElement {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }
