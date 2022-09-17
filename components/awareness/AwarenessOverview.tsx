@@ -76,7 +76,7 @@ const AwarenessOverview = (): ReactElement => {
                     </TextBlock>
 
                     <TextBlock className="text-[#ffe698] leading-4 mt-3">
-                        ************<br />
+                        01771572053<br />
                         während des Festivals hier sichtbar
                     </TextBlock>
 
@@ -103,7 +103,7 @@ const AwarenessOverview = (): ReactElement => {
                     </TextBlock>
 
                     <TextBlock className="text-[#ffe698] leading-4 mt-3">
-                        ************<br />
+                        01771572053<br />
                         You can find the number here during the festival
                     </TextBlock>
 

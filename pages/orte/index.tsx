@@ -8,6 +8,7 @@ import SwrResponseWrapper from 'components/strapi/SwrResponseWrapper';
 import { LocationGroupsContextProvider } from 'lib/context/LocationGroupsContext';
 import useAllLocationGroups from 'lib/strapi/useAllLocationGroups';
 import useAllLocations from 'lib/strapi/useAllLocations';
+import PageAlert from 'components/common/PageAlert';
 
 export default (): ReactElement => {
 
@@ -17,6 +18,8 @@ export default (): ReactElement => {
     return (
         <>
             <NextHead title="B-Side Festival 2022 - Orte" />
+
+            <PageAlert />
 
             <PageHeader theme="blue" symbols="hearts" />
 
