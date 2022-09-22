@@ -83,19 +83,3 @@
   z-index: 1;
 }
 
-.bigBox {
-  margin-top: 40px;
-  padding: 40px 25px;
-
-  background: linear-gradient(
-      100deg,
-      rgb(44, 159, 201) 0%,
-      rgba(225, 1, 126, 1) 100%
-  );
-
-  color: #fff;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
