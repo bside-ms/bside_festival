@@ -2,7 +2,6 @@ import type { ReactElement } from 'react';
 import ContentWrapper from 'components/common/ContentWrapper';
 import Footer from 'components/common/Footer';
 import NextHead from 'components/common/NextHead';
-import PageAlert from 'components/common/PageAlert';
 import PageHeader from 'components/common/PageHeader';
 import LocationsList from 'components/locations/LocationsList';
 import SwrResponseWrapper from 'components/strapi/SwrResponseWrapper';
@@ -18,8 +17,6 @@ export default (): ReactElement => {
     return (
         <>
             <NextHead title="B-Side Festival 2022 - Orte" />
-
-            <PageAlert />
 
             <PageHeader theme="blue" symbols="hearts" />
 

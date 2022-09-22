@@ -1,6 +1,5 @@
 import type { ReactElement } from 'react';
 import Footer from 'components/common/Footer';
-import PageAlert from 'components/common/PageAlert';
 import PageHeader from 'components/common/PageHeader';
 import FestivalSentiment from 'components/front-page/FestivalSentiment';
 import FrontPageEyeCatchers from 'components/front-page/FrontPageEyeCatchers';
@@ -10,8 +9,6 @@ export default (): ReactElement => {
 
     return (
         <>
-            <PageAlert />
-
             <PageHeader theme="yellow" />
 
             <FrontPageEyeCatchers />
