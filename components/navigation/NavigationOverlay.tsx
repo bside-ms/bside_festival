@@ -12,9 +12,7 @@ import { useNavigationOverlayContext } from 'components/navigation/NavigationOve
 
 const links = new Array<{label: string, link: string}>(
     { label: 'Start', link: '/' },
-    { label: 'Mithelfen', link: '/mithelfen' },
     { label: 'Programm', link: '/programm' },
-    { label: 'Awareness', link: '/awareness' },
     { label: 'Orte', link: '/orte' },
 );
 
