@@ -2,6 +2,8 @@ import styles from './FrontPageEyeCatchers.module.scss';
 
 import Image from 'next/image';
 import type { ReactElement } from 'react';
+import team1Picture from '../../public/assets/images/festival/team1.jpg';
+import team2Picture from '../../public/assets/images/festival/team2.jpg';
 import ContentWrapper from 'components/common/ContentWrapper';
 import BHeartGrid from 'components/front-page/BHeartGrid';
 import BSideInfo from 'components/front-page/BSideInfo';
@@ -46,7 +48,7 @@ const FrontPageEyeCatchers = (): ReactElement => {
                     <div className="group">
                         <div className="group-hover:hidden">
                             <Image
-                                src="/assets/images/festival/team1.jpg"
+                                src={team1Picture}
                                 width={2992}
                                 height={2607}
                                 layout="responsive"
@@ -54,7 +56,7 @@ const FrontPageEyeCatchers = (): ReactElement => {
                         </div>
                         <div className="hidden group-hover:block">
                             <Image
-                                src="/assets/images/festival/team2.jpg"
+                                src={team2Picture}
                                 width={2992}
                                 height={2607}
                                 layout="responsive"
