@@ -52,6 +52,8 @@ const FrontPageEyeCatchers = (): ReactElement => {
                                 width={2992}
                                 height={2607}
                                 layout="responsive"
+                                priority={true}
+                                placeholder="blur"
                             />
                         </div>
                         <div className="hidden group-hover:block">
@@ -60,6 +62,8 @@ const FrontPageEyeCatchers = (): ReactElement => {
                                 width={2992}
                                 height={2607}
                                 layout="responsive"
+                                priority={true}
+                                placeholder="blur"
                             />
                         </div>
                     </div>

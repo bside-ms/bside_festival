@@ -3,6 +3,7 @@ import styles from './AwarenessOverview.module.scss';
 import { range } from 'lodash';
 import Image from 'next/image';
 import type { ReactElement, ReactNode } from 'react';
+import westPicture from '../../public/assets/images/festival/weste.jpg';
 import BHeartSvg from 'components/common/BHeartSvg';
 import ContentWrapper from 'components/common/ContentWrapper';
 
@@ -117,11 +118,12 @@ const AwarenessOverview = (): ReactElement => {
                     <div className="relative">
                         <div className={`mt-12 ${styles.vestImageContainer ?? ''}`}>
                             <Image
-                                src="/assets/images/festival/weste.jpg"
+                                src={westPicture}
                                 width={1990}
                                 height={1024}
                                 layout="responsive"
                                 className={styles.vestImage}
+                                placeholder="blur"
                             />
                         </div>
                     </div>
