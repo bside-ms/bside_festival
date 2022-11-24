@@ -30,7 +30,7 @@ interface Props {
 const Artist = ({ artist, applicationType, strapiCollectionType, onCloseClick, programItems }: Props): ReactElement => {
 
     const imageRelativeUrl = getImageUrl(artist.attributes.Images, false, 'medium');
-    const imageUrl = imageRelativeUrl === null ? null : `https://cms.b-side.ms${imageRelativeUrl}`;
+    const imageUrl = imageRelativeUrl === null ? null : `https://strapi.b-side.ms${imageRelativeUrl}`;
 
     return (
         <div key={artist.id} className={`space-y-3 relative z-50 ${styles.artist ?? ''}`}>
