@@ -120,5 +120,5 @@ export interface RawBlock extends BaseBlock {
 
 export interface DelimiterBlock extends BaseBlock {
     type: BlockType.delimiter;
-    data: {};
+    data: Record<string, unknown>;
 }
