@@ -182,6 +182,10 @@ module.exports = {
          *
          * https://github.com/yannickcr/eslint-plugin-react#list-of-supported-rules
          */
+        'react/default-props-match-prop-types': [
+            ERROR,
+            { 'allowRequiredDefaults': true }
+        ],
         'react/display-name': OFF,
         'react/jsx-closing-bracket-location': ERROR,
         'react/jsx-closing-tag-location': ERROR,
@@ -216,22 +220,22 @@ module.exports = {
                 'prop': 'parens-new-line'
             }
         ],
-        'react/no-access-state-in-setstate': WARNING,
+        'react/no-access-state-in-setstate': ERROR,
         'react/no-adjacent-inline-elements': OFF,
         'react/no-array-index-key': WARNING,
         'react/no-danger': ERROR,
         'react/no-deprecated': OFF,
-        'react/no-did-mount-set-state': WARNING,
-        'react/no-did-update-set-state': WARNING,
+        'react/no-did-mount-set-state': ERROR,
+        'react/no-did-update-set-state': ERROR,
         'react/no-direct-mutation-state': OFF,
-        'react/no-find-dom-node': WARNING,
+        'react/no-find-dom-node': ERROR,
         'react/no-string-refs': [ERROR, { noTemplateLiterals: true }],
         'react/no-unescaped-entities': OFF,
         'react/no-unknown-property': OFF,
         'react/no-unsafe': ERROR,
-        'react/no-unused-prop-types': OFF,
+        'react/no-unused-prop-types': ERROR,
         'react/no-unused-state': ERROR,
-        'react/prefer-stateless-function': WARNING,
+        'react/prefer-stateless-function': ERROR,
         'react/prop-types': OFF,
         'react/react-in-jsx-scope': OFF,
         'react/require-render-return': OFF,
@@ -247,7 +251,6 @@ module.exports = {
             { default: 'generic' }
         ],
         '@typescript-eslint/ban-ts-comment': ERROR,
-        '@typescript-eslint/ban-types': OFF, // For now we use {} way too often for this
         '@typescript-eslint/brace-style': ERROR,
         '@typescript-eslint/camelcase': OFF, // Too many external influences for a consistent case style
         '@typescript-eslint/comma-dangle': [
@@ -288,7 +291,7 @@ module.exports = {
                 }
             }
         ],
-        '@typescript-eslint/explicit-module-boundary-types': WARNING,
+        '@typescript-eslint/explicit-module-boundary-types': ERROR,
         '@typescript-eslint/func-call-spacing': ERROR,
         '@typescript-eslint/init-declarations': ERROR,
         '@typescript-eslint/keyword-spacing': ERROR,
@@ -317,23 +320,22 @@ module.exports = {
                     'protected-static-field',
                     'private-static-field',
 
-                    'public-instance-field',
-                    'protected-instance-field',
-                    'private-instance-field',
-
-                    'public-abstract-field',
-                    'protected-abstract-field',
-                    'private-abstract-field',
-
                     'public-field',
                     'protected-field',
                     'private-field',
 
-                    'static-field',
-                    'instance-field',
-                    'abstract-field',
-
                     'field',
+
+                    // Getters
+                    'public-static-get',
+                    'protected-static-get',
+                    'private-static-get',
+
+                    'public-get',
+                    'protected-get',
+                    'private-get',
+
+                    'get',
 
                     // Constructors
                     'public-constructor',
@@ -347,21 +349,9 @@ module.exports = {
                     'protected-static-method',
                     'private-static-method',
 
-                    'public-instance-method',
-                    'protected-instance-method',
-                    'private-instance-method',
-
-                    'public-abstract-method',
-                    'protected-abstract-method',
-                    'private-abstract-method',
-
                     'public-method',
                     'protected-method',
                     'private-method',
-
-                    'static-method',
-                    'instance-method',
-                    'abstract-method',
 
                     'method'
                 ]
@@ -476,8 +466,8 @@ module.exports = {
                         `^(${require('module').builtinModules.join('|')})(/|$)`,
                         // Installed packages
                         `^(${[
-                        ...Object.keys(require('./package.json').dependencies),
-                        ...Object.keys(require('./package.json').devDependencies)
+                            ...Object.keys(require('./package.json').dependencies),
+                            ...Object.keys(require('./package.json').devDependencies)
                         ].join('|')})(/|$|\u0000)`,
                         // Internal packages
                         '^\\w/view/\\w(/.*|$)',

@@ -9,7 +9,6 @@ import useScaledTimeTableMinutes from 'lib/strapi/useScaledTimeTableMinutes';
 
 interface Props {
     optimizedTimeTableBegin: Date;
-    optimizedTimeTableEnd: Date;
     programItem: ProgramItem;
 }
 

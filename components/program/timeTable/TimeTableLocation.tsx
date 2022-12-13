@@ -6,7 +6,6 @@ import type Concert from 'lib/strapi/typings/Concert';
 import type FamilyProgram from 'lib/strapi/typings/FamilyProgram';
 import type Location from 'lib/strapi/typings/Location';
 import type Performance from 'lib/strapi/typings/Performance';
-import type ProgramDate from 'lib/strapi/typings/ProgramDate';
 import type Reading from 'lib/strapi/typings/Reading';
 import type Workshop from 'lib/strapi/typings/Workshop';
 import useProgramItemFilteredByLocationId from 'lib/strapi/useProgramItemFilteredByLocationId';
@@ -14,7 +13,6 @@ import useProgramItemFilteredByLocationId from 'lib/strapi/useProgramItemFiltere
 interface Props {
     usedHeight: number;
     timeTableHours: Array<Date>;
-    date: ProgramDate;
     location: Location;
     concerts: Array<Concert>;
     workshops: Array<Workshop>;
@@ -23,7 +21,6 @@ interface Props {
     familyPrograms: Array<FamilyProgram>;
     isFirstLocation: boolean;
     optimizedTimeTableBegin: Date;
-    optimizedTimeTableEnd: Date;
 }
 
 const TimeTableLocation = ({
@@ -36,7 +33,6 @@ const TimeTableLocation = ({
     readings,
     familyPrograms,
     optimizedTimeTableBegin,
-    optimizedTimeTableEnd,
     isFirstLocation,
 }: Props): ReactElement => {
 
@@ -64,7 +60,6 @@ const TimeTableLocation = ({
                     <TimeTableProgramItem
                         key={concert.id}
                         optimizedTimeTableBegin={optimizedTimeTableBegin}
-                        optimizedTimeTableEnd={optimizedTimeTableEnd}
                         programItem={concert}
                     />
                 ))}
@@ -72,7 +67,6 @@ const TimeTableLocation = ({
                     <TimeTableProgramItem
                         key={workshop.id}
                         optimizedTimeTableBegin={optimizedTimeTableBegin}
-                        optimizedTimeTableEnd={optimizedTimeTableEnd}
                         programItem={workshop}
                     />
                 ))}
@@ -80,7 +74,6 @@ const TimeTableLocation = ({
                     <TimeTableProgramItem
                         key={performance.id}
                         optimizedTimeTableBegin={optimizedTimeTableBegin}
-                        optimizedTimeTableEnd={optimizedTimeTableEnd}
                         programItem={performance}
                     />
                 ))}
@@ -88,7 +81,6 @@ const TimeTableLocation = ({
                     <TimeTableProgramItem
                         key={reading.id}
                         optimizedTimeTableBegin={optimizedTimeTableBegin}
-                        optimizedTimeTableEnd={optimizedTimeTableEnd}
                         programItem={reading}
                     />
                 ))}
@@ -96,7 +88,6 @@ const TimeTableLocation = ({
                     <TimeTableProgramItem
                         key={familyProgram.id}
                         optimizedTimeTableBegin={optimizedTimeTableBegin}
-                        optimizedTimeTableEnd={optimizedTimeTableEnd}
                         programItem={familyProgram}
                     />
                 ))}

@@ -85,10 +85,8 @@ const TimeTableLocations = ({
             <div className="flex gap-[1px] bg-gray-300">
                 {locations.map((location, index) => (
                     <TimeTableLocation
-                        date={[begin, end]}
                         usedHeight={usedHeight}
                         optimizedTimeTableBegin={optimizedTimeTableBegin}
-                        optimizedTimeTableEnd={optimizedTimeTableEnd}
                         timeTableHours={timeTableHours}
                         key={location.id}
                         location={location}
