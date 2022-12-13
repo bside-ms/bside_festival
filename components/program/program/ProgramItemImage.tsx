@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import getAbsoluteImageUrl from 'lib/strapi/getAbsoluteImageUrl';
 import getDetailsFromProgramItem from 'lib/strapi/getDetailsFromProgramItem';
 import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
 import type GenericImagesData from 'lib/strapi/typings/GenericImagesData';
@@ -17,7 +18,7 @@ const getImageUrl = (images: GenericImagesData['data'], size: keyof GenericImage
         return null;
     }
 
-    return `https://cms.b-side.ms${imageUrl}`;
+    return getAbsoluteImageUrl(imageUrl);
 };
 
 const ProgramItemImage = ({ programItem }: Props): ReactElement => {

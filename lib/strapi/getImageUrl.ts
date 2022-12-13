@@ -1,3 +1,4 @@
+import getAbsoluteImageUrl from 'lib/strapi/getAbsoluteImageUrl';
 import type { GenericImagesAttributes } from 'lib/strapi/typings/GenericImagesData';
 import type GenericImagesData from 'lib/strapi/typings/GenericImagesData';
 
@@ -25,7 +26,7 @@ const getImageUrl = (
         return imageUrl;
     }
 
-    return `https://cms.b-side.ms${imageUrl}`;
+    return getAbsoluteImageUrl(imageUrl);
 };
 
 export default getImageUrl;

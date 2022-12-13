@@ -13,6 +13,7 @@ import ArtistShareLink from 'components/artist/ArtistShareLink';
 import ArtistUnpublishedTag from 'components/artist/ArtistUnpublishedTag';
 import RegistrationWrapper from 'components/artist/registration/RegistrationWrapper';
 import Button from 'components/common/Button';
+import getAbsoluteImageUrl from 'lib/strapi/getAbsoluteImageUrl';
 import getImageUrl from 'lib/strapi/getImageUrl';
 import type { default as ArtistModel } from 'lib/strapi/typings/Artist';
 import type FullTimeProgramItem from 'lib/strapi/typings/FullTimeProgramItem';
@@ -30,7 +31,7 @@ interface Props {
 const Artist = ({ artist, applicationType, strapiCollectionType, onCloseClick, programItems }: Props): ReactElement => {
 
     const imageRelativeUrl = getImageUrl(artist.attributes.Images, false, 'medium');
-    const imageUrl = imageRelativeUrl === null ? null : `https://strapi.b-side.ms${imageRelativeUrl}`;
+    const imageUrl = imageRelativeUrl === null ? null : getAbsoluteImageUrl(imageRelativeUrl);
 
     return (
         <div key={artist.id} className={`space-y-3 relative z-50 ${styles.artist ?? ''}`}>
