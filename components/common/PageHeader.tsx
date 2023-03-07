@@ -1,14 +1,11 @@
 import styles from 'components/common/PageHeader.module.scss';
 
-import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { range } from 'lodash';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import BHeartSvg from 'components/common/BHeartSvg';
 import ContentWrapper from 'components/common/ContentWrapper';
 import NavigationOverlay from 'components/navigation/NavigationOverlay';
-import { useNavigationOverlayContext } from 'components/navigation/NavigationOverlayContext';
 
 type HeaderThemes = 'blue' | 'yellow' | 'pink' | 'yellowOnPink';
 
@@ -58,8 +55,6 @@ const Symbols = ({ symbols }: { symbols: NonNullable<Props['symbols']>}): ReactE
 
 const PageHeader = ({ theme = 'yellow', symbols = 'plusSigns' }: Props): ReactElement => {
 
-    const { toggleOverlay } = useNavigationOverlayContext();
-
     return (
         <>
             <NavigationOverlay />
@@ -77,30 +72,9 @@ const PageHeader = ({ theme = 'yellow', symbols = 'plusSigns' }: Props): ReactEl
                                     <div className={`${styles.content ?? ''} font-display`}>
                                         <div>B-Side</div>
                                         <div>Festival</div>
-                                        <div>16. - 18. Sep</div>
                                     </div>
                                 </a>
                             </Link>
-
-                            <div className="flex flex-col justify-center text-white">
-                                <div
-                                    className={`
-                                        w-11
-                                        h-11 
-                                        text-[28px] 
-                                        leading-3 
-                                        flex 
-                                        flex-col 
-                                        justify-center 
-                                        text-center 
-                                        cursor-pointer 
-                                        ${styles.menuToggle ?? ''}
-                                    `}
-                                    onClick={toggleOverlay}
-                                >
-                                    <FontAwesomeIcon icon={faBars} />
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </ContentWrapper>

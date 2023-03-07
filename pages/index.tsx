@@ -4,6 +4,7 @@ import PageHeader from 'components/common/PageHeader';
 import FestivalSentiment from 'components/front-page/FestivalSentiment';
 import FrontPageEyeCatchers from 'components/front-page/FrontPageEyeCatchers';
 import ParticipateEyecatcher from 'components/front-page/ParticipateEyecatcher';
+import TeamImageEyeCatcher from 'components/front-page/TeamImageEyeCatcher';
 
 export default (): ReactElement => {
 
@@ -14,6 +15,8 @@ export default (): ReactElement => {
             <FrontPageEyeCatchers />
 
             <FestivalSentiment />
+
+            <TeamImageEyeCatcher />
 
             <ParticipateEyecatcher />
 
