@@ -7,8 +7,8 @@ module.exports = {
     async redirects() {
 
         return [
-            // Temporarily redirect every route to the front page
-            { source: '/(.+)', destination: '/', permanent: false },
+            // Temporarily redirect content routes to the front page
+            { source: '/(artists|awareness|bewerbung| mithelfen|orte|programm)(.*)', destination: '/', permanent: false },
 
             // This is used so the images of the leaflet map are shown, not sure
             // how to tell leaflet to use a different path for its images instead.
