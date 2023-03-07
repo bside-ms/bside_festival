@@ -1,6 +1,5 @@
-
-import YouTube from 'react-youtube';
 import type { ReactElement } from 'react';
+import YouTube from 'react-youtube';
 import ContentWrapper from 'components/common/ContentWrapper';
 
 const FestivalMovieEyeCatcher = (): ReactElement => {
