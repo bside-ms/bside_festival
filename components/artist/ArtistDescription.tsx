@@ -1,5 +1,4 @@
 import type { ReactElement } from 'react';
-import ReactHtmlParser from 'react-html-parser';
 import TruncateMarkup from 'react-truncate-markup';
 import EditorJsBlocks from 'components/editorJs/EditorJsBlocks';
 import getEditorJsParagraphsAsHtml from 'lib/editorJs/getEditorJsDataAsHtml';
@@ -36,9 +35,8 @@ const ArtistDescription = ({ artist, truncateAfterLines }: Props): ReactElement 
 
     return (
         <TruncateMarkup lines={truncateAfterLines}>
-            <div>
-                {ReactHtmlParser(editorJsDataAsHtml)}
-            </div>
+            {/* eslint-disable-next-line react/no-danger */}
+            <div dangerouslySetInnerHTML={{ __html: editorJsDataAsHtml }} />
         </TruncateMarkup>
     );
 };
