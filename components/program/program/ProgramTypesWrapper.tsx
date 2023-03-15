@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { useRouterScroll } from '@moxy/next-router-scroll';
 import type { ReactElement } from 'react';
 import ProgramTypeWrapper from 'components/program/program/ProgramTypeWrapper';
 import type AllProgramItems from 'lib/strapi/typings/AllProgramItems';
@@ -23,15 +21,6 @@ const ProgramTypesWrapper = ({ allProgramItems }: Props): ReactElement => {
         { title: 'Performances, Theater & Kabarett', programItems: allProgramItems.performances },
         { title: 'Familienprogramm', programItems: allProgramItems.familyPrograms },
     );
-
-    const { updateScroll } = useRouterScroll();
-
-    useEffect(() => {
-        // Trying everything here to restore scroll position..
-        updateScroll();
-        window.requestAnimationFrame(() => updateScroll());
-        window.setTimeout(() => updateScroll(), 400);
-    });
 
     return (
         <div className="space-y-5">
