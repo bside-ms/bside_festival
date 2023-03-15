@@ -19,6 +19,7 @@ export default (): ReactElement | null => {
                     width="128"
                     height="128"
                     layout="responsive"
+                    alt="Achtung"
                 />
             </div>
             <div className="flex flex-col space-y-3 lg:space-y-0 lg:space-x-4 lg:flex-row w-full">

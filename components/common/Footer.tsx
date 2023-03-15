@@ -62,6 +62,7 @@ const Footer = (): ReactElement => {
                         width={1025}
                         height={781}
                         layout="responsive"
+                        alt="DeLorean"
                     />
                 </div>
             </div>

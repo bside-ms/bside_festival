@@ -43,6 +43,7 @@ const VolunteerPriorDates = (): ReactElement | null => {
                         height={1536}
                         layout="responsive"
                         className={styles.decorationImage}
+                        alt="Deko-Team"
                     />
                 </div>
             </div>

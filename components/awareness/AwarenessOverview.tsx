@@ -56,6 +56,7 @@ const AwarenessOverview = (): ReactElement => {
                     width={3508}
                     height={993}
                     layout="responsive"
+                    alt="Awareness"
                 />
             </div>
 
@@ -124,6 +125,7 @@ const AwarenessOverview = (): ReactElement => {
                                 layout="responsive"
                                 className={styles.vestImage}
                                 placeholder="blur"
+                                alt="Awareness-Westen"
                             />
                         </div>
                     </div>

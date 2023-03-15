@@ -106,6 +106,7 @@ const ApplicationFormImageUploadField = ({ formField }: Props): ReactElement => 
                             layout="fill"
                             objectFit="contain"
                             objectPosition="left"
+                            alt="Upload-Vorschau"
                         />
                     </div>
 

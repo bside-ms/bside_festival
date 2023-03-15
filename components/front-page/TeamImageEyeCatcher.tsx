@@ -19,6 +19,7 @@ const TeamImageEyeCatcher = (): ReactElement => {
                                 layout="responsive"
                                 priority={true}
                                 placeholder="blur"
+                                alt="Festival-Team"
                             />
                         </div>
                         <div className="hidden group-hover:block">
@@ -29,6 +30,7 @@ const TeamImageEyeCatcher = (): ReactElement => {
                                 layout="responsive"
                                 priority={true}
                                 placeholder="blur"
+                                alt="Festival-Team"
                             />
                         </div>
                     </div>
