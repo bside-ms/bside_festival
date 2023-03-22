@@ -69,10 +69,8 @@ const NavigationOverlay = (): ReactElement | null => {
                 <div className="pt-36 flex flex-col space-y-4 text-4xl text-center">
                     {links.map(link => (
                         <div key={link.link}>
-                            <Link href={link.link}>
-                                <a className="font-display text-white">
-                                    {link.label}
-                                </a>
+                            <Link href={link.link} className="font-display text-white">
+                                {link.label}
                             </Link>
                         </div>
                     ))}
@@ -86,10 +84,8 @@ const NavigationOverlay = (): ReactElement | null => {
 
                         {internalLinks.map(link => (
                             <div key={link.link}>
-                                <Link href={link.link}>
-                                    <a className="font-display text-white">
-                                        {link.label}
-                                    </a>
+                                <Link href={link.link} className="font-display text-white">
+                                    {link.label}
                                 </Link>
                             </div>
                         ))}

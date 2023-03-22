@@ -67,13 +67,11 @@ const PageHeader = ({ theme = 'yellow', symbols = 'plusSigns' }: Props): ReactEl
 
                     <div className={styles.header}>
                         <div className="flex gap-4">
-                            <Link href="/" passHref={true}>
-                                <a className={styles.headerLink}>
-                                    <div className={`${styles.content ?? ''} font-display`}>
-                                        <div>B-Side</div>
-                                        <div>Festival</div>
-                                    </div>
-                                </a>
+                            <Link href="/" passHref={true} className={styles.headerLink}>
+                                <div className={`${styles.content ?? ''} font-display`}>
+                                    <div>B-Side</div>
+                                    <div>Festival</div>
+                                </div>
                             </Link>
                         </div>
                     </div>

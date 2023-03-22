@@ -11,29 +11,33 @@ import Login from 'components/common/Login';
 const Footer = (): ReactElement => {
 
     const imprintLink = (
-        <Link href="https://b-side.ms/kv/impressum/">
-            <a className="underline">Impressum</a>
+        <Link href="https://b-side.ms/kv/impressum/" className="underline">
+            Impressum
         </Link>
     );
     const privacyPolicyLink = (
-        <Link href="https://b-side.ms/kv/datenschutz/">
-            <a className="underline">Datenschutz</a>
+        <Link href="https://b-side.ms/kv/datenschutz/" className="underline">
+            Datenschutz
         </Link>
     );
 
     const instagramLink = (
-        <Link href="https://www.instagram.com/bsidemuenster/">
-            <a className="p-3 text-xl" target="_blank">
-                <FontAwesomeIcon icon={faInstagram} />
-            </a>
+        <Link
+            href="https://www.instagram.com/bsidemuenster/"
+            className="p-3 text-xl"
+            target="_blank"
+        >
+            <FontAwesomeIcon icon={faInstagram} />
         </Link>
     );
 
     const facebookLink = (
-        <Link href="https://www.facebook.com/bsidemuenster">
-            <a className="p-3 text-xl" target="_blank">
-                <FontAwesomeIcon icon={faFacebookSquare} />
-            </a>
+        <Link
+            href="https://www.facebook.com/bsidemuenster"
+            className="p-3 text-xl"
+            target="_blank"
+        >
+            <FontAwesomeIcon icon={faFacebookSquare} />
         </Link>
     );
 
