@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Participant {
+  id            Int       @id @default(autoincrement())
+  name          String    @db.Text
+  appliedAt     DateTime?
+  updatedAt     DateTime  @updatedAt
+  contactName   String?   @db.Text
+  contactMail   String?   @db.Text
+  contactPhone  String?   @db.Text
+  description   String?   @db.Text
+  motivation    String?   @db.Text
+  curationScore Int?
+  curationInfo  String?   @db.Text
+  address       String?   @db.Text
+  residence     String?   @db.Text
+  links         Link[]
+  comments      Comment[]
+  labels        Label[]
+  type          Type
+}
+
+model Link {
+  id            Int         @id @default(autoincrement())
+  participant   Participant @relation(fields: [participantId], references: [id])
+  participantId Int
+  link          String      @db.Text
+}
+
+model Comment {
+  id            Int         @id @default(autoincrement())
+  participant   Participant @relation(fields: [participantId], references: [id])
+  participantId Int
+  comment       String      @db.Text
+  commentator   String      @db.Text
+  updatedAt     DateTime    @updatedAt
+}
+
+model Label {
+  id            Int         @id @default(autoincrement())
+  participant   Participant @relation(fields: [participantId], references: [id])
+  participantId Int
+  label         String      @db.Text
+}
+
+enum Type {
+  Concert
+  Workshop
+  Reading
+  Performance
+  FamilyProgram
+  Exhibition
+  Food
+  Neighbor
+  Misc
+}
