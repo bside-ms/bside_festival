@@ -48,6 +48,7 @@ model Label {
   participant   Participant @relation(fields: [participantId], references: [id])
   participantId Int
   label         String      @db.Text
+  color         String?     @db.Text
 }
 
 enum Type {
