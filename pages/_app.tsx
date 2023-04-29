@@ -11,7 +11,7 @@ const MyApp = ({ Component, pageProps }: AppProps): ReactElement => {
     return (
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         <SessionProvider session={pageProps.session}>
-            <NextHead title="B-Side Festival 2022" />
+            <NextHead title="B-Side Festival 2023" />
 
             <NavigationOverlayContextProvider>
                 {/* eslint-disable-next-line react/jsx-props-no-spreading */}
