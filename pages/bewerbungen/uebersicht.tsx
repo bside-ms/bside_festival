@@ -1,10 +1,8 @@
-import { useCallback } from 'react';
 import * as process from 'process';
 import type { Participant } from '@prisma/client';
 import type { GetServerSideProps } from 'next';
 import type { ReactElement } from 'react';
-import useSwr from 'swr';
-import ApplicationForm from 'components/participants/applicationForm/ApplicationForm';
+import ApplicationsOverview from 'components/participants/applicationsOverview/ApplicationsOverview';
 import fetcher from 'lib/common/fetcher';
 import type { GetAllParticipantsResponse } from 'pages/api/participants/all';
 
@@ -24,29 +22,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
     };
 };
 
-export default ({ participants: initialData }: Props): ReactElement => {
-
-    const { data, mutate } = useSwr<GetAllParticipantsResponse>(
-        '/api/participants/all',
-        fetcher,
-    );
-
-    const usedData = data?.participants ?? initialData;
-
-    const handleSubmit = useCallback(
-        (newParticipant: Participant) => mutate({
-            participants: [
-                ...usedData,
-                newParticipant,
-            ],
-        }),
-        [mutate, usedData]
-    );
+export default ({ participants }: Props): ReactElement => {
 
     return (
         <div className="p-7">
-            <ApplicationForm
-                onSuccessfulFormSubmit={handleSubmit}
+            <ApplicationsOverview
+                applications={participants}
             />
         </div>
     );
