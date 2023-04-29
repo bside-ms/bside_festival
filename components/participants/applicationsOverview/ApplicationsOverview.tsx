@@ -6,6 +6,14 @@ interface Props {
     applications: Array<Participant>;
 }
 
+// TODO: Redesign output of applications
+
+// TODO: Show all information of applications
+
+// TODO: Make applications sortable
+
+// TODO: Make applications filterable
+
 const ApplicationsOverview = ({ applications }: Props): ReactElement => {
 
     return (
