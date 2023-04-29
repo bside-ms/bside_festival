@@ -1,10 +1,7 @@
 import { useMemo } from 'react';
 import { uniqueId } from 'lodash';
 import type { ReactElement } from 'react';
-import type { UseFormRegister } from 'react-hook-form';
-import type { FieldErrors } from 'react-hook-form/dist/types/errors';
-import type { FieldValues } from 'react-hook-form/dist/types/fields';
-import type { FieldPath } from 'react-hook-form/dist/types/path/eager';
+import type { FieldErrors, FieldPath, FieldValues, UseFormRegister } from 'react-hook-form';
 import useIsMounted from 'lib/common/hooks/useIsMounted';
 
 interface Props<T extends FieldValues> {
