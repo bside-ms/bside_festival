@@ -22,6 +22,7 @@
     "@prisma/client": "^4.12.0",
     "@tailwindcss/line-clamp": "0.4.x",
     "date-fns": "2.29.x",
+    "fuse.js": "^6.6.2",
     "lodash": "4.17.x",
     "mariadb": "3.1.x",
     "next": "13.2.x",

@@ -1,17 +1,17 @@
 import * as process from 'process';
 import type { Participant } from '@prisma/client';
-import type { GetServerSideProps } from 'next';
+import type { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import type { ReactElement } from 'react';
-import ApplicationsOverview from 'components/participants/applicationsOverview/ApplicationsOverview';
+import ApplicationsOverview from 'components/applications/applicationsOverview/ApplicationsOverview';
 import fetcher from 'lib/common/fetcher';
 import getUserSession from 'lib/next-auth/getUserSession';
-import type { GetAllParticipantsResponse } from 'pages/api/participants/all';
+import type { GetAllApplicationsResponse } from 'pages/api/applications/all';
 
 interface Props {
-    participants: Array<Participant>;
+    applications: Array<Participant>;
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (context): Promise<GetServerSidePropsResult<Props>> => {
 
     const userSession = await getUserSession(context);
 
@@ -25,21 +25,21 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
     }
 
     const url = new URL(process.env.APP_URL);
-    url.pathname = '/api/participants/all';
+    url.pathname = '/api/applications/all';
 
-    const { participants } = await fetcher(url.toString()) as GetAllParticipantsResponse;
+    const { applications } = await fetcher(url.toString()) as GetAllApplicationsResponse;
 
     return {
-        props: { participants },
+        props: { applications },
     };
 };
 
-export default ({ participants }: Props): ReactElement => {
+export default ({ applications }: Props): ReactElement => {
 
     return (
         <div className="p-7">
             <ApplicationsOverview
-                applications={participants}
+                applications={applications}
             />
         </div>
     );
