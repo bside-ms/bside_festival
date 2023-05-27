@@ -109,14 +109,6 @@ module.exports = {
         'jsx-quotes': [ERROR, 'prefer-double'],
         'key-spacing': ERROR,
         'max-classes-per-file': [ERROR, 10],
-        'max-len': [
-            ERROR,
-            {
-                code: 160,
-                ignoreRegExpLiterals: true,
-                ignorePattern: '^import ' // ignoring imports
-            }
-        ],
         'max-lines': [ERROR, 666],
         'new-parens': ERROR,
         'no-bitwise': ERROR,
@@ -194,11 +186,11 @@ module.exports = {
         'react/jsx-first-prop-new-line': [ERROR, 'multiline'],
         'react/jsx-equals-spacing': ERROR,
         'react/jsx-indent': ERROR,
-        'react/jsx-no-bind': WARNING,
+        'react/jsx-no-bind': ERROR,
         'react/jsx-no-target-blank': OFF,
         'react/jsx-no-useless-fragment': ERROR,
         'react/jsx-props-no-multi-spaces': ERROR,
-        'react/jsx-props-no-spreading': WARNING,
+        'react/jsx-props-no-spreading': OFF,
         'react/jsx-tag-spacing': [
             ERROR,
             {
@@ -222,7 +214,7 @@ module.exports = {
         ],
         'react/no-access-state-in-setstate': ERROR,
         'react/no-adjacent-inline-elements': OFF,
-        'react/no-array-index-key': WARNING,
+        'react/no-array-index-key': ERROR,
         'react/no-danger': ERROR,
         'react/no-deprecated': OFF,
         'react/no-did-mount-set-state': ERROR,
@@ -280,7 +272,7 @@ module.exports = {
         ],
         '@typescript-eslint/default-param-last': ERROR,
         '@typescript-eslint/dot-notation': ERROR,
-        '@typescript-eslint/explicit-function-return-type': WARNING,
+        '@typescript-eslint/explicit-function-return-type': ERROR,
         '@typescript-eslint/explicit-member-accessibility': [
             ERROR,
             {
@@ -376,14 +368,14 @@ module.exports = {
         ],
         '@typescript-eslint/no-throw-literal': ERROR,
         '@typescript-eslint/no-unnecessary-boolean-literal-compare': ERROR,
-        '@typescript-eslint/no-unnecessary-condition': WARNING,
+        '@typescript-eslint/no-unnecessary-condition': ERROR,
         '@typescript-eslint/no-unnecessary-type-arguments': ERROR,
         '@typescript-eslint/no-unnecessary-type-assertion': OFF, // Switched off for time we're migrating to noUncheckedIndexedAccess
         '@typescript-eslint/no-unsafe-assignment': OFF, // Takes way too much time in our code base
-        '@typescript-eslint/no-unsafe-argument': WARNING,
-        '@typescript-eslint/no-unsafe-call': WARNING,
-        '@typescript-eslint/no-unsafe-member-access': WARNING,
-        '@typescript-eslint/no-unsafe-return': WARNING,
+        '@typescript-eslint/no-unsafe-argument': ERROR,
+        '@typescript-eslint/no-unsafe-call': ERROR,
+        '@typescript-eslint/no-unsafe-member-access': ERROR,
+        '@typescript-eslint/no-unsafe-return': ERROR,
         '@typescript-eslint/no-unused-expressions': ERROR,
         '@typescript-eslint/no-unused-vars': OFF, // unused-imports plugin takes care of this
         '@typescript-eslint/no-use-before-define': ERROR,
@@ -393,8 +385,8 @@ module.exports = {
         '@typescript-eslint/prefer-for-of': ERROR,
         '@typescript-eslint/prefer-function-type': ERROR,
         '@typescript-eslint/prefer-includes': ERROR,
-        '@typescript-eslint/prefer-nullish-coalescing': WARNING,
-        '@typescript-eslint/prefer-optional-chain': WARNING,
+        '@typescript-eslint/prefer-nullish-coalescing': ERROR,
+        '@typescript-eslint/prefer-optional-chain': OFF,
         '@typescript-eslint/prefer-readonly': ERROR,
         '@typescript-eslint/prefer-reduce-type-parameter': ERROR,
         '@typescript-eslint/prefer-regexp-exec': ERROR,
@@ -403,7 +395,7 @@ module.exports = {
         '@typescript-eslint/quotes': [ERROR, 'single'],
         '@typescript-eslint/require-await': ERROR,
         '@typescript-eslint/restrict-template-expressions': [
-            WARNING,
+            ERROR,
             { allowNumber: true }
         ],
         '@typescript-eslint/semi': [ERROR, 'always'],
@@ -416,7 +408,7 @@ module.exports = {
             }
         ],
         '@typescript-eslint/space-infix-ops': ERROR,
-        '@typescript-eslint/strict-boolean-expressions': WARNING,
+        '@typescript-eslint/strict-boolean-expressions': ERROR,
         '@typescript-eslint/type-annotation-spacing': ERROR,
         '@typescript-eslint/unbound-method': OFF, // Doesn't recognize autobind decorator
         '@typescript-eslint/unified-signatures': ERROR,
