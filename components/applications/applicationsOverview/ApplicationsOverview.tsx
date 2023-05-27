@@ -19,7 +19,7 @@ const ApplicationsOverview = ({ applications }: Props): ReactElement => {
 
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const handleKeyDown = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 
         setSearchText(event.target.value);
     }, []);
@@ -93,7 +93,7 @@ const ApplicationsOverview = ({ applications }: Props): ReactElement => {
                     type="text"
                     placeholder="Suchen"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2 outline-0"
-                    onChange={handleKeyDown}
+                    onChange={handleSearchChange}
                     ref={inputRef}
                 />
                 {isNotEmptyString(searchText) && (

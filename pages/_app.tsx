@@ -14,7 +14,6 @@ const MyApp = ({ Component, pageProps }: AppProps): ReactElement => {
             <NextHead title="B-Side Festival 2023" />
 
             <NavigationOverlayContextProvider>
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <Component {...pageProps} />
             </NavigationOverlayContextProvider>
         </SessionProvider>

@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
         };
     }
 
-    const url = new URL(process.env.APP_URL);
+    const url = new URL(process.env.APP_URL ?? '');
     url.pathname = '/api/applications/all';
 
     const { applications } = await fetcher(url.toString()) as GetAllApplicationsResponse;

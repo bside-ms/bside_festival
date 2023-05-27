@@ -1,14 +1,12 @@
 import { useState } from 'react';
-import process from 'process';
-import type { Participant } from '@prisma/client';
+import type { Link, Participant } from '@prisma/client';
 import type { GetServerSideProps } from 'next';
-import Link from 'next/link';
+import { default as NextLink } from 'next/link';
 import type { ReactElement } from 'react';
 import ApplicationDetails from 'components/applications/applicationsOverview/ApplicationDetails';
-import fetcher from 'lib/common/fetcher';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
+import prismaClient from 'lib/common/prismaClient';
 import getUserSession from 'lib/next-auth/getUserSession';
-import type { GetApplicationResponse } from 'pages/api/applications/[id]';
 
 const BackLink = (): ReactElement => {
 
@@ -24,17 +22,20 @@ const BackLink = (): ReactElement => {
     });
 
     return (
-        <Link
+        <NextLink
             href={backLink?.toString() ?? ''}
             className="text-gray-800 underline md:cursor-pointer md:hover:text-gray-700"
         >
             zurück
-        </Link>
+        </NextLink>
     );
 };
 
+export type SerializableParticipant = Omit<Participant, 'appliedAt' | 'updatedAt'> & { updatedAt: string };
+
 interface Props {
-    application: Participant;
+    application: SerializableParticipant;
+    links: Array<Link>;
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
@@ -52,27 +53,33 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 
     const idAndName = context.params.idAndName as string | undefined;
 
-    const id = /^\d+/.exec(idAndName ?? '')?.[0] ?? null;
+    const applicationId = /^\d+/.exec(idAndName ?? '')?.[0] ?? null;
 
-    if (id === null) {
+    if (applicationId === null) {
         return { notFound: true };
     }
 
-    const url = new URL(process.env.APP_URL);
-    url.pathname = `/api/applications/${id}`;
-
-    const { application } = await fetcher(url.toString()) as GetApplicationResponse;
+    const application = await prismaClient.participant.findUnique({ where: { id: Number(applicationId) } });
 
     if (application === null) {
         return { notFound: true };
     }
 
+    const links = await prismaClient.link.findMany({ where: { participantId: Number(applicationId) } });
+
     return {
-        props: { application },
+        props: {
+            application: {
+                ...application,
+                appliedAt: application.appliedAt?.toString() ?? null,
+                updatedAt: application.updatedAt.toString(),
+            },
+            links,
+        },
     };
 };
 
-export default ({ application }: Props): ReactElement => {
+export default ({ application, links }: Props): ReactElement => {
 
     return (
         <div className="p-7">
@@ -80,6 +87,7 @@ export default ({ application }: Props): ReactElement => {
 
             <ApplicationDetails
                 application={application}
+                links={links}
             />
         </div>
     );

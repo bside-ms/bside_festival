@@ -8,23 +8,26 @@ datasource db {
 }
 
 model Participant {
-  id            Int       @id @default(autoincrement())
-  name          String    @db.Text
-  appliedAt     DateTime?
-  updatedAt     DateTime  @updatedAt
-  contactName   String?   @db.Text
-  contactMail   String?   @db.Text
-  contactPhone  String?   @db.Text
-  description   String?   @db.Text
-  motivation    String?   @db.Text
-  curationScore Int?
-  curationInfo  String?   @db.Text
-  address       String?   @db.Text
-  residence     String?   @db.Text
-  links         Link[]
-  comments      Comment[]
-  labels        Label[]
-  type          Type
+  id                     Int       @id @default(autoincrement())
+  name                   String    @db.Text
+  appliedAt              DateTime?
+  updatedAt              DateTime  @updatedAt
+  contactName            String?   @db.Text
+  contactMail            String?   @db.Text
+  contactPhone           String?   @db.Text
+  description            String?   @db.Text
+  motivation             String?   @db.Text
+  curationScore          Int?
+  curationInfo           String?   @db.Text
+  address                String?   @db.Text
+  residence              String?   @db.Text
+  imageFileName          String?   @db.Text
+  technicalRider         String?   @db.Text
+  technicalRiderFileName String?   @db.Text
+  links                  Link[]
+  comments               Comment[]
+  labels                 Label[]
+  type                   Type
 }
 
 model Link {

@@ -4,17 +4,19 @@ import type { ReactElement } from 'react';
 import type { FieldPath, FieldValues } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
 import isEmptyNumber from 'lib/common/helper/isEmptyNumber';
+import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import useIsMounted from 'lib/common/hooks/useIsMounted';
 
 interface Props<T extends FieldValues> {
     name: FieldPath<T>;
     label: string;
+    info?: string;
     required?: boolean;
     maxLength?: number;
 }
 
 // eslint-disable-next-line @typescript-eslint/comma-dangle
-const TextArea = <T extends FieldValues,>({ label, name, required = false, maxLength }: Props<T>): ReactElement => {
+const TextArea = <T extends FieldValues,>({ label, name, info, required = false, maxLength }: Props<T>): ReactElement => {
 
     const { formState: { errors }, register } = useFormContext();
 
@@ -27,17 +29,13 @@ const TextArea = <T extends FieldValues,>({ label, name, required = false, maxLe
     const errorMessage = errors[name]?.message;
 
     return (
-        <div className="flex flex-col gap-1">
-            <label htmlFor={id}>
-                {label} {required && <span className="text-orange-600">*</span>}
-            </label>
-
+        <div className="flex flex-col">
             <textarea
                 id={id}
-                className="border border-gray-700 p-1 rounded outline-0 w-full"
+                className={`p-2 rounded outline-0 ${typeof errorMessage === 'string' ? 'bg-rose-600 text-gray-100 placeholder:text-gray-100' : ''}`}
                 rows={5}
+                placeholder={required ? `${label} *` : label}
                 required={required}
-                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...register(
                     name,
                     {
@@ -53,8 +51,14 @@ const TextArea = <T extends FieldValues,>({ label, name, required = false, maxLe
                 )}
             />
 
+            {isNotEmptyString(info) && (
+                <label htmlFor={id} className="px-1 text-gray-100 text-base">
+                    {info}
+                </label>
+            )}
+
             {typeof errorMessage === 'string' && (
-                <div className="text-blue-700">
+                <div className="px-1 text-rose-700">
                     {errorMessage}
                 </div>
             )}
