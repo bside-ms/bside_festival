@@ -18,7 +18,7 @@ interface Props<T extends FieldValues> {
 // eslint-disable-next-line @typescript-eslint/comma-dangle
 const TextArea = <T extends FieldValues,>({ label, name, info, required = false, maxLength }: Props<T>): ReactElement => {
 
-    const { formState: { errors }, register } = useFormContext();
+    const { formState: { errors, isSubmitting }, register } = useFormContext();
 
     const isMounted = useIsMounted();
     const id = useMemo(
@@ -36,6 +36,7 @@ const TextArea = <T extends FieldValues,>({ label, name, info, required = false,
                 rows={5}
                 placeholder={required ? `${label} *` : label}
                 required={required}
+                disabled={isSubmitting}
                 {...register(
                     name,
                     {

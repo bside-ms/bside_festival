@@ -11,28 +11,26 @@ import type { ApplicationFormValues } from 'components/applications/applicationF
 import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 
-interface Props {
-    required?: boolean;
-}
-
 const fieldName: keyof ApplicationFormValues = 'encodedImage';
 
-const maxFileSize = bytes('1MB'); // TODO
-
-const allowedTypes = [
+export const allowedImageContentTypes = [
     'image/bmp',
     'image/jpeg',
     'image/tiff',
     'image/png',
 ];
 
+export const allowedImageMaxFileSize = bytes('1MB'); // TODO
+
+interface Props {
+    required?: boolean;
+}
+
 const ImageUpload = ({ required = false }: Props): ReactElement => {
 
-    const { register, setValue, formState, watch, setError, clearErrors } = useFormContext<ApplicationFormValues>();
+    const { register, setValue, formState: { errors, isSubmitting }, watch, setError, clearErrors } = useFormContext<ApplicationFormValues>();
 
-    const errorMessage = formState.errors[fieldName]?.message;
-
-    console.log('errorMessage', errorMessage);
+    const errorMessage = errors[fieldName]?.message;
 
     const handleImageChange = useCallback(async ({ target }: ChangeEvent<HTMLInputElement>) => {
 
@@ -44,24 +42,24 @@ const ImageUpload = ({ required = false }: Props): ReactElement => {
 
         const file = target.files[0];
 
-        if (!allowedTypes.includes(file.type)) {
+        if (!allowedImageContentTypes.includes(file.type)) {
             setValue(fieldName, '');
             setError(
                 fieldName,
                 {
                     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                    message: `Dateityp nicht zulässig, erlaubt sind ${allowedTypes.map(type => `.${extension(type)}`).join(', ')}`,
+                    message: `Dateityp nicht zulässig, erlaubt sind ${allowedImageContentTypes.map(type => `.${extension(type)}`).join(', ')}`,
                 }
             );
             return;
         }
 
-        if (file.size > maxFileSize) {
+        if (file.size > allowedImageMaxFileSize) {
             setValue(fieldName, '');
             setError(
                 fieldName,
                 {
-                    message: `Max. ${bytes.format(maxFileSize, { unitSeparator: '', unit: 'MB' })} zulässig`,
+                    message: `Max. ${bytes.format(allowedImageMaxFileSize, { unitSeparator: '', unit: 'MB' })} zulässig`,
                 }
             );
             return;
@@ -86,7 +84,7 @@ const ImageUpload = ({ required = false }: Props): ReactElement => {
 
     return (
         <div className="flex flex-col gap-1 relative text-gray-100">
-            {isNotEmptyString(currentImageDataUrl) && (
+            {isNotEmptyString(currentImageDataUrl) && !isSubmitting && (
                 <div
                     className="absolute right-1 top-1 py-1 px-2 bg-gray-800 hover:bg-gray-700 text-gray-50 text-sm rounded-md cursor-pointer z-10"
                     onClick={handleImageDelete}
@@ -96,7 +94,8 @@ const ImageUpload = ({ required = false }: Props): ReactElement => {
             )}
 
             <input
-                type="hidden"
+                type="text"
+                className="h-0 opacity-0 pointer-events-none"
                 {...register(
                     fieldName,
                     {
@@ -113,7 +112,8 @@ const ImageUpload = ({ required = false }: Props): ReactElement => {
                 type="file"
                 onChange={handleImageChange}
                 className="hidden"
-                accept={allowedTypes.join(', ')}
+                accept={allowedImageContentTypes.join(', ')}
+                disabled={isSubmitting}
             />
 
             <label htmlFor={fileInputId.current} className="cursor-pointer">

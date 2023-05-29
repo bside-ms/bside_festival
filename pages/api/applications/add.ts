@@ -1,5 +1,7 @@
 import type { Participant, Type } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { allowedImageContentTypes, allowedImageMaxFileSize } from 'components/applications/applicationForm/ImageUpload';
+import { allowedTechnicalRiderMaxFileSize, allowedTechnicRiderContentType } from 'components/applications/applicationForm/TechnicalRiderFields';
 import prismaClient from 'lib/common/prismaClient';
 import uploadFileToIonos from 'lib/upload/uploadFileToIonos';
 
@@ -42,8 +44,17 @@ export default async (
 
     const requestBody = request.body as AddParticipantRequest;
 
-    const imageFileName = await uploadFileToIonos(requestBody.encodedImage);
-    const technicalRiderFileName = await uploadFileToIonos(requestBody.encodedTechnicalRiderPdf);
+    const imageFileName = await uploadFileToIonos(
+        requestBody.encodedImage,
+        allowedImageContentTypes,
+        allowedImageMaxFileSize
+    );
+
+    const technicalRiderFileName = await uploadFileToIonos(
+        requestBody.encodedTechnicalRiderPdf,
+        [allowedTechnicRiderContentType],
+        allowedTechnicalRiderMaxFileSize
+    );
 
     const dataCool = {
         type: requestBody.type,
@@ -60,7 +71,6 @@ export default async (
         appliedAt: new Date(),
     };
 
-    console.log('dataCool', dataCool);
     const newParticipant = await prismaClient.participant.create({
         data: dataCool,
     });

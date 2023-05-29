@@ -17,7 +17,7 @@ const generateFileName = (base64Data: string, contentType: string): string => {
     return `${fileName}.${fileExtension}`;
 };
 
-const uploadFileToIonos = async (encodedFile: string): Promise<string | null> => {
+const uploadFileToIonos = async (encodedFile: string, allowedContentTypes: Array<string>, allowedMaxFileSize: number): Promise<string | null> => {
 
     if (isEmptyString(encodedFile)) {
         return null;
@@ -31,11 +31,19 @@ const uploadFileToIonos = async (encodedFile: string): Promise<string | null> =>
 
     const [match, contentType] = fileEncodingMatch;
 
+    if (!allowedContentTypes.includes(contentType)) {
+        throw new Error(`Unexpected content type ${contentType}, allowed types: ${allowedContentTypes.join(', ')}`);
+    }
+
     const base64Data = encodedFile.replace(match, '');
 
     const fileName = generateFileName(base64Data, contentType);
 
     const buffer = Buffer.from(base64Data, 'base64');
+
+    if (buffer.length > allowedMaxFileSize) {
+        throw new Error(`File size ${buffer.length} is too big, max. ${allowedMaxFileSize} allowed`);
+    }
 
     const s3Client = createS3Client();
 

@@ -8,7 +8,7 @@ import isEmptyString from 'lib/common/helper/isEmptyString';
 
 const Links = (): ReactElement => {
 
-    const { formState: { dirtyFields } } = useFormContext<ApplicationFormValues>();
+    const { formState: { dirtyFields, isSubmitting } } = useFormContext<ApplicationFormValues>();
 
     const validateUrl = useCallback((url: string): string | undefined => {
         if (isEmptyString(url)) {

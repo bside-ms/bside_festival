@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Type } from '@prisma/client';
 import bytes from 'bytes';
 import { uniqueId } from 'lodash';
 import type { ChangeEvent, ReactElement } from 'react';
@@ -11,21 +12,68 @@ import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 
 const fileFieldName: keyof ApplicationFormValues = 'encodedTechnicalRiderPdf';
-const maxFileSize = bytes('20MB');
 
-const allowedPdfFileType = 'application/pdf';
+export const getTechnicalRiderInfo = (applicationType: Type): null | { info: string, required?: boolean } => {
 
-const TechnicalRiderFields = (): ReactElement => {
+    switch (applicationType) {
+        case Type.Exhibition:
+            return {
+                info: 'Welche technische Ausstattung braucht ihr? Alternativ könnt ihr hierfür auch eine PDF-Datei hochladen',
+            };
+
+        case Type.Performance:
+            return {
+                info: `
+                    Welche technische Ausstattung braucht ihr? Zum Beispiel Mikrofone, Licht, … Wie viel Platz 
+                    braucht ihr auf der Bühne? Seid so genau wie möglich. Kennzeichnet was 
+                    ihr selber mitbringt und was ihr von uns braucht. Alternativ könnt ihr hierfür auch eine
+                    PDF-Datei hochladen
+                `,
+                required: true,
+            };
+
+        case Type.Concert:
+            return {
+                info: `
+                    Welche Instrumente habt ihr auf der Bühne? Welche technische Ausstattung 
+                    braucht ihr? Zum Beispiel Verstärker, Mikrofone, Licht, … Wie viel Platz 
+                    braucht ihr auf der Bühne? Seid so genau wie möglich. Kennzeichnet was 
+                    ihr selber mitbringt und was ihr von uns braucht. Ladet optional zusätzlich
+                    eine PDF-Datei hoch.
+                `,
+                required: true,
+            };
+
+        case Type.Reading:
+            return {
+                info: 'Welche technische Ausstattung braucht ihr? Alternativ könnt ihr hierfür auch eine PDF-Datei hochladen',
+            };
+
+        case Type.Workshop:
+            return {
+                info: 'Welche technische Ausstattung braucht ihr? Alternativ könnt ihr hierfür auch eine PDF-Datei hochladen',
+            };
+
+        default:
+            return null;
+    }
+};
+
+export const allowedTechnicRiderContentType = 'application/pdf';
+export const allowedTechnicalRiderMaxFileSize = bytes('20MB');
+
+const TechnicalRiderFields = (): ReactElement | null => {
 
     const { register, setValue, formState, watch, setError, clearErrors } = useFormContext<ApplicationFormValues>();
 
-    const errorMessage = formState.errors.encodedImage?.message;
+    const technicalRiderErrorMessage = formState.errors.technicalRider?.message;
+    const technicalRiderPdfErrorMessage = formState.errors.encodedTechnicalRiderPdf?.message;
 
     const [currentFileName, setCurrentFileName] = useState<string | null>(null);
 
     const handleFileChange = useCallback(async ({ target }: ChangeEvent<HTMLInputElement>) => {
 
-        clearErrors(fileFieldName);
+        clearErrors(['technicalRider', fileFieldName]);
 
         if (target.files === null || target.files[0] === undefined) {
             return;
@@ -33,7 +81,7 @@ const TechnicalRiderFields = (): ReactElement => {
 
         const file = target.files[0];
 
-        if (file.type !== allowedPdfFileType) {
+        if (file.type !== allowedTechnicRiderContentType) {
             setValue(fileFieldName, '');
             setCurrentFileName(null);
             setError(
@@ -43,12 +91,12 @@ const TechnicalRiderFields = (): ReactElement => {
             return;
         }
 
-        if (file.size > maxFileSize) {
+        if (file.size > allowedTechnicalRiderMaxFileSize) {
             setValue(fileFieldName, '');
             setCurrentFileName(null);
             setError(
                 fileFieldName,
-                { message: `Max. ${bytes.format(maxFileSize, { unitSeparator: '', unit: 'MB' })} zulässig` }
+                { message: `Max. ${bytes.format(allowedTechnicalRiderMaxFileSize, { unitSeparator: '', unit: 'MB' })} zulässig` }
             );
             return;
         }
@@ -68,20 +116,25 @@ const TechnicalRiderFields = (): ReactElement => {
     );
 
     const currentFileDataUrl = watch(fileFieldName);
+    const currentApplicationType = watch('type');
 
     const fileInputId = useRef(uniqueId('file-upload'));
+
+    const technicalRiderInfo = getTechnicalRiderInfo(currentApplicationType);
+
+    if (technicalRiderInfo === null) {
+        return null;
+    }
+
+    const { info, required } = technicalRiderInfo;
 
     return (
         <div className="flex flex-col gap-1 relative">
             <TextArea<ApplicationFormValues>
                 name="technicalRider"
-                label="Technical Rider"
-                info={`
-                    Welche Instrumente habt ihr auf der Bühne? Welche technische Ausstattung 
-                    braucht ihr (Verstärker, Mikrofone, etc.)? Kennzeichnet was 
-                    ihr selber mitbringt und was ihr von uns braucht. Reiche den Technical Rider alternativ als PDF ein.
-                `}
-                required={true}
+                // We do not use `required` of `TextArea` since PDF is fine as well, it's handled manually
+                label={required === true ? 'Technical Rider *' : 'Technical Rider'}
+                info={info}
             />
 
             <input type="hidden" {...register(fileFieldName)} />
@@ -91,7 +144,7 @@ const TechnicalRiderFields = (): ReactElement => {
                 type="file"
                 onChange={handleFileChange}
                 className="hidden"
-                accept={allowedPdfFileType}
+                accept={allowedTechnicRiderContentType}
             />
 
             <div className="text-gray-100">
@@ -116,9 +169,15 @@ const TechnicalRiderFields = (): ReactElement => {
                 )}
             </div>
 
-            {typeof errorMessage === 'string' && (
+            {typeof technicalRiderPdfErrorMessage === 'string' && (
                 <div className="px-1 text-rose-700">
-                    {errorMessage}
+                    {technicalRiderErrorMessage}
+                </div>
+            )}
+
+            {typeof technicalRiderPdfErrorMessage === 'string' && (
+                <div className="px-1 text-rose-700">
+                    {technicalRiderErrorMessage}
                 </div>
             )}
         </div>

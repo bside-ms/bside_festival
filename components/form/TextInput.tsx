@@ -18,7 +18,7 @@ interface Props<T extends FieldValues> {
 
 const TextInput = <T extends FieldValues>({ label, name, info, validate, required = false, maxLength }: Props<T>): ReactElement => {
 
-    const { formState: { errors }, register } = useFormContext();
+    const { formState: { errors, isSubmitting }, register } = useFormContext();
 
     const isMounted = useIsMounted();
     const id = useMemo(
@@ -36,6 +36,7 @@ const TextInput = <T extends FieldValues>({ label, name, info, validate, require
                 className={`p-2 rounded outline-0 ${typeof errorMessage === 'string' ? 'bg-rose-600 text-gray-100 placeholder:text-gray-100' : ''}`}
                 required={required}
                 placeholder={required ? `${label} *` : label}
+                disabled={isSubmitting}
                 {...register(
                     name,
                     {

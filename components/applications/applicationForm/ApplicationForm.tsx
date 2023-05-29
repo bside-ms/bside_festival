@@ -1,11 +1,13 @@
-
 import { useCallback } from 'react';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Type } from '@prisma/client';
+import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import ImageUpload from 'components/applications/applicationForm/ImageUpload';
 import Links from 'components/applications/applicationForm/Links';
-import TechnicalRiderFields from 'components/applications/applicationForm/TechnicalRiderFields';
+import TechnicalRiderFields, { getTechnicalRiderInfo } from 'components/applications/applicationForm/TechnicalRiderFields';
 import Button from 'components/common/Button';
 import SelectInput from 'components/form/SelectInput';
 import TextArea from 'components/form/TextArea';
@@ -52,13 +54,38 @@ const availableTypes = new Array<Type>(
 const ApplicationForm = (): ReactElement => {
 
     const methods = useForm<ApplicationFormValues>();
-    const { handleSubmit, setError, formState, clearErrors, reset, watch } = methods;
+    const { handleSubmit, setError, formState: { errors, isSubmitting }, clearErrors, reset, watch } = methods;
+
+    const router = useRouter();
 
     const handleFormReset = useCallback(() => reset(), [reset]);
+
+    const currentType = watch('type');
 
     const handleFormSubmit = useCallback(async (values: ApplicationFormValues) => {
 
         clearErrors('root');
+
+        const technicalRiderInfo = getTechnicalRiderInfo(values.type);
+
+        if (
+            technicalRiderInfo !== null &&
+            technicalRiderInfo.required === true &&
+            isEmptyString(values.technicalRider) &&
+            isEmptyString(values.encodedTechnicalRiderPdf)
+        ) {
+            setError(
+                'technicalRider',
+                {
+                    type: 'manual',
+                    message: 'Bitte sende uns euren Technical Rider in Text- oder PDF-Form',
+                },
+                {
+                    shouldFocus: true,
+                }
+            );
+            return;
+        }
 
         const request: AddParticipantRequest = {
             type: values.type,
@@ -82,8 +109,6 @@ const ApplicationForm = (): ReactElement => {
             ].filter(isNotEmptyString),
         };
 
-        console.log(request);
-
         const response = await fetch('/api/applications/add', {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
@@ -95,11 +120,13 @@ const ApplicationForm = (): ReactElement => {
             return;
         }
 
+        window.scrollTo({ behavior: 'smooth' });
+
         handleFormReset();
 
-    }, [clearErrors, handleFormReset, setError]);
+        router.push('/bewerbungen/danke');
 
-    const currentType = watch('type');
+    }, [clearErrors, handleFormReset, router, setError]);
 
     return (
         <FormProvider {...methods}>
@@ -125,12 +152,14 @@ const ApplicationForm = (): ReactElement => {
                                     <strong>{typeLabels[currentType]}</strong>
                                 </div>
 
-                                <a
-                                    onClick={handleFormReset}
-                                    className="cursor-pointer text-sm"
-                                >
-                                    ändern
-                                </a>
+                                {!isSubmitting && (
+                                    <a
+                                        onClick={handleFormReset}
+                                        className="cursor-pointer text-sm"
+                                    >
+                                        ändern
+                                    </a>
+                                )}
                             </div>
 
                             <TextInput<ApplicationFormValues>
@@ -141,7 +170,9 @@ const ApplicationForm = (): ReactElement => {
                                 maxLength={100}
                             />
 
-                            <ImageUpload />
+                            <ImageUpload
+                                required={true}
+                            />
 
                             <TextArea<ApplicationFormValues>
                                 name="description"
@@ -190,17 +221,23 @@ const ApplicationForm = (): ReactElement => {
                             />
 
                             <div>
-                                <Button type="submit" withFullWidth={true}>
+                                <Button type="submit" withFullWidth={true} isDisabled={isSubmitting}>
                                     Absenden
                                 </Button>
                             </div>
+
+                            {isSubmitting && (
+                                <div className="text-gray-100">
+                                    Wird gesendet <span className="animate-spin inline-block"><FontAwesomeIcon icon={faSpinner} /></span>
+                                </div>
+                            )}
                         </>
                     )}
                 </form>
 
-                {formState.errors.root && (
+                {errors.root && (
                     <div className="mt-2 text-red-600">
-                        {formState.errors.root.message}
+                        {errors.root.message}
                     </div>
                 )}
             </div>

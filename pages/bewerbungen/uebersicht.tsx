@@ -3,6 +3,8 @@ import type { Participant } from '@prisma/client';
 import type { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import type { ReactElement } from 'react';
 import ApplicationsOverview from 'components/applications/applicationsOverview/ApplicationsOverview';
+import Footer from 'components/common/Footer';
+import PageHeader from 'components/common/PageHeader';
 import fetcher from 'lib/common/fetcher';
 import getUserSession from 'lib/next-auth/getUserSession';
 import type { GetAllApplicationsResponse } from 'pages/api/applications/all';
@@ -37,10 +39,18 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
 export default ({ applications }: Props): ReactElement => {
 
     return (
-        <div className="p-7">
-            <ApplicationsOverview
-                applications={applications}
-            />
-        </div>
+        <>
+            <PageHeader theme="pink" symbols="none" />
+
+            <div
+                className="min-h-screen py-40 px-7 relative w-full"
+            >
+                <ApplicationsOverview
+                    applications={applications}
+                />
+            </div>
+
+            <Footer />
+        </>
     );
 };

@@ -3,7 +3,7 @@ import type { Link, Participant } from '@prisma/client';
 import type { GetServerSideProps } from 'next';
 import { default as NextLink } from 'next/link';
 import type { ReactElement } from 'react';
-import ApplicationDetails from 'components/applications/applicationsOverview/ApplicationDetails';
+import ApplicationDetails from 'components/applications/applicationDetails/ApplicationDetails';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 import prismaClient from 'lib/common/prismaClient';
 import getUserSession from 'lib/next-auth/getUserSession';
