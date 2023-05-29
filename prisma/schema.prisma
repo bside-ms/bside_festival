@@ -65,3 +65,8 @@ enum Type {
   Neighbor
   Misc
 }
+
+model Location {
+  id   Int    @id @default(autoincrement())
+  name String @db.Text
+}
