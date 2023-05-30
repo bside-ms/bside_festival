@@ -4,6 +4,8 @@ import type { GetServerSideProps } from 'next';
 import { default as NextLink } from 'next/link';
 import type { ReactElement } from 'react';
 import ApplicationDetails from 'components/applications/applicationDetails/ApplicationDetails';
+import Footer from 'components/common/Footer';
+import PageHeader from 'components/common/PageHeader';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 import prismaClient from 'lib/common/prismaClient';
 import getUserSession from 'lib/next-auth/getUserSession';
@@ -82,13 +84,21 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 export default ({ application, links }: Props): ReactElement => {
 
     return (
-        <div className="p-7">
-            <BackLink />
+        <>
+            <PageHeader theme="pink" symbols="none" />
 
-            <ApplicationDetails
-                application={application}
-                links={links}
-            />
-        </div>
+            <div
+                className="min-h-screen py-40 px-7 relative w-full"
+            >
+                <BackLink />
+
+                <ApplicationDetails
+                    application={application}
+                    links={links}
+                />
+            </div>
+
+            <Footer />
+        </>
     );
 };

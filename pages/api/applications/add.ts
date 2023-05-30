@@ -56,23 +56,22 @@ export default async (
         allowedTechnicalRiderMaxFileSize
     );
 
-    const dataCool = {
-        type: requestBody.type,
-        name: requestBody.name,
-        contactName: requestBody.contactName,
-        contactPhone: requestBody.contactPhone,
-        contactMail: requestBody.contactMail,
-        technicalRider: requestBody.technicalRider,
-        description: requestBody.description,
-        motivation: requestBody.motivation,
-        residence: requestBody.residence,
-        imageFileName,
-        technicalRiderFileName,
-        appliedAt: new Date(),
-    };
-
     const newParticipant = await prismaClient.participant.create({
-        data: dataCool,
+        data: {
+            type: requestBody.type,
+            name: requestBody.name,
+            contactName: requestBody.contactName,
+            contactPhone: requestBody.contactPhone,
+            contactMail: requestBody.contactMail,
+            technicalRider: requestBody.technicalRider,
+            description: requestBody.description,
+            motivation: requestBody.motivation,
+            residence: requestBody.residence,
+            additionalInfo: requestBody.additionalInfo,
+            imageFileName,
+            technicalRiderFileName,
+            appliedAt: new Date(),
+        },
     });
 
     for (const link of requestBody.links) {

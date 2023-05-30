@@ -1,16 +1,18 @@
-import * as process from 'process';
-import type { Participant } from '@prisma/client';
+import type { Link } from '@prisma/client';
 import type { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import type { ReactElement } from 'react';
 import ApplicationsOverview from 'components/applications/applicationsOverview/ApplicationsOverview';
+import { ApplicationsOverviewContextProvider } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
+import ContentWrapper from 'components/common/ContentWrapper';
 import Footer from 'components/common/Footer';
 import PageHeader from 'components/common/PageHeader';
-import fetcher from 'lib/common/fetcher';
+import prismaClient from 'lib/common/prismaClient';
 import getUserSession from 'lib/next-auth/getUserSession';
-import type { GetAllApplicationsResponse } from 'pages/api/applications/all';
+import type { SerializableParticipant } from 'pages/bewerbungen/[idAndName]';
 
 interface Props {
-    applications: Array<Participant>;
+    applications: Array<SerializableParticipant>;
+    allLinks: Array<Link>;
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context): Promise<GetServerSidePropsResult<Props>> => {
@@ -26,28 +28,37 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
         };
     }
 
-    const url = new URL(process.env.APP_URL ?? '');
-    url.pathname = '/api/applications/all';
+    const applications = await prismaClient.participant.findMany();
 
-    const { applications } = await fetcher(url.toString()) as GetAllApplicationsResponse;
+    const allLinks = await prismaClient.link.findMany();
 
     return {
-        props: { applications },
+        props: {
+            applications: applications.map(application => ({
+                ...application,
+                appliedAt: application.appliedAt?.toString() ?? null,
+                updatedAt: application.updatedAt.toString(),
+            })),
+            allLinks,
+        },
     };
 };
 
-export default ({ applications }: Props): ReactElement => {
+export default ({ applications, allLinks }: Props): ReactElement => {
 
     return (
         <>
             <PageHeader theme="pink" symbols="none" />
 
-            <div
-                className="min-h-screen py-40 px-7 relative w-full"
-            >
-                <ApplicationsOverview
-                    applications={applications}
-                />
+            <div className="py-40">
+                <ContentWrapper>
+                    <ApplicationsOverviewContextProvider
+                        applications={applications}
+                        allLinks={allLinks}
+                    >
+                        <ApplicationsOverview />
+                    </ApplicationsOverviewContextProvider>
+                </ContentWrapper>
             </div>
 
             <Footer />

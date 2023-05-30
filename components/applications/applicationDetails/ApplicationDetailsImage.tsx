@@ -24,17 +24,17 @@ const ApplicationDetailsImage = ({ application: { imageFileName, name } }: Props
         <div
             className={`${showEnhancedImage ? 'h-96 md:h-[600px]' : ''} w-full h-32 md:h-52 relative rounded-md overflow-hidden mb-2`}
         >
+            <div
+                className="bg-center bg-cover bg-no-repeat absolute top-0 right-0 bottom-0 left-0"
+                style={{ backgroundImage: `url(${imageUrl})` }}
+            />
+
             <Image
                 src={imageUrl}
                 alt={name}
                 fill={true}
-                className="object-contain"
+                className="object-contain backdrop-blur-2xl"
                 onClick={toggleEnhancedImage}
-            />
-
-            <div
-                className="bg-center bg-contain backdrop-blur-2xl bg-no-repeat absolute top-0 right-0 bottom-0 left-0"
-                style={{ backgroundImage: `url(${imageUrl})` }}
             />
         </div>
     );

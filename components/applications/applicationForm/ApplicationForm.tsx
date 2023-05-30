@@ -12,6 +12,7 @@ import Button from 'components/common/Button';
 import SelectInput from 'components/form/SelectInput';
 import TextArea from 'components/form/TextArea';
 import TextInput from 'components/form/TextInput';
+import availableTypes from 'lib/applications/availableTypes';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import typeLabels from 'lib/participants/typeLabels';
@@ -38,18 +39,6 @@ export interface ApplicationFormValues {
     url4: string;
     url5: string;
 }
-
-const availableTypes = new Array<Type>(
-    Type.Concert,
-    Type.Workshop,
-    Type.Reading,
-    Type.Performance,
-    Type.FamilyProgram,
-    Type.Exhibition,
-    Type.Food,
-    Type.Neighbor,
-    Type.Misc,
-);
 
 const ApplicationForm = (): ReactElement => {
 

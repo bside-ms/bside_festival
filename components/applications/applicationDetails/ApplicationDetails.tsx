@@ -1,5 +1,6 @@
 import type { Link } from '@prisma/client';
 import type { ReactElement } from 'react';
+import ApplicationDetailsAdditionalInfo from 'components/applications/applicationDetails/ApplicationDetailsAdditionalInfo';
 import ApplicationDetailsContacts from 'components/applications/applicationDetails/ApplicationDetailsContacts';
 import ApplicationDetailsImage from 'components/applications/applicationDetails/ApplicationDetailsImage';
 import ApplicationDetailsLinks from 'components/applications/applicationDetails/ApplicationDetailsLinks';
@@ -37,6 +38,8 @@ const ApplicationDetails = ({ application, links }: Props): ReactElement => {
             <ApplicationDetailsContacts application={application} />
 
             <ApplicationDetailsTechnicalRider application={application} />
+
+            <ApplicationDetailsAdditionalInfo application={application} />
         </div>
     );
 };

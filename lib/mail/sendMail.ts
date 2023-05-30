@@ -7,14 +7,11 @@ const sendMail = (options: Options): void => {
 
     transporter.sendMail(
         options,
-        (error, info) => {
+        error => {
             if (error !== null) {
                 // eslint-disable-next-line no-console
                 console.error(`Failed to send mail, error: ${error.message}`);
             }
-
-            console.log('error', error);
-            console.log('info', info);
         }
     );
 };

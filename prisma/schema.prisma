@@ -24,6 +24,7 @@ model Participant {
   imageFileName          String?   @db.Text
   technicalRider         String?   @db.Text
   technicalRiderFileName String?   @db.Text
+  additionalInfo         String?   @db.Text
   links                  Link[]
   comments               Comment[]
   labels                 Label[]
