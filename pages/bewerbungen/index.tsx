@@ -9,7 +9,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const userSession = await getUserSession(context);
 
-    if (userSession === null || context.params === undefined) {
+    if (userSession === null) {
         return {
             redirect: {
                 statusCode: 302,
