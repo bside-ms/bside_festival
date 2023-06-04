@@ -17,8 +17,6 @@ RUN adduser --system --uid 1001 nextjs
 
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
-RUN npm run prisma:migrations:deploy
-RUN npm run prisma:client:generate
 RUN npm run build -- --no-lint
 
 USER nextjs
