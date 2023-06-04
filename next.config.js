@@ -5,7 +5,7 @@ module.exports = {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: process.env.NEXT_PUBLIC_IONOS_HOST_NAME ?? '',
+                hostname: process.env.NEXT_PUBLIC_IONOS_HOST_NAME ?? 'localhost',
             },
         ],
     },
