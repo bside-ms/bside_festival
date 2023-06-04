@@ -2,7 +2,9 @@ import type { Participant, Type } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { allowedImageContentTypes, allowedImageMaxFileSize } from 'components/applications/applicationForm/ImageUpload';
 import { allowedTechnicalRiderMaxFileSize, allowedTechnicRiderContentType } from 'components/applications/applicationForm/TechnicalRiderFields';
+import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import prismaClient from 'lib/common/prismaClient';
+import sendApplicationConfirmationMail from 'lib/mail/sendApplicationConfirmationMail';
 import uploadFileToIonos from 'lib/upload/uploadFileToIonos';
 
 export interface AddParticipantRequest {
@@ -42,45 +44,66 @@ export default async (
     response: NextApiResponse<SuccessfulAddParticipantResponse | ErroneousAddParticipantResponse>
 ): Promise<void> => {
 
-    const requestBody = request.body as AddParticipantRequest;
+    const {
+        type,
+        motivation,
+        encodedImage,
+        name,
+        description,
+        residence,
+        additionalInfo,
+        contactPhone,
+        encodedTechnicalRiderPdf,
+        technicalRider,
+        contactName,
+        links,
+        contactMail,
+    } = request.body as AddParticipantRequest;
 
     const imageFileName = await uploadFileToIonos(
-        requestBody.encodedImage,
+        encodedImage,
         allowedImageContentTypes,
         allowedImageMaxFileSize
     );
 
     const technicalRiderFileName = await uploadFileToIonos(
-        requestBody.encodedTechnicalRiderPdf,
+        encodedTechnicalRiderPdf,
         [allowedTechnicRiderContentType],
         allowedTechnicalRiderMaxFileSize
     );
 
     const newParticipant = await prismaClient.participant.create({
         data: {
-            type: requestBody.type,
-            name: requestBody.name,
-            contactName: requestBody.contactName,
-            contactPhone: requestBody.contactPhone,
-            contactMail: requestBody.contactMail,
-            technicalRider: requestBody.technicalRider,
-            description: requestBody.description,
-            motivation: requestBody.motivation,
-            residence: requestBody.residence,
-            additionalInfo: requestBody.additionalInfo,
+            type,
+            name,
+            contactName,
+            contactPhone,
+            contactMail,
+            technicalRider,
+            description,
+            motivation,
+            residence,
+            additionalInfo,
             imageFileName,
             technicalRiderFileName,
             appliedAt: new Date(),
         },
     });
 
-    for (const link of requestBody.links) {
+    for (const link of links) {
         await prismaClient.link.create({
             data: {
                 link,
                 participantId: newParticipant.id,
             },
         });
+    }
+
+    if (isNotEmptyString(newParticipant.contactMail)) {
+        sendApplicationConfirmationMail({
+            ...newParticipant,
+            contactMail: newParticipant.contactMail,
+        }, links);
     }
 
     response.status(200).json({ newParticipant });

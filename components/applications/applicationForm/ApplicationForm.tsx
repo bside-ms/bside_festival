@@ -132,7 +132,6 @@ const ApplicationForm = (): ReactElement => {
                             label="Art der Bewerbung"
                             options={availableTypes.map(type => ({ value: type, label: typeLabels[type] }))}
                             required={true}
-                            info=""
                         />
                     ) : (
                         <>
@@ -159,9 +158,7 @@ const ApplicationForm = (): ReactElement => {
                                 maxLength={100}
                             />
 
-                            <ImageUpload
-                                required={true}
-                            />
+                            <ImageUpload />
 
                             <TextArea<ApplicationFormValues>
                                 name="description"
@@ -183,13 +180,13 @@ const ApplicationForm = (): ReactElement => {
                             <TextInput<ApplicationFormValues>
                                 name="contactName"
                                 label="Ansprechperson"
-                                // required={true}
+                                required={true}
                             />
 
                             <TextInput<ApplicationFormValues>
                                 name="contactMail"
                                 label="E-Mail-Adresse"
-                                // required={true}
+                                required={true}
                             />
 
                             <TextInput<ApplicationFormValues>

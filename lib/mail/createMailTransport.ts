@@ -1,17 +1,18 @@
-import type { Transporter } from 'nodemailer';
 import { createTransport } from 'nodemailer';
+import type Mail from 'nodemailer/lib/mailer';
+import type { SentMessageInfo } from 'nodemailer/lib/smtp-transport';
 
-let mailTransport: Transporter | null = null;
+let mailTransport: Mail<SentMessageInfo> | null = null;
 
-const createMailTransport = (): Transporter => {
+const createMailTransport = (): Mail<SentMessageInfo> => {
 
     if (mailTransport !== null) {
         return mailTransport;
     }
 
-    mailTransport = createTransport({
+    const transportOptions = {
         host: process.env.MAIL_HOST,
-        port: 465,
+        port: Number(process.env.MAIL_PORT),
         secure: true,
         auth: {
             user: process.env.MAIL_USER,
@@ -22,7 +23,9 @@ const createMailTransport = (): Transporter => {
             address: 'no-reply@b-side.ms',
         },
         replyTo: 'festival@b-side.ms',
-    });
+    };
+
+    mailTransport = createTransport(transportOptions);
 
     mailTransport.verify(error => {
         if (error !== null) {

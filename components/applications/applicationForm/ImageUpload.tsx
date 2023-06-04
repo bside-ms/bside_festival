@@ -1,6 +1,7 @@
 import { useCallback, useRef } from 'react';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Type } from '@prisma/client';
 import bytes from 'bytes';
 import { uniqueId } from 'lodash';
 import { extension } from 'mime-types';
@@ -22,13 +23,19 @@ export const allowedImageContentTypes = [
 
 export const allowedImageMaxFileSize = bytes('1MB'); // TODO
 
-interface Props {
-    required?: boolean;
-}
+const typesRequiringImage = new Array<Type>(
+    Type.Concert,
+    Type.Performance,
+    Type.Exhibition,
+);
 
-const ImageUpload = ({ required = false }: Props): ReactElement => {
+const ImageUpload = (): ReactElement => {
 
     const { register, setValue, formState: { errors, isSubmitting }, watch, setError, clearErrors } = useFormContext<ApplicationFormValues>();
+
+    const currentType = watch('type');
+
+    const required = typesRequiringImage.includes(currentType);
 
     const errorMessage = errors[fieldName]?.message;
 
