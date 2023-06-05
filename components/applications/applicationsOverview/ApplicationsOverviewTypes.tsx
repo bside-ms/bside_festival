@@ -17,7 +17,7 @@ const TypeToggle = ({ type }: { type: Type }): ReactElement => {
 
     return (
         <div
-            className={`select-none md:cursor-pointer rounded-2xl border border-gray-400 text-sm py-1 px-4 bg-gray-100 ${active ? '!bg-gray-600 !text-white' : ''}`}
+            className={`select-none md:cursor-pointer rounded-2xl border border-gray-400 text-sm py-1 px-4 bg-gray-100 ${active ? '!bg-gray-600 !text-gray-100' : ''}`}
             onClick={handleClick}
         >
             {typeLabels[type]}

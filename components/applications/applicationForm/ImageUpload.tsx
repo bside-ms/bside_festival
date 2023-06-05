@@ -21,7 +21,7 @@ export const allowedImageContentTypes = [
     'image/png',
 ];
 
-export const allowedImageMaxFileSize = bytes('1MB'); // TODO
+export const allowedImageMaxFileSize = bytes('20MB');
 
 const typesRequiringImage = new Array<Type>(
     Type.Concert,

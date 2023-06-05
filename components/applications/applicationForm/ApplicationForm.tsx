@@ -1,18 +1,19 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Type } from '@prisma/client';
-import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import ApplicationSuccess from 'components/applications/applicationForm/ApplicationSuccess';
+import ApplicationTypeImage from 'components/applications/applicationForm/ApplicationTypeImage';
+import ApplicationTypeIntro from 'components/applications/applicationForm/ApplicationTypeIntro';
+import ApplicationTypeSelection from 'components/applications/applicationForm/ApplicationTypeSelection';
 import ImageUpload from 'components/applications/applicationForm/ImageUpload';
 import Links from 'components/applications/applicationForm/Links';
 import TechnicalRiderFields, { getTechnicalRiderInfo } from 'components/applications/applicationForm/TechnicalRiderFields';
 import Button from 'components/common/Button';
-import SelectInput from 'components/form/SelectInput';
 import TextArea from 'components/form/TextArea';
 import TextInput from 'components/form/TextInput';
-import availableTypes from 'lib/applications/availableTypes';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import typeLabels from 'lib/participants/typeLabels';
@@ -42,10 +43,10 @@ export interface ApplicationFormValues {
 
 const ApplicationForm = (): ReactElement => {
 
-    const methods = useForm<ApplicationFormValues>();
-    const { handleSubmit, setError, formState: { errors, isSubmitting }, clearErrors, reset, watch } = methods;
+    const [wasSuccessfullySubmitted, setWasSuccessfullySubmitted] = useState(false);
 
-    const router = useRouter();
+    const methods = useForm<ApplicationFormValues>();
+    const { handleSubmit, setError, formState: { errors, isSubmitting }, clearErrors, reset, watch, setValue } = methods;
 
     const handleFormReset = useCallback(() => reset(), [reset]);
 
@@ -109,13 +110,23 @@ const ApplicationForm = (): ReactElement => {
             return;
         }
 
-        window.scrollTo({ behavior: 'smooth' });
+        window.scrollTo({ top: 0 });
+
+        setWasSuccessfullySubmitted(true);
 
         handleFormReset();
 
-        router.push('/bewerbungen/danke');
+    }, [clearErrors, handleFormReset, setError]);
 
-    }, [clearErrors, handleFormReset, router, setError]);
+    const handleTypeSelect = useCallback((type: Type) => {
+        setValue('type', type);
+
+        window.scrollTo({ top: 0 });
+    }, [setValue]);
+
+    if (wasSuccessfullySubmitted) {
+        return <ApplicationSuccess />;
+    }
 
     return (
         <FormProvider {...methods}>
@@ -125,29 +136,47 @@ const ApplicationForm = (): ReactElement => {
                     noValidate={true}
                     className="flex gap-6 flex-col"
                 >
+                    <div className="text-gray-100">
+                        <div className="text-lg">B-Side Festival 2023</div>
+                        <div className="text-2xl font-bold">Bewerbung</div>
+                    </div>
 
                     {isEmptyString(currentType) ? (
-                        <SelectInput<ApplicationFormValues>
-                            name="type"
-                            label="Art der Bewerbung"
-                            options={availableTypes.map(type => ({ value: type, label: typeLabels[type] }))}
-                            required={true}
-                        />
+                        <>
+                            <div className="text-gray-100">
+                                Auf dem B-Side Festival gibt es viele verschiedenen Formate. Damit wir
+                                den Überblick behalten, haben wir auf dieser Seite verschiedene
+                                Bewerbungsformulare zusammengestellt. Sucht euch einfach das Genre
+                                aus, das am ehesten zu eurem Programmpunkt passt.
+                            </div>
+
+                            <ApplicationTypeSelection onSelect={handleTypeSelect} />
+                        </>
                     ) : (
                         <>
-                            <div className="text-gray-100 flex gap-2 items-baseline">
-                                <div className="text-xl">
-                                    <strong>{typeLabels[currentType]}</strong>
-                                </div>
+                            <div className="relative h-52">
+                                <ApplicationTypeImage type={currentType} />
 
-                                {!isSubmitting && (
-                                    <a
-                                        onClick={handleFormReset}
-                                        className="cursor-pointer text-sm"
-                                    >
-                                        ändern
-                                    </a>
-                                )}
+                                <div className="absolute top-0 right-0 bottom-0 left-0 opacity-30 bg-gray-600" />
+
+                                <div className="absolute bottom-0 left-0 right-0 text-white px-2 flex gap-2 items-baseline">
+                                    <div className="text-3xl">
+                                        <strong>{typeLabels[currentType]}</strong>
+                                    </div>
+
+                                    {!isSubmitting && (
+                                        <a
+                                            onClick={handleFormReset}
+                                            className="cursor-pointer text-sm"
+                                        >
+                                            ändern
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="text-gray-100">
+                                <ApplicationTypeIntro type={currentType} />
                             </div>
 
                             <TextInput<ApplicationFormValues>
@@ -217,6 +246,22 @@ const ApplicationForm = (): ReactElement => {
                                     Wird gesendet <span className="animate-spin inline-block"><FontAwesomeIcon icon={faSpinner} /></span>
                                 </div>
                             )}
+
+                            <div className="mt-5 text-gray-100 text-sm flex flex-col gap-2">
+                                <div>
+                                    Das B-Side Festival ist auch 2023 ein Festival für alle mit vielfältigem und buntem
+                                    Programm. Dabei wollen wir insbesondere Räume und Bühnen für FLINTA* und andere
+                                    marginalisierte Gesellschaftsgruppen schaffen.
+                                </div>
+                                <div>
+                                    Das B-Side Festival wird nicht kommerziell, ohne Eintrittsgelder und im Sinne der
+                                    Gemeinnützigkeit für die Allgemeinheit frei zugänglich veranstaltet. Das Festival
+                                    wird auch dieses Jahr wieder durch öffentliche Fördermittel, Spenden und den
+                                    Eigenanteil des B-Side Kultur e.V. als Veranstalter finanziert. Im Rahmen
+                                    unserer finanziellen Möglichkeiten erhalten alle künstlerischen, kulturellen
+                                    und bildende Programmpunkte eine Aufwandsentschädigung.
+                                </div>
+                            </div>
                         </>
                     )}
                 </form>

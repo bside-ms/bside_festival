@@ -37,15 +37,18 @@ const FrontPageEyeCatchers = (): ReactElement => {
                         ) : (
                             <div className={`${styles.boxContent ?? ''} space-y-2`}>
                                 <div className={`${styles.title ?? ''} font-display`}>
-                                    Jetzt bewerben für das B-Side Festival 2023
+                                    Endlich geht es wieder los: Das 7. B-Side Festival startet
                                 </div>
 
                                 <div>
-                                    Unter dem Motto "Interaktion Reaktion" findet auch in diesem Jahr das
-                                    B-Side Festival statt. Am <strong>15. und 16.09.</strong> möchten
-                                    wir erneut einen Raum für Kunst und Kultur im Viertel schaffen. Wenn
-                                    auch ihr mit eurer Musik, Ausstellung, Workshop, Performance oder sonst
-                                    wie Teil davon sein möchtet, bewerbt euch bei uns!
+                                    Nachdem letztes Jahr ein voller Erfolg war, freuen wir uns richtig auf
+                                    diesen September. Denn vom <strong>15. - 16.09.2023</strong> werden die Straßen
+                                    wieder mit Kunst, Musik, Workshops und Theater gefüllt.
+                                </div>
+                                <div>
+                                    Du willst mit deiner Kunst Teil des bunten Programms werden? Deine Musik
+                                    darf auf gar keinen Fall fehlen? Du hast eine spannende Idee, auf die
+                                    wir bisher noch gar nicht gekommen sind? Super! Dann bewirb dich jetzt!
                                 </div>
 
                                 <Button href="/bewerbungen">zur Bewerbung</Button>
