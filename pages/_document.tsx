@@ -14,6 +14,10 @@ class MyDocument extends Document {
                         rel="stylesheet"
                     />
                     <link
+                        href="https://use.typekit.net/gbo5uob.css"
+                        rel="stylesheet"
+                    />
+                    <link
                         href="https://fonts.googleapis.com/css2?family=Questrial&display=swap"
                         rel="stylesheet"
                     />

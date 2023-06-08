@@ -47,7 +47,7 @@ const uploadFileToIonos = async (encodedFile: string, allowedContentTypes: Array
 
     const s3Client = createS3Client();
 
-    const putObjectCommand = createPutObjectCommand(fileName, 'image/pdf', buffer);
+    const putObjectCommand = createPutObjectCommand(fileName, contentType, buffer);
 
     const output = await s3Client.send(putObjectCommand);
 

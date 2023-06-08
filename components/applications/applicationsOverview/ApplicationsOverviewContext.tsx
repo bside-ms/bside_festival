@@ -8,6 +8,7 @@ import isValidType from 'lib/participants/isValidType';
 import type { SerializableParticipant } from 'pages/bewerbungen/[idAndName]';
 
 interface ApplicationsOverviewContextData {
+    allApplications: Array<SerializableParticipant>;
     filteredApplications: Array<SerializableParticipant>;
     searchText: string | null;
     setSearchText: Dispatch<SetStateAction<string | null>>;
@@ -92,6 +93,7 @@ const ApplicationsOverviewContextProvider = ({ applications, allLinks, children 
     return (
         <ApplicationsOverviewContext.Provider
             value={{
+                allApplications: applications,
                 filteredApplications,
                 searchText,
                 setSearchText,

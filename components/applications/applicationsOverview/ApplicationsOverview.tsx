@@ -6,11 +6,17 @@ import ApplicationsOverviewTypes from 'components/applications/applicationsOverv
 
 const ApplicationsOverview = (): ReactElement => {
 
-    const { filteredApplications } = useApplicationsOverviewContext();
+    const { allApplications, filteredApplications } = useApplicationsOverviewContext();
+
+    const applicationAmount = filteredApplications.length === allApplications.length
+        ? allApplications.length.toString()
+        : `${filteredApplications.length} von ${allApplications.length}`;
 
     return (
         <div>
-            <div className="text-xl mb-2">Bewerbungen</div>
+            <div className="text-xl mb-2">
+                Bewerbungen ({applicationAmount})
+            </div>
 
             <ApplicationsOverviewSearchText />
 
