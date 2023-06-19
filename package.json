@@ -9,6 +9,7 @@
     "lint:fix": "next lint -c .eslintrc.js -- --fix",
     "tsc": "tsc --noEmit",
     "tsc:watch": "tsc --noEmit --watch",
+    "find-unused-exports": "ts-unused-exports tsconfig.json --excludePathsFromReport=pages",
     "prisma:migrations:dev": "npx prisma migrate dev",
     "prisma:migrations:deploy": "npx prisma migrate deploy",
     "prisma:client:generate": "prisma generate"
@@ -44,7 +45,8 @@
     "react-hook-form": "7.43.x",
     "react-youtube": "10.1.x",
     "sharp": "0.32.x",
-    "swr": "2.1.x"
+    "swr": "2.1.x",
+    "ts-unused-exports": "^9.0.4"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "13.2.x",
