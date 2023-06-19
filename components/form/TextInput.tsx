@@ -53,13 +53,13 @@ const TextInput = <T extends FieldValues>({ label, name, info, validate, require
                 )}
             />
             {isNotEmptyString(info) && (
-                <label htmlFor={id} className="px-1 text-gray-100 text-base">
+                <label htmlFor={id} className="px-1 text-black text-base">
                     {info}
                 </label>
             )}
 
             {typeof errorMessage === 'string' && (
-                <div className="px-1 text-rose-700">
+                <div className="px-1 text-rose-900">
                     {errorMessage}
                 </div>
             )}

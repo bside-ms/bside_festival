@@ -2,7 +2,6 @@
 
 import { faFacebookSquare, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import InternalLinks from 'components/common/InternalLinks';
@@ -42,7 +41,7 @@ const Footer = (): ReactElement => {
     );
 
     return (
-        <div className="text-sm text-gray-400 text-center p-4 bg-gray-800 space-y-1">
+        <div className="text-sm text-white text-center p-4 bg-black space-y-1">
             <div>Veranstaltet durch den B-Side Kultur e.V.</div>
 
             <div className="flex gap-3 justify-center">
@@ -57,18 +56,6 @@ const Footer = (): ReactElement => {
                 <Login />
 
                 <InternalLinks />
-            </div>
-
-            <div className="flex justify-center pt-4">
-                <div className="w-64">
-                    <Image
-                        src="/assets/images/festival/delorean.png"
-                        width={1025}
-                        height={781}
-                        layout="responsive"
-                        alt="DeLorean"
-                    />
-                </div>
             </div>
         </div>
     );

@@ -11,7 +11,6 @@ import ApplicationTypeSelection from 'components/applications/applicationForm/Ap
 import ImageUpload from 'components/applications/applicationForm/ImageUpload';
 import Links from 'components/applications/applicationForm/Links';
 import TechnicalRiderFields, { getTechnicalRiderInfo } from 'components/applications/applicationForm/TechnicalRiderFields';
-import Button from 'components/common/Button';
 import TextArea from 'components/form/TextArea';
 import TextInput from 'components/form/TextInput';
 import isEmptyString from 'lib/common/helper/isEmptyString';
@@ -136,14 +135,14 @@ const ApplicationForm = (): ReactElement => {
                     noValidate={true}
                     className="flex gap-6 flex-col"
                 >
-                    <div className="text-gray-100">
-                        <div className="text-lg">B-Side Festival 2023</div>
-                        <div className="text-2xl font-bold">Bewerbung</div>
+                    <div className="text-black font-display">
+                        <div className="text-2xl">B-Side Festival 2023</div>
+                        <div className="text-4xl font-bold">Bewerbung</div>
                     </div>
 
                     {isEmptyString(currentType) ? (
                         <>
-                            <div className="text-gray-100">
+                            <div className="text-black font-bold">
                                 Auf dem B-Side Festival gibt es viele verschiedenen Formate. Damit wir
                                 den Überblick behalten, haben wir auf dieser Seite verschiedene
                                 Bewerbungsformulare zusammengestellt. Sucht euch einfach das Genre
@@ -175,7 +174,7 @@ const ApplicationForm = (): ReactElement => {
                                 </div>
                             </div>
 
-                            <div className="text-gray-100">
+                            <div className="text-black">
                                 <ApplicationTypeIntro type={currentType} />
                             </div>
 
@@ -235,19 +234,23 @@ const ApplicationForm = (): ReactElement => {
                                 info="Was möchten ihr uns noch mitteilen?"
                             />
 
-                            <div>
-                                <Button type="submit" withFullWidth={true} isDisabled={isSubmitting}>
+                            <label className="w-full bg-black p-1 block">
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="w-full bg-black text-white border border-white rounded font-display text-sm leading-3 p-3 disabled:bg-gray-600"
+                                >
                                     Absenden
-                                </Button>
-                            </div>
+                                </button>
+                            </label>
 
                             {isSubmitting && (
-                                <div className="text-gray-100">
+                                <div className="text-black">
                                     Wird gesendet <span className="animate-spin inline-block"><FontAwesomeIcon icon={faSpinner} /></span>
                                 </div>
                             )}
 
-                            <div className="mt-5 text-gray-100 text-sm flex flex-col gap-2">
+                            <div className="mt-5 text-sm flex flex-col gap-2">
                                 <div>
                                     Das B-Side Festival ist auch 2023 ein Festival für alle mit vielfältigem und buntem
                                     Programm. Dabei wollen wir insbesondere Räume und Bühnen für FLINTA* und andere

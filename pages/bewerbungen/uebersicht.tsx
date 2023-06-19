@@ -50,7 +50,7 @@ export default ({ applications, allLinks }: Props): ReactElement => {
         <>
             <PageHeader theme="pink" symbols="none" />
 
-            <div className="py-40">
+            <div className="py-40 min-h-screen">
                 <ContentWrapper>
                     <ApplicationsOverviewContextProvider
                         applications={applications}

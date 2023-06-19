@@ -147,7 +147,7 @@ const TechnicalRiderFields = (): ReactElement | null => {
                 accept={allowedTechnicRiderContentType}
             />
 
-            <div className="text-gray-100">
+            <div className="text-black">
                 {isNotEmptyString(currentFileDataUrl) && isNotEmptyString(currentFileName) ? (
                     <div>
                         <span className="font-mono px-2">
@@ -162,7 +162,7 @@ const TechnicalRiderFields = (): ReactElement | null => {
                     </div>
                 ) : (
                     <label htmlFor={fileInputId.current} className="cursor-pointer">
-                        <div className="p-5 border border-dashed border-gray-100 flex justify-center items-center rounded">
+                        <div className="p-5 border border-dashed border-black flex justify-center items-center rounded">
                             PDF hinzufügen
                         </div>
                     </label>
@@ -170,13 +170,13 @@ const TechnicalRiderFields = (): ReactElement | null => {
             </div>
 
             {typeof technicalRiderPdfErrorMessage === 'string' && (
-                <div className="px-1 text-rose-700">
+                <div className="px-1 text-rose-900">
                     {technicalRiderErrorMessage}
                 </div>
             )}
 
             {typeof technicalRiderPdfErrorMessage === 'string' && (
-                <div className="px-1 text-rose-700">
+                <div className="px-1 text-rose-900">
                     {technicalRiderErrorMessage}
                 </div>
             )}

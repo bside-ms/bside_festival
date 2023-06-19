@@ -90,7 +90,7 @@ const ImageUpload = (): ReactElement => {
     const fileInputId = useRef(uniqueId('image-upload'));
 
     return (
-        <div className="flex flex-col gap-1 relative text-gray-100">
+        <div className="flex flex-col gap-1 relative text-black">
             {isNotEmptyString(currentImageDataUrl) && !isSubmitting && (
                 <div
                     className="absolute right-1 top-1 py-1 px-2 bg-gray-800 hover:bg-gray-700 text-gray-50 text-sm rounded-md cursor-pointer z-10"
@@ -129,19 +129,19 @@ const ImageUpload = (): ReactElement => {
                         <Image src={currentImageDataUrl} alt="foo" fill={true} style={{ objectFit: 'contain' }} />
                     </div>
                 ) : (
-                    <div className={`h-24 w-full border border-dashed border-gray-100 flex justify-center items-center rounded ${typeof errorMessage === 'string' ? 'bg-rose-700' : ''}`}>
+                    <div className={`h-24 w-full border border-dashed border-black flex justify-center items-center rounded ${typeof errorMessage === 'string' ? 'bg-rose-600' : ''}`}>
                         {required ? 'Bild hinzufügen *' : 'Bild hinzufügen'}
                     </div>
                 )}
             </label>
 
             {typeof errorMessage === 'string' && (
-                <div className="px-1 text-rose-600">
+                <div className="px-1 text-rose-900">
                     {errorMessage}
                 </div>
             )}
 
-            <div className="px-1 text-gray-100 text-base">
+            <div className="px-1 text-black text-base">
                 Dieses Foto wird auf unserer Webseite
                 veröffentlicht, falls ihr beim B-Side Festival
                 dabei sein werdet. Bitte sendet nur neutrale Fotos
