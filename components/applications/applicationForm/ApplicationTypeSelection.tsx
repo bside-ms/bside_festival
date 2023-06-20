@@ -15,7 +15,7 @@ const TypeSelect = ({ type, onSelect }: { type: Type, onSelect: (type: Type) => 
 
             <div className="absolute top-0 right-0 bottom-0 left-0 opacity-50 bg-gray-600 hover:bg-gray-400 md:cursor-pointer" />
 
-            <div className="absolute right-0 bottom-0 left-0 text-black px-3 md:px-6 py-1 md:py-3 text-lg md:text-xl font-display break-all">
+            <div className="absolute right-0 bottom-0 left-0 px-3 md:px-6 py-1 md:py-3 text-lg md:text-xl font-display text-white break-all">
                 {typeLabels[type]}
             </div>
         </div>
