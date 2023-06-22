@@ -74,12 +74,21 @@ model Location {
 }
 
 model Volunteer {
-  int                   Int    @id @default(autoincrement())
-  fullName              String @db.Text
-  mailAddress           String @db.Text
-  phoneNumber           String @db.Text
-  preferredMessengers   String @db.Text
-  confirmedQuestions    String @db.Text
-  additionalInformation String @db.Text
-  createdAt             String @db.Text
+  int                   Int     @id @default(autoincrement())
+  fullName              String  @db.Text
+  mailAddress           String  @db.Text
+  phoneNumber           String  @db.Text
+  canCook               Boolean @default(false)
+  hasCar                Boolean @default(false)
+  hasDrivingLicense     Boolean @default(false)
+  canCarryHeavyStuff    Boolean @default(false)
+  canLiftHeavtStuff     Boolean @default(false)
+  isSocial              Boolean @default(false)
+  canSupportTechnician  Boolean @default(false)
+  canSupportArtist      Boolean @default(false)
+  hasMultipleTalents    Boolean @default(false)
+  canWorkWithChildren   Boolean @default(false)
+  canCleanupAfterShow   Boolean @default(false)
+  isAvailableOnFriday   Boolean @default(false)
+  isAvailableOnSaturday Boolean @default(false)
 }
