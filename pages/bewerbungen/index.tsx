@@ -1,4 +1,5 @@
 import type { GetServerSideProps } from 'next';
+import Image from 'next/image';
 import type { ReactElement } from 'react';
 import ApplicationForm from 'components/applications/applicationForm/ApplicationForm';
 import Footer from 'components/common/Footer';
@@ -34,6 +35,13 @@ export default (): ReactElement => {
                     </div>
 
                 </div>
+
+                <Image
+                    src="/assets/background.webp"
+                    alt="Hintergrund"
+                    className="object-cover object-top absolute z-0"
+                    fill={true}
+                />
             </div>
 
             <Footer />
