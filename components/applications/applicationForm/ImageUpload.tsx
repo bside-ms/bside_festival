@@ -121,12 +121,13 @@ const ImageUpload = (): ReactElement => {
                 className="hidden"
                 accept={allowedImageContentTypes.join(', ')}
                 disabled={isSubmitting}
+                tabIndex={-1}
             />
 
             <label htmlFor={fileInputId.current} className="cursor-pointer">
                 {isNotEmptyString(currentImageDataUrl) ? (
                     <div className="relative w-full h-24 overflow-hidden">
-                        <Image src={currentImageDataUrl} alt="foo" fill={true} style={{ objectFit: 'contain' }} />
+                        <Image src={currentImageDataUrl} alt="Upload-Vorschau" fill={true} style={{ objectFit: 'contain' }} />
                     </div>
                 ) : (
                     <div className={`h-24 w-full border border-dashed border-black flex justify-center items-center rounded ${typeof errorMessage === 'string' ? 'bg-rose-600' : ''}`}>

@@ -145,6 +145,7 @@ const TechnicalRiderFields = (): ReactElement | null => {
                 onChange={handleFileChange}
                 className="hidden"
                 accept={allowedTechnicRiderContentType}
+                tabIndex={-1}
             />
 
             <div className="text-black">
