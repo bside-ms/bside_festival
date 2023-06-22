@@ -72,3 +72,14 @@ model Location {
   id   Int    @id @default(autoincrement())
   name String @db.Text
 }
+
+model Volunteer {
+  int                   Int    @id @default(autoincrement())
+  fullName              String @db.Text
+  mailAddress           String @db.Text
+  phoneNumber           String @db.Text
+  preferredMessengers   String @db.Text
+  confirmedQuestions    String @db.Text
+  additionalInformation String @db.Text
+  createdAt             String @db.Text
+}
