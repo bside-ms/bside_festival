@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
+import BHeartLinesSvg from 'components/common/BHeartLinesSvg';
 import Footer from 'components/common/Footer';
 
 export default (): ReactElement => {
@@ -12,9 +13,9 @@ export default (): ReactElement => {
             <div className="min-h-screen w-full relative font-display">
                 <div className="relative z-10">
                     <div className="flex">
-                        <div className="w-1/3 sm:w-2/5 relative max-w-[460px]">
-                            <div className="absolute w-full min-w-[200px] h-40 md:h-96">
-                                <div className="relative w-full h-full">
+                        <div className="w-1/3 sm:w-2/5 relative max-w-[385px] min-h-max">
+                            <div className="absolute w-full min-w-[200px]">
+                                <div className="relative w-full aspect-square">
                                     <Image
                                         src="/assets/frontpage-heart-red.webp"
                                         alt="Eyecatcher"
@@ -22,44 +23,40 @@ export default (): ReactElement => {
                                         className="object-contain object-left"
                                     />
                                 </div>
-                            </div>
-                            <div className="absolute hidden md:block top-96 w-full min-w-[200px] h-40 md:h-96">
-                                <div className="relative w-full h-full">
-                                    <Image
-                                        src="/assets/frontpage-heart-black.webp"
-                                        alt="Eyecatcher"
-                                        fill={true}
-                                        className="object-contain object-left"
-                                    />
+                                <div className="hidden sm:block relative w-full aspect-square -mt-4">
+                                    <BHeartLinesSvg color="#000" />
+                                </div>
+                                <div className="sm:hidden relative w-full aspect-square -mt-2">
+                                    <BHeartLinesSvg color="#666" />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex pt-16 pr-7 md:pl-5 md:pt-24 md:pr-10 max-w-[540px]">
-                            <div className="relative mb-60">
-                                <div className="font-semibold text-6xl md:text-8xl">
+                        <div className="flex pt-16 pr-7 sm:pl-5 sm:pt-24 sm:pr-10 max-w-[540px]">
+                            <div className="relative mb-[40rem]">
+                                <div className="font-semibold text-6xl sm:text-8xl">
                                     B-Side<br />
                                     Festival
                                 </div>
 
                                 <div className="absolute top-full left-0 right-0 flex flex-col">
-                                    <div className="text-lg md:text-2xl [text-align-last:justify] mt-1">
+                                    <div className="text-lg sm:text-2xl [text-align-last:justify] mt-1">
                                         Interaktion Reaktion
                                     </div>
-                                    <div className="text-xl md:text-3xl [text-align-last:justify]">
+                                    <div className="text-xl sm:text-3xl [text-align-last:justify]">
                                         15. & 16. SEPT. 2023
                                     </div>
-                                    <div className="text-xs md:text-sm [text-align-last:justify] mt-1">
+                                    <div className="text-xs sm:text-sm [text-align-last:justify] mt-1">
                                         Kunst, Kultur & Bildung am Hawerkamp
                                     </div>
-                                    <div className="mt-3 bg-black text-gray-100 text-center text-xs md:text-sm leading-4 py-3">
+                                    <div className="mt-3 bg-black text-gray-100 text-center text-xs sm:text-sm leading-4 py-3">
                                         Veranstaltet vom B-Side Kultur e.V.
                                     </div>
                                     <div className="mt-2 text-xs text-justify [text-align-last:justify]">
                                         Konzerte, Kunstausstellungen, Theater, Workshops, Kinder- & Familienprogramm,
                                         Vorträge, Lesungen und Diskussionsrunden.
                                     </div>
-                                    <div className="mt-20 text-lg md:text-2xl text-justify [text-align-last:justify]">
+                                    <div className="mt-20 text-lg sm:text-2xl text-justify [text-align-last:justify]">
                                         Bewerbt euch jetzt!
                                     </div>
                                     <div className="mt-3 text-xs text-justify">
