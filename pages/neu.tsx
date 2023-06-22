@@ -81,13 +81,6 @@ export default (): ReactElement => {
 
                     </div>
                 </div>
-
-                <Image
-                    src="/assets/background.webp"
-                    alt="Hintergrund"
-                    className="object-cover object-top absolute z-0"
-                    fill={true}
-                />
             </div>
 
             <Footer />
