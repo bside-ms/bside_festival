@@ -20,7 +20,7 @@ const VolunteerForm = (): ReactElement => {
 
     return (
         <div>
-            <h1>Hello </h1>
+            <div>Hello World</div>
         </div>
 
     );
