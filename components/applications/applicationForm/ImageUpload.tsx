@@ -103,6 +103,7 @@ const ImageUpload = (): ReactElement => {
             <input
                 type="text"
                 className="h-0 opacity-0 pointer-events-none"
+                tabIndex={-1}
                 {...register(
                     fieldName,
                     {
