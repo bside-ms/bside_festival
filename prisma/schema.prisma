@@ -82,7 +82,7 @@ model Volunteer {
   hasCar                Boolean @default(false)
   hasDrivingLicense     Boolean @default(false)
   canCarryHeavyStuff    Boolean @default(false)
-  canLiftHeavtStuff     Boolean @default(false)
+  canLiftHeavyStuff     Boolean @default(false)
   isSocial              Boolean @default(false)
   canSupportTechnician  Boolean @default(false)
   canSupportArtist      Boolean @default(false)
