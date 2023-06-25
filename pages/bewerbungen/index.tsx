@@ -1,25 +1,7 @@
-import type { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 import ApplicationForm from 'components/applications/applicationForm/ApplicationForm';
 import Footer from 'components/common/Footer';
-import getUserSession from 'lib/next-auth/getUserSession';
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-
-    const userSession = await getUserSession(context);
-
-    if (userSession === null) {
-        return {
-            redirect: {
-                statusCode: 302,
-                destination: '/',
-            },
-        };
-    }
-
-    return { props: {} };
-};
 
 export default (): ReactElement => {
 
