@@ -14,7 +14,7 @@ const ApplicationSuccess = (): ReactElement => {
 
             <div className="text-justify">
                 Vielen Dank für eure Bewerbung! Bitte bedenkt, dass unsere Bewerbungsphase
-                noch bis Ende Juni läuft. Erst im Anschluss der Bewerbungsphase entscheiden wir uns,
+                noch läuft. Erst im Anschluss der Bewerbungsphase entscheiden wir uns,
                 wer dieses Jahr dabei sein kann. Das Sichten der zahlreichen Bewerbungen dauert
                 erfahrungsgemäß mehrere Wochen.<br /><br />
                 Schön, dass ihr dabei sein möchtet!
