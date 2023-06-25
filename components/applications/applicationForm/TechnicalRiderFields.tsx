@@ -128,6 +128,8 @@ const TechnicalRiderFields = (): ReactElement | null => {
 
     const { info, required } = technicalRiderInfo;
 
+    const templateLink = '/assets/Tech-Rider-Vorlage.pdf';
+
     return (
         <div className="flex flex-col gap-1 relative">
             <TextArea<ApplicationFormValues>
@@ -168,6 +170,12 @@ const TechnicalRiderFields = (): ReactElement | null => {
                         </div>
                     </label>
                 )}
+            </div>
+
+            <div>
+                Solltet ihr selbst noch keinen Tech-Rider haben, nutzt
+                bitte <a href={templateLink} className="underline cursor-pointer">unsere Vorlage</a>, um
+                unserer Technik-Crew viel Arbeit zu ersparen.
             </div>
 
             {typeof technicalRiderPdfErrorMessage === 'string' && (
