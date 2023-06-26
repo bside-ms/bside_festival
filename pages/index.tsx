@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
+import BackgroundImage from 'components/common/BackgroundImage';
 import BHeartLinesSvg from 'components/common/BHeartLinesSvg';
 import Footer from 'components/common/Footer';
 
@@ -82,12 +83,7 @@ export default (): ReactElement => {
                     </div>
                 </div>
 
-                <Image
-                    src="/assets/background.webp"
-                    alt="Hintergrund"
-                    className="object-cover object-top absolute z-0"
-                    fill={true}
-                />
+                <BackgroundImage />
             </div>
 
             <Footer />

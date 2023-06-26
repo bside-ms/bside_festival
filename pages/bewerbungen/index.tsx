@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import type { ReactElement } from 'react';
 import ApplicationForm from 'components/applications/applicationForm/ApplicationForm';
+import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
 
 export default (): ReactElement => {
@@ -18,12 +18,7 @@ export default (): ReactElement => {
 
                 </div>
 
-                <Image
-                    src="/assets/background.webp"
-                    alt="Hintergrund"
-                    className="object-cover object-top absolute z-0"
-                    fill={true}
-                />
+                <BackgroundImage />
             </div>
 
             <Footer />
