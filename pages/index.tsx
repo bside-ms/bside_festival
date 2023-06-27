@@ -72,8 +72,8 @@ export default (): ReactElement => {
                                         dieses Formular!
                                     </div>
                                     <div className="mt-3 text-right">
-                                        <Link className="text-md cursor-pointer hover:text-red-700" href="/bewerbungen">
-                                            Zum Bewerbungsformular <FontAwesomeIcon icon={faArrowRight} />
+                                        <Link className="text-md cursor-pointer hover:text-red-700 flex items-center gap-2 leading-3 justify-end" href="/bewerbungen">
+                                            Zum Bewerbungsformular <FontAwesomeIcon className="w-4 pt-1 inline-block" icon={faArrowRight} />
                                         </Link>
                                     </div>
                                 </div>
