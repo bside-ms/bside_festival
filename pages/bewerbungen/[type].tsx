@@ -6,6 +6,7 @@ import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
 import urlPathTypes from 'lib/participants/urlPathTypes';
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
 
     const type = context.params?.type as string | undefined;
