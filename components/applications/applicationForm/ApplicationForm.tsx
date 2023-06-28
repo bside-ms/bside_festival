@@ -19,7 +19,6 @@ import typeLabels from 'lib/participants/typeLabels';
 import type { AddParticipantRequest } from 'pages/api/applications/add';
 
 export interface ApplicationFormValues {
-    type: Type;
     name: string;
     contactName: string;
     contactPhone: string;
@@ -57,7 +56,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
 
         clearErrors('root');
 
-        const technicalRiderInfo = getTechnicalRiderInfo(values.type);
+        const technicalRiderInfo = getTechnicalRiderInfo(chosenType);
 
         if (
             technicalRiderInfo !== null &&
@@ -79,7 +78,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
         }
 
         const request: AddParticipantRequest = {
-            type: values.type,
+            type: chosenType,
             name: values.name,
             contactName: values.contactName,
             contactPhone: values.contactPhone,
@@ -117,7 +116,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
 
         handleFormReset();
 
-    }, [clearErrors, handleFormReset, setError]);
+    }, [chosenType, clearErrors, handleFormReset, setError]);
 
     if (wasSuccessfullySubmitted) {
         return <ApplicationSuccess />;
@@ -169,7 +168,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                         maxLength={100}
                     />
 
-                    <ImageUpload />
+                    <ImageUpload chosenType={chosenType} />
 
                     <TextArea<ApplicationFormValues>
                         name="description"
@@ -186,7 +185,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                         />
                     )}
 
-                    <TechnicalRiderFields />
+                    <TechnicalRiderFields chosenType={chosenType} />
 
                     <TextInput<ApplicationFormValues>
                         name="contactName"

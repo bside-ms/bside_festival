@@ -29,13 +29,15 @@ const typesRequiringImage = new Array<Type>(
     Type.Exhibition,
 );
 
-const ImageUpload = (): ReactElement => {
+interface Props {
+    chosenType: Type;
+}
+
+const ImageUpload = ({ chosenType }: Props): ReactElement => {
 
     const { register, setValue, formState: { errors, isSubmitting }, watch, setError, clearErrors } = useFormContext<ApplicationFormValues>();
 
-    const currentType = watch('type');
-
-    const required = typesRequiringImage.includes(currentType);
+    const required = typesRequiringImage.includes(chosenType);
 
     const errorMessage = errors[fieldName]?.message;
 

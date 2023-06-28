@@ -62,7 +62,11 @@ export const getTechnicalRiderInfo = (applicationType: Type): null | { info: str
 export const allowedTechnicRiderContentType = 'application/pdf';
 export const allowedTechnicalRiderMaxFileSize = bytes('20MB');
 
-const TechnicalRiderFields = (): ReactElement | null => {
+interface Props {
+    chosenType: Type;
+}
+
+const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
 
     const { register, setValue, formState, watch, setError, clearErrors } = useFormContext<ApplicationFormValues>();
 
@@ -116,11 +120,10 @@ const TechnicalRiderFields = (): ReactElement | null => {
     );
 
     const currentFileDataUrl = watch(fileFieldName);
-    const currentApplicationType = watch('type');
 
     const fileInputId = useRef(uniqueId('file-upload'));
 
-    const technicalRiderInfo = getTechnicalRiderInfo(currentApplicationType);
+    const technicalRiderInfo = getTechnicalRiderInfo(chosenType);
 
     if (technicalRiderInfo === null) {
         return null;
