@@ -96,7 +96,7 @@ const ImageUpload = (): ReactElement => {
                     className="absolute right-1 top-1 py-1 px-2 bg-gray-800 hover:bg-gray-700 text-gray-50 text-sm rounded-md cursor-pointer z-10"
                     onClick={handleImageDelete}
                 >
-                    Entfernen&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faTrashAlt} />
+                    Entfernen&nbsp;&nbsp;&nbsp;<FontAwesomeIcon className="w-4 inline-block" icon={faTrashAlt} />
                 </div>
             )}
 

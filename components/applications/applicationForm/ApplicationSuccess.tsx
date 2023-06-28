@@ -22,7 +22,7 @@ const ApplicationSuccess = (): ReactElement => {
 
             <div className="mt-6">
                 <Link href="/" className="md:cursor-pointer">
-                    <FontAwesomeIcon icon={faArrowLeft} />&nbsp;&nbsp; zurück zur Startseite
+                    <FontAwesomeIcon icon={faArrowLeft} className="inline-block w-4" />&nbsp;&nbsp; zurück zur Startseite
                 </Link>
             </div>
         </div>

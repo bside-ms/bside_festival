@@ -160,7 +160,7 @@ const TechnicalRiderFields = (): ReactElement | null => {
                             className="py-1 px-2 bg-gray-800 hover:bg-gray-700 text-gray-50 text-sm rounded-md cursor-pointer z-10"
                             onClick={handleFileRemove}
                         >
-                            Entfernen&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faTrashAlt} />
+                            Entfernen&nbsp;&nbsp;&nbsp;<FontAwesomeIcon className="w-4 inline-block" icon={faTrashAlt} />
                         </span>
                     </div>
                 ) : (

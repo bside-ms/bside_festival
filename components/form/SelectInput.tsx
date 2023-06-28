@@ -9,6 +9,7 @@ import useIsMounted from 'lib/common/hooks/useIsMounted';
 
 interface Props<T extends FieldValues> {
     name: FieldPath<T>;
+    defaultValue?: string;
     label: string;
     info?: string;
     options: Array<{ value: string, label: string }>;
@@ -16,7 +17,7 @@ interface Props<T extends FieldValues> {
 }
 
 // eslint-disable-next-line @typescript-eslint/comma-dangle
-const SelectInput = <T extends FieldValues,>({ label, name, info, options, required = false, }: Props<T>): ReactElement => {
+const SelectInput = <T extends FieldValues,>({ label, defaultValue = '', name, info, options, required = false, }: Props<T>): ReactElement => {
 
     const { formState: { errors }, register } = useFormContext();
 
@@ -34,7 +35,7 @@ const SelectInput = <T extends FieldValues,>({ label, name, info, options, requi
                 id={id}
                 className="p-1 rounded bg-white py-2 outline-0"
                 required={required}
-                defaultValue=""
+                defaultValue={defaultValue}
                 {...register(
                     name,
                     {

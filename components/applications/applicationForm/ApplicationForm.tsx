@@ -246,7 +246,7 @@ const ApplicationForm = (): ReactElement => {
 
                             {isSubmitting && (
                                 <div className="text-black">
-                                    Wird gesendet <span className="animate-spin inline-block"><FontAwesomeIcon icon={faSpinner} /></span>
+                                    Wird gesendet <span className="ml-1 animate-spin inline-block"><FontAwesomeIcon className="w-3" icon={faSpinner} /></span>
                                 </div>
                             )}
 

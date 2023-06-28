@@ -5,7 +5,7 @@ import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 
-const ApplicationsOverviewSearchText = (): ReactElement => {
+const ApplicationsOverviewSearchTextFilter = (): ReactElement => {
 
     const { searchText, setSearchText } = useApplicationsOverviewContext();
 
@@ -66,7 +66,7 @@ const ApplicationsOverviewSearchText = (): ReactElement => {
             <input
                 type="text"
                 placeholder="Suchen"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2 outline-0"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2 outline-0 w-full md:w-60"
                 onChange={handleSearchChange}
                 ref={inputRef}
             />
@@ -82,4 +82,4 @@ const ApplicationsOverviewSearchText = (): ReactElement => {
     );
 };
 
-export default ApplicationsOverviewSearchText;
+export default ApplicationsOverviewSearchTextFilter;

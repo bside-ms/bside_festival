@@ -10,13 +10,14 @@ import useIsMounted from 'lib/common/hooks/useIsMounted';
 interface Props<T extends FieldValues> {
     name: FieldPath<T>;
     label: string;
+    defaultValue?: string;
     info?: string;
     required?: boolean;
     maxLength?: number;
 }
 
 // eslint-disable-next-line @typescript-eslint/comma-dangle
-const TextArea = <T extends FieldValues,>({ label, name, info, required = false, maxLength }: Props<T>): ReactElement => {
+const TextArea = <T extends FieldValues,>({ label, name, defaultValue, info, required = false, maxLength }: Props<T>): ReactElement => {
 
     const { formState: { errors, isSubmitting }, register } = useFormContext();
 
@@ -37,6 +38,7 @@ const TextArea = <T extends FieldValues,>({ label, name, info, required = false,
                 placeholder={required ? `${label} *` : label}
                 required={required}
                 disabled={isSubmitting}
+                defaultValue={defaultValue}
                 {...register(
                     name,
                     {

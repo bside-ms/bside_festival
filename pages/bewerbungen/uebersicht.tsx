@@ -3,12 +3,12 @@ import type { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import type { ReactElement } from 'react';
 import ApplicationsOverview from 'components/applications/applicationsOverview/ApplicationsOverview';
 import { ApplicationsOverviewContextProvider } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
-import ContentWrapper from 'components/common/ContentWrapper';
+import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
-import PageHeader from 'components/common/PageHeader';
+import serializeApplication from 'lib/applications/serializeApplication';
 import prismaClient from 'lib/common/prismaClient';
 import getUserSession from 'lib/next-auth/getUserSession';
-import type { SerializableParticipant } from 'pages/bewerbungen/[idAndName]';
+import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     applications: Array<SerializableParticipant>;
@@ -34,11 +34,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
 
     return {
         props: {
-            applications: applications.map(application => ({
-                ...application,
-                appliedAt: application.appliedAt?.toString() ?? null,
-                updatedAt: application.updatedAt.toString(),
-            })),
+            applications: applications.map(serializeApplication),
             allLinks,
         },
     };
@@ -47,21 +43,23 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
 export default ({ applications, allLinks }: Props): ReactElement => {
 
     return (
-        <>
-            <PageHeader theme="pink" symbols="none" />
+        <div>
+            <div className="py-16 min-h-screen w-full relative">
+                <div className="relative z-10">
+                    <div className="px-3 max-w-7xl mx-auto">
+                        <ApplicationsOverviewContextProvider
+                            applications={applications}
+                            allLinks={allLinks}
+                        >
+                            <ApplicationsOverview />
+                        </ApplicationsOverviewContextProvider>
+                    </div>
+                </div>
 
-            <div className="py-40 min-h-screen">
-                <ContentWrapper>
-                    <ApplicationsOverviewContextProvider
-                        applications={applications}
-                        allLinks={allLinks}
-                    >
-                        <ApplicationsOverview />
-                    </ApplicationsOverviewContextProvider>
-                </ContentWrapper>
+                <BackgroundImage />
             </div>
 
             <Footer />
-        </>
+        </div>
     );
 };

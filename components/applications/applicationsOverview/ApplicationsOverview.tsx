@@ -1,8 +1,8 @@
 import type { ReactElement } from 'react';
 import Application from 'components/applications/applicationsOverview/Application';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
-import ApplicationsOverviewSearchText from 'components/applications/applicationsOverview/ApplicationsOverviewSearchText';
-import ApplicationsOverviewTypes from 'components/applications/applicationsOverview/ApplicationsOverviewTypes';
+import ApplicationsOverviewSearchTextFilter from 'components/applications/applicationsOverview/ApplicationsOverviewSearchTextFilter';
+import ApplicationsOverviewTypesFilter from 'components/applications/applicationsOverview/ApplicationsOverviewTypesFilter';
 
 const ApplicationsOverview = (): ReactElement => {
 
@@ -14,15 +14,15 @@ const ApplicationsOverview = (): ReactElement => {
 
     return (
         <div>
-            <div className="text-xl mb-2">
+            <div className="text-3xl mb-5 font-display">
                 Bewerbungen ({applicationAmount})
             </div>
 
-            <ApplicationsOverviewSearchText />
+            <ApplicationsOverviewSearchTextFilter />
 
-            <ApplicationsOverviewTypes />
+            <ApplicationsOverviewTypesFilter />
 
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 gap-5">
                 {filteredApplications
                     .map(application => (
                         <Application

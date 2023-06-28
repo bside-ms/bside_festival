@@ -2,6 +2,8 @@ import type { Link } from '@prisma/client';
 import { default as NextLink } from 'next/link';
 import type { ReactElement } from 'react';
 
+const maxLinkLength = 50;
+
 const ExternalLink = ({ link: { link } }: { link: Link }): ReactElement => (
     <div className="overflow-hidden whitespace-nowrap overflow-ellipsis">
         <NextLink
@@ -9,7 +11,7 @@ const ExternalLink = ({ link: { link } }: { link: Link }): ReactElement => (
             target="_blank"
             className="cursor-pointer text-sky-700"
         >
-            {link}
+            {link.length > maxLinkLength ? `${link.slice(0, maxLinkLength)}…` : link}
         </NextLink>
     </div>
 );
