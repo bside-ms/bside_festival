@@ -1,16 +1,15 @@
-import { useCallback } from 'react';
 import type { Type } from '@prisma/client';
+import Link from 'next/link';
 import type { ReactElement } from 'react';
 import ApplicationTypeImage from 'components/applications/applicationForm/ApplicationTypeImage';
 import availableTypes from 'lib/applications/availableTypes';
 import typeLabels from 'lib/participants/typeLabels';
+import typeUrlPaths from 'lib/participants/typeUrlPaths';
 
-const TypeSelect = ({ type, onSelect }: { type: Type, onSelect: (type: Type) => void }): ReactElement => {
-
-    const handleClick = useCallback(() => onSelect(type), [onSelect, type]);
+const TypeSelect = ({ type }: { type: Type }): ReactElement => {
 
     return (
-        <div className="relative h-52" onClick={handleClick}>
+        <Link className="block relative h-52" href={`/bewerbungen/${typeUrlPaths[type]}`}>
             <ApplicationTypeImage type={type} />
 
             <div className="absolute top-0 right-0 bottom-0 left-0 opacity-50 bg-gray-600 hover:bg-gray-400 md:cursor-pointer" />
@@ -18,21 +17,17 @@ const TypeSelect = ({ type, onSelect }: { type: Type, onSelect: (type: Type) => 
             <div className="absolute right-0 bottom-0 left-0 px-3 md:px-6 py-1 md:py-3 text-lg md:text-xl font-display text-white break-all">
                 {typeLabels[type]}
             </div>
-        </div>
+        </Link>
     );
 };
 
-interface Props {
-    onSelect: (type: Type) => void;
-}
-
-const ApplicationTypeSelection = ({ onSelect }: Props): ReactElement => {
+const ApplicationTypeSelection = (): ReactElement => {
 
     return (
         <div className="grid grid-cols-2 gap-4">
             {availableTypes.map(availableType => (
                 <div key={availableType} className="">
-                    <TypeSelect type={availableType} onSelect={onSelect} />
+                    <TypeSelect type={availableType} />
                 </div>
             ))}
         </div>
