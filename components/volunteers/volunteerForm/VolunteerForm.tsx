@@ -1,10 +1,8 @@
 // import { Type } from '@prisma/client'
 import { type ReactElement, useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import type { ApplicationFormValues } from 'components/applications/applicationForm/ApplicationForm';
 import ContentWrapper from 'components/common/ContentWrapper';
 
-// do i also need a type? 
 export interface VolunteerFormValues {
     fullName: string;
     mailAddress: string;
@@ -27,38 +25,46 @@ export interface VolunteerFormValues {
 const VolunteerForm = (): ReactElement => {
 
     const methods = useForm<VolunteerFormValues>();
-    const { handleSubmit, setError, formState: { errors, isSubmitting }, clearErrors, reset, watch } = methods;
+    const { handleSubmit, setError, formState: { errors, isSubmitting }, clearErrors, reset } = methods;
     
     const handleFormReset = useCallback(() => reset(), [reset]);
+    
+    const handleFormSubmit = useCallback(async (values: VolunteerFormValues) => {
 
-    // what should i watch here?,
-    const currentType = watch('type');
-
-    const handleFormSubmit = useCallback(async (values: ApplicationFormValues) => {
-        // What does root do? i couldnt find any information about it. 
         clearErrors('root');
         
-        // const request = {
-        // type: values.type,    
-        // fullName: values.fullName,
-        // mailAddress: values.mailAddress,
-        // phoneNumber: values.photoNumber,
-        // canCook: values.canCook,
-        // hasCar: values.hasCar,
-        // hasDrivingLicense: values.hasDrivingLicense,
-        // canCarryHeavyStuff: values.canCarryHeavyStuff,
-        // canLiftHeavyStuff: values.canLiftHeavyStuff,
-        // isSocial: values.isSocial,
-        // canSupportTechnician: values.canSupportTechnician,
-        // canSupportArtist: values.canSupportArtist,
-        // hasMultipleTalents: values.hasMultipleTalents,
-        // canWorkWithChildren: values.canWorkWithChildren,
-        // canCleanupAfterShow: values.canCleanupAfterShow,
-        // isAvailableOnFriday: values.isAvailableOnFriday,
-        // isAvailableOnSaturday: values.isAvailableOnSaturday,
+        const request = {    
+            fullName: values.fullName,
+            mailAddress: values.mailAddress,
+            phoneNumber: values.phoneNumber,
+            canCook: values.canCook,
+            hasCar: values.hasCar,
+            hasDrivingLicense: values.hasDrivingLicense,
+            canCarryHeavyStuff: values.canCarryHeavyStuff,
+            canLiftHeavyStuff: values.canLiftHeavyStuff,
+            isSocial: values.isSocial,
+            canSupportTechnician: values.canSupportTechnician,
+            canSupportArtist: values.canSupportArtist,
+            hasMultipleTalents: values.hasMultipleTalents,
+            canWorkWithChildren: values.canWorkWithChildren,
+            canCleanupAfterShow: values.canCleanupAfterShow,
+            isAvailableOnFriday: values.isAvailableOnFriday,
+            isAvailableOnSaturday: values.isAvailableOnSaturday,
 
-        // };
+        };
+        const response = await fetch('/api/valunteers/add', {
+            method: 'POST', 
+            headers: { 'Content-type': 'volunteer/json' }, 
+            body: JSON.stringify(request),
+        });
 
+        if (!response.ok) {
+            setError('root', { message: 'Fehler beim Submit' });
+            
+        }
+
+        handleFormReset();
+        
     }, [clearErrors, handleFormReset, setError]);
 
     return (
@@ -99,7 +105,7 @@ const VolunteerForm = (): ReactElement => {
             <FormProvider {...methods}>
                 <div className="w-full">
                     <form
-                        // onSubmit={handleSubmit(handleFormSubmit)}
+                        onSubmit={handleSubmit(handleFormSubmit)}
                         noValidate={true}
                         className="flex gap-6 flex-col"
                     >
