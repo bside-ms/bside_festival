@@ -5,7 +5,7 @@ import type { ReactElement } from 'react';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
-import type { SerializableParticipant } from 'pages/bewerbungen/[idAndName]';
+import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;
@@ -21,7 +21,7 @@ const ApplicationDetailsTechnicalRider = ({ application: { technicalRider, techn
 
     return (
         <div className="mt-4">
-            <div className="font-bold">Technical Rider</div>
+            <div className="font-display">Technical Rider</div>
 
             {isNotEmptyString(technicalRider) && (
                 <div>{technicalRider}</div>
@@ -29,7 +29,10 @@ const ApplicationDetailsTechnicalRider = ({ application: { technicalRider, techn
 
             {isNotEmptyString(technicalRiderPdfUrl) && (
                 <NextLink href={technicalRiderPdfUrl}>
-                    <FontAwesomeIcon icon={faFilePdf} />
+                    <FontAwesomeIcon
+                        className="inline-block p-1 w-8"
+                        icon={faFilePdf}
+                    />
                 </NextLink>
             )}
         </div>

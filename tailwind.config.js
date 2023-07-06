@@ -12,7 +12,7 @@ module.exports = {
     extend: {
       fontFamily: {
         'sans': ['Questrial', 'sans-serif'],
-        'display': ['bdr-mono', 'serif'],
+        'display': ['obviously', 'serif'],
       }
     }
   }

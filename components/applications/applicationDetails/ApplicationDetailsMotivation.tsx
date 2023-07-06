@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import isEmptyString from 'lib/common/helper/isEmptyString';
-import type { SerializableParticipant } from 'pages/bewerbungen/[idAndName]';
+import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;
@@ -14,7 +14,7 @@ const ApplicationDetailsMotivation = ({ application: { motivation } }: Props): R
 
     return (
         <div className="mt-4">
-            <div className="font-bold">Motivation</div>
+            <div className="font-display">Motivation</div>
             <div>{motivation}</div>
         </div>
     );

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import type { ReactElement } from 'react';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
-import type { SerializableParticipant } from 'pages/bewerbungen/[idAndName]';
+import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;

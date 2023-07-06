@@ -62,7 +62,11 @@ export const getTechnicalRiderInfo = (applicationType: Type): null | { info: str
 export const allowedTechnicRiderContentType = 'application/pdf';
 export const allowedTechnicalRiderMaxFileSize = bytes('20MB');
 
-const TechnicalRiderFields = (): ReactElement | null => {
+interface Props {
+    chosenType: Type;
+}
+
+const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
 
     const { register, setValue, formState, watch, setError, clearErrors } = useFormContext<ApplicationFormValues>();
 
@@ -116,17 +120,18 @@ const TechnicalRiderFields = (): ReactElement | null => {
     );
 
     const currentFileDataUrl = watch(fileFieldName);
-    const currentApplicationType = watch('type');
 
     const fileInputId = useRef(uniqueId('file-upload'));
 
-    const technicalRiderInfo = getTechnicalRiderInfo(currentApplicationType);
+    const technicalRiderInfo = getTechnicalRiderInfo(chosenType);
 
     if (technicalRiderInfo === null) {
         return null;
     }
 
     const { info, required } = technicalRiderInfo;
+
+    const templateLink = '/assets/Tech-Rider-Vorlage.pdf';
 
     return (
         <div className="flex flex-col gap-1 relative">
@@ -145,9 +150,10 @@ const TechnicalRiderFields = (): ReactElement | null => {
                 onChange={handleFileChange}
                 className="hidden"
                 accept={allowedTechnicRiderContentType}
+                tabIndex={-1}
             />
 
-            <div className="text-gray-100">
+            <div className="text-black">
                 {isNotEmptyString(currentFileDataUrl) && isNotEmptyString(currentFileName) ? (
                     <div>
                         <span className="font-mono px-2">
@@ -157,26 +163,32 @@ const TechnicalRiderFields = (): ReactElement | null => {
                             className="py-1 px-2 bg-gray-800 hover:bg-gray-700 text-gray-50 text-sm rounded-md cursor-pointer z-10"
                             onClick={handleFileRemove}
                         >
-                            Entfernen&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faTrashAlt} />
+                            Entfernen&nbsp;&nbsp;&nbsp;<FontAwesomeIcon className="w-4 inline-block" icon={faTrashAlt} />
                         </span>
                     </div>
                 ) : (
                     <label htmlFor={fileInputId.current} className="cursor-pointer">
-                        <div className="p-5 border border-dashed border-gray-100 flex justify-center items-center rounded">
+                        <div className="p-5 border border-dashed border-black flex justify-center items-center rounded">
                             PDF hinzufügen
                         </div>
                     </label>
                 )}
             </div>
 
+            <div>
+                Solltet ihr selbst noch keinen Tech-Rider haben, nutzt
+                bitte <a href={templateLink} className="underline cursor-pointer">unsere Vorlage</a>, um
+                unserer Technik-Crew viel Arbeit zu ersparen.
+            </div>
+
             {typeof technicalRiderPdfErrorMessage === 'string' && (
-                <div className="px-1 text-rose-700">
+                <div className="px-1 text-rose-900">
                     {technicalRiderErrorMessage}
                 </div>
             )}
 
             {typeof technicalRiderPdfErrorMessage === 'string' && (
-                <div className="px-1 text-rose-700">
+                <div className="px-1 text-rose-900">
                     {technicalRiderErrorMessage}
                 </div>
             )}

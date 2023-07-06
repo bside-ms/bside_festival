@@ -21,7 +21,7 @@ export const allowedImageContentTypes = [
     'image/png',
 ];
 
-export const allowedImageMaxFileSize = bytes('1MB'); // TODO
+export const allowedImageMaxFileSize = bytes('20MB');
 
 const typesRequiringImage = new Array<Type>(
     Type.Concert,
@@ -29,13 +29,15 @@ const typesRequiringImage = new Array<Type>(
     Type.Exhibition,
 );
 
-const ImageUpload = (): ReactElement => {
+interface Props {
+    chosenType: Type;
+}
+
+const ImageUpload = ({ chosenType }: Props): ReactElement => {
 
     const { register, setValue, formState: { errors, isSubmitting }, watch, setError, clearErrors } = useFormContext<ApplicationFormValues>();
 
-    const currentType = watch('type');
-
-    const required = typesRequiringImage.includes(currentType);
+    const required = typesRequiringImage.includes(chosenType);
 
     const errorMessage = errors[fieldName]?.message;
 
@@ -90,19 +92,20 @@ const ImageUpload = (): ReactElement => {
     const fileInputId = useRef(uniqueId('image-upload'));
 
     return (
-        <div className="flex flex-col gap-1 relative text-gray-100">
+        <div className="flex flex-col gap-1 relative text-black">
             {isNotEmptyString(currentImageDataUrl) && !isSubmitting && (
                 <div
                     className="absolute right-1 top-1 py-1 px-2 bg-gray-800 hover:bg-gray-700 text-gray-50 text-sm rounded-md cursor-pointer z-10"
                     onClick={handleImageDelete}
                 >
-                    Entfernen&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faTrashAlt} />
+                    Entfernen&nbsp;&nbsp;&nbsp;<FontAwesomeIcon className="w-4 inline-block" icon={faTrashAlt} />
                 </div>
             )}
 
             <input
                 type="text"
                 className="h-0 opacity-0 pointer-events-none"
+                tabIndex={-1}
                 {...register(
                     fieldName,
                     {
@@ -121,27 +124,28 @@ const ImageUpload = (): ReactElement => {
                 className="hidden"
                 accept={allowedImageContentTypes.join(', ')}
                 disabled={isSubmitting}
+                tabIndex={-1}
             />
 
             <label htmlFor={fileInputId.current} className="cursor-pointer">
                 {isNotEmptyString(currentImageDataUrl) ? (
                     <div className="relative w-full h-24 overflow-hidden">
-                        <Image src={currentImageDataUrl} alt="foo" fill={true} style={{ objectFit: 'contain' }} />
+                        <Image src={currentImageDataUrl} alt="Upload-Vorschau" fill={true} style={{ objectFit: 'contain' }} />
                     </div>
                 ) : (
-                    <div className={`h-24 w-full border border-dashed border-gray-100 flex justify-center items-center rounded ${typeof errorMessage === 'string' ? 'bg-rose-700' : ''}`}>
+                    <div className={`h-24 w-full border border-dashed border-black flex justify-center items-center rounded ${typeof errorMessage === 'string' ? 'bg-rose-600' : ''}`}>
                         {required ? 'Bild hinzufügen *' : 'Bild hinzufügen'}
                     </div>
                 )}
             </label>
 
             {typeof errorMessage === 'string' && (
-                <div className="px-1 text-rose-600">
+                <div className="px-1 text-rose-900">
                     {errorMessage}
                 </div>
             )}
 
-            <div className="px-1 text-gray-100 text-base">
+            <div className="px-1 text-black text-base">
                 Dieses Foto wird auf unserer Webseite
                 veröffentlicht, falls ihr beim B-Side Festival
                 dabei sein werdet. Bitte sendet nur neutrale Fotos

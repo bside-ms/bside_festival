@@ -5,6 +5,7 @@ import { useApplicationsOverviewContext } from 'components/applications/applicat
 import availableTypes from 'lib/applications/availableTypes';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
+import typeColors from 'lib/participants/typeColors';
 import typeLabels from 'lib/participants/typeLabels';
 
 const TypeToggle = ({ type }: { type: Type }): ReactElement => {
@@ -17,7 +18,11 @@ const TypeToggle = ({ type }: { type: Type }): ReactElement => {
 
     return (
         <div
-            className={`select-none md:cursor-pointer rounded-2xl border border-gray-400 text-sm py-1 px-4 bg-gray-100 ${active ? '!bg-gray-600 !text-white' : ''}`}
+            className="select-none uppercase md:cursor-pointer rounded-2xl border-2 border-dashed text-sm px-3 py-1"
+            style={{
+                backgroundColor: typeColors[type],
+                borderColor: active ? '#444' : typeColors[type],
+            }}
             onClick={handleClick}
         >
             {typeLabels[type]}
@@ -25,7 +30,7 @@ const TypeToggle = ({ type }: { type: Type }): ReactElement => {
     );
 };
 
-const ApplicationsOverviewSearchText = (): ReactElement => {
+const ApplicationsOverviewTypesFilter = (): ReactElement => {
 
     const { filteredTypes } = useApplicationsOverviewContext();
 
@@ -64,4 +69,4 @@ const ApplicationsOverviewSearchText = (): ReactElement => {
     );
 };
 
-export default ApplicationsOverviewSearchText;
+export default ApplicationsOverviewTypesFilter;

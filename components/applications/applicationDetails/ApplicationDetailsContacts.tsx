@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ReactElement } from 'react';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import type { SerializableParticipant } from 'pages/bewerbungen/[idAndName]';
+import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;

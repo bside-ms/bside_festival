@@ -1,6 +1,7 @@
 import { createTransport } from 'nodemailer';
 import type Mail from 'nodemailer/lib/mailer';
 import type { SentMessageInfo } from 'nodemailer/lib/smtp-transport';
+import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 let mailTransport: Mail<SentMessageInfo> | null = null;
 
@@ -10,7 +11,7 @@ const createMailTransport = (): Mail<SentMessageInfo> => {
         return mailTransport;
     }
 
-    const transportOptions = {
+    const transportOptions: SMTPTransport.Options = {
         host: process.env.MAIL_HOST,
         port: Number(process.env.MAIL_PORT),
         secure: true,
