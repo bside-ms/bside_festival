@@ -1,12 +1,14 @@
 // import { Type } from '@prisma/client'
-import { type ReactElement, useCallback } from 'react';
+import { type ReactElement, useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import ContentWrapper from 'components/common/ContentWrapper';
+import Checkbox from 'components/form/Checkbox';
+import TextInput from 'components/form/TextInput';
 
 export interface VolunteerFormValues {
-    fullName: string;
-    mailAddress: string;
-    phoneNumber: string;
+    name: string;
+    contactNumber: string;
+    contactMail: string;
     canCook: boolean;
     hasCar: boolean;
     hasDrivingLicense: boolean;
@@ -36,9 +38,9 @@ const VolunteerForm = (): ReactElement => {
         clearErrors('root');
         
         const request = {    
-            fullName: values.fullName,
-            mailAddress: values.mailAddress,
-            phoneNumber: values.phoneNumber,
+            name: values.name,
+            contactMail: values.contactMail,
+            contactNumber: values.contactNumber,
             canCook: values.canCook,
             hasCar: values.hasCar,
             hasDrivingLicense: values.hasDrivingLicense,
@@ -54,19 +56,22 @@ const VolunteerForm = (): ReactElement => {
             isAvailableOnSaturday: values.isAvailableOnSaturday,
 
         };
-        const response = await fetch('/api/valunteers/add', {
-            method: 'POST', 
-            headers: { 'Content-type': 'volunteer/json' }, 
-            body: JSON.stringify(request),
-        });
+        
+        console.log(request);
 
-        if (!response.ok) {
-            setError('root', { message: 'Fehler beim Submit' });
+        // const response = await fetch('/api/volunteers/add', {
+        //     method: 'POST', 
+        //     headers: { 'Content-type': 'volunteer/json' }, 
+        //     body: JSON.stringify(request),
+        // });
+
+        // if (!response.ok) {
+        //     setError('root', { message: 'Fehler beim Submit' });
             
-        }
+        // }
 
-        setWasSuccessfullySubmitted(true);
-        handleFormReset();
+        // setWasSuccessfullySubmitted(true);
+        // handleFormReset();
         
     }, [clearErrors, handleFormReset, setError]);
 
@@ -112,7 +117,60 @@ const VolunteerForm = (): ReactElement => {
                         noValidate={true}
                         className="flex gap-6 flex-col"
                     >
-                        <div>hello world</div>
+                        <TextInput<VolunteerFormValues>
+                            name="name"
+                            label="Vor- und Nachname"
+                            required={true}
+                        />
+
+                        <TextInput<VolunteerFormValues>
+                            name="contactNumber"
+                            label="Telefonnummer"
+                        />
+
+                        <TextInput<VolunteerFormValues>
+                            name="contactMail"
+                            label="E-Mail-Adresse"
+                            required={true}
+                        />
+
+                        <Checkbox<VolunteerFormValues>
+                            name="canCook"
+                            label="can you cook?"
+                        />
+
+                        <Checkbox<VolunteerFormValues>
+                            name="hasCar"
+                            label="hat Auto?"
+                            
+                        />
+        
+                        <Checkbox<VolunteerFormValues>
+                            name="hasDrivingLicense"
+                            label="has a driving license?"
+                        />
+
+                        <Checkbox<VolunteerFormValues>
+                            name="canCarryHeavyStuff"
+                            label="can carry heavy stuff?"
+                        />
+
+                        <Checkbox<VolunteerFormValues>
+                            name="isSocial"
+                            label="can lift heavy stuff?"
+                        />
+
+                        <label className="w-full bg-black p-1 block">
+                       
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="w-full bg-black text-white border border-white rounded font-display text-sm leading-3 p-3 disabled:bg-gray-600"
+                            >
+                                Absenden
+                            </button>
+                        </label>
+                        
                     </form>
                 </div>
             </FormProvider>
