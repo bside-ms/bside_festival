@@ -157,7 +157,7 @@ const VolunteerForm = (): ReactElement => {
 
                         <Checkbox<VolunteerFormValues>
                             name="isSocial"
-                            label="can lift heavy stuff?"
+                            label="are you social?"
                         />
 
                         <label className="w-full bg-black p-1 block">
