@@ -23,6 +23,8 @@ export interface VolunteerFormValues {
 }
 
 const VolunteerForm = (): ReactElement => {
+    
+    const [wasSuccessfullySubmitted, setWasSuccessfullySubmitted] = useState(false);
 
     const methods = useForm<VolunteerFormValues>();
     const { handleSubmit, setError, formState: { errors, isSubmitting }, clearErrors, reset } = methods;
@@ -63,6 +65,7 @@ const VolunteerForm = (): ReactElement => {
             
         }
 
+        setWasSuccessfullySubmitted(true);
         handleFormReset();
         
     }, [clearErrors, handleFormReset, setError]);
@@ -109,7 +112,7 @@ const VolunteerForm = (): ReactElement => {
                         noValidate={true}
                         className="flex gap-6 flex-col"
                     >
-                        <div>Hello World</div>
+                        <div>hello world</div>
                     </form>
                 </div>
             </FormProvider>
