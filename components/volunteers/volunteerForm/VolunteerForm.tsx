@@ -126,6 +126,7 @@ const VolunteerForm = (): ReactElement => {
                         <TextInput<VolunteerFormValues>
                             name="contactNumber"
                             label="Telefonnummer"
+                            required={true}
                         />
 
                         <TextInput<VolunteerFormValues>
