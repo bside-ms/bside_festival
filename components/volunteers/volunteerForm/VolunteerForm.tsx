@@ -160,6 +160,46 @@ const VolunteerForm = (): ReactElement => {
                             label="are you social?"
                         />
 
+                        <Checkbox<VolunteerFormValues>
+                            name="canSupportTechnician"
+                            label="can you support Tech Team?"
+                        />
+                        
+                        <Checkbox<VolunteerFormValues>
+                            name="canSupportArtist"
+                            label="can you support Artist?"
+                        />
+                        
+                        <Checkbox<VolunteerFormValues>
+                            name="hasMultipleTalents"
+                            label="are you multifacetic?"
+                        />
+
+                        <Checkbox<VolunteerFormValues>
+                            name="canWorkWithChildren"
+                            label="can you work with children?"
+                        />
+                        
+                        <Checkbox<VolunteerFormValues>
+                            name="canCleanupAfterShow"
+                            label="can clean up after show?"
+                        />
+
+                        <Checkbox<VolunteerFormValues>
+                            name="canCleanupAfterShow"
+                            label="can clean up after show?"
+                        />
+                        
+                        <Checkbox<VolunteerFormValues>
+                            name="isAvailableOnFriday"
+                            label="free on friday?"
+                        />
+
+                        <Checkbox<VolunteerFormValues>
+                            name="isAvailableOnSaturday"
+                            label="free on Saturday?"
+                        />
+
                         <label className="w-full bg-black p-1 block">
                        
                             <button
