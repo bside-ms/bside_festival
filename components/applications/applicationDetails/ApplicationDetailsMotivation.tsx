@@ -13,10 +13,10 @@ const ApplicationDetailsMotivation = ({ application: { motivation } }: Props): R
     }
 
     return (
-        <div className="mt-4">
+        <>
             <div className="font-display">Motivation</div>
             <div>{motivation}</div>
-        </div>
+        </>
     );
 };
 

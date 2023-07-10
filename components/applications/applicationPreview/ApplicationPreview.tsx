@@ -1,10 +1,8 @@
 import Image from 'next/image';
 import type { ReactElement } from 'react';
+import ApplicationBadges from 'components/applications/common/ApplicationBadges';
 import isEmptyString from 'lib/common/helper/isEmptyString';
-import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import typeColors from 'lib/participants/typeColors';
-import typeLabels from 'lib/participants/typeLabels';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
@@ -15,7 +13,7 @@ interface Props {
 
 const ApplicationPreview = ({ application, onClick }: Props): ReactElement => {
 
-    const { name, type, imageFileName, description, curationScore } = application;
+    const { name, imageFileName, description } = application;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -37,20 +35,7 @@ const ApplicationPreview = ({ application, onClick }: Props): ReactElement => {
             </div>
 
             <div>
-                <div className="flex gap-2">
-                    <div
-                        className="uppercase inline-block select-none rounded-2xl text-sm px-3 py-1 mb-2"
-                        style={{ backgroundColor: typeColors[type] }}
-                    >
-                        {typeLabels[type]}
-                    </div>
-
-                    {isNotEmptyNumber(curationScore) && (
-                        <div className="rounded-2xl text-sm px-3 py-1 mb-2 bg-gray-800 text-white">
-                            {curationScore}
-                        </div>
-                    )}
-                </div>
+                <ApplicationBadges application={application} />
 
                 <div className="text-2xl font-display line-clamp-3">
                     {name}
