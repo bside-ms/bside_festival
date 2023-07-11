@@ -1,7 +1,4 @@
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
-import Link from 'next/link';
 import type { ReactElement } from 'react';
 import BackgroundImage from 'components/common/BackgroundImage';
 import BHeartLinesSvg from 'components/common/BHeartLinesSvg';
@@ -57,24 +54,15 @@ export default (): ReactElement => {
                                         Konzerte, Kunstausstellungen, Theater, Workshops, Kinder- & Familienprogramm,
                                         Vorträge, Lesungen und Diskussionsrunden.
                                     </div>
-                                    <div className="mt-20 text-lg sm:text-2xl text-justify [text-align-last:justify]">
-                                        Bewerbt euch jetzt!
+                                    <div className="mt-20 text-lg sm:text-2xl text-justify">
+                                        Bewerbungsphase beendet
                                     </div>
                                     <div className="mt-3 text-xs text-justify">
-                                        Nachdem letztes Jahr ein voller Erfolg war, freuen wir uns auf
-                                        September. Denn dann werden die Straßen wieder mit Kunst, Musik,
-                                        Workshops und Theater gefüllt.
-                                    </div>
-                                    <div className="mt-3 text-xs text-justify">
-                                        Ihr wollt mit eurer Kunst Teil des bunten Programms werden? Eure Musik
-                                        darf auf gar keinen Fall fehlen? Ihr habt eine spannende Idee, auf die
-                                        wir bisher noch gar nicht gekommen sind? Super! Dann bewerbt euch über
-                                        dieses Formular!
-                                    </div>
-                                    <div className="mt-3 text-right">
-                                        <Link className="text-md cursor-pointer hover:text-red-700 flex items-center gap-2 leading-3 justify-end" href="/bewerbungen">
-                                            Zum Bewerbungsformular <FontAwesomeIcon className="w-4 pt-1 inline-block" icon={faArrowRight} />
-                                        </Link>
+                                        Die diesjährige Bewerbungsphase ist beendet. Und wir sind überwältigt von den
+                                        unzähligen wundervollen Bewerbungen! Nun stecken wir die Köpfe zusammen, um
+                                        für euch ein unterhaltsames und diverses Programm für das diesjährige B-Side
+                                        Festival zusammenzustellen. Wir halten euch hier und in den sozialen Medien
+                                        auf dem Laufenden!
                                     </div>
                                 </div>
                             </div>
