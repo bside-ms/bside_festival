@@ -24,7 +24,7 @@ interface Props {
 
 const ApplicationDetails = ({ application, links, onCloseClick }: Props): ReactElement => {
 
-    const { name, type, description, imageFileName, curationScore } = application;
+    const { name, description, imageFileName } = application;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
