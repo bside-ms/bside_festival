@@ -10,11 +10,9 @@ import ApplicationDetailsContacts from 'components/applications/applicationDetai
 import ApplicationDetailsLinks from 'components/applications/applicationDetails/ApplicationDetailsLinks';
 import ApplicationDetailsMotivation from 'components/applications/applicationDetails/ApplicationDetailsMotivation';
 import ApplicationDetailsTechnicalRider from 'components/applications/applicationDetails/ApplicationDetailsTechnicalRider';
+import ApplicationBadges from 'components/applications/common/ApplicationBadges';
 import isEmptyString from 'lib/common/helper/isEmptyString';
-import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import typeColors from 'lib/participants/typeColors';
-import typeLabels from 'lib/participants/typeLabels';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
@@ -26,7 +24,7 @@ interface Props {
 
 const ApplicationDetails = ({ application, links, onCloseClick }: Props): ReactElement => {
 
-    const { name, type, description, imageFileName, curationScore } = application;
+    const { name, description, imageFileName } = application;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -54,20 +52,7 @@ const ApplicationDetails = ({ application, links, onCloseClick }: Props): ReactE
                 </div>
 
                 <div className="shrink grow-0">
-                    <div className="flex gap-2">
-                        <div
-                            className="uppercase inline-block select-none rounded-2xl text-sm px-3 py-1 mb-2"
-                            style={{ backgroundColor: typeColors[type] }}
-                        >
-                            {typeLabels[type]}
-                        </div>
-
-                        {isNotEmptyNumber(curationScore) && (
-                            <div className="rounded-2xl text-sm px-3 py-1 mb-2 bg-gray-800 text-white">
-                                {curationScore}
-                            </div>
-                        )}
-                    </div>
+                    <ApplicationBadges application={application} />
 
                     <div className="text-2xl font-display">
                         {name}
@@ -78,17 +63,21 @@ const ApplicationDetails = ({ application, links, onCloseClick }: Props): ReactE
                             {description}
                         </div>
                     )}
-
-                    <ApplicationDetailsMotivation application={application} />
-
-                    <ApplicationDetailsLinks links={links} />
-
-                    <ApplicationDetailsContacts application={application} />
-
-                    <ApplicationDetailsTechnicalRider application={application} />
-
-                    <ApplicationDetailsAdditionalInfo application={application} />
                 </div>
+            </div>
+
+            <div
+                className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl"
+            >
+                <ApplicationDetailsMotivation application={application} />
+
+                <ApplicationDetailsLinks links={links} />
+
+                <ApplicationDetailsContacts application={application} />
+
+                <ApplicationDetailsTechnicalRider application={application} />
+
+                <ApplicationDetailsAdditionalInfo application={application} />
             </div>
 
             <div

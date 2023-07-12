@@ -4,10 +4,21 @@ import type { ReactElement } from 'react';
 import ApplicationForm from 'components/applications/applicationForm/ApplicationForm';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
+import getUserSession from 'lib/next-auth/getUserSession';
 import urlPathTypes from 'lib/participants/urlPathTypes';
-
-// eslint-disable-next-line @typescript-eslint/require-await
+ 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
+
+    const userSession = await getUserSession(context);
+
+    if (userSession === null) {
+        return {
+            redirect: {
+                statusCode: 302,
+                destination: '/',
+            },
+        };
+    }
 
     const type = context.params?.type as string | undefined;
 

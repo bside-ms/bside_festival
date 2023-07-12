@@ -10,10 +10,6 @@ const ApplicationCuration = ({ application }: Props): ReactElement => {
 
     return (
         <div>
-            <div className="font-display">
-                Kuration
-            </div>
-
             <ApplicationCurationForm application={application} />
         </div>
     );
