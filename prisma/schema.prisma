@@ -74,21 +74,31 @@ model Location {
 }
 
 model Volunteer {
-  int                   Int     @id @default(autoincrement())
-  fullName              String  @db.Text
-  mailAddress           String  @db.Text
-  phoneNumber           String  @db.Text
-  canCook               Boolean @default(false)
-  hasCar                Boolean @default(false)
-  hasDrivingLicense     Boolean @default(false)
-  canCarryHeavyStuff    Boolean @default(false)
-  canLiftHeavyStuff     Boolean @default(false)
-  isSocial              Boolean @default(false)
-  canSupportTechnician  Boolean @default(false)
-  canSupportArtist      Boolean @default(false)
-  hasMultipleTalents    Boolean @default(false)
-  canWorkWithChildren   Boolean @default(false)
-  canCleanupAfterShow   Boolean @default(false)
-  isAvailableOnFriday   Boolean @default(false)
-  isAvailableOnSaturday Boolean @default(false)
+  int                   Int          @id @default(autoincrement())
+  fullName              String       @db.Text
+  mailAddress           String       @db.Text
+  phoneNumber           String       @db.Text
+  preferences           Preference[]
+  canCook               Boolean      @default(false)
+  hasCar                Boolean      @default(false)
+  hasDrivingLicense     Boolean      @default(false)
+  canCarryHeavyStuff    Boolean      @default(false)
+  canLiftHeavyStuff     Boolean      @default(false)
+  isSocial              Boolean      @default(false)
+  canSupportTechnician  Boolean      @default(false)
+  canSupportArtist      Boolean      @default(false)
+  hasMultipleTalents    Boolean      @default(false)
+  canWorkWithChildren   Boolean      @default(false)
+  canCleanupAfterShow   Boolean      @default(false)
+  isAvailableOnFriday   Boolean      @default(false)
+  isAvailableOnSaturday Boolean      @default(false)
+}
+
+model Preference {
+  id           Int        @id @default(autoincrement())
+  key          String     @db.Text
+  label        String     @db.Text
+  emoji        String     @db.Text
+  Volunteer    Volunteer? @relation(fields: [volunteerInt], references: [int])
+  volunteerInt Int?
 }

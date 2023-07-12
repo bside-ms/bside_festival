@@ -17,7 +17,7 @@ interface Props<T extends FieldValues> {
     validate?: (value: string) => string | undefined;
 }
 
-const Checkbox = <T extends FieldValues>({ label, name, info, validate, required = false, maxLength}: Props<T>): ReactElement => {
+const Checkbox = <T extends FieldValues>({ label, name, info, validate, required = false, maxLength }: Props<T>): ReactElement => {
 
     const { formState: { errors, isSubmitting }, register } = useFormContext();
 

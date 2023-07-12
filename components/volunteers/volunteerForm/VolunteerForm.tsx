@@ -57,8 +57,6 @@ const VolunteerForm = (): ReactElement => {
 
         };
         
-        console.log(request);
-
         // const response = await fetch('/api/volunteers/add', {
         //     method: 'POST', 
         //     headers: { 'Content-type': 'volunteer/json' }, 
