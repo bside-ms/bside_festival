@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import ContentWrapper from 'components/common/ContentWrapper';
 import Checkbox from 'components/form/Checkbox';
 import TextInput from 'components/form/TextInput';
+import volunteerPreferences from 'lib/volunteers/volunteerPreferences';
 
 export interface VolunteerFormValues {
     name: string;
@@ -43,6 +44,7 @@ const VolunteerForm = (): ReactElement => {
             contactNumber: values.contactNumber,
             canCook: values.canCook,
             hasCar: values.hasCar,
+            preference: values.preference,
             hasDrivingLicense: values.hasDrivingLicense,
             canCarryHeavyStuff: values.canCarryHeavyStuff,
             canLiftHeavyStuff: values.canLiftHeavyStuff,
@@ -56,6 +58,8 @@ const VolunteerForm = (): ReactElement => {
             isAvailableOnSaturday: values.isAvailableOnSaturday,
 
         };
+
+        console.log(request);
         
         // const response = await fetch('/api/volunteers/add', {
         //     method: 'POST', 
@@ -132,72 +136,16 @@ const VolunteerForm = (): ReactElement => {
                             label="E-Mail-Adresse"
                             required={true}
                         />
-
-                        <Checkbox<VolunteerFormValues>
-                            name="canCook"
-                            label="can you cook?"
-                        />
-
-                        <Checkbox<VolunteerFormValues>
-                            name="hasCar"
-                            label="hat Auto?"
-                            
-                        />
-        
-                        <Checkbox<VolunteerFormValues>
-                            name="hasDrivingLicense"
-                            label="has a driving license?"
-                        />
-
-                        <Checkbox<VolunteerFormValues>
-                            name="canCarryHeavyStuff"
-                            label="can carry heavy stuff?"
-                        />
-
-                        <Checkbox<VolunteerFormValues>
-                            name="isSocial"
-                            label="are you social?"
-                        />
-
-                        <Checkbox<VolunteerFormValues>
-                            name="canSupportTechnician"
-                            label="can you support Tech Team?"
-                        />
                         
-                        <Checkbox<VolunteerFormValues>
-                            name="canSupportArtist"
-                            label="can you support Artist?"
-                        />
-                        
-                        <Checkbox<VolunteerFormValues>
-                            name="hasMultipleTalents"
-                            label="are you multifacetic?"
-                        />
-
-                        <Checkbox<VolunteerFormValues>
-                            name="canWorkWithChildren"
-                            label="can you work with children?"
-                        />
-                        
-                        <Checkbox<VolunteerFormValues>
-                            name="canCleanupAfterShow"
-                            label="can clean up after show?"
-                        />
-
-                        <Checkbox<VolunteerFormValues>
-                            name="canCleanupAfterShow"
-                            label="can clean up after show?"
-                        />
-                        
-                        <Checkbox<VolunteerFormValues>
-                            name="isAvailableOnFriday"
-                            label="free on friday?"
-                        />
-
-                        <Checkbox<VolunteerFormValues>
-                            name="isAvailableOnSaturday"
-                            label="free on Saturday?"
-                        />
+                        {volunteerPreferences.map(({ key, label }) => ( 
+                            <div key={key}>
+                                <Checkbox<VolunteerFormValues>
+                                    name={key}
+                                    label={label}
+                                />
+                            </div>
+                        ))
+                        }
 
                         <label className="w-full bg-black p-1 block">
                        
