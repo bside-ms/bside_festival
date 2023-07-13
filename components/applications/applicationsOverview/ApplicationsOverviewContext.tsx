@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import type { Link, Participant, Type } from '@prisma/client';
+import type { Label, Link, Participant, ParticipantLabel, Type } from '@prisma/client';
 import Fuse from 'fuse.js';
+import { noop } from 'lodash';
 import type { Dispatch, PropsWithChildren, ReactElement, SetStateAction } from 'react';
 import serializeApplication from 'lib/applications/serializeApplication';
 import isEmptyString from 'lib/common/helper/isEmptyString';
@@ -11,6 +12,8 @@ import type { SerializableParticipant } from 'typings/SerializableParticipant';
 interface ApplicationsOverviewContextData {
     allApplications: Array<SerializableParticipant>;
     filteredApplications: Array<SerializableParticipant>;
+    participantLabels: Array<ParticipantLabel>;
+    updateParticipantLabels: (participantLabels: Array<ParticipantLabel>) => void;
     searchText: string | null;
     setSearchText: Dispatch<SetStateAction<string | null>>;
     enhancedApplicationIds: Array<number>;
@@ -19,16 +22,32 @@ interface ApplicationsOverviewContextData {
     filteredTypes: Array<Type>;
     toggleFilteredType: (type: Type) => void;
     updateApplication: (application: Participant) => void;
+    allLabels: Array<Label & { count: 0 }>;
+    updateAllLabels: (allLabels: Array<Label>) => void;
+    filteredLabelIds: Array<number>;
+    toggleFilteredLabelId: (id: number) => void;
 }
 
 const ApplicationsOverviewContext = createContext<ApplicationsOverviewContextData | null>(null);
 
 interface Props extends PropsWithChildren {
     applications: Array<SerializableParticipant>;
+    participantLabels: Array<ParticipantLabel>;
     allLinks: Array<Link>;
+    allLabels: Array<Label>;
 }
 
-const ApplicationsOverviewContextProvider = ({ applications: initialApplications, allLinks, children }: Props): ReactElement => {
+const ApplicationsOverviewContextProvider = ({
+    applications: initialApplications,
+    participantLabels: initialParticipantLabels,
+    allLinks,
+    allLabels: initialAllLabels,
+    children,
+}: Props): ReactElement => {
+
+    const [allLabels, setAllLabels] = useState<Array<Label>>(initialAllLabels);
+
+    const [participantLabels, setParticipantLabels] = useState<Array<ParticipantLabel>>(initialParticipantLabels);
 
     const [applications, setApplications] = useState<Array<SerializableParticipant>>(initialApplications);
 
@@ -120,6 +139,8 @@ const ApplicationsOverviewContextProvider = ({ applications: initialApplications
         <ApplicationsOverviewContext.Provider
             value={{
                 allApplications: applications,
+                participantLabels,
+                updateParticipantLabels: setParticipantLabels,
                 filteredApplications,
                 searchText,
                 setSearchText,
@@ -129,6 +150,10 @@ const ApplicationsOverviewContextProvider = ({ applications: initialApplications
                 filteredTypes,
                 toggleFilteredType,
                 updateApplication,
+                allLabels: allLabels.map(label => ({ ...label, count: 0 })),
+                updateAllLabels: setAllLabels,
+                filteredLabelIds: [],
+                toggleFilteredLabelId: noop,
             }}
         >
             {children}

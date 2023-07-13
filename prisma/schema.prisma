@@ -9,28 +9,28 @@ datasource db {
 }
 
 model Participant {
-  id                     Int               @id @default(autoincrement())
-  name                   String            @db.Text
+  id                     Int                @id @default(autoincrement())
+  name                   String             @db.Text
   appliedAt              DateTime?
-  updatedAt              DateTime          @updatedAt
-  contactName            String?           @db.Text
-  contactMail            String?           @db.Text
-  contactPhone           String?           @db.Text
-  description            String?           @db.Text
-  motivation             String?           @db.Text
+  updatedAt              DateTime           @updatedAt
+  contactName            String?            @db.Text
+  contactMail            String?            @db.Text
+  contactPhone           String?            @db.Text
+  description            String?            @db.Text
+  motivation             String?            @db.Text
   curationScore          Int?
-  curationInfo           String?           @db.Text
-  address                String?           @db.Text
-  residence              String?           @db.Text
-  imageFileName          String?           @db.Text
-  technicalRider         String?           @db.Text
-  technicalRiderFileName String?           @db.Text
-  additionalInfo         String?           @db.Text
+  curationInfo           String?            @db.Text
+  address                String?            @db.Text
+  residence              String?            @db.Text
+  imageFileName          String?            @db.Text
+  technicalRider         String?            @db.Text
+  technicalRiderFileName String?            @db.Text
+  additionalInfo         String?            @db.Text
   links                  Link[]
   comments               Comment[]
-  labels                 Label[]
+  labels                 ParticipantLabel[]
   type                   Type
-  status                 ApplicationStatus @default(Applied)
+  status                 ApplicationStatus  @default(Applied)
 }
 
 model Link {
@@ -50,11 +50,18 @@ model Comment {
 }
 
 model Label {
-  id            Int         @id @default(autoincrement())
+  id           Int                @id @default(autoincrement())
+  label        String             @db.Text
+  particapants ParticipantLabel[]
+}
+
+model ParticipantLabel {
   participant   Participant @relation(fields: [participantId], references: [id])
   participantId Int
-  label         String      @db.Text
-  color         String?     @db.Text
+  label         Label       @relation(fields: [labelId], references: [id])
+  labelId       Int
+
+  @@id([participantId, labelId])
 }
 
 enum Type {

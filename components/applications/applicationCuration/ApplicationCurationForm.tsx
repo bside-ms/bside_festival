@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { ApplicationStatus } from '@prisma/client';
+import type { ApplicationStatus, Label } from '@prisma/client';
 import { range } from 'lodash';
 import type { ReactElement } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import ApplicationCurationLabelSelect from 'components/applications/applicationCuration/ApplicationCurationLabelSelect';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import SelectInput from 'components/form/SelectInput';
 import TextArea from 'components/form/TextArea';
@@ -18,20 +19,22 @@ export interface CurationFormValues {
     curationScore: string;
     curationInfo: string | null;
     applicationStatus: ApplicationStatus;
+    labels: Array<string | number>;
 }
 
 interface Props {
     application: SerializableParticipant;
+    labels: Array<Label>;
 }
 
-const ApplicationCurationForm = ({ application }: Props): ReactElement => {
+const ApplicationCurationForm = ({ application, labels }: Props): ReactElement => {
 
-    const { updateApplication } = useApplicationsOverviewContext();
+    const { updateApplication, updateAllLabels, updateParticipantLabels } = useApplicationsOverviewContext();
 
     const methods = useForm<CurationFormValues>();
     const { handleSubmit, setError, formState: { errors, isSubmitting }, clearErrors } = methods;
 
-    const handleFormSubmit = useCallback(async ({ curationInfo, curationScore, applicationStatus }: CurationFormValues) => {
+    const handleFormSubmit = useCallback(async ({ curationInfo, curationScore, applicationStatus, labels: updatedLabels }: CurationFormValues) => {
 
         clearErrors('root');
 
@@ -40,6 +43,7 @@ const ApplicationCurationForm = ({ application }: Props): ReactElement => {
             curationScore: isEmptyString(curationScore) ? null : Number(curationScore),
             curationInfo: isEmptyString(curationInfo) ? null : curationInfo,
             applicationStatus,
+            labels: updatedLabels,
         };
 
         const response = await fetch('/api/applications/curation/set', {
@@ -52,12 +56,14 @@ const ApplicationCurationForm = ({ application }: Props): ReactElement => {
             setError('root', { message: 'Fehler beim Submit!' });
         } else {
 
-            const { updatedParticipant } = await response.json() as SuccessfulSetCurationResponse;
+            const { updatedParticipant, allLabels, participantLabels } = await response.json() as SuccessfulSetCurationResponse;
 
             updateApplication(updatedParticipant);
+            updateAllLabels(allLabels);
+            updateParticipantLabels(participantLabels);
         }
 
-    }, [application.id, clearErrors, setError, updateApplication]);
+    }, [application.id, clearErrors, setError, updateAllLabels, updateApplication, updateParticipantLabels]);
 
     return (
         <FormProvider {...methods}>
@@ -84,6 +90,10 @@ const ApplicationCurationForm = ({ application }: Props): ReactElement => {
                         ]}
                     />
                 </div>
+
+                <ApplicationCurationLabelSelect
+                    labels={labels}
+                />
 
                 <TextArea<CurationFormValues>
                     name="curationInfo"
