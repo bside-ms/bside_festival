@@ -10,6 +10,7 @@ export interface VolunteerFormValues {
     name: string;
     contactNumber: string;
     contactMail: string;
+    preference: VolunteerFormValues;
     canCook: boolean;
     hasCar: boolean;
     hasDrivingLicense: boolean;
@@ -138,10 +139,11 @@ const VolunteerForm = (): ReactElement => {
                         />
                         
                         {volunteerPreferences.map(({ key, label }) => ( 
-                            <div key={key}>
+                            <div className=" bg-blue-300" key={key}>
                                 <Checkbox<VolunteerFormValues>
                                     name={key}
                                     label={label}
+                                    // emoji={emoji}
                                 />
                             </div>
                         ))
