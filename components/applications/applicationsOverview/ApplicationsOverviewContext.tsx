@@ -26,6 +26,8 @@ interface ApplicationsOverviewContextData {
     updateAllLabels: (allLabels: Array<Label>) => void;
     filteredLabelIds: Array<number>;
     toggleFilteredLabelId: (id: number) => void;
+    filteredMinimumScore: number | null;
+    setFilteredMinimumScore: (score: number | null) => void;
 }
 
 const ApplicationsOverviewContext = createContext<ApplicationsOverviewContextData | null>(null);
@@ -55,6 +57,8 @@ const ApplicationsOverviewContextProvider = ({
 
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
 
+    const [filteredMinimumScore, setFilteredMinimumScore] = useState<number | null>(null);
+
     useEffectOnMount(() => {
 
         const queryParams = new URLSearchParams(window.location.search);
@@ -67,7 +71,10 @@ const ApplicationsOverviewContextProvider = ({
     const filteredApplications = useMemo<Array<SerializableParticipant>>(() => {
 
         const applicationsFilteredByType = applications.filter(
-            application => filteredTypes.length === 0 || filteredTypes.includes(application.type)
+            application => (
+                (filteredTypes.length === 0 || filteredTypes.includes(application.type)) &&
+                (filteredMinimumScore === null || (application.curationScore !== null && application.curationScore >= filteredMinimumScore))
+            )
         );
 
         if (isEmptyString(searchText)) {
@@ -88,7 +95,7 @@ const ApplicationsOverviewContextProvider = ({
         );
 
         return fuse.search(searchText).map(result => result.item);
-    }, [applications, filteredTypes, searchText]);
+    }, [applications, filteredMinimumScore, filteredTypes, searchText]);
 
     const [enhancedApplicationIds, setEnhancedApplicationIds] = useState<Array<number>>([]);
 
@@ -154,6 +161,8 @@ const ApplicationsOverviewContextProvider = ({
                 updateAllLabels: setAllLabels,
                 filteredLabelIds: [],
                 toggleFilteredLabelId: noop,
+                filteredMinimumScore,
+                setFilteredMinimumScore,
             }}
         >
             {children}

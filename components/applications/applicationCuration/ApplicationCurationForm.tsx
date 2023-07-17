@@ -15,6 +15,14 @@ import statusOrder from 'lib/participants/status/statusOrder';
 import type { SetCurationRequest, SuccessfulSetCurationResponse } from 'pages/api/applications/curation/set';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
+export const curationScoreOptions = [
+    { value: '', label: 'Unbewertet' },
+    ...range(0, 11).map(scoreValue => ({
+        value: scoreValue.toString(),
+        label: scoreValue.toString(),
+    })),
+];
+
 export interface CurationFormValues {
     curationScore: string;
     curationInfo: string | null;
@@ -81,13 +89,7 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
                         label="Bewertung"
                         name="curationScore"
                         defaultValue={application.curationScore?.toString()}
-                        options={[
-                            { value: '', label: 'Unbewertet' },
-                            ...range(0, 11).map(scoreValue => ({
-                                value: scoreValue.toString(),
-                                label: scoreValue.toString(),
-                            })),
-                        ]}
+                        options={curationScoreOptions}
                     />
                 </div>
 

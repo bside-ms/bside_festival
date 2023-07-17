@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import Application from 'components/applications/applicationsOverview/Application';
+import ApplicationOverviewAdditionalFilters from 'components/applications/applicationsOverview/ApplicationOverviewAdditionalFilters';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import ApplicationsOverviewSearchTextFilter from 'components/applications/applicationsOverview/ApplicationsOverviewSearchTextFilter';
 import ApplicationsOverviewTypesFilter from 'components/applications/applicationsOverview/ApplicationsOverviewTypesFilter';
@@ -21,6 +22,8 @@ const ApplicationsOverview = (): ReactElement => {
             <ApplicationsOverviewSearchTextFilter />
 
             <ApplicationsOverviewTypesFilter />
+
+            <ApplicationOverviewAdditionalFilters />
 
             <div className="grid grid-cols-1 gap-5">
                 {filteredApplications
