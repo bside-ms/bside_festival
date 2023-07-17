@@ -61,7 +61,7 @@ const ApplicationsOverviewTypesFilter = (): ReactElement => {
     }, [isMounted, filteredTypes]);
 
     return (
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mb-3">
             {availableTypes.map(availableType => (
                 <TypeToggle key={availableType} type={availableType} />
             ))}

@@ -43,6 +43,7 @@
     "react": "18.2.x",
     "react-dom": "18.2.x",
     "react-hook-form": "7.43.x",
+    "react-select": "5.7.x",
     "react-youtube": "10.1.x",
     "sharp": "0.32.x",
     "swr": "2.1.x",

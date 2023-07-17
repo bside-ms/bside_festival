@@ -1,16 +1,17 @@
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { Link } from '@prisma/client';
+import type { Label, Link } from '@prisma/client';
 import Image from 'next/image';
 import { default as NextLink } from 'next/link';
 import type { ReactElement } from 'react';
-import ApplicationCuration from 'components/applications/applicationCuration/ApplicationCuration';
+import ApplicationCurationForm from 'components/applications/applicationCuration/ApplicationCurationForm';
 import ApplicationDetailsAdditionalInfo from 'components/applications/applicationDetails/ApplicationDetailsAdditionalInfo';
 import ApplicationDetailsContacts from 'components/applications/applicationDetails/ApplicationDetailsContacts';
 import ApplicationDetailsLinks from 'components/applications/applicationDetails/ApplicationDetailsLinks';
 import ApplicationDetailsMotivation from 'components/applications/applicationDetails/ApplicationDetailsMotivation';
 import ApplicationDetailsTechnicalRider from 'components/applications/applicationDetails/ApplicationDetailsTechnicalRider';
 import ApplicationBadges from 'components/applications/common/ApplicationBadges';
+import ApplicationLabels from 'components/applications/common/ApplicationLabels';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
@@ -18,11 +19,12 @@ import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;
+    labels: Array<Label>;
     links: Array<Link>;
     onCloseClick: () => void;
 }
 
-const ApplicationDetails = ({ application, links, onCloseClick }: Props): ReactElement => {
+const ApplicationDetails = ({ application, labels, links, onCloseClick }: Props): ReactElement => {
 
     const { name, description, imageFileName } = application;
 
@@ -54,6 +56,8 @@ const ApplicationDetails = ({ application, links, onCloseClick }: Props): ReactE
                 <div className="shrink grow-0">
                     <ApplicationBadges application={application} />
 
+                    <ApplicationLabels labels={labels} />
+
                     <div className="text-2xl font-display">
                         {name}
                     </div>
@@ -83,7 +87,7 @@ const ApplicationDetails = ({ application, links, onCloseClick }: Props): ReactE
             <div
                 className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl"
             >
-                <ApplicationCuration application={application} />
+                <ApplicationCurationForm application={application} labels={labels} />
             </div>
 
             <div

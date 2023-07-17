@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import type { Link, Participant, Type } from '@prisma/client';
+import type { Label, Link, Participant, ParticipantLabel, Type } from '@prisma/client';
 import Fuse from 'fuse.js';
+import { noop } from 'lodash';
 import type { Dispatch, PropsWithChildren, ReactElement, SetStateAction } from 'react';
 import serializeApplication from 'lib/applications/serializeApplication';
 import isEmptyString from 'lib/common/helper/isEmptyString';
@@ -11,6 +12,8 @@ import type { SerializableParticipant } from 'typings/SerializableParticipant';
 interface ApplicationsOverviewContextData {
     allApplications: Array<SerializableParticipant>;
     filteredApplications: Array<SerializableParticipant>;
+    participantLabels: Array<ParticipantLabel>;
+    updateParticipantLabels: (participantLabels: Array<ParticipantLabel>) => void;
     searchText: string | null;
     setSearchText: Dispatch<SetStateAction<string | null>>;
     enhancedApplicationIds: Array<number>;
@@ -19,22 +22,42 @@ interface ApplicationsOverviewContextData {
     filteredTypes: Array<Type>;
     toggleFilteredType: (type: Type) => void;
     updateApplication: (application: Participant) => void;
+    allLabels: Array<Label & { count: 0 }>;
+    updateAllLabels: (allLabels: Array<Label>) => void;
+    filteredLabelIds: Array<number>;
+    toggleFilteredLabelId: (id: number) => void;
+    filteredMinimumScore: number | null;
+    setFilteredMinimumScore: (score: number | null) => void;
 }
 
 const ApplicationsOverviewContext = createContext<ApplicationsOverviewContextData | null>(null);
 
 interface Props extends PropsWithChildren {
     applications: Array<SerializableParticipant>;
+    participantLabels: Array<ParticipantLabel>;
     allLinks: Array<Link>;
+    allLabels: Array<Label>;
 }
 
-const ApplicationsOverviewContextProvider = ({ applications: initialApplications, allLinks, children }: Props): ReactElement => {
+const ApplicationsOverviewContextProvider = ({
+    applications: initialApplications,
+    participantLabels: initialParticipantLabels,
+    allLinks,
+    allLabels: initialAllLabels,
+    children,
+}: Props): ReactElement => {
+
+    const [allLabels, setAllLabels] = useState<Array<Label>>(initialAllLabels);
+
+    const [participantLabels, setParticipantLabels] = useState<Array<ParticipantLabel>>(initialParticipantLabels);
 
     const [applications, setApplications] = useState<Array<SerializableParticipant>>(initialApplications);
 
     const [searchText, setSearchText] = useState<string | null>(null);
 
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
+
+    const [filteredMinimumScore, setFilteredMinimumScore] = useState<number | null>(null);
 
     useEffectOnMount(() => {
 
@@ -48,7 +71,10 @@ const ApplicationsOverviewContextProvider = ({ applications: initialApplications
     const filteredApplications = useMemo<Array<SerializableParticipant>>(() => {
 
         const applicationsFilteredByType = applications.filter(
-            application => filteredTypes.length === 0 || filteredTypes.includes(application.type)
+            application => (
+                (filteredTypes.length === 0 || filteredTypes.includes(application.type)) &&
+                (filteredMinimumScore === null || (application.curationScore !== null && application.curationScore >= filteredMinimumScore))
+            )
         );
 
         if (isEmptyString(searchText)) {
@@ -69,7 +95,7 @@ const ApplicationsOverviewContextProvider = ({ applications: initialApplications
         );
 
         return fuse.search(searchText).map(result => result.item);
-    }, [applications, filteredTypes, searchText]);
+    }, [applications, filteredMinimumScore, filteredTypes, searchText]);
 
     const [enhancedApplicationIds, setEnhancedApplicationIds] = useState<Array<number>>([]);
 
@@ -120,6 +146,8 @@ const ApplicationsOverviewContextProvider = ({ applications: initialApplications
         <ApplicationsOverviewContext.Provider
             value={{
                 allApplications: applications,
+                participantLabels,
+                updateParticipantLabels: setParticipantLabels,
                 filteredApplications,
                 searchText,
                 setSearchText,
@@ -129,6 +157,12 @@ const ApplicationsOverviewContextProvider = ({ applications: initialApplications
                 filteredTypes,
                 toggleFilteredType,
                 updateApplication,
+                allLabels: allLabels.map(label => ({ ...label, count: 0 })),
+                updateAllLabels: setAllLabels,
+                filteredLabelIds: [],
+                toggleFilteredLabelId: noop,
+                filteredMinimumScore,
+                setFilteredMinimumScore,
             }}
         >
             {children}

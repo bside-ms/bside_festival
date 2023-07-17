@@ -11,9 +11,19 @@ interface Props {
 
 const Application = ({ application }: Props): ReactElement => {
 
-    const { enhancedApplicationIds, toggleEnhancedApplicationId, getLinksOfApplication } = useApplicationsOverviewContext();
+    const {
+        enhancedApplicationIds,
+        toggleEnhancedApplicationId,
+        getLinksOfApplication,
+        participantLabels,
+        allLabels,
+    } = useApplicationsOverviewContext();
 
     const { id } = application;
+
+    const ownParticipantLabelIds = participantLabels.filter(label => label.participantId === id).map(label => label.labelId);
+
+    const labels = allLabels.filter(label => ownParticipantLabelIds.includes(label.id));
 
     const handleEnhancedToggle = useCallback(
         () => toggleEnhancedApplicationId(id),
@@ -24,6 +34,7 @@ const Application = ({ application }: Props): ReactElement => {
         return (
             <ApplicationDetails
                 application={application}
+                labels={labels}
                 links={getLinksOfApplication(id)}
                 onCloseClick={handleEnhancedToggle}
             />
@@ -33,6 +44,7 @@ const Application = ({ application }: Props): ReactElement => {
     return (
         <ApplicationPreview
             application={application}
+            labels={labels}
             onClick={handleEnhancedToggle}
         />
     );
