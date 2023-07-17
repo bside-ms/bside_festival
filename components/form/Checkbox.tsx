@@ -11,12 +11,9 @@ interface Props<T extends FieldValues> {
     label: string;
     info?: string;
     required?: boolean;
-    maxLength?: number;
-    checked?: boolean;
-    validate?: (value: string) => string | undefined;
 }
 
-const Checkbox = <T extends FieldValues>({ label, name, info, validate, required = false, maxLength }: Props<T>): ReactElement => {
+const Checkbox = <T extends FieldValues>({ label, name, info, required = false }: Props<T>): ReactElement => {
 
     const { formState: { errors, isSubmitting }, register } = useFormContext();
 
@@ -43,7 +40,6 @@ const Checkbox = <T extends FieldValues>({ label, name, info, validate, required
                             value: required,
                             message: 'Dies ist ein Pflichtfeld',
                         },
-                        validate,
                     },
                 )}
             />
