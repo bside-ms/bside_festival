@@ -6,7 +6,8 @@ import VolunteerForm from 'components/volunteers/volunteerForm/VolunteerForm';
 import getUserSession from 'lib/next-auth/getUserSession';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const userSession = await getUserSession(context);  
+
+    const userSession = await getUserSession(context);
 
     if (userSession === null) {
         return {
