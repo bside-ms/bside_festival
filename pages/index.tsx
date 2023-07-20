@@ -6,6 +6,8 @@ import Footer from 'components/common/Footer';
 
 export default (): ReactElement => {
 
+    // TODO: Header deutlich größer, die beiden Herzen dann aber ein wenig kleiner <3<3
+
     return (
         <div>
             <div className="min-h-screen w-full relative font-display">
@@ -47,11 +49,8 @@ export default (): ReactElement => {
                                     <div className="text-xs sm:text-sm [text-align-last:justify] mt-1">
                                         Kunst, Kultur & Bildung am Hawerkamp
                                     </div>
-                                    <div className="mt-3 bg-black text-gray-100 text-center text-xs sm:text-sm leading-4 py-3">
-                                        Veranstaltet vom B-Side Kultur e.V.
-                                    </div>
-                                    <div className="mt-2 text-xs text-justify [text-align-last:justify]">
-                                        Konzerte, Kunstausstellungen, Theater, Workshops, Kinder- & Familienprogramm,
+                                    <div className="mt-14 text-xl">
+                                        Konzerte, Kunstausstellungen, Theater, Workshops, Kinder- & Familien&shy;programm,
                                         Vorträge, Lesungen und Diskussionsrunden.
                                     </div>
                                     <div className="mt-20 text-lg sm:text-2xl text-justify">
