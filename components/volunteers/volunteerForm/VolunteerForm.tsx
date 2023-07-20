@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import ContentWrapper from 'components/common/ContentWrapper';
 import Checkbox from 'components/form/Checkbox';
 import TextInput from 'components/form/TextInput';
+import VolunteerInfo from 'components/volunteers/volunteerForm/VolunteerInfo';
 import volunteerDayPreferences from 'lib/volunteers/volunteerDayPreferences';
 import volunteerPreferences from 'lib/volunteers/volunteerPreferences';
 import type { AddVolunteerRequest } from 'pages/api/volunteers/add';
@@ -78,24 +79,7 @@ const VolunteerForm = (): ReactElement => {
                     </div>
 
                     <div className="mb-3">
-                        <div>
-                            Schon sehr bald geht es im Hansaviertel rund! Für unser B-Side Festival 2023
-                            „Interaktion Reaktion“ brauchen wir euch! Wir suchen tatkräftige Helfer*innen. Dabei gibt
-                            es verschiedene Aufgaben, bei denen ihr euch einbringen könnt: Die Betreuung von  Konzerten,
-                            Workshops, Ausstellungen und Lesungen, die Verpflegung für das Helfer*innen- und B-Side-Team,
-                            Hilfe beim Auf- und Abbau und der Technik des Festivals, Unterstützung des Awareness-Teams
-                            auf dem gesamten Festival und beim Spendensammeln.
-                        </div>
-                        <div>
-                            Mit allen Stärken und Interessen seid ihr herzlich willkommen uns zu unterstützen! Denn nur
-                            mit euch kann das Festival so toll wie die letzten Jahre werden!
-                        </div>
-                        <div>
-                            Um einen Überblick über eure Stärken und Interessen zu bekommen,
-                            haben wir folgenden Fragebogen vorbereitet. Kreuzt bitte an,
-                            was auf euch zutrifft. Außerdem hinterlasst bitte eure Kontaktdaten,
-                            sodass wir euch erreichen können. Danke!
-                        </div>
+                        <VolunteerInfo />
                     </div>
 
                     <div className="mt-9 bg-gray-200 border-green-700 text-green-700 p-5 rounded-xl font-bold">
@@ -114,24 +98,7 @@ const VolunteerForm = (): ReactElement => {
                 </div>
 
                 <div className="mb-3">
-                    <div>
-                        Schon sehr bald geht es im Hansaviertel rund! Für unser B-Side Festival 2023
-                        „Interaktion Reaktion“ brauchen wir euch! Wir suchen tatkräftige Helfer*innen. Dabei gibt
-                        es verschiedene Aufgaben, bei denen ihr euch einbringen könnt: Die Betreuung von  Konzerten,
-                        Workshops, Ausstellungen und Lesungen, die Verpflegung für das Helfer*innen- und B-Side-Team,
-                        Hilfe beim Auf- und Abbau und der Technik des Festivals, Unterstützung des Awareness-Teams
-                        auf dem gesamten Festival und beim Spendensammeln.
-                    </div>
-                    <div>
-                        Mit allen Stärken und Interessen seid ihr herzlich willkommen uns zu unterstützen! Denn nur
-                        mit euch kann das Festival so toll wie die letzten Jahre werden!
-                    </div>
-                    <div>
-                        Um einen Überblick über eure Stärken und Interessen zu bekommen,
-                        haben wir folgenden Fragebogen vorbereitet. Kreuzt bitte an,
-                        was auf euch zutrifft. Außerdem hinterlasst bitte eure Kontaktdaten,
-                        sodass wir euch erreichen können. Danke!
-                    </div>
+                    <VolunteerInfo />
                 </div>
 
                 <FormProvider {...methods}>
