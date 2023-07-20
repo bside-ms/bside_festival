@@ -38,15 +38,6 @@ const ApplicationOverviewAdditionalFilters = (): ReactElement => {
         <FormProvider {...methods}>
             <div className="mb-3">
                 {showAdditionalFilters ? (
-                    <div className="flex">
-                        <a
-                            onClick={toggleShowAdditionalFilters}
-                            className="cursor-pointer bg-gray-200 py-2 px-3 text-sm rounded-xl flex items-center gap-1 select-none"
-                        >
-                            Weitere Filter <FontAwesomeIcon className="w-2" icon={faChevronDown} />
-                        </a>
-                    </div>
-                ) : (
                     <div>
                         <div className="flex">
                             <a
@@ -71,6 +62,15 @@ const ApplicationOverviewAdditionalFilters = (): ReactElement => {
 
                             </div>
                         </div>
+                    </div>
+                ) : (
+                    <div className="flex">
+                        <a
+                            onClick={toggleShowAdditionalFilters}
+                            className="cursor-pointer bg-gray-200 py-2 px-3 text-sm rounded-xl flex items-center gap-1 select-none"
+                        >
+                            Weitere Filter <FontAwesomeIcon className="w-2" icon={faChevronDown} />
+                        </a>
                     </div>
                 )}
             </div>
