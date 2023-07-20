@@ -74,6 +74,7 @@ enum Type {
   Food
   Neighbor
   Misc
+  DiskJockey
 }
 
 enum ApplicationStatus {

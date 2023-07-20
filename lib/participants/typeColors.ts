@@ -2,6 +2,7 @@ import type { Type } from '@prisma/client';
 
 const typeColors: Record<Type, string> = {
     Concert: '#afefd4',
+    DiskJockey: '#afacff',
     Workshop: '#efb5b5',
     Reading: '#e9ea9d',
     Performance: '#9ec8e0',

@@ -2,6 +2,7 @@ import type { Type } from '@prisma/client';
 
 const typeUrlPaths: Record<Type, string> = {
     Concert: 'konzert',
+    DiskJockey: 'dj',
     Workshop: 'workshop',
     Reading: 'lesung',
     Performance: 'performance',
