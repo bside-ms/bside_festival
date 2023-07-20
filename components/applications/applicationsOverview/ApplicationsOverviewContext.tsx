@@ -1,7 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import type { Label, Link, Participant, ParticipantLabel, Type } from '@prisma/client';
 import Fuse from 'fuse.js';
-import { noop } from 'lodash';
 import type { Dispatch, PropsWithChildren, ReactElement, SetStateAction } from 'react';
 import serializeApplication from 'lib/applications/serializeApplication';
 import isEmptyString from 'lib/common/helper/isEmptyString';
@@ -25,7 +24,7 @@ interface ApplicationsOverviewContextData {
     allLabels: Array<Label & { count: 0 }>;
     updateAllLabels: (allLabels: Array<Label>) => void;
     filteredLabelIds: Array<number>;
-    toggleFilteredLabelId: (id: number) => void;
+    toggleFilteredLabelId: (labelId: number) => void;
     filteredMinimumScore: number | null;
     setFilteredMinimumScore: (score: number | null) => void;
 }
@@ -59,6 +58,8 @@ const ApplicationsOverviewContextProvider = ({
 
     const [filteredMinimumScore, setFilteredMinimumScore] = useState<number | null>(null);
 
+    const [filteredLabelIds, setFilteredLabelIds] = useState<Array<number>>([]);
+
     useEffectOnMount(() => {
 
         const queryParams = new URLSearchParams(window.location.search);
@@ -71,10 +72,18 @@ const ApplicationsOverviewContextProvider = ({
     const filteredApplications = useMemo<Array<SerializableParticipant>>(() => {
 
         const applicationsFilteredByType = applications.filter(
-            application => (
-                (filteredTypes.length === 0 || filteredTypes.includes(application.type)) &&
-                (filteredMinimumScore === null || (application.curationScore !== null && application.curationScore >= filteredMinimumScore))
-            )
+            application => {
+
+                const participantLabelIds = participantLabels
+                    .filter(({ participantId }) => participantId === application.id)
+                    .map(({ labelId }) => labelId);
+
+                return (
+                    (filteredTypes.length === 0 || filteredTypes.includes(application.type)) &&
+                    (filteredMinimumScore === null || (application.curationScore !== null && application.curationScore >= filteredMinimumScore)) &&
+                    (filteredLabelIds.length === 0 || participantLabelIds.some(id => filteredLabelIds.includes(id)))
+                );
+            }
         );
 
         if (isEmptyString(searchText)) {
@@ -95,7 +104,7 @@ const ApplicationsOverviewContextProvider = ({
         );
 
         return fuse.search(searchText).map(result => result.item);
-    }, [applications, filteredMinimumScore, filteredTypes, searchText]);
+    }, [applications, filteredLabelIds, filteredMinimumScore, filteredTypes, participantLabels, searchText]);
 
     const [enhancedApplicationIds, setEnhancedApplicationIds] = useState<Array<number>>([]);
 
@@ -142,6 +151,17 @@ const ApplicationsOverviewContextProvider = ({
 
     }, []);
 
+    const handleLabelFilterClick = useCallback((labelId: number) => {
+
+        setFilteredLabelIds(prevState => {
+            if (prevState.includes(labelId)) {
+                return prevState.filter(id => id !== labelId);
+            }
+
+            return [...prevState, labelId];
+        });
+    }, []);
+
     return (
         <ApplicationsOverviewContext.Provider
             value={{
@@ -159,8 +179,8 @@ const ApplicationsOverviewContextProvider = ({
                 updateApplication,
                 allLabels: allLabels.map(label => ({ ...label, count: 0 })),
                 updateAllLabels: setAllLabels,
-                filteredLabelIds: [],
-                toggleFilteredLabelId: noop,
+                filteredLabelIds,
+                toggleFilteredLabelId: handleLabelFilterClick,
                 filteredMinimumScore,
                 setFilteredMinimumScore,
             }}

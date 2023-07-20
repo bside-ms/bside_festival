@@ -14,7 +14,14 @@ interface AdditionFiltersFormValues {
 
 const ApplicationOverviewAdditionalFilters = (): ReactElement => {
 
-    const { filteredMinimumScore, setFilteredMinimumScore } = useApplicationsOverviewContext();
+    const {
+        filteredMinimumScore,
+        setFilteredMinimumScore,
+        participantLabels,
+        allLabels,
+        toggleFilteredLabelId,
+        filteredLabelIds,
+    } = useApplicationsOverviewContext();
 
     const [showAdditionalFilters, setShowAdditionalFilters] = useState(false);
     const toggleShowAdditionalFilters = useCallback(() => setShowAdditionalFilters(prevState => !prevState), []);
@@ -33,6 +40,18 @@ const ApplicationOverviewAdditionalFilters = (): ReactElement => {
     );
 
     const handleReset = useCallback(() => setValue('minimumScore', ''), [setValue]);
+
+    const usedLabelIds = participantLabels.map(({ labelId }) => labelId);
+    const usedLabels = allLabels.filter(({ id }) => usedLabelIds.includes(id));
+
+    const handleLabelClick = useCallback((event: MouseEvent) => {
+
+        // @ts-expect-error | Will fix this later..
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        const clickedLabelId = event.target.dataset.labelId as string;
+
+        toggleFilteredLabelId(Number(clickedLabelId));
+    }, [toggleFilteredLabelId]);
 
     return (
         <FormProvider {...methods}>
@@ -60,6 +79,24 @@ const ApplicationOverviewAdditionalFilters = (): ReactElement => {
                                 />
                                 <a className="text-xs text-sky-700 cursor-pointer" onClick={handleReset}>zurücksetzen</a>
 
+                            </div>
+
+                            <div className="mt-2">
+                                <div>Labels</div>
+                                <div className="flex gap-1 flex-wrap">
+                                    {usedLabels.map(({ id, label }) => (
+                                        <div
+                                            key={id}
+                                            className="uppercase select-none rounded-2xl text-xs px-3 py-1 bg-gray-200 text-gray-700 border border-gray-700 cursor-pointer"
+                                            data-label-id={id}
+                                            style={{ borderStyle: filteredLabelIds.includes(id) ? 'dashed' : undefined }}
+                                            // @ts-expect-error | Will fix this later
+                                            onClick={handleLabelClick}
+                                        >
+                                            {label}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
