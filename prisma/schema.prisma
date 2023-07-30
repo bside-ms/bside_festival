@@ -17,6 +17,7 @@ model Participant {
   contactMail            String?            @db.Text
   contactPhone           String?            @db.Text
   description            String?            @db.Text
+  updatedDescription     String?            @db.Text
   motivation             String?            @db.Text
   curationScore          Int?
   curationInfo           String?            @db.Text

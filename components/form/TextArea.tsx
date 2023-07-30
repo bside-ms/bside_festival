@@ -14,10 +14,11 @@ interface Props<T extends FieldValues> {
     info?: string;
     required?: boolean;
     maxLength?: number;
+    rows?: number;
 }
 
 // eslint-disable-next-line @typescript-eslint/comma-dangle
-const TextArea = <T extends FieldValues,>({ label, name, defaultValue, info, required = false, maxLength }: Props<T>): ReactElement => {
+const TextArea = <T extends FieldValues,>({ label, name, defaultValue, info, required = false, maxLength, rows = 5 }: Props<T>): ReactElement => {
 
     const { formState: { errors, isSubmitting }, register } = useFormContext();
 
@@ -34,7 +35,7 @@ const TextArea = <T extends FieldValues,>({ label, name, defaultValue, info, req
             <textarea
                 id={id}
                 className={`p-2 rounded outline-0 ${typeof errorMessage === 'string' ? 'bg-rose-600 text-gray-100 placeholder:text-gray-100' : ''}`}
-                rows={5}
+                rows={rows}
                 placeholder={required ? `${label} *` : label}
                 required={required}
                 disabled={isSubmitting}

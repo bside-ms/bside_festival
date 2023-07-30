@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { default as NextLink } from 'next/link';
 import type { ReactElement } from 'react';
 import ApplicationCurationForm from 'components/applications/applicationCuration/ApplicationCurationForm';
+import ApplicationDescriptionForm from 'components/applications/applicationCuration/ApplicationDescriptionForm';
 import ApplicationDetailsAdditionalInfo from 'components/applications/applicationDetails/ApplicationDetailsAdditionalInfo';
 import ApplicationDetailsContacts from 'components/applications/applicationDetails/ApplicationDetailsContacts';
 import ApplicationDetailsLinks from 'components/applications/applicationDetails/ApplicationDetailsLinks';
@@ -26,7 +27,7 @@ interface Props {
 
 const ApplicationDetails = ({ application, labels, links, onCloseClick }: Props): ReactElement => {
 
-    const { name, description, imageFileName } = application;
+    const { name, imageFileName } = application;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -62,11 +63,9 @@ const ApplicationDetails = ({ application, labels, links, onCloseClick }: Props)
                         {name}
                     </div>
 
-                    {isNotEmptyString(description) && (
-                        <div className="mt-4">
-                            {description}
-                        </div>
-                    )}
+                    <ApplicationDescriptionForm
+                        application={application}
+                    />
                 </div>
             </div>
 

@@ -16,7 +16,7 @@ interface Props {
 
 const ApplicationPreview = ({ application, labels, onClick }: Props): ReactElement => {
 
-    const { name, imageFileName, description } = application;
+    const { name, imageFileName, description, updatedDescription } = application;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -48,7 +48,7 @@ const ApplicationPreview = ({ application, labels, onClick }: Props): ReactEleme
 
                 {isNotEmptyString(description) && (
                     <div className="mt-4 line-clamp-6">
-                        {description}
+                        {updatedDescription ?? description}
                     </div>
                 )}
 
