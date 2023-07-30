@@ -1,8 +1,12 @@
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
+import Link from 'next/link';
 import type { ReactElement } from 'react';
 import BackgroundImage from 'components/common/BackgroundImage';
 import BHeartLinesSvg from 'components/common/BHeartLinesSvg';
 import Footer from 'components/common/Footer';
+import VolunteerInfo from 'components/volunteers/volunteerForm/VolunteerInfo';
 
 export default (): ReactElement => {
 
@@ -27,12 +31,12 @@ export default (): ReactElement => {
                                     <BHeartLinesSvg color="#000" />
                                 </div>
                                 <div className="sm:hidden relative w-full aspect-square -mt-2">
-                                    <BHeartLinesSvg color="#666" />
+                                    <BHeartLinesSvg color="#888" />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex pt-16 pr-7 sm:pl-5 sm:pt-24 sm:pr-10 max-w-[540px]">
+                        <div className="flex pt-16 pr-7 sm:pl-5 sm:pt-24 sm:pr-10 max-w-[540px] mb-14">
                             <div className="relative mb-[40rem]">
                                 <div className="font-semibold text-6xl sm:text-8xl">
                                     B-Side<br />
@@ -53,15 +57,18 @@ export default (): ReactElement => {
                                         Konzerte, Kunstausstellungen, Theater, Workshops, Kinder- & Familien&shy;programm,
                                         Vorträge, Lesungen und Diskussionsrunden.
                                     </div>
-                                    <div className="mt-20 text-lg sm:text-2xl text-justify">
-                                        Bewerbungsphase beendet
+                                    <div className="mt-16 text-lg sm:text-2xl font-bold">
+                                        Wir brauchen euch!
                                     </div>
-                                    <div className="mt-3 text-xs text-justify">
-                                        Die diesjährige Bewerbungsphase ist beendet. Und wir sind überwältigt von den
-                                        unzähligen wundervollen Bewerbungen! Nun stecken wir die Köpfe zusammen, um
-                                        für euch ein unterhaltsames und diverses Programm für das diesjährige B-Side
-                                        Festival zusammenzustellen. Wir halten euch hier und in den sozialen Medien
-                                        auf dem Laufenden!
+
+                                    <div className="text-xs mt-3">
+                                        <VolunteerInfo />
+                                    </div>
+
+                                    <div className="mt-3 text-right">
+                                        <Link className="text-md cursor-pointer hover:text-red-700 flex items-center gap-2 leading-3 justify-end" href="/mithelfen">
+                                            Zum Formular für Helfer:innen <FontAwesomeIcon className="w-4 pt-1 inline-block" icon={faArrowRight} />
+                                        </Link>
                                     </div>
                                 </div>
                             </div>

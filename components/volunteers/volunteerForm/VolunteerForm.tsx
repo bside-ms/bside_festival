@@ -1,4 +1,3 @@
-// import { Type } from '@prisma/client'
 import { type ReactElement, useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Checkbox from 'components/form/Checkbox';
