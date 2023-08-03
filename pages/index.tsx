@@ -37,7 +37,7 @@ export default (): ReactElement => {
                         </div>
 
                         <div className="flex pt-16 pr-7 sm:pl-5 sm:pt-24 sm:pr-10 max-w-[540px] mb-14">
-                            <div className="relative mb-[40rem]">
+                            <div className="relative mb-[50rem]">
                                 <div className="font-semibold text-6xl sm:text-8xl">
                                     B-Side<br />
                                     Festival
