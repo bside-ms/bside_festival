@@ -46,7 +46,7 @@ const VolunteerForm = (): ReactElement => {
             canSupportTechnician: values.canSupportTechnician,
             canSupportArtist: values.canSupportArtist,
             hasMultipleTalents: values.hasMultipleTalents,
-            canWorkWithChildren: values.canWorkWithChildren,
+            canWorkWithChildren: false, // No entertainment for children this year
             isAvailableOnFriday: values.isAvailableOnFriday,
             isAvailableOnSaturday: values.isAvailableOnSaturday,
             isAvailableOnSunday: values.isAvailableOnSunday,
