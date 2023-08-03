@@ -1,9 +1,9 @@
 import type VolunteerPreference from './VolunteerPreference';
 
 const volunteerDayPreferences = new Array<VolunteerPreference>(
-    { key: 'isAvailableOnFriday', label: 'Ich habe am Freitag Zeit', emoji: '📆' },
-    { key: 'isAvailableOnSaturday', label: 'Ich habe am Samstag Zeit', emoji: '📆' },
-    { key: 'isAvailableOnSunday', label: 'Ich habe am Sonntag Zeit', emoji: '📆' },
+    { key: 'isAvailableOnFriday', label: 'Ich habe Zeit am Freitag, den 15.09.', emoji: '📆' },
+    { key: 'isAvailableOnSaturday', label: 'Ich habe Zeit am Samstag, den 16.09.', emoji: '📆' },
+    { key: 'isAvailableOnSunday', label: 'Ich habe Zeit am Sonntag, den 17.09.', emoji: '📆' },
 );
 
 export default volunteerDayPreferences;
