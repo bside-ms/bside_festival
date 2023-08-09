@@ -54,7 +54,7 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
             toggleShowForm();
         }
 
-    }, [application.id, clearErrors, setError, updateApplication]);
+    }, [application.id, clearErrors, setError, toggleShowForm, updateApplication]);
 
     if (!showForm) {
         return (
