@@ -92,6 +92,7 @@ model Location {
 }
 
 model Volunteer {
+  // Primary key is called int instead of id by accident >_<
   int                   Int     @id @default(autoincrement())
   fullName              String  @db.Text
   mailAddress           String  @db.Text
