@@ -1,7 +1,5 @@
-import type { Label } from '@prisma/client';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
-import ApplicationLabels from 'components/applications/common/ApplicationLabels';
 import Badges from 'components/participants/details/Badges';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
@@ -10,11 +8,10 @@ import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;
-    labels: Array<Label>;
     onClick: () => void;
 }
 
-const ApplicationPreview = ({ application, labels, onClick }: Props): ReactElement => {
+const ParticipantsPreview = ({ application, onClick }: Props): ReactElement => {
 
     const { name, imageFileName, description, updatedDescription } = application;
 
@@ -40,8 +37,6 @@ const ApplicationPreview = ({ application, labels, onClick }: Props): ReactEleme
             <div>
                 <Badges application={application} />
 
-                <ApplicationLabels labels={labels} />
-
                 <div className="text-2xl font-display line-clamp-3">
                     {name}
                 </div>
@@ -58,4 +53,4 @@ const ApplicationPreview = ({ application, labels, onClick }: Props): ReactEleme
     );
 };
 
-export default ApplicationPreview;
+export default ParticipantsPreview;

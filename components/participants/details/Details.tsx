@@ -1,18 +1,16 @@
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { Label, Link } from '@prisma/client';
+import type { Link } from '@prisma/client';
 import Image from 'next/image';
 import { default as NextLink } from 'next/link';
+import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
-import ApplicationCurationForm from 'components/applications/applicationCuration/ApplicationCurationForm';
-import ApplicationDescriptionForm from 'components/applications/applicationCuration/ApplicationDescriptionForm';
-import ApplicationDetailsAdditionalInfo from 'components/applications/applicationDetails/ApplicationDetailsAdditionalInfo';
-import ApplicationDetailsContacts from 'components/applications/applicationDetails/ApplicationDetailsContacts';
-import ApplicationDetailsLinks from 'components/applications/applicationDetails/ApplicationDetailsLinks';
-import ApplicationDetailsMotivation from 'components/applications/applicationDetails/ApplicationDetailsMotivation';
-import ApplicationDetailsTechnicalRider from 'components/applications/applicationDetails/ApplicationDetailsTechnicalRider';
-import ApplicationLabels from 'components/applications/common/ApplicationLabels';
+import AdditionalInfo from 'components/participants/details/AdditionalInfo';
 import Badges from 'components/participants/details/Badges';
+import Contacts from 'components/participants/details/Contacts';
+import DescriptionForm from 'components/participants/details/DescriptionForm';
+import Links from 'components/participants/details/Links';
+import TechnicalRider from 'components/participants/details/TechnicalRider';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
@@ -20,12 +18,13 @@ import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;
-    labels: Array<Label>;
     links: Array<Link>;
     onCloseClick: () => void;
 }
 
-const ApplicationDetails = ({ application, labels, links, onCloseClick }: Props): ReactElement => {
+const Details = ({ application, links, onCloseClick }: Props): ReactElement => {
+
+    const { status } = useSession();
 
     const { name, imageFileName } = application;
 
@@ -57,37 +56,29 @@ const ApplicationDetails = ({ application, labels, links, onCloseClick }: Props)
                 <div className="shrink grow-0">
                     <Badges application={application} />
 
-                    <ApplicationLabels labels={labels} />
-
                     <div className="text-2xl font-display">
                         {name}
                     </div>
 
-                    <ApplicationDescriptionForm
+                    <DescriptionForm
                         application={application}
                     />
                 </div>
             </div>
 
-            <div
-                className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl"
-            >
-                <ApplicationDetailsMotivation application={application} />
+            {status === 'authenticated' && (
+                <div
+                    className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl"
+                >
+                    <Links links={links} />
 
-                <ApplicationDetailsLinks links={links} />
+                    <Contacts application={application} />
 
-                <ApplicationDetailsContacts application={application} />
+                    <TechnicalRider application={application} />
 
-                <ApplicationDetailsTechnicalRider application={application} />
-
-                <ApplicationDetailsAdditionalInfo application={application} />
-            </div>
-
-            <div
-                className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl"
-            >
-                <ApplicationCurationForm application={application} labels={labels} />
-            </div>
+                    <AdditionalInfo application={application} />
+                </div>
+            )}
 
             <div
                 className="mt-1 p-1 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl flex justify-center md:hover:cursor-pointer hover:brightness-110"
@@ -99,4 +90,4 @@ const ApplicationDetails = ({ application, labels, links, onCloseClick }: Props)
     );
 };
 
-export default ApplicationDetails;
+export default Details;

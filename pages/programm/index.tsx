@@ -1,12 +1,11 @@
-import type { Label, Link, ParticipantLabel } from '@prisma/client';
+import type { Link, ParticipantLabel } from '@prisma/client';
 import type { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import type { ReactElement } from 'react';
-import ApplicationsOverview from 'components/applications/applicationsOverview/ApplicationsOverview';
-import { ApplicationsOverviewContextProvider } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
+import ParticipantsOverview from 'components/participants/overview/ParticipantsOverview';
+import { ApplicationsOverviewContextProvider } from 'components/participants/overview/ParticipantsOverviewContext';
 import prismaClient from 'lib/common/prismaClient';
-import getUserSession from 'lib/next-auth/getUserSession';
 import serializeParticipant from 'lib/participants/serializeParticipant';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
@@ -14,21 +13,9 @@ interface Props {
     applications: Array<SerializableParticipant>;
     participantLabels: Array<ParticipantLabel>;
     allLinks: Array<Link>;
-    allLabels: Array<Label>;
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async (context): Promise<GetServerSidePropsResult<Props>> => {
-
-    const userSession = await getUserSession(context);
-
-    if (userSession === null) {
-        return {
-            redirect: {
-                statusCode: 302,
-                destination: '/',
-            },
-        };
-    }
+export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<GetServerSidePropsResult<Props>> => {
 
     const applications = await prismaClient.participant.findMany();
 
@@ -36,20 +23,16 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
 
     const allLinks = await prismaClient.link.findMany();
 
-    // Just use all now, will be filtered out later
-    const allLabels = await prismaClient.label.findMany();
-
     return {
         props: {
             applications: applications.map(serializeParticipant),
             participantLabels,
             allLinks,
-            allLabels,
         },
     };
 };
 
-export default ({ applications, participantLabels, allLinks, allLabels }: Props): ReactElement => {
+export default ({ applications, participantLabels, allLinks }: Props): ReactElement => {
 
     return (
         <div>
@@ -60,9 +43,8 @@ export default ({ applications, participantLabels, allLinks, allLabels }: Props)
                             applications={applications}
                             participantLabels={participantLabels}
                             allLinks={allLinks}
-                            allLabels={allLabels}
                         >
-                            <ApplicationsOverview />
+                            <ParticipantsOverview />
                         </ApplicationsOverviewContextProvider>
                     </div>
                 </div>
