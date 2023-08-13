@@ -6,11 +6,12 @@ import { default as NextLink } from 'next/link';
 import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 import AdditionalInfo from 'components/participants/details/AdditionalInfo';
-import Badges from 'components/participants/details/Badges';
 import Contacts from 'components/participants/details/Contacts';
 import DescriptionForm from 'components/participants/details/DescriptionForm';
 import Links from 'components/participants/details/Links';
 import TechnicalRider from 'components/participants/details/TechnicalRider';
+import TypeBadge from 'components/participants/details/TypeBadge';
+import SlotsForm from 'components/participants/slotsForm/SlotsForm';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
@@ -26,7 +27,7 @@ const Details = ({ application, links, onCloseClick }: Props): ReactElement => {
 
     const { status } = useSession();
 
-    const { name, imageFileName } = application;
+    const { name, imageFileName, type } = application;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -54,7 +55,9 @@ const Details = ({ application, links, onCloseClick }: Props): ReactElement => {
                 </div>
 
                 <div className="shrink grow-0">
-                    <Badges application={application} />
+                    <div className="mb-1">
+                        <TypeBadge type={type} />
+                    </div>
 
                     <div className="text-2xl font-display">
                         {name}
@@ -65,6 +68,14 @@ const Details = ({ application, links, onCloseClick }: Props): ReactElement => {
                     />
                 </div>
             </div>
+
+            {status === 'authenticated' && (
+                <div
+                    className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl"
+                >
+                    <SlotsForm />
+                </div>
+            )}
 
             {status === 'authenticated' && (
                 <div

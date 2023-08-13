@@ -2,9 +2,11 @@ import type { Label } from '@prisma/client';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 import ApplicationLabels from 'components/applications/common/ApplicationLabels';
-import Badges from 'components/participants/details/Badges';
+import TypeBadge from 'components/participants/details/TypeBadge';
 import isEmptyString from 'lib/common/helper/isEmptyString';
+import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import statusLabels from 'lib/participants/status/statusLabels';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
@@ -16,7 +18,7 @@ interface Props {
 
 const ApplicationPreview = ({ application, labels, onClick }: Props): ReactElement => {
 
-    const { name, imageFileName, description, updatedDescription } = application;
+    const { name, imageFileName, type, curationScore, status, description, updatedDescription } = application;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -38,7 +40,21 @@ const ApplicationPreview = ({ application, labels, onClick }: Props): ReactEleme
             </div>
 
             <div>
-                <Badges application={application} />
+                <div className="flex gap-2 mb-2">
+                    <TypeBadge type={type} />
+
+                    {isNotEmptyNumber(curationScore) && (
+                        <div className="rounded-2xl text-sm px-3 py-1 bg-gray-800 text-white">
+                            {curationScore}
+                        </div>
+                    )}
+
+                    <div
+                        className="uppercase inline-block select-none rounded-2xl text-sm px-3 py-1 bg-gray-800 text-white"
+                    >
+                        {statusLabels[status]}
+                    </div>
+                </div>
 
                 <ApplicationLabels labels={labels} />
 

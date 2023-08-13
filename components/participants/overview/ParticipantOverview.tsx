@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import type { ReactElement } from 'react';
 import Details from 'components/participants/details/Details';
-import { useApplicationsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
+import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import ParticipantsPreview from 'components/participants/overview/ParticipantsPreview';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
@@ -12,23 +12,23 @@ interface Props {
 const ParticipantOverview = ({ application }: Props): ReactElement => {
 
     const {
-        enhancedApplicationIds,
-        toggleEnhancedApplicationId,
-        getLinksOfApplication,
-    } = useApplicationsOverviewContext();
+        enhancedParticipantIds,
+        toggleEnhancedParticipantId,
+        getLinksOfParticipant,
+    } = useParticipantsOverviewContext();
 
     const { id } = application;
 
     const handleEnhancedToggle = useCallback(
-        () => toggleEnhancedApplicationId(id),
-        [id, toggleEnhancedApplicationId]
+        () => toggleEnhancedParticipantId(id),
+        [id, toggleEnhancedParticipantId]
     );
 
-    if (enhancedApplicationIds.includes(id)) {
+    if (enhancedParticipantIds.includes(id)) {
         return (
             <Details
                 application={application}
-                links={getLinksOfApplication(id)}
+                links={getLinksOfParticipant(id)}
                 onCloseClick={handleEnhancedToggle}
             />
         );

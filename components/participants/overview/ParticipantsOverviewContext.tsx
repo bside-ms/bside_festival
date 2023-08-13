@@ -1,42 +1,44 @@
 import { createContext, useCallback, useContext, useState } from 'react';
-import type { Link, Participant, ParticipantLabel, Type } from '@prisma/client';
+import type { Link, Location, Participant, ParticipantLabel, Type } from '@prisma/client';
 import type { PropsWithChildren, ReactElement } from 'react';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 import isValidType from 'lib/participants/isValidType';
 import serializeParticipant from 'lib/participants/serializeParticipant';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
-interface ApplicationsOverviewContextData {
-    allApplications: Array<SerializableParticipant>;
-    filteredApplications: Array<SerializableParticipant>;
+interface ParticipantsOverviewContextData {
+    allParticipants: Array<SerializableParticipant>;
+    filteredParticipants: Array<SerializableParticipant>;
     participantLabels: Array<ParticipantLabel>;
     updateParticipantLabels: (participantLabels: Array<ParticipantLabel>) => void;
-    enhancedApplicationIds: Array<number>;
-    toggleEnhancedApplicationId: (id: number) => void;
-    getLinksOfApplication: (id: number) => Array<Link>;
+    enhancedParticipantIds: Array<number>;
+    toggleEnhancedParticipantId: (id: number) => void;
+    getLinksOfParticipant: (id: number) => Array<Link>;
     filteredTypes: Array<Type>;
     toggleFilteredType: (type: Type) => void;
-    updateApplication: (application: Participant) => void;
+    updateParticipant: (participant: Participant) => void;
 }
 
-const ParticipantsOverviewContext = createContext<ApplicationsOverviewContextData | null>(null);
+const ParticipantsOverviewContext = createContext<ParticipantsOverviewContextData | null>(null);
 
 interface Props extends PropsWithChildren {
-    applications: Array<SerializableParticipant>;
+    participants: Array<SerializableParticipant>;
     participantLabels: Array<ParticipantLabel>;
     allLinks: Array<Link>;
+    allLocations: Array<Location>;
 }
 
-const ApplicationsOverviewContextProvider = ({
-    applications: initialApplications,
+const ParticipantsOverviewContextProvider = ({
+    participants: initialParticipants,
     participantLabels: initialParticipantLabels,
     allLinks,
+    allLocations,
     children,
 }: Props): ReactElement => {
 
     const [participantLabels, setParticipantLabels] = useState<Array<ParticipantLabel>>(initialParticipantLabels);
 
-    const [applications, setApplications] = useState<Array<SerializableParticipant>>(initialApplications);
+    const [participants, setParticipants] = useState<Array<SerializableParticipant>>(initialParticipants);
 
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
 
@@ -49,15 +51,15 @@ const ApplicationsOverviewContextProvider = ({
         setFilteredTypes(initialTypes.filter(isValidType));
     });
 
-    const filteredApplications = applications.filter(
-        application => filteredTypes.length === 0 || filteredTypes.includes(application.type)
+    const filteredParticipants = participants.filter(
+        participant => filteredTypes.length === 0 || filteredTypes.includes(participant.type)
     );
 
-    const [enhancedApplicationIds, setEnhancedApplicationIds] = useState<Array<number>>([]);
+    const [enhancedParticipantIds, setEnhancedParticipantIds] = useState<Array<number>>([]);
 
-    const toggleEnhancedApplicationId = useCallback((id: number) => {
+    const toggleEnhancedParticipantId = useCallback((id: number) => {
 
-        setEnhancedApplicationIds(enhancedIds => {
+        setEnhancedParticipantIds(enhancedIds => {
             if (enhancedIds.includes(id)) {
                 return enhancedIds.filter(enhancedId => enhancedId !== id);
             } else {
@@ -77,22 +79,22 @@ const ApplicationsOverviewContextProvider = ({
         });
     }, []);
 
-    const getLinksOfApplication = useCallback((id: number) => (
+    const getLinksOfParticipant = useCallback((id: number) => (
         allLinks.filter(({ participantId }) => participantId === id)
     ), [allLinks]);
 
-    const updateApplication = useCallback((application: Participant) => {
+    const updateParticipant = useCallback((participant: Participant) => {
 
-        setApplications(prevState => {
+        setParticipants(prevState => {
 
             return prevState
-                .map(applicationItem => {
+                .map(participantItem => {
 
-                    if (applicationItem.id === application.id) {
-                        return serializeParticipant(application);
+                    if (participantItem.id === participant.id) {
+                        return serializeParticipant(participant);
                     }
 
-                    return applicationItem;
+                    return participantItem;
                 });
         });
 
@@ -101,16 +103,16 @@ const ApplicationsOverviewContextProvider = ({
     return (
         <ParticipantsOverviewContext.Provider
             value={{
-                allApplications: applications,
+                allParticipants: participants,
                 participantLabels,
                 updateParticipantLabels: setParticipantLabels,
-                filteredApplications,
-                enhancedApplicationIds,
-                toggleEnhancedApplicationId,
-                getLinksOfApplication,
+                filteredParticipants,
+                enhancedParticipantIds,
+                toggleEnhancedParticipantId,
+                getLinksOfParticipant,
                 filteredTypes,
                 toggleFilteredType,
-                updateApplication,
+                updateParticipant,
             }}
         >
             {children}
@@ -118,18 +120,18 @@ const ApplicationsOverviewContextProvider = ({
     );
 };
 
-const useApplicationsOverviewContext = (): ApplicationsOverviewContextData => {
+const useParticipantsOverviewContext = (): ParticipantsOverviewContextData => {
 
-    const ApplicationsOverviewContextContext = useContext(ParticipantsOverviewContext);
+    const participantsOverviewContext = useContext(ParticipantsOverviewContext);
 
-    if (ApplicationsOverviewContextContext === null) {
-        throw new Error('useApplicationsOverviewContext must only be used within corresponding provider!');
+    if (participantsOverviewContext === null) {
+        throw new Error('useParticipantsOverviewContext must only be used within corresponding provider!');
     }
 
-    return ApplicationsOverviewContextContext;
+    return participantsOverviewContext;
 };
 
 export {
-    ApplicationsOverviewContextProvider,
-    useApplicationsOverviewContext,
+    ParticipantsOverviewContextProvider,
+    useParticipantsOverviewContext,
 };

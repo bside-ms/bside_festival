@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import TextArea from 'components/form/TextArea';
-import { useApplicationsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
+import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import type { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } from 'pages/api/applications/update/description';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
@@ -21,7 +21,7 @@ const DescriptionForm = ({ application }: Props): ReactElement => {
 
     const { status } = useSession();
 
-    const { updateApplication } = useApplicationsOverviewContext();
+    const { updateParticipant } = useParticipantsOverviewContext();
 
     const [showForm, setShowForm] = useState(false);
     const toggleShowForm = useCallback(() => setShowForm(prevState => !prevState), []);
@@ -52,12 +52,12 @@ const DescriptionForm = ({ application }: Props): ReactElement => {
                 updatedParticipant,
             } = await response.json() as SuccessfulUpdateDescriptionResponse;
 
-            updateApplication(updatedParticipant);
+            updateParticipant(updatedParticipant);
 
             toggleShowForm();
         }
 
-    }, [application.id, clearErrors, setError, toggleShowForm, updateApplication]);
+    }, [application.id, clearErrors, setError, toggleShowForm, updateParticipant]);
 
     if (!showForm) {
         return (

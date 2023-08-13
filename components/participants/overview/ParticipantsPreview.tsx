@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import type { ReactElement } from 'react';
-import Badges from 'components/participants/details/Badges';
+import TypeBadge from 'components/participants/details/TypeBadge';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
@@ -13,7 +13,7 @@ interface Props {
 
 const ParticipantsPreview = ({ application, onClick }: Props): ReactElement => {
 
-    const { name, imageFileName, description, updatedDescription } = application;
+    const { name, imageFileName, description, type, updatedDescription } = application;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -35,7 +35,9 @@ const ParticipantsPreview = ({ application, onClick }: Props): ReactElement => {
             </div>
 
             <div>
-                <Badges application={application} />
+                <div className="mb-1">
+                    <TypeBadge type={type} />
+                </div>
 
                 <div className="text-2xl font-display line-clamp-3">
                     {name}
