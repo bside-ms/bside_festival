@@ -8,8 +8,8 @@ const SlotsForm = (): ReactElement => {
                 Programmslots
             </div>
 
-            <div>
-                hier bearbeiten...
+            <div className="mt-2">
+                Bald hier bearbeiten...
             </div>
         </div>
     );

@@ -6,10 +6,10 @@ import ParticipantsPreview from 'components/participants/overview/ParticipantsPr
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
-    application: SerializableParticipant;
+    participant: SerializableParticipant;
 }
 
-const ParticipantOverview = ({ application }: Props): ReactElement => {
+const ParticipantOverview = ({ participant }: Props): ReactElement => {
 
     const {
         enhancedParticipantIds,
@@ -17,7 +17,7 @@ const ParticipantOverview = ({ application }: Props): ReactElement => {
         getLinksOfParticipant,
     } = useParticipantsOverviewContext();
 
-    const { id } = application;
+    const { id } = participant;
 
     const handleEnhancedToggle = useCallback(
         () => toggleEnhancedParticipantId(id),
@@ -27,7 +27,7 @@ const ParticipantOverview = ({ application }: Props): ReactElement => {
     if (enhancedParticipantIds.includes(id)) {
         return (
             <Details
-                application={application}
+                participant={participant}
                 links={getLinksOfParticipant(id)}
                 onCloseClick={handleEnhancedToggle}
             />
@@ -36,7 +36,7 @@ const ParticipantOverview = ({ application }: Props): ReactElement => {
 
     return (
         <ParticipantsPreview
-            application={application}
+            participant={participant}
             onClick={handleEnhancedToggle}
         />
     );

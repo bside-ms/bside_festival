@@ -3,10 +3,10 @@ import isEmptyString from 'lib/common/helper/isEmptyString';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
-    application: SerializableParticipant;
+    participant: SerializableParticipant;
 }
 
-const AdditionalInfo = ({ application: { additionalInfo } }: Props): ReactElement | null => {
+const AdditionalInfo = ({ participant: { additionalInfo } }: Props): ReactElement | null => {
 
     if (isEmptyString(additionalInfo)) {
         return null;

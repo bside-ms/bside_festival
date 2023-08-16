@@ -57,6 +57,17 @@ export default (): ReactElement => {
                                         Konzerte, Kunstausstellungen, Theater, Workshops, Kinder- & Familien&shy;programm,
                                         Vorträge, Lesungen und Diskussionsrunden.
                                     </div>
+
+                                    <div className="mt-8 flex">
+                                        <Link
+                                            className="cursor-pointer hover:bg-gray-800 bg-black text-white px-4 rounded-sm flex items-center gap-2 leading-3"
+                                            href="/programm"
+                                        >
+                                            <div className="font-display text-xl md:text-4xl pb-2 md:pb-3">zum Programm</div>
+                                            <div><FontAwesomeIcon className="w-3 md:w-6 md:pt-1 inline-block" icon={faArrowRight} /></div>
+                                        </Link>
+                                    </div>
+
                                     <div className="mt-16 text-lg sm:text-2xl font-bold">
                                         Wir brauchen euch!
                                     </div>
@@ -66,7 +77,7 @@ export default (): ReactElement => {
                                     </div>
 
                                     <div className="mt-3 text-right">
-                                        <Link className="text-md cursor-pointer hover:text-red-700 flex items-center gap-2 leading-3 justify-end" href="/mithelfen">
+                                        <Link className="text-md cursor-pointer hover:text-red-700 flex items-center gap-2 leading-4 justify-end" href="/mithelfen">
                                             Zum Formular für Helfer:innen <FontAwesomeIcon className="w-4 pt-1 inline-block" icon={faArrowRight} />
                                         </Link>
                                     </div>

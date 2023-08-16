@@ -5,9 +5,12 @@ import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 import isValidType from 'lib/participants/isValidType';
 import serializeParticipant from 'lib/participants/serializeParticipant';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
+import type { SerializableSlot } from 'typings/SerializableSlot';
 
 interface ParticipantsOverviewContextData {
     allParticipants: Array<SerializableParticipant>;
+    slots: Array<SerializableSlot>;
+    allLocations: Array<Location>;
     filteredParticipants: Array<SerializableParticipant>;
     participantLabels: Array<ParticipantLabel>;
     updateParticipantLabels: (participantLabels: Array<ParticipantLabel>) => void;
@@ -23,6 +26,7 @@ const ParticipantsOverviewContext = createContext<ParticipantsOverviewContextDat
 
 interface Props extends PropsWithChildren {
     participants: Array<SerializableParticipant>;
+    slots: Array<SerializableSlot>;
     participantLabels: Array<ParticipantLabel>;
     allLinks: Array<Link>;
     allLocations: Array<Location>;
@@ -32,6 +36,7 @@ const ParticipantsOverviewContextProvider = ({
     participants: initialParticipants,
     participantLabels: initialParticipantLabels,
     allLinks,
+    slots,
     allLocations,
     children,
 }: Props): ReactElement => {
@@ -113,6 +118,8 @@ const ParticipantsOverviewContextProvider = ({
                 filteredTypes,
                 toggleFilteredType,
                 updateParticipant,
+                slots,
+                allLocations,
             }}
         >
             {children}
@@ -131,7 +138,35 @@ const useParticipantsOverviewContext = (): ParticipantsOverviewContextData => {
     return participantsOverviewContext;
 };
 
+export interface ParticipantSlot {
+    slot: SerializableSlot;
+    location: Location;
+}
+
+const useParticipantSlots = (participantId: number): Array<ParticipantSlot> => {
+
+    const { allLocations, slots } = useParticipantsOverviewContext();
+
+    return slots
+        .filter(slotItem => slotItem.participantId === participantId)
+        .map<ParticipantSlot | null>(slotItem => {
+
+            const location = allLocations.find(locationItem => locationItem.id === slotItem.locationId);
+
+            if (location === undefined) {
+                return null;
+            }
+
+            return {
+                slot: slotItem,
+                location,
+            };
+        })
+        .filter((slotItem): slotItem is ParticipantSlot => slotItem !== null);
+};
+
 export {
     ParticipantsOverviewContextProvider,
     useParticipantsOverviewContext,
+    useParticipantSlots,
 };

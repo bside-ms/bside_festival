@@ -6,10 +6,10 @@ import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
-    application: SerializableParticipant;
+    participant: SerializableParticipant;
 }
 
-const Contacts = ({ application: {
+const Contacts = ({ participant: {
     contactName,
     contactPhone,
     contactMail,

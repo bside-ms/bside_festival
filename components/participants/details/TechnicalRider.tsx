@@ -8,10 +8,10 @@ import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
-    application: SerializableParticipant;
+    participant: SerializableParticipant;
 }
 
-const TechnicalRider = ({ application: { technicalRider, technicalRiderFileName } }: Props): ReactElement | null => {
+const TechnicalRider = ({ participant: { technicalRider, technicalRiderFileName } }: Props): ReactElement | null => {
 
     if (isEmptyString(technicalRider) && isEmptyString(technicalRiderFileName)) {
         return null;

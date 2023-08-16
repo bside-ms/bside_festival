@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import type { ReactElement } from 'react';
+import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import TypeBadge from 'components/participants/details/TypeBadge';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
@@ -7,13 +8,13 @@ import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
-    application: SerializableParticipant;
+    participant: SerializableParticipant;
     onClick: () => void;
 }
 
-const ParticipantsPreview = ({ application, onClick }: Props): ReactElement => {
+const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement => {
 
-    const { name, imageFileName, description, type, updatedDescription } = application;
+    const { id, name, imageFileName, description, type, updatedDescription } = participant;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -43,14 +44,16 @@ const ParticipantsPreview = ({ application, onClick }: Props): ReactElement => {
                     {name}
                 </div>
 
+                <ParticipantSlots
+                    participantId={id}
+                />
+
                 {isNotEmptyString(description) && (
-                    <div className="mt-4 line-clamp-6">
+                    <div className="mt-4 line-clamp-3">
                         {updatedDescription ?? description}
                     </div>
                 )}
-
             </div>
-
         </div>
     );
 };

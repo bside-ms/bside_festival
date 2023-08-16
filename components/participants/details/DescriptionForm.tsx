@@ -14,10 +14,10 @@ export interface DescriptionFormValues {
 }
 
 interface Props {
-    application: SerializableParticipant;
+    participant: SerializableParticipant;
 }
 
-const DescriptionForm = ({ application }: Props): ReactElement => {
+const DescriptionForm = ({ participant }: Props): ReactElement => {
 
     const { status } = useSession();
 
@@ -34,7 +34,7 @@ const DescriptionForm = ({ application }: Props): ReactElement => {
         clearErrors('root');
 
         const request: UpdateDescriptionRequest = {
-            id: application.id,
+            id: participant.id,
             description,
         };
 
@@ -57,13 +57,13 @@ const DescriptionForm = ({ application }: Props): ReactElement => {
             toggleShowForm();
         }
 
-    }, [application.id, clearErrors, setError, toggleShowForm, updateParticipant]);
+    }, [participant.id, clearErrors, setError, toggleShowForm, updateParticipant]);
 
     if (!showForm) {
         return (
             <div className="mt-4">
                 <div>
-                    {application.updatedDescription ?? application.description}
+                    {participant.updatedDescription ?? participant.description}
                 </div>
                 {status === 'authenticated' && (
                     <a onClick={toggleShowForm} className="text-sky-700 cursor-pointer">
@@ -85,14 +85,14 @@ const DescriptionForm = ({ application }: Props): ReactElement => {
                     <TextArea<DescriptionFormValues>
                         name="description"
                         label="Beschreibung"
-                        defaultValue={application.updatedDescription ?? application.description ?? ''}
+                        defaultValue={participant.updatedDescription ?? participant.description ?? ''}
                         rows={10}
                     />
 
                     <div className="text-sm text-gray-800">
                         <div className="font-bold text-gray-900">Ursprüngliche Beschreibung</div>
                         <div>
-                            {application.description}
+                            {participant.description}
                         </div>
                     </div>
 

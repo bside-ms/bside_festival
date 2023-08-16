@@ -9,6 +9,7 @@ import AdditionalInfo from 'components/participants/details/AdditionalInfo';
 import Contacts from 'components/participants/details/Contacts';
 import DescriptionForm from 'components/participants/details/DescriptionForm';
 import Links from 'components/participants/details/Links';
+import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import TechnicalRider from 'components/participants/details/TechnicalRider';
 import TypeBadge from 'components/participants/details/TypeBadge';
 import SlotsForm from 'components/participants/slotsForm/SlotsForm';
@@ -18,16 +19,16 @@ import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
-    application: SerializableParticipant;
+    participant: SerializableParticipant;
     links: Array<Link>;
     onCloseClick: () => void;
 }
 
-const Details = ({ application, links, onCloseClick }: Props): ReactElement => {
+const Details = ({ participant, links, onCloseClick }: Props): ReactElement => {
 
     const { status } = useSession();
 
-    const { name, imageFileName, type } = application;
+    const { id, name, imageFileName, type } = participant;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -63,8 +64,12 @@ const Details = ({ application, links, onCloseClick }: Props): ReactElement => {
                         {name}
                     </div>
 
+                    <ParticipantSlots
+                        participantId={id}
+                    />
+
                     <DescriptionForm
-                        application={application}
+                        participant={participant}
                     />
                 </div>
             </div>
@@ -83,11 +88,11 @@ const Details = ({ application, links, onCloseClick }: Props): ReactElement => {
                 >
                     <Links links={links} />
 
-                    <Contacts application={application} />
+                    <Contacts participant={participant} />
 
-                    <TechnicalRider application={application} />
+                    <TechnicalRider participant={participant} />
 
-                    <AdditionalInfo application={application} />
+                    <AdditionalInfo participant={participant} />
                 </div>
             )}
 

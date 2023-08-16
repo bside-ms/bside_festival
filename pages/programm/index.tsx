@@ -1,4 +1,5 @@
 import type { Link, Location, ParticipantLabel } from '@prisma/client';
+import { isAfter, isEqual } from 'date-fns';
 import type { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import type { ReactElement } from 'react';
 import BackgroundImage from 'components/common/BackgroundImage';
@@ -7,10 +8,13 @@ import ParticipantsOverview from 'components/participants/overview/ParticipantsO
 import { ParticipantsOverviewContextProvider } from 'components/participants/overview/ParticipantsOverviewContext';
 import prismaClient from 'lib/common/prismaClient';
 import serializeParticipant from 'lib/participants/serializeParticipant';
+import serializeSlot from 'lib/participants/serializeSlot';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
+import type { SerializableSlot } from 'typings/SerializableSlot';
 
 interface Props {
-    applications: Array<SerializableParticipant>;
+    participants: Array<SerializableParticipant>;
+    slots: Array<SerializableSlot>;
     participantLabels: Array<ParticipantLabel>;
     allLinks: Array<Link>;
     allLocations: Array<Location>;
@@ -18,7 +22,38 @@ interface Props {
 
 export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<GetServerSidePropsResult<Props>> => {
 
-    const applications = await prismaClient.participant.findMany();
+    const participants = await prismaClient.participant.findMany({ where: { status: 'Confirmed' } });
+
+    const slots = await prismaClient.slot.findMany({ orderBy: { begin: 'asc' } });
+
+    const sortedParticipant = participants.sort(
+        (participantA, participantB) => {
+
+            const firstSlotA = slots.find(({ participantId }) => participantId === participantA.id);
+            const firstSlotB = slots.find(({ participantId }) => participantId === participantB.id);
+
+            if (firstSlotA === undefined && firstSlotB === undefined) {
+                return 0;
+            }
+
+            if (firstSlotA === undefined) {
+                return 1;
+            }
+
+            if (firstSlotB === undefined) {
+                return -1;
+            }
+
+            const firstSlotABegin = new Date(firstSlotA.begin);
+            const firstSlotBBegin = new Date(firstSlotB.begin);
+
+            if (isEqual(firstSlotABegin, firstSlotBBegin)) {
+                return 0;
+            }
+
+            return isAfter(firstSlotABegin, firstSlotBBegin) ? 1 : -1;
+        }
+    );
 
     const participantLabels = await prismaClient.participantLabel.findMany();
 
@@ -28,7 +63,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<G
 
     return {
         props: {
-            applications: applications.map(serializeParticipant),
+            participants: sortedParticipant.map(serializeParticipant),
+            slots: slots.map(serializeSlot),
             participantLabels,
             allLinks,
             allLocations,
@@ -36,15 +72,16 @@ export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<G
     };
 };
 
-export default ({ applications, participantLabels, allLinks, allLocations }: Props): ReactElement => {
+export default ({ participants, slots, participantLabels, allLinks, allLocations }: Props): ReactElement => {
 
     return (
         <div>
-            <div className="py-16 min-h-screen w-full relative">
+            <div className="pt-8 min-h-screen w-full relative">
                 <div className="relative z-10">
-                    <div className="px-3 max-w-7xl mx-auto">
+                    <div className="px-3 pb-9 max-w-7xl mx-auto">
                         <ParticipantsOverviewContextProvider
-                            participants={applications}
+                            participants={participants}
+                            slots={slots}
                             participantLabels={participantLabels}
                             allLinks={allLinks}
                             allLocations={allLocations}
