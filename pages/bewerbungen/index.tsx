@@ -3,11 +3,11 @@ import type { ReactElement } from 'react';
 import ApplicationTypeSelection from 'components/applications/applicationForm/ApplicationTypeSelection';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
-import getUserSession from 'lib/next-auth/getUserSession';
+import getLegacyUserSession from 'lib/next-auth/getLegacyUserSession';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
-    const userSession = await getUserSession(context);
+    const userSession = await getLegacyUserSession(context);
 
     if (userSession === null) {
         return {

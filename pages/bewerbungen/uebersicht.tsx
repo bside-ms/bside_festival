@@ -6,7 +6,7 @@ import { ApplicationsOverviewContextProvider } from 'components/applications/app
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
 import prismaClient from 'lib/common/prismaClient';
-import getUserSession from 'lib/next-auth/getUserSession';
+import getLegacyUserSession from 'lib/next-auth/getLegacyUserSession';
 import serializeParticipant from 'lib/participants/serializeParticipant';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
@@ -19,7 +19,7 @@ interface Props {
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context): Promise<GetServerSidePropsResult<Props>> => {
 
-    const userSession = await getUserSession(context);
+    const userSession = await getLegacyUserSession(context);
 
     if (userSession === null) {
         return {

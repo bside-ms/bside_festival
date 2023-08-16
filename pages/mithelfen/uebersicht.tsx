@@ -5,7 +5,7 @@ import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
 import VolunteersOverview from 'components/volunteers/volunteersOverview/VolunteersOverview';
 import prismaClient from 'lib/common/prismaClient';
-import getUserSession from 'lib/next-auth/getUserSession';
+import getLegacyUserSession from 'lib/next-auth/getLegacyUserSession';
 
 interface Props {
     volunteers: Array<Volunteer>;
@@ -13,7 +13,7 @@ interface Props {
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context): Promise<GetServerSidePropsResult<Props>> => {
 
-    const userSession = await getUserSession(context);
+    const userSession = await getLegacyUserSession(context);
 
     if (userSession === null) {
         return {

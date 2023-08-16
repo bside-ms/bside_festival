@@ -4,12 +4,12 @@ import type { ReactElement } from 'react';
 import ApplicationForm from 'components/applications/applicationForm/ApplicationForm';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
-import getUserSession from 'lib/next-auth/getUserSession';
+import getLegacyUserSession from 'lib/next-auth/getLegacyUserSession';
 import urlPathTypes from 'lib/participants/urlPathTypes';
- 
+
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
 
-    const userSession = await getUserSession(context);
+    const userSession = await getLegacyUserSession(context);
 
     if (userSession === null) {
         return {
