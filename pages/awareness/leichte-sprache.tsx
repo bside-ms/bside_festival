@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import type { ReactElement } from 'react';
+import AwarenessEasyGerman from 'components/awareness/AwarenessEasyGerman';
 import Footer from 'components/common/Footer';
-import VolunteerForm from 'components/volunteers/volunteerForm/VolunteerForm';
 
 export default (): ReactElement => {
 
@@ -10,7 +10,7 @@ export default (): ReactElement => {
             <div className="min-h-screen w-full relative ">
                 <div className="relative z-10">
                     <div className="p-5 md:p-10 w-full md:w-2/3 max-w-[700px] mx-auto drop-shadow-xl">
-                        <VolunteerForm />
+                        <AwarenessEasyGerman />
                     </div>
                 </div>
 
