@@ -1,6 +1,8 @@
 import { createContext, useCallback, useContext, useState } from 'react';
 import type { Link, Location, Participant, ParticipantLabel, Type } from '@prisma/client';
+import { uniq } from 'lodash';
 import type { PropsWithChildren, ReactElement } from 'react';
+import availableTypes from 'lib/applications/availableTypes';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 import isValidType from 'lib/participants/isValidType';
 import serializeParticipant from 'lib/participants/serializeParticipant';
@@ -17,6 +19,7 @@ interface ParticipantsOverviewContextData {
     enhancedParticipantIds: Array<number>;
     toggleEnhancedParticipantId: (id: number) => void;
     getLinksOfParticipant: (id: number) => Array<Link>;
+    actuallyAvailableTypes: Array<Type>;
     filteredTypes: Array<Type>;
     toggleFilteredType: (type: Type) => void;
     updateParticipant: (participant: Participant) => void;
@@ -105,6 +108,12 @@ const ParticipantsOverviewContextProvider = ({
 
     }, []);
 
+    const typesOfParticipants = uniq(participants.map(({ type }) => type));
+
+    const actuallyAvailableTypes = availableTypes.filter(
+        type => typesOfParticipants.includes(type)
+    );
+
     return (
         <ParticipantsOverviewContext.Provider
             value={{
@@ -115,6 +124,7 @@ const ParticipantsOverviewContextProvider = ({
                 enhancedParticipantIds,
                 toggleEnhancedParticipantId,
                 getLinksOfParticipant,
+                actuallyAvailableTypes,
                 filteredTypes,
                 toggleFilteredType,
                 updateParticipant,

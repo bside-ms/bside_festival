@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import type { Type } from '@prisma/client';
 import type { ReactElement } from 'react';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
-import availableTypes from 'lib/applications/availableTypes';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 import typeColors from 'lib/participants/typeColors';
@@ -32,7 +31,7 @@ const TypeToggle = ({ type }: { type: Type }): ReactElement => {
 
 const ParticipantsOverviewTypesFilter = (): ReactElement => {
 
-    const { filteredTypes } = useParticipantsOverviewContext();
+    const { actuallyAvailableTypes, filteredTypes } = useParticipantsOverviewContext();
 
     const [isMounted, setIsMounted] = useState(false);
 
@@ -62,7 +61,7 @@ const ParticipantsOverviewTypesFilter = (): ReactElement => {
 
     return (
         <div className="flex flex-wrap gap-2 mb-3">
-            {availableTypes.map(availableType => (
+            {actuallyAvailableTypes.map(availableType => (
                 <TypeToggle key={availableType} type={availableType} />
             ))}
         </div>
