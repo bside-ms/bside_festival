@@ -46,6 +46,7 @@ const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement => {
 
                 <ParticipantSlots
                     participantId={id}
+                    isInPreview={true}
                 />
 
                 {isNotEmptyString(description) && (

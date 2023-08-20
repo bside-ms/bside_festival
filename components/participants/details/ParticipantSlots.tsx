@@ -4,9 +4,10 @@ import { useParticipantSlots } from 'components/participants/overview/Participan
 
 interface Props {
     participantId: number;
+    isInPreview?: boolean;
 }
 
-const ParticipantSlots = ({ participantId }: Props): ReactElement | null => {
+const ParticipantSlots = ({ participantId, isInPreview = false }: Props): ReactElement | null => {
 
     const participantSlots = useParticipantSlots(participantId);
 
@@ -21,6 +22,7 @@ const ParticipantSlots = ({ participantId }: Props): ReactElement | null => {
                     key={slot.id}
                     slot={slot}
                     location={location}
+                    showAccessibleInfo={!isInPreview}
                 />
             ))}
         </div>
