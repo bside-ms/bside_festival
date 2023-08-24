@@ -1,7 +1,7 @@
 import type { Type } from '@prisma/client';
 
 const typeLabels: Record<Type, string> = {
-    Concert: 'Konzert',
+    Concert: 'Musik',
     DiskJockey: 'DJ',
     Workshop: 'Workshop',
     Reading: 'Lesung',
