@@ -13,7 +13,7 @@ interface Props {
 
 const ParticipantSlot = ({ slot, location: { name, awarenessInfo }, showAccessibleInfo }: Props): ReactElement | null => {
 
-    const dateAndLocation = `${formatDate(new Date(slot.begin), 'dd.MM. / HH:mm')} / ${name}`;
+    const dateAndLocation = `${formatDate(new Date(slot.begin), 'EEE dd.MM. / HH:mm')} / ${name}`;
 
     if (isEmptyString(awarenessInfo)) {
         return <div>{dateAndLocation}</div>;
