@@ -7,10 +7,9 @@ import BackgroundImage from 'components/common/BackgroundImage';
 import BHeartLinesSvg from 'components/common/BHeartLinesSvg';
 import Footer from 'components/common/Footer';
 import VolunteerInfo from 'components/volunteers/volunteerForm/VolunteerInfo';
+import typeLabels from 'lib/participants/typeLabels';
 
 export default (): ReactElement => {
-
-    // TODO: Header deutlich größer, die beiden Herzen dann aber ein wenig kleiner <3<3
 
     return (
         <div>
@@ -37,7 +36,7 @@ export default (): ReactElement => {
                         </div>
 
                         <div className="flex pt-16 pr-7 sm:pl-5 sm:pt-24 sm:pr-10 max-w-[540px] mb-14">
-                            <div className="relative mb-[60rem]">
+                            <div className="relative mb-[57rem] md:mb-[50rem]">
                                 <div className="font-semibold text-6xl sm:text-8xl">
                                     B-Side<br />
                                     Festival
@@ -84,7 +83,21 @@ export default (): ReactElement => {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
+                <div className="w-full relative pb-14 md:pb-32">
+                    <div className="relative z-10">
+                        <div className="px-20 md:px-5 max-w-2xl mx-auto">
+                            <Image
+                                src="/assets/map.svg"
+                                alt={typeLabels.Reading}
+                                width="128"
+                                height="128"
+                                layout="responsive"
+                                className="object-cover"
+                            />
+                        </div>
                     </div>
                 </div>
 
