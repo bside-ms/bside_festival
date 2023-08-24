@@ -37,7 +37,7 @@ export default (): ReactElement => {
                         </div>
 
                         <div className="flex pt-16 pr-7 sm:pl-5 sm:pt-24 sm:pr-10 max-w-[540px] mb-14">
-                            <div className="relative mb-[50rem]">
+                            <div className="relative mb-[60rem]">
                                 <div className="font-semibold text-6xl sm:text-8xl">
                                     B-Side<br />
                                     Festival
@@ -77,7 +77,7 @@ export default (): ReactElement => {
                                     </div>
 
                                     <div className="mt-3 text-right">
-                                        <Link className="text-md cursor-pointer hover:text-red-700 flex items-center gap-2 leading-4 justify-end" href="/mithelfen">
+                                        <Link className="text-md cursor-pointer hover:text-red-700 flex items-center gap-2 leading-5 justify-end" href="/mithelfen">
                                             Zum Formular für Helfer:innen <FontAwesomeIcon className="w-4 pt-1 inline-block" icon={faArrowRight} />
                                         </Link>
                                     </div>

@@ -23,20 +23,18 @@ const Footer = (): ReactElement => {
     const instagramLink = (
         <Link
             href="https://www.instagram.com/bsidemuenster/"
-            className="p-3 text-xl"
             target="_blank"
         >
-            <FontAwesomeIcon icon={faInstagram} />
+            <FontAwesomeIcon className="w-[25px]" icon={faInstagram} />
         </Link>
     );
 
     const facebookLink = (
         <Link
             href="https://www.facebook.com/bsidemuenster"
-            className="p-3 text-xl"
             target="_blank"
         >
-            <FontAwesomeIcon icon={faFacebookSquare} />
+            <FontAwesomeIcon className="w-[25px]" icon={faFacebookSquare} />
         </Link>
     );
 
@@ -44,7 +42,7 @@ const Footer = (): ReactElement => {
         <div className="text-sm text-white text-center p-4 bg-black space-y-1">
             <div>Veranstaltet durch den B-Side Kultur e.V.</div>
 
-            <div className="flex gap-3 justify-center">
+            <div className="flex gap-3 justify-center py-1">
                 <span>{instagramLink}</span> <span>{facebookLink}</span>
             </div>
 
