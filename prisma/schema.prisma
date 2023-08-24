@@ -77,6 +77,8 @@ enum Type {
   Neighbor
   Misc
   DiskJockey
+  InfoBooth
+  Catering
 }
 
 enum ApplicationStatus {

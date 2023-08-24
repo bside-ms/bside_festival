@@ -11,6 +11,8 @@ const typeUrlPaths: Record<Type, string> = {
     Food: 'essensstand',
     Neighbor: 'nachbarschaft',
     Misc: 'sonstiges',
+    InfoBooth: 'infostand',
+    Catering: 'catering',
 };
 
 export default typeUrlPaths;

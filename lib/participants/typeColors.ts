@@ -11,6 +11,8 @@ const typeColors: Record<Type, string> = {
     Food: '#d28218',
     Neighbor: '#a192a6',
     Misc: '#8b9ebd',
+    InfoBooth: '#ffaddd',
+    Catering: '#d9c18f',
 };
 
 export default typeColors;

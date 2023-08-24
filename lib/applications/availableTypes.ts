@@ -7,8 +7,8 @@ const availableTypes = new Array<Type>(
     Type.Performance,
     Type.FamilyProgram,
     Type.Exhibition,
-    // Type.Food,
-    // Type.Neighbor,
+    Type.Catering,
+    Type.InfoBooth,
     Type.Misc,
 );
 

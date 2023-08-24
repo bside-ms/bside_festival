@@ -11,6 +11,8 @@ const typeLabels: Record<Type, string> = {
     Food: 'Essensstand',
     Neighbor: 'Nachbarschaft',
     Misc: 'Sonstiges',
+    InfoBooth: 'Infostand',
+    Catering: 'Catering',
 };
 
 export default typeLabels;
