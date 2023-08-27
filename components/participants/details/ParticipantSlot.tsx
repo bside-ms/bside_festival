@@ -1,6 +1,6 @@
 import type { Location } from '@prisma/client';
+import Image from 'next/image';
 import type { ReactElement } from 'react';
-import AccessibleIcon from 'components/participants/details/AccessibleIcon';
 import formatDate from 'lib/common/helper/formatDate';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import type { SerializableSlot } from 'typings/SerializableSlot';
@@ -15,27 +15,46 @@ const ParticipantSlot = ({ slot, location: { name, awarenessInfo }, showAccessib
 
     const dateAndLocation = `${formatDate(new Date(slot.begin), 'EEE dd.MM. / HH:mm')} / ${name}`;
 
-    if (isEmptyString(awarenessInfo)) {
+    if (!showAccessibleInfo) {
         return <div>{dateAndLocation}</div>;
     }
 
-    if (showAccessibleInfo) {
-        return (
-            <div>
-                <div>{dateAndLocation}</div>
-                <div className="flex items-center gap-1">
-                    <div className="flex items-center"><AccessibleIcon /></div>
-                    <div>{awarenessInfo}</div>
-                </div>
-            </div>
-        );
-
-    }
-
     return (
-        <div className="flex items-center gap-1">
+        <div>
             <div>{dateAndLocation}</div>
-            <AccessibleIcon />
+            <div className="flex items-center gap-2">
+                {isEmptyString(awarenessInfo) ? (
+                    <>
+                        <div className="flex items-center">
+                            <Image
+                                src="/assets/wheelchair.png"
+                                alt="Barrierefreier Zugang"
+                                width={15}
+                                height={15}
+                                className="object-contain"
+                            />
+                        </div>
+                        <div>
+                            Barrierefreier Zugang
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="flex items-center">
+                            <Image
+                                src="/assets/stairs.png"
+                                alt={awarenessInfo}
+                                width={15}
+                                height={15}
+                                className="object-contain"
+                            />
+                        </div>
+                        <div>
+                            {awarenessInfo}
+                        </div>
+                    </>
+                )}
+            </div>
         </div>
     );
 };
