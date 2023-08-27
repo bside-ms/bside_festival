@@ -8,7 +8,7 @@ import ParticipantsOverview from 'components/participants/overview/ParticipantsO
 import { ParticipantsOverviewContextProvider } from 'components/participants/overview/ParticipantsOverviewContext';
 import prismaClient from 'lib/common/prismaClient';
 import serializeParticipant from 'lib/participants/serializeParticipant';
-import serializeSlot from 'lib/participants/serializeSlot';
+import getAllSlots from 'lib/participants/slots/getAllSlots';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 import type { SerializableSlot } from 'typings/SerializableSlot';
 
@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<G
 
     const participants = await prismaClient.participant.findMany({ where: { status: 'Confirmed' } });
 
-    const slots = await prismaClient.slot.findMany({ orderBy: { begin: 'asc' } });
+    const slots = await getAllSlots();
 
     const sortedParticipant = participants.sort(
         (participantA, participantB) => {
@@ -59,12 +59,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<G
 
     const allLinks = await prismaClient.link.findMany();
 
-    const allLocations = await prismaClient.location.findMany();
+    const allLocations = await prismaClient.location.findMany({ orderBy: { name: 'asc' } });
 
     return {
         props: {
             participants: sortedParticipant.map(serializeParticipant),
-            slots: slots.map(serializeSlot),
+            slots,
             participantLabels,
             allLinks,
             allLocations,

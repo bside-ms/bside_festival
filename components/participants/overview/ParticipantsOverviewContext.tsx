@@ -23,6 +23,7 @@ interface ParticipantsOverviewContextData {
     filteredTypes: Array<Type>;
     toggleFilteredType: (type: Type) => void;
     updateParticipant: (participant: Participant) => void;
+    updateAllSlots: (allSlots: Array<SerializableSlot>) => void;
 }
 
 const ParticipantsOverviewContext = createContext<ParticipantsOverviewContextData | null>(null);
@@ -39,7 +40,7 @@ const ParticipantsOverviewContextProvider = ({
     participants: initialParticipants,
     participantLabels: initialParticipantLabels,
     allLinks,
-    slots,
+    slots: initialSlots,
     allLocations,
     children,
 }: Props): ReactElement => {
@@ -47,6 +48,8 @@ const ParticipantsOverviewContextProvider = ({
     const [participantLabels, setParticipantLabels] = useState<Array<ParticipantLabel>>(initialParticipantLabels);
 
     const [participants, setParticipants] = useState<Array<SerializableParticipant>>(initialParticipants);
+
+    const [slots, setSlots] = useState<Array<SerializableSlot>>(initialSlots);
 
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
 
@@ -108,6 +111,11 @@ const ParticipantsOverviewContextProvider = ({
 
     }, []);
 
+    const updateAllSlots = useCallback((allSlots: Array<SerializableSlot>): void => {
+
+        setSlots(allSlots);
+    }, []);
+
     const typesOfParticipants = uniq(participants.map(({ type }) => type));
 
     const actuallyAvailableTypes = availableTypes.filter(
@@ -130,6 +138,7 @@ const ParticipantsOverviewContextProvider = ({
                 updateParticipant,
                 slots,
                 allLocations,
+                updateAllSlots,
             }}
         >
             {children}

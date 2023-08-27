@@ -17,7 +17,7 @@ interface Props<T extends FieldValues> {
     validate?: (value: string) => string | undefined;
 }
 
-const TextInput = <T extends FieldValues>({ label, name, defaultValue, info, validate, required = false, maxLength }: Props<T>): ReactElement => {
+const DateTimeInput = <T extends FieldValues>({ label, name, defaultValue, info, validate, required = false, maxLength }: Props<T>): ReactElement => {
 
     const { formState: { errors, isSubmitting }, register } = useFormContext();
 
@@ -33,10 +33,10 @@ const TextInput = <T extends FieldValues>({ label, name, defaultValue, info, val
         <div className="flex flex-col">
             <input
                 id={id}
-                type="text"
-                defaultValue={defaultValue}
+                type="datetime-local"
                 className={`p-2 rounded outline-0 ${typeof errorMessage === 'string' ? 'bg-rose-600 text-gray-100 placeholder:text-gray-100' : ''}`}
                 required={required}
+                defaultValue={defaultValue}
                 placeholder={required ? `${label} *` : label}
                 disabled={isSubmitting}
                 {...register(
@@ -69,4 +69,4 @@ const TextInput = <T extends FieldValues>({ label, name, defaultValue, info, val
     );
 };
 
-export default TextInput;
+export default DateTimeInput;

@@ -12,7 +12,7 @@ import Links from 'components/participants/details/Links';
 import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import TechnicalRider from 'components/participants/details/TechnicalRider';
 import TypeBadge from 'components/participants/details/TypeBadge';
-import SlotsForm from 'components/participants/slotsForm/SlotsForm';
+import SlotForm from 'components/participants/slotsForm/SlotForm';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
@@ -78,7 +78,9 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement => {
                 <div
                     className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl"
                 >
-                    <SlotsForm />
+                    <SlotForm
+                        participantId={id}
+                    />
                 </div>
             )}
 

@@ -16,7 +16,7 @@ const ParticipantSlots = ({ participantId, isInPreview = false }: Props): ReactE
     }
 
     return (
-        <div className="mt-3">
+        <div className="mt-3 space-y-1">
             {participantSlots.map(({ location, slot }) => (
                 <ParticipantSlot
                     key={slot.id}
