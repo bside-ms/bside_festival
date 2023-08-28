@@ -9,6 +9,8 @@ const urlPathTypes: Record<string, Type> = {
     ausstellung: 'Exhibition',
     essensstand: 'Food',
     nachbarschaft: 'Neighbor',
+    infostand: 'InfoBooth',
+    catering: 'Catering',
     sonstiges: 'Misc',
 };
 
