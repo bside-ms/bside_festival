@@ -1,4 +1,4 @@
-import type { Link, Location, ParticipantLabel } from '@prisma/client';
+import type { Link, Location, ParticipantLabel, Venue } from '@prisma/client';
 import { isAfter, isEqual } from 'date-fns';
 import type { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import type { ReactElement } from 'react';
@@ -7,14 +7,16 @@ import Footer from 'components/common/Footer';
 import ParticipantsOverview from 'components/participants/overview/ParticipantsOverview';
 import { ParticipantsOverviewContextProvider } from 'components/participants/overview/ParticipantsOverviewContext';
 import prismaClient from 'lib/common/prismaClient';
+import getAllSlots from 'lib/participants/getAllSlots';
+import getAllVenues from 'lib/participants/getAllVenues';
 import serializeParticipant from 'lib/participants/serializeParticipant';
-import getAllSlots from 'lib/participants/slots/getAllSlots';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 import type { SerializableSlot } from 'typings/SerializableSlot';
 
 interface Props {
     participants: Array<SerializableParticipant>;
     slots: Array<SerializableSlot>;
+    venues: Array<Venue>;
     participantLabels: Array<ParticipantLabel>;
     allLinks: Array<Link>;
     allLocations: Array<Location>;
@@ -25,6 +27,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<G
     const participants = await prismaClient.participant.findMany({ where: { status: 'Confirmed' } });
 
     const slots = await getAllSlots();
+
+    const venues = await getAllVenues();
 
     const sortedParticipant = participants.sort(
         (participantA, participantB) => {
@@ -65,6 +69,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<G
         props: {
             participants: sortedParticipant.map(serializeParticipant),
             slots,
+            venues,
             participantLabels,
             allLinks,
             allLocations,
@@ -72,7 +77,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<G
     };
 };
 
-export default ({ participants, slots, participantLabels, allLinks, allLocations }: Props): ReactElement => {
+export default ({ participants, slots, venues, participantLabels, allLinks, allLocations }: Props): ReactElement => {
 
     return (
         <div>
@@ -82,6 +87,7 @@ export default ({ participants, slots, participantLabels, allLinks, allLocations
                         <ParticipantsOverviewContextProvider
                             participants={participants}
                             slots={slots}
+                            venues={venues}
                             participantLabels={participantLabels}
                             allLinks={allLinks}
                             allLocations={allLocations}

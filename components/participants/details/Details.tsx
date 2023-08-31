@@ -10,11 +10,13 @@ import Contacts from 'components/participants/details/Contacts';
 import DescriptionForm from 'components/participants/details/DescriptionForm';
 import Links from 'components/participants/details/Links';
 import ParticipantSlots from 'components/participants/details/ParticipantSlots';
+import ParticipantVenues from 'components/participants/details/ParticipantVenues';
 import TechnicalRider from 'components/participants/details/TechnicalRider';
 import TypeBadge from 'components/participants/details/TypeBadge';
 import SlotForm from 'components/participants/slotsForm/SlotForm';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import hasSlotOrVenue from 'lib/participants/hasSlotOrVenue';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
@@ -68,13 +70,17 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement => {
                         participantId={id}
                     />
 
+                    <ParticipantVenues
+                        participantId={id}
+                    />
+
                     <DescriptionForm
                         participant={participant}
                     />
                 </div>
             </div>
 
-            {status === 'authenticated' && (
+            {status === 'authenticated' && hasSlotOrVenue(type) === 'slot' && (
                 <div
                     className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl"
                 >

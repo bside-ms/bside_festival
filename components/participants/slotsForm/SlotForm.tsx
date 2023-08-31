@@ -21,7 +21,7 @@ interface Props {
     participantId: number;
 }
 
-const SlotForm = ({ participantId }: Props): ReactElement => {
+const SlotForm = ({ participantId }: Props): ReactElement | null => {
 
     const [showDeleteButton, setShowDeleteButton] = useState(false);
     const toggleShowDeleteButton = useCallback(() => setShowDeleteButton(prevState => !prevState), []);

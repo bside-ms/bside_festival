@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 import ParticipantSlots from 'components/participants/details/ParticipantSlots';
+import ParticipantVenues from 'components/participants/details/ParticipantVenues';
 import TypeBadge from 'components/participants/details/TypeBadge';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
@@ -45,6 +46,11 @@ const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement => {
                 </div>
 
                 <ParticipantSlots
+                    participantId={id}
+                    isInPreview={true}
+                />
+
+                <ParticipantVenues
                     participantId={id}
                     isInPreview={true}
                 />

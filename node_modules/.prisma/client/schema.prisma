@@ -33,6 +33,7 @@ model Participant {
   type                   Type
   status                 ApplicationStatus  @default(Applied)
   Slot                   Slot[]
+  Venue                  Venue[]
 }
 
 model Link {
@@ -97,12 +98,23 @@ model Location {
   longitude     Float?  @db.Float
   awarenessInfo String? @db.Text
   Slot          Slot[]
+  Venue         Venue[]
 }
 
+// Slot is for program that starts at a specific time at the location
 model Slot {
   id            Int         @id @default(autoincrement())
   begin         DateTime
   duration      Int
+  participantId Int
+  participant   Participant @relation(fields: [participantId], references: [id])
+  locationId    Int
+  location      Location    @relation(fields: [locationId], references: [id])
+}
+
+// Venue is for program that is at the location during the entire festival
+model Venue {
+  id            Int         @id @default(autoincrement())
   participantId Int
   participant   Participant @relation(fields: [participantId], references: [id])
   locationId    Int

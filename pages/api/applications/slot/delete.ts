@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prismaClient from 'lib/common/prismaClient';
-import getAllSlots from 'lib/participants/slots/getAllSlots';
+import getAllSlots from 'lib/participants/getAllSlots';
 import type { SerializableSlot } from 'typings/SerializableSlot';
 
 export interface DeleteSlotRequest {

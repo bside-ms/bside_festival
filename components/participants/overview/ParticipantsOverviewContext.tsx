@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useState } from 'react';
-import type { Link, Location, Participant, ParticipantLabel, Type } from '@prisma/client';
+import type { Link, Location, Participant, ParticipantLabel, Type, Venue } from '@prisma/client';
 import { uniq } from 'lodash';
 import type { PropsWithChildren, ReactElement } from 'react';
 import availableTypes from 'lib/applications/availableTypes';
@@ -12,6 +12,7 @@ import type { SerializableSlot } from 'typings/SerializableSlot';
 interface ParticipantsOverviewContextData {
     allParticipants: Array<SerializableParticipant>;
     slots: Array<SerializableSlot>;
+    venues: Array<Venue>;
     allLocations: Array<Location>;
     filteredParticipants: Array<SerializableParticipant>;
     participantLabels: Array<ParticipantLabel>;
@@ -31,6 +32,7 @@ const ParticipantsOverviewContext = createContext<ParticipantsOverviewContextDat
 interface Props extends PropsWithChildren {
     participants: Array<SerializableParticipant>;
     slots: Array<SerializableSlot>;
+    venues: Array<Venue>;
     participantLabels: Array<ParticipantLabel>;
     allLinks: Array<Link>;
     allLocations: Array<Location>;
@@ -41,6 +43,7 @@ const ParticipantsOverviewContextProvider = ({
     participantLabels: initialParticipantLabels,
     allLinks,
     slots: initialSlots,
+    venues: initialVenues,
     allLocations,
     children,
 }: Props): ReactElement => {
@@ -50,6 +53,8 @@ const ParticipantsOverviewContextProvider = ({
     const [participants, setParticipants] = useState<Array<SerializableParticipant>>(initialParticipants);
 
     const [slots, setSlots] = useState<Array<SerializableSlot>>(initialSlots);
+
+    const [venues, _setVenues] = useState<Array<Venue>>(initialVenues);
 
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
 
@@ -137,6 +142,7 @@ const ParticipantsOverviewContextProvider = ({
                 toggleFilteredType,
                 updateParticipant,
                 slots,
+                venues,
                 allLocations,
                 updateAllSlots,
             }}
@@ -162,6 +168,11 @@ export interface ParticipantSlot {
     location: Location;
 }
 
+export interface ParticipantVenue {
+    venue: Venue;
+    location: Location;
+}
+
 const useParticipantSlots = (participantId: number): Array<ParticipantSlot> => {
 
     const { allLocations, slots } = useParticipantsOverviewContext();
@@ -184,8 +195,31 @@ const useParticipantSlots = (participantId: number): Array<ParticipantSlot> => {
         .filter((slotItem): slotItem is ParticipantSlot => slotItem !== null);
 };
 
+const useParticipantVenues = (participantId: number): Array<ParticipantVenue> => {
+
+    const { allLocations, venues } = useParticipantsOverviewContext();
+
+    return venues
+        .filter(venueItem => venueItem.participantId === participantId)
+        .map<ParticipantVenue | null>(venueItem => {
+
+            const location = allLocations.find(locationItem => locationItem.id === venueItem.locationId);
+
+            if (location === undefined) {
+                return null;
+            }
+
+            return {
+                venue: venueItem,
+                location,
+            };
+        })
+        .filter((venueItem): venueItem is ParticipantVenue => venueItem !== null);
+};
+
 export {
     ParticipantsOverviewContextProvider,
     useParticipantsOverviewContext,
     useParticipantSlots,
+    useParticipantVenues,
 };
