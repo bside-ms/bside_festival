@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import awarenessPhoneNumber from 'components/awareness/awarenessPhoneNumber';
@@ -12,33 +13,45 @@ const AwarenessEasyGerman = (): ReactElement => {
                 </div>
             </div>
 
-            <div>
-                Du bist auf dem Festival und es geht dir nicht gut?<br />
-                Du möchtest, dass Menschen dir helfen?<br />
-                Du kannst diese Nummer anrufen:<br />
-                <span className="text-xl">{awarenessPhoneNumber}</span><br />
+            <div className="font-sans">
+                Wenn du auf dem Festival bist:<br />
+                Und es dir nicht gut geht.<br />
+                Oder wenn du Hilfe brauchst.<br />
+                Dann kannst du diese Nummer anrufen:<br />
+                <span className="text-xl tracking-wider">{awarenessPhoneNumber}</span><br />
+                Dann kommen Menschen und helfen dir.<br />
                 <br />
-                Auf unserem Festival sollen sich alle Menschen sicher fühlen.<br />
-                Manchmal fühlen sich Menschen nicht sicher.<br />
+                Willkommen auf dem B-Side Festival.<br />
+                Hier sollen sich alle Menschen sicher fühlen.<br />
+                Aber manchmal fühlen sich Menschen nicht sicher.<br />
                 Auch wenn sich andere Menschen in der gleichen Situation sicher fühlen.<br />
                 Das liegt daran, dass wir unterschiedliche Erfahrungen gemacht haben.<br />
-                Manche wurden in der Vergangenheit schon diskriminiert.<br />
-                Wir wollen, dass sich alle Menschen auf dem Festival sicher fühlen.<br />
-                Deshalb gibt es ein paar Regeln.<br />
+                Manche Menschen wurden in der Vergangenheit schon schlecht behandelt.<br />
+                Zum Beispiel:<br />
+                Wegen ihres Geschlechts.<br />
+                Oder weil sie eine Behinderung haben.<br />
+                Oder weil sie lesbisch oder schwul sind.<br />
+                Das schwierige Wort für schlecht behandeln heißt:<br />
+                Diskriminieren.<br />
+                <br />
+                Wir wollen, dass sich alle Menschen auf dem B-Side Festival sicher fühlen.<br />
+                Deshalb gibt es ein paar Regeln:<br />
                 <br />
                 <span className="text-xl">1.</span><br />
                 Jeder Mensch hat eigene Grenzen.<br />
-                Grenzen sind Sachen, bei der eine Person sagt: Nein.<br />
-                Oder sich unwohl fühlt.<br />
+                Grenzen sind Sachen, bei denen eine Person sagt: Nein.<br />
+                Oder Sache, die ein Person nicht machen möchte. Oder sich dabei unwohl fühlt.<br />
                 Manchmal sagt eine Person auch nicht Nein.<br />
-                Aber meint es trotzdem. Und fühlt sich unwohl.<br />
+                Aber meint es trotzdem.<br />
+                Und fühlt sich unwohl.<br />
                 Vielleicht traut sich eine Person nicht, Nein zu sagen.<br />
-                Wenn eine Person etwas nicht machen möchte.<br />
-                Dann sagt sie: Nein.<br />
-                Wenn jemand anderes trotzdem weitermacht, sagt man:<br />
+                Wenn sie etwas nicht machen möchte.<br />
+                Manchmal machen andere Menschen trotzdem weiter.<br />
+                Und hören nicht auf das Nein von der anderen Person.<br />
+                Oder zwingen eine Person, etwas zu machen.<br />
+                Dann sagt man:<br />
                 Diese Person überschreitet eine Grenze.<br />
-                Oder etwas nicht machen möchte.<br />
-                Und sich dabei unwohl fühlt.<br />
+                <br />
                 Nur wenn eine Person wirklich sagt: Ja.<br />
                 Dann bedeutet es, dass die Person eine Sache machen möchte.<br />
                 Vielleicht weiß man nicht, ob eine Person sich unwohl fühlt.<br />
@@ -57,19 +70,23 @@ const AwarenessEasyGerman = (): ReactElement => {
                 <strong>Awareness heißt:</strong><br />
                 Aufmerksam sein.<br />
                 Zu probieren, dass es allen gut geht.<br />
-                Und die Bedürfnisse von anderen Personen beachtet werden.<br />
-                Manchmal werden Menschen diskriminiert:<br />
+                Und die Bedürfnisse von anderen Personen beachten.<br />
+                Manchmal werden Menschen schlecht behandelt.<br />
+                Weil die Person anders ist.<br />
+                Zum Beispiel:<br />
                 Wegen ihres Geschlechts.<br />
-                Oder weil sie eine Behinderung haben.<br />
+                Oder wegen einer Behinderung.<br />
                 Oder weil sie lesbisch oder schwul sind.<br />
+                Das schwierige Wort für schlecht behandeln heißt:<br />
+                Diskriminieren.<br />
                 <br />
                 <span className="text-xl">3.</span><br />
-                Alle Menschen auf dem Festival müssen vorsichtig sein.<br />
+                Alle Menschen auf dem Festival müssen vorsichtig sein:<br />
                 Damit es allen gut geht.<br />
                 Und niemand diskriminiert wird.<br />
-                Diskriminieren heißt:<br />
-                Jemand anderen schlecht behandeln.<br />
-                Weil die Person anders ist.<br />
+                Die Gäste müssen vorsichtig sein.<br />
+                Und die Leute, die das Festival organisieren.<br />
+                Und die Künstler und Künstlerinnen.<br />
                 <br />
                 <strong>Wird eine Grenze von dir überschritten?</strong><br />
                 <strong>Wird die Grenze von jemand anderem überschritten?</strong><br />
@@ -83,27 +100,38 @@ const AwarenessEasyGerman = (): ReactElement => {
                 <br />
                 <span className="text-xl">2.</span><br />
                 Es gibt das Awareness-Team.<br />
-                Das sind Menschen mit pinken Westen oder Armbinden.<br />
-                Du kannst diese Menschen um Hilfe bitten.<br />
-                Sie hören dir zu.<br />
-                Und bringen dich an einen sicheren Ort.<br />
-                Sie können andere Menschen um Hilfe fragen.<br />
-                Und sie können dafür sorgen, dass die Person, die dich schlecht behandelt, vom Festival weggeht.<br />
+                Das sind Menschen mit pinken Westen.<br />
                 <br />
-                <span className="text-xl">3.</span><br />
+                <img src="/assets/awareness_west.png" className="w-2/3 md:w-1/2" />
+                <br />
+                Oder Menschen mit pinken Arm-binden.<br />
+                <br />
+                <img src="/assets/awareness_wristband.png" className="w-2/3 md:w-1/2" />
+                <br />
+                Sie können andere Menschen um Hilfe fragen.<br />
+                Und sie können etwas machen:<br />
+                Dass die Person, die dich schlecht behandelt, vom Festival weggeht.<br />
+                <br />
+                <span className="text-xl tracking-wider">3.</span><br />
                 Du kannst die Awareness-Telefonnummer anrufen.<br />
                 Die Telefonnummer ist:<br />
                 {awarenessPhoneNumber}<br />
                 Dann kommt Hilfe.<br />
-                Oder sagen dir, wo du hingehen kannst, damit du in Sicherheit bist.<br />
+                Oder sagen dir, wo du hingehen kannst.<br />
+                Damit du in Sicherheit bist.<br />
                 <br />
                 <span className="text-xl">4.</span><br />
                 Du kannst zum Awareness-Treffpunkt gehen.<br />
-                Der Treffpunkt ist vor dem Haus der B-Side.Die Adresse ist Am Hawerkamp 29Dort siehst du ein Schild, auf dem „Awareness„ steht.<br />
+                Der Treffpunkt ist vor dem Haus der B-Side.<br />
+                Die Adresse ist Am Hawerkamp 29.<br />
+                Dort siehst du ein Schild, auf dem <strong>Awareness</strong> steht.<br />
                 <br />
-                Wichtig:<br />
+                <strong>Wichtig:</strong><br />
                 Das Awareness-Team ist nicht der Notarzt.<br />
-                Wenn es jemandem körperlich sehr schlecht geht, musst du den Notarzt anrufen.Die Nummer ist 112.<br />
+                Wenn es jemandem körperlich sehr schlecht geht:<br />
+                Musst du den Notarzt anrufen.<br />
+                Die Nummer vom Notarzt ist:<br />
+                <strong>112</strong>
             </div>
         </div>
     );
