@@ -34,7 +34,7 @@ const ParticipantsOverview = (): ReactElement => {
 
                 {showMap && (
                     <div className="p-5">
-                        <div className="bg-white bg-opacity-50 p-10">
+                        <div className="bg-white bg-opacity-50 p-10 w-full md:w-1/2 max-w-xl">
                             <Image
                                 src="/assets/map.svg"
                                 alt={typeLabels.Reading}
