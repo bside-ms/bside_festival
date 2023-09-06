@@ -36,7 +36,7 @@ export default (): ReactElement => {
                         </div>
 
                         <div className="flex pt-16 pr-7 sm:pl-5 sm:pt-24 sm:pr-10 max-w-[540px] mb-14">
-                            <div className="relative mb-[57rem] md:mb-[50rem]">
+                            <div className="relative mb-[70rem] md:mb-[60rem]">
                                 <div className="font-semibold text-6xl sm:text-8xl">
                                     B-Side<br />
                                     Festival
@@ -80,6 +80,16 @@ export default (): ReactElement => {
                                             Zum Formular für Helfer:innen <FontAwesomeIcon className="w-4 pt-1 inline-block" icon={faArrowRight} />
                                         </Link>
                                     </div>
+
+                                    <div className="mt-14 flex">
+                                        <Link
+                                            className="cursor-pointer hover:bg-gray-800 bg-black text-white px-4 rounded-sm flex items-center gap-2 leading-3"
+                                            href="/awareness"
+                                        >
+                                            <div className="font-display text-xl md:text-4xl pb-2 md:pb-3">Awareness</div>
+                                            <div><FontAwesomeIcon className="w-3 md:w-6 md:pt-1 inline-block" icon={faArrowRight} /></div>
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -88,7 +98,7 @@ export default (): ReactElement => {
 
                 <div className="w-full relative pb-14 md:pb-32">
                     <div className="relative z-10">
-                        <div className="px-20 md:px-5 max-w-2xl mx-auto">
+                        <div className="px-20 md:px-5 max-w-xl mx-auto">
                             <Image
                                 src="/assets/map.svg"
                                 alt={typeLabels.Reading}
