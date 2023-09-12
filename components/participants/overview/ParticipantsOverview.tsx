@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import ParticipantOverview from 'components/participants/overview/ParticipantOverview';
+import ParticipantsOverviewAdditionalFilters from 'components/participants/overview/ParticipantsOverviewAdditionalFilters';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import ParticipantsOverviewTypesFilter from 'components/participants/overview/ParticipantsOverviewTypesFilter';
 import typeLabels from 'lib/participants/typeLabels';
@@ -26,6 +27,8 @@ const ParticipantsOverview = (): ReactElement => {
             </div>
 
             <ParticipantsOverviewTypesFilter />
+
+            <ParticipantsOverviewAdditionalFilters />
 
             <div className="mt-5 mb-2">
                 <a onClick={toggleShowMap} className="inline-flex gap-2 items-center border border-gray-900 px-3 py-1 rounded-full cursor-pointer">

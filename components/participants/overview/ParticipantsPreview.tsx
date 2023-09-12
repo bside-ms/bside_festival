@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import ParticipantVenues from 'components/participants/details/ParticipantVenues';
 import TypeBadge from 'components/participants/details/TypeBadge';
+import { useParticipantSlots, useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
@@ -13,11 +14,19 @@ interface Props {
     onClick: () => void;
 }
 
-const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement => {
+const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | null => {
+
+    const { filteredParticipants } = useParticipantsOverviewContext();
+
+    const participantSlots = useParticipantSlots(participant.id);
 
     const { id, name, imageFileName, description, type, updatedDescription } = participant;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
+
+    if (filteredParticipants.length > 0 && participantSlots.length === 0) {
+        return null;
+    }
 
     return (
         <div
@@ -45,10 +54,12 @@ const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement => {
                     {name}
                 </div>
 
-                <ParticipantSlots
-                    participantId={id}
-                    isInPreview={true}
-                />
+                {participantSlots.length > 0 && (
+                    <ParticipantSlots
+                        participantSlots={participantSlots}
+                        isInPreview={true}
+                    />
+                )}
 
                 <ParticipantVenues
                     participantId={id}

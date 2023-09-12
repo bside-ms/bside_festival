@@ -1,19 +1,13 @@
 import type { ReactElement } from 'react';
 import ParticipantSlot from 'components/participants/details/ParticipantSlot';
-import { useParticipantSlots } from 'components/participants/overview/ParticipantsOverviewContext';
+import type { ParticipantSlot as IParticipantSlot } from 'components/participants/overview/ParticipantsOverviewContext';
 
 interface Props {
-    participantId: number;
+    participantSlots: Array<IParticipantSlot>;
     isInPreview?: boolean;
 }
 
-const ParticipantSlots = ({ participantId, isInPreview = false }: Props): ReactElement | null => {
-
-    const participantSlots = useParticipantSlots(participantId);
-
-    if (participantSlots.length === 0) {
-        return null;
-    }
+const ParticipantSlots = ({ participantSlots, isInPreview = false }: Props): ReactElement | null => {
 
     return (
         <div className="mt-3 space-y-1">

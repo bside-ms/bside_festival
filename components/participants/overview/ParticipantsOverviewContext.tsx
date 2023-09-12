@@ -23,6 +23,8 @@ interface ParticipantsOverviewContextData {
     actuallyAvailableTypes: Array<Type>;
     filteredTypes: Array<Type>;
     toggleFilteredType: (type: Type) => void;
+    filteredLocationIds: Array<number>;
+    toggleFilteredLocationId: (locationId: number) => void;
     updateParticipant: (participant: Participant) => void;
     updateAllSlots: (allSlots: Array<SerializableSlot>) => void;
 }
@@ -58,13 +60,17 @@ const ParticipantsOverviewContextProvider = ({
 
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
 
+    const [filteredLocationIds, setFilteredLocationIds] = useState<Array<number>>([]);
+
     useEffectOnMount(() => {
 
         const queryParams = new URLSearchParams(window.location.search);
 
         const initialTypes = queryParams.get('types')?.split(',') ?? [];
-
         setFilteredTypes(initialTypes.filter(isValidType));
+
+        const initialLocations = queryParams.get('locations')?.split(',') ?? [];
+        setFilteredLocationIds(initialLocations.map(Number));
     });
 
     const filteredParticipants = participants.filter(
@@ -91,6 +97,17 @@ const ParticipantsOverviewContextProvider = ({
                 return types.filter(filteredType => filteredType !== type);
             } else {
                 return [...types, type];
+            }
+        });
+    }, []);
+
+    const toggleFilteredLocationId = useCallback((locationId: number) => {
+
+        setFilteredLocationIds(locationIds => {
+            if (locationIds.includes(locationId)) {
+                return locationIds.filter(filteredLocationId => filteredLocationId !== locationId);
+            } else {
+                return [...locationIds, locationId];
             }
         });
     }, []);
@@ -140,8 +157,12 @@ const ParticipantsOverviewContextProvider = ({
                 actuallyAvailableTypes,
                 filteredTypes,
                 toggleFilteredType,
+                filteredLocationIds,
+                toggleFilteredLocationId,
                 updateParticipant,
-                slots,
+                slots: slots.filter(
+                    slot => filteredLocationIds.length === 0 || filteredLocationIds.includes(slot.locationId)
+                ),
                 venues,
                 allLocations,
                 updateAllSlots,

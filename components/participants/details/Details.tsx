@@ -13,6 +13,7 @@ import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import ParticipantVenues from 'components/participants/details/ParticipantVenues';
 import TechnicalRider from 'components/participants/details/TechnicalRider';
 import TypeBadge from 'components/participants/details/TypeBadge';
+import { useParticipantSlots, useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import SlotForm from 'components/participants/slotsForm/SlotForm';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
@@ -26,13 +27,21 @@ interface Props {
     onCloseClick: () => void;
 }
 
-const Details = ({ participant, links, onCloseClick }: Props): ReactElement => {
+const Details = ({ participant, links, onCloseClick }: Props): ReactElement | null => {
+
+    const { filteredParticipants } = useParticipantsOverviewContext();
 
     const { status } = useSession();
 
     const { id, name, imageFileName, type } = participant;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
+
+    const participantSlots = useParticipantSlots(participant.id);
+
+    if (filteredParticipants.length > 0 && participantSlots.length === 0) {
+        return null;
+    }
 
     return (
         <div>
@@ -66,9 +75,11 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement => {
                         {name}
                     </div>
 
-                    <ParticipantSlots
-                        participantId={id}
-                    />
+                    {participantSlots.length > 0 && (
+                        <ParticipantSlots
+                            participantSlots={participantSlots}
+                        />
+                    )}
 
                     <ParticipantVenues
                         participantId={id}
