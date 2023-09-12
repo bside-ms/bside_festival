@@ -17,7 +17,7 @@ import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 export const curationScoreOptions = [
     { value: '', label: 'Unbewertet' },
-    ...range(0, 11).map(scoreValue => ({
+    ...range(0, 11).map((scoreValue) => ({
         value: scoreValue.toString(),
         label: scoreValue.toString(),
     })),
@@ -36,53 +36,51 @@ interface Props {
 }
 
 const ApplicationCurationForm = ({ application, labels }: Props): ReactElement => {
-
     const { updateApplication, updateAllLabels, updateParticipantLabels } = useApplicationsOverviewContext();
 
     const methods = useForm<CurationFormValues>();
-    const { handleSubmit, setError, formState: { errors, isSubmitting }, clearErrors } = methods;
+    const {
+        handleSubmit,
+        setError,
+        formState: { errors, isSubmitting },
+        clearErrors,
+    } = methods;
 
-    const handleFormSubmit = useCallback(async ({ curationInfo, curationScore, applicationStatus, labels: updatedLabels }: CurationFormValues) => {
+    const handleFormSubmit = useCallback(
+        async ({ curationInfo, curationScore, applicationStatus, labels: updatedLabels }: CurationFormValues) => {
+            clearErrors('root');
 
-        clearErrors('root');
+            const request: SetCurationRequest = {
+                id: application.id,
+                curationScore: isEmptyString(curationScore) ? null : Number(curationScore),
+                curationInfo: isEmptyString(curationInfo) ? null : curationInfo,
+                applicationStatus,
+                labels: updatedLabels,
+            };
 
-        const request: SetCurationRequest = {
-            id: application.id,
-            curationScore: isEmptyString(curationScore) ? null : Number(curationScore),
-            curationInfo: isEmptyString(curationInfo) ? null : curationInfo,
-            applicationStatus,
-            labels: updatedLabels,
-        };
+            const response = await fetch('/api/applications/curation/set', {
+                method: 'POST',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify(request),
+            });
 
-        const response = await fetch('/api/applications/curation/set', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(request),
-        });
+            if (!response.ok) {
+                setError('root', { message: 'Fehler beim Submit!' });
+            } else {
+                const { updatedParticipant, allLabels, participantLabels } = (await response.json()) as SuccessfulSetCurationResponse;
 
-        if (!response.ok) {
-            setError('root', { message: 'Fehler beim Submit!' });
-        } else {
-
-            const { updatedParticipant, allLabels, participantLabels } = await response.json() as SuccessfulSetCurationResponse;
-
-            updateApplication(updatedParticipant);
-            updateAllLabels(allLabels);
-            updateParticipantLabels(participantLabels);
-        }
-
-    }, [application.id, clearErrors, setError, updateAllLabels, updateApplication, updateParticipantLabels]);
+                updateApplication(updatedParticipant);
+                updateAllLabels(allLabels);
+                updateParticipantLabels(participantLabels);
+            }
+        },
+        [application.id, clearErrors, setError, updateAllLabels, updateApplication, updateParticipantLabels],
+    );
 
     return (
         <FormProvider {...methods}>
-            <form
-                onSubmit={handleSubmit(handleFormSubmit)}
-                noValidate={true}
-                className="flex gap-4 flex-col max-w-3xl"
-            >
-                <div className="font-display">
-                    Kuration
-                </div>
+            <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex gap-4 flex-col max-w-3xl">
+                <div className="font-display">Kuration</div>
 
                 <div className="max-w-[250px]">
                     <SelectInput<CurationFormValues>
@@ -93,9 +91,7 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
                     />
                 </div>
 
-                <ApplicationCurationLabelSelect
-                    labels={labels}
-                />
+                <ApplicationCurationLabelSelect labels={labels} />
 
                 <TextArea<CurationFormValues>
                     name="curationInfo"
@@ -103,9 +99,7 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
                     defaultValue={application.curationInfo ?? undefined}
                 />
 
-                <div className="font-display">
-                    Status
-                </div>
+                <div className="font-display">Status</div>
 
                 <div>
                     <div className="max-w-[250px]">
@@ -113,18 +107,16 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
                             label="Status"
                             name="applicationStatus"
                             defaultValue={application.status}
-                            options={
-                                statusOrder.map(status => ({
-                                    value: status,
-                                    label: statusLabels[status],
-                                }))
-                            }
+                            options={statusOrder.map((status) => ({
+                                value: status,
+                                label: statusLabels[status],
+                            }))}
                         />
                     </div>
 
                     <div className="text-xs mt-1">
-                        Sobald der Status "{statusLabels.Confirmed}" gesetzt ist, wird
-                        der Programmpunkt (später) unter Programm aufgelistet!
+                        Sobald der Status "{statusLabels.Confirmed}" gesetzt ist, wird der Programmpunkt (später) unter Programm
+                        aufgelistet!
                     </div>
                 </div>
 
@@ -140,15 +132,14 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
 
                 {isSubmitting && (
                     <div className="text-black">
-                        <span className="mr-1">Wird gespeichert</span> <span className="animate-spin inline-block w-3"><FontAwesomeIcon icon={faSpinner} /></span>
+                        <span className="mr-1">Wird gespeichert</span>{' '}
+                        <span className="animate-spin inline-block w-3">
+                            <FontAwesomeIcon icon={faSpinner} />
+                        </span>
                     </div>
                 )}
 
-                {errors.root && (
-                    <div className="text-red-600">
-                        {errors.root.message}
-                    </div>
-                )}
+                {errors.root && <div className="text-red-600">{errors.root.message}</div>}
             </form>
         </FormProvider>
     );

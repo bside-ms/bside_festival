@@ -10,25 +10,16 @@ interface Props {
 }
 
 const Application = ({ application }: Props): ReactElement => {
-
-    const {
-        enhancedApplicationIds,
-        toggleEnhancedApplicationId,
-        getLinksOfApplication,
-        participantLabels,
-        allLabels,
-    } = useApplicationsOverviewContext();
+    const { enhancedApplicationIds, toggleEnhancedApplicationId, getLinksOfApplication, participantLabels, allLabels } =
+        useApplicationsOverviewContext();
 
     const { id } = application;
 
-    const ownParticipantLabelIds = participantLabels.filter(label => label.participantId === id).map(label => label.labelId);
+    const ownParticipantLabelIds = participantLabels.filter((label) => label.participantId === id).map((label) => label.labelId);
 
-    const labels = allLabels.filter(label => ownParticipantLabelIds.includes(label.id));
+    const labels = allLabels.filter((label) => ownParticipantLabelIds.includes(label.id));
 
-    const handleEnhancedToggle = useCallback(
-        () => toggleEnhancedApplicationId(id),
-        [id, toggleEnhancedApplicationId]
-    );
+    const handleEnhancedToggle = useCallback(() => toggleEnhancedApplicationId(id), [id, toggleEnhancedApplicationId]);
 
     if (enhancedApplicationIds.includes(id)) {
         return (
@@ -41,13 +32,7 @@ const Application = ({ application }: Props): ReactElement => {
         );
     }
 
-    return (
-        <ApplicationPreview
-            application={application}
-            labels={labels}
-            onClick={handleEnhancedToggle}
-        />
-    );
+    return <ApplicationPreview application={application} labels={labels} onClick={handleEnhancedToggle} />;
 };
 
 export default Application;

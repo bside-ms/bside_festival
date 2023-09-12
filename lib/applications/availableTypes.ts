@@ -1,7 +1,6 @@
 import { Type } from '@prisma/client';
 
 const isTypeAvailable = (type: Type): boolean => {
-
     switch (type) {
         case Type.Concert:
         case Type.Workshop:

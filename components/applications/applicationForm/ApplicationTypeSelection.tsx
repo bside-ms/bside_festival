@@ -7,7 +7,6 @@ import typeLabels from 'lib/participants/typeLabels';
 import typeUrlPaths from 'lib/participants/typeUrlPaths';
 
 const TypeSelect = ({ type }: { type: Type }): ReactElement => {
-
     return (
         <Link className="block relative h-52" href={`/bewerbungen/${typeUrlPaths[type]}`}>
             <ApplicationTypeImage type={type} />
@@ -22,10 +21,9 @@ const TypeSelect = ({ type }: { type: Type }): ReactElement => {
 };
 
 const ApplicationTypeSelection = (): ReactElement => {
-
     return (
         <div className="grid grid-cols-2 gap-4">
-            {availableTypes.map(availableType => (
+            {availableTypes.map((availableType) => (
                 <div key={availableType} className="">
                     <TypeSelect type={availableType} />
                 </div>

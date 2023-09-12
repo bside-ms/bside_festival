@@ -25,48 +25,54 @@ export interface VolunteerFormValues {
 }
 
 const VolunteerForm = (): ReactElement => {
-
     const [wasSuccessfullySubmitted, setWasSuccessfullySubmitted] = useState(false);
 
     const methods = useForm<VolunteerFormValues>();
-    const { handleSubmit, setError, formState: { isSubmitting }, clearErrors, reset } = methods;
+    const {
+        handleSubmit,
+        setError,
+        formState: { isSubmitting },
+        clearErrors,
+        reset,
+    } = methods;
 
-    const handleFormSubmit = useCallback(async (values: VolunteerFormValues) => {
+    const handleFormSubmit = useCallback(
+        async (values: VolunteerFormValues) => {
+            clearErrors('root');
 
-        clearErrors('root');
+            const request: AddVolunteerRequest = {
+                fullName: values.fullName,
+                mailAddress: values.mailAddress,
+                phoneNumber: values.phoneNumber,
+                canCook: values.canCook,
+                hasCar: values.hasCar,
+                canCarryHeavyStuff: values.canCarryHeavyStuff,
+                isSocial: values.isSocial,
+                canSupportTechnician: values.canSupportTechnician,
+                canSupportArtist: values.canSupportArtist,
+                hasMultipleTalents: values.hasMultipleTalents,
+                canWorkWithChildren: false, // No entertainment for children this year
+                isAvailableOnFriday: values.isAvailableOnFriday,
+                isAvailableOnSaturday: values.isAvailableOnSaturday,
+                isAvailableOnSunday: values.isAvailableOnSunday,
+            };
 
-        const request: AddVolunteerRequest = {
-            fullName: values.fullName,
-            mailAddress: values.mailAddress,
-            phoneNumber: values.phoneNumber,
-            canCook: values.canCook,
-            hasCar: values.hasCar,
-            canCarryHeavyStuff: values.canCarryHeavyStuff,
-            isSocial: values.isSocial,
-            canSupportTechnician: values.canSupportTechnician,
-            canSupportArtist: values.canSupportArtist,
-            hasMultipleTalents: values.hasMultipleTalents,
-            canWorkWithChildren: false, // No entertainment for children this year
-            isAvailableOnFriday: values.isAvailableOnFriday,
-            isAvailableOnSaturday: values.isAvailableOnSaturday,
-            isAvailableOnSunday: values.isAvailableOnSunday,
-        };
+            const response = await fetch('/api/volunteers/add', {
+                method: 'POST',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify(request),
+            });
 
-        const response = await fetch('/api/volunteers/add', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(request),
-        });
-
-        if (!response.ok) {
-            setError('root', { message: 'Fehler beim Submit' });
-        } else {
-            setWasSuccessfullySubmitted(true);
-            reset();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-    }, [clearErrors, reset, setError]);
+            if (!response.ok) {
+                setError('root', { message: 'Fehler beim Submit' });
+            } else {
+                setWasSuccessfullySubmitted(true);
+                reset();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        },
+        [clearErrors, reset, setError],
+    );
 
     const title = (
         <div className="text-black font-display mb-4">
@@ -101,46 +107,22 @@ const VolunteerForm = (): ReactElement => {
 
             <FormProvider {...methods}>
                 <div className="w-full">
-                    <form
-                        onSubmit={handleSubmit(handleFormSubmit)}
-                        noValidate={true}
-                        className="flex gap-6 flex-col"
-                    >
-                        <TextInput<VolunteerFormValues>
-                            name="fullName"
-                            label="Vor- und Nachname"
-                            required={true}
-                        />
+                    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex gap-6 flex-col">
+                        <TextInput<VolunteerFormValues> name="fullName" label="Vor- und Nachname" required={true} />
 
-                        <TextInput<VolunteerFormValues>
-                            name="phoneNumber"
-                            label="Telefonnummer"
-                            required={true}
-                        />
+                        <TextInput<VolunteerFormValues> name="phoneNumber" label="Telefonnummer" required={true} />
 
-                        <TextInput<VolunteerFormValues>
-                            name="mailAddress"
-                            label="E-Mail-Adresse"
-                            required={true}
-                        />
+                        <TextInput<VolunteerFormValues> name="mailAddress" label="E-Mail-Adresse" required={true} />
 
                         <div className="flex flex-col gap-3">
                             {volunteerPreferences.map(({ key, label }) => (
-                                <Checkbox<VolunteerFormValues>
-                                    key={key}
-                                    name={key}
-                                    label={label}
-                                />
+                                <Checkbox<VolunteerFormValues> key={key} name={key} label={label} />
                             ))}
                         </div>
 
                         <div className="flex flex-col gap-3">
                             {volunteerDayPreferences.map(({ key, label }) => (
-                                <Checkbox<VolunteerFormValues>
-                                    key={key}
-                                    name={key}
-                                    label={label}
-                                />
+                                <Checkbox<VolunteerFormValues> key={key} name={key} label={label} />
                             ))}
                         </div>
 
@@ -153,7 +135,6 @@ const VolunteerForm = (): ReactElement => {
                                 Absenden
                             </button>
                         </label>
-
                     </form>
                 </div>
             </FormProvider>

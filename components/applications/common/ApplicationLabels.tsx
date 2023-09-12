@@ -6,7 +6,6 @@ interface Props {
 }
 
 const ApplicationLabels = ({ labels }: Props): ReactElement | null => {
-
     if (labels.length === 0) {
         return null;
     }
@@ -14,10 +13,7 @@ const ApplicationLabels = ({ labels }: Props): ReactElement | null => {
     return (
         <div className="flex gap-1 mb-1">
             {labels.map(({ id, label }) => (
-                <div
-                    key={id}
-                    className="uppercase inline-block select-none rounded-2xl text-xs px-3 py-1 bg-gray-200 text-gray-700"
-                >
+                <div key={id} className="uppercase inline-block select-none rounded-2xl text-xs px-3 py-1 bg-gray-200 text-gray-700">
                     {label}
                 </div>
             ))}

@@ -29,9 +29,8 @@ export interface SuccessfulAddVolunteerResponse {
 
 export default async (
     request: NextApiRequest,
-    response: NextApiResponse<SuccessfulAddVolunteerResponse | ErroneousAddVolunteerResponse>
+    response: NextApiResponse<SuccessfulAddVolunteerResponse | ErroneousAddVolunteerResponse>,
 ): Promise<void> => {
-
     const {
         fullName,
         phoneNumber,

@@ -5,7 +5,6 @@ import ContentWrapper from 'components/common/ContentWrapper';
 import BHeartGrid from 'components/front-page/BHeartGrid';
 
 const BSideInfo = (): ReactElement => {
-
     const mailTo = (
         <a href="mailto:kultur@b-side.ms" className="italic whitespace-nowrap">
             kultur@b-side.ms
@@ -24,13 +23,13 @@ const BSideInfo = (): ReactElement => {
                             Konzerte, künstlerische Workshops, Ausstellungen, Theater, politische Bildung, mit eigene Ideen...
                         </div>
                         <div>
-                            Ihr möchtet euch engagieren? Dann meldet euch einfach unter {mailTo} oder
-                            kommt bei uns Am Hawerkamp 29 vorbei. Ende 2023 wird der B-Side Kultur e.V. wieder in der B-Side Am Mittelhafen
-                            42 einziehen. Nach erfolgreicher Sanierung können dort Konzerte und Podiumsdiskussionen, Orga-Treffen und
-                            Klima-Workshops, Theaterproben, handwerkliche Bildung uvm. stattfinden. Es entstehen programmatische
-                            Freiräume, um auch deine/ eure gemeinnützigen Ideen in den offenen Vereinsstrukturen umzusetzen und
-                            große Herausforderungen der Gesellschaft kollektiv anzugehen. Transformative Soziokultur, koproduktiv und nichtkommerziell,
-                            für die Allgemeinheit. Bald wieder am alten Ort. <span className="font-display pl-1">Zurück für die Zukunft.</span>
+                            Ihr möchtet euch engagieren? Dann meldet euch einfach unter {mailTo} oder kommt bei uns Am Hawerkamp 29 vorbei.
+                            Ende 2023 wird der B-Side Kultur e.V. wieder in der B-Side Am Mittelhafen 42 einziehen. Nach erfolgreicher
+                            Sanierung können dort Konzerte und Podiumsdiskussionen, Orga-Treffen und Klima-Workshops, Theaterproben,
+                            handwerkliche Bildung uvm. stattfinden. Es entstehen programmatische Freiräume, um auch deine/ eure
+                            gemeinnützigen Ideen in den offenen Vereinsstrukturen umzusetzen und große Herausforderungen der Gesellschaft
+                            kollektiv anzugehen. Transformative Soziokultur, koproduktiv und nichtkommerziell, für die Allgemeinheit. Bald
+                            wieder am alten Ort. <span className="font-display pl-1">Zurück für die Zukunft.</span>
                         </div>
                     </div>
 

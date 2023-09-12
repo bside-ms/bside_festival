@@ -11,7 +11,6 @@ interface Props {
 }
 
 const VolunteersOverview = ({ volunteers }: Props): ReactElement => {
-
     const { data: session } = useSession();
 
     const isInDataPrivacyGroup = isGroupMember('/kreise/festival/eingeschränkt/datenschutz', session);
@@ -28,22 +27,15 @@ const VolunteersOverview = ({ volunteers }: Props): ReactElement => {
 
     return (
         <div>
-            <div className="text-3xl mb-5 font-display">
-                Helfer:innen ({volunteers.length})
-            </div>
+            <div className="text-3xl mb-5 font-display">Helfer:innen ({volunteers.length})</div>
 
             <div className="rounded-md drop-shadow bg-gray-50 p-2 mb-3">
-                Die Kontakt-Daten der Helfer:innen sind nur für Mitglieder
-                der {portalLink} des Festivals sichtbar.
+                Die Kontakt-Daten der Helfer:innen sind nur für Mitglieder der {portalLink} des Festivals sichtbar.
             </div>
 
             <div className="grid grid-cols-1 gap-3">
-                {volunteers.map(volunteer => (
-                    <VolunteerDetails
-                        key={volunteer.int}
-                        volunteer={volunteer}
-                        showSensitiveData={isInDataPrivacyGroup}
-                    />
+                {volunteers.map((volunteer) => (
+                    <VolunteerDetails key={volunteer.int} volunteer={volunteer} showSensitiveData={isInDataPrivacyGroup} />
                 ))}
             </div>
 

@@ -12,7 +12,6 @@ interface Props {
 }
 
 const TechnicalRider = ({ participant: { technicalRider, technicalRiderFileName } }: Props): ReactElement | null => {
-
     if (isEmptyString(technicalRider) && isEmptyString(technicalRiderFileName)) {
         return null;
     }
@@ -23,16 +22,11 @@ const TechnicalRider = ({ participant: { technicalRider, technicalRiderFileName 
         <div className="mt-4">
             <div className="font-display">Technical Rider</div>
 
-            {isNotEmptyString(technicalRider) && (
-                <div>{technicalRider}</div>
-            )}
+            {isNotEmptyString(technicalRider) && <div>{technicalRider}</div>}
 
             {isNotEmptyString(technicalRiderPdfUrl) && (
                 <NextLink href={technicalRiderPdfUrl}>
-                    <FontAwesomeIcon
-                        className="inline-block p-1 w-8"
-                        icon={faFilePdf}
-                    />
+                    <FontAwesomeIcon className="inline-block p-1 w-8" icon={faFilePdf} />
                 </NextLink>
             )}
         </div>

@@ -10,36 +10,17 @@ interface Props {
 }
 
 const ParticipantOverview = ({ participant }: Props): ReactElement => {
-
-    const {
-        enhancedParticipantIds,
-        toggleEnhancedParticipantId,
-        getLinksOfParticipant,
-    } = useParticipantsOverviewContext();
+    const { enhancedParticipantIds, toggleEnhancedParticipantId, getLinksOfParticipant } = useParticipantsOverviewContext();
 
     const { id } = participant;
 
-    const handleEnhancedToggle = useCallback(
-        () => toggleEnhancedParticipantId(id),
-        [id, toggleEnhancedParticipantId]
-    );
+    const handleEnhancedToggle = useCallback(() => toggleEnhancedParticipantId(id), [id, toggleEnhancedParticipantId]);
 
     if (enhancedParticipantIds.includes(id)) {
-        return (
-            <Details
-                participant={participant}
-                links={getLinksOfParticipant(id)}
-                onCloseClick={handleEnhancedToggle}
-            />
-        );
+        return <Details participant={participant} links={getLinksOfParticipant(id)} onCloseClick={handleEnhancedToggle} />;
     }
 
-    return (
-        <ParticipantsPreview
-            participant={participant}
-            onClick={handleEnhancedToggle}
-        />
-    );
+    return <ParticipantsPreview participant={participant} onClick={handleEnhancedToggle} />;
 };
 
 export default ParticipantOverview;

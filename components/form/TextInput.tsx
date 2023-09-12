@@ -17,15 +17,22 @@ interface Props<T extends FieldValues> {
     validate?: (value: string) => string | undefined;
 }
 
-const TextInput = <T extends FieldValues>({ label, name, defaultValue, info, validate, required = false, maxLength }: Props<T>): ReactElement => {
-
-    const { formState: { errors, isSubmitting }, register } = useFormContext();
+const TextInput = <T extends FieldValues>({
+    label,
+    name,
+    defaultValue,
+    info,
+    validate,
+    required = false,
+    maxLength,
+}: Props<T>): ReactElement => {
+    const {
+        formState: { errors, isSubmitting },
+        register,
+    } = useFormContext();
 
     const isMounted = useIsMounted();
-    const id = useMemo(
-        () => isMounted ? uniqueId(name) : undefined,
-        [isMounted, name]
-    );
+    const id = useMemo(() => (isMounted ? uniqueId(name) : undefined), [isMounted, name]);
 
     const errorMessage = errors[name]?.message;
 
@@ -35,24 +42,25 @@ const TextInput = <T extends FieldValues>({ label, name, defaultValue, info, val
                 id={id}
                 type="text"
                 defaultValue={defaultValue}
-                className={`p-2 rounded outline-0 ${typeof errorMessage === 'string' ? 'bg-rose-600 text-gray-100 placeholder:text-gray-100' : ''}`}
+                className={`p-2 rounded outline-0 ${
+                    typeof errorMessage === 'string' ? 'bg-rose-600 text-gray-100 placeholder:text-gray-100' : ''
+                }`}
                 required={required}
                 placeholder={required ? `${label} *` : label}
                 disabled={isSubmitting}
-                {...register(
-                    name,
-                    {
-                        required: {
-                            value: required,
-                            message: 'Dies ist ein Pflichtfeld',
-                        },
-                        maxLength: isEmptyNumber(maxLength) ? undefined : {
-                            value: maxLength,
-                            message: `Max. ${maxLength} Zeichen`,
-                        },
-                        validate,
-                    }
-                )}
+                {...register(name, {
+                    required: {
+                        value: required,
+                        message: 'Dies ist ein Pflichtfeld',
+                    },
+                    maxLength: isEmptyNumber(maxLength)
+                        ? undefined
+                        : {
+                              value: maxLength,
+                              message: `Max. ${maxLength} Zeichen`,
+                          },
+                    validate,
+                })}
             />
             {isNotEmptyString(info) && (
                 <label htmlFor={id} className="px-1 text-black text-base">
@@ -60,11 +68,7 @@ const TextInput = <T extends FieldValues>({ label, name, defaultValue, info, val
                 </label>
             )}
 
-            {typeof errorMessage === 'string' && (
-                <div className="px-1 text-rose-900">
-                    {errorMessage}
-                </div>
-            )}
+            {typeof errorMessage === 'string' && <div className="px-1 text-rose-900">{errorMessage}</div>}
         </div>
     );
 };

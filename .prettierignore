@@ -1,0 +1,11 @@
+{
+node_modules
+.next
+
+**/*.prisma
+**/*.sql
+
+**/*.tsbuildinfo
+
+package-lock.json
+}

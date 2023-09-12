@@ -1,7 +1,6 @@
 import { Type } from '@prisma/client';
 
 const hasSlotOrVenue = (type: Type): 'slot' | 'venue' => {
-
     switch (type) {
         case Type.Neighbor:
         case Type.Misc:

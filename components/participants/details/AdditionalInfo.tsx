@@ -7,7 +7,6 @@ interface Props {
 }
 
 const AdditionalInfo = ({ participant: { additionalInfo } }: Props): ReactElement | null => {
-
     if (isEmptyString(additionalInfo)) {
         return null;
     }

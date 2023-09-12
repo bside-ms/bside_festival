@@ -28,7 +28,6 @@ interface Props {
 }
 
 const Details = ({ participant, links, onCloseClick }: Props): ReactElement | null => {
-
     const { filteredParticipants } = useParticipantsOverviewContext();
 
     const { status } = useSession();
@@ -45,23 +44,11 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
 
     return (
         <div>
-            <div
-                className="p-3 md:p-5 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl flex flex-col md:flex-row-reverse justify-between gap-4"
-            >
+            <div className="p-3 md:p-5 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl flex flex-col md:flex-row-reverse justify-between gap-4">
                 <div className="md:w-1/3 shrink-0 relative rounded-md overflow-auto h-[300px]">
                     {isNotEmptyString(imageUrl) && (
-                        <NextLink
-                            href={imageUrl}
-                            className="md:cursor-pointer"
-                            target="_blank"
-                        >
-                            <Image
-                                src={imageUrl}
-                                alt={name}
-                                fill={true}
-                                priority={true}
-                                className="object-cover"
-                            />
+                        <NextLink href={imageUrl} className="md:cursor-pointer" target="_blank">
+                            <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />
                         </NextLink>
                     )}
                 </div>
@@ -71,40 +58,24 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
                         <TypeBadge type={type} />
                     </div>
 
-                    <div className="text-2xl font-display">
-                        {name}
-                    </div>
+                    <div className="text-2xl font-display">{name}</div>
 
-                    {participantSlots.length > 0 && (
-                        <ParticipantSlots
-                            participantSlots={participantSlots}
-                        />
-                    )}
+                    {participantSlots.length > 0 && <ParticipantSlots participantSlots={participantSlots} />}
 
-                    <ParticipantVenues
-                        participantId={id}
-                    />
+                    <ParticipantVenues participantId={id} />
 
-                    <DescriptionForm
-                        participant={participant}
-                    />
+                    <DescriptionForm participant={participant} />
                 </div>
             </div>
 
             {status === 'authenticated' && hasSlotOrVenue(type) === 'slot' && (
-                <div
-                    className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl"
-                >
-                    <SlotForm
-                        participantId={id}
-                    />
+                <div className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl">
+                    <SlotForm participantId={id} />
                 </div>
             )}
 
             {status === 'authenticated' && (
-                <div
-                    className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl"
-                >
+                <div className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl">
                     <Links links={links} />
 
                     <Contacts participant={participant} />

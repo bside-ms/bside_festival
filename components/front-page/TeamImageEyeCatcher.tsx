@@ -5,7 +5,6 @@ import team2Picture from '../../public/assets/images/festival/team2.jpg';
 import ContentWrapper from 'components/common/ContentWrapper';
 
 const TeamImageEyeCatcher = (): ReactElement => {
-
     return (
         <div className="bg-[#3eb0e3] py-10 px-5">
             <ContentWrapper>

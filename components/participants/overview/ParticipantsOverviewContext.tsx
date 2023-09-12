@@ -49,7 +49,6 @@ const ParticipantsOverviewContextProvider = ({
     allLocations,
     children,
 }: Props): ReactElement => {
-
     const [participantLabels, setParticipantLabels] = useState<Array<ParticipantLabel>>(initialParticipantLabels);
 
     const [participants, setParticipants] = useState<Array<SerializableParticipant>>(initialParticipants);
@@ -63,7 +62,6 @@ const ParticipantsOverviewContextProvider = ({
     const [filteredLocationIds, setFilteredLocationIds] = useState<Array<number>>([]);
 
     useEffectOnMount(() => {
-
         const queryParams = new URLSearchParams(window.location.search);
 
         const initialTypes = queryParams.get('types')?.split(',') ?? [];
@@ -74,16 +72,15 @@ const ParticipantsOverviewContextProvider = ({
     });
 
     const filteredParticipants = participants.filter(
-        participant => filteredTypes.length === 0 || filteredTypes.includes(participant.type)
+        (participant) => filteredTypes.length === 0 || filteredTypes.includes(participant.type),
     );
 
     const [enhancedParticipantIds, setEnhancedParticipantIds] = useState<Array<number>>([]);
 
     const toggleEnhancedParticipantId = useCallback((id: number) => {
-
-        setEnhancedParticipantIds(enhancedIds => {
+        setEnhancedParticipantIds((enhancedIds) => {
             if (enhancedIds.includes(id)) {
-                return enhancedIds.filter(enhancedId => enhancedId !== id);
+                return enhancedIds.filter((enhancedId) => enhancedId !== id);
             } else {
                 return [...enhancedIds, id];
             }
@@ -91,10 +88,9 @@ const ParticipantsOverviewContextProvider = ({
     }, []);
 
     const toggleFilteredType = useCallback((type: Type) => {
-
-        setFilteredTypes(types => {
+        setFilteredTypes((types) => {
             if (types.includes(type)) {
-                return types.filter(filteredType => filteredType !== type);
+                return types.filter((filteredType) => filteredType !== type);
             } else {
                 return [...types, type];
             }
@@ -102,47 +98,36 @@ const ParticipantsOverviewContextProvider = ({
     }, []);
 
     const toggleFilteredLocationId = useCallback((locationId: number) => {
-
-        setFilteredLocationIds(locationIds => {
+        setFilteredLocationIds((locationIds) => {
             if (locationIds.includes(locationId)) {
-                return locationIds.filter(filteredLocationId => filteredLocationId !== locationId);
+                return locationIds.filter((filteredLocationId) => filteredLocationId !== locationId);
             } else {
                 return [...locationIds, locationId];
             }
         });
     }, []);
 
-    const getLinksOfParticipant = useCallback((id: number) => (
-        allLinks.filter(({ participantId }) => participantId === id)
-    ), [allLinks]);
+    const getLinksOfParticipant = useCallback((id: number) => allLinks.filter(({ participantId }) => participantId === id), [allLinks]);
 
     const updateParticipant = useCallback((participant: Participant) => {
+        setParticipants((prevState) => {
+            return prevState.map((participantItem) => {
+                if (participantItem.id === participant.id) {
+                    return serializeParticipant(participant);
+                }
 
-        setParticipants(prevState => {
-
-            return prevState
-                .map(participantItem => {
-
-                    if (participantItem.id === participant.id) {
-                        return serializeParticipant(participant);
-                    }
-
-                    return participantItem;
-                });
+                return participantItem;
+            });
         });
-
     }, []);
 
     const updateAllSlots = useCallback((allSlots: Array<SerializableSlot>): void => {
-
         setSlots(allSlots);
     }, []);
 
     const typesOfParticipants = uniq(participants.map(({ type }) => type));
 
-    const actuallyAvailableTypes = availableTypes.filter(
-        type => typesOfParticipants.includes(type)
-    );
+    const actuallyAvailableTypes = availableTypes.filter((type) => typesOfParticipants.includes(type));
 
     return (
         <ParticipantsOverviewContext.Provider
@@ -160,9 +145,7 @@ const ParticipantsOverviewContextProvider = ({
                 filteredLocationIds,
                 toggleFilteredLocationId,
                 updateParticipant,
-                slots: slots.filter(
-                    slot => filteredLocationIds.length === 0 || filteredLocationIds.includes(slot.locationId)
-                ),
+                slots: slots.filter((slot) => filteredLocationIds.length === 0 || filteredLocationIds.includes(slot.locationId)),
                 venues,
                 allLocations,
                 updateAllSlots,
@@ -174,7 +157,6 @@ const ParticipantsOverviewContextProvider = ({
 };
 
 const useParticipantsOverviewContext = (): ParticipantsOverviewContextData => {
-
     const participantsOverviewContext = useContext(ParticipantsOverviewContext);
 
     if (participantsOverviewContext === null) {
@@ -195,14 +177,12 @@ export interface ParticipantVenue {
 }
 
 const useParticipantSlots = (participantId: number): Array<ParticipantSlot> => {
-
     const { allLocations, slots } = useParticipantsOverviewContext();
 
     return slots
-        .filter(slotItem => slotItem.participantId === participantId)
-        .map<ParticipantSlot | null>(slotItem => {
-
-            const location = allLocations.find(locationItem => locationItem.id === slotItem.locationId);
+        .filter((slotItem) => slotItem.participantId === participantId)
+        .map<ParticipantSlot | null>((slotItem) => {
+            const location = allLocations.find((locationItem) => locationItem.id === slotItem.locationId);
 
             if (location === undefined) {
                 return null;
@@ -217,14 +197,12 @@ const useParticipantSlots = (participantId: number): Array<ParticipantSlot> => {
 };
 
 const useParticipantVenues = (participantId: number): Array<ParticipantVenue> => {
-
     const { allLocations, venues } = useParticipantsOverviewContext();
 
     return venues
-        .filter(venueItem => venueItem.participantId === participantId)
-        .map<ParticipantVenue | null>(venueItem => {
-
-            const location = allLocations.find(locationItem => locationItem.id === venueItem.locationId);
+        .filter((venueItem) => venueItem.participantId === participantId)
+        .map<ParticipantVenue | null>((venueItem) => {
+            const location = allLocations.find((locationItem) => locationItem.id === venueItem.locationId);
 
             if (location === undefined) {
                 return null;
@@ -238,9 +216,4 @@ const useParticipantVenues = (participantId: number): Array<ParticipantVenue> =>
         .filter((venueItem): venueItem is ParticipantVenue => venueItem !== null);
 };
 
-export {
-    ParticipantsOverviewContextProvider,
-    useParticipantsOverviewContext,
-    useParticipantSlots,
-    useParticipantVenues,
-};
+export { ParticipantsOverviewContextProvider, useParticipantsOverviewContext, useParticipantSlots, useParticipantVenues };

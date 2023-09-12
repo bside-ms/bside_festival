@@ -1,20 +1,20 @@
 version: '3.3'
 
 services:
-  db:
-    image: mariadb:10.5.8
-    restart: always
-    environment:
-      MYSQL_DATABASE: 'test_festival'
-      MYSQL_USER: 'festival'
-      MYSQL_PASSWORD: '1rDS3yHAdVaMX5Ey'
-      MYSQL_ROOT_PASSWORD: 'puAx0aWi8E6CTw3V'
-    ports:
-      - '3306:3306'
-    expose:
-      - '3306'
-    volumes:
-      - db_test_festival:/var/lib/mysql
+    db:
+        image: mariadb:10.5.8
+        restart: always
+        environment:
+            MYSQL_DATABASE: 'test_festival'
+            MYSQL_USER: 'festival'
+            MYSQL_PASSWORD: '1rDS3yHAdVaMX5Ey'
+            MYSQL_ROOT_PASSWORD: 'puAx0aWi8E6CTw3V'
+        ports:
+            - '3306:3306'
+        expose:
+            - '3306'
+        volumes:
+            - db_test_festival:/var/lib/mysql
 
 volumes:
-  db_test_festival:
+    db_test_festival:

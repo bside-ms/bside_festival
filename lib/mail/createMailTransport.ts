@@ -6,7 +6,6 @@ import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 let mailTransport: Mail<SentMessageInfo> | null = null;
 
 const createMailTransport = (): Mail<SentMessageInfo> => {
-
     if (mailTransport !== null) {
         return mailTransport;
     }
@@ -28,7 +27,7 @@ const createMailTransport = (): Mail<SentMessageInfo> => {
 
     mailTransport = createTransport(transportOptions);
 
-    mailTransport.verify(error => {
+    mailTransport.verify((error) => {
         if (error !== null) {
             // eslint-disable-next-line no-console
             console.error(`Failed to create mail transport, error: ${error.message}`);

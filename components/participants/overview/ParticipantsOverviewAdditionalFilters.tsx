@@ -6,7 +6,6 @@ import type { ReactElement } from 'react';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 
 const LocationIdToggle = ({ location }: { location: Location }): ReactElement | null => {
-
     const { filteredLocationIds, toggleFilteredLocationId } = useParticipantsOverviewContext();
 
     const handleClick = useCallback(() => toggleFilteredLocationId(location.id), [location.id, toggleFilteredLocationId]);
@@ -25,21 +24,17 @@ const LocationIdToggle = ({ location }: { location: Location }): ReactElement | 
 };
 
 const ParticipantsOverviewAdditionalFilters = (): ReactElement => {
-
     const { allLocations } = useParticipantsOverviewContext();
 
     const [showAdditionalFilters, setShowAdditionalFilters] = useState(false);
-    const toggleShowAdditionalFilters = useCallback(() => setShowAdditionalFilters(prevState => !prevState), []);
+    const toggleShowAdditionalFilters = useCallback(() => setShowAdditionalFilters((prevState) => !prevState), []);
 
     return (
         <div className="mb-3">
             {showAdditionalFilters ? (
                 <div>
                     <div className="flex">
-                        <a
-                            onClick={toggleShowAdditionalFilters}
-                            className="cursor-pointer text-sm flex items-center gap-1 select-none"
-                        >
+                        <a onClick={toggleShowAdditionalFilters} className="cursor-pointer text-sm flex items-center gap-1 select-none">
                             Weitere Filter <FontAwesomeIcon className="w-2" icon={faChevronUp} />
                         </a>
                     </div>
@@ -47,16 +42,15 @@ const ParticipantsOverviewAdditionalFilters = (): ReactElement => {
                     <div className="mt-2">
                         <div className="mb-1 underline">Veranstaltungsort</div>
                         <div className="flex flex-wrap gap-2 mb-3">
-                            {allLocations.map(location => <LocationIdToggle key={location.id} location={location} />)}
+                            {allLocations.map((location) => (
+                                <LocationIdToggle key={location.id} location={location} />
+                            ))}
                         </div>
                     </div>
                 </div>
             ) : (
                 <div className="flex">
-                    <a
-                        onClick={toggleShowAdditionalFilters}
-                        className="cursor-pointer text-sm flex items-center gap-1 select-none"
-                    >
+                    <a onClick={toggleShowAdditionalFilters} className="cursor-pointer text-sm flex items-center gap-1 select-none">
                         Weitere Filter <FontAwesomeIcon className="w-2" icon={faChevronDown} />
                     </a>
                 </div>

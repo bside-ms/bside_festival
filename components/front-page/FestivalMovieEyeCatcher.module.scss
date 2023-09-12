@@ -1,85 +1,71 @@
 .eyecatcher {
-  padding: 100px 0 40px;
-  background: #ffe698;
+    padding: 100px 0 40px;
+    background: #ffe698;
 }
 
 .box {
-  position: relative;
-  min-width: 300px;
-  width: 70%;
-  display: flex;
-  flex-direction: column;
-  padding: 130px 30px 30px;
+    position: relative;
+    min-width: 300px;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    padding: 130px 30px 30px;
 }
 
 .boxContent {
-  position: relative;
-  z-index: 6;
+    position: relative;
+    z-index: 6;
 
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 
-  color: #fff;
+    color: #fff;
 }
 
 .title {
-  font-size: 32px;
-  line-height: 1.2;
+    font-size: 32px;
+    line-height: 1.2;
 }
 
 .boxBackground {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-image: url("/assets/images/festival/19-475-min.jpg");
-  background-size: cover;
-  z-index: 3;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url('/assets/images/festival/19-475-min.jpg');
+    background-size: cover;
+    z-index: 3;
 }
 
 .boxBackgroundLayer {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(
-      180deg,
-      rgba(255, 230, 152, 0.7) 0%,
-      rgba(39, 150, 192, 0.9) 40%,
-      rgba(39, 150, 192, 0.9) 100%
-  );
-  z-index: 4;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(180deg, rgba(255, 230, 152, 0.7) 0%, rgba(39, 150, 192, 0.9) 40%, rgba(39, 150, 192, 0.9) 100%);
+    z-index: 4;
 }
 
 .offsetBackgroundLayer1 {
-  position: absolute;
-  top: -20px;
-  right: -20px;
-  bottom: 20px;
-  left: 20px;
-  background: linear-gradient(
-      214deg,
-      rgba(255, 230, 152, 1) 0%,
-      rgba(51, 187, 233, 1) 100%
-  );
-  z-index: 2;
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    bottom: 20px;
+    left: 20px;
+    background: linear-gradient(214deg, rgba(255, 230, 152, 1) 0%, rgba(51, 187, 233, 1) 100%);
+    z-index: 2;
 }
 
 .offsetBackgroundLayer2 {
-  position: absolute;
-  top: -40px;
-  right: -40px;
-  bottom: 40px;
-  left: 40px;
-  background: linear-gradient(
-      180deg,
-      rgba(225, 1, 126, 1) 0%,
-      rgba(51, 187, 233, 1) 100%
-  );
-  z-index: 1;
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    bottom: 40px;
+    left: 40px;
+    background: linear-gradient(180deg, rgba(225, 1, 126, 1) 0%, rgba(51, 187, 233, 1) 100%);
+    z-index: 1;
 }
-

@@ -1,7 +1,10 @@
 import type { Participant, Type } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { allowedImageContentTypes, allowedImageMaxFileSize } from 'components/applications/applicationForm/ImageUpload';
-import { allowedTechnicalRiderMaxFileSize, allowedTechnicRiderContentType } from 'components/applications/applicationForm/TechnicalRiderFields';
+import {
+    allowedTechnicalRiderMaxFileSize,
+    allowedTechnicRiderContentType,
+} from 'components/applications/applicationForm/TechnicalRiderFields';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import prismaClient from 'lib/common/prismaClient';
 import sendApplicationConfirmationMail from 'lib/mail/sendApplicationConfirmationMail';
@@ -41,9 +44,8 @@ export const config = {
 
 export default async (
     request: NextApiRequest,
-    response: NextApiResponse<SuccessfulAddParticipantResponse | ErroneousAddParticipantResponse>
+    response: NextApiResponse<SuccessfulAddParticipantResponse | ErroneousAddParticipantResponse>,
 ): Promise<void> => {
-
     const {
         type,
         motivation,
@@ -60,16 +62,12 @@ export default async (
         contactMail,
     } = request.body as AddParticipantRequest;
 
-    const imageFileName = await uploadFileToIonos(
-        encodedImage,
-        allowedImageContentTypes,
-        allowedImageMaxFileSize
-    );
+    const imageFileName = await uploadFileToIonos(encodedImage, allowedImageContentTypes, allowedImageMaxFileSize);
 
     const technicalRiderFileName = await uploadFileToIonos(
         encodedTechnicalRiderPdf,
         [allowedTechnicRiderContentType],
-        allowedTechnicalRiderMaxFileSize
+        allowedTechnicalRiderMaxFileSize,
     );
 
     const newParticipant = await prismaClient.participant.create({
@@ -100,10 +98,13 @@ export default async (
     }
 
     if (isNotEmptyString(newParticipant.contactMail)) {
-        sendApplicationConfirmationMail({
-            ...newParticipant,
-            contactMail: newParticipant.contactMail,
-        }, links);
+        sendApplicationConfirmationMail(
+            {
+                ...newParticipant,
+                contactMail: newParticipant.contactMail,
+            },
+            links,
+        );
     }
 
     response.status(200).json({ newParticipant });

@@ -12,7 +12,6 @@ interface Props {
 }
 
 const ApplicationConfirmationMail = ({ application, links, title }: Props): ReactElement => {
-
     const {
         type,
         description,
@@ -31,106 +30,130 @@ const ApplicationConfirmationMail = ({ application, links, title }: Props): Reac
     return (
         <MailWireframe title={title}>
             <MailParagraph>
-                Vielen Dank für eure Bewerbung und euer Interesse, Teil des diesjährigen B-Side
-                Festivals zu sein.
+                Vielen Dank für eure Bewerbung und euer Interesse, Teil des diesjährigen B-Side Festivals zu sein.
             </MailParagraph>
 
             <MailParagraph>
-                Hier eine kurze Zusammenfassung eurer Bewerbung:<br />
-
+                Hier eine kurze Zusammenfassung eurer Bewerbung:
                 <br />
-                <strong>Typ:</strong><br />
-                {typeLabels[type]}<br />
-
                 <br />
-                <strong>Name:</strong><br />
-                {name}<br />
-
+                <strong>Typ:</strong>
+                <br />
+                {typeLabels[type]}
+                <br />
+                <br />
+                <strong>Name:</strong>
+                <br />
+                {name}
+                <br />
                 {isNotEmptyString(description) && (
                     <>
                         <br />
-                        <strong>Beschreibung:</strong><br />
-                        {description}<br />
+                        <strong>Beschreibung:</strong>
+                        <br />
+                        {description}
+                        <br />
                     </>
                 )}
-
                 {isNotEmptyString(motivation) && (
                     <>
                         <br />
-                        <strong>Motivation:</strong><br />
-                        {motivation}<br />
+                        <strong>Motivation:</strong>
+                        <br />
+                        {motivation}
+                        <br />
                     </>
                 )}
-
                 {isNotEmptyString(additionalInfo) && (
                     <>
                         <br />
-                        <strong>Zusätzliche Info:</strong><br />
-                        {additionalInfo}<br />
+                        <strong>Zusätzliche Info:</strong>
+                        <br />
+                        {additionalInfo}
+                        <br />
                     </>
                 )}
-
                 {(isNotEmptyString(technicalRider) || isNotEmptyString(technicalRiderFileName)) && (
                     <>
                         <br />
-                        <strong>Technical Rider:</strong><br />
-                        {isNotEmptyString(technicalRider) && <>{technicalRider}<br /></>}
-                        {isNotEmptyString(technicalRiderFileName) && <>(PDF bereitgestellt)<br /></>}
+                        <strong>Technical Rider:</strong>
+                        <br />
+                        {isNotEmptyString(technicalRider) && (
+                            <>
+                                {technicalRider}
+                                <br />
+                            </>
+                        )}
+                        {isNotEmptyString(technicalRiderFileName) && (
+                            <>
+                                (PDF bereitgestellt)
+                                <br />
+                            </>
+                        )}
                     </>
                 )}
-
                 {links.length > 0 && (
                     <>
                         <br />
-                        <strong>Links:</strong><br />
-                        {links.map(link => <>{link}<br /></>)}
+                        <strong>Links:</strong>
+                        <br />
+                        {links.map((link) => (
+                            <>
+                                {link}
+                                <br />
+                            </>
+                        ))}
                     </>
                 )}
-
                 {isNotEmptyString(contactName) && (
                     <>
                         <br />
-                        <strong>Ansprechperson:</strong><br />
-                        {contactName}<br />
+                        <strong>Ansprechperson:</strong>
+                        <br />
+                        {contactName}
+                        <br />
                     </>
                 )}
-
                 {isNotEmptyString(contactMail) && (
                     <>
                         <br />
-                        <strong>E-Mail-Adresse:</strong><br />
-                        {contactMail}<br />
+                        <strong>E-Mail-Adresse:</strong>
+                        <br />
+                        {contactMail}
+                        <br />
                     </>
                 )}
-
                 {isNotEmptyString(contactPhone) && (
                     <>
                         <br />
-                        <strong>Telefonnummer:</strong><br />
-                        {contactPhone}<br />
+                        <strong>Telefonnummer:</strong>
+                        <br />
+                        {contactPhone}
+                        <br />
                     </>
                 )}
-
                 {isNotEmptyString(address) && (
                     <>
                         <br />
-                        <strong>Adresse:</strong><br />
-                        {address}<br />
+                        <strong>Adresse:</strong>
+                        <br />
+                        {address}
+                        <br />
                     </>
                 )}
-
                 {isNotEmptyString(residence) && (
                     <>
                         <br />
-                        <strong>Wohnort:</strong><br />
-                        {residence}<br />
+                        <strong>Wohnort:</strong>
+                        <br />
+                        {residence}
+                        <br />
                     </>
                 )}
             </MailParagraph>
 
             <MailParagraph>
-                Zusammen mit den vielen anderen Bewerbungen werden wir diese bald sichten
-                und uns im Anschluss bei euch melden!
+                Zusammen mit den vielen anderen Bewerbungen werden wir diese bald sichten und uns im Anschluss bei euch melden!
             </MailParagraph>
         </MailWireframe>
     );

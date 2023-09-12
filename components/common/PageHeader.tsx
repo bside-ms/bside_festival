@@ -21,18 +21,10 @@ const themeClasses: Record<HeaderThemes, string | undefined> = {
     yellowOnPink: styles.yellowOnPink,
 };
 
-const Symbols = ({ symbols }: { symbols: NonNullable<Props['symbols']>}): ReactElement | null => {
-
+const Symbols = ({ symbols }: { symbols: NonNullable<Props['symbols']> }): ReactElement | null => {
     switch (symbols) {
         case 'plusSigns':
-            return (
-                <div className={styles.plusSigns}>
-                    ++++
-                    ++++
-                    ++++
-                    ++++
-                </div>
-            );
+            return <div className={styles.plusSigns}>++++ ++++ ++++ ++++</div>;
 
         case 'hearts': {
             const heart = <BHeartSvg size={22} color="" />;
@@ -41,7 +33,12 @@ const Symbols = ({ symbols }: { symbols: NonNullable<Props['symbols']>}): ReactE
                 <div className={`w-2/3 md:w-[300px] ${styles.hearts ?? ''}`}>
                     {range(4).map((index) => (
                         <div key={index} className={styles.heartsRow}>
-                            {heart}{heart}{heart}{heart}{heart}{heart}
+                            {heart}
+                            {heart}
+                            {heart}
+                            {heart}
+                            {heart}
+                            {heart}
                         </div>
                     ))}
                 </div>
@@ -54,7 +51,6 @@ const Symbols = ({ symbols }: { symbols: NonNullable<Props['symbols']>}): ReactE
 };
 
 const PageHeader = ({ theme = 'yellow', symbols = 'plusSigns' }: Props): ReactElement => {
-
     return (
         <>
             <NavigationOverlay />

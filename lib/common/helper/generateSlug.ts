@@ -1,10 +1,9 @@
-const generateSlug = (text: string): string => (
+const generateSlug = (text: string): string =>
     text
         .toLowerCase()
         .trim()
         .replace(/\s+/g, '-')
         .replace(/[^\w-]+/g, '')
-        .replace(/--+/g, '-')
-);
+        .replace(/--+/g, '-');
 
 export default generateSlug;

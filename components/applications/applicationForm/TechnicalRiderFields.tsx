@@ -13,8 +13,7 @@ import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 
 const fileFieldName: keyof ApplicationFormValues = 'encodedTechnicalRiderPdf';
 
-export const getTechnicalRiderInfo = (applicationType: Type): null | { info: string, required?: boolean } => {
-
+export const getTechnicalRiderInfo = (applicationType: Type): null | { info: string; required?: boolean } => {
     switch (applicationType) {
         case Type.Exhibition:
             return {
@@ -67,7 +66,6 @@ interface Props {
 }
 
 const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
-
     const { register, setValue, formState, watch, setError, clearErrors } = useFormContext<ApplicationFormValues>();
 
     const technicalRiderErrorMessage = formState.errors.technicalRider?.message;
@@ -75,49 +73,43 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
 
     const [currentFileName, setCurrentFileName] = useState<string | null>(null);
 
-    const handleFileChange = useCallback(async ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = useCallback(
+        async ({ target }: ChangeEvent<HTMLInputElement>) => {
+            clearErrors(['technicalRider', fileFieldName]);
 
-        clearErrors(['technicalRider', fileFieldName]);
+            if (target.files === null || target.files[0] === undefined) {
+                return;
+            }
 
-        if (target.files === null || target.files[0] === undefined) {
-            return;
-        }
+            const file = target.files[0];
 
-        const file = target.files[0];
+            if (file.type !== allowedTechnicRiderContentType) {
+                setValue(fileFieldName, '');
+                setCurrentFileName(null);
+                setError(fileFieldName, { message: 'Bitte wähle eine PDF-Datei aus' });
+                return;
+            }
 
-        if (file.type !== allowedTechnicRiderContentType) {
-            setValue(fileFieldName, '');
-            setCurrentFileName(null);
-            setError(
-                fileFieldName,
-                { message: 'Bitte wähle eine PDF-Datei aus' }
-            );
-            return;
-        }
+            if (file.size > allowedTechnicalRiderMaxFileSize) {
+                setValue(fileFieldName, '');
+                setCurrentFileName(null);
+                setError(fileFieldName, {
+                    message: `Max. ${bytes.format(allowedTechnicalRiderMaxFileSize, { unitSeparator: '', unit: 'MB' })} zulässig`,
+                });
+                return;
+            }
 
-        if (file.size > allowedTechnicalRiderMaxFileSize) {
-            setValue(fileFieldName, '');
-            setCurrentFileName(null);
-            setError(
-                fileFieldName,
-                { message: `Max. ${bytes.format(allowedTechnicalRiderMaxFileSize, { unitSeparator: '', unit: 'MB' })} zulässig` }
-            );
-            return;
-        }
+            const fileDataUrl = await blobToDataUrl(file);
 
-        const fileDataUrl = await blobToDataUrl(file);
-
-        if (typeof fileDataUrl === 'string') {
-            setValue(fileFieldName, fileDataUrl);
-            setCurrentFileName(file.name);
-        }
-
-    }, [clearErrors, setError, setValue]);
-
-    const handleFileRemove = useCallback(
-        () => setValue(fileFieldName, ''),
-        [setValue]
+            if (typeof fileDataUrl === 'string') {
+                setValue(fileFieldName, fileDataUrl);
+                setCurrentFileName(file.name);
+            }
+        },
+        [clearErrors, setError, setValue],
     );
+
+    const handleFileRemove = useCallback(() => setValue(fileFieldName, ''), [setValue]);
 
     const currentFileDataUrl = watch(fileFieldName);
 
@@ -156,42 +148,33 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
             <div className="text-black">
                 {isNotEmptyString(currentFileDataUrl) && isNotEmptyString(currentFileName) ? (
                     <div>
-                        <span className="font-mono px-2">
-                            {currentFileName}
-                        </span>
+                        <span className="font-mono px-2">{currentFileName}</span>
                         <span
                             className="py-1 px-2 bg-gray-800 hover:bg-gray-700 text-gray-50 text-sm rounded-md cursor-pointer z-10"
                             onClick={handleFileRemove}
                         >
-                            Entfernen&nbsp;&nbsp;&nbsp;<FontAwesomeIcon className="w-4 inline-block" icon={faTrashAlt} />
+                            Entfernen&nbsp;&nbsp;&nbsp;
+                            <FontAwesomeIcon className="w-4 inline-block" icon={faTrashAlt} />
                         </span>
                     </div>
                 ) : (
                     <label htmlFor={fileInputId.current} className="cursor-pointer">
-                        <div className="p-5 border border-dashed border-black flex justify-center items-center rounded">
-                            PDF hinzufügen
-                        </div>
+                        <div className="p-5 border border-dashed border-black flex justify-center items-center rounded">PDF hinzufügen</div>
                     </label>
                 )}
             </div>
 
             <div>
-                Solltet ihr selbst noch keinen Tech-Rider haben, nutzt
-                bitte <a href={templateLink} className="underline cursor-pointer">unsere Vorlage</a>, um
-                unserer Technik-Crew viel Arbeit zu ersparen.
+                Solltet ihr selbst noch keinen Tech-Rider haben, nutzt bitte{' '}
+                <a href={templateLink} className="underline cursor-pointer">
+                    unsere Vorlage
+                </a>
+                , um unserer Technik-Crew viel Arbeit zu ersparen.
             </div>
 
-            {typeof technicalRiderPdfErrorMessage === 'string' && (
-                <div className="px-1 text-rose-900">
-                    {technicalRiderErrorMessage}
-                </div>
-            )}
+            {typeof technicalRiderPdfErrorMessage === 'string' && <div className="px-1 text-rose-900">{technicalRiderErrorMessage}</div>}
 
-            {typeof technicalRiderPdfErrorMessage === 'string' && (
-                <div className="px-1 text-rose-900">
-                    {technicalRiderErrorMessage}
-                </div>
-            )}
+            {typeof technicalRiderPdfErrorMessage === 'string' && <div className="px-1 text-rose-900">{technicalRiderErrorMessage}</div>}
         </div>
     );
 };

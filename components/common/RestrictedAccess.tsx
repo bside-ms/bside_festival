@@ -13,7 +13,6 @@ interface Props {
 }
 
 const RestrictedAccess = ({ children }: Props): ReactElement | null => {
-
     const { data: session, status } = useSession();
     const isInFestivalGroup = isGroupMember('/kreise/festival/mitglieder', session);
 
@@ -41,7 +40,8 @@ const RestrictedAccess = ({ children }: Props): ReactElement | null => {
                         <ContentWrapper>
                             <div className="flex flex-col gap-5">
                                 <FontAwesomeIcon icon={faLock} className="text-5xl" />
-                                Hierfür musst du Mitglied<br />
+                                Hierfür musst du Mitglied
+                                <br />
                                 der Festival-Gruppe sein
                             </div>
                         </ContentWrapper>

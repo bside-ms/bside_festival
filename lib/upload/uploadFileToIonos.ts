@@ -5,7 +5,6 @@ import createPutObjectCommand from 'lib/upload/createPutObjectCommand';
 import createS3Client from 'lib/upload/createS3Client';
 
 const generateFileName = (base64Data: string, contentType: string): string => {
-
     const fileExtension = extension(contentType);
 
     const fileName = hashData(base64Data).slice(0, 35);
@@ -17,8 +16,11 @@ const generateFileName = (base64Data: string, contentType: string): string => {
     return `${fileName}.${fileExtension}`;
 };
 
-const uploadFileToIonos = async (encodedFile: string, allowedContentTypes: Array<string>, allowedMaxFileSize: number): Promise<string | null> => {
-
+const uploadFileToIonos = async (
+    encodedFile: string,
+    allowedContentTypes: Array<string>,
+    allowedMaxFileSize: number,
+): Promise<string | null> => {
     if (isEmptyString(encodedFile)) {
         return null;
     }

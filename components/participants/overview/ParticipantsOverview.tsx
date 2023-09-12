@@ -11,9 +11,8 @@ import ParticipantsOverviewTypesFilter from 'components/participants/overview/Pa
 import typeLabels from 'lib/participants/typeLabels';
 
 const ParticipantsOverview = (): ReactElement => {
-
     const [showMap, setShowMap] = useState(false);
-    const toggleShowMap = useCallback(() => setShowMap(prevState => !prevState), []);
+    const toggleShowMap = useCallback(() => setShowMap((prevState) => !prevState), []);
 
     const { filteredParticipants } = useParticipantsOverviewContext();
 
@@ -31,7 +30,10 @@ const ParticipantsOverview = (): ReactElement => {
             <ParticipantsOverviewAdditionalFilters />
 
             <div className="mt-5 mb-2">
-                <a onClick={toggleShowMap} className="inline-flex gap-2 items-center border border-gray-900 px-3 py-1 rounded-full cursor-pointer">
+                <a
+                    onClick={toggleShowMap}
+                    className="inline-flex gap-2 items-center border border-gray-900 px-3 py-1 rounded-full cursor-pointer"
+                >
                     <FontAwesomeIcon className="w-5" icon={faMapLocationDot} /> Lageplan
                 </a>
 
@@ -52,13 +54,9 @@ const ParticipantsOverview = (): ReactElement => {
             </div>
 
             <div className="grid grid-cols-1 gap-5">
-                {filteredParticipants
-                    .map(participant => (
-                        <ParticipantOverview
-                            key={participant.id}
-                            participant={participant}
-                        />
-                    ))}
+                {filteredParticipants.map((participant) => (
+                    <ParticipantOverview key={participant.id} participant={participant} />
+                ))}
             </div>
         </div>
     );

@@ -4,7 +4,6 @@ import type { ReactElement } from 'react';
 import LoginLink from 'components/common/LoginLink';
 
 const Login = (): ReactElement | null => {
-
     const { data: session, status } = useSession();
 
     const handleLogOut = useCallback(() => signOut(), []);
@@ -21,8 +20,11 @@ const Login = (): ReactElement | null => {
 
     return (
         <>
-            Angemeldet {userIdentifier !== null ? `als ${userIdentifier}` : ''}<br />
-            <a className="underline cursor-pointer" onClick={handleLogOut}>Abmelden</a>
+            Angemeldet {userIdentifier !== null ? `als ${userIdentifier}` : ''}
+            <br />
+            <a className="underline cursor-pointer" onClick={handleLogOut}>
+                Abmelden
+            </a>
         </>
     );
 };

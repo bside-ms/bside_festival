@@ -7,7 +7,6 @@ interface Props {
 }
 
 const ApplicationDetailsMotivation = ({ application: { motivation } }: Props): ReactElement | null => {
-
     if (isEmptyString(motivation)) {
         return null;
     }

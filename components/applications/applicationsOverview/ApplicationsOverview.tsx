@@ -6,18 +6,16 @@ import ApplicationsOverviewSearchTextFilter from 'components/applications/applic
 import ApplicationsOverviewTypesFilter from 'components/applications/applicationsOverview/ApplicationsOverviewTypesFilter';
 
 const ApplicationsOverview = (): ReactElement => {
-
     const { allApplications, filteredApplications } = useApplicationsOverviewContext();
 
-    const applicationAmount = filteredApplications.length === allApplications.length
-        ? allApplications.length.toString()
-        : `${filteredApplications.length} von ${allApplications.length}`;
+    const applicationAmount =
+        filteredApplications.length === allApplications.length
+            ? allApplications.length.toString()
+            : `${filteredApplications.length} von ${allApplications.length}`;
 
     return (
         <div>
-            <div className="text-3xl mb-5 font-display">
-                Bewerbungen ({applicationAmount})
-            </div>
+            <div className="text-3xl mb-5 font-display">Bewerbungen ({applicationAmount})</div>
 
             <ApplicationsOverviewSearchTextFilter />
 
@@ -26,13 +24,9 @@ const ApplicationsOverview = (): ReactElement => {
             <ApplicationOverviewAdditionalFilters />
 
             <div className="grid grid-cols-1 gap-5">
-                {filteredApplications
-                    .map(application => (
-                        <Application
-                            key={application.id}
-                            application={application}
-                        />
-                    ))}
+                {filteredApplications.map((application) => (
+                    <Application key={application.id} application={application} />
+                ))}
             </div>
         </div>
     );

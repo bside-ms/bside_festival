@@ -18,15 +18,22 @@ interface Props<T extends FieldValues> {
 }
 
 // eslint-disable-next-line @typescript-eslint/comma-dangle
-const TextArea = <T extends FieldValues,>({ label, name, defaultValue, info, required = false, maxLength, rows = 5 }: Props<T>): ReactElement => {
-
-    const { formState: { errors, isSubmitting }, register } = useFormContext();
+const TextArea = <T extends FieldValues>({
+    label,
+    name,
+    defaultValue,
+    info,
+    required = false,
+    maxLength,
+    rows = 5,
+}: Props<T>): ReactElement => {
+    const {
+        formState: { errors, isSubmitting },
+        register,
+    } = useFormContext();
 
     const isMounted = useIsMounted();
-    const id = useMemo(
-        () => isMounted ? uniqueId(name) : undefined,
-        [isMounted, name]
-    );
+    const id = useMemo(() => (isMounted ? uniqueId(name) : undefined), [isMounted, name]);
 
     const errorMessage = errors[name]?.message;
 
@@ -34,25 +41,26 @@ const TextArea = <T extends FieldValues,>({ label, name, defaultValue, info, req
         <div className="flex flex-col">
             <textarea
                 id={id}
-                className={`p-2 rounded outline-0 ${typeof errorMessage === 'string' ? 'bg-rose-600 text-gray-100 placeholder:text-gray-100' : ''}`}
+                className={`p-2 rounded outline-0 ${
+                    typeof errorMessage === 'string' ? 'bg-rose-600 text-gray-100 placeholder:text-gray-100' : ''
+                }`}
                 rows={rows}
                 placeholder={required ? `${label} *` : label}
                 required={required}
                 disabled={isSubmitting}
                 defaultValue={defaultValue}
-                {...register(
-                    name,
-                    {
-                        required: {
-                            value: required,
-                            message: 'Dies ist ein Pflichtfeld',
-                        },
-                        maxLength: isEmptyNumber(maxLength) ? undefined : {
-                            value: maxLength,
-                            message: `Max. ${maxLength} Zeichen`,
-                        },
-                    }
-                )}
+                {...register(name, {
+                    required: {
+                        value: required,
+                        message: 'Dies ist ein Pflichtfeld',
+                    },
+                    maxLength: isEmptyNumber(maxLength)
+                        ? undefined
+                        : {
+                              value: maxLength,
+                              message: `Max. ${maxLength} Zeichen`,
+                          },
+                })}
             />
 
             {isNotEmptyString(info) && (
@@ -61,11 +69,7 @@ const TextArea = <T extends FieldValues,>({ label, name, defaultValue, info, req
                 </label>
             )}
 
-            {typeof errorMessage === 'string' && (
-                <div className="px-1 text-rose-900">
-                    {errorMessage}
-                </div>
-            )}
+            {typeof errorMessage === 'string' && <div className="px-1 text-rose-900">{errorMessage}</div>}
         </div>
     );
 };

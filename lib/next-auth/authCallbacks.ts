@@ -6,7 +6,6 @@ import isExtendedKeycloakProfile from 'lib/next-auth/isExtendedKeycloakProfile';
 
 const authCallbacks: Partial<CallbacksOptions> = {
     jwt: ({ token, profile }) => {
-
         if (isExtendedKeycloakProfile(profile)) {
             const extendedToken = token as ExtendedJWT;
 
@@ -24,7 +23,6 @@ const authCallbacks: Partial<CallbacksOptions> = {
         return token;
     },
     session: ({ session, token }) => {
-
         if (isExtendedJwt(token)) {
             const extendedSession = session as ExtendedSession;
 

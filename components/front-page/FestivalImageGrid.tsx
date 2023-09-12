@@ -2,7 +2,6 @@ import { Fragment } from 'react';
 import type { ReactElement } from 'react';
 
 const FestivalImageGrid = (): ReactElement => {
-
     const images = [
         ['/assets/images/festival/favs/bside_festival19_109.jpg'],
         ['/assets/images/festival/favs/bside_festival19_142.jpg', '/assets/images/festival/favs/bside_festival19_356.jpg'],
@@ -21,8 +20,7 @@ const FestivalImageGrid = (): ReactElement => {
 
     return (
         <div className="grid grid-cols-2 gap-4">
-            {images.map(imageRow => {
-
+            {images.map((imageRow) => {
                 if (imageRow.length === 1) {
                     return (
                         <div

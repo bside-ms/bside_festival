@@ -6,7 +6,6 @@ interface Props {
 }
 
 const BHeartLinesSvg = ({ size, color }: Props): ReactElement => {
-
     return (
         <svg
             height={size}

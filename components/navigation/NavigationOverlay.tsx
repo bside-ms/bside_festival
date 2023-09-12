@@ -10,7 +10,7 @@ import type { ReactElement } from 'react';
 import ContentWrapper from 'components/common/ContentWrapper';
 import { useNavigationOverlayContext } from 'components/navigation/NavigationOverlayContext';
 
-const links = new Array<{ label: string, link: string }>();
+const links = new Array<{ label: string; link: string }>();
 
 // links.push(
 //     { label: 'Start', link: '/' },
@@ -18,7 +18,7 @@ const links = new Array<{ label: string, link: string }>();
 //     { label: 'Orte', link: '/orte' },
 // );
 
-const internalLinks = new Array<{ label: string, link: string }>();
+const internalLinks = new Array<{ label: string; link: string }>();
 
 // internalLinks.push(
 //     { label: 'Bewerbungsübersicht', link: '/bewerbung/uebersicht' },
@@ -29,7 +29,6 @@ const internalLinks = new Array<{ label: string, link: string }>();
 // );
 
 const NavigationOverlay = (): ReactElement | null => {
-
     const { events } = useRouter();
 
     const { status } = useSession();
@@ -67,7 +66,7 @@ const NavigationOverlay = (): ReactElement | null => {
                 </div>
 
                 <div className="pt-36 flex flex-col space-y-4 text-4xl text-center">
-                    {links.map(link => (
+                    {links.map((link) => (
                         <div key={link.link}>
                             <Link href={link.link} className="font-display text-white">
                                 {link.label}
@@ -78,11 +77,9 @@ const NavigationOverlay = (): ReactElement | null => {
 
                 {status === 'authenticated' && internalLinks.length > 0 && (
                     <div className="mt-14 flex flex-col justify-center space-y-1 text-2xl text-center">
-                        <span className="text-white underline">
-                            Interne Links
-                        </span>
+                        <span className="text-white underline">Interne Links</span>
 
-                        {internalLinks.map(link => (
+                        {internalLinks.map((link) => (
                             <div key={link.link}>
                                 <Link href={link.link} className="font-display text-white">
                                     {link.label}

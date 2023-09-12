@@ -8,7 +8,6 @@ interface Props {
 }
 
 const ParticipantVenues = ({ participantId, isInPreview = false }: Props): ReactElement | null => {
-
     const participantVenues = useParticipantVenues(participantId);
 
     if (participantVenues.length === 0) {
@@ -18,11 +17,7 @@ const ParticipantVenues = ({ participantId, isInPreview = false }: Props): React
     return (
         <div className="mt-3 space-y-1">
             {participantVenues.map(({ location }) => (
-                <ParticipantVenue
-                    key={location.id}
-                    location={location}
-                    showAccessibleInfo={!isInPreview}
-                />
+                <ParticipantVenue key={location.id} location={location} showAccessibleInfo={!isInPreview} />
             ))}
         </div>
     );

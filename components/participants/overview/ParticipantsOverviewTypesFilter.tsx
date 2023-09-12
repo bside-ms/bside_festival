@@ -8,7 +8,6 @@ import typeColors from 'lib/participants/typeColors';
 import typeLabels from 'lib/participants/typeLabels';
 
 const TypeToggle = ({ type }: { type: Type }): ReactElement => {
-
     const { filteredTypes, toggleFilteredType } = useParticipantsOverviewContext();
 
     const handleClick = useCallback(() => toggleFilteredType(type), [toggleFilteredType, type]);
@@ -30,18 +29,15 @@ const TypeToggle = ({ type }: { type: Type }): ReactElement => {
 };
 
 const ParticipantsOverviewTypesFilter = (): ReactElement => {
-
     const { actuallyAvailableTypes, filteredTypes } = useParticipantsOverviewContext();
 
     const [isMounted, setIsMounted] = useState(false);
 
     useEffectOnMount(() => {
-
         setIsMounted(true);
     });
 
     useEffect(() => {
-
         if (!isMounted) {
             return;
         }
@@ -61,7 +57,7 @@ const ParticipantsOverviewTypesFilter = (): ReactElement => {
 
     return (
         <div className="flex flex-wrap gap-2 mb-3">
-            {actuallyAvailableTypes.map(availableType => (
+            {actuallyAvailableTypes.map((availableType) => (
                 <TypeToggle key={availableType} type={availableType} />
             ))}
         </div>

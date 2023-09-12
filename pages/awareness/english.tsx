@@ -4,7 +4,6 @@ import AwarenessEnglishVersion from 'components/awareness/AwarenessEnglishVersio
 import Footer from 'components/common/Footer';
 
 export default (): ReactElement => {
-
     return (
         <div>
             <div className="min-h-screen w-full relative ">
@@ -14,12 +13,7 @@ export default (): ReactElement => {
                     </div>
                 </div>
 
-                <Image
-                    src="/assets/background.webp"
-                    alt="Hintergrund"
-                    className="object-cover object-top absolute z-0"
-                    fill={true}
-                />
+                <Image src="/assets/background.webp" alt="Hintergrund" className="object-cover object-top absolute z-0" fill={true} />
             </div>
 
             <Footer />

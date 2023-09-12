@@ -2,7 +2,6 @@ import { type ReactElement, useCallback, useState } from 'react';
 import Image from 'next/image';
 
 export default (): ReactElement | null => {
-
     const [show, setShow] = useState(true);
 
     const handleClick = useCallback(() => setShow(false), []);
@@ -14,13 +13,7 @@ export default (): ReactElement | null => {
     return (
         <div className="flex flex-col lg:flex-row bg-gradient-to-r from-[#2c9fc9] to-[#e1017e] p-4 text-white lg:p-8 lg:text-x lg:space-x-4">
             <div className="block w-20">
-                <Image
-                    src="/assets/images/attention.svg"
-                    width="128"
-                    height="128"
-                    layout="responsive"
-                    alt="Achtung"
-                />
+                <Image src="/assets/images/attention.svg" width="128" height="128" layout="responsive" alt="Achtung" />
             </div>
             <div className="flex flex-col space-y-3 lg:space-y-0 lg:space-x-4 lg:flex-row w-full">
                 <div className="w-full">

@@ -12,7 +12,6 @@ interface Props {
 }
 
 const ParticipantSlot = ({ slot, location: { name, awarenessInfo }, showAccessibleInfo }: Props): ReactElement | null => {
-
     const dateAndLocation = `${formatDate(new Date(slot.begin), 'EEE dd.MM. / HH:mm')} / ${name}`;
 
     if (!showAccessibleInfo) {
@@ -34,24 +33,14 @@ const ParticipantSlot = ({ slot, location: { name, awarenessInfo }, showAccessib
                                 className="object-contain"
                             />
                         </div>
-                        <div>
-                            Barrierefreier Zugang
-                        </div>
+                        <div>Barrierefreier Zugang</div>
                     </>
                 ) : (
                     <>
                         <div className="flex items-center">
-                            <Image
-                                src="/assets/stairs.png"
-                                alt={awarenessInfo}
-                                width={15}
-                                height={15}
-                                className="object-contain"
-                            />
+                            <Image src="/assets/stairs.png" alt={awarenessInfo} width={15} height={15} className="object-contain" />
                         </div>
-                        <div>
-                            {awarenessInfo}
-                        </div>
+                        <div>{awarenessInfo}</div>
                     </>
                 )}
             </div>

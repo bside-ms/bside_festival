@@ -3,7 +3,6 @@ import { signIn } from 'next-auth/react';
 import type { ReactElement } from 'react';
 
 const LoginLink = (): ReactElement => {
-
     const handleLogIn = useCallback(() => signIn('keycloak'), []);
 
     return (

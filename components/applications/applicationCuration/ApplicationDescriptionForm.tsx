@@ -17,51 +17,51 @@ interface Props {
 }
 
 const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
-
     const { updateApplication } = useApplicationsOverviewContext();
 
     const [showForm, setShowForm] = useState(false);
-    const toggleShowForm = useCallback(() => setShowForm(prevState => !prevState), []);
+    const toggleShowForm = useCallback(() => setShowForm((prevState) => !prevState), []);
 
     const methods = useForm<DescriptionFormValues>();
-    const { handleSubmit, setError, formState: { errors, isSubmitting }, clearErrors } = methods;
+    const {
+        handleSubmit,
+        setError,
+        formState: { errors, isSubmitting },
+        clearErrors,
+    } = methods;
 
-    const handleFormSubmit = useCallback(async ({ description }: DescriptionFormValues) => {
+    const handleFormSubmit = useCallback(
+        async ({ description }: DescriptionFormValues) => {
+            clearErrors('root');
 
-        clearErrors('root');
+            const request: UpdateDescriptionRequest = {
+                id: application.id,
+                description,
+            };
 
-        const request: UpdateDescriptionRequest = {
-            id: application.id,
-            description,
-        };
+            const response = await fetch('/api/applications/update/description', {
+                method: 'POST',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify(request),
+            });
 
-        const response = await fetch('/api/applications/update/description', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(request),
-        });
+            if (!response.ok) {
+                setError('root', { message: 'Fehler beim Submit!' });
+            } else {
+                const { updatedParticipant } = (await response.json()) as SuccessfulUpdateDescriptionResponse;
 
-        if (!response.ok) {
-            setError('root', { message: 'Fehler beim Submit!' });
-        } else {
+                updateApplication(updatedParticipant);
 
-            const {
-                updatedParticipant,
-            } = await response.json() as SuccessfulUpdateDescriptionResponse;
-
-            updateApplication(updatedParticipant);
-
-            toggleShowForm();
-        }
-
-    }, [application.id, clearErrors, setError, toggleShowForm, updateApplication]);
+                toggleShowForm();
+            }
+        },
+        [application.id, clearErrors, setError, toggleShowForm, updateApplication],
+    );
 
     if (!showForm) {
         return (
             <div className="mt-4">
-                <div>
-                    {application.updatedDescription ?? application.description}
-                </div>
+                <div>{application.updatedDescription ?? application.description}</div>
                 <a onClick={toggleShowForm} className="text-sky-700 cursor-pointer">
                     Beschreibung bearbeiten…
                 </a>
@@ -72,11 +72,7 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
     return (
         <div className="mt-4">
             <FormProvider {...methods}>
-                <form
-                    onSubmit={handleSubmit(handleFormSubmit)}
-                    noValidate={true}
-                    className="flex gap-4 flex-col max-w-3xl"
-                >
+                <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex gap-4 flex-col max-w-3xl">
                     <TextArea<DescriptionFormValues>
                         name="description"
                         label="Beschreibung"
@@ -86,9 +82,7 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
 
                     <div className="text-sm text-gray-800">
                         <div className="font-bold text-gray-900">Ursprüngliche Beschreibung</div>
-                        <div>
-                            {application.description}
-                        </div>
+                        <div>{application.description}</div>
                     </div>
 
                     <div>
@@ -108,15 +102,14 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
 
                     {isSubmitting && (
                         <div className="text-black">
-                            <span className="mr-1">Wird gespeichert</span> <span className="animate-spin inline-block w-3"><FontAwesomeIcon icon={faSpinner} /></span>
+                            <span className="mr-1">Wird gespeichert</span>{' '}
+                            <span className="animate-spin inline-block w-3">
+                                <FontAwesomeIcon icon={faSpinner} />
+                            </span>
                         </div>
                     )}
 
-                    {errors.root && (
-                        <div className="text-red-600">
-                            {errors.root.message}
-                        </div>
-                    )}
+                    {errors.root && <div className="text-red-600">{errors.root.message}</div>}
                 </form>
             </FormProvider>
         </div>

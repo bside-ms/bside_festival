@@ -9,13 +9,7 @@ interface Props {
     participant: SerializableParticipant;
 }
 
-const Contacts = ({ participant: {
-    contactName,
-    contactPhone,
-    contactMail,
-    residence,
-} }: Props): ReactElement | null => {
-
+const Contacts = ({ participant: { contactName, contactPhone, contactMail, residence } }: Props): ReactElement | null => {
     if (isEmptyString(residence) && isEmptyString(contactName) && isEmptyString(contactMail) && isEmptyString(contactPhone)) {
         return null;
     }
@@ -24,25 +18,33 @@ const Contacts = ({ participant: {
         <div className="mt-4">
             {isNotEmptyString(residence) && (
                 <div className="flex items-center">
-                    <div className="shrink-0 text-center w-4 mr-2 text-sm"><FontAwesomeIcon icon={faLocationDot} /></div>
+                    <div className="shrink-0 text-center w-4 mr-2 text-sm">
+                        <FontAwesomeIcon icon={faLocationDot} />
+                    </div>
                     <div>{residence}</div>
                 </div>
             )}
             {isNotEmptyString(contactName) && (
                 <div className="flex items-center">
-                    <div className="shrink-0 text-center w-4 mr-2 text-sm"><FontAwesomeIcon icon={faUser} /></div>
+                    <div className="shrink-0 text-center w-4 mr-2 text-sm">
+                        <FontAwesomeIcon icon={faUser} />
+                    </div>
                     <div>{contactName}</div>
                 </div>
             )}
             {isNotEmptyString(contactMail) && (
                 <div className="flex items-center">
-                    <div className="shrink-0 text-center w-4 mr-2 text-sm"><FontAwesomeIcon icon={faEnvelope} /></div>
+                    <div className="shrink-0 text-center w-4 mr-2 text-sm">
+                        <FontAwesomeIcon icon={faEnvelope} />
+                    </div>
                     <div>{contactMail}</div>
                 </div>
             )}
             {isNotEmptyString(contactPhone) && (
                 <div className="flex items-center">
-                    <div className="shrink-0 text-center w-4 mr-2 text-sm"><FontAwesomeIcon icon={faPhone} /></div>
+                    <div className="shrink-0 text-center w-4 mr-2 text-sm">
+                        <FontAwesomeIcon icon={faPhone} />
+                    </div>
                     <div>{contactPhone}</div>
                 </div>
             )}

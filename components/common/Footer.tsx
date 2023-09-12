@@ -8,7 +8,6 @@ import InternalLinks from 'components/common/InternalLinks';
 import Login from 'components/common/Login';
 
 const Footer = (): ReactElement => {
-
     const imprintLink = (
         <Link href="https://b-side.ms/kv/impressum/" className="underline">
             Impressum
@@ -21,19 +20,13 @@ const Footer = (): ReactElement => {
     );
 
     const instagramLink = (
-        <Link
-            href="https://www.instagram.com/bsidemuenster/"
-            target="_blank"
-        >
+        <Link href="https://www.instagram.com/bsidemuenster/" target="_blank">
             <FontAwesomeIcon className="w-[25px]" icon={faInstagram} />
         </Link>
     );
 
     const facebookLink = (
-        <Link
-            href="https://www.facebook.com/bsidemuenster"
-            target="_blank"
-        >
+        <Link href="https://www.facebook.com/bsidemuenster" target="_blank">
             <FontAwesomeIcon className="w-[25px]" icon={faFacebookSquare} />
         </Link>
     );

@@ -12,20 +12,26 @@ interface Props<T extends FieldValues> {
     defaultValue?: string;
     label: string;
     info?: string;
-    options: Array<{ value: string, label: string }>;
+    options: Array<{ value: string; label: string }>;
     required?: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/comma-dangle
-const SelectInput = <T extends FieldValues,>({ label, defaultValue = '', name, info, options, required = false, }: Props<T>): ReactElement => {
-
-    const { formState: { errors }, register } = useFormContext();
+const SelectInput = <T extends FieldValues>({
+    label,
+    defaultValue = '',
+    name,
+    info,
+    options,
+    required = false,
+}: Props<T>): ReactElement => {
+    const {
+        formState: { errors },
+        register,
+    } = useFormContext();
 
     const isMounted = useIsMounted();
-    const id = useMemo(
-        () => isMounted ? uniqueId(name) : undefined,
-        [isMounted, name]
-    );
+    const id = useMemo(() => (isMounted ? uniqueId(name) : undefined), [isMounted, name]);
 
     const errorMessage = errors[name]?.message;
 
@@ -36,17 +42,16 @@ const SelectInput = <T extends FieldValues,>({ label, defaultValue = '', name, i
                 className="p-1 rounded bg-white py-2 outline-0"
                 required={required}
                 defaultValue={defaultValue}
-                {...register(
-                    name,
-                    {
-                        required: {
-                            value: required,
-                            message: 'Dies ist ein Pflichtfeld',
-                        },
-                    }
-                )}
+                {...register(name, {
+                    required: {
+                        value: required,
+                        message: 'Dies ist ein Pflichtfeld',
+                    },
+                })}
             >
-                <option disabled={true} value="">{required ? `${label} *` : label}</option>
+                <option disabled={true} value="">
+                    {required ? `${label} *` : label}
+                </option>
                 {options.map(({ label: optionLabel, value }) => (
                     <option key={value} value={value}>
                         {optionLabel}
@@ -59,11 +64,7 @@ const SelectInput = <T extends FieldValues,>({ label, defaultValue = '', name, i
                 </label>
             )}
 
-            {typeof errorMessage === 'string' && (
-                <div className="px-1 text-pink-300">
-                    {errorMessage}
-                </div>
-            )}
+            {typeof errorMessage === 'string' && <div className="px-1 text-pink-300">{errorMessage}</div>}
         </div>
     );
 };

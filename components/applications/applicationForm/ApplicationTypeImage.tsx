@@ -8,12 +8,13 @@ interface Props {
 }
 
 const ApplicationTypeImage = ({ type }: Props): ReactElement => {
-
     switch (type) {
         case Type.Reading:
             return <Image src="/assets/images/types/reading.jpeg" alt={typeLabels.Reading} fill={true} className="object-cover" />;
         case Type.FamilyProgram:
-            return <Image src="/assets/images/types/familyProgram.jpeg" alt={typeLabels.FamilyProgram} fill={true} className="object-cover" />;
+            return (
+                <Image src="/assets/images/types/familyProgram.jpeg" alt={typeLabels.FamilyProgram} fill={true} className="object-cover" />
+            );
         case Type.Exhibition:
             return <Image src="/assets/images/types/exhibition.jpeg" alt={typeLabels.Exhibition} fill={true} className="object-cover" />;
         case Type.Workshop:

@@ -44,79 +44,79 @@ interface Props {
 }
 
 const ApplicationForm = ({ chosenType }: Props): ReactElement => {
-
     const [wasSuccessfullySubmitted, setWasSuccessfullySubmitted] = useState(false);
 
     const methods = useForm<ApplicationFormValues>();
-    const { handleSubmit, setError, formState: { errors, isSubmitting }, clearErrors, reset } = methods;
+    const {
+        handleSubmit,
+        setError,
+        formState: { errors, isSubmitting },
+        clearErrors,
+        reset,
+    } = methods;
 
     const handleFormReset = useCallback(() => reset(), [reset]);
 
-    const handleFormSubmit = useCallback(async (values: ApplicationFormValues) => {
+    const handleFormSubmit = useCallback(
+        async (values: ApplicationFormValues) => {
+            clearErrors('root');
 
-        clearErrors('root');
+            const technicalRiderInfo = getTechnicalRiderInfo(chosenType);
 
-        const technicalRiderInfo = getTechnicalRiderInfo(chosenType);
+            if (
+                technicalRiderInfo !== null &&
+                technicalRiderInfo.required === true &&
+                isEmptyString(values.technicalRider) &&
+                isEmptyString(values.encodedTechnicalRiderPdf)
+            ) {
+                setError(
+                    'technicalRider',
+                    {
+                        type: 'manual',
+                        message: 'Bitte sende uns euren Technical Rider in Text- oder PDF-Form',
+                    },
+                    {
+                        shouldFocus: true,
+                    },
+                );
+                return;
+            }
 
-        if (
-            technicalRiderInfo !== null &&
-            technicalRiderInfo.required === true &&
-            isEmptyString(values.technicalRider) &&
-            isEmptyString(values.encodedTechnicalRiderPdf)
-        ) {
-            setError(
-                'technicalRider',
-                {
-                    type: 'manual',
-                    message: 'Bitte sende uns euren Technical Rider in Text- oder PDF-Form',
-                },
-                {
-                    shouldFocus: true,
-                }
-            );
-            return;
-        }
+            const request: AddParticipantRequest = {
+                type: chosenType,
+                name: values.name,
+                contactName: values.contactName,
+                contactPhone: values.contactPhone,
+                contactMail: values.contactMail,
+                description: values.description,
+                encodedImage: values.encodedImage,
+                motivation: values.motivation,
+                additionalInfo: values.additionalInfo,
+                technicalRider: values.technicalRider,
+                encodedTechnicalRiderPdf: values.encodedTechnicalRiderPdf,
+                residence: values.residence,
+                links: [values.url1, values.url2, values.url3, values.url4, values.url5].filter(isNotEmptyString),
+            };
 
-        const request: AddParticipantRequest = {
-            type: chosenType,
-            name: values.name,
-            contactName: values.contactName,
-            contactPhone: values.contactPhone,
-            contactMail: values.contactMail,
-            description: values.description,
-            encodedImage: values.encodedImage,
-            motivation: values.motivation,
-            additionalInfo: values.additionalInfo,
-            technicalRider: values.technicalRider,
-            encodedTechnicalRiderPdf: values.encodedTechnicalRiderPdf,
-            residence: values.residence,
-            links: [
-                values.url1,
-                values.url2,
-                values.url3,
-                values.url4,
-                values.url5,
-            ].filter(isNotEmptyString),
-        };
+            const response = await fetch('/api/applications/add', {
+                method: 'POST',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify(request),
+            });
 
-        const response = await fetch('/api/applications/add', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(request),
-        });
+            if (!response.ok) {
+                setError('root', { message: 'Fehler beim Submit!' });
+                return;
+            }
 
-        if (!response.ok) {
-            setError('root', { message: 'Fehler beim Submit!' });
-            return;
-        }
+            window.scrollTo({ top: 0 });
 
-        window.scrollTo({ top: 0 });
+            setWasSuccessfullySubmitted(true);
 
-        setWasSuccessfullySubmitted(true);
-
-        handleFormReset();
-
-    }, [chosenType, clearErrors, handleFormReset, setError]);
+            handleFormReset();
+        },
+        [chosenType, clearErrors, handleFormReset, setError],
+    );
 
     if (wasSuccessfullySubmitted) {
         return <ApplicationSuccess />;
@@ -125,11 +125,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
     return (
         <FormProvider {...methods}>
             <div className="w-full">
-                <form
-                    onSubmit={handleSubmit(handleFormSubmit)}
-                    noValidate={true}
-                    className="flex gap-6 flex-col"
-                >
+                <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex gap-6 flex-col">
                     <div className="text-black font-display">
                         <div className="text-2xl">B-Side Festival 2023</div>
                         <div className="text-4xl font-bold">Bewerbung</div>
@@ -146,10 +142,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                             </div>
 
                             {!isSubmitting && (
-                                <Link
-                                    href="/bewerbungen"
-                                    className="cursor-pointer text-sm"
-                                >
+                                <Link href="/bewerbungen" className="cursor-pointer text-sm">
                                     ändern
                                 </Link>
                             )}
@@ -178,31 +171,15 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
 
                     <Links />
 
-                    {chosenType !== Type.Neighbor && (
-                        <TextInput<ApplicationFormValues>
-                            name="residence"
-                            label="Wohnort"
-                        />
-                    )}
+                    {chosenType !== Type.Neighbor && <TextInput<ApplicationFormValues> name="residence" label="Wohnort" />}
 
                     <TechnicalRiderFields chosenType={chosenType} />
 
-                    <TextInput<ApplicationFormValues>
-                        name="contactName"
-                        label="Ansprechperson"
-                        required={true}
-                    />
+                    <TextInput<ApplicationFormValues> name="contactName" label="Ansprechperson" required={true} />
 
-                    <TextInput<ApplicationFormValues>
-                        name="contactMail"
-                        label="E-Mail-Adresse"
-                        required={true}
-                    />
+                    <TextInput<ApplicationFormValues> name="contactMail" label="E-Mail-Adresse" required={true} />
 
-                    <TextInput<ApplicationFormValues>
-                        name="contactPhone"
-                        label="Telefonnummer"
-                    />
+                    <TextInput<ApplicationFormValues> name="contactPhone" label="Telefonnummer" />
 
                     <TextArea<ApplicationFormValues>
                         name="motivation"
@@ -228,32 +205,29 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
 
                     {isSubmitting && (
                         <div className="text-black">
-                            Wird gesendet <span className="ml-1 animate-spin inline-block"><FontAwesomeIcon className="w-3" icon={faSpinner} /></span>
+                            Wird gesendet{' '}
+                            <span className="ml-1 animate-spin inline-block">
+                                <FontAwesomeIcon className="w-3" icon={faSpinner} />
+                            </span>
                         </div>
                     )}
 
                     <div className="mt-5 text-sm flex flex-col gap-2">
                         <div>
-                            Das B-Side Festival ist auch 2023 ein Festival für alle mit vielfältigem und buntem
-                            Programm. Dabei wollen wir insbesondere Räume und Bühnen für FLINTA* und andere
-                            marginalisierte Gesellschaftsgruppen schaffen.
+                            Das B-Side Festival ist auch 2023 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
+                            insbesondere Räume und Bühnen für FLINTA* und andere marginalisierte Gesellschaftsgruppen schaffen.
                         </div>
                         <div>
-                            Das B-Side Festival wird nicht kommerziell, ohne Eintrittsgelder und im Sinne der
-                            Gemeinnützigkeit für die Allgemeinheit frei zugänglich veranstaltet. Das Festival
-                            wird auch dieses Jahr wieder durch öffentliche Fördermittel, Spenden und den
-                            Eigenanteil des B-Side Kultur e.V. als Veranstalter finanziert. Im Rahmen
-                            unserer finanziellen Möglichkeiten erhalten alle künstlerischen, kulturellen
-                            und bildende Programmpunkte eine Aufwandsentschädigung.
+                            Das B-Side Festival wird nicht kommerziell, ohne Eintrittsgelder und im Sinne der Gemeinnützigkeit für die
+                            Allgemeinheit frei zugänglich veranstaltet. Das Festival wird auch dieses Jahr wieder durch öffentliche
+                            Fördermittel, Spenden und den Eigenanteil des B-Side Kultur e.V. als Veranstalter finanziert. Im Rahmen unserer
+                            finanziellen Möglichkeiten erhalten alle künstlerischen, kulturellen und bildende Programmpunkte eine
+                            Aufwandsentschädigung.
                         </div>
                     </div>
                 </form>
 
-                {errors.root && (
-                    <div className="mt-2 text-red-600">
-                        {errors.root.message}
-                    </div>
-                )}
+                {errors.root && <div className="mt-2 text-red-600">{errors.root.message}</div>}
             </div>
         </FormProvider>
     );

@@ -10,7 +10,6 @@ import VolunteerInfo from 'components/volunteers/volunteerForm/VolunteerInfo';
 import typeLabels from 'lib/participants/typeLabels';
 
 export default (): ReactElement => {
-
     return (
         <div>
             <div className="min-h-screen w-full relative font-display">
@@ -38,23 +37,20 @@ export default (): ReactElement => {
                         <div className="flex pt-16 pr-7 sm:pl-5 sm:pt-24 sm:pr-10 max-w-[540px] mb-14">
                             <div className="relative mb-[70rem] md:mb-[60rem]">
                                 <div className="font-semibold text-6xl sm:text-8xl">
-                                    B-Side<br />
+                                    B-Side
+                                    <br />
                                     Festival
                                 </div>
 
                                 <div className="absolute top-full left-0 right-0 flex flex-col">
-                                    <div className="text-lg sm:text-2xl [text-align-last:justify] mt-1">
-                                        Interaktion Reaktion
-                                    </div>
-                                    <div className="text-xl sm:text-3xl [text-align-last:justify]">
-                                        15. & 16. SEPT. 2023
-                                    </div>
+                                    <div className="text-lg sm:text-2xl [text-align-last:justify] mt-1">Interaktion Reaktion</div>
+                                    <div className="text-xl sm:text-3xl [text-align-last:justify]">15. & 16. SEPT. 2023</div>
                                     <div className="text-xs sm:text-sm [text-align-last:justify] mt-1">
                                         Kunst, Kultur & Bildung am Hawerkamp
                                     </div>
                                     <div className="mt-14 text-xl">
-                                        Konzerte, Kunstausstellungen, Theater, Workshops, Kinder- & Familien&shy;programm,
-                                        Vorträge, Lesungen und Diskussionsrunden.
+                                        Konzerte, Kunstausstellungen, Theater, Workshops, Kinder- & Familien&shy;programm, Vorträge,
+                                        Lesungen und Diskussionsrunden.
                                     </div>
 
                                     <div className="mt-8 flex">
@@ -63,21 +59,25 @@ export default (): ReactElement => {
                                             href="/programm"
                                         >
                                             <div className="font-display text-xl md:text-4xl pb-2 md:pb-3">zum Programm</div>
-                                            <div><FontAwesomeIcon className="w-3 md:w-6 md:pt-1 inline-block" icon={faArrowRight} /></div>
+                                            <div>
+                                                <FontAwesomeIcon className="w-3 md:w-6 md:pt-1 inline-block" icon={faArrowRight} />
+                                            </div>
                                         </Link>
                                     </div>
 
-                                    <div className="mt-16 text-lg sm:text-2xl font-bold">
-                                        Wir brauchen euch!
-                                    </div>
+                                    <div className="mt-16 text-lg sm:text-2xl font-bold">Wir brauchen euch!</div>
 
                                     <div className="text-xs mt-3">
                                         <VolunteerInfo />
                                     </div>
 
                                     <div className="mt-3 text-right">
-                                        <Link className="text-md cursor-pointer hover:text-red-700 flex items-center gap-2 leading-5 justify-end" href="/mithelfen">
-                                            Zum Formular für Helfer:innen <FontAwesomeIcon className="w-4 pt-1 inline-block" icon={faArrowRight} />
+                                        <Link
+                                            className="text-md cursor-pointer hover:text-red-700 flex items-center gap-2 leading-5 justify-end"
+                                            href="/mithelfen"
+                                        >
+                                            Zum Formular für Helfer:innen{' '}
+                                            <FontAwesomeIcon className="w-4 pt-1 inline-block" icon={faArrowRight} />
                                         </Link>
                                     </div>
 
@@ -87,7 +87,9 @@ export default (): ReactElement => {
                                             href="/awareness"
                                         >
                                             <div className="font-display text-xl md:text-4xl pb-2 md:pb-3">Awareness</div>
-                                            <div><FontAwesomeIcon className="w-3 md:w-6 md:pt-1 inline-block" icon={faArrowRight} /></div>
+                                            <div>
+                                                <FontAwesomeIcon className="w-3 md:w-6 md:pt-1 inline-block" icon={faArrowRight} />
+                                            </div>
                                         </Link>
                                     </div>
                                 </div>

@@ -18,7 +18,6 @@ interface Props {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context): Promise<GetServerSidePropsResult<Props>> => {
-
     const userSession = await getLegacyUserSession(context);
 
     if (userSession === null) {
@@ -50,7 +49,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
 };
 
 export default ({ applications, participantLabels, allLinks, allLabels }: Props): ReactElement => {
-
     return (
         <div>
             <div className="py-16 min-h-screen w-full relative">

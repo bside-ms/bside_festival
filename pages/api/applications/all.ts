@@ -6,11 +6,7 @@ export interface GetAllApplicationsResponse {
     applications: Array<Participant>;
 }
 
-export default async (
-    _request: NextApiRequest,
-    response: NextApiResponse<GetAllApplicationsResponse>
-): Promise<void> => {
-
+export default async (_request: NextApiRequest, response: NextApiResponse<GetAllApplicationsResponse>): Promise<void> => {
     const applications = await prismaClient.participant.findMany();
 
     response.status(200).json({ applications });

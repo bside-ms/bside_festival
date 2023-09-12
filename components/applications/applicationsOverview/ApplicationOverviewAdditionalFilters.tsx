@@ -13,18 +13,11 @@ interface AdditionFiltersFormValues {
 }
 
 const ApplicationOverviewAdditionalFilters = (): ReactElement => {
-
-    const {
-        filteredMinimumScore,
-        setFilteredMinimumScore,
-        participantLabels,
-        allLabels,
-        toggleFilteredLabelId,
-        filteredLabelIds,
-    } = useApplicationsOverviewContext();
+    const { filteredMinimumScore, setFilteredMinimumScore, participantLabels, allLabels, toggleFilteredLabelId, filteredLabelIds } =
+        useApplicationsOverviewContext();
 
     const [showAdditionalFilters, setShowAdditionalFilters] = useState(false);
-    const toggleShowAdditionalFilters = useCallback(() => setShowAdditionalFilters(prevState => !prevState), []);
+    const toggleShowAdditionalFilters = useCallback(() => setShowAdditionalFilters((prevState) => !prevState), []);
 
     const methods = useForm<AdditionFiltersFormValues>();
 
@@ -32,26 +25,25 @@ const ApplicationOverviewAdditionalFilters = (): ReactElement => {
 
     const currentMinimusScore = watch('minimumScore');
 
-    useEffect(
-        () => {
-            setFilteredMinimumScore(isEmptyString(currentMinimusScore) ? null : Number(currentMinimusScore));
-        },
-        [currentMinimusScore, setFilteredMinimumScore]
-    );
+    useEffect(() => {
+        setFilteredMinimumScore(isEmptyString(currentMinimusScore) ? null : Number(currentMinimusScore));
+    }, [currentMinimusScore, setFilteredMinimumScore]);
 
     const handleReset = useCallback(() => setValue('minimumScore', ''), [setValue]);
 
     const usedLabelIds = participantLabels.map(({ labelId }) => labelId);
     const usedLabels = allLabels.filter(({ id }) => usedLabelIds.includes(id));
 
-    const handleLabelClick = useCallback((event: MouseEvent) => {
+    const handleLabelClick = useCallback(
+        (event: MouseEvent) => {
+            // @ts-expect-error | Will fix this later..
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            const clickedLabelId = event.target.dataset.labelId as string;
 
-        // @ts-expect-error | Will fix this later..
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        const clickedLabelId = event.target.dataset.labelId as string;
-
-        toggleFilteredLabelId(Number(clickedLabelId));
-    }, [toggleFilteredLabelId]);
+            toggleFilteredLabelId(Number(clickedLabelId));
+        },
+        [toggleFilteredLabelId],
+    );
 
     return (
         <FormProvider {...methods}>
@@ -68,7 +60,6 @@ const ApplicationOverviewAdditionalFilters = (): ReactElement => {
                         </div>
 
                         <div className="rounded-t-xl bg-gray-200 py-2 px-3 rounded-xl rounded-tl-none max-w-[500px]">
-
                             <div className="max-w-[350px]">
                                 <div>Min. Score</div>
                                 <SelectInput<AdditionFiltersFormValues>
@@ -77,8 +68,9 @@ const ApplicationOverviewAdditionalFilters = (): ReactElement => {
                                     name="minimumScore"
                                     defaultValue={filteredMinimumScore?.toString()}
                                 />
-                                <a className="text-xs text-sky-700 cursor-pointer" onClick={handleReset}>zurücksetzen</a>
-
+                                <a className="text-xs text-sky-700 cursor-pointer" onClick={handleReset}>
+                                    zurücksetzen
+                                </a>
                             </div>
 
                             <div className="mt-2">

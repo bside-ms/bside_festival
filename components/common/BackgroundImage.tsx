@@ -2,7 +2,6 @@ import Image from 'next/image';
 import type { ReactElement } from 'react';
 
 const BackgroundImage = (): ReactElement => {
-
     return (
         <>
             <Image

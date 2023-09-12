@@ -15,7 +15,6 @@ interface Props {
 }
 
 const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | null => {
-
     const { filteredParticipants } = useParticipantsOverviewContext();
 
     const participantSlots = useParticipantSlots(participant.id);
@@ -34,15 +33,7 @@ const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | nu
             onClick={onClick}
         >
             <div className="md:w-1/3 shrink-0 relative rounded-md overflow-auto min-h-[300px]">
-                {isNotEmptyString(imageUrl) && (
-                    <Image
-                        src={imageUrl}
-                        alt={name}
-                        fill={true}
-                        priority={true}
-                        className="object-cover"
-                    />
-                )}
+                {isNotEmptyString(imageUrl) && <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />}
             </div>
 
             <div>
@@ -50,27 +41,13 @@ const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | nu
                     <TypeBadge type={type} />
                 </div>
 
-                <div className="text-2xl font-display line-clamp-3">
-                    {name}
-                </div>
+                <div className="text-2xl font-display line-clamp-3">{name}</div>
 
-                {participantSlots.length > 0 && (
-                    <ParticipantSlots
-                        participantSlots={participantSlots}
-                        isInPreview={true}
-                    />
-                )}
+                {participantSlots.length > 0 && <ParticipantSlots participantSlots={participantSlots} isInPreview={true} />}
 
-                <ParticipantVenues
-                    participantId={id}
-                    isInPreview={true}
-                />
+                <ParticipantVenues participantId={id} isInPreview={true} />
 
-                {isNotEmptyString(description) && (
-                    <div className="mt-4 line-clamp-3">
-                        {updatedDescription ?? description}
-                    </div>
-                )}
+                {isNotEmptyString(description) && <div className="mt-4 line-clamp-3">{updatedDescription ?? description}</div>}
             </div>
         </div>
     );

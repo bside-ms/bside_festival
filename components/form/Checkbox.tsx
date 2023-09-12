@@ -14,14 +14,13 @@ interface Props<T extends FieldValues> {
 }
 
 const Checkbox = <T extends FieldValues>({ label, name, info, required = false }: Props<T>): ReactElement => {
-
-    const { formState: { errors, isSubmitting }, register } = useFormContext();
+    const {
+        formState: { errors, isSubmitting },
+        register,
+    } = useFormContext();
 
     const isMounted = useIsMounted();
-    const id = useMemo(
-        () => isMounted ? uniqueId(name) : undefined,
-        [isMounted, name]
-    );
+    const id = useMemo(() => (isMounted ? uniqueId(name) : undefined), [isMounted, name]);
 
     const errorMessage = errors[name]?.message;
 
@@ -33,15 +32,12 @@ const Checkbox = <T extends FieldValues>({ label, name, info, required = false }
                 required={required}
                 disabled={isSubmitting}
                 className="w-4 h-4 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 cursor-pointer"
-                {...register(
-                    name,
-                    {
-                        required: {
-                            value: required,
-                            message: 'Dies ist ein Pflichtfeld',
-                        },
+                {...register(name, {
+                    required: {
+                        value: required,
+                        message: 'Dies ist ein Pflichtfeld',
                     },
-                )}
+                })}
             />
 
             <label htmlFor={id} className="text-md font-medium text-gray-900 cursor-pointer">
@@ -54,11 +50,7 @@ const Checkbox = <T extends FieldValues>({ label, name, info, required = false }
                 </label>
             )}
 
-            {typeof errorMessage === 'string' && (
-                <div className="px-1 text-rose-900">
-                    {errorMessage}
-                </div>
-            )}
+            {typeof errorMessage === 'string' && <div className="px-1 text-rose-900">{errorMessage}</div>}
         </div>
     );
 };

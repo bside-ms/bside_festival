@@ -8,7 +8,6 @@ import getLegacyUserSession from 'lib/next-auth/getLegacyUserSession';
 import urlPathTypes from 'lib/participants/urlPathTypes';
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
-
     const userSession = await getLegacyUserSession(context);
 
     if (userSession === null) {
@@ -45,18 +44,13 @@ interface Props {
 }
 
 export default ({ chosenType }: Props): ReactElement => {
-
     return (
         <div>
             <div className="min-h-screen w-full relative ">
                 <div className="relative z-10">
-
-                    <div
-                        className="p-5 md:p-10 w-full md:w-2/3 max-w-[700px] mx-auto drop-shadow-xl"
-                    >
+                    <div className="p-5 md:p-10 w-full md:w-2/3 max-w-[700px] mx-auto drop-shadow-xl">
                         <ApplicationForm chosenType={chosenType} />
                     </div>
-
                 </div>
 
                 <BackgroundImage />

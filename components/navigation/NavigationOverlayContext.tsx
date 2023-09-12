@@ -10,11 +10,10 @@ interface NavigationOverlayContextData {
 const NavigationOverlayContext = createContext<NavigationOverlayContextData | null>(null);
 
 const NavigationOverlayContextProvider = ({ children }: { children: ReactNode }): ReactElement => {
-
     const [isOverlayShown, setIsOverlayShown] = useState(false);
 
     const toggleOverlay = useCallback((): void => {
-        setIsOverlayShown(prevState => !prevState);
+        setIsOverlayShown((prevState) => !prevState);
     }, []);
 
     const closeOverlay = useCallback((): void => {
@@ -29,7 +28,6 @@ const NavigationOverlayContextProvider = ({ children }: { children: ReactNode })
 };
 
 const useNavigationOverlayContext = (): NavigationOverlayContextData => {
-
     const NavigationOverlayContextContext = useContext(NavigationOverlayContext);
 
     if (NavigationOverlayContextContext === null) {
@@ -39,7 +37,4 @@ const useNavigationOverlayContext = (): NavigationOverlayContextData => {
     return NavigationOverlayContextContext;
 };
 
-export {
-    NavigationOverlayContextProvider,
-    useNavigationOverlayContext,
-};
+export { NavigationOverlayContextProvider, useNavigationOverlayContext };

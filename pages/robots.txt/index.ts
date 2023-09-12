@@ -4,7 +4,6 @@ const Robots: NextPage = () => null;
 
 // eslint-disable-next-line @typescript-eslint/require-await
 Robots.getInitialProps = async ({ res }): Promise<void> => {
-
     if (res === undefined) {
         return;
     }

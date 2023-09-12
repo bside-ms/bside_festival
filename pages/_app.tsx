@@ -7,7 +7,6 @@ import NextHead from 'components/common/NextHead';
 import { NavigationOverlayContextProvider } from 'components/navigation/NavigationOverlayContext';
 
 const MyApp = ({ Component, pageProps }: AppProps): ReactElement => {
-
     return (
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         <SessionProvider session={pageProps.session}>

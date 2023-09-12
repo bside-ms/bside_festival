@@ -6,14 +6,8 @@ interface Props {
 }
 
 const BHeartSvg = ({ size, color }: Props): ReactElement => {
-
     return (
-        <svg
-            height={size}
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 255.12 232.07"
-            version="1.1"
-        >
+        <svg height={size} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 255.12 232.07" version="1.1">
             <path
                 stroke={color}
                 fill="transparent"

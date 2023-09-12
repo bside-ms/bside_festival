@@ -6,20 +6,20 @@ import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 
 const ApplicationsOverviewSearchTextFilter = (): ReactElement => {
-
     const { searchText, setSearchText } = useApplicationsOverviewContext();
 
     const [isMounted, setIsMounted] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-
-        setSearchText(event.target.value);
-    }, [setSearchText]);
+    const handleSearchChange = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            setSearchText(event.target.value);
+        },
+        [setSearchText],
+    );
 
     useEffectOnMount(() => {
-
         const queryParams = new URLSearchParams(window.location.search);
 
         const initialSearchText = queryParams.get('search');
@@ -36,7 +36,6 @@ const ApplicationsOverviewSearchTextFilter = (): ReactElement => {
     });
 
     const handleClearSearchFilter = useCallback(() => {
-
         setSearchText(null);
 
         if (inputRef.current !== null) {
@@ -45,7 +44,6 @@ const ApplicationsOverviewSearchTextFilter = (): ReactElement => {
     }, [setSearchText]);
 
     useEffect(() => {
-
         if (!isMounted) {
             return;
         }
@@ -71,10 +69,7 @@ const ApplicationsOverviewSearchTextFilter = (): ReactElement => {
                 ref={inputRef}
             />
             {isNotEmptyString(searchText) && (
-                <div
-                    onClick={handleClearSearchFilter}
-                    className="md:cursor-pointer text-gray-800"
-                >
+                <div onClick={handleClearSearchFilter} className="md:cursor-pointer text-gray-800">
                     Alle anzeigen
                 </div>
             )}

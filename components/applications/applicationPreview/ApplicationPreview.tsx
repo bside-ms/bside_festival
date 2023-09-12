@@ -17,7 +17,6 @@ interface Props {
 }
 
 const ApplicationPreview = ({ application, labels, onClick }: Props): ReactElement => {
-
     const { name, imageFileName, type, curationScore, status, description, updatedDescription } = application;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
@@ -28,15 +27,7 @@ const ApplicationPreview = ({ application, labels, onClick }: Props): ReactEleme
             onClick={onClick}
         >
             <div className="md:w-1/3 shrink-0 relative rounded-md overflow-auto min-h-[300px]">
-                {isNotEmptyString(imageUrl) && (
-                    <Image
-                        src={imageUrl}
-                        alt={name}
-                        fill={true}
-                        priority={true}
-                        className="object-cover"
-                    />
-                )}
+                {isNotEmptyString(imageUrl) && <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />}
             </div>
 
             <div>
@@ -44,32 +35,20 @@ const ApplicationPreview = ({ application, labels, onClick }: Props): ReactEleme
                     <TypeBadge type={type} />
 
                     {isNotEmptyNumber(curationScore) && (
-                        <div className="rounded-2xl text-sm px-3 py-1 bg-gray-800 text-white">
-                            {curationScore}
-                        </div>
+                        <div className="rounded-2xl text-sm px-3 py-1 bg-gray-800 text-white">{curationScore}</div>
                     )}
 
-                    <div
-                        className="uppercase inline-block select-none rounded-2xl text-sm px-3 py-1 bg-gray-800 text-white"
-                    >
+                    <div className="uppercase inline-block select-none rounded-2xl text-sm px-3 py-1 bg-gray-800 text-white">
                         {statusLabels[status]}
                     </div>
                 </div>
 
                 <ApplicationLabels labels={labels} />
 
-                <div className="text-2xl font-display line-clamp-3">
-                    {name}
-                </div>
+                <div className="text-2xl font-display line-clamp-3">{name}</div>
 
-                {isNotEmptyString(description) && (
-                    <div className="mt-4 line-clamp-6">
-                        {updatedDescription ?? description}
-                    </div>
-                )}
-
+                {isNotEmptyString(description) && <div className="mt-4 line-clamp-6">{updatedDescription ?? description}</div>}
             </div>
-
         </div>
     );
 };

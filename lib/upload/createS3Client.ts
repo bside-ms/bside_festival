@@ -3,7 +3,6 @@ import { S3Client } from '@aws-sdk/client-s3';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 
 const createS3Client = (): S3Client => {
-
     const { NEXT_PUBLIC_IONOS_HOST_NAME, IONOS_ACCESS_KEY_ID, IONOS_SECRET_ACCESS_KEY } = process.env;
 
     if (isEmptyString(NEXT_PUBLIC_IONOS_HOST_NAME) || isEmptyString(IONOS_ACCESS_KEY_ID) || isEmptyString(IONOS_SECRET_ACCESS_KEY)) {

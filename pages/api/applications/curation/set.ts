@@ -22,16 +22,9 @@ export interface ErroneousSetCurationResponse {
 
 export default async (
     request: NextApiRequest,
-    response: NextApiResponse<SuccessfulSetCurationResponse | ErroneousSetCurationResponse>
+    response: NextApiResponse<SuccessfulSetCurationResponse | ErroneousSetCurationResponse>,
 ): Promise<void> => {
-
-    const {
-        id,
-        curationScore,
-        curationInfo,
-        applicationStatus,
-        labels,
-    } = request.body as SetCurationRequest;
+    const { id, curationScore, curationInfo, applicationStatus, labels } = request.body as SetCurationRequest;
 
     await prismaClient.participantLabel.deleteMany({
         where: {
@@ -48,7 +41,7 @@ export default async (
                 create: [
                     ...labels
                         .filter((label): label is number => typeof label === 'number')
-                        .map(label => ({
+                        .map((label) => ({
                             label: {
                                 connect: {
                                     id: label,
@@ -57,7 +50,7 @@ export default async (
                         })),
                     ...labels
                         .filter((label): label is string => typeof label === 'string')
-                        .map(label => ({
+                        .map((label) => ({
                             label: {
                                 create: {
                                     label,

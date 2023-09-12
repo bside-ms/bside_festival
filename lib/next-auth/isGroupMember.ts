@@ -2,7 +2,6 @@ import type { Session } from 'next-auth';
 import isExtendedSession from 'lib/next-auth/isExtendedSession';
 
 const isGroupMember = (group: string, session: Session | null | undefined): boolean => {
-
     if (session === null || session === undefined) {
         return false;
     }

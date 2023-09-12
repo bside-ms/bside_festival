@@ -6,11 +6,7 @@ export interface GetApplicationResponse {
     application: Participant | null;
 }
 
-export default async (
-    request: NextApiRequest,
-    response: NextApiResponse<GetApplicationResponse>
-): Promise<void> => {
-
+export default async (request: NextApiRequest, response: NextApiResponse<GetApplicationResponse>): Promise<void> => {
     const query = request.query as { id: string };
 
     const applicationId = Number(query.id);

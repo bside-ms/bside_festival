@@ -17,7 +17,6 @@ interface Props {
 }
 
 const ApplicationCurationLabelSelect = ({ labels }: Props): ReactElement => {
-
     const { control } = useFormContext<CurationFormValues>();
 
     const { allLabels } = useApplicationsOverviewContext();
@@ -50,9 +49,7 @@ const ApplicationCurationLabelSelect = ({ labels }: Props): ReactElement => {
                         <CreatableSelect
                             ref={ref}
                             // eslint-disable-next-line react/jsx-no-bind
-                            onChange={(newValues: MultiValue<LabelOption>): void => (
-                                onChange(newValues.map(({ value }) => value))
-                            )}
+                            onChange={(newValues: MultiValue<LabelOption>): void => onChange(newValues.map(({ value }) => value))}
                             defaultValue={defaultValue}
                             isMulti={true}
                             options={options}

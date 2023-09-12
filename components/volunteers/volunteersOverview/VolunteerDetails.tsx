@@ -1,5 +1,13 @@
 import type { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faCarSide, faDumbbell, faKitchenSet, faMicrophoneLines, faPeopleGroup, faScrewdriverWrench, faStar } from '@fortawesome/free-solid-svg-icons';
+import {
+    faCarSide,
+    faDumbbell,
+    faKitchenSet,
+    faMicrophoneLines,
+    faPeopleGroup,
+    faScrewdriverWrench,
+    faStar,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { Volunteer } from '@prisma/client';
 import type { ReactElement } from 'react';
@@ -23,16 +31,13 @@ export const preferences = new Array<[VolunteerPreferenceKey, IconProp]>(
 export const dayPreferences = new Array<[VolunteerDayPreferenceKey, string]>(
     ['isAvailableOnFriday', 'Fr'],
     ['isAvailableOnSaturday', 'Sa'],
-    ['isAvailableOnSunday', 'So']
+    ['isAvailableOnSunday', 'So'],
 );
 
 const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement => {
-
     return (
         <div className="rounded-md drop-shadow bg-gray-50 py-2 px-4">
-            <div className="text-xl mb-2">
-                {volunteer.fullName}
-            </div>
+            <div className="text-xl mb-2">{volunteer.fullName}</div>
 
             {showSensitiveData && (
                 <div className="text-base text-gray-600 mb-3">
@@ -62,11 +67,7 @@ const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement
                 <div className="w-4" />
 
                 {dayPreferences.map(([dayPreference, label]) => (
-                    <div
-                        key={dayPreference}
-                        className="text-xl leading-4"
-                        style={{ color: volunteer[dayPreference] ? undefined : '#CCC' }}
-                    >
+                    <div key={dayPreference} className="text-xl leading-4" style={{ color: volunteer[dayPreference] ? undefined : '#CCC' }}>
                         {label}
                     </div>
                 ))}

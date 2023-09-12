@@ -9,7 +9,6 @@ interface Props {
 }
 
 const ParticipantVenue = ({ location: { name: location, awarenessInfo }, showAccessibleInfo }: Props): ReactElement | null => {
-
     if (!showAccessibleInfo) {
         return <div>{location}</div>;
     }
@@ -29,24 +28,14 @@ const ParticipantVenue = ({ location: { name: location, awarenessInfo }, showAcc
                                 className="object-contain"
                             />
                         </div>
-                        <div>
-                            Barrierefreier Zugang
-                        </div>
+                        <div>Barrierefreier Zugang</div>
                     </>
                 ) : (
                     <>
                         <div className="flex items-center">
-                            <Image
-                                src="/assets/stairs.png"
-                                alt={awarenessInfo}
-                                width={15}
-                                height={15}
-                                className="object-contain"
-                            />
+                            <Image src="/assets/stairs.png" alt={awarenessInfo} width={15} height={15} className="object-contain" />
                         </div>
-                        <div>
-                            {awarenessInfo}
-                        </div>
+                        <div>{awarenessInfo}</div>
                     </>
                 )}
             </div>

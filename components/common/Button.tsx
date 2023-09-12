@@ -13,27 +13,25 @@ interface Props {
 }
 
 const Button = ({ href, onClick, children, isDisabled = false, withFullWidth = false, type = 'button' }: Props): ReactElement => {
-
     const button = (
-        <button
-            className={styles.button}
-            type={type}
-            disabled={isDisabled}
-            onClick={onClick}
-        >
+        <button className={styles.button} type={type} disabled={isDisabled} onClick={onClick}>
             {children}
         </button>
     );
 
     return (
         <div
-            className={`${styles.buttonContainer ?? ''} ${withFullWidth ? styles.withFullWidth ?? '' : ''} ${isDisabled ? 'grayscale brightness-150' : ''}`}
+            className={`${styles.buttonContainer ?? ''} ${withFullWidth ? styles.withFullWidth ?? '' : ''} ${
+                isDisabled ? 'grayscale brightness-150' : ''
+            }`}
         >
             {href !== undefined ? (
                 <Link href={href} passHref={true}>
                     {button}
                 </Link>
-            ) : button}
+            ) : (
+                button
+            )}
 
             <div className={styles.buttonBackdrop} />
         </div>

@@ -23,41 +23,37 @@ interface Props {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<GetServerSidePropsResult<Props>> => {
-
     const participants = await prismaClient.participant.findMany({ where: { status: 'Confirmed' } });
 
     const slots = await getAllSlots();
 
     const venues = await getAllVenues();
 
-    const sortedParticipant = participants.sort(
-        (participantA, participantB) => {
+    const sortedParticipant = participants.sort((participantA, participantB) => {
+        const firstSlotA = slots.find(({ participantId }) => participantId === participantA.id);
+        const firstSlotB = slots.find(({ participantId }) => participantId === participantB.id);
 
-            const firstSlotA = slots.find(({ participantId }) => participantId === participantA.id);
-            const firstSlotB = slots.find(({ participantId }) => participantId === participantB.id);
-
-            if (firstSlotA === undefined && firstSlotB === undefined) {
-                return 0;
-            }
-
-            if (firstSlotA === undefined) {
-                return 1;
-            }
-
-            if (firstSlotB === undefined) {
-                return -1;
-            }
-
-            const firstSlotABegin = new Date(firstSlotA.begin);
-            const firstSlotBBegin = new Date(firstSlotB.begin);
-
-            if (isEqual(firstSlotABegin, firstSlotBBegin)) {
-                return 0;
-            }
-
-            return isAfter(firstSlotABegin, firstSlotBBegin) ? 1 : -1;
+        if (firstSlotA === undefined && firstSlotB === undefined) {
+            return 0;
         }
-    );
+
+        if (firstSlotA === undefined) {
+            return 1;
+        }
+
+        if (firstSlotB === undefined) {
+            return -1;
+        }
+
+        const firstSlotABegin = new Date(firstSlotA.begin);
+        const firstSlotBBegin = new Date(firstSlotB.begin);
+
+        if (isEqual(firstSlotABegin, firstSlotBBegin)) {
+            return 0;
+        }
+
+        return isAfter(firstSlotABegin, firstSlotBBegin) ? 1 : -1;
+    });
 
     const participantLabels = await prismaClient.participantLabel.findMany();
 
@@ -78,7 +74,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<G
 };
 
 export default ({ participants, slots, venues, participantLabels, allLinks, allLocations }: Props): ReactElement => {
-
     return (
         <div>
             <div className="pt-8 min-h-screen w-full relative">

@@ -8,16 +8,10 @@ interface Props {
 }
 
 const ParticipantSlots = ({ participantSlots, isInPreview = false }: Props): ReactElement | null => {
-
     return (
         <div className="mt-3 space-y-1">
             {participantSlots.map(({ location, slot }) => (
-                <ParticipantSlot
-                    key={slot.id}
-                    slot={slot}
-                    location={location}
-                    showAccessibleInfo={!isInPreview}
-                />
+                <ParticipantSlot key={slot.id} slot={slot} location={location} showAccessibleInfo={!isInPreview} />
             ))}
         </div>
     );

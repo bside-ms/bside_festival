@@ -1,46 +1,39 @@
 .gridContainer {
-  height: 200px;
-  position: relative;
+    height: 200px;
+    position: relative;
 
-  background: linear-gradient(
-      180deg,
-      #3eb0e3 0%,
-      #8e3ee3 100%
-  );
+    background: linear-gradient(180deg, #3eb0e3 0%, #8e3ee3 100%);
 
-  overflow: hidden;
+    overflow: hidden;
 }
 
 .smGrid,
 .mdGrid {
-
-  border: 1px solid #ffffff;
-
-  & > div {
     border: 1px solid #ffffff;
-  }
+
+    & > div {
+        border: 1px solid #ffffff;
+    }
 }
 
 .smGrid {
-  position: absolute;
-  top: 0;
-  left: 50%;
+    position: absolute;
+    top: 0;
+    left: 50%;
 
-  transform: translateX(-50%) perspective(228px) rotateX(35deg) scale(3.3);
+    transform: translateX(-50%) perspective(228px) rotateX(35deg) scale(3.3);
 
-  grid-template-rows: repeat(10, 51px);
-  grid-template-columns: repeat(10, 47px);
-
-
+    grid-template-rows: repeat(10, 51px);
+    grid-template-columns: repeat(10, 47px);
 }
 
 .mdGrid {
-  position: absolute;
-  top: 0;
-  left: 50%;
+    position: absolute;
+    top: 0;
+    left: 50%;
 
-  transform: translateX(-50%) perspective(1348px) rotateX(47deg) scale(3.3);
+    transform: translateX(-50%) perspective(1348px) rotateX(47deg) scale(3.3);
 
-  grid-template-rows: repeat(30, 51px);
-  grid-template-columns: repeat(30, 47px);
+    grid-template-rows: repeat(30, 51px);
+    grid-template-columns: repeat(30, 47px);
 }

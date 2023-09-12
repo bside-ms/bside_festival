@@ -3,7 +3,6 @@ import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 
 const InternalLinks = (): ReactElement | null => {
-
     const { status } = useSession();
 
     if (status !== 'authenticated') {

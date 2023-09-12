@@ -5,7 +5,6 @@ const fromName = 'B-Side Festival';
 const fromMail = 'no-reply@b-side.ms';
 
 const sendMail = async (subject: string, recipient: string, { html, errors }: ConvertedHtml): Promise<void> => {
-
     try {
         const transport = createMailTransport();
 

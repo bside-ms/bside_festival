@@ -45,7 +45,6 @@ const ApplicationsOverviewContextProvider = ({
     allLabels: initialAllLabels,
     children,
 }: Props): ReactElement => {
-
     const [allLabels, setAllLabels] = useState<Array<Label>>(initialAllLabels);
 
     const [participantLabels, setParticipantLabels] = useState<Array<ParticipantLabel>>(initialParticipantLabels);
@@ -61,7 +60,6 @@ const ApplicationsOverviewContextProvider = ({
     const [filteredLabelIds, setFilteredLabelIds] = useState<Array<number>>([]);
 
     useEffectOnMount(() => {
-
         const queryParams = new URLSearchParams(window.location.search);
 
         const initialTypes = queryParams.get('types')?.split(',') ?? [];
@@ -70,49 +68,42 @@ const ApplicationsOverviewContextProvider = ({
     });
 
     const filteredApplications = useMemo<Array<SerializableParticipant>>(() => {
+        const applicationsFilteredByType = applications.filter((application) => {
+            const participantLabelIds = participantLabels
+                .filter(({ participantId }) => participantId === application.id)
+                .map(({ labelId }) => labelId);
 
-        const applicationsFilteredByType = applications.filter(
-            application => {
-
-                const participantLabelIds = participantLabels
-                    .filter(({ participantId }) => participantId === application.id)
-                    .map(({ labelId }) => labelId);
-
-                return (
-                    (filteredTypes.length === 0 || filteredTypes.includes(application.type)) &&
-                    (filteredMinimumScore === null || (application.curationScore !== null && application.curationScore >= filteredMinimumScore)) &&
-                    (filteredLabelIds.length === 0 || participantLabelIds.some(id => filteredLabelIds.includes(id)))
-                );
-            }
-        );
+            return (
+                (filteredTypes.length === 0 || filteredTypes.includes(application.type)) &&
+                (filteredMinimumScore === null ||
+                    (application.curationScore !== null && application.curationScore >= filteredMinimumScore)) &&
+                (filteredLabelIds.length === 0 || participantLabelIds.some((id) => filteredLabelIds.includes(id)))
+            );
+        });
 
         if (isEmptyString(searchText)) {
             return applicationsFilteredByType;
         }
 
-        const fuse = new Fuse(
-            applicationsFilteredByType,
-            {
-                keys: ['name'],
-                shouldSort: true,
-                includeScore: true,
-                includeMatches: true,
-                minMatchCharLength: 3,
-                isCaseSensitive: false,
-                findAllMatches: true,
-            }
-        );
+        const fuse = new Fuse(applicationsFilteredByType, {
+            keys: ['name'],
+            shouldSort: true,
+            includeScore: true,
+            includeMatches: true,
+            minMatchCharLength: 3,
+            isCaseSensitive: false,
+            findAllMatches: true,
+        });
 
-        return fuse.search(searchText).map(result => result.item);
+        return fuse.search(searchText).map((result) => result.item);
     }, [applications, filteredLabelIds, filteredMinimumScore, filteredTypes, participantLabels, searchText]);
 
     const [enhancedApplicationIds, setEnhancedApplicationIds] = useState<Array<number>>([]);
 
     const toggleEnhancedApplicationId = useCallback((id: number) => {
-
-        setEnhancedApplicationIds(enhancedIds => {
+        setEnhancedApplicationIds((enhancedIds) => {
             if (enhancedIds.includes(id)) {
-                return enhancedIds.filter(enhancedId => enhancedId !== id);
+                return enhancedIds.filter((enhancedId) => enhancedId !== id);
             } else {
                 return [...enhancedIds, id];
             }
@@ -120,42 +111,33 @@ const ApplicationsOverviewContextProvider = ({
     }, []);
 
     const toggleFilteredType = useCallback((type: Type) => {
-
-        setFilteredTypes(types => {
+        setFilteredTypes((types) => {
             if (types.includes(type)) {
-                return types.filter(filteredType => filteredType !== type);
+                return types.filter((filteredType) => filteredType !== type);
             } else {
                 return [...types, type];
             }
         });
     }, []);
 
-    const getLinksOfApplication = useCallback((id: number) => (
-        allLinks.filter(({ participantId }) => participantId === id)
-    ), [allLinks]);
+    const getLinksOfApplication = useCallback((id: number) => allLinks.filter(({ participantId }) => participantId === id), [allLinks]);
 
     const updateApplication = useCallback((application: Participant) => {
+        setApplications((prevState) => {
+            return prevState.map((applicationItem) => {
+                if (applicationItem.id === application.id) {
+                    return serializeParticipant(application);
+                }
 
-        setApplications(prevState => {
-
-            return prevState
-                .map(applicationItem => {
-
-                    if (applicationItem.id === application.id) {
-                        return serializeParticipant(application);
-                    }
-
-                    return applicationItem;
-                });
+                return applicationItem;
+            });
         });
-
     }, []);
 
     const handleLabelFilterClick = useCallback((labelId: number) => {
-
-        setFilteredLabelIds(prevState => {
+        setFilteredLabelIds((prevState) => {
             if (prevState.includes(labelId)) {
-                return prevState.filter(id => id !== labelId);
+                return prevState.filter((id) => id !== labelId);
             }
 
             return [...prevState, labelId];
@@ -177,7 +159,7 @@ const ApplicationsOverviewContextProvider = ({
                 filteredTypes,
                 toggleFilteredType,
                 updateApplication,
-                allLabels: allLabels.map(label => ({ ...label, count: 0 })),
+                allLabels: allLabels.map((label) => ({ ...label, count: 0 })),
                 updateAllLabels: setAllLabels,
                 filteredLabelIds,
                 toggleFilteredLabelId: handleLabelFilterClick,
@@ -191,7 +173,6 @@ const ApplicationsOverviewContextProvider = ({
 };
 
 const useApplicationsOverviewContext = (): ApplicationsOverviewContextData => {
-
     const ApplicationsOverviewContextContext = useContext(ApplicationsOverviewContext);
 
     if (ApplicationsOverviewContextContext === null) {
@@ -201,7 +182,4 @@ const useApplicationsOverviewContext = (): ApplicationsOverviewContextData => {
     return ApplicationsOverviewContextContext;
 };
 
-export {
-    ApplicationsOverviewContextProvider,
-    useApplicationsOverviewContext,
-};
+export { ApplicationsOverviewContextProvider, useApplicationsOverviewContext };

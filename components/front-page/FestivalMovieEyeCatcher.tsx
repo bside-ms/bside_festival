@@ -3,7 +3,6 @@ import YouTube from 'react-youtube';
 import ContentWrapper from 'components/common/ContentWrapper';
 
 const FestivalMovieEyeCatcher = (): ReactElement => {
-
     return (
         <ContentWrapper>
             <div className="flex flex-col gap-3 mt-[40px] py-[25px] px-[40px] bg-gradient-to-b from-[#2c9fc9] to-[#e1017e] text-white">

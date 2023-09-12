@@ -17,12 +17,9 @@ export interface ErroneousDeleteSlotResponse {
 
 export default async (
     request: NextApiRequest,
-    response: NextApiResponse<SuccessfulDeleteSlotResponse | ErroneousDeleteSlotResponse>
+    response: NextApiResponse<SuccessfulDeleteSlotResponse | ErroneousDeleteSlotResponse>,
 ): Promise<void> => {
-
-    const {
-        participantId,
-    } = request.body as DeleteSlotRequest;
+    const { participantId } = request.body as DeleteSlotRequest;
 
     await prismaClient.slot.deleteMany({ where: { participantId } });
 

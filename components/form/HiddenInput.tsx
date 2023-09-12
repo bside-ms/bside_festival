@@ -8,15 +8,9 @@ interface Props<T extends FieldValues> {
 }
 
 const HiddenInput = <T extends FieldValues>({ name }: Props<T>): ReactElement => {
-
     const { register } = useFormContext();
 
-    return (
-        <input
-            type="hidden"
-            {...register(name)}
-        />
-    );
+    return <input type="hidden" {...register(name)} />;
 };
 
 export default HiddenInput;

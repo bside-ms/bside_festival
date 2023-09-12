@@ -17,13 +17,9 @@ export interface ErroneousUpdateDescriptionResponse {
 
 export default async (
     request: NextApiRequest,
-    response: NextApiResponse<SuccessfulUpdateDescriptionResponse | ErroneousUpdateDescriptionResponse>
+    response: NextApiResponse<SuccessfulUpdateDescriptionResponse | ErroneousUpdateDescriptionResponse>,
 ): Promise<void> => {
-
-    const {
-        id,
-        description,
-    } = request.body as UpdateDescriptionRequest;
+    const { id, description } = request.body as UpdateDescriptionRequest;
 
     const updatedParticipant = await prismaClient.participant.update({
         data: {
