@@ -13,7 +13,11 @@ import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import ParticipantVenues from 'components/participants/details/ParticipantVenues';
 import TechnicalRider from 'components/participants/details/TechnicalRider';
 import TypeBadge from 'components/participants/details/TypeBadge';
-import { useParticipantSlots, useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
+import {
+    useParticipantSlots,
+    useParticipantsOverviewContext,
+    useParticipantVenues,
+} from 'components/participants/overview/ParticipantsOverviewContext';
 import SlotForm from 'components/participants/slotsForm/SlotForm';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
@@ -37,8 +41,9 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
     const participantSlots = useParticipantSlots(participant.id);
+    const participantVenues = useParticipantVenues(participant.id);
 
-    if (filteredParticipants.length > 0 && participantSlots.length === 0) {
+    if (filteredParticipants.length > 0 && participantSlots.length === 0 && participantVenues.length === 0) {
         return null;
     }
 

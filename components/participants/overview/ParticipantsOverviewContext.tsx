@@ -148,7 +148,7 @@ const ParticipantsOverviewContextProvider = ({
                 toggleFilteredLocationId,
                 updateParticipant,
                 slots: slots.filter((slot) => filteredLocationIds.length === 0 || filteredLocationIds.includes(slot.locationId)),
-                venues,
+                venues: venues.filter((venue) => filteredLocationIds.length === 0 || filteredLocationIds.includes(venue.locationId)),
                 allLocations,
                 updateAllSlots,
             }}

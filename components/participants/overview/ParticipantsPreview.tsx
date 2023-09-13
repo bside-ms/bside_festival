@@ -3,7 +3,11 @@ import type { ReactElement } from 'react';
 import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import ParticipantVenues from 'components/participants/details/ParticipantVenues';
 import TypeBadge from 'components/participants/details/TypeBadge';
-import { useParticipantSlots, useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
+import {
+    useParticipantSlots,
+    useParticipantsOverviewContext,
+    useParticipantVenues,
+} from 'components/participants/overview/ParticipantsOverviewContext';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
@@ -18,12 +22,13 @@ const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | nu
     const { filteredParticipants } = useParticipantsOverviewContext();
 
     const participantSlots = useParticipantSlots(participant.id);
+    const participantVenues = useParticipantVenues(participant.id);
 
     const { id, name, imageFileName, description, type, updatedDescription } = participant;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
-    if (filteredParticipants.length > 0 && participantSlots.length === 0) {
+    if (filteredParticipants.length > 0 && participantSlots.length === 0 && participantVenues.length === 0) {
         return null;
     }
 
