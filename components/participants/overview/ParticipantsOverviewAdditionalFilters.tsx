@@ -1,33 +1,23 @@
 import { useCallback, useState } from 'react';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { Location } from '@prisma/client';
 import type { ReactElement } from 'react';
-import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
-
-const LocationIdToggle = ({ location }: { location: Location }): ReactElement | null => {
-    const { filteredLocationIds, toggleFilteredLocationId } = useParticipantsOverviewContext();
-
-    const handleClick = useCallback(() => toggleFilteredLocationId(location.id), [location.id, toggleFilteredLocationId]);
-
-    const active = filteredLocationIds.includes(location.id);
-
-    return (
-        <div
-            className="select-none uppercase md:cursor-pointer rounded-2xl border-2 bg-gray-200 border-gray-200 border-dashed text-sm px-3 py-1"
-            style={{ borderColor: active ? '#444' : undefined }}
-            onClick={handleClick}
-        >
-            {location.name}
-        </div>
-    );
-};
+import ParticipantsOverviewLocationFilter, {
+    locationsFilterQueryName,
+} from 'components/participants/overview/ParticipantsOverviewLocationFilter';
+import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 
 const ParticipantsOverviewAdditionalFilters = (): ReactElement => {
-    const { allLocations } = useParticipantsOverviewContext();
-
     const [showAdditionalFilters, setShowAdditionalFilters] = useState(false);
     const toggleShowAdditionalFilters = useCallback(() => setShowAdditionalFilters((prevState) => !prevState), []);
+
+    useEffectOnMount(() => {
+        const url = new URL(window.location.href);
+
+        if (url.searchParams.has(locationsFilterQueryName)) {
+            setShowAdditionalFilters(true);
+        }
+    });
 
     return (
         <div className="mb-3">
@@ -40,12 +30,7 @@ const ParticipantsOverviewAdditionalFilters = (): ReactElement => {
                     </div>
 
                     <div className="mt-2">
-                        <div className="mb-1 underline">Veranstaltungsort</div>
-                        <div className="flex flex-wrap gap-2 mb-3">
-                            {allLocations.map((location) => (
-                                <LocationIdToggle key={location.id} location={location} />
-                            ))}
-                        </div>
+                        <ParticipantsOverviewLocationFilter />
                     </div>
                 </div>
             ) : (

@@ -2,6 +2,8 @@ import { createContext, useCallback, useContext, useState } from 'react';
 import type { Link, Location, Participant, ParticipantLabel, Type, Venue } from '@prisma/client';
 import { uniq } from 'lodash';
 import type { PropsWithChildren, ReactElement } from 'react';
+import { locationsFilterQueryName } from 'components/participants/overview/ParticipantsOverviewLocationFilter';
+import { typesFilterQueryName } from 'components/participants/overview/ParticipantsOverviewTypesFilter';
 import availableTypes from 'lib/applications/availableTypes';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 import isValidType from 'lib/participants/isValidType';
@@ -64,10 +66,10 @@ const ParticipantsOverviewContextProvider = ({
     useEffectOnMount(() => {
         const queryParams = new URLSearchParams(window.location.search);
 
-        const initialTypes = queryParams.get('types')?.split(',') ?? [];
+        const initialTypes = queryParams.get(typesFilterQueryName)?.split(',') ?? [];
         setFilteredTypes(initialTypes.filter(isValidType));
 
-        const initialLocations = queryParams.get('locations')?.split(',') ?? [];
+        const initialLocations = queryParams.get(locationsFilterQueryName)?.split(',') ?? [];
         setFilteredLocationIds(initialLocations.map(Number));
     });
 

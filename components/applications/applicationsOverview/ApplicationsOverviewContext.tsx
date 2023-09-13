@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useMemo, useState } from 'react
 import type { Label, Link, Participant, ParticipantLabel, Type } from '@prisma/client';
 import Fuse from 'fuse.js';
 import type { Dispatch, PropsWithChildren, ReactElement, SetStateAction } from 'react';
+import { typesFilterQueryName } from 'components/participants/overview/ParticipantsOverviewTypesFilter';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 import isValidType from 'lib/participants/isValidType';
@@ -62,7 +63,7 @@ const ApplicationsOverviewContextProvider = ({
     useEffectOnMount(() => {
         const queryParams = new URLSearchParams(window.location.search);
 
-        const initialTypes = queryParams.get('types')?.split(',') ?? [];
+        const initialTypes = queryParams.get(typesFilterQueryName)?.split(',') ?? [];
 
         setFilteredTypes(initialTypes.filter(isValidType));
     });

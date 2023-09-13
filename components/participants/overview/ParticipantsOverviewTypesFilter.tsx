@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import type { Type } from '@prisma/client';
 import type { ReactElement } from 'react';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import isEmptyString from 'lib/common/helper/isEmptyString';
-import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
+import useIsMounted from 'lib/common/hooks/useIsMounted';
 import typeColors from 'lib/participants/typeColors';
 import typeLabels from 'lib/participants/typeLabels';
+
+export const typesFilterQueryName = 'types';
 
 const TypeToggle = ({ type }: { type: Type }): ReactElement => {
     const { filteredTypes, toggleFilteredType } = useParticipantsOverviewContext();
@@ -31,11 +33,7 @@ const TypeToggle = ({ type }: { type: Type }): ReactElement => {
 const ParticipantsOverviewTypesFilter = (): ReactElement => {
     const { actuallyAvailableTypes, filteredTypes } = useParticipantsOverviewContext();
 
-    const [isMounted, setIsMounted] = useState(false);
-
-    useEffectOnMount(() => {
-        setIsMounted(true);
-    });
+    const isMounted = useIsMounted();
 
     useEffect(() => {
         if (!isMounted) {
@@ -47,9 +45,9 @@ const ParticipantsOverviewTypesFilter = (): ReactElement => {
         const queryValue = filteredTypes.join(',');
 
         if (isEmptyString(queryValue)) {
-            currentUrl.searchParams.delete('types');
+            currentUrl.searchParams.delete(typesFilterQueryName);
         } else {
-            currentUrl.searchParams.set('types', queryValue);
+            currentUrl.searchParams.set(typesFilterQueryName, queryValue);
         }
 
         history.replaceState(null, '', currentUrl.toString());

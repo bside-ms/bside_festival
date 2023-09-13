@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type { Type } from '@prisma/client';
 import type { ReactElement } from 'react';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
+import { typesFilterQueryName } from 'components/participants/overview/ParticipantsOverviewTypesFilter';
 import availableTypes from 'lib/applications/availableTypes';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
@@ -48,9 +49,9 @@ const ApplicationsOverviewTypesFilter = (): ReactElement => {
         const queryValue = filteredTypes.join(',');
 
         if (isEmptyString(queryValue)) {
-            currentUrl.searchParams.delete('types');
+            currentUrl.searchParams.delete(typesFilterQueryName);
         } else {
-            currentUrl.searchParams.set('types', queryValue);
+            currentUrl.searchParams.set(typesFilterQueryName, queryValue);
         }
 
         history.replaceState(null, '', currentUrl.toString());
