@@ -17,7 +17,6 @@ interface Props<T extends FieldValues> {
     rows?: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/comma-dangle
 const TextArea = <T extends FieldValues>({
     label,
     name,

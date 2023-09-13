@@ -16,7 +16,6 @@ interface Props<T extends FieldValues> {
     required?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/comma-dangle
 const SelectInput = <T extends FieldValues>({
     label,
     defaultValue = '',

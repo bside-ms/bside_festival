@@ -51,8 +51,8 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
             if (!allowedImageContentTypes.includes(file.type)) {
                 setValue(fieldName, '');
                 setError(fieldName, {
-                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                     message: `Dateityp nicht zulässig, erlaubt sind ${allowedImageContentTypes
+                        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                         .map((type) => `.${extension(type)}`)
                         .join(', ')}`,
                 });

@@ -134,7 +134,7 @@ module.exports = {
         'react/jsx-no-bind': ERROR,
         'react/jsx-no-target-blank': OFF,
         'react/jsx-no-useless-fragment': [ERROR, { allowExpressions: true }],
-        'react/jsx-props-no-spreading': ERROR,
+        'react/jsx-props-no-spreading': OFF,
         'react/no-access-state-in-setstate': ERROR,
         'react/no-adjacent-inline-elements': OFF,
         'react/no-array-index-key': ERROR,
@@ -256,7 +256,7 @@ module.exports = {
         '@typescript-eslint/no-shadow': [ERROR, { hoist: 'all' }],
         '@typescript-eslint/no-throw-literal': ERROR,
         '@typescript-eslint/no-unnecessary-boolean-literal-compare': ERROR,
-        '@typescript-eslint/no-unnecessary-condition': OFF, // As long as we don't forbid unchecked indexed access this should be disabled
+        '@typescript-eslint/no-unnecessary-condition': ERROR,
         '@typescript-eslint/no-unnecessary-type-arguments': ERROR,
         '@typescript-eslint/no-unnecessary-type-assertion': OFF, // Switched off for time we're migrating to noUncheckedIndexedAccess
         '@typescript-eslint/no-unsafe-assignment': OFF, // Takes way too much time in our code base
