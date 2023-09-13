@@ -20,15 +20,35 @@ const LocationGroupToggle = ({ locations }: { locations: Array<Location> }): Rea
         [locations, toggleFilteredLocationId],
     );
 
-    const active = locations.every(({ id }) => filteredLocationIds.includes(id));
+    const isActive = locations.every(({ id }) => filteredLocationIds.includes(id));
 
     return (
         <div
             className="select-none uppercase md:cursor-pointer rounded-2xl border-2 bg-gray-200 border-gray-200 border-dashed text-sm px-3 py-1"
-            style={{ borderColor: active ? '#444' : undefined }}
+            style={{ borderColor: isActive ? '#444' : undefined }}
             onClick={handleClick}
         >
             {simplifyLocationName(locations[0]!.name)}
+        </div>
+    );
+};
+
+const LocationIdToggle = ({ locationId }: { locationId: number }): ReactElement | null => {
+    const { filteredLocationIds, toggleFilteredLocationId, allLocations } = useParticipantsOverviewContext();
+
+    const handleClick = useCallback(() => toggleFilteredLocationId(locationId), [locationId, toggleFilteredLocationId]);
+
+    const isActive = filteredLocationIds.includes(locationId);
+
+    const locationName = allLocations.find(({ id }) => id === locationId)?.name ?? `Ort #${locationId}`;
+
+    return (
+        <div
+            className="select-none uppercase md:cursor-pointer rounded-2xl border-2 bg-gray-200 border-gray-200 border-dashed text-sm px-3 py-1"
+            style={{ borderColor: isActive ? '#444' : undefined }}
+            onClick={handleClick}
+        >
+            {locationName}
         </div>
     );
 };
@@ -76,12 +96,25 @@ const ParticipantsOverviewLocationFilter = (): ReactElement => {
         history.replaceState(null, '', currentUrl.toString());
     }, [isMounted, filteredLocationIds]);
 
+    // Determine location IDs that are somehow set w/o their corresponding group
+    let remainingFilteredLocationIds = filteredLocationIds;
+    locationGroups.forEach((group) => {
+        if (group.every(({ id }) => filteredLocationIds.includes(id))) {
+            group.forEach(({ id }) => {
+                remainingFilteredLocationIds = remainingFilteredLocationIds.filter((locationId) => locationId !== id);
+            });
+        }
+    });
+
     return (
         <div className="mb-3">
             <div className="mb-1 underline">Veranstaltungsort</div>
             <div className="flex flex-wrap gap-2 mb-3">
                 {locationGroups.map((locations) => (
                     <LocationGroupToggle key={locations[0]!.id} locations={locations} />
+                ))}
+                {remainingFilteredLocationIds.map((locationId) => (
+                    <LocationIdToggle key={locationId} locationId={locationId} />
                 ))}
             </div>
         </div>
