@@ -23,7 +23,7 @@ const ParticipantsOverview = (): ReactElement => {
 
             <ParticipantsOverviewAdditionalFilters />
 
-            <div className="mt-5 mb-4 flex gap-4">
+            <div className="mt-5 mb-4 flex gap-4 flex-wrap">
                 <Link
                     href="/assets/map.svg"
                     target="_blank"
