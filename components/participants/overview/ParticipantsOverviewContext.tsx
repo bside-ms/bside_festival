@@ -1,7 +1,9 @@
 import { createContext, useCallback, useContext, useState } from 'react';
 import type { Link, Location, Participant, ParticipantLabel, Type, Venue } from '@prisma/client';
-import { uniq } from 'lodash';
+import { addHours, endOfHour, isAfter, isBefore, isSameMinute, startOfHour, subHours } from 'date-fns';
+import { first, last, uniq } from 'lodash';
 import type { PropsWithChildren, ReactElement } from 'react';
+import { dateRangeFilterQueryName } from 'components/participants/overview/ParticipantsOverviewDateRangeFilter';
 import { locationsFilterQueryName } from 'components/participants/overview/ParticipantsOverviewLocationFilter';
 import { typesFilterQueryName } from 'components/participants/overview/ParticipantsOverviewTypesFilter';
 import availableTypes from 'lib/applications/availableTypes';
@@ -27,8 +29,11 @@ interface ParticipantsOverviewContextData {
     toggleFilteredType: (type: Type) => void;
     filteredLocationIds: Array<number>;
     toggleFilteredLocationId: (locationId: number) => void;
+    filteredDateRange: [number, number] | null;
+    setFilteredDateRange: (dateRange: [number, number] | null) => void;
     updateParticipant: (participant: Participant) => void;
     updateAllSlots: (allSlots: Array<SerializableSlot>) => void;
+    slotsDateRange: [Date, Date] | null;
 }
 
 const ParticipantsOverviewContext = createContext<ParticipantsOverviewContextData | null>(null);
@@ -63,6 +68,15 @@ const ParticipantsOverviewContextProvider = ({
 
     const [filteredLocationIds, setFilteredLocationIds] = useState<Array<number>>([]);
 
+    const [filteredDateRange, setFilteredDateRange] = useState<[number, number] | null>(null);
+
+    const earliestSlot = first(slots);
+    const latestSlot = last(slots);
+    const timeBufferInHours = 2;
+    const earliestBegin = earliestSlot === undefined ? null : startOfHour(subHours(new Date(earliestSlot.begin), timeBufferInHours));
+    const latestBegin =
+        latestSlot === undefined ? null : startOfHour(addHours(endOfHour(addHours(new Date(latestSlot.begin), timeBufferInHours)), 1));
+
     useEffectOnMount(() => {
         const queryParams = new URLSearchParams(window.location.search);
 
@@ -71,6 +85,11 @@ const ParticipantsOverviewContextProvider = ({
 
         const initialLocations = queryParams.get(locationsFilterQueryName)?.split(',') ?? [];
         setFilteredLocationIds(initialLocations.map(Number));
+
+        const initialDateRange = queryParams.get(dateRangeFilterQueryName)?.split(',') ?? [];
+        if (initialDateRange.length === 2 && !isNaN(Number(initialDateRange[0])) && !isNaN(Number(initialDateRange[1]))) {
+            setFilteredDateRange([Number(initialDateRange[0]), Number(initialDateRange[1])]);
+        }
     });
 
     const filteredParticipants = participants.filter(
@@ -146,11 +165,33 @@ const ParticipantsOverviewContextProvider = ({
                 toggleFilteredType,
                 filteredLocationIds,
                 toggleFilteredLocationId,
+                filteredDateRange,
+                setFilteredDateRange,
                 updateParticipant,
-                slots: slots.filter((slot) => filteredLocationIds.length === 0 || filteredLocationIds.includes(slot.locationId)),
-                venues: venues.filter((venue) => filteredLocationIds.length === 0 || filteredLocationIds.includes(venue.locationId)),
+                slots: slots.filter((slot) => {
+                    const matchesLocationFilter = filteredLocationIds.length === 0 || filteredLocationIds.includes(slot.locationId);
+
+                    const slotBegin = new Date(slot.begin);
+                    const matchesDateRangeFilter = true;
+                    if (filteredDateRange !== null) {
+                        const filteredBegin = new Date(filteredDateRange[0]);
+                        const filteredEnd = new Date(filteredDateRange[1]);
+
+                        return (
+                            (isSameMinute(slotBegin, filteredBegin) || isAfter(slotBegin, filteredBegin)) &&
+                            (isSameMinute(slotBegin, filteredEnd) || isBefore(slotBegin, filteredEnd))
+                        );
+                    }
+
+                    return matchesLocationFilter && matchesDateRangeFilter;
+                }),
+                venues: venues.filter(
+                    (venue) =>
+                        (filteredLocationIds.length === 0 && filteredDateRange === null) || filteredLocationIds.includes(venue.locationId),
+                ),
                 allLocations,
                 updateAllSlots,
+                slotsDateRange: earliestBegin === null || latestBegin === null ? null : [earliestBegin, latestBegin],
             }}
         >
             {children}

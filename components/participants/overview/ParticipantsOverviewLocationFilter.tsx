@@ -108,7 +108,6 @@ const ParticipantsOverviewLocationFilter = (): ReactElement => {
 
     return (
         <div className="mb-3">
-            <div className="mb-1 underline">Veranstaltungsort</div>
             <div className="flex flex-wrap gap-2 mb-3">
                 {locationGroups.map((locations) => (
                     <LocationGroupToggle key={locations[0]!.id} locations={locations} />
