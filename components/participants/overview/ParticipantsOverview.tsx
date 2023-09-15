@@ -1,3 +1,4 @@
+import { ToastContainer } from 'react-toastify';
 import { faFilePdf, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
@@ -9,7 +10,9 @@ import ParticipantsOverviewLocationFilter from 'components/participants/overview
 import ParticipantsOverviewTypesFilter from 'components/participants/overview/ParticipantsOverviewTypesFilter';
 
 const ParticipantsOverview = (): ReactElement => {
-    const { filteredParticipants } = useParticipantsOverviewContext();
+    const { filteredParticipants, pinnedParticipantIds } = useParticipantsOverviewContext();
+
+    const pinnedParticipants = filteredParticipants.filter(({ id }) => pinnedParticipantIds.includes(id));
 
     return (
         <div>
@@ -51,10 +54,29 @@ const ParticipantsOverview = (): ReactElement => {
             </div>
 
             <div className="grid grid-cols-1 gap-5">
-                {filteredParticipants.map((participant) => (
+                {pinnedParticipants.map((participant) => (
                     <ParticipantOverview key={participant.id} participant={participant} />
                 ))}
+
+                {filteredParticipants
+                    .filter(({ id }) => pinnedParticipants.length === 0 || !pinnedParticipantIds.includes(id))
+                    .map((participant) => (
+                        <ParticipantOverview key={participant.id} participant={participant} />
+                    ))}
             </div>
+
+            <ToastContainer
+                position="bottom-center"
+                autoClose={2000}
+                hideProgressBar={true}
+                newestOnTop={false}
+                closeOnClick={true}
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable={false}
+                pauseOnHover={false}
+                theme="dark"
+            />
         </div>
     );
 };

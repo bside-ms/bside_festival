@@ -18,6 +18,7 @@ import {
     useParticipantsOverviewContext,
     useParticipantVenues,
 } from 'components/participants/overview/ParticipantsOverviewContext';
+import PinParticipantToggle from 'components/participants/overview/PinParticipantToggle';
 import SlotForm from 'components/participants/slotsForm/SlotForm';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
@@ -51,8 +52,10 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
         <div>
             <div className="p-3 md:p-5 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl flex flex-col md:flex-row-reverse justify-between gap-4">
                 <div className="md:w-1/3 shrink-0 relative rounded-md overflow-auto h-[300px]">
+                    <PinParticipantToggle participantId={id} />
+
                     {participant.status === 'Canceled' && (
-                        <div className="absolute top-0 right-0 bottom-0 left-0 z-50 bg-red-800 bg-opacity-70 text-6xl p-5 text-center flex justify-center items-center text-gray-100">
+                        <div className="absolute top-0 right-0 bottom-0 left-0 z-30 bg-red-800 bg-opacity-70 text-6xl p-5 text-center flex justify-center items-center text-gray-100">
                             Fällt leider aus
                         </div>
                     )}

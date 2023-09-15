@@ -7,6 +7,7 @@ import { dateRangeFilterQueryName } from 'components/participants/overview/Parti
 import { locationsFilterQueryName } from 'components/participants/overview/ParticipantsOverviewLocationFilter';
 import { typesFilterQueryName } from 'components/participants/overview/ParticipantsOverviewTypesFilter';
 import availableTypes from 'lib/applications/availableTypes';
+import { pinnedParticipantsCookieName, readCookie, setCookie } from 'lib/applications/cookies';
 import formatDate from 'lib/common/helper/formatDate';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 import isValidType from 'lib/participants/isValidType';
@@ -24,6 +25,8 @@ interface ParticipantsOverviewContextData {
     updateParticipantLabels: (participantLabels: Array<ParticipantLabel>) => void;
     enhancedParticipantIds: Array<number>;
     toggleEnhancedParticipantId: (id: number) => void;
+    pinnedParticipantIds: Array<number>;
+    togglePinnedParticipantId: (id: number) => void;
     getLinksOfParticipant: (id: number) => Array<Link>;
     actuallyAvailableTypes: Array<Type>;
     filteredTypes: Array<Type>;
@@ -104,10 +107,6 @@ const ParticipantsOverviewContextProvider = ({
         }
     });
 
-    const filteredParticipants = participants.filter(
-        (participant) => filteredTypes.length === 0 || filteredTypes.includes(participant.type),
-    );
-
     const [enhancedParticipantIds, setEnhancedParticipantIds] = useState<Array<number>>([]);
 
     const toggleEnhancedParticipantId = useCallback((id: number) => {
@@ -119,6 +118,28 @@ const ParticipantsOverviewContextProvider = ({
             }
         });
     }, []);
+
+    const [pinnedParticipantIds, setPinnedParticipantIds] = useState<Array<number>>([]);
+
+    const togglePinnedParticipantId = useCallback((participantId: number) => {
+        setPinnedParticipantIds((prevPinnedParticipantIds) => {
+            const newPinnedParticipantIds = prevPinnedParticipantIds.includes(participantId)
+                ? prevPinnedParticipantIds.filter((enhancedId) => enhancedId !== participantId)
+                : [...prevPinnedParticipantIds, participantId];
+
+            setCookie(pinnedParticipantsCookieName, newPinnedParticipantIds.join(','));
+
+            return newPinnedParticipantIds;
+        });
+    }, []);
+
+    useEffectOnMount(() => {
+        setPinnedParticipantIds(readCookie(pinnedParticipantsCookieName)?.split(',').map(Number) ?? []);
+    });
+
+    const filteredParticipants = participants.filter(
+        (participant) => filteredTypes.length === 0 || filteredTypes.includes(participant.type),
+    );
 
     const toggleFilteredType = useCallback((type: Type) => {
         setFilteredTypes((types) => {
@@ -204,6 +225,8 @@ const ParticipantsOverviewContextProvider = ({
                 updateAllSlots,
                 slotsDateRange: earliestBegin === null || latestBegin === null ? null : [earliestBegin, latestBegin],
                 areFiltersSet,
+                pinnedParticipantIds,
+                togglePinnedParticipantId,
             }}
         >
             {children}
