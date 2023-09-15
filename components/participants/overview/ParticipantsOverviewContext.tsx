@@ -82,7 +82,8 @@ const ParticipantsOverviewContextProvider = ({
         latestSlot === undefined ? null : startOfHour(addHours(endOfHour(addHours(new Date(latestSlot.begin), timeBufferInHours)), 1));
 
     useEffect(() => {
-        setAreFiltersSet(filteredTypes.length > 0 || filteredLocationIds.length > 0 || filteredDateRange !== null);
+        // Filtered types are not relevant for this
+        setAreFiltersSet(filteredLocationIds.length > 0 || filteredDateRange !== null);
     }, [filteredDateRange, filteredLocationIds.length, filteredTypes.length]);
 
     useEffectOnMount(() => {
