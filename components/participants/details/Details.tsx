@@ -32,7 +32,7 @@ interface Props {
 }
 
 const Details = ({ participant, links, onCloseClick }: Props): ReactElement | null => {
-    const { filteredParticipants } = useParticipantsOverviewContext();
+    const { areFiltersSet } = useParticipantsOverviewContext();
 
     const { status } = useSession();
 
@@ -43,7 +43,7 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
     const participantSlots = useParticipantSlots(participant.id);
     const participantVenues = useParticipantVenues(participant.id);
 
-    if (filteredParticipants.length > 0 && participantSlots.length === 0 && participantVenues.length === 0) {
+    if (areFiltersSet && participantSlots.length === 0 && participantVenues.length === 0) {
         return null;
     }
 
@@ -51,6 +51,11 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
         <div>
             <div className="p-3 md:p-5 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl flex flex-col md:flex-row-reverse justify-between gap-4">
                 <div className="md:w-1/3 shrink-0 relative rounded-md overflow-auto h-[300px]">
+                    {participant.status === 'Canceled' && (
+                        <div className="absolute top-0 right-0 bottom-0 left-0 z-50 bg-red-800 bg-opacity-70 text-6xl p-5 text-center flex justify-center items-center text-gray-100">
+                            Fällt leider aus
+                        </div>
+                    )}
                     {isNotEmptyString(imageUrl) && (
                         <NextLink href={imageUrl} className="md:cursor-pointer" target="_blank">
                             <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />
@@ -64,6 +69,10 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
                     </div>
 
                     <div className="text-2xl font-display">{name}</div>
+
+                    {participant.status === 'Canceled' && (
+                        <div className="text-red-900 text-lg font-bold mt-3">Leider kann dieser Programmpunkt nicht stattfinden!</div>
+                    )}
 
                     {participantSlots.length > 0 && <ParticipantSlots participantSlots={participantSlots} />}
 

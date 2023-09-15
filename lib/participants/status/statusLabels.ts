@@ -6,6 +6,7 @@ const statusLabels: Record<ApplicationStatus, string> = {
     InProgress: 'In Bearbeitung',
     WaitingForConfirmation: 'Warten auf Bestätigung',
     Confirmed: 'Bestätigt',
+    Canceled: 'Abgesagt',
 };
 
 export default statusLabels;

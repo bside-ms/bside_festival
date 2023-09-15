@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import type { Link, Location, Participant, ParticipantLabel, Type, Venue } from '@prisma/client';
 import { addHours, endOfHour, isAfter, isBefore, isSameMinute, startOfHour, subHours } from 'date-fns';
 import { first, last, uniq } from 'lodash';
@@ -34,6 +34,7 @@ interface ParticipantsOverviewContextData {
     updateParticipant: (participant: Participant) => void;
     updateAllSlots: (allSlots: Array<SerializableSlot>) => void;
     slotsDateRange: [Date, Date] | null;
+    areFiltersSet: boolean;
 }
 
 const ParticipantsOverviewContext = createContext<ParticipantsOverviewContextData | null>(null);
@@ -70,12 +71,18 @@ const ParticipantsOverviewContextProvider = ({
 
     const [filteredDateRange, setFilteredDateRange] = useState<[number, number] | null>(null);
 
+    const [areFiltersSet, setAreFiltersSet] = useState(false);
+
     const earliestSlot = first(slots);
     const latestSlot = last(slots);
     const timeBufferInHours = 2;
     const earliestBegin = earliestSlot === undefined ? null : startOfHour(subHours(new Date(earliestSlot.begin), timeBufferInHours));
     const latestBegin =
         latestSlot === undefined ? null : startOfHour(addHours(endOfHour(addHours(new Date(latestSlot.begin), timeBufferInHours)), 1));
+
+    useEffect(() => {
+        setAreFiltersSet(filteredTypes.length > 0 || filteredLocationIds.length > 0 || filteredDateRange !== null);
+    }, [filteredDateRange, filteredLocationIds.length, filteredTypes.length]);
 
     useEffectOnMount(() => {
         const queryParams = new URLSearchParams(window.location.search);
@@ -192,6 +199,7 @@ const ParticipantsOverviewContextProvider = ({
                 allLocations,
                 updateAllSlots,
                 slotsDateRange: earliestBegin === null || latestBegin === null ? null : [earliestBegin, latestBegin],
+                areFiltersSet,
             }}
         >
             {children}

@@ -23,7 +23,7 @@ interface Props {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<GetServerSidePropsResult<Props>> => {
-    const participants = await prismaClient.participant.findMany({ where: { status: 'Confirmed' } });
+    const participants = await prismaClient.participant.findMany({ where: { status: { in: ['Confirmed', 'Canceled'] } } });
 
     const slots = await getAllSlots();
 

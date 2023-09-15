@@ -19,7 +19,7 @@ interface Props {
 }
 
 const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | null => {
-    const { filteredParticipants } = useParticipantsOverviewContext();
+    const { areFiltersSet } = useParticipantsOverviewContext();
 
     const participantSlots = useParticipantSlots(participant.id);
     const participantVenues = useParticipantVenues(participant.id);
@@ -28,7 +28,7 @@ const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | nu
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
-    if (filteredParticipants.length > 0 && participantSlots.length === 0 && participantVenues.length === 0) {
+    if (areFiltersSet && participantSlots.length === 0 && participantVenues.length === 0) {
         return null;
     }
 
@@ -38,6 +38,11 @@ const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | nu
             onClick={onClick}
         >
             <div className="md:w-1/3 shrink-0 relative rounded-md overflow-auto min-h-[300px]">
+                {participant.status === 'Canceled' && (
+                    <div className="absolute top-0 right-0 bottom-0 left-0 z-50 bg-red-800 bg-opacity-70 text-6xl p-5 text-center flex justify-center items-center text-gray-100">
+                        Fällt leider aus
+                    </div>
+                )}
                 {isNotEmptyString(imageUrl) && <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />}
             </div>
 

@@ -115,8 +115,8 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
                     </div>
 
                     <div className="text-xs mt-1">
-                        Sobald der Status "{statusLabels.Confirmed}" gesetzt ist, wird der Programmpunkt (später) unter Programm
-                        aufgelistet!
+                        Sobald der Status "{statusLabels.Confirmed}" gesetzt ist, wird der Programmpunkt im Programm aufgelistet! Auch mit
+                        Status "{statusLabels.Canceled}" erscheint der Punkt mit entsprechendem Hinweis in der Programmliste.
                     </div>
                 </div>
 

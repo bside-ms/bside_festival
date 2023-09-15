@@ -3,8 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import ParticipantOverview from 'components/participants/overview/ParticipantOverview';
-import ParticipantsOverviewAdditionalFilters from 'components/participants/overview/ParticipantsOverviewAdditionalFilters';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
+import ParticipantsOverviewLDateRangeFilter from 'components/participants/overview/ParticipantsOverviewDateRangeFilter';
+import ParticipantsOverviewLocationFilter from 'components/participants/overview/ParticipantsOverviewLocationFilter';
 import ParticipantsOverviewTypesFilter from 'components/participants/overview/ParticipantsOverviewTypesFilter';
 
 const ParticipantsOverview = (): ReactElement => {
@@ -21,7 +22,15 @@ const ParticipantsOverview = (): ReactElement => {
 
             <ParticipantsOverviewTypesFilter />
 
-            <ParticipantsOverviewAdditionalFilters />
+            <div className="mb-3">
+                <div className="mt-4">
+                    <ParticipantsOverviewLocationFilter />
+                </div>
+
+                <div className="mt-8 empty:mt-0">
+                    <ParticipantsOverviewLDateRangeFilter />
+                </div>
+            </div>
 
             <div className="mt-5 mb-4 flex gap-4 flex-wrap">
                 <Link
