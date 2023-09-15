@@ -7,6 +7,7 @@ import { dateRangeFilterQueryName } from 'components/participants/overview/Parti
 import { locationsFilterQueryName } from 'components/participants/overview/ParticipantsOverviewLocationFilter';
 import { typesFilterQueryName } from 'components/participants/overview/ParticipantsOverviewTypesFilter';
 import availableTypes from 'lib/applications/availableTypes';
+import formatDate from 'lib/common/helper/formatDate';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 import isValidType from 'lib/participants/isValidType';
 import serializeParticipant from 'lib/participants/serializeParticipant';
@@ -96,6 +97,9 @@ const ParticipantsOverviewContextProvider = ({
         const initialDateRange = queryParams.get(dateRangeFilterQueryName)?.split(',') ?? [];
         if (initialDateRange.length === 2 && !isNaN(Number(initialDateRange[0])) && !isNaN(Number(initialDateRange[1]))) {
             setFilteredDateRange([Number(initialDateRange[0]), Number(initialDateRange[1])]);
+        } else if (earliestBegin !== null && latestBegin !== null && isAfter(new Date(), earliestBegin)) {
+            const aboutOneHourAgo = startOfHour(subHours(new Date(), 1));
+            setFilteredDateRange([Number(formatDate(aboutOneHourAgo, 'T')), Number(formatDate(latestBegin, 'T'))]);
         }
     });
 
