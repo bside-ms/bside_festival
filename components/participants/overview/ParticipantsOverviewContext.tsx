@@ -179,15 +179,14 @@ const ParticipantsOverviewContextProvider = ({
                     const matchesLocationFilter = filteredLocationIds.length === 0 || filteredLocationIds.includes(slot.locationId);
 
                     const slotBegin = new Date(slot.begin);
-                    const matchesDateRangeFilter = true;
+                    let matchesDateRangeFilter = true;
                     if (filteredDateRange !== null) {
                         const filteredBegin = new Date(filteredDateRange[0]);
                         const filteredEnd = new Date(filteredDateRange[1]);
 
-                        return (
+                        matchesDateRangeFilter =
                             (isSameMinute(slotBegin, filteredBegin) || isAfter(slotBegin, filteredBegin)) &&
-                            (isSameMinute(slotBegin, filteredEnd) || isBefore(slotBegin, filteredEnd))
-                        );
+                            (isSameMinute(slotBegin, filteredEnd) || isBefore(slotBegin, filteredEnd));
                     }
 
                     return matchesLocationFilter && matchesDateRangeFilter;
