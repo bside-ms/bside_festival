@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
-import { toast } from 'react-toastify';
 import { faThumbtack } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ReactElement, SyntheticEvent } from 'react';
+import { toast } from 'react-toastify';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 
 interface Props {
