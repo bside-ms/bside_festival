@@ -44,7 +44,7 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
     const participantSlots = useParticipantSlots(participant.id);
     const participantVenues = useParticipantVenues(participant.id);
 
-    if (areFiltersSet && participantSlots.length === 0 && participantVenues.length === 0) {
+    if (areFiltersSet && hasSlotOrVenue(participant.type) === 'slot' && participantSlots.length === 0) {
         return null;
     }
 

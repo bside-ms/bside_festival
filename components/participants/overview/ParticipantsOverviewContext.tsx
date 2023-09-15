@@ -217,10 +217,7 @@ const ParticipantsOverviewContextProvider = ({
 
                     return matchesLocationFilter && matchesDateRangeFilter;
                 }),
-                venues: venues.filter(
-                    (venue) =>
-                        (filteredLocationIds.length === 0 && filteredDateRange === null) || filteredLocationIds.includes(venue.locationId),
-                ),
+                venues: venues.filter((venue) => filteredLocationIds.length === 0 || filteredLocationIds.includes(venue.locationId)),
                 allLocations,
                 updateAllSlots,
                 slotsDateRange: earliestBegin === null || latestBegin === null ? null : [earliestBegin, latestBegin],

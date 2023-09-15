@@ -3,14 +3,11 @@ import type { ReactElement } from 'react';
 import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import ParticipantVenues from 'components/participants/details/ParticipantVenues';
 import TypeBadge from 'components/participants/details/TypeBadge';
-import {
-    useParticipantSlots,
-    useParticipantsOverviewContext,
-    useParticipantVenues,
-} from 'components/participants/overview/ParticipantsOverviewContext';
+import { useParticipantSlots, useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import PinParticipantToggle from 'components/participants/overview/PinParticipantToggle';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import hasSlotOrVenue from 'lib/participants/hasSlotOrVenue';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
@@ -23,13 +20,12 @@ const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | nu
     const { areFiltersSet } = useParticipantsOverviewContext();
 
     const participantSlots = useParticipantSlots(participant.id);
-    const participantVenues = useParticipantVenues(participant.id);
 
     const { id, name, imageFileName, description, type, updatedDescription } = participant;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
-    if (areFiltersSet && participantSlots.length === 0 && participantVenues.length === 0) {
+    if (areFiltersSet && hasSlotOrVenue(participant.type) === 'slot' && participantSlots.length === 0) {
         return null;
     }
 
