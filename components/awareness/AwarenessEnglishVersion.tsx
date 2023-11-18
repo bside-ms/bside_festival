@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import type { ReactElement } from 'react';
-import awarenessPhoneNumber from 'components/awareness/awarenessPhoneNumber';
 
 const AwarenessEnglishVersion = (): ReactElement => {
     return (
@@ -28,11 +27,8 @@ const AwarenessEnglishVersion = (): ReactElement => {
                     <li className="pl-2">
                         You will find contact persons at the awareness point in front of the B-Side building at Hawerkamp 29.
                     </li>
-                    <li className="pl-2">The awareness team can accompany you to a safer space at any time</li>
-                    <li className="pl-2">
-                        <div>You can always call or messenger the awareness team at this number</div>
-                        <div className="text-3xl">{awarenessPhoneNumber}</div>
-                    </li>
+                    <li className="pl-2">The awareness team can accompany you to a safer space at any time.</li>
+                    <li className="pl-2">You can always call or messenger the awareness team.</li>
                 </ul>
             </div>
             <div>
@@ -77,8 +73,7 @@ const AwarenessEnglishVersion = (): ReactElement => {
             their neon-pink high-visibility vests. They help you navigate uncomfortable situations, lend a listening ear, guide you to a
             safe place, organize additional support, and if possible, ensure that intrusive and/or discriminatory individuals leave the
             premises or face other consequences. Call the Awareness hotline. If you do not see anyone from the Awareness Team, you can call
-            the number 01788887435 at any time. Help will be on its way or they will instruct you where to find assistance at a safe
-            location.
+            the hotline at any time. Help will be on its way or they will instruct you where to find assistance at a safe location.
             <div>
                 <div className="mb-2 font-bold underline">
                     Actions you can take if you observe or experience discriminatory behavior or boundary crossings:
@@ -89,8 +84,8 @@ const AwarenessEnglishVersion = (): ReactElement => {
                 them by their neon-pink high-visibility vests. They help you navigate uncomfortable situations, lend a listening ear, guide
                 you to a safe place, organize additional support, and if possible, ensure that intrusive and/or discriminatory individuals
                 leave the premises or face other consequences. Call the Awareness hotline. If you do not see anyone from the Awareness Team,
-                you can call the number 01788887435 at any time. Help will be on its way or they will instruct you where to find assistance
-                at a safe location.
+                you can call the hotline at any time. Help will be on its way or they will instruct you where to find assistance at a safe
+                location.
                 <div>
                     <ol className="pl-7 space-y-2 list-decimal list-outside">
                         <li className="pl-2">
@@ -103,11 +98,6 @@ const AwarenessEnglishVersion = (): ReactElement => {
                             their neon-pink high-visibility vests. They help you navigate uncomfortable situations, lend a listening ear,
                             guide you to a safe place, organize additional support, and if possible, ensure that intrusive and/or
                             discriminatory individuals leave the premises or face other consequences.
-                        </li>
-                        <li className="pl-2">
-                            Call the Awareness hotline. If you do not see anyone from the Awareness Team, you can call the number{' '}
-                            {awarenessPhoneNumber} at any time. Help will be on its way or they will instruct you where to find assistance
-                            at a safe location.
                         </li>
                     </ol>
                 </div>

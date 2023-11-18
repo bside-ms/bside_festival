@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import AwarenessAlternativeLinks from 'components/awareness/AwarenessAlternativeLinks';
-import awarenessPhoneNumber from 'components/awareness/awarenessPhoneNumber';
 
 const AwarenessInformation = (): ReactElement => {
     return (
@@ -30,10 +29,7 @@ const AwarenessInformation = (): ReactElement => {
                     <li className="pl-2">Du kannst die Menschen jederzeit ansprechen, wenn du dich unwohl fühlst oder Fragen hast.</li>
                     <li className="pl-2">Du findest Ansprechpersonen an der Awareness-Anlaufstelle vor dem B-Side Gebäude</li>
                     <li className="pl-2">Das Awareness-Team kann dich jederzeit an einen Rückzugsort begleiten</li>
-                    <li className="pl-2">
-                        <div>Du kannst das Awareness-Team jederzeit unter dieser Nummer per Anruf oder Messenger erreichen:</div>
-                        <div className="text-3xl">{awarenessPhoneNumber}</div>
-                    </li>
+                    <li className="pl-2">Du kannst das Awareness-Team jederzeit per Anruf oder Messenger erreichen.</li>
                 </ul>
             </div>
 
@@ -85,11 +81,6 @@ const AwarenessInformation = (): ReactElement => {
                             unseren Partys sind Menschen mit neon-pinken Warnwesten und mit Armbinden unterwegs. Sie helfen dir aus
                             unangenehmen Situationen, hören dir zu, bringen dich an einen sicheren Ort und vermitteln dir weitere
                             Unterstützung.
-                        </li>
-                        <li className="pl-2">
-                            <span className="underline">Awareness-Telefon</span> anrufen. Solltest du keinen Menschen aus dem Awareness-Team
-                            sehen, kannst du jederzeit {awarenessPhoneNumber} anrufen. Menschen werden sich dann schnellstmöglich auf den
-                            Weg zu dir machen oder dir sagen, wo ihr euch in Sicherheit treffen könnt.
                         </li>
                         <li className="pl-2">
                             <span className="underline">Awareness-Anlaufstelle</span> aufsuchen. Vor dem B-Side Gebäude (Am Hawerkamp 29)

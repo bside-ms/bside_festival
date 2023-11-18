@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import type { ReactElement } from 'react';
-import awarenessPhoneNumber from 'components/awareness/awarenessPhoneNumber';
 
 const AwarenessEasyGerman = (): ReactElement => {
     return (
@@ -19,9 +18,7 @@ const AwarenessEasyGerman = (): ReactElement => {
                 <br />
                 Oder wenn du Hilfe brauchst.
                 <br />
-                Dann kannst du diese Nummer anrufen:
-                <br />
-                <span className="text-xl tracking-wider">{awarenessPhoneNumber}</span>
+                Dann kannst uns anrufen.
                 <br />
                 Dann kommen Menschen und helfen dir.
                 <br />
@@ -195,10 +192,6 @@ const AwarenessEasyGerman = (): ReactElement => {
                 <span className="text-xl tracking-wider">3.</span>
                 <br />
                 Du kannst die Awareness-Telefonnummer anrufen.
-                <br />
-                Die Telefonnummer ist:
-                <br />
-                {awarenessPhoneNumber}
                 <br />
                 Dann kommt Hilfe.
                 <br />
