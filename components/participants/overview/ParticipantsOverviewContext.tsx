@@ -101,7 +101,12 @@ const ParticipantsOverviewContextProvider = ({
         const initialDateRange = queryParams.get(dateRangeFilterQueryName)?.split(',') ?? [];
         if (initialDateRange.length === 2 && !isNaN(Number(initialDateRange[0])) && !isNaN(Number(initialDateRange[1]))) {
             setFilteredDateRange([Number(initialDateRange[0]), Number(initialDateRange[1])]);
-        } else if (earliestBegin !== null && latestBegin !== null && isAfter(new Date(), earliestBegin)) {
+        } else if (
+            earliestBegin !== null &&
+            latestBegin !== null &&
+            isAfter(new Date(), earliestBegin) &&
+            isBefore(new Date(), latestBegin)
+        ) {
             const aboutOneHourAgo = startOfHour(subHours(new Date(), 1));
             setFilteredDateRange([Number(formatDate(aboutOneHourAgo, 'T')), Number(formatDate(latestBegin, 'T'))]);
         }
