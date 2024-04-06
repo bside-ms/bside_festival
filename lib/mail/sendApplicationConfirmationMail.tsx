@@ -7,7 +7,7 @@ const sendApplicationConfirmationMail = (
     application: Omit<Participant, 'contactMail'> & { contactMail: string },
     links: Array<string>,
 ): void => {
-    const title = 'B-Side Festival 2023 - Bewerbungsbestätigung';
+    const title = 'B-Side Festival 2024 - Bewerbungsbestätigung';
 
     sendMail(title, application.contactMail, render(<ApplicationConfirmationMail title={title} application={application} links={links} />));
 };

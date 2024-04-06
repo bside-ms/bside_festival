@@ -18,7 +18,7 @@ const ParticipantsOverview = (): ReactElement => {
         <div>
             <div className="text-black font-display mb-8">
                 <div className="text-2xl">
-                    <Link href="/">B-Side Festival 2023</Link>
+                    <Link href="/">B-Side Festival 2024</Link>
                 </div>
                 <div className="text-4xl font-bold">Programm</div>
             </div>

@@ -23,11 +23,19 @@ const ApplicationsOverview = (): ReactElement => {
 
             <ApplicationOverviewAdditionalFilters />
 
-            <div className="grid grid-cols-1 gap-5">
-                {filteredApplications.map((application) => (
-                    <Application key={application.id} application={application} />
-                ))}
-            </div>
+            {filteredApplications.length === 0 ? (
+                <div className="mt-5 p-3 md:p-5 rounded-md shadow-lg text-gray-800 backdrop-blur-2xl font-bold">
+                    {allApplications.length > 0
+                        ? 'Bisher sind noch keine Bewerbungen eingegangen!'
+                        : 'Zur aktuellen Filterung keine Bewerbungen gefunden!'}
+                </div>
+            ) : (
+                <div className="space-y-5">
+                    {filteredApplications.map((application) => (
+                        <Application key={application.id} application={application} />
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

@@ -14,7 +14,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2023 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
                     <div>Du möchtest Dich als Solokünstler:in oder mit deiner Band für ein Konzert bewerben?</div>
                     <div>
                         Bitte beachtet, dass wir insbesondere Künstler:innen fördern, die ihre eigenen Kompositionen & Texte präsentieren.
@@ -31,7 +31,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2023 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
                     <div>Ihr möchtet euch mit einer Lesung, einem Vortrag oder einem poetischen Beitrag bewerben?</div>
                     <div>Wir bitten um vollständige & aussagekräftige Bewerbung, d.h. inklusive Text- & Hörproben.</div>
                 </div>
@@ -44,7 +44,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2023 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
                     <div>Ihr habt eine Idee für das diesjährige Familienprogramm?</div>
                 </div>
             );
@@ -56,7 +56,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2023 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
                     <div>Ihr möchtet euch mit einem Workshop oder einem (interaktiven) Infostand bewerben?</div>
                     <div>
                         Bitte beachtet, dass wir insbesondere Bewerbungen berücksichtigen, die generationsübergreifend, interaktiv, kreativ
@@ -73,7 +73,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2023 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
                     <div>Ihr möchtet euch mit einer Performance, einem Theaterstück oder einem kabarettistischen Beitrag bewerben?</div>
                     <div>
                         Wir bitten um vollständige & aussagekräftige Bewerbung, d.h. inklusive Aufzeichnungen in Bild und Ton zu euren
@@ -89,7 +89,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2023 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
                     <div>Wir bitten um vollständige & aussagekräftige Bewerbung.</div>
                 </div>
             );
@@ -102,7 +102,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2023 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
                 </div>
             );
     }

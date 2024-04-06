@@ -36,7 +36,7 @@ const MailWireframe = ({ title, preview, children }: Props): ReactElement => {
                 <MjmlSection fullWidth={true} backgroundColor="#818387">
                     <MjmlColumn padding={0} width="600px">
                         <MjmlText color="#ededed" fontWeight="700" fontSize="20px" align="left">
-                            B-Side Festival 2023
+                            B-Side Festival 2024
                         </MjmlText>
                     </MjmlColumn>
                 </MjmlSection>

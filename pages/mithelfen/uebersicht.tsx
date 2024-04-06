@@ -3,16 +3,17 @@ import type { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import type { ReactElement } from 'react';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
+import Header from 'components/common/Header';
 import VolunteersOverview from 'components/volunteers/volunteersOverview/VolunteersOverview';
 import prismaClient from 'lib/common/prismaClient';
-import getLegacyUserSession from 'lib/next-auth/getLegacyUserSession';
+import getUserSession from 'lib/next-auth/getUserSession';
 
 interface Props {
     volunteers: Array<Volunteer>;
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context): Promise<GetServerSidePropsResult<Props>> => {
-    const userSession = await getLegacyUserSession(context);
+    const userSession = await getUserSession(context);
 
     if (userSession === null) {
         return {
@@ -35,8 +36,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
 export default ({ volunteers }: Props): ReactElement => {
     return (
         <div>
-            <div className="py-16 min-h-screen w-full relative">
+            <div className="pb-16 min-h-screen w-full relative">
                 <div className="relative z-10">
+                    <div className="p-3 max-w-2xl mx-auto">
+                        <Header />
+                    </div>
+
                     <div className="px-3 max-w-2xl mx-auto">
                         <VolunteersOverview volunteers={volunteers} />
                     </div>

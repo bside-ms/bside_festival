@@ -3,10 +3,11 @@ import type { ReactElement } from 'react';
 import ApplicationTypeSelection from 'components/applications/applicationForm/ApplicationTypeSelection';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
-import getLegacyUserSession from 'lib/next-auth/getLegacyUserSession';
+import Header from 'components/common/Header';
+import getUserSession from 'lib/next-auth/getUserSession';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const userSession = await getLegacyUserSession(context);
+    const userSession = await getUserSession(context);
 
     if (userSession === null) {
         return {
@@ -25,10 +26,13 @@ export default (): ReactElement => {
         <div>
             <div className="min-h-screen w-full relative ">
                 <div className="relative z-10">
-                    <div className="p-5 md:p-10 w-full md:w-2/3 max-w-[700px] mx-auto drop-shadow-xl">
+                    <div className="w-full md:w-2/3 md:pt-2 max-w-[700px] mx-auto">
+                        <Header />
+                    </div>
+
+                    <div className="p-5 md:p-8 w-full md:w-2/3 max-w-[700px] mx-auto drop-shadow-xl">
                         <div className="w-full flex gap-6 flex-col">
                             <div className="text-black font-display">
-                                <div className="text-2xl">B-Side Festival 2023</div>
                                 <div className="text-4xl font-bold">Bewerbung</div>
                             </div>
 

@@ -7,7 +7,7 @@ const AwarenessInformation = (): ReactElement => {
         <div className="bg-opacity-50 bg-white p-4 flex flex-col gap-5">
             <div className="text-black font-display">
                 <div className="text-2xl">
-                    <Link href="/">B-Side Festival 2023</Link>
+                    <Link href="/">B-Side Festival 2024</Link>
                 </div>
                 <div className="text-4xl font-bold">Awareness</div>
             </div>

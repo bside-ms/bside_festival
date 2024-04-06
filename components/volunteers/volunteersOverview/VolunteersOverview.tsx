@@ -29,19 +29,25 @@ const VolunteersOverview = ({ volunteers }: Props): ReactElement => {
         <div>
             <div className="text-3xl mb-5 font-display">Helfer:innen ({volunteers.length})</div>
 
-            <div className="rounded-md drop-shadow bg-gray-50 p-2 mb-3">
-                Die Kontakt-Daten der Helfer:innen sind nur für Mitglieder der {portalLink} des Festivals sichtbar.
-            </div>
+            {volunteers.length === 0 ? (
+                <div className="rounded-md drop-shadow bg-gray-50 p-2 mt-3">Bisher sind keine Helfer:innen-Anmeldungen eingegangen</div>
+            ) : (
+                <>
+                    <div className="rounded-md drop-shadow bg-gray-50 p-2 mb-3">
+                        Die Kontakt-Daten der Helfer:innen sind nur für Mitglieder der {portalLink} des Festivals sichtbar.
+                    </div>
 
-            <div className="grid grid-cols-1 gap-3">
-                {volunteers.map((volunteer) => (
-                    <VolunteerDetails key={volunteer.int} volunteer={volunteer} showSensitiveData={isInDataPrivacyGroup} />
-                ))}
-            </div>
+                    <div className="grid grid-cols-1 gap-3">
+                        {volunteers.map((volunteer) => (
+                            <VolunteerDetails key={volunteer.int} volunteer={volunteer} showSensitiveData={isInDataPrivacyGroup} />
+                        ))}
+                    </div>
 
-            <div className="mt-8">
-                <VolunteerDetailsLegend />
-            </div>
+                    <div className="mt-8">
+                        <VolunteerDetailsLegend />
+                    </div>
+                </>
+            )}
         </div>
     );
 };

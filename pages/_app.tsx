@@ -10,7 +10,7 @@ const MyApp = ({ Component, pageProps }: AppProps): ReactElement => {
     return (
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         <SessionProvider session={pageProps.session}>
-            <NextHead title="B-Side Festival 2023" />
+            <NextHead title="B-Side Festival 2024" />
 
             <NavigationOverlayContextProvider>
                 <Component {...pageProps} />

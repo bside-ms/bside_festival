@@ -4,11 +4,12 @@ import type { ReactElement } from 'react';
 import ApplicationForm from 'components/applications/applicationForm/ApplicationForm';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
-import getLegacyUserSession from 'lib/next-auth/getLegacyUserSession';
+import Header from 'components/common/Header';
+import getUserSession from 'lib/next-auth/getUserSession';
 import urlPathTypes from 'lib/participants/urlPathTypes';
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
-    const userSession = await getLegacyUserSession(context);
+    const userSession = await getUserSession(context);
 
     if (userSession === null) {
         return {
@@ -48,7 +49,11 @@ export default ({ chosenType }: Props): ReactElement => {
         <div>
             <div className="min-h-screen w-full relative ">
                 <div className="relative z-10">
-                    <div className="p-5 md:p-10 w-full md:w-2/3 max-w-[700px] mx-auto drop-shadow-xl">
+                    <div className="w-full md:w-2/3 md:pt-2 max-w-[700px] mx-auto">
+                        <Header />
+                    </div>
+
+                    <div className="p-5 md:p-8 w-full md:w-2/3 max-w-[700px] mx-auto drop-shadow-xl">
                         <ApplicationForm chosenType={chosenType} />
                     </div>
                 </div>

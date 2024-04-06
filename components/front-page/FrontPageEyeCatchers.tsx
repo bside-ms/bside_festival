@@ -35,11 +35,6 @@ const FrontPageEyeCatchers = (): ReactElement => {
                                 </div>
 
                                 <div>
-                                    Nachdem letztes Jahr ein voller Erfolg war, freuen wir uns richtig auf diesen September. Denn vom{' '}
-                                    <strong>15. - 16.09.2023</strong> werden die Straßen wieder mit Kunst, Musik, Workshops und Theater
-                                    gefüllt.
-                                </div>
-                                <div>
                                     Du willst mit deiner Kunst Teil des bunten Programms werden? Deine Musik darf auf gar keinen Fall
                                     fehlen? Du hast eine spannende Idee, auf die wir bisher noch gar nicht gekommen sind? Super! Dann bewirb
                                     dich jetzt!

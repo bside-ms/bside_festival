@@ -127,7 +127,6 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
             <div className="w-full">
                 <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex gap-6 flex-col">
                     <div className="text-black font-display">
-                        <div className="text-2xl">B-Side Festival 2023</div>
                         <div className="text-4xl font-bold">Bewerbung</div>
                     </div>
 
@@ -184,7 +183,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                     <TextArea<ApplicationFormValues>
                         name="motivation"
                         label="Motivation"
-                        info="Warum möchtet ihr Teil des B-Side Festivals 2023 sein?"
+                        info="Warum möchtet ihr Teil des B-Side Festivals 2024 sein?"
                     />
 
                     <TextArea<ApplicationFormValues>
@@ -214,7 +213,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
 
                     <div className="mt-5 text-sm flex flex-col gap-2">
                         <div>
-                            Das B-Side Festival ist auch 2023 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
+                            Das B-Side Festival ist auch 2024 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
                             insbesondere Räume und Bühnen für FLINTA* und andere marginalisierte Gesellschaftsgruppen schaffen.
                         </div>
                         <div>

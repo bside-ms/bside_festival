@@ -7,7 +7,7 @@ const AwarenessEasyGerman = (): ReactElement => {
         <div className="bg-white p-4 flex flex-col gap-5 drop-shadow-2xl">
             <div className="text-black font-display">
                 <div className="text-2xl">
-                    <Link href="/">B-Side Festival 2023</Link>
+                    <Link href="/">B-Side Festival 2024</Link>
                 </div>
             </div>
 

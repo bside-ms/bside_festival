@@ -76,7 +76,6 @@ const VolunteerForm = (): ReactElement => {
 
     const title = (
         <div className="text-black font-display mb-4">
-            <div className="text-2xl">B-Side Festival 2023</div>
             <div className="text-4xl font-bold">Mithelfen</div>
         </div>
     );

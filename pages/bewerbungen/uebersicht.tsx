@@ -5,8 +5,9 @@ import ApplicationsOverview from 'components/applications/applicationsOverview/A
 import { ApplicationsOverviewContextProvider } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
+import Header from 'components/common/Header';
 import prismaClient from 'lib/common/prismaClient';
-import getLegacyUserSession from 'lib/next-auth/getLegacyUserSession';
+import getUserSession from 'lib/next-auth/getUserSession';
 import serializeParticipant from 'lib/participants/serializeParticipant';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
@@ -18,7 +19,7 @@ interface Props {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context): Promise<GetServerSidePropsResult<Props>> => {
-    const userSession = await getLegacyUserSession(context);
+    const userSession = await getUserSession(context);
 
     if (userSession === null) {
         return {
@@ -51,8 +52,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
 export default ({ applications, participantLabels, allLinks, allLabels }: Props): ReactElement => {
     return (
         <div>
-            <div className="py-16 min-h-screen w-full relative">
+            <div className="pb-16 min-h-screen w-full relative">
                 <div className="relative z-10">
+                    <div className="p-3 max-w-7xl mx-auto">
+                        <Header />
+                    </div>
+
                     <div className="px-3 max-w-7xl mx-auto">
                         <ApplicationsOverviewContextProvider
                             applications={applications}
