@@ -7,6 +7,7 @@ import type { ReactElement } from 'react';
 import ApplicationCurationForm from 'components/applications/applicationCuration/ApplicationCurationForm';
 import ApplicationDescriptionForm from 'components/applications/applicationCuration/ApplicationDescriptionForm';
 import ApplicationDetailsAdditionalInfo from 'components/applications/applicationDetails/ApplicationDetailsAdditionalInfo';
+import ApplicationDetailsCanProvideBackline from 'components/applications/applicationDetails/ApplicationDetailsCanProvideBackline';
 import ApplicationDetailsContacts from 'components/applications/applicationDetails/ApplicationDetailsContacts';
 import ApplicationDetailsLinks from 'components/applications/applicationDetails/ApplicationDetailsLinks';
 import ApplicationDetailsMotivation from 'components/applications/applicationDetails/ApplicationDetailsMotivation';
@@ -72,6 +73,8 @@ const ApplicationDetails = ({ application, labels, links, onCloseClick }: Props)
                 <ApplicationDetailsContacts application={application} />
 
                 <ApplicationDetailsTechnicalRider application={application} />
+
+                <ApplicationDetailsCanProvideBackline application={application} />
 
                 <ApplicationDetailsAdditionalInfo application={application} />
             </div>

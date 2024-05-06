@@ -38,8 +38,8 @@ export default (): ReactElement => {
 
                             <div className="text-black font-bold">
                                 Auf dem B-Side Festival gibt es viele verschiedenen Formate. Damit wir den Überblick behalten, haben wir auf
-                                dieser Seite verschiedene Bewerbungsformulare zusammengestellt. Sucht euch einfach das Genre aus, das am
-                                ehesten zu eurem Programmpunkt passt.
+                                dieser Seite verschiedene Bewerbungsformulare zusammengestellt. Such dir einfach das Genre raus, das am
+                                ehesten zu deinem Programmpunkt passt.
                             </div>
 
                             <ApplicationTypeSelection />

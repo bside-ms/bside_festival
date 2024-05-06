@@ -17,7 +17,7 @@ const generateFileName = (base64Data: string, contentType: string): string => {
 };
 
 const uploadFileToIonos = async (
-    encodedFile: string,
+    encodedFile: string | null,
     allowedContentTypes: Array<string>,
     allowedMaxFileSize: number,
 ): Promise<string | null> => {

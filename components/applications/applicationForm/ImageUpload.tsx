@@ -124,7 +124,7 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
                 ) : (
                     <div
                         className={`h-24 w-full border border-dashed border-black flex justify-center items-center rounded ${
-                            typeof errorMessage === 'string' ? 'bg-rose-600' : ''
+                            typeof errorMessage === 'string' ? 'bg-rose-600 text-white' : ''
                         }`}
                     >
                         {required ? 'Bild hinzufügen *' : 'Bild hinzufügen'}

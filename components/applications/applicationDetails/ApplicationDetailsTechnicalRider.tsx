@@ -25,7 +25,7 @@ const ApplicationDetailsTechnicalRider = ({ application: { technicalRider, techn
             {isNotEmptyString(technicalRider) && <div>{technicalRider}</div>}
 
             {isNotEmptyString(technicalRiderPdfUrl) && (
-                <NextLink href={technicalRiderPdfUrl}>
+                <NextLink href={technicalRiderPdfUrl} target="_blank">
                     <FontAwesomeIcon className="inline-block p-1 w-8" icon={faFilePdf} />
                 </NextLink>
             )}

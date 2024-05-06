@@ -11,6 +11,7 @@ import ApplicationTypeIntro from 'components/applications/applicationForm/Applic
 import ImageUpload from 'components/applications/applicationForm/ImageUpload';
 import Links from 'components/applications/applicationForm/Links';
 import TechnicalRiderFields, { getTechnicalRiderInfo } from 'components/applications/applicationForm/TechnicalRiderFields';
+import Checkbox from 'components/form/Checkbox';
 import TextArea from 'components/form/TextArea';
 import TextInput from 'components/form/TextInput';
 import isEmptyString from 'lib/common/helper/isEmptyString';
@@ -27,16 +28,17 @@ export interface ApplicationFormValues {
     encodedImage: string;
     motivation: string;
     additionalInfo: string;
-    technicalRider: string;
-    encodedTechnicalRiderPdf: string;
-    residence: string;
+    technicalRider?: string;
+    encodedTechnicalRiderPdf?: string;
+    canProvideBackline?: boolean;
+    residence?: string;
 
     // Proud and also ashamed about this lazy solution
     url1: string;
-    url2: string;
-    url3: string;
-    url4: string;
-    url5: string;
+    url2?: string;
+    url3?: string;
+    url4?: string;
+    url5?: string;
 }
 
 interface Props {
@@ -73,7 +75,10 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                     'technicalRider',
                     {
                         type: 'manual',
-                        message: 'Bitte sende uns euren Technical Rider in Text- oder PDF-Form',
+                        message:
+                            technicalRiderInfo.withoutTextArea === true
+                                ? 'Bitte sende uns euren Technical Rider in PDF-Form'
+                                : 'Bitte sende uns euren Technical Rider in Text- oder PDF-Form',
                     },
                     {
                         shouldFocus: true,
@@ -92,9 +97,10 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                 encodedImage: values.encodedImage,
                 motivation: values.motivation,
                 additionalInfo: values.additionalInfo,
-                technicalRider: values.technicalRider,
-                encodedTechnicalRiderPdf: values.encodedTechnicalRiderPdf,
-                residence: values.residence,
+                technicalRider: values.technicalRider ?? null,
+                encodedTechnicalRiderPdf: values.encodedTechnicalRiderPdf ?? null,
+                canProvideBackline: values.canProvideBackline ?? false,
+                residence: values.residence ?? null,
                 links: [values.url1, values.url2, values.url3, values.url4, values.url5].filter(isNotEmptyString),
             };
 
@@ -165,7 +171,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                     <TextArea<ApplicationFormValues>
                         name="description"
                         label="Beschreibung"
-                        info="Dies ist ein Pressetext und wird auf unserer Webseite veröffentlicht."
+                        info="Beachtet: Dies ist ein Pressetext. Dieser Text wird auf unserer Webseite veröffentlicht, falls ihr beim B-Side Festival dabei sein werdet."
                     />
 
                     <Links />
@@ -173,6 +179,21 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                     {chosenType !== Type.Neighbor && <TextInput<ApplicationFormValues> name="residence" label="Wohnort" />}
 
                     <TechnicalRiderFields chosenType={chosenType} />
+
+                    {chosenType === Type.Concert && (
+                        <div>
+                            <div>
+                                Für schnelle Umbauzeiten sind wir womöglich darauf angewiesen, Backline wie Amps und Boxen von Schlagzeug
+                                und Gitarren zwischen den Bands zuteilen. Könnt ihr euch vorstellen, Teile der Backline bereitzustellen?
+                            </div>
+                            <div className="mt-1">
+                                <Checkbox<ApplicationFormValues>
+                                    name="canProvideBackline"
+                                    label="Ja, wir können Teile der Backline bereitstellen"
+                                />
+                            </div>
+                        </div>
+                    )}
 
                     <TextInput<ApplicationFormValues> name="contactName" label="Ansprechperson" required={true} />
 

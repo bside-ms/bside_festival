@@ -13,7 +13,7 @@ import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 
 const fileFieldName: keyof ApplicationFormValues = 'encodedTechnicalRiderPdf';
 
-export const getTechnicalRiderInfo = (applicationType: Type): null | { info: string; required?: boolean } => {
+export const getTechnicalRiderInfo = (applicationType: Type): null | { info: string; withoutTextArea?: boolean; required?: boolean } => {
     switch (applicationType) {
         case Type.Exhibition:
             return {
@@ -34,12 +34,9 @@ export const getTechnicalRiderInfo = (applicationType: Type): null | { info: str
         case Type.Concert:
             return {
                 info: `
-                    Welche Instrumente habt ihr auf der Bühne? Welche technische Ausstattung 
-                    braucht ihr? Zum Beispiel Verstärker, Mikrofone, Licht, … Wie viel Platz 
-                    braucht ihr auf der Bühne? Seid so genau wie möglich. Kennzeichnet was 
-                    ihr selber mitbringt und was ihr von uns braucht. Ladet optional zusätzlich
-                    eine PDF-Datei hoch.
+                    Ladet uns bitte einen Technical Rider als PDF hoch, welcher eure technischen Anforderungen beschreibt.
                 `,
+                withoutTextArea: true,
                 required: true,
             };
 
@@ -121,18 +118,25 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
         return null;
     }
 
-    const { info, required } = technicalRiderInfo;
+    const { info, required, withoutTextArea } = technicalRiderInfo;
 
     const templateLink = '/assets/Tech-Rider-Vorlage.pdf';
 
     return (
         <div className="flex flex-col gap-1 relative">
-            <TextArea<ApplicationFormValues>
-                name="technicalRider"
-                // We do not use `required` of `TextArea` since PDF is fine as well, it's handled manually
-                label={required === true ? 'Technical Rider *' : 'Technical Rider'}
-                info={info}
-            />
+            {withoutTextArea === true ? (
+                <>
+                    <input type="hidden" {...register('technicalRider')} />
+                    <label className="px-1 text-black text-base">{info}</label>
+                </>
+            ) : (
+                <TextArea<ApplicationFormValues>
+                    name="technicalRider"
+                    // We do not use `required` of `TextArea` since PDF is fine as well, it's handled manually
+                    label={required === true ? 'Technical Rider *' : 'Technical Rider'}
+                    info={info}
+                />
+            )}
 
             <input type="hidden" {...register(fileFieldName)} />
 
@@ -159,22 +163,30 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
                     </div>
                 ) : (
                     <label htmlFor={fileInputId.current} className="cursor-pointer">
-                        <div className="p-5 border border-dashed border-black flex justify-center items-center rounded">PDF hinzufügen</div>
+                        <div
+                            className={`p-5 border border-dashed border-black flex justify-center items-center rounded ${
+                                typeof technicalRiderErrorMessage === 'string' || typeof technicalRiderPdfErrorMessage === 'string'
+                                    ? 'bg-rose-600 text-white'
+                                    : ''
+                            }`}
+                        >
+                            PDF hinzufügen {withoutTextArea === true && required === true && ' *'}
+                        </div>
                     </label>
                 )}
             </div>
 
             <div>
                 Solltet ihr selbst noch keinen Tech-Rider haben, nutzt bitte{' '}
-                <a href={templateLink} className="underline cursor-pointer">
+                <a href={templateLink} target="_blank" className="underline cursor-pointer">
                     unsere Vorlage
                 </a>
                 , um unserer Technik-Crew viel Arbeit zu ersparen.
             </div>
 
-            {typeof technicalRiderPdfErrorMessage === 'string' && <div className="px-1 text-rose-900">{technicalRiderErrorMessage}</div>}
+            {typeof technicalRiderErrorMessage === 'string' && <div className="px-1 text-rose-900">{technicalRiderErrorMessage}</div>}
 
-            {typeof technicalRiderPdfErrorMessage === 'string' && <div className="px-1 text-rose-900">{technicalRiderErrorMessage}</div>}
+            {typeof technicalRiderPdfErrorMessage === 'string' && <div className="px-1 text-rose-900">{technicalRiderPdfErrorMessage}</div>}
         </div>
     );
 };
