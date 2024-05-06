@@ -55,21 +55,26 @@ export default (): ReactElement => {
                                     <div className="mt-3 text-xs text-justify">
                                         Passend zum neuen Ort, lautet das Motto in diesem Jahr: SPIELPLATZ FÜR KREATIVE
                                     </div>
-                                    <div className="mt-3 text-xs text-justify">
-                                        Du willst mit deiner Kunst Teil des bunten Programms werden? Deine Musik darf auf gar keinen Fall
-                                        fehlen? Du hast eine spannende Idee, auf die wir bisher noch gar nicht gekommen sind? Super! Dann
-                                        bewirb dich jetzt!
-                                    </div>
 
-                                    <div className="mt-3 text-right">
-                                        <Link
-                                            className="text-md cursor-pointer hover:text-red-700 flex items-center gap-2 leading-5 justify-end"
-                                            href="/bewerbungen"
-                                        >
-                                            Zum Bewerbungsformular
-                                            <FontAwesomeIcon className="w-4 pt-1 inline-block" icon={faArrowRight} />
-                                        </Link>
-                                    </div>
+                                    {status === 'authenticated' && (
+                                        <>
+                                            <div className="mt-3 text-xs text-justify">
+                                                Du willst mit deiner Kunst Teil des bunten Programms werden? Deine Musik darf auf gar keinen
+                                                Fall fehlen? Du hast eine spannende Idee, auf die wir bisher noch gar nicht gekommen sind?
+                                                Super! Dann bewirb dich jetzt!
+                                            </div>
+
+                                            <div className="mt-3 text-right">
+                                                <Link
+                                                    className="text-md cursor-pointer hover:text-red-700 flex items-center gap-2 leading-5 justify-end"
+                                                    href="/bewerbungen"
+                                                >
+                                                    Zum Bewerbungsformular
+                                                    <FontAwesomeIcon className="w-4 pt-1 inline-block" icon={faArrowRight} />
+                                                </Link>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
