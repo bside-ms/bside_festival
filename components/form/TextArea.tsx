@@ -12,6 +12,7 @@ interface Props<T extends FieldValues> {
     label: string;
     defaultValue?: string;
     info?: string;
+    additionalInfo?: string;
     required?: boolean;
     maxLength?: number;
     rows?: number;
@@ -22,6 +23,7 @@ const TextArea = <T extends FieldValues>({
     name,
     defaultValue,
     info,
+    additionalInfo,
     required = false,
     maxLength,
     rows = 5,
@@ -38,6 +40,12 @@ const TextArea = <T extends FieldValues>({
 
     return (
         <div className="flex flex-col">
+            {isNotEmptyString(info) && (
+                <label htmlFor={id} className="px-1 text-black text-base">
+                    {info}
+                </label>
+            )}
+
             <textarea
                 id={id}
                 className={`p-2 rounded outline-0 ${
@@ -62,11 +70,7 @@ const TextArea = <T extends FieldValues>({
                 })}
             />
 
-            {isNotEmptyString(info) && (
-                <label htmlFor={id} className="px-1 text-black text-base">
-                    {info}
-                </label>
-            )}
+            {isNotEmptyString(additionalInfo) && <div className="px-1 text-black text-base">{additionalInfo}</div>}
 
             {typeof errorMessage === 'string' && <div className="px-1 text-rose-900">{errorMessage}</div>}
         </div>

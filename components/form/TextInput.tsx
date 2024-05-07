@@ -38,6 +38,12 @@ const TextInput = <T extends FieldValues>({
 
     return (
         <div className="flex flex-col">
+            {isNotEmptyString(info) && (
+                <label htmlFor={id} className="px-1 text-black text-base">
+                    {info}
+                </label>
+            )}
+
             <input
                 id={id}
                 type="text"
@@ -62,11 +68,6 @@ const TextInput = <T extends FieldValues>({
                     validate,
                 })}
             />
-            {isNotEmptyString(info) && (
-                <label htmlFor={id} className="px-1 text-black text-base">
-                    {info}
-                </label>
-            )}
 
             {typeof errorMessage === 'string' && <div className="px-1 text-rose-900">{errorMessage}</div>}
         </div>

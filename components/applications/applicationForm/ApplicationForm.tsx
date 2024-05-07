@@ -11,7 +11,6 @@ import ApplicationTypeIntro from 'components/applications/applicationForm/Applic
 import ImageUpload from 'components/applications/applicationForm/ImageUpload';
 import Links from 'components/applications/applicationForm/Links';
 import TechnicalRiderFields, { getTechnicalRiderInfo } from 'components/applications/applicationForm/TechnicalRiderFields';
-import Checkbox from 'components/form/Checkbox';
 import TextArea from 'components/form/TextArea';
 import TextInput from 'components/form/TextInput';
 import isEmptyString from 'lib/common/helper/isEmptyString';
@@ -30,7 +29,7 @@ export interface ApplicationFormValues {
     additionalInfo: string;
     technicalRider?: string;
     encodedTechnicalRiderPdf?: string;
-    canProvideBackline?: boolean;
+    backlineSharing?: string;
     residence?: string;
 
     // Proud and also ashamed about this lazy solution
@@ -99,7 +98,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                 additionalInfo: values.additionalInfo,
                 technicalRider: values.technicalRider ?? null,
                 encodedTechnicalRiderPdf: values.encodedTechnicalRiderPdf ?? null,
-                canProvideBackline: values.canProvideBackline ?? false,
+                backlineSharing: values.backlineSharing ?? null,
                 residence: values.residence ?? null,
                 links: [values.url1, values.url2, values.url3, values.url4, values.url5].filter(isNotEmptyString),
             };
@@ -171,7 +170,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                     <TextArea<ApplicationFormValues>
                         name="description"
                         label="Beschreibung"
-                        info="Beachtet: Dies ist ein Pressetext. Dieser Text wird auf unserer Webseite veröffentlicht, falls ihr beim B-Side Festival dabei sein werdet."
+                        additionalInfo="Beachtet: Dies ist ein Pressetext. Dieser Text wird auf unserer Webseite veröffentlicht, falls ihr beim B-Side Festival dabei sein werdet."
                     />
 
                     <Links />
@@ -181,18 +180,16 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                     <TechnicalRiderFields chosenType={chosenType} />
 
                     {chosenType === Type.Concert && (
-                        <div>
-                            <div>
-                                Für schnelle Umbauzeiten sind wir womöglich darauf angewiesen, Backline wie Amps und Boxen von Schlagzeug
-                                und Gitarren zwischen den Bands zuteilen. Könnt ihr euch vorstellen, Teile der Backline bereitzustellen?
-                            </div>
-                            <div className="mt-1">
-                                <Checkbox<ApplicationFormValues>
-                                    name="canProvideBackline"
-                                    label="Ja, wir können Teile der Backline bereitstellen"
-                                />
-                            </div>
-                        </div>
+                        <TextArea<ApplicationFormValues>
+                            name="backlineSharing"
+                            label="Ja, wir können folgendes bereitstellen …"
+                            info={`
+                                Für schnelle Umbauzeiten sind wir womöglich darauf angewiesen, die Backline der Acts wiederzuverwenden.
+                                Könnt ihr euch vorstellen hierfür, Teile eurer Backline bereitzustellen und wenn ja, was wäre das
+                                (beispielsweise Amps und Boxen)?
+                            `}
+                            rows={3}
+                        />
                     )}
 
                     <TextInput<ApplicationFormValues> name="contactName" label="Ansprechperson" required={true} />

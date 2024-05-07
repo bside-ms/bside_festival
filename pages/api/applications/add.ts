@@ -22,7 +22,7 @@ export interface AddParticipantRequest {
     additionalInfo: string;
     technicalRider: string | null;
     encodedTechnicalRiderPdf: string | null;
-    canProvideBackline: boolean;
+    backlineSharing: string | null;
     residence: string | null;
     links: Array<string>;
 }
@@ -58,7 +58,7 @@ export default async (
         contactPhone,
         encodedTechnicalRiderPdf,
         technicalRider,
-        canProvideBackline,
+        backlineSharing,
         contactName,
         links,
         contactMail,
@@ -86,7 +86,7 @@ export default async (
             additionalInfo,
             imageFileName,
             technicalRiderFileName,
-            canProvideBackline,
+            backlineSharing,
             appliedAt: new Date(),
         },
     });
