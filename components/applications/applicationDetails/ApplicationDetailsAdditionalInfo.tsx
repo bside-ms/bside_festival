@@ -13,7 +13,7 @@ const ApplicationDetailsAdditionalInfo = ({ application: { additionalInfo } }: P
 
     return (
         <div className="mt-4">
-            <div className="font-bold">Weitere Infos</div>
+            <div className="font-display">Weitere Infos</div>
             <div>{additionalInfo}</div>
         </div>
     );
