@@ -170,7 +170,10 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                     <TextArea<ApplicationFormValues>
                         name="description"
                         label="Beschreibung"
-                        additionalInfo="Beachtet: Dies ist ein Pressetext. Dieser Text wird auf unserer Webseite veröffentlicht, falls ihr beim B-Side Festival dabei sein werdet."
+                        additionalInfo={`
+                            Beachtet: Dies ist ein Pressetext. Dieser Text wird auf unserer Webseite veröffentlicht,
+                            falls ihr beim B-Side Festival dabei sein werdet.
+                        `}
                     />
 
                     <Links />

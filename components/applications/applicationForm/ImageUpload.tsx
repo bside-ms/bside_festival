@@ -135,8 +135,7 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
             {typeof errorMessage === 'string' && <div className="px-1 text-rose-900">{errorMessage}</div>}
 
             <div className="px-1 text-black text-base">
-                Dieses Foto wird auf unserer Webseite veröffentlicht, falls ihr beim B-Side Festival dabei sein werdet. Bitte sendet nur
-                neutrale Fotos ohne Text & Logos.
+                Beachtet: Dieses Foto wird auf unserer Webseite veröffentlicht, falls ihr beim B-Side Festival dabei sein werdet.
             </div>
         </div>
     );

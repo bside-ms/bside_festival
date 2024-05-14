@@ -7,11 +7,11 @@ const isTypeAvailable = (type: Type): boolean => {
         case Type.Reading:
         case Type.Performance:
         case Type.FamilyProgram:
+        case Type.Misc:
+            return true;
         case Type.Exhibition:
         case Type.Catering:
         case Type.InfoBooth:
-        case Type.Misc:
-            return true;
         case Type.Neighbor:
         case Type.DiskJockey:
         case Type.Food:

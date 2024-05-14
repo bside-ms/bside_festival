@@ -138,7 +138,6 @@ module.exports = {
         'react/no-access-state-in-setstate': ERROR,
         'react/no-adjacent-inline-elements': OFF,
         'react/no-array-index-key': ERROR,
-        'react/no-danger': ERROR,
         'react/no-deprecated': OFF,
         'react/no-did-mount-set-state': ERROR,
         'react/no-did-update-set-state': ERROR,
