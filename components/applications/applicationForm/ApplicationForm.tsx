@@ -30,6 +30,7 @@ export interface ApplicationFormValues {
     technicalRider?: string;
     encodedTechnicalRiderPdf?: string;
     backlineSharing?: string;
+    materialExpenses?: string;
     residence?: string;
 
     // Proud and also ashamed about this lazy solution
@@ -99,6 +100,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                 technicalRider: values.technicalRider ?? null,
                 encodedTechnicalRiderPdf: values.encodedTechnicalRiderPdf ?? null,
                 backlineSharing: values.backlineSharing ?? null,
+                materialExpenses: values.materialExpenses ?? null,
                 residence: values.residence ?? null,
                 links: [values.url1, values.url2, values.url3, values.url4, values.url5].filter(isNotEmptyString),
             };
@@ -178,8 +180,6 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
 
                     <Links />
 
-                    {chosenType !== Type.Neighbor && <TextInput<ApplicationFormValues> name="residence" label="Wohnort" />}
-
                     <TechnicalRiderFields chosenType={chosenType} />
 
                     {chosenType === Type.Concert && (
@@ -195,11 +195,13 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                         />
                     )}
 
-                    <TextInput<ApplicationFormValues> name="contactName" label="Ansprechperson" required={true} />
-
-                    <TextInput<ApplicationFormValues> name="contactMail" label="E-Mail-Adresse" required={true} />
-
-                    <TextInput<ApplicationFormValues> name="contactPhone" label="Telefonnummer" />
+                    {chosenType === Type.Exhibition && (
+                        <TextInput<ApplicationFormValues>
+                            name="materialExpenses"
+                            label="Materialkosten"
+                            additionalInfo="Diese Kosten werden gegebenenfalls übernommen."
+                        />
+                    )}
 
                     <TextArea<ApplicationFormValues>
                         name="motivation"
@@ -212,6 +214,14 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                         label="Weitere Informationen"
                         info="Was möchten ihr uns noch mitteilen?"
                     />
+
+                    <TextInput<ApplicationFormValues> name="contactName" label="Ansprechperson" required={true} />
+
+                    <TextInput<ApplicationFormValues> name="contactMail" label="E-Mail-Adresse" required={true} />
+
+                    <TextInput<ApplicationFormValues> name="contactPhone" label="Telefonnummer" />
+
+                    {chosenType !== Type.Neighbor && <TextInput<ApplicationFormValues> name="residence" label="Wohnort" />}
 
                     <label className="w-full bg-black p-1 block">
                         <button

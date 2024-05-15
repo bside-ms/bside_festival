@@ -25,6 +25,8 @@ const ApplicationConfirmationMail = ({ application, links, title }: Props): Reac
         residence,
         technicalRider,
         technicalRiderFileName,
+        backlineSharing,
+        materialExpenses,
     } = application;
 
     return (
@@ -90,6 +92,24 @@ const ApplicationConfirmationMail = ({ application, links, title }: Props): Reac
                                 <br />
                             </>
                         )}
+                    </>
+                )}
+                {isNotEmptyString(backlineSharing) && (
+                    <>
+                        <br />
+                        <strong>Backline-Sharing:</strong>
+                        <br />
+                        {backlineSharing}
+                        <br />
+                    </>
+                )}
+                {isNotEmptyString(materialExpenses) && (
+                    <>
+                        <br />
+                        <strong>Materialkosten:</strong>
+                        <br />
+                        {materialExpenses}
+                        <br />
                     </>
                 )}
                 {links.length > 0 && (

@@ -8,8 +8,8 @@ const isTypeAvailable = (type: Type): boolean => {
         case Type.Performance:
         case Type.FamilyProgram:
         case Type.Misc:
-            return true;
         case Type.Exhibition:
+            return true;
         case Type.Catering:
         case Type.InfoBooth:
         case Type.Neighbor:

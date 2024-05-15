@@ -12,6 +12,7 @@ interface Props<T extends FieldValues> {
     label: string;
     defaultValue?: string;
     info?: string;
+    additionalInfo?: string;
     required?: boolean;
     maxLength?: number;
     validate?: (value: string) => string | undefined;
@@ -22,6 +23,7 @@ const TextInput = <T extends FieldValues>({
     name,
     defaultValue,
     info,
+    additionalInfo,
     validate,
     required = false,
     maxLength,
@@ -68,6 +70,8 @@ const TextInput = <T extends FieldValues>({
                     validate,
                 })}
             />
+
+            {isNotEmptyString(additionalInfo) && <div className="px-1 text-black text-base">{additionalInfo}</div>}
 
             {typeof errorMessage === 'string' && <div className="px-1 text-rose-900">{errorMessage}</div>}
         </div>

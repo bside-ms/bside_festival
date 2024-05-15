@@ -10,6 +10,7 @@ import ApplicationDetailsAdditionalInfo from 'components/applications/applicatio
 import ApplicationDetailsCanProvideBackline from 'components/applications/applicationDetails/ApplicationDetailsCanProvideBackline';
 import ApplicationDetailsContacts from 'components/applications/applicationDetails/ApplicationDetailsContacts';
 import ApplicationDetailsLinks from 'components/applications/applicationDetails/ApplicationDetailsLinks';
+import ApplicationDetailsMaterialExpenses from 'components/applications/applicationDetails/ApplicationDetailsMaterialExpenses';
 import ApplicationDetailsMotivation from 'components/applications/applicationDetails/ApplicationDetailsMotivation';
 import ApplicationDetailsTechnicalRider from 'components/applications/applicationDetails/ApplicationDetailsTechnicalRider';
 import ApplicationLabels from 'components/applications/common/ApplicationLabels';
@@ -73,6 +74,8 @@ const ApplicationDetails = ({ application, labels, links, onCloseClick }: Props)
                 <ApplicationDetailsContacts application={application} />
 
                 <ApplicationDetailsTechnicalRider application={application} />
+
+                <ApplicationDetailsMaterialExpenses application={application} />
 
                 <ApplicationDetailsCanProvideBackline application={application} />
 

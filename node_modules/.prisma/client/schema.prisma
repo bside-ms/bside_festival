@@ -27,6 +27,7 @@ model Participant {
   technicalRider         String?            @db.Text
   technicalRiderFileName String?            @db.Text
   backlineSharing        String?            @db.Text
+  materialExpenses       String?            @db.Text
   additionalInfo         String?            @db.Text
   links                  Link[]
   comments               Comment[]
