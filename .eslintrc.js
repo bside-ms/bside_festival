@@ -81,7 +81,6 @@ module.exports = {
          */
         'arrow-parens': [OFF, 'as-needed'],
         'comma-dangle': OFF, // Is handled by TS plugin
-        complexity: [ERROR, { max: 15 }],
         curly: ERROR,
         'default-param-last': OFF, // Is handled by TS plugin
         'dot-notation': OFF, // Is handled by TS plugin
