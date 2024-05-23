@@ -130,7 +130,6 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
         case Type.Food:
         case Type.Neighbor:
         case Type.DiskJockey:
-        case Type.InfoBooth:
         case Type.Catering:
             return (
                 <div className="flex flex-col gap-2">
