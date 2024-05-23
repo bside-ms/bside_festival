@@ -55,6 +55,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
             );
 
         case Type.Workshop:
+        case Type.InfoBooth:
             return (
                 <div className="flex flex-col gap-2">
                     <div>

@@ -3,7 +3,7 @@ import type { Type } from '@prisma/client';
 const typeLabels: Record<Type, string> = {
     Concert: 'Musik',
     DiskJockey: 'DJ',
-    Workshop: 'Workshops & (interaktive) Infostände',
+    Workshop: 'Workshops',
     Reading: 'Lesungen, Vorträge & Poesie',
     Performance: 'Performance, Theater & Kabarett',
     FamilyProgram: 'Familienprogramm',
@@ -11,14 +11,15 @@ const typeLabels: Record<Type, string> = {
     Food: 'Essensstand',
     Neighbor: 'Nachbarschaft',
     Misc: 'Sonstiges',
-    InfoBooth: 'Infostand',
+    InfoBooth: 'Infostände',
     Catering: 'Catering',
 };
 
 export const typeLabelsWithSoftHyphens: Record<Type, string> = {
     ...typeLabels,
-    Workshop: 'Workshops & (inter&shy;aktive) Infostände',
+    Reading: 'Lesungen, Vorträge&nbsp;& Poesie',
     FamilyProgram: 'Familien&shy;programm',
+    Performance: 'Performance, Theater&nbsp;& Kabarett',
 };
 
 export default typeLabels;

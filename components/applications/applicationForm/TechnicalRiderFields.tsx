@@ -46,6 +46,7 @@ export const getTechnicalRiderInfo = (applicationType: Type): null | { info: str
             };
 
         case Type.Workshop:
+        case Type.InfoBooth:
             return {
                 info: 'Welche technische Ausstattung braucht ihr? Alternativ könnt ihr hierfür auch eine PDF-Datei hochladen',
             };

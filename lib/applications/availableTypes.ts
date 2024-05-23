@@ -9,9 +9,9 @@ const isTypeAvailable = (type: Type): boolean => {
         case Type.FamilyProgram:
         case Type.Misc:
         case Type.Exhibition:
+        case Type.InfoBooth:
             return true;
         case Type.Catering:
-        case Type.InfoBooth:
         case Type.Neighbor:
         case Type.DiskJockey:
         case Type.Food:
