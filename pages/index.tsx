@@ -12,7 +12,7 @@ export default (): ReactElement => {
             <div className="min-h-screen w-full relative font-display">
                 <div className="relative z-10">
                     <div className="flex">
-                        <div className="w-1/3 sm:w-2/5 relative max-w-[385px] min-h-max">
+                        <div className="w-1/4 sm:w-2/5 relative max-w-[385px] min-h-max">
                             <div className="absolute w-full min-w-[200px]">
                                 <div className="relative w-full aspect-square">
                                     <Image
@@ -33,8 +33,10 @@ export default (): ReactElement => {
 
                         <div className="flex pt-16 pr-7 sm:pl-5 sm:pt-24 sm:pr-10 max-w-[540px] mb-14">
                             <div className="relative mb-[70rem] md:mb-[60rem]">
-                                <div className="font-semibold text-3xl md:text-6xl [text-align-last:justify]">B - S i d e</div>
-                                <div className="font-semibold text-3xl md:text-6xl [text-align-last:justify]">F e s t i v a l</div>
+                                <div className="font-semibold text-4xl sm:text-5xl md:text-6xl [text-align-last:justify]">B - S i d e</div>
+                                <div className="font-semibold text-4xl sm:text-5xl md:text-6xl [text-align-last:justify]">
+                                    F e s t i v a l
+                                </div>
                                 <div className="text-xl sm:text-3xl [text-align-last:justify]">2 0 2 4</div>
 
                                 <div className="absolute top-full left-0 right-0 flex flex-col">
@@ -56,12 +58,12 @@ export default (): ReactElement => {
                                     <div className="mt-3 text-xs text-justify">
                                         Du willst mit deiner Kunst Teil des bunten Programms werden? Deine Musik darf auf gar keinen Fall
                                         fehlen? Du hast eine spannende Idee, auf die wir bisher noch gar nicht gekommen sind? Super! Dann
-                                        bewirb dich jetzt!
+                                        bewirb dich jetzt noch bis zum 02.06.2024!
                                     </div>
 
                                     <div className="mt-3 text-right">
                                         <Link
-                                            className="text-md cursor-pointer hover:text-red-700 flex items-center gap-2 leading-5 justify-end"
+                                            className="text-xs sm:text-base cursor-pointer hover:text-red-700 flex items-center gap-2 leading-5 justify-end"
                                             href="/bewerbungen"
                                         >
                                             Zum Bewerbungsformular
