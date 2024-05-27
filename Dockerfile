@@ -1,5 +1,5 @@
 ## Install Dependencies
-FROM node:16-alpine AS dependencies
+FROM node:20-bullseye AS dependencies
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -7,7 +7,7 @@ RUN npm ci --force
 
 
 ## Runner
-FROM node:16-alpine AS runner
+FROM node:20-bullseye AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED 1
