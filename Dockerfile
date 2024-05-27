@@ -1,6 +1,6 @@
 ## Install Dependencies
 FROM node:20-bullseye AS dependencies
-RUN apt install libc6-compat
+RUN apt-get install libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --force
