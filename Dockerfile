@@ -3,6 +3,7 @@ FROM node:20-bullseye AS dependencies
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --force
+RUN npm prisma:client:generate
 
 
 ## Runner
