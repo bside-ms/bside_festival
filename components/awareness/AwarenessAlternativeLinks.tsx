@@ -17,7 +17,7 @@ const AwarenessAlternativeLinks = (): ReactElement => {
             </Link>
             <Link
                 className="flex w-full cursor-pointer items-center gap-2 rounded-sm bg-black px-4 leading-3 text-white hover:bg-gray-800"
-                href="//awareness/english"
+                href="/awareness/english"
             >
                 <div className="pb-1 font-display text-base md:pb-3 md:text-4xl">English version</div>
                 <div>
