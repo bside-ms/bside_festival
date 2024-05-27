@@ -38,7 +38,7 @@ const SelectInput = <T extends FieldValues>({
         <div className="flex flex-col">
             <select
                 id={id}
-                className="p-1 rounded bg-white py-2 outline-0"
+                className="rounded bg-white p-1 py-2 outline-0"
                 required={required}
                 defaultValue={defaultValue}
                 {...register(name, {

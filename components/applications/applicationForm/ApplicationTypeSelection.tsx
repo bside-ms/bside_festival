@@ -8,13 +8,13 @@ import typeUrlPaths from 'lib/participants/typeUrlPaths';
 
 const TypeSelect = ({ type }: { type: Type }): ReactElement => {
     return (
-        <Link className="block relative group h-52" href={`/bewerbungen/${typeUrlPaths[type]}`}>
+        <Link className="group relative block h-52" href={`/bewerbungen/${typeUrlPaths[type]}`}>
             <ApplicationTypeImage type={type} />
 
-            <div className="absolute top-0 right-0 bottom-0 left-0 opacity-50 bg-gray-600 transition-colors group-hover:bg-gray-400 md:cursor-pointer" />
+            <div className="absolute inset-0 bg-gray-600 opacity-50 transition-colors group-hover:bg-gray-400 md:cursor-pointer" />
 
             <div
-                className="absolute right-0 bottom-0 left-0 px-3 md:px-6 py-1 md:py-3 text-lg md:text-xl font-display text-white"
+                className="absolute inset-x-0 bottom-0 px-3 py-1 font-display text-lg text-white md:px-6 md:py-3 md:text-xl"
                 dangerouslySetInnerHTML={{ __html: typeLabelsWithSoftHyphens[type] }}
             />
         </Link>

@@ -122,7 +122,7 @@ const SlotForm = ({ participantId }: Props): ReactElement | null => {
 
             <div className="mt-2">
                 <FormProvider {...methods}>
-                    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex gap-4 flex-col max-w-[350px]">
+                    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex max-w-[350px] flex-col gap-4">
                         <DateTimeInput name="beginDate" label="Beginn" defaultValue={beginValue} required={true} />
 
                         <TextInput<SlotFormValues>
@@ -141,11 +141,11 @@ const SlotForm = ({ participantId }: Props): ReactElement | null => {
                             defaultValue={participantSlots[0]?.location.id.toString()}
                         />
 
-                        <label className="max-w-[300px] bg-black p-1 block">
+                        <label className="block max-w-[300px] bg-black p-1">
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full bg-black text-white border border-white rounded font-display text-sm leading-3 p-3 disabled:bg-gray-600"
+                                className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 text-white disabled:bg-gray-600"
                             >
                                 Speichern
                             </button>
@@ -154,7 +154,7 @@ const SlotForm = ({ participantId }: Props): ReactElement | null => {
                         {isSubmitting && (
                             <div className="text-black">
                                 <span className="mr-1">Wird gespeichert</span>{' '}
-                                <span className="animate-spin inline-block w-3">
+                                <span className="inline-block w-3 animate-spin">
                                     <FontAwesomeIcon icon={faSpinner} />
                                 </span>
                             </div>
@@ -167,16 +167,16 @@ const SlotForm = ({ participantId }: Props): ReactElement | null => {
 
             {participantSlots.length > 0 && (
                 <div className="mt-4 max-w-[350px]">
-                    <a onClick={toggleShowDeleteButton} className="text-sky-700 cursor-pointer">
+                    <a onClick={toggleShowDeleteButton} className="cursor-pointer text-sky-700">
                         Slot löschen
                     </a>
 
                     {showDeleteButton && (
                         <div>
-                            <label className="max-w-[300px] bg-black p-1 block">
+                            <label className="block max-w-[300px] bg-black p-1">
                                 <button
                                     onClick={handleSlotDelete}
-                                    className="w-full bg-black text-white border border-white rounded font-display text-sm leading-3 p-3 disabled:bg-gray-600"
+                                    className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 text-white disabled:bg-gray-600"
                                 >
                                     Slot unwiderruflich löschen
                                 </button>

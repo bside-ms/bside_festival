@@ -13,16 +13,16 @@ const ParticipateEyecatcher = (): ReactElement => {
 
     return (
         <div className={styles.gridContainer}>
-            <div className={`grid md:hidden bg-red z-0 ${styles.smGrid ?? ''}`}>
+            <div className={`z-0 grid bg-red-700 md:hidden ${styles.smGrid ?? ''}`}>
                 {range(10).map((rowIdx) => range(10).map((colIdx) => <div key={`r${rowIdx}c${colIdx}`} />))}
             </div>
 
-            <div className={`hidden md:grid bg-red z-0 ${styles.mdGrid ?? ''}`}>
+            <div className={`z-0 hidden bg-red-700 md:grid ${styles.mdGrid ?? ''}`}>
                 {range(30).map((rowIdx) => range(30).map((colIdx) => <div key={`r${rowIdx}c${colIdx}`} />))}
             </div>
 
-            <div className="relative w-full h-full">
-                <div className="font-bold absolute left-1/2 -translate-x-1/2 top-[80px] text-[20px] z-20">
+            <div className="relative size-full">
+                <div className="absolute left-1/2 top-[80px] z-20 -translate-x-1/2 text-[20px] font-bold">
                     <Button onClick={handleOverlayToggle}>Mitmachen</Button>
                 </div>
             </div>

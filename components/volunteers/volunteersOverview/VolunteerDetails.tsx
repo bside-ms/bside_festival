@@ -36,11 +36,11 @@ export const dayPreferences = new Array<[VolunteerDayPreferenceKey, string]>(
 
 const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement => {
     return (
-        <div className="rounded-md drop-shadow bg-gray-50 py-2 px-4">
-            <div className="text-xl mb-2">{volunteer.fullName}</div>
+        <div className="rounded-md bg-gray-50 px-4 py-2 drop-shadow">
+            <div className="mb-2 text-xl">{volunteer.fullName}</div>
 
             {showSensitiveData && (
-                <div className="text-base text-gray-600 mb-3">
+                <div className="mb-3 text-base text-gray-600">
                     <div>
                         <a href={`tel:${volunteer.phoneNumber}`} className="md:cursor-pointer md:hover:text-gray-900">
                             {volunteer.phoneNumber}
@@ -54,11 +54,11 @@ const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement
                 </div>
             )}
 
-            <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
                 {preferences.map(([preference, iconName]) => (
                     <FontAwesomeIcon
                         key={preference}
-                        className="w-6 h-6"
+                        className="size-6"
                         style={{ color: volunteer[preference] ? undefined : '#CCC' }}
                         icon={iconName}
                     />

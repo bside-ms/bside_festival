@@ -67,7 +67,7 @@ const ParticipantsOverviewLDateRangeFilter = (): ReactElement | null => {
 
     return (
         <div className="mb-9">
-            <div className="flex flex-col flex-wrap gap-4 mb-3 max-w-lg">
+            <div className="mb-3 flex max-w-lg flex-col flex-wrap gap-4">
                 <div className="flex justify-between">
                     {filteredDateRange !== null ? (
                         <>
@@ -85,26 +85,24 @@ const ParticipantsOverviewLDateRangeFilter = (): ReactElement | null => {
                 <div>
                     <ReactSlider
                         value={filteredDateRange === null ? undefined : [filteredDateRange[0], filteredDateRange[1]]}
-                        className="w-full h-3 bg-gray-200 rounded-lg"
+                        className="h-3 w-full rounded-lg bg-gray-200"
                         min={earliestTimestamp}
                         max={latestTimestamp}
                         defaultValue={[earliestTimestamp, latestTimestamp]}
                         step={halfHourInMilliseconds}
                         pearling={true}
                         onChange={handleChange}
-                        // eslint-disable-next-line react/jsx-no-bind
                         renderTrack={(props, state): ReactElement => {
                             if (state.index === 1) {
-                                return <div {...props} className="bg-gray-500 rounded-lg h-3" />;
+                                return <div {...props} className="h-3 rounded-lg bg-gray-500" />;
                             }
 
                             return <div {...props} />;
                         }}
-                        // eslint-disable-next-line react/jsx-no-bind
                         renderThumb={(props): ReactElement => (
                             <div
                                 {...props}
-                                className="border-gray-600 border-2 bg-gray-200 select-none ring-0 h-8 w-8 rounded-full top-1/2 -translate-y-1/2"
+                                className="top-1/2 size-8 -translate-y-1/2 select-none rounded-full border-2 border-gray-600 bg-gray-200 ring-0"
                             />
                         )}
                     />

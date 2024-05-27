@@ -22,7 +22,7 @@ const RestrictedAccess = ({ children }: Props): ReactElement | null => {
 
         case 'unauthenticated':
             return (
-                <div className={`text-white bg-gray-500 py-5 text-2xl text-center h-screen ${styles.overview ?? ''}`}>
+                <div className={`h-screen bg-gray-500 py-5 text-center text-2xl text-white ${styles.overview ?? ''}`}>
                     <ContentWrapper>
                         <div className="flex flex-col gap-5">
                             <FontAwesomeIcon icon={faLock} className="text-5xl" />
@@ -36,7 +36,7 @@ const RestrictedAccess = ({ children }: Props): ReactElement | null => {
         case 'authenticated':
             if (!isInFestivalGroup) {
                 return (
-                    <div className={`text-white bg-gray-500 py-5 text-2xl text-center h-screen ${styles.overview ?? ''}`}>
+                    <div className={`h-screen bg-gray-500 py-5 text-center text-2xl text-white ${styles.overview ?? ''}`}>
                         <ContentWrapper>
                             <div className="flex flex-col gap-5">
                                 <FontAwesomeIcon icon={faLock} className="text-5xl" />

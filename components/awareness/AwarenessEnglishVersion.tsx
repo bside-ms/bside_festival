@@ -3,8 +3,8 @@ import type { ReactElement } from 'react';
 
 const AwarenessEnglishVersion = (): ReactElement => {
     return (
-        <div className="bg-opacity-50 bg-white p-4 flex flex-col gap-5">
-            <div className="text-black font-display">
+        <div className="flex flex-col gap-5 bg-white/50 p-4">
+            <div className="font-display text-black">
                 <div className="text-2xl">
                     <Link href="/">B-Side Festival 2024</Link>
                 </div>
@@ -21,7 +21,7 @@ const AwarenessEnglishVersion = (): ReactElement => {
             You can always reach out to people if you're uncomfortable or have questions. You will find contact persons at the awareness
             point in front of the B-Side building at Hawerkamp 29. The awareness team can accompany you to a safer space at any time
             <div>
-                <ul className="pl-7 space-y-2 list-outside list-disc">
+                <ul className="list-outside list-disc space-y-2 pl-7">
                     <li className="pl-2">You can recognize the awareness team by their neon pink vests or armbands.</li>
                     <li className="pl-2">You can always reach out to people if you're uncomfortable or have questions.</li>
                     <li className="pl-2">
@@ -48,7 +48,7 @@ const AwarenessEnglishVersion = (): ReactElement => {
                 ensuring a safe event that is free from discrimination. Anyone who engages in discriminatory behavior or crosses someone's
                 boundaries will face consequences.
                 <div>
-                    <ol className="pl-7 space-y-2 list-decimal list-outside">
+                    <ol className="list-outside list-decimal space-y-2 pl-7">
                         <li className="pl-2">
                             Personal boundaries are individual and subjective. It should go without saying that they must be respected! Only
                             a clear "Yes" means "Yes." If in doubt, it's better to ask one time too often than one time too few.
@@ -87,7 +87,7 @@ const AwarenessEnglishVersion = (): ReactElement => {
                 you can call the hotline at any time. Help will be on its way or they will instruct you where to find assistance at a safe
                 location.
                 <div>
-                    <ol className="pl-7 space-y-2 list-decimal list-outside">
+                    <ol className="list-outside list-decimal space-y-2 pl-7">
                         <li className="pl-2">
                             Go to a safe place or assist the person in question in reaching a safe place. Please do not help individuals you
                             do not know without asking. Ask the individual if you should intervene or not. It is about the needs of the

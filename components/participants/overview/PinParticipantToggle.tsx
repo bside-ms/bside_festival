@@ -29,7 +29,7 @@ const PinParticipantToggle = ({ participantId }: Props): ReactElement => {
         return (
             <div
                 onClick={handleToggleClick}
-                className="absolute top-2 right-2 z-50 w-10 h-10 bg-gray-600 text-gray-200 flex justify-center items-center p-3 rounded-full leading-3"
+                className="absolute right-2 top-2 z-50 flex size-10 items-center justify-center rounded-full bg-gray-600 p-3 leading-3 text-gray-200"
             >
                 <FontAwesomeIcon icon={faThumbtack} />
             </div>
@@ -39,7 +39,7 @@ const PinParticipantToggle = ({ participantId }: Props): ReactElement => {
     return (
         <div
             onClick={handleToggleClick}
-            className="absolute top-2 right-2 z-50 w-10 h-10 bg-gray-200 text-gray-600 flex justify-center items-center p-3 rounded-full leading-3"
+            className="absolute right-2 top-2 z-50 flex size-10 items-center justify-center rounded-full bg-gray-200 p-3 leading-3 text-gray-600"
         >
             <FontAwesomeIcon icon={faThumbtack} className="rotate-45" />
         </div>

@@ -60,16 +60,16 @@ const ApplicationsOverviewSearchTextFilter = (): ReactElement => {
     }, [isMounted, searchText]);
 
     return (
-        <div className="flex gap-2 items-center mb-4">
+        <div className="mb-4 flex items-center gap-2">
             <input
                 type="text"
                 placeholder="Suchen"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2 outline-0 w-full md:w-60"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 outline-0 md:w-60"
                 onChange={handleSearchChange}
                 ref={inputRef}
             />
             {isNotEmptyString(searchText) && (
-                <div onClick={handleClearSearchFilter} className="md:cursor-pointer text-gray-800">
+                <div onClick={handleClearSearchFilter} className="text-gray-800 md:cursor-pointer">
                     Alle anzeigen
                 </div>
             )}

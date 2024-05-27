@@ -1,11 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 
 const AwarenessEasyGerman = (): ReactElement => {
     return (
-        <div className="bg-white p-4 flex flex-col gap-5 drop-shadow-2xl">
-            <div className="text-black font-display">
+        <div className="flex flex-col gap-5 bg-white p-4 drop-shadow-2xl">
+            <div className="font-display text-black">
                 <div className="text-2xl">
                     <Link href="/">B-Side Festival 2024</Link>
                 </div>

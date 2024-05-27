@@ -7,19 +7,19 @@ import Header from 'components/common/Header';
 export default (): ReactElement => {
     return (
         <div>
-            <div className="min-h-screen w-full relative ">
+            <div className="relative min-h-screen w-full ">
                 <div className="relative z-10">
-                    <div className="w-full md:w-2/3 md:pt-2 max-w-[700px] mx-auto">
+                    <div className="mx-auto w-full max-w-[700px] md:w-2/3 md:pt-2">
                         <Header />
                     </div>
 
-                    <div className="p-5 md:p-8 w-full md:w-2/3 max-w-[700px] mx-auto drop-shadow-xl">
-                        <div className="w-full flex gap-6 flex-col">
-                            <div className="text-black font-display">
+                    <div className="mx-auto w-full max-w-[700px] p-5 drop-shadow-xl md:w-2/3 md:p-8">
+                        <div className="flex w-full flex-col gap-6">
+                            <div className="font-display text-black">
                                 <div className="text-4xl font-bold">Bewerbung</div>
                             </div>
 
-                            <div className="text-black font-bold">
+                            <div className="font-bold text-black">
                                 Auf dem B-Side Festival gibt es viele verschiedenen Formate. Damit wir den Überblick behalten, haben wir auf
                                 dieser Seite verschiedene Bewerbungsformulare zusammengestellt. Such dir einfach das Genre raus, das am
                                 ehesten zu deinem Programmpunkt passt.

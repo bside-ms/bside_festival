@@ -6,7 +6,7 @@ const LoginLink = (): ReactElement => {
     const handleLogIn = useCallback(() => signIn('keycloak'), []);
 
     return (
-        <a className="underline cursor-pointer" onClick={handleLogIn}>
+        <a className="cursor-pointer underline" onClick={handleLogIn}>
             Interner Log-In
         </a>
     );

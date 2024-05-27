@@ -62,7 +62,7 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
         return (
             <div className="mt-4">
                 <div>{application.updatedDescription ?? application.description}</div>
-                <a onClick={toggleShowForm} className="text-sky-700 cursor-pointer">
+                <a onClick={toggleShowForm} className="cursor-pointer text-sky-700">
                     Beschreibung bearbeiten…
                 </a>
             </div>
@@ -72,7 +72,7 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
     return (
         <div className="mt-4">
             <FormProvider {...methods}>
-                <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex gap-4 flex-col max-w-3xl">
+                <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex max-w-3xl flex-col gap-4">
                     <TextArea<DescriptionFormValues>
                         name="description"
                         label="Beschreibung"
@@ -86,16 +86,16 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
                     </div>
 
                     <div>
-                        <label className="max-w-[300px] bg-black p-1 block">
+                        <label className="block max-w-[300px] bg-black p-1">
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full bg-black text-white border border-white rounded font-display text-sm leading-3 p-3 disabled:bg-gray-600"
+                                className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 text-white disabled:bg-gray-600"
                             >
                                 Speichern
                             </button>
                         </label>
-                        <a onClick={toggleShowForm} className="text-sky-700 cursor-pointer">
+                        <a onClick={toggleShowForm} className="cursor-pointer text-sky-700">
                             abbrechen
                         </a>
                     </div>
@@ -103,7 +103,7 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
                     {isSubmitting && (
                         <div className="text-black">
                             <span className="mr-1">Wird gespeichert</span>{' '}
-                            <span className="animate-spin inline-block w-3">
+                            <span className="inline-block w-3 animate-spin">
                                 <FontAwesomeIcon icon={faSpinner} />
                             </span>
                         </div>

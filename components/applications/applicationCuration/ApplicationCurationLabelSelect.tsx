@@ -44,11 +44,9 @@ const ApplicationCurationLabelSelect = ({ labels }: Props): ReactElement => {
                     control={control}
                     name="labels"
                     defaultValue={labels.map(({ id }) => id)}
-                    // eslint-disable-next-line react/jsx-no-bind
                     render={({ field: { ref, onChange } }): ReactElement => (
                         <CreatableSelect
                             ref={ref}
-                            // eslint-disable-next-line react/jsx-no-bind
                             onChange={(newValues: MultiValue<LabelOption>): void => onChange(newValues.map(({ value }) => value))}
                             defaultValue={defaultValue}
                             isMulti={true}

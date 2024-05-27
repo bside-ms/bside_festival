@@ -52,13 +52,13 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
 export default ({ applications, participantLabels, allLinks, allLabels }: Props): ReactElement => {
     return (
         <div>
-            <div className="pb-16 min-h-screen w-full relative">
+            <div className="relative min-h-screen w-full pb-16">
                 <div className="relative z-10">
-                    <div className="p-3 max-w-7xl mx-auto">
+                    <div className="mx-auto max-w-7xl p-3">
                         <Header />
                     </div>
 
-                    <div className="px-3 max-w-7xl mx-auto">
+                    <div className="mx-auto max-w-7xl px-3">
                         <ApplicationsOverviewContextProvider
                             applications={applications}
                             participantLabels={participantLabels}

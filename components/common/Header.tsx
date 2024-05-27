@@ -5,16 +5,16 @@ import BHeartLinesSvg from 'components/common/BHeartLinesSvg';
 
 const Header = (): ReactElement => {
     return (
-        <Link href="/" className="flex gap-3 items-center">
-            <div className="relative w-12 md:w-16 aspect-square">
+        <Link href="/" className="flex items-center gap-3">
+            <div className="relative aspect-square w-12 md:w-16">
                 <Image src="/assets/frontpage-heart-red.webp" alt="Eyecatcher" fill={true} className="object-contain object-left" />
             </div>
 
-            <div className="text-2xl md:text-3xl pt-1 md:pt-2">B-Side Festival 2024</div>
+            <div className="pt-1 text-2xl md:pt-2 md:text-3xl">B-Side Festival 2024</div>
 
             <div className="absolute top-8 md:top-10">
-                <div className="relative w-12 md:w-16 aspect-square">
-                    <div className="relative w-full aspect-square -mt-4">
+                <div className="relative aspect-square w-12 md:w-16">
+                    <div className="relative -mt-4 aspect-square w-full">
                         <BHeartLinesSvg color="#000" />
                     </div>
                 </div>

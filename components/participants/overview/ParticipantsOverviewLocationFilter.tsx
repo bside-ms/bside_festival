@@ -24,7 +24,7 @@ const LocationGroupToggle = ({ locations }: { locations: Array<Location> }): Rea
 
     return (
         <div
-            className="select-none uppercase md:cursor-pointer rounded-2xl border-2 bg-gray-200 border-gray-200 border-dashed text-sm px-3 py-1"
+            className="select-none rounded-2xl border-2 border-dashed border-gray-200 bg-gray-200 px-3 py-1 text-sm uppercase md:cursor-pointer"
             style={{ borderColor: isActive ? '#444' : undefined }}
             onClick={handleClick}
         >
@@ -44,7 +44,7 @@ const LocationIdToggle = ({ locationId }: { locationId: number }): ReactElement 
 
     return (
         <div
-            className="select-none uppercase md:cursor-pointer rounded-2xl border-2 bg-gray-200 border-gray-200 border-dashed text-sm px-3 py-1"
+            className="select-none rounded-2xl border-2 border-dashed border-gray-200 bg-gray-200 px-3 py-1 text-sm uppercase md:cursor-pointer"
             style={{ borderColor: isActive ? '#444' : undefined }}
             onClick={handleClick}
         >
@@ -108,7 +108,7 @@ const ParticipantsOverviewLocationFilter = (): ReactElement => {
 
     return (
         <div className="mb-3">
-            <div className="flex flex-wrap gap-2 mb-3">
+            <div className="mb-3 flex flex-wrap gap-2">
                 {locationGroups.map((locations) => (
                     <LocationGroupToggle key={locations[0]!.id} locations={locations} />
                 ))}

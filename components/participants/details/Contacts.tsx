@@ -18,7 +18,7 @@ const Contacts = ({ participant: { contactName, contactPhone, contactMail, resid
         <div className="mt-4">
             {isNotEmptyString(residence) && (
                 <div className="flex items-center">
-                    <div className="shrink-0 text-center w-4 mr-2 text-sm">
+                    <div className="mr-2 w-4 shrink-0 text-center text-sm">
                         <FontAwesomeIcon icon={faLocationDot} />
                     </div>
                     <div>{residence}</div>
@@ -26,7 +26,7 @@ const Contacts = ({ participant: { contactName, contactPhone, contactMail, resid
             )}
             {isNotEmptyString(contactName) && (
                 <div className="flex items-center">
-                    <div className="shrink-0 text-center w-4 mr-2 text-sm">
+                    <div className="mr-2 w-4 shrink-0 text-center text-sm">
                         <FontAwesomeIcon icon={faUser} />
                     </div>
                     <div>{contactName}</div>
@@ -34,7 +34,7 @@ const Contacts = ({ participant: { contactName, contactPhone, contactMail, resid
             )}
             {isNotEmptyString(contactMail) && (
                 <div className="flex items-center">
-                    <div className="shrink-0 text-center w-4 mr-2 text-sm">
+                    <div className="mr-2 w-4 shrink-0 text-center text-sm">
                         <FontAwesomeIcon icon={faEnvelope} />
                     </div>
                     <div>{contactMail}</div>
@@ -42,7 +42,7 @@ const Contacts = ({ participant: { contactName, contactPhone, contactMail, resid
             )}
             {isNotEmptyString(contactPhone) && (
                 <div className="flex items-center">
-                    <div className="shrink-0 text-center w-4 mr-2 text-sm">
+                    <div className="mr-2 w-4 shrink-0 text-center text-sm">
                         <FontAwesomeIcon icon={faPhone} />
                     </div>
                     <div>{contactPhone}</div>

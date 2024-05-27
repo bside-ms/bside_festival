@@ -6,9 +6,9 @@ import ContentWrapper from 'components/common/ContentWrapper';
 
 const TeamImageEyeCatcher = (): ReactElement => {
     return (
-        <div className="bg-[#3eb0e3] py-10 px-5">
+        <div className="bg-[#3eb0e3] px-5 py-10">
             <ContentWrapper>
-                <div className="flex flex-col gap-3 py-[25px] px-[40px] bg-gradient-to-b from-[#2c9fc9] to-[#e1017e] text-white">
+                <div className="flex flex-col gap-3 bg-gradient-to-b from-[#2c9fc9] to-[#e1017e] px-[40px] py-[25px] text-white">
                     <div className="group">
                         <div className="group-hover:hidden">
                             <Image

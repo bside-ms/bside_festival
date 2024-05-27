@@ -45,12 +45,12 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
 
     return (
         <div>
-            <div className="p-3 md:p-5 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl flex flex-col md:flex-row-reverse justify-between gap-4">
-                <div className="md:w-1/3 shrink-0 relative rounded-md overflow-auto h-[300px]">
+            <div className="relative flex flex-col justify-between gap-4 rounded-md p-3 text-gray-800 shadow-lg backdrop-blur-2xl md:flex-row-reverse md:p-5">
+                <div className="relative h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3">
                     <PinParticipantToggle participantId={id} />
 
                     {participant.status === 'Canceled' && (
-                        <div className="absolute top-0 right-0 bottom-0 left-0 z-30 bg-red-800 bg-opacity-70 text-6xl p-5 text-center flex justify-center items-center text-gray-100">
+                        <div className="absolute inset-0 z-30 flex items-center justify-center bg-red-800/70 p-5 text-center text-6xl text-gray-100">
                             Fällt leider aus
                         </div>
                     )}
@@ -66,10 +66,10 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
                         <TypeBadge type={type} />
                     </div>
 
-                    <div className="text-2xl font-display">{name}</div>
+                    <div className="font-display text-2xl">{name}</div>
 
                     {participant.status === 'Canceled' && (
-                        <div className="text-red-900 text-lg font-bold mt-3">Leider kann dieser Programmpunkt nicht stattfinden!</div>
+                        <div className="mt-3 text-lg font-bold text-red-900">Leider kann dieser Programmpunkt nicht stattfinden!</div>
                     )}
 
                     {participantSlots.length > 0 && <ParticipantSlots participantSlots={participantSlots} />}
@@ -81,13 +81,13 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
             </div>
 
             {status === 'authenticated' && hasSlotOrVenue(type) === 'slot' && (
-                <div className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl">
+                <div className="relative mt-1 rounded-md px-3 py-2 text-gray-800 shadow-lg backdrop-blur-2xl md:px-5">
                     <SlotForm participantId={id} />
                 </div>
             )}
 
             {status === 'authenticated' && (
-                <div className="mt-1 px-3 md:px-5 py-2 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl">
+                <div className="relative mt-1 rounded-md px-3 py-2 text-gray-800 shadow-lg backdrop-blur-2xl md:px-5">
                     <Links links={links} />
 
                     <Contacts participant={participant} />
@@ -99,7 +99,7 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
             )}
 
             <div
-                className="mt-1 p-1 rounded-md shadow-lg relative text-gray-800 backdrop-blur-2xl flex justify-center md:hover:cursor-pointer hover:brightness-110"
+                className="relative mt-1 flex justify-center rounded-md p-1 text-gray-800 shadow-lg backdrop-blur-2xl hover:brightness-110 md:hover:cursor-pointer"
                 onClick={onCloseClick}
             >
                 <FontAwesomeIcon className="w-5" icon={faTimes} />

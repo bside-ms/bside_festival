@@ -36,13 +36,13 @@ interface Props {
 export default ({ chosenType }: Props): ReactElement => {
     return (
         <div>
-            <div className="min-h-screen w-full relative ">
+            <div className="relative min-h-screen w-full ">
                 <div className="relative z-10">
-                    <div className="w-full md:w-2/3 md:pt-2 max-w-[700px] mx-auto">
+                    <div className="mx-auto w-full max-w-[700px] md:w-2/3 md:pt-2">
                         <Header />
                     </div>
 
-                    <div className="p-5 md:p-8 w-full md:w-2/3 max-w-[700px] mx-auto drop-shadow-xl">
+                    <div className="mx-auto w-full max-w-[700px] p-5 drop-shadow-xl md:w-2/3 md:p-8">
                         <ApplicationForm chosenType={chosenType} />
                     </div>
                 </div>

@@ -18,7 +18,7 @@ const VolunteersOverview = ({ volunteers }: Props): ReactElement => {
     const portalLink = (
         <Link
             href="https://portal.b-side.ms/group/284ef230-f3f0-4368-a895-334ed02ff59a"
-            className="underline cursor-pointer"
+            className="cursor-pointer underline"
             target="_blank"
         >
             Datenschutz-Gruppe
@@ -27,13 +27,13 @@ const VolunteersOverview = ({ volunteers }: Props): ReactElement => {
 
     return (
         <div>
-            <div className="text-3xl mb-5 font-display">Helfer:innen ({volunteers.length})</div>
+            <div className="mb-5 font-display text-3xl">Helfer:innen ({volunteers.length})</div>
 
             {volunteers.length === 0 ? (
-                <div className="rounded-md drop-shadow bg-gray-50 p-2 mt-3">Bisher sind keine Helfer:innen-Anmeldungen eingegangen</div>
+                <div className="mt-3 rounded-md bg-gray-50 p-2 drop-shadow">Bisher sind keine Helfer:innen-Anmeldungen eingegangen</div>
             ) : (
                 <>
-                    <div className="rounded-md drop-shadow bg-gray-50 p-2 mb-3">
+                    <div className="mb-3 rounded-md bg-gray-50 p-2 drop-shadow">
                         Die Kontakt-Daten der Helfer:innen sind nur für Mitglieder der {portalLink} des Festivals sichtbar.
                     </div>
 

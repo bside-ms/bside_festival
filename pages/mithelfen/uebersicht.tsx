@@ -36,13 +36,13 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
 export default ({ volunteers }: Props): ReactElement => {
     return (
         <div>
-            <div className="pb-16 min-h-screen w-full relative">
+            <div className="relative min-h-screen w-full pb-16">
                 <div className="relative z-10">
-                    <div className="p-3 max-w-2xl mx-auto">
+                    <div className="mx-auto max-w-2xl p-3">
                         <Header />
                     </div>
 
-                    <div className="px-3 max-w-2xl mx-auto">
+                    <div className="mx-auto max-w-2xl px-3">
                         <VolunteersOverview volunteers={volunteers} />
                     </div>
                 </div>

@@ -9,7 +9,7 @@ interface Props {
 
 const TypeBadge = ({ type }: Props): ReactElement => {
     return (
-        <div className="uppercase inline-block select-none rounded-2xl text-sm px-3 py-1" style={{ backgroundColor: typeColors[type] }}>
+        <div className="inline-block select-none rounded-2xl px-3 py-1 text-sm uppercase" style={{ backgroundColor: typeColors[type] }}>
             {typeLabels[type]}
         </div>
     );

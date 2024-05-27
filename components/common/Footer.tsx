@@ -32,14 +32,14 @@ const Footer = (): ReactElement => {
     );
 
     return (
-        <div className="text-sm text-white text-center p-4 bg-black space-y-1">
+        <div className="space-y-1 bg-black p-4 text-center text-sm text-white">
             <div>Veranstaltet durch den B-Side Kultur e.V.</div>
 
-            <div className="flex gap-3 justify-center py-1">
+            <div className="flex justify-center gap-3 py-1">
                 <span>{instagramLink}</span> <span>{facebookLink}</span>
             </div>
 
-            <div className="flex gap-3 justify-center">
+            <div className="flex justify-center gap-3">
                 <span>{imprintLink}</span> <span>{privacyPolicyLink}</span>
             </div>
 

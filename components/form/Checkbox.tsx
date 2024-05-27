@@ -31,7 +31,7 @@ const Checkbox = <T extends FieldValues>({ label, name, info, required = false }
                 type="checkbox"
                 required={required}
                 disabled={isSubmitting}
-                className="w-4 h-4 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                className="size-4 cursor-pointer rounded border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500"
                 {...register(name, {
                     required: {
                         value: required,
@@ -40,12 +40,12 @@ const Checkbox = <T extends FieldValues>({ label, name, info, required = false }
                 })}
             />
 
-            <label htmlFor={id} className="text-md font-medium text-gray-900 cursor-pointer">
+            <label htmlFor={id} className="cursor-pointer text-base font-medium text-gray-900">
                 {required ? `${label} *` : label}
             </label>
 
             {isNotEmptyString(info) && (
-                <label htmlFor={id} className="px-1 text-black text-base">
+                <label htmlFor={id} className="px-1 text-base text-black">
                     {info}
                 </label>
             )}

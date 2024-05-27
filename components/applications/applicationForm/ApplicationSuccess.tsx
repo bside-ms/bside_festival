@@ -6,7 +6,7 @@ import type { ReactElement } from 'react';
 const ApplicationSuccess = (): ReactElement => {
     return (
         <div className="text-black">
-            <div className="text-black font-display mb-4">
+            <div className="mb-4 font-display text-black">
                 <div className="text-4xl font-bold">Bewerbung</div>
             </div>
 

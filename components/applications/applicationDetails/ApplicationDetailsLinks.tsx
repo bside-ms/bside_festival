@@ -5,7 +5,7 @@ import type { ReactElement } from 'react';
 const maxLinkLength = 50;
 
 const ExternalLink = ({ link: { link } }: { link: Link }): ReactElement => (
-    <div className="overflow-hidden whitespace-nowrap overflow-ellipsis">
+    <div className="truncate">
         <NextLink href={link} target="_blank" className="cursor-pointer text-sky-700">
             {link.length > maxLinkLength ? `${link.slice(0, maxLinkLength)}…` : link}
         </NextLink>

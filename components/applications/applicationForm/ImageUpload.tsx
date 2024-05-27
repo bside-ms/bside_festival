@@ -83,20 +83,20 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
     const fileInputId = useRef(uniqueId('image-upload'));
 
     return (
-        <div className="flex flex-col gap-1 relative text-black">
+        <div className="relative flex flex-col gap-1 text-black">
             {isNotEmptyString(currentImageDataUrl) && !isSubmitting && (
                 <div
-                    className="absolute right-1 top-1 py-1 px-2 bg-gray-800 hover:bg-gray-700 text-gray-50 text-sm rounded-md cursor-pointer z-10"
+                    className="absolute right-1 top-1 z-10 cursor-pointer rounded-md bg-gray-800 px-2 py-1 text-sm text-gray-50 hover:bg-gray-700"
                     onClick={handleImageDelete}
                 >
                     Entfernen&nbsp;&nbsp;&nbsp;
-                    <FontAwesomeIcon className="w-4 inline-block" icon={faTrashAlt} />
+                    <FontAwesomeIcon className="inline-block w-4" icon={faTrashAlt} />
                 </div>
             )}
 
             <input
                 type="text"
-                className="h-0 opacity-0 pointer-events-none"
+                className="pointer-events-none h-0 opacity-0"
                 tabIndex={-1}
                 {...register(fieldName, {
                     required: {
@@ -118,12 +118,12 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
 
             <label htmlFor={fileInputId.current} className="cursor-pointer">
                 {isNotEmptyString(currentImageDataUrl) ? (
-                    <div className="relative w-full h-24 overflow-hidden">
+                    <div className="relative h-24 w-full overflow-hidden">
                         <Image src={currentImageDataUrl} alt="Upload-Vorschau" fill={true} style={{ objectFit: 'contain' }} />
                     </div>
                 ) : (
                     <div
-                        className={`h-24 w-full border border-dashed border-black flex justify-center items-center rounded ${
+                        className={`flex h-24 w-full items-center justify-center rounded border border-dashed border-black ${
                             typeof errorMessage === 'string' ? 'bg-rose-600 text-white' : ''
                         }`}
                     >
@@ -134,7 +134,7 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
 
             {typeof errorMessage === 'string' && <div className="px-1 text-rose-900">{errorMessage}</div>}
 
-            <div className="px-1 text-black text-base">
+            <div className="px-1 text-base text-black">
                 Beachtet: Dieses Foto wird auf unserer Webseite veröffentlicht, falls ihr beim B-Side Festival dabei sein werdet.
             </div>
         </div>

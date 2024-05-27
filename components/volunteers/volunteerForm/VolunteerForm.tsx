@@ -75,21 +75,21 @@ const VolunteerForm = (): ReactElement => {
     );
 
     const title = (
-        <div className="text-black font-display mb-4">
+        <div className="mb-4 font-display text-black">
             <div className="text-4xl font-bold">Mithelfen</div>
         </div>
     );
 
     if (wasSuccessfullySubmitted) {
         return (
-            <div className="p-2 rounded-md">
+            <div className="rounded-md p-2">
                 {title}
 
                 <div className="mb-3">
                     <VolunteerInfo />
                 </div>
 
-                <div className="mt-9 bg-gray-200 border-green-700 text-green-700 p-5 rounded-xl font-bold">
+                <div className="mt-9 rounded-xl border-green-700 bg-gray-200 p-5 font-bold text-green-700">
                     Vielen Dank für deine Unterstützung! Wir werden uns schon bald bei dir melden!
                 </div>
             </div>
@@ -97,7 +97,7 @@ const VolunteerForm = (): ReactElement => {
     }
 
     return (
-        <div className="p-2 rounded-md">
+        <div className="rounded-md p-2">
             {title}
 
             <div className="mb-3">
@@ -106,7 +106,7 @@ const VolunteerForm = (): ReactElement => {
 
             <FormProvider {...methods}>
                 <div className="w-full">
-                    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex gap-6 flex-col">
+                    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex flex-col gap-6">
                         <TextInput<VolunteerFormValues> name="fullName" label="Vor- und Nachname" required={true} />
 
                         <TextInput<VolunteerFormValues> name="phoneNumber" label="Telefonnummer" required={true} />
@@ -125,11 +125,11 @@ const VolunteerForm = (): ReactElement => {
                             ))}
                         </div>
 
-                        <label className="w-full bg-black p-1 block">
+                        <label className="block w-full bg-black p-1">
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full bg-black text-white border border-white rounded font-display text-sm leading-3 p-3 disabled:bg-gray-600"
+                                className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 text-white disabled:bg-gray-600"
                             >
                                 Absenden
                             </button>

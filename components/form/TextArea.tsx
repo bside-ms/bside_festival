@@ -41,14 +41,14 @@ const TextArea = <T extends FieldValues>({
     return (
         <div className="flex flex-col">
             {isNotEmptyString(info) && (
-                <label htmlFor={id} className="px-1 text-black text-base">
+                <label htmlFor={id} className="px-1 text-base text-black">
                     {info}
                 </label>
             )}
 
             <textarea
                 id={id}
-                className={`p-2 rounded outline-0 ${
+                className={`rounded p-2 outline-0 ${
                     typeof errorMessage === 'string' ? 'bg-rose-600 text-gray-100 placeholder:text-gray-100' : ''
                 }`}
                 rows={rows}
@@ -70,7 +70,7 @@ const TextArea = <T extends FieldValues>({
                 })}
             />
 
-            {isNotEmptyString(additionalInfo) && <div className="px-1 text-black text-base">{additionalInfo}</div>}
+            {isNotEmptyString(additionalInfo) && <div className="px-1 text-base text-black">{additionalInfo}</div>}
 
             {typeof errorMessage === 'string' && <div className="px-1 text-rose-900">{errorMessage}</div>}
         </div>

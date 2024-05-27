@@ -76,9 +76,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<G
 export default ({ participants, slots, venues, participantLabels, allLinks, allLocations }: Props): ReactElement => {
     return (
         <div>
-            <div className="pt-8 min-h-screen w-full relative">
+            <div className="relative min-h-screen w-full pt-8">
                 <div className="relative z-10">
-                    <div className="px-3 pb-9 max-w-7xl mx-auto">
+                    <div className="mx-auto max-w-7xl px-3 pb-9">
                         <ParticipantsOverviewContextProvider
                             participants={participants}
                             slots={slots}

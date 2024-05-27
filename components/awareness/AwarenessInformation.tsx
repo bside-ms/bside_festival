@@ -4,8 +4,8 @@ import AwarenessAlternativeLinks from 'components/awareness/AwarenessAlternative
 
 const AwarenessInformation = (): ReactElement => {
     return (
-        <div className="bg-opacity-50 bg-white p-4 flex flex-col gap-5">
-            <div className="text-black font-display">
+        <div className="flex flex-col gap-5 bg-white/50 p-4">
+            <div className="font-display text-black">
                 <div className="text-2xl">
                     <Link href="/">B-Side Festival 2024</Link>
                 </div>
@@ -24,7 +24,7 @@ const AwarenessInformation = (): ReactElement => {
             </div>
 
             <div>
-                <ul className="pl-7 space-y-2 list-outside list-disc">
+                <ul className="list-outside list-disc space-y-2 pl-7">
                     <li className="pl-2">Du erkennst das Awareness-Team an neon-pinken Westen oder Armbinden.</li>
                     <li className="pl-2">Du kannst die Menschen jederzeit ansprechen, wenn du dich unwohl fühlst oder Fragen hast.</li>
                     <li className="pl-2">Du findest Ansprechpersonen an der Awareness-Anlaufstelle vor dem B-Side Gebäude</li>
@@ -44,7 +44,7 @@ const AwarenessInformation = (): ReactElement => {
                 <div className="mb-2">Deswegen bitten wir dich, an folgende Dinge zu denken:</div>
 
                 <div>
-                    <ol className="pl-7 space-y-2 list-decimal list-outside">
+                    <ol className="list-outside list-decimal space-y-2 pl-7">
                         <li className="pl-2">
                             Persönliche Grenzen sind individuell und subjektiv. Sie zu achten und zu respektieren sollte selbstverständlich
                             sein! Nur ein ganz klares Ja heißt Ja. Frag lieber einmal zu viel als zu wenig nach.
@@ -70,7 +70,7 @@ const AwarenessInformation = (): ReactElement => {
                 </div>
 
                 <div>
-                    <ol className="pl-7 space-y-2 list-decimal list-outside">
+                    <ol className="list-outside list-decimal space-y-2 pl-7">
                         <li className="pl-2">
                             Dich selbst und/oder den betroffenen Menschen in Sicherheit bringen. Versuche dabei zu vermeiden, fremden
                             Menschen ungefragt zu helfen. Frage Betroffene, ob du einschreiten sollst. Im Fokus stehen immer die Bedürfnisse

@@ -22,7 +22,7 @@ const Button = ({ href, onClick, children, isDisabled = false, withFullWidth = f
     return (
         <div
             className={`${styles.buttonContainer ?? ''} ${withFullWidth ? styles.withFullWidth ?? '' : ''} ${
-                isDisabled ? 'grayscale brightness-150' : ''
+                isDisabled ? 'brightness-150 grayscale' : ''
             }`}
         >
             {href !== undefined ? (

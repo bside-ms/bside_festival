@@ -18,7 +18,7 @@ const TypeToggle = ({ type }: { type: Type }): ReactElement => {
 
     return (
         <div
-            className="select-none uppercase md:cursor-pointer rounded-2xl border-2 border-dashed text-sm px-3 py-1"
+            className="select-none rounded-2xl border-2 border-dashed px-3 py-1 text-sm uppercase md:cursor-pointer"
             style={{
                 backgroundColor: typeColors[type],
                 borderColor: active ? '#444' : typeColors[type],
@@ -58,7 +58,7 @@ const ApplicationsOverviewTypesFilter = (): ReactElement => {
     }, [isMounted, filteredTypes]);
 
     return (
-        <div className="flex flex-wrap gap-2 mb-3">
+        <div className="mb-3 flex flex-wrap gap-2">
             {availableTypes.map((availableType) => (
                 <TypeToggle key={availableType} type={availableType} />
             ))}

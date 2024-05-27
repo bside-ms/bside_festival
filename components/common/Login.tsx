@@ -22,7 +22,7 @@ const Login = (): ReactElement | null => {
         <>
             Angemeldet {userIdentifier !== null ? `als ${userIdentifier}` : ''}
             <br />
-            <a className="underline cursor-pointer" onClick={handleLogOut}>
+            <a className="cursor-pointer underline" onClick={handleLogOut}>
                 Abmelden
             </a>
         </>

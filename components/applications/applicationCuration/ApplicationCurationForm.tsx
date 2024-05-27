@@ -79,7 +79,7 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
 
     return (
         <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex gap-4 flex-col max-w-3xl">
+            <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex max-w-3xl flex-col gap-4">
                 <div className="font-display">Kuration</div>
 
                 <div className="max-w-[250px]">
@@ -114,17 +114,17 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
                         />
                     </div>
 
-                    <div className="text-xs mt-1">
+                    <div className="mt-1 text-xs">
                         Sobald der Status "{statusLabels.Confirmed}" gesetzt ist, wird der Programmpunkt im Programm aufgelistet! Auch mit
                         Status "{statusLabels.Canceled}" erscheint der Punkt mit entsprechendem Hinweis in der Programmliste.
                     </div>
                 </div>
 
-                <label className="max-w-[300px] bg-black p-1 block">
+                <label className="block max-w-[300px] bg-black p-1">
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-black text-white border border-white rounded font-display text-sm leading-3 p-3 disabled:bg-gray-600"
+                        className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 text-white disabled:bg-gray-600"
                     >
                         Speichern
                     </button>
@@ -133,7 +133,7 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
                 {isSubmitting && (
                     <div className="text-black">
                         <span className="mr-1">Wird gespeichert</span>{' '}
-                        <span className="animate-spin inline-block w-3">
+                        <span className="inline-block w-3 animate-spin">
                             <FontAwesomeIcon icon={faSpinner} />
                         </span>
                     </div>

@@ -124,11 +124,11 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
     const templateLink = '/assets/Tech-Rider-Vorlage.pdf';
 
     return (
-        <div className="flex flex-col gap-1 relative">
+        <div className="relative flex flex-col gap-1">
             {withoutTextArea === true ? (
                 <>
                     <input type="hidden" {...register('technicalRider')} />
-                    <label className="px-1 text-black text-base">{info}</label>
+                    <label className="px-1 text-base text-black">{info}</label>
                 </>
             ) : (
                 <TextArea<ApplicationFormValues>
@@ -153,19 +153,19 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
             <div className="text-black">
                 {isNotEmptyString(currentFileDataUrl) && isNotEmptyString(currentFileName) ? (
                     <div>
-                        <span className="font-mono px-2">{currentFileName}</span>
+                        <span className="px-2 font-mono">{currentFileName}</span>
                         <span
-                            className="py-1 px-2 bg-gray-800 hover:bg-gray-700 text-gray-50 text-sm rounded-md cursor-pointer z-10"
+                            className="z-10 cursor-pointer rounded-md bg-gray-800 px-2 py-1 text-sm text-gray-50 hover:bg-gray-700"
                             onClick={handleFileRemove}
                         >
                             Entfernen&nbsp;&nbsp;&nbsp;
-                            <FontAwesomeIcon className="w-4 inline-block" icon={faTrashAlt} />
+                            <FontAwesomeIcon className="inline-block w-4" icon={faTrashAlt} />
                         </span>
                     </div>
                 ) : (
                     <label htmlFor={fileInputId.current} className="cursor-pointer">
                         <div
-                            className={`p-5 border border-dashed border-black flex justify-center items-center rounded ${
+                            className={`flex items-center justify-center rounded border border-dashed border-black p-5 ${
                                 typeof technicalRiderErrorMessage === 'string' || typeof technicalRiderPdfErrorMessage === 'string'
                                     ? 'bg-rose-600 text-white'
                                     : ''
@@ -179,7 +179,7 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
 
             <div>
                 Solltet ihr selbst noch keinen Tech-Rider haben, nutzt bitte{' '}
-                <a href={templateLink} target="_blank" className="underline cursor-pointer">
+                <a href={templateLink} target="_blank" className="cursor-pointer underline">
                     unsere Vorlage
                 </a>
                 , um unserer Technik-Crew viel Arbeit zu ersparen.

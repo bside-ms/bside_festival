@@ -16,7 +16,7 @@ const ParticipantsOverview = (): ReactElement => {
 
     return (
         <div>
-            <div className="text-black font-display mb-8">
+            <div className="mb-8 font-display text-black">
                 <div className="text-2xl">
                     <Link href="/">B-Side Festival 2024</Link>
                 </div>
@@ -35,11 +35,11 @@ const ParticipantsOverview = (): ReactElement => {
                 </div>
             </div>
 
-            <div className="mt-5 mb-4 flex gap-4 flex-wrap">
+            <div className="mb-4 mt-5 flex flex-wrap gap-4">
                 <Link
                     href="/assets/map.svg"
                     target="_blank"
-                    className="inline-flex gap-2 items-center border border-gray-900 px-3 py-1 rounded-full cursor-pointer"
+                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-900 px-3 py-1"
                 >
                     <FontAwesomeIcon className="w-5" icon={faMapLocationDot} /> Lageplan
                 </Link>
@@ -47,7 +47,7 @@ const ParticipantsOverview = (): ReactElement => {
                 <Link
                     href="/assets/b-side-festival-2023-programm.pdf"
                     target="_blank"
-                    className="inline-flex gap-2 items-center border border-gray-900 px-3 py-1 rounded-full cursor-pointer"
+                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-900 px-3 py-1"
                 >
                     <FontAwesomeIcon className="w-5" icon={faFilePdf} /> Programmheft
                 </Link>

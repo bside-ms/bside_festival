@@ -20,9 +20,9 @@ const DetailImage = ({ application: { imageFileName, name } }: Props): ReactElem
     const imageUrl = createPublicObjectUrl(imageFileName);
 
     return (
-        <div className={`${showEnhancedImage ? 'h-96 md:h-[600px]' : ''} w-full h-32 md:h-52 relative rounded-md overflow-hidden mb-2`}>
+        <div className={`${showEnhancedImage ? 'h-96 md:h-[600px]' : ''} relative mb-2 h-32 w-full overflow-hidden rounded-md md:h-52`}>
             <div
-                className="bg-center bg-cover bg-no-repeat absolute top-0 right-0 bottom-0 left-0"
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{ backgroundImage: `url(${imageUrl})` }}
             />
 

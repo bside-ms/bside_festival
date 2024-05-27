@@ -132,17 +132,17 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
     return (
         <FormProvider {...methods}>
             <div className="w-full">
-                <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex gap-6 flex-col">
-                    <div className="text-black font-display">
+                <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex flex-col gap-6">
+                    <div className="font-display text-black">
                         <div className="text-4xl font-bold">Bewerbung</div>
                     </div>
 
                     <div className="relative h-52">
                         <ApplicationTypeImage type={chosenType} />
 
-                        <div className="absolute top-0 right-0 bottom-0 left-0 opacity-30 bg-gray-600" />
+                        <div className="absolute inset-0 bg-gray-600 opacity-30" />
 
-                        <div className="absolute bottom-0 left-0 right-0 text-white px-2 flex gap-2 items-baseline">
+                        <div className="absolute inset-x-0 bottom-0 flex items-baseline gap-2 px-2 text-white">
                             <div className="text-3xl">
                                 <strong>{typeLabels[chosenType]}</strong>
                             </div>
@@ -223,11 +223,11 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
 
                     {chosenType !== Type.Neighbor && <TextInput<ApplicationFormValues> name="residence" label="Wohnort" />}
 
-                    <label className="w-full bg-black p-1 block">
+                    <label className="block w-full bg-black p-1">
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full bg-black text-white border border-white rounded font-display text-sm leading-3 p-3 disabled:bg-gray-600"
+                            className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 text-white disabled:bg-gray-600"
                         >
                             Absenden
                         </button>
@@ -236,13 +236,13 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                     {isSubmitting && (
                         <div className="text-black">
                             Wird gesendet{' '}
-                            <span className="ml-1 animate-spin inline-block">
+                            <span className="ml-1 inline-block animate-spin">
                                 <FontAwesomeIcon className="w-3" icon={faSpinner} />
                             </span>
                         </div>
                     )}
 
-                    <div className="mt-5 text-sm flex flex-col gap-2">
+                    <div className="mt-5 flex flex-col gap-2 text-sm">
                         <div>
                             Das B-Side Festival ist auch 2024 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
                             insbesondere Räume und Bühnen für FLINTA* und andere marginalisierte Gesellschaftsgruppen schaffen.

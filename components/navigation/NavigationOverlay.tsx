@@ -52,20 +52,20 @@ const NavigationOverlay = (): ReactElement | null => {
     }
 
     return (
-        <div className="fixed top-0 right-0 bottom-0 left-0 z-[4000]">
-            <div className={`absolute top-0 right-0 bottom-0 left-0 ${styles.background ?? ''}`} />
+        <div className="fixed inset-0 z-[4000]">
+            <div className={`absolute inset-0 ${styles.background ?? ''}`} />
 
             <ContentWrapper>
                 <div className={styles.menuToggle}>
                     <div
-                        className="w-11 h-11 text-[28px] leading-3 flex flex-col justify-center text-center cursor-pointer text-white bg-[#33bbe9]"
+                        className="flex size-11 cursor-pointer flex-col justify-center bg-[#33bbe9] text-center text-[28px] leading-3 text-white"
                         onClick={toggleOverlay}
                     >
                         <FontAwesomeIcon icon={faTimes} />
                     </div>
                 </div>
 
-                <div className="pt-36 flex flex-col space-y-4 text-4xl text-center">
+                <div className="flex flex-col space-y-4 pt-36 text-center text-4xl">
                     {links.map((link) => (
                         <div key={link.link}>
                             <Link href={link.link} className="font-display text-white">
@@ -76,7 +76,7 @@ const NavigationOverlay = (): ReactElement | null => {
                 </div>
 
                 {status === 'authenticated' && internalLinks.length > 0 && (
-                    <div className="mt-14 flex flex-col justify-center space-y-1 text-2xl text-center">
+                    <div className="mt-14 flex flex-col justify-center space-y-1 text-center text-2xl">
                         <span className="text-white underline">Interne Links</span>
 
                         {internalLinks.map((link) => (

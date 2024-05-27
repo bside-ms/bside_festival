@@ -6,14 +6,14 @@ import Footer from 'components/common/Footer';
 export default (): ReactElement => {
     return (
         <div>
-            <div className="min-h-screen w-full relative ">
+            <div className="relative min-h-screen w-full ">
                 <div className="relative z-10">
-                    <div className="p-5 md:p-10 w-full md:w-2/3 max-w-[700px] mx-auto drop-shadow-xl">
+                    <div className="mx-auto w-full max-w-[700px] p-5 drop-shadow-xl md:w-2/3 md:p-10">
                         <AwarenessEnglishVersion />
                     </div>
                 </div>
 
-                <Image src="/assets/background.webp" alt="Hintergrund" className="object-cover object-top absolute z-0" fill={true} />
+                <Image src="/assets/background.webp" alt="Hintergrund" className="absolute z-0 object-cover object-top" fill={true} />
             </div>
 
             <Footer />

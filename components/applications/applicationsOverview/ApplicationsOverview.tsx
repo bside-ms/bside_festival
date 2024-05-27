@@ -15,7 +15,7 @@ const ApplicationsOverview = (): ReactElement => {
 
     return (
         <div>
-            <div className="text-3xl mb-5 font-display">Bewerbungen ({applicationAmount})</div>
+            <div className="mb-5 font-display text-3xl">Bewerbungen ({applicationAmount})</div>
 
             <ApplicationsOverviewSearchTextFilter />
 
@@ -24,7 +24,7 @@ const ApplicationsOverview = (): ReactElement => {
             <ApplicationOverviewAdditionalFilters />
 
             {filteredApplications.length === 0 ? (
-                <div className="mt-5 p-3 md:p-5 rounded-md shadow-lg text-gray-800 backdrop-blur-2xl font-bold">
+                <div className="mt-5 rounded-md p-3 font-bold text-gray-800 shadow-lg backdrop-blur-2xl md:p-5">
                     {allApplications.length > 0
                         ? 'Bisher sind noch keine Bewerbungen eingegangen!'
                         : 'Zur aktuellen Filterung keine Bewerbungen gefunden!'}

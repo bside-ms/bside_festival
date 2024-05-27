@@ -57,7 +57,7 @@ const ParticipantsOverviewContextProvider = ({
     participantLabels: initialParticipantLabels,
     allLinks,
     slots: initialSlots,
-    venues: initialVenues,
+    venues,
     allLocations,
     children,
 }: Props): ReactElement => {
@@ -66,8 +66,6 @@ const ParticipantsOverviewContextProvider = ({
     const [participants, setParticipants] = useState<Array<SerializableParticipant>>(initialParticipants);
 
     const [slots, setSlots] = useState<Array<SerializableSlot>>(initialSlots);
-
-    const [venues, _setVenues] = useState<Array<Venue>>(initialVenues);
 
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
 
