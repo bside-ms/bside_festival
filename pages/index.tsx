@@ -48,7 +48,7 @@ export default (): ReactElement => {
                                         bis 21.09.2024 weihen wir das frisch renovierte Gebäude mit Kunst, Musik, Literatur und Workshops
                                         ein.
                                     </div>
-                                    <div className="mt-20 text-justify text-lg sm:text-2xl">Bewerbungsphase beendet</div>
+                                    <div className="mt-14 text-justify text-lg sm:text-2xl">Bewerbungsphase beendet</div>
 
                                     <div className="mt-3 text-justify text-xs">
                                         Die diesjährige Bewerbungsphase ist beendet. Und wir sind überwältigt von den unzähligen
