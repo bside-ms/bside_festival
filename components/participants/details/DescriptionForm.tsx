@@ -8,6 +8,7 @@ import TextArea from 'components/form/TextArea';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import type { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } from 'pages/api/applications/update/description';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
+import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 
 export interface DescriptionFormValues {
     description: string;
@@ -85,10 +86,12 @@ const DescriptionForm = ({ participant }: Props): ReactElement => {
                         rows={10}
                     />
 
-                    <div className="text-sm text-gray-800">
-                        <div className="font-bold text-gray-900">Ursprüngliche Beschreibung</div>
-                        <div>{participant.description}</div>
-                    </div>
+                    {isNotEmptyString(participant.description) && (
+                        <div className="text-sm text-gray-800">
+                            <div className="font-bold text-gray-900">Ursprüngliche Beschreibung</div>
+                            <div>{participant.description}</div>
+                        </div>
+                    )}
 
                     <div>
                         <label className="block max-w-[300px] bg-black p-1">
