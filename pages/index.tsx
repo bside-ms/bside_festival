@@ -1,7 +1,4 @@
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
-import Link from 'next/link';
 import type { ReactElement } from 'react';
 import BHeartLinesSvg from 'components/common/BHeartLinesSvg';
 import Footer from 'components/common/Footer';
@@ -51,24 +48,13 @@ export default (): ReactElement => {
                                         bis 21.09.2024 weihen wir das frisch renovierte Gebäude mit Kunst, Musik, Literatur und Workshops
                                         ein.
                                     </div>
-                                    <div className="mt-3 text-justify text-xs">
-                                        Passend zum neuen Ort, lautet das Motto in diesem Jahr: SPIELPLATZ FÜR KREATIVE
-                                    </div>
+                                    <div className="mt-20 text-justify text-lg sm:text-2xl">Bewerbungsphase beendet</div>
 
                                     <div className="mt-3 text-justify text-xs">
-                                        Du willst mit deiner Kunst Teil des bunten Programms werden? Deine Musik darf auf gar keinen Fall
-                                        fehlen? Du hast eine spannende Idee, auf die wir bisher noch gar nicht gekommen sind? Super! Dann
-                                        bewirb dich jetzt noch bis zum 02.06.2024!
-                                    </div>
-
-                                    <div className="mt-3 text-right">
-                                        <Link
-                                            className="flex cursor-pointer items-center justify-end gap-2 text-xs leading-5 hover:text-red-700 sm:text-base"
-                                            href="/bewerbungen"
-                                        >
-                                            Zum Bewerbungsformular
-                                            <FontAwesomeIcon className="inline-block w-4 pt-1" icon={faArrowRight} />
-                                        </Link>
+                                        Die diesjährige Bewerbungsphase ist beendet. Und wir sind überwältigt von den unzähligen
+                                        wundervollen Bewerbungen! Nun stecken wir die Köpfe zusammen, um für euch ein unterhaltsames und
+                                        diverses Programm für das diesjährige B-Side Festival zusammenzustellen. Wir halten euch hier und in
+                                        den sozialen Medien auf dem Laufenden!
                                     </div>
                                 </div>
                             </div>
