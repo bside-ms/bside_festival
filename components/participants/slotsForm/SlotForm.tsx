@@ -11,7 +11,7 @@ import formatDate from 'lib/common/helper/formatDate';
 import type { DeleteSlotRequest, SuccessfulDeleteSlotResponse } from 'pages/api/applications/slot/delete';
 import type { SuccessfulUpdateSlotResponse, UpsertSlotRequest } from 'pages/api/applications/slot/update';
 
-export interface SlotFormValues {
+interface SlotFormValues {
     locationId: number;
     beginDate: Date;
     duration?: number;

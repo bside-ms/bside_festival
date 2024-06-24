@@ -8,7 +8,7 @@ import TextArea from 'components/form/TextArea';
 import type { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } from 'pages/api/applications/update/description';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
-export interface DescriptionFormValues {
+interface DescriptionFormValues {
     description: string;
 }
 

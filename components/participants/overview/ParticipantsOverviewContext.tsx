@@ -52,7 +52,7 @@ interface Props extends PropsWithChildren {
     allLocations: Array<Location>;
 }
 
-const ParticipantsOverviewContextProvider = ({
+export const ParticipantsOverviewContextProvider = ({
     participants: initialParticipants,
     participantLabels: initialParticipantLabels,
     allLinks,
@@ -234,7 +234,7 @@ const ParticipantsOverviewContextProvider = ({
     );
 };
 
-const useParticipantsOverviewContext = (): ParticipantsOverviewContextData => {
+export const useParticipantsOverviewContext = (): ParticipantsOverviewContextData => {
     const participantsOverviewContext = useContext(ParticipantsOverviewContext);
 
     if (participantsOverviewContext === null) {
@@ -249,12 +249,12 @@ export interface ParticipantSlot {
     location: Location;
 }
 
-export interface ParticipantVenue {
+interface ParticipantVenue {
     venue: Venue;
     location: Location;
 }
 
-const useParticipantSlots = (participantId: number): Array<ParticipantSlot> => {
+export const useParticipantSlots = (participantId: number): Array<ParticipantSlot> => {
     const { allLocations, slots } = useParticipantsOverviewContext();
 
     return slots
@@ -274,7 +274,7 @@ const useParticipantSlots = (participantId: number): Array<ParticipantSlot> => {
         .filter((slotItem): slotItem is ParticipantSlot => slotItem !== null);
 };
 
-const useParticipantVenues = (participantId: number): Array<ParticipantVenue> => {
+export const useParticipantVenues = (participantId: number): Array<ParticipantVenue> => {
     const { allLocations, venues } = useParticipantsOverviewContext();
 
     return venues
@@ -293,5 +293,3 @@ const useParticipantVenues = (participantId: number): Array<ParticipantVenue> =>
         })
         .filter((venueItem): venueItem is ParticipantVenue => venueItem !== null);
 };
-
-export { ParticipantsOverviewContextProvider, useParticipantsOverviewContext, useParticipantSlots, useParticipantVenues };

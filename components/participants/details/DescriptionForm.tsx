@@ -10,7 +10,7 @@ import type { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } fr
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 
-export interface DescriptionFormValues {
+interface DescriptionFormValues {
     description: string;
 }
 
