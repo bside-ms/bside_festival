@@ -1,8 +1,6 @@
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { Link } from '@prisma/client';
-import Image from 'next/image';
-import { default as NextLink } from 'next/link';
 import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 import AdditionalInfo from 'components/participants/details/AdditionalInfo';
@@ -14,13 +12,10 @@ import ParticipantVenues from 'components/participants/details/ParticipantVenues
 import TechnicalRider from 'components/participants/details/TechnicalRider';
 import TypeBadge from 'components/participants/details/TypeBadge';
 import { useParticipantSlots, useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
-import PinParticipantToggle from 'components/participants/overview/PinParticipantToggle';
 import SlotForm from 'components/participants/slotsForm/SlotForm';
-import isEmptyString from 'lib/common/helper/isEmptyString';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import hasSlotOrVenue from 'lib/participants/hasSlotOrVenue';
-import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
+import ParticipantImage from 'components/participants/details/ParticipantImage';
 
 interface Props {
     participant: SerializableParticipant;
@@ -33,9 +28,7 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
 
     const { status } = useSession();
 
-    const { id, name, imageFileName, type } = participant;
-
-    const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
+    const { id, name, type } = participant;
 
     const participantSlots = useParticipantSlots(participant.id);
 
@@ -46,20 +39,7 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
     return (
         <div>
             <div className="relative flex flex-col justify-between gap-4 rounded-md p-3 text-gray-800 shadow-lg backdrop-blur-2xl md:flex-row-reverse md:p-5">
-                <div className="relative h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3">
-                    <PinParticipantToggle participantId={id} />
-
-                    {participant.status === 'Canceled' && (
-                        <div className="absolute inset-0 z-30 flex items-center justify-center bg-red-800/70 p-5 text-center text-6xl text-gray-100">
-                            Fällt leider aus
-                        </div>
-                    )}
-                    {isNotEmptyString(imageUrl) && (
-                        <NextLink href={imageUrl} className="md:cursor-pointer" target="_blank">
-                            <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />
-                        </NextLink>
-                    )}
-                </div>
+                <ParticipantImage participant={participant} />
 
                 <div className="shrink grow-0">
                     <div className="mb-1">

@@ -1,8 +1,6 @@
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { Label, Link } from '@prisma/client';
-import Image from 'next/image';
-import { default as NextLink } from 'next/link';
 import type { ReactElement } from 'react';
 import ApplicationCurationForm from 'components/applications/applicationCuration/ApplicationCurationForm';
 import ApplicationDescriptionForm from 'components/applications/applicationCuration/ApplicationDescriptionForm';
@@ -15,12 +13,10 @@ import ApplicationDetailsMotivation from 'components/applications/applicationDet
 import ApplicationDetailsTechnicalRider from 'components/applications/applicationDetails/ApplicationDetailsTechnicalRider';
 import ApplicationLabels from 'components/applications/common/ApplicationLabels';
 import TypeBadge from 'components/participants/details/TypeBadge';
-import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import statusLabels from 'lib/participants/status/statusLabels';
-import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
+import ApplicationDetailsImage from 'components/applications/applicationDetails/ApplicationDetailsImage';
 
 interface Props {
     application: SerializableParticipant;
@@ -30,20 +26,12 @@ interface Props {
 }
 
 const ApplicationDetails = ({ application, labels, links, onCloseClick }: Props): ReactElement => {
-    const { name, imageFileName, type, curationScore, status } = application;
-
-    const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
+    const { name, type, curationScore, status } = application;
 
     return (
         <div>
             <div className="relative flex flex-col justify-between gap-4 rounded-md p-3 text-gray-800 shadow-lg backdrop-blur-2xl md:flex-row-reverse md:p-5">
-                <div className="relative h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3">
-                    {isNotEmptyString(imageUrl) && (
-                        <NextLink href={imageUrl} className="md:cursor-pointer" target="_blank">
-                            <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />
-                        </NextLink>
-                    )}
-                </div>
+                <ApplicationDetailsImage application={application} />
 
                 <div className="shrink grow-0">
                     <div className="mb-2 flex gap-2">

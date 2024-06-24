@@ -39,7 +39,7 @@ const ParticipantsOverview = (): ReactElement => {
                 <Link
                     href="/assets/map.svg"
                     target="_blank"
-                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-900 px-3 py-1"
+                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-900 px-3 py-1 hover:bg-white/10"
                 >
                     <FontAwesomeIcon className="w-5" icon={faMapLocationDot} /> Lageplan
                 </Link>
@@ -47,7 +47,7 @@ const ParticipantsOverview = (): ReactElement => {
                 <Link
                     href="/assets/b-side-festival-2023-programm.pdf"
                     target="_blank"
-                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-900 px-3 py-1"
+                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-900 px-3 py-1 hover:bg-white/10"
                 >
                     <FontAwesomeIcon className="w-5" icon={faFilePdf} /> Programmheft
                 </Link>

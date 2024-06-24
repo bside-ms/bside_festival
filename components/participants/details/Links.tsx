@@ -60,7 +60,7 @@ const Links = ({ links }: Props): ReactElement | null => {
     }
 
     return (
-        <div className="mt-4">
+        <div className="mt-4 flex flex-wrap gap-2">
             {links.map((link) => (
                 <ExternalLink key={link.id} link={link} />
             ))}

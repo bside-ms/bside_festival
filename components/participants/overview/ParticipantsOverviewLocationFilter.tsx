@@ -24,7 +24,7 @@ const LocationGroupToggle = ({ locations }: { locations: Array<Location> }): Rea
 
     return (
         <div
-            className="select-none rounded-2xl border-2 border-dashed border-gray-200 bg-gray-200 px-3 py-1 text-sm uppercase md:cursor-pointer"
+            className="select-none rounded-2xl border-2 border-dashed border-gray-200 bg-gray-200 px-3 py-1 text-sm uppercase hover:opacity-90 md:cursor-pointer"
             style={{ borderColor: isActive ? '#444' : undefined }}
             onClick={handleClick}
         >

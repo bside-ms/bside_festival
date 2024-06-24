@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ReactElement, SyntheticEvent } from 'react';
 import { toast } from 'react-toastify';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
+import cn from 'lib/common/helper/cn';
 
 interface Props {
     participantId: number;
@@ -27,22 +28,52 @@ const PinParticipantToggle = ({ participantId }: Props): ReactElement => {
 
     if (pinnedParticipantIds.includes(participantId)) {
         return (
-            <div
+            <button
                 onClick={handleToggleClick}
-                className="absolute right-2 top-2 z-50 flex size-10 items-center justify-center rounded-full bg-gray-600 p-3 leading-3 text-gray-200"
+                className={cn(
+                    'absolute',
+                    'right-2',
+                    'top-2',
+                    'z-50',
+                    'flex',
+                    'size-10',
+                    'items-center',
+                    'justify-center',
+                    'rounded-full',
+                    'bg-black/80',
+                    'p-3',
+                    'leading-3',
+                    'text-gray-200',
+                    'hover:bg-black/70',
+                )}
             >
                 <FontAwesomeIcon icon={faThumbtack} />
-            </div>
+            </button>
         );
     }
 
     return (
-        <div
+        <button
             onClick={handleToggleClick}
-            className="absolute right-2 top-2 z-50 flex size-10 items-center justify-center rounded-full bg-gray-200 p-3 leading-3 text-gray-600"
+            className={cn(
+                'absolute',
+                'right-2',
+                'top-2',
+                'z-50',
+                'flex',
+                'size-10',
+                'items-center',
+                'justify-center',
+                'rounded-full',
+                'bg-white/50',
+                'p-3',
+                'leading-3',
+                'text-gray-600',
+                'hover:bg-white/60',
+            )}
         >
             <FontAwesomeIcon icon={faThumbtack} className="rotate-45" />
-        </div>
+        </button>
     );
 };
 
