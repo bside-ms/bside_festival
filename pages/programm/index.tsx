@@ -12,6 +12,7 @@ import getAllVenues from 'lib/participants/getAllVenues';
 import serializeParticipant from 'lib/participants/serializeParticipant';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 import type { SerializableSlot } from 'typings/SerializableSlot';
+import getUserSession from 'lib/next-auth/getUserSession';
 
 interface Props {
     participants: Array<SerializableParticipant>;
@@ -22,7 +23,18 @@ interface Props {
     allLocations: Array<Location>;
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async (): Promise<GetServerSidePropsResult<Props>> => {
+export const getServerSideProps: GetServerSideProps<Props> = async (context): Promise<GetServerSidePropsResult<Props>> => {
+    const userSession = await getUserSession(context);
+
+    if (userSession === null)
+        return {
+            redirect: {
+                statusCode: 302,
+                destination: '/',
+            },
+        };
+    }
+
     const participants = await prismaClient.participant.findMany({ where: { status: { in: ['Confirmed', 'Canceled'] } } });
 
     const slots = await getAllSlots();
