@@ -26,7 +26,7 @@ interface Props {
 export const getServerSideProps: GetServerSideProps<Props> = async (context): Promise<GetServerSidePropsResult<Props>> => {
     const userSession = await getUserSession(context);
 
-    if (userSession === null)
+    if (userSession === null) {
         return {
             redirect: {
                 statusCode: 302,
