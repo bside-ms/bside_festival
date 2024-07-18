@@ -16,6 +16,13 @@ const InternalLinks = (): ReactElement | null => {
                     Bewerbungsübersicht
                 </Link>
             </div>
+
+            <div>
+                <Link href="/programm/" className="cursor-pointer underline">
+                    Programmübersicht
+                </Link>
+            </div>
+
             <div>
                 <Link href="/mithelfen/uebersicht" className="cursor-pointer underline">
                     Helfer:innenübersicht
