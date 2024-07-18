@@ -3,7 +3,11 @@ import type { ReactElement } from 'react';
 import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import ParticipantVenues from 'components/participants/details/ParticipantVenues';
 import TypeBadge from 'components/participants/details/TypeBadge';
-import { useParticipantSlots, useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
+import {
+    useParticipantSlots,
+    useParticipantsOverviewContext,
+    useParticipantVenues,
+} from 'components/participants/overview/ParticipantsOverviewContext';
 import PinParticipantToggle from 'components/participants/overview/PinParticipantToggle';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
@@ -17,15 +21,20 @@ interface Props {
 }
 
 const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | null => {
-    const { areFiltersSet } = useParticipantsOverviewContext();
+    const { areLocationOrDateRangeFiltersSet } = useParticipantsOverviewContext();
 
     const participantSlots = useParticipantSlots(participant.id);
+    const participantVenues = useParticipantVenues(participant.id);
 
     const { id, name, imageFileName, description, type, updatedDescription } = participant;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
-    if (areFiltersSet && hasSlotOrVenue(participant.type) === 'slot' && participantSlots.length === 0) {
+    if (
+        areLocationOrDateRangeFiltersSet &&
+        ((hasSlotOrVenue(participant.type) === 'slot' && participantSlots.length === 0) ||
+            (hasSlotOrVenue(participant.type) === 'venue' && participantVenues.length === 0))
+    ) {
         return null;
     }
 

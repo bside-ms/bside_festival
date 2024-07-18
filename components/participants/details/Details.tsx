@@ -11,11 +11,16 @@ import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import ParticipantVenues from 'components/participants/details/ParticipantVenues';
 import TechnicalRider from 'components/participants/details/TechnicalRider';
 import TypeBadge from 'components/participants/details/TypeBadge';
-import { useParticipantSlots, useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
+import {
+    useParticipantSlots,
+    useParticipantsOverviewContext,
+    useParticipantVenues,
+} from 'components/participants/overview/ParticipantsOverviewContext';
 import SlotForm from 'components/participants/slotsForm/SlotForm';
 import hasSlotOrVenue from 'lib/participants/hasSlotOrVenue';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 import ParticipantImage from 'components/participants/details/ParticipantImage';
+import VenueForm from 'components/participants/venueForm/VenueForm';
 
 interface Props {
     participant: SerializableParticipant;
@@ -24,15 +29,20 @@ interface Props {
 }
 
 const Details = ({ participant, links, onCloseClick }: Props): ReactElement | null => {
-    const { areFiltersSet } = useParticipantsOverviewContext();
+    const { areLocationOrDateRangeFiltersSet } = useParticipantsOverviewContext();
 
     const { status } = useSession();
 
     const { id, name, type } = participant;
 
     const participantSlots = useParticipantSlots(participant.id);
+    const participantVenues = useParticipantVenues(participant.id);
 
-    if (areFiltersSet && hasSlotOrVenue(participant.type) === 'slot' && participantSlots.length === 0) {
+    if (
+        areLocationOrDateRangeFiltersSet &&
+        ((hasSlotOrVenue(participant.type) === 'slot' && participantSlots.length === 0) ||
+            (hasSlotOrVenue(participant.type) === 'venue' && participantVenues.length === 0))
+    ) {
         return null;
     }
 
@@ -63,6 +73,12 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
             {status === 'authenticated' && hasSlotOrVenue(type) === 'slot' && (
                 <div className="relative mt-1 rounded-md px-3 py-2 text-gray-800 shadow-lg backdrop-blur-2xl md:px-5">
                     <SlotForm participantId={id} />
+                </div>
+            )}
+
+            {status === 'authenticated' && hasSlotOrVenue(type) === 'venue' && (
+                <div className="relative mt-1 rounded-md px-3 py-2 text-gray-800 shadow-lg backdrop-blur-2xl md:px-5">
+                    <VenueForm participantId={id} />
                 </div>
             )}
 

@@ -1,8 +1,8 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import type { PropsWithChildren, ReactElement } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 import type { Link, Location, Participant, ParticipantLabel, Type, Venue } from '@prisma/client';
 import { addHours, endOfHour, isAfter, isBefore, isSameMinute, startOfHour, subHours } from 'date-fns';
 import { first, last, uniq } from 'lodash';
-import type { PropsWithChildren, ReactElement } from 'react';
 import { dateRangeFilterQueryName } from 'components/participants/overview/ParticipantsOverviewDateRangeFilter';
 import { locationsFilterQueryName } from 'components/participants/overview/ParticipantsOverviewLocationFilter';
 import { typesFilterQueryName } from 'components/participants/overview/ParticipantsOverviewTypesFilter';
@@ -37,8 +37,9 @@ interface ParticipantsOverviewContextData {
     setFilteredDateRange: (dateRange: [number, number] | null) => void;
     updateParticipant: (participant: Participant) => void;
     updateAllSlots: (allSlots: Array<SerializableSlot>) => void;
+    updateAllVenues: (allVenues: Array<Venue>) => void;
     slotsDateRange: [Date, Date] | null;
-    areFiltersSet: boolean;
+    areLocationOrDateRangeFiltersSet: boolean;
 }
 
 const ParticipantsOverviewContext = createContext<ParticipantsOverviewContextData | null>(null);
@@ -57,7 +58,7 @@ export const ParticipantsOverviewContextProvider = ({
     participantLabels: initialParticipantLabels,
     allLinks,
     slots: initialSlots,
-    venues,
+    venues: initialVenues,
     allLocations,
     children,
 }: Props): ReactElement => {
@@ -66,6 +67,7 @@ export const ParticipantsOverviewContextProvider = ({
     const [participants, setParticipants] = useState<Array<SerializableParticipant>>(initialParticipants);
 
     const [slots, setSlots] = useState<Array<SerializableSlot>>(initialSlots);
+    const [venues, setVenues] = useState<Array<Venue>>(initialVenues);
 
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
 
@@ -73,19 +75,12 @@ export const ParticipantsOverviewContextProvider = ({
 
     const [filteredDateRange, setFilteredDateRange] = useState<[number, number] | null>(null);
 
-    const [areFiltersSet, setAreFiltersSet] = useState(false);
-
     const earliestSlot = first(slots);
     const latestSlot = last(slots);
     const timeBufferInHours = 2;
     const earliestBegin = earliestSlot === undefined ? null : startOfHour(subHours(new Date(earliestSlot.begin), timeBufferInHours));
     const latestBegin =
         latestSlot === undefined ? null : startOfHour(addHours(endOfHour(addHours(new Date(latestSlot.begin), timeBufferInHours)), 1));
-
-    useEffect(() => {
-        // Filtered types are not relevant for this
-        setAreFiltersSet(filteredLocationIds.length > 0 || filteredDateRange !== null);
-    }, [filteredDateRange, filteredLocationIds.length, filteredTypes.length]);
 
     useEffectOnMount(() => {
         const queryParams = new URLSearchParams(window.location.search);
@@ -178,9 +173,9 @@ export const ParticipantsOverviewContextProvider = ({
         });
     }, []);
 
-    const updateAllSlots = useCallback((allSlots: Array<SerializableSlot>): void => {
-        setSlots(allSlots);
-    }, []);
+    const updateAllSlots = useCallback((allSlots: Array<SerializableSlot>): void => setSlots(allSlots), []);
+
+    const updateAllVenues = useCallback((allVenues: Array<Venue>): void => setVenues(allVenues), []);
 
     const typesOfParticipants = uniq(participants.map(({ type }) => type));
 
@@ -205,26 +200,33 @@ export const ParticipantsOverviewContextProvider = ({
                 setFilteredDateRange,
                 updateParticipant,
                 slots: slots.filter((slot) => {
-                    const matchesLocationFilter = filteredLocationIds.length === 0 || filteredLocationIds.includes(slot.locationId);
-
-                    const slotBegin = new Date(slot.begin);
-                    let matchesDateRangeFilter = true;
-                    if (filteredDateRange !== null) {
-                        const filteredBegin = new Date(filteredDateRange[0]);
-                        const filteredEnd = new Date(filteredDateRange[1]);
-
-                        matchesDateRangeFilter =
-                            (isSameMinute(slotBegin, filteredBegin) || isAfter(slotBegin, filteredBegin)) &&
-                            (isSameMinute(slotBegin, filteredEnd) || isBefore(slotBegin, filteredEnd));
+                    if (filteredLocationIds.length > 0 && !filteredLocationIds.includes(slot.locationId)) {
+                        return false;
                     }
 
-                    return matchesLocationFilter && matchesDateRangeFilter;
+                    if (filteredDateRange === null) {
+                        return true;
+                    }
+
+                    const slotBegin = new Date(slot.begin);
+
+                    const filteredBegin = new Date(filteredDateRange[0]);
+                    const filteredEnd = new Date(filteredDateRange[1]);
+
+                    return (
+                        (isSameMinute(slotBegin, filteredBegin) || isAfter(slotBegin, filteredBegin)) &&
+                        (isSameMinute(slotBegin, filteredEnd) || isBefore(slotBegin, filteredEnd))
+                    );
                 }),
-                venues: venues.filter((venue) => filteredLocationIds.length === 0 || filteredLocationIds.includes(venue.locationId)),
+                venues: venues.filter(
+                    (venue) =>
+                        filteredDateRange === null && (filteredLocationIds.length === 0 || filteredLocationIds.includes(venue.locationId)),
+                ),
                 allLocations,
                 updateAllSlots,
+                updateAllVenues,
                 slotsDateRange: earliestBegin === null || latestBegin === null ? null : [earliestBegin, latestBegin],
-                areFiltersSet,
+                areLocationOrDateRangeFiltersSet: filteredLocationIds.length > 0 || filteredDateRange !== null,
                 pinnedParticipantIds,
                 togglePinnedParticipantId,
             }}
