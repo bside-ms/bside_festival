@@ -4,8 +4,8 @@ import Checkbox from 'components/form/Checkbox';
 import TextInput from 'components/form/TextInput';
 import VolunteerInfo from 'components/volunteers/volunteerForm/VolunteerInfo';
 import volunteerDayPreferences from 'lib/volunteers/volunteerDayPreferences';
-import volunteerPreferences from 'lib/volunteers/volunteerPreferences';
 import type { AddVolunteerRequest } from 'pages/api/volunteers/add';
+import TextArea from 'components/form/TextArea';
 
 export interface VolunteerFormValues {
     fullName: string;
@@ -22,6 +22,7 @@ export interface VolunteerFormValues {
     isAvailableOnFriday: boolean;
     isAvailableOnSaturday: boolean;
     isAvailableOnSunday: boolean;
+    additionalInfo: string;
 }
 
 const VolunteerForm = (): ReactElement => {
@@ -55,6 +56,7 @@ const VolunteerForm = (): ReactElement => {
                 isAvailableOnFriday: values.isAvailableOnFriday,
                 isAvailableOnSaturday: values.isAvailableOnSaturday,
                 isAvailableOnSunday: values.isAvailableOnSunday,
+                additionalInfo: values.additionalInfo,
             };
 
             const response = await fetch('/api/volunteers/add', {
@@ -114,15 +116,14 @@ const VolunteerForm = (): ReactElement => {
                         <TextInput<VolunteerFormValues> name="mailAddress" label="E-Mail-Adresse" required={true} />
 
                         <div className="flex flex-col gap-3">
-                            {volunteerPreferences.map(({ key, label }) => (
+                            An welchen Tagen kannst du uns unterstützen?
+                            {volunteerDayPreferences.map(({ key, label }) => (
                                 <Checkbox<VolunteerFormValues> key={key} name={key} label={label} />
                             ))}
                         </div>
 
-                        <div className="flex flex-col gap-3">
-                            {volunteerDayPreferences.map(({ key, label }) => (
-                                <Checkbox<VolunteerFormValues> key={key} name={key} label={label} />
-                            ))}
+                        <div>
+                            <TextArea<VolunteerFormValues> name="additionalInfo" label="Möchtest du uns noch etwas über dich mitteilen?" />
                         </div>
 
                         <label className="block w-full bg-black p-1">

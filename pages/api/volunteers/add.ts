@@ -17,6 +17,7 @@ export interface AddVolunteerRequest {
     isAvailableOnFriday: boolean;
     isAvailableOnSaturday: boolean;
     isAvailableOnSunday: boolean;
+    additionalInfo: string;
 }
 
 interface ErroneousAddVolunteerResponse {
@@ -46,6 +47,7 @@ export default async (
         isAvailableOnFriday,
         isAvailableOnSaturday,
         isAvailableOnSunday,
+        additionalInfo,
     } = request.body as AddVolunteerRequest;
 
     const newVolunteer = await prismaClient.volunteer.create({
@@ -64,6 +66,7 @@ export default async (
             isAvailableOnFriday,
             isAvailableOnSaturday,
             isAvailableOnSunday,
+            additionalInfo,
         },
     });
 

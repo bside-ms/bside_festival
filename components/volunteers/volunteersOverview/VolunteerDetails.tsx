@@ -1,34 +1,15 @@
-import type { IconProp } from '@fortawesome/fontawesome-svg-core';
-import {
-    faCarSide,
-    faDumbbell,
-    faKitchenSet,
-    faMicrophoneLines,
-    faPeopleGroup,
-    faScrewdriverWrench,
-    faStar,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { Volunteer } from '@prisma/client';
 import type { ReactElement } from 'react';
-import type { VolunteerDayPreferenceKey, VolunteerPreferenceKey } from 'lib/volunteers/VolunteerPreference';
+import type { VolunteerDayPreferenceKey } from 'lib/volunteers/VolunteerPreference';
+import cn from 'lib/common/helper/cn';
+import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 
 interface Props {
     volunteer: Volunteer;
     showSensitiveData: boolean;
 }
 
-export const preferences = new Array<[VolunteerPreferenceKey, IconProp]>(
-    ['canCook', faKitchenSet],
-    ['isSocial', faPeopleGroup],
-    ['canSupportTechnician', faScrewdriverWrench],
-    ['canSupportArtist', faMicrophoneLines],
-    ['hasCar', faCarSide],
-    ['canCarryHeavyStuff', faDumbbell],
-    ['hasMultipleTalents', faStar],
-);
-
-export const dayPreferences = new Array<[VolunteerDayPreferenceKey, string]>(
+const dayPreferences = new Array<[VolunteerDayPreferenceKey, string]>(
     ['isAvailableOnFriday', 'Fr'],
     ['isAvailableOnSaturday', 'Sa'],
     ['isAvailableOnSunday', 'So'],
@@ -36,7 +17,7 @@ export const dayPreferences = new Array<[VolunteerDayPreferenceKey, string]>(
 
 const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement => {
     return (
-        <div className="rounded-md bg-gray-50 px-4 py-2 drop-shadow">
+        <div className="rounded-md bg-gray-50 px-4 pb-3 pt-2 drop-shadow">
             <div className="mb-2 text-xl">{volunteer.fullName}</div>
 
             {showSensitiveData && (
@@ -55,23 +36,16 @@ const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement
             )}
 
             <div className="flex items-center gap-2">
-                {preferences.map(([preference, iconName]) => (
-                    <FontAwesomeIcon
-                        key={preference}
-                        className="size-6"
-                        style={{ color: volunteer[preference] ? undefined : '#CCC' }}
-                        icon={iconName}
-                    />
-                ))}
-
-                <div className="w-4" />
-
                 {dayPreferences.map(([dayPreference, label]) => (
-                    <div key={dayPreference} className="text-xl leading-4" style={{ color: volunteer[dayPreference] ? undefined : '#CCC' }}>
+                    <div key={dayPreference} className={cn('text-xl leading-4', !volunteer[dayPreference] && 'text-gray-300')}>
                         {label}
                     </div>
                 ))}
             </div>
+
+            {isNotEmptyString(volunteer.additionalInfo) && (
+                <pre className="mt-4 border-l-2 border-gray-400 pl-3 font-sans italic text-gray-600">{volunteer.additionalInfo}</pre>
+            )}
         </div>
     );
 };

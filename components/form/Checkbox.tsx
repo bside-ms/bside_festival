@@ -40,7 +40,7 @@ const Checkbox = <T extends FieldValues>({ label, name, info, required = false }
                 })}
             />
 
-            <label htmlFor={id} className="cursor-pointer text-base font-medium text-gray-900">
+            <label htmlFor={id} className="cursor-pointer text-base font-medium ">
                 {required ? `${label} *` : label}
             </label>
 

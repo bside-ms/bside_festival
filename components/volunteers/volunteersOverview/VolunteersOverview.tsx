@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 import VolunteerDetails from 'components/volunteers/volunteersOverview/VolunteerDetails';
-import VolunteerDetailsLegend from 'components/volunteers/volunteersOverview/VolunteerDetailsLegend';
 import isGroupMember from 'lib/next-auth/isGroupMember';
 import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
 
@@ -42,10 +41,6 @@ const VolunteersOverview = ({ volunteers }: Props): ReactElement => {
                         {volunteers.map((volunteer) => (
                             <VolunteerDetails key={volunteer.int} volunteer={volunteer} showSensitiveData={isInDataPrivacyGroup} />
                         ))}
-                    </div>
-
-                    <div className="mt-8">
-                        <VolunteerDetailsLegend />
                     </div>
                 </>
             )}
