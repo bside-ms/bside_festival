@@ -20,7 +20,6 @@ import isGroupMember from 'lib/next-auth/isGroupMember';
 import getAllAttendees from 'lib/participants/getAllAttendees';
 import AllAttendees from 'typings/AllAttendees';
 import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
-import getUserSession from 'lib/next-auth/getUserSession';
 
 interface Props {
     participants: Array<SerializableParticipant>;
@@ -86,7 +85,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, res }
 
     const allLocations = await prismaClient.location.findMany({ orderBy: { name: 'asc' } });
 
-    const allAttendees = await getAllAttendees(session !== null && session.user !== undefined, isInDataPrivacyGroup);
+    const allAttendees = await getAllAttendees(session.user !== undefined, isInDataPrivacyGroup);
 
     return {
         props: {
