@@ -20,6 +20,7 @@ import isGroupMember from 'lib/next-auth/isGroupMember';
 import getAllAttendees from 'lib/participants/getAllAttendees';
 import AllAttendees from 'typings/AllAttendees';
 import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
+import getUserSession from 'lib/next-auth/getUserSession';
 
 interface Props {
     participants: Array<SerializableParticipant>;
@@ -33,6 +34,16 @@ interface Props {
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({ req, res }): Promise<GetServerSidePropsResult<Props>> => {
     const session = await getServerSession(req, res, authOptions);
+
+    if (session === null) {
+        return {
+            redirect: {
+                statusCode: 302,
+                destination: '/',
+            },
+        };
+    }
+
     const isInDataPrivacyGroup = isGroupMember(dataPrivacyGroup, session);
 
     const participants = (await getAllParticipants(isInDataPrivacyGroup)).filter(({ status }) =>
