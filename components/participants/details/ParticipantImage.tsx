@@ -15,6 +15,7 @@ import bytes from 'bytes';
 import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
 import { ReplaceImageRequest } from 'pages/api/applications/update/image/replace';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
+import cn from 'lib/common/helper/cn';
 
 interface Props {
     participant: SerializableParticipant;
@@ -104,7 +105,7 @@ const ParticipantImage = ({ participant: { id, name, status, imageFileName } }: 
     }, []);
 
     return (
-        <div className="relative h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3">
+        <div className={cn('relative h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3', isEmptyString(imageUrl) && 'h-[50px]')}>
             <PinParticipantToggle participantId={id} />
 
             {status === 'Canceled' && (

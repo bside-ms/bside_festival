@@ -113,6 +113,8 @@ model Slot {
   participant   Participant @relation(fields: [participantId], references: [id])
   locationId    Int
   location      Location    @relation(fields: [locationId], references: [id])
+  maxAttendees  Int?
+  Attendee      Attendee[]
 }
 
 // Venue is for program that is at the location during the entire festival
@@ -141,4 +143,13 @@ model Volunteer {
   isAvailableOnFriday   Boolean @default(false)
   isAvailableOnSaturday Boolean @default(false)
   isAvailableOnSunday   Boolean @default(false)
+}
+
+model Attendee {
+  id          Int      @id @default(autoincrement())
+  fullName    String   @db.Text
+  mailAddress String   @db.Text
+  attendedAt  DateTime
+  slotId      Int
+  slot        Slot     @relation(fields: [slotId], references: [id])
 }

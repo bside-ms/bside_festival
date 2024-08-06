@@ -10,6 +10,11 @@ import prismaClient from 'lib/common/prismaClient';
 import getUserSession from 'lib/next-auth/getUserSession';
 import serializeParticipant from 'lib/participants/serializeParticipant';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
+import getAllParticipants from 'lib/participants/getAllParticipants';
+import { getServerSession } from 'next-auth';
+import authOptions from 'lib/next-auth/authOptions';
+import isGroupMember from 'lib/next-auth/isGroupMember';
+import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
 
 interface Props {
     applications: Array<SerializableParticipant>;
@@ -30,7 +35,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
         };
     }
 
-    const applications = await prismaClient.participant.findMany();
+    const session = await getServerSession(context.req, context.res, authOptions);
+    const isInDataPrivacyGroup = isGroupMember(dataPrivacyGroup, session);
+
+    const applications = await getAllParticipants(isInDataPrivacyGroup);
 
     const participantLabels = await prismaClient.participantLabel.findMany();
 

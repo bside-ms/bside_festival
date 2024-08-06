@@ -5,6 +5,7 @@ import type { ReactElement } from 'react';
 import VolunteerDetails from 'components/volunteers/volunteersOverview/VolunteerDetails';
 import VolunteerDetailsLegend from 'components/volunteers/volunteersOverview/VolunteerDetailsLegend';
 import isGroupMember from 'lib/next-auth/isGroupMember';
+import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
 
 interface Props {
     volunteers: Array<Volunteer>;
@@ -13,7 +14,7 @@ interface Props {
 const VolunteersOverview = ({ volunteers }: Props): ReactElement => {
     const { data: session } = useSession();
 
-    const isInDataPrivacyGroup = isGroupMember('/kreise/festival/eingeschränkt/datenschutz', session);
+    const isInDataPrivacyGroup = isGroupMember(dataPrivacyGroup, session);
 
     const portalLink = (
         <Link

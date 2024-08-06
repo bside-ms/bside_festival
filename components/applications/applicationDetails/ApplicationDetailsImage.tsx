@@ -14,6 +14,7 @@ import { allowedImageContentTypes, allowedImageMaxFileSize } from 'components/ap
 import { extension } from 'mime-types';
 import bytes from 'bytes';
 import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
+import cn from 'lib/common/helper/cn';
 
 interface Props {
     application: SerializableParticipant;
@@ -103,7 +104,7 @@ const ApplicationDetailsImage = ({ application: { id, name, imageFileName } }: P
     }, []);
 
     return (
-        <div className="relative h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3">
+        <div className={cn('relative h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3', isEmptyString(imageUrl) && 'h-[50px]')}>
             {isNotEmptyString(imageUrl) ? (
                 <>
                     <NextLink href={imageUrl} className="md:cursor-pointer" target="_blank">

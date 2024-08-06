@@ -10,11 +10,13 @@ import { useParticipantSlots, useParticipantsOverviewContext } from 'components/
 import formatDate from 'lib/common/helper/formatDate';
 import type { DeleteSlotRequest, SuccessfulDeleteSlotResponse } from 'pages/api/applications/slot/delete';
 import type { SuccessfulUpdateSlotResponse, UpsertSlotRequest } from 'pages/api/applications/slot/update';
+import isEmptyString from 'lib/common/helper/isEmptyString';
 
 interface SlotFormValues {
     locationId: number;
     beginDate: Date;
-    duration?: number;
+    duration?: string;
+    maxAttendees?: string;
 }
 
 interface Props {
@@ -36,22 +38,27 @@ const SlotForm = ({ participantId }: Props): ReactElement => {
         formState: { errors, isSubmitting },
         clearErrors,
         resetField,
+        setValue,
     } = methods;
 
     const handleFormSubmit = useCallback(
-        async ({ locationId, beginDate, duration }: SlotFormValues) => {
-            clearErrors('root');
+        async ({ locationId, beginDate, duration, maxAttendees }: SlotFormValues) => {
+            // clearErrors('root');
 
             if (isNaN(Number(duration))) {
                 setError('duration', { message: 'Bitte nur eine Zahl angeben' });
                 return;
             }
 
+            const usedMaxAttendees = isEmptyString(maxAttendees) || maxAttendees === '0' ? undefined : maxAttendees;
+            setValue('maxAttendees', usedMaxAttendees);
+
             const request: UpsertSlotRequest = {
                 participantId,
                 begin: new Date(beginDate),
                 locationId: Number(locationId),
                 duration: Number(duration),
+                maxAttendees: Number(maxAttendees),
             };
 
             const response = await fetch('/api/applications/slot/update', {
@@ -116,6 +123,11 @@ const SlotForm = ({ participantId }: Props): ReactElement => {
     const beginValue =
         participantSlots[0]?.slot?.begin === undefined ? undefined : formatDate(participantSlots[0].slot.begin, "yyyy-MM-dd'T'HH:mm");
 
+    const validateMaxAttendees = useCallback(
+        (value: string) => (value === '' || /^\d+$/.test(value) ? undefined : 'Nur Zahlen eintragen'),
+        [],
+    );
+
     return (
         <div>
             <div className="font-display">Programmslot</div>
@@ -139,6 +151,17 @@ const SlotForm = ({ participantId }: Props): ReactElement => {
                             options={locationOptions}
                             required={true}
                             defaultValue={participantSlots[0]?.location.id.toString()}
+                        />
+
+                        <TextInput<SlotFormValues>
+                            name="maxAttendees"
+                            defaultValue={participantSlots[0]?.slot?.maxAttendees?.toString()}
+                            info="Maximale Teilnehmer:innen"
+                            additionalInfo={
+                                'Frei lassen, wenn es keine Teilnehmer:innen-Begrenzung gibt. ' +
+                                'Die Eingabe einer maximalen Anzahl aktiviert die Teilnahme-Möglichkeit für diesen Programmpunkt.'
+                            }
+                            validate={validateMaxAttendees}
                         />
 
                         <label className="block max-w-[300px] bg-black p-1">

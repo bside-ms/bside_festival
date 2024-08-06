@@ -14,6 +14,7 @@ import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import hasSlotOrVenue from 'lib/participants/hasSlotOrVenue';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
+import cn from 'lib/common/helper/cn';
 
 interface Props {
     participant: SerializableParticipant;
@@ -43,13 +44,20 @@ const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | nu
             className="relative flex flex-col justify-between gap-4 rounded-md p-3 text-gray-800 shadow-lg backdrop-blur-2xl md:cursor-pointer md:flex-row-reverse md:p-5 md:hover:brightness-110"
             onClick={onClick}
         >
-            <div className="relative min-h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3">
+            <div
+                className={cn(
+                    'relative min-h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3',
+                    isEmptyString(imageUrl) && 'min-h-0 h-[50px]',
+                )}
+            >
                 <PinParticipantToggle participantId={id} />
+
                 {participant.status === 'Canceled' && (
                     <div className="absolute inset-0 z-30 flex items-center justify-center bg-red-800/70 p-5 text-center text-6xl text-gray-100">
                         Fällt leider aus
                     </div>
                 )}
+
                 {isNotEmptyString(imageUrl) && <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />}
             </div>
 
@@ -64,7 +72,9 @@ const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | nu
 
                 <ParticipantVenues participantId={id} isInPreview={true} />
 
-                {isNotEmptyString(description) && <div className="mt-4 line-clamp-3">{updatedDescription ?? description}</div>}
+                {isNotEmptyString(updatedDescription ?? description) && (
+                    <div className="mt-4 line-clamp-3">{updatedDescription ?? description}</div>
+                )}
             </div>
         </div>
     );

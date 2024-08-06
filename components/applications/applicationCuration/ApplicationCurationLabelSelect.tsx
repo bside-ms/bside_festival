@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-bind */
 import { useCallback } from 'react';
 import type { Label } from '@prisma/client';
 import type { ReactElement } from 'react';

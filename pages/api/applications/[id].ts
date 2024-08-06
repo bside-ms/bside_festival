@@ -1,6 +1,10 @@
 import type { Participant } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prismaClient from 'lib/common/prismaClient';
+import getAllParticipants from 'lib/participants/getAllParticipants';
+import { getServerSession } from 'next-auth';
+import authOptions from 'lib/next-auth/authOptions';
+import isGroupMember from 'lib/next-auth/isGroupMember';
+import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
 
 export interface GetApplicationResponse {
     application: Participant | null;
@@ -9,14 +13,11 @@ export interface GetApplicationResponse {
 export default async (request: NextApiRequest, response: NextApiResponse<GetApplicationResponse>): Promise<void> => {
     const query = request.query as { id: string };
 
-    const applicationId = Number(query.id);
+    const session = await getServerSession(request, response, authOptions);
 
-    if (isNaN(applicationId)) {
-        response.status(404).json({ application: null });
-        return;
-    }
+    const isInDataPrivacyGroup = isGroupMember(dataPrivacyGroup, session);
 
-    const application = await prismaClient.participant.findUnique({ where: { id: applicationId } });
+    const application = (await getAllParticipants(isInDataPrivacyGroup)).find(({ id }) => id === Number(query.id)) ?? null;
 
     response.status(application === null ? 404 : 200).json({ application });
 };

@@ -4,6 +4,7 @@ import type { ReactElement } from 'react';
 import formatDate from 'lib/common/helper/formatDate';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import type { SerializableSlot } from 'typings/SerializableSlot';
+import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
 
 interface Props {
     slot: SerializableSlot;
@@ -11,8 +12,16 @@ interface Props {
     showAccessibleInfo: boolean;
 }
 
-const ParticipantSlot = ({ slot, location: { name, awarenessInfo }, showAccessibleInfo }: Props): ReactElement | null => {
-    const dateAndLocation = `${formatDate(new Date(slot.begin), 'EEE dd.MM. / HH:mm')} / ${name}`;
+const ParticipantSlot = ({
+    slot: { begin, maxAttendees },
+    location: { name, awarenessInfo },
+    showAccessibleInfo,
+}: Props): ReactElement | null => {
+    let dateAndLocation = `${formatDate(new Date(begin), 'EEE dd.MM. / HH:mm')} / ${name}`;
+
+    if (isNotEmptyNumber(maxAttendees)) {
+        dateAndLocation += ' / Anmeldung erforderlich';
+    }
 
     if (!showAccessibleInfo) {
         return <div>{dateAndLocation}</div>;

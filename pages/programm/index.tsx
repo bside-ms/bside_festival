@@ -1,7 +1,7 @@
 import type { Link, Location, ParticipantLabel, Venue } from '@prisma/client';
 import { isAfter, isEqual } from 'date-fns';
 import type { GetServerSideProps, GetServerSidePropsResult } from 'next';
-import type { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
 import ParticipantsOverview from 'components/participants/overview/ParticipantsOverview';
@@ -12,7 +12,14 @@ import getAllVenues from 'lib/participants/getAllVenues';
 import serializeParticipant from 'lib/participants/serializeParticipant';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 import type { SerializableSlot } from 'typings/SerializableSlot';
-import getUserSession from 'lib/next-auth/getUserSession';
+import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
+import getAllParticipants from 'lib/participants/getAllParticipants';
+import { getServerSession } from 'next-auth';
+import authOptions from 'lib/next-auth/authOptions';
+import isGroupMember from 'lib/next-auth/isGroupMember';
+import getAllAttendees from 'lib/participants/getAllAttendees';
+import AllAttendees from 'typings/AllAttendees';
+import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
 
 interface Props {
     participants: Array<SerializableParticipant>;
@@ -21,21 +28,16 @@ interface Props {
     participantLabels: Array<ParticipantLabel>;
     allLinks: Array<Link>;
     allLocations: Array<Location>;
+    allAttendees: Array<AllAttendees>;
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async (context): Promise<GetServerSidePropsResult<Props>> => {
-    const userSession = await getUserSession(context);
+export const getServerSideProps: GetServerSideProps<Props> = async ({ req, res }): Promise<GetServerSidePropsResult<Props>> => {
+    const session = await getServerSession(req, res, authOptions);
+    const isInDataPrivacyGroup = isGroupMember(dataPrivacyGroup, session);
 
-    if (userSession === null) {
-        return {
-            redirect: {
-                statusCode: 302,
-                destination: '/',
-            },
-        };
-    }
-
-    const participants = await prismaClient.participant.findMany({ where: { status: { in: ['Confirmed', 'Canceled'] } } });
+    const participants = (await getAllParticipants(isInDataPrivacyGroup)).filter(({ status }) =>
+        ['Confirmed', 'Canceled'].includes(status),
+    );
 
     const slots = await getAllSlots();
 
@@ -73,6 +75,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
 
     const allLocations = await prismaClient.location.findMany({ orderBy: { name: 'asc' } });
 
+    const allAttendees = await getAllAttendees(session !== null && session.user !== undefined, isInDataPrivacyGroup);
+
     return {
         props: {
             participants: sortedParticipant.map(serializeParticipant),
@@ -81,11 +85,24 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context): Pr
             participantLabels,
             allLinks,
             allLocations,
+            allAttendees,
         },
     };
 };
 
-export default ({ participants, slots, venues, participantLabels, allLinks, allLocations }: Props): ReactElement => {
+export default ({ participants, slots, venues, participantLabels, allLinks, allLocations, allAttendees }: Props): ReactElement => {
+    useEffectOnMount(() => {
+        (async () => {
+            const response = await fetch('/api/applications/all');
+
+            if (response.ok) {
+                const data = await response.json();
+
+                console.log('data', data);
+            }
+        })();
+    });
+
     return (
         <div>
             <div className="relative min-h-screen w-full pt-8">
@@ -98,6 +115,7 @@ export default ({ participants, slots, venues, participantLabels, allLinks, allL
                             participantLabels={participantLabels}
                             allLinks={allLinks}
                             allLocations={allLocations}
+                            allAttendees={allAttendees}
                         >
                             <ParticipantsOverview />
                         </ParticipantsOverviewContextProvider>

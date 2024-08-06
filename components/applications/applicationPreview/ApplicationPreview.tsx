@@ -9,6 +9,7 @@ import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import statusLabels from 'lib/participants/status/statusLabels';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
+import cn from 'lib/common/helper/cn';
 
 interface Props {
     application: SerializableParticipant;
@@ -26,7 +27,7 @@ const ApplicationPreview = ({ application, labels, onClick }: Props): ReactEleme
             className="relative flex flex-col justify-between gap-4 rounded-md p-3 text-gray-800 shadow-lg backdrop-blur-2xl md:cursor-pointer md:flex-row-reverse md:p-5 md:hover:brightness-110"
             onClick={onClick}
         >
-            <div className="relative min-h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3">
+            <div className={cn('relative h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3', isEmptyString(imageUrl) && 'h-auto')}>
                 {isNotEmptyString(imageUrl) && <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />}
             </div>
 

@@ -92,6 +92,7 @@ const ParticipantsOverviewLDateRangeFilter = (): ReactElement | null => {
                         step={halfHourInMilliseconds}
                         pearling={true}
                         onChange={handleChange}
+                        // eslint-disable-next-line react/jsx-no-bind
                         renderTrack={(props, state): ReactElement => {
                             if (state.index === 1) {
                                 return <div {...props} className="h-3 rounded-lg bg-gray-500" />;
@@ -99,6 +100,7 @@ const ParticipantsOverviewLDateRangeFilter = (): ReactElement | null => {
 
                             return <div {...props} />;
                         }}
+                        // eslint-disable-next-line react/jsx-no-bind
                         renderThumb={(props): ReactElement => (
                             <div
                                 {...props}

@@ -21,6 +21,9 @@ import hasSlotOrVenue from 'lib/participants/hasSlotOrVenue';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 import ParticipantImage from 'components/participants/details/ParticipantImage';
 import VenueForm from 'components/participants/venueForm/VenueForm';
+import AttendeeForm from 'components/participants/attendeeForm/AttendeeForm';
+import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
+import SlotAttendeeData from 'components/participants/details/SlotAttendeeData';
 
 interface Props {
     participant: SerializableParticipant;
@@ -69,6 +72,24 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
                     <DescriptionForm participant={participant} />
                 </div>
             </div>
+
+            {participantSlots.length === 1 &&
+                participantSlots[0] !== undefined &&
+                isNotEmptyNumber(participantSlots[0].slot.maxAttendees) && (
+                    <div className="relative mt-1 rounded-md px-3 py-2 text-gray-800 shadow-lg backdrop-blur-2xl md:px-5">
+                        <AttendeeForm slot={participantSlots[0]} />
+                    </div>
+                )}
+
+            {status === 'authenticated' &&
+                hasSlotOrVenue(type) === 'slot' &&
+                participantSlots.length === 1 &&
+                participantSlots[0] !== undefined &&
+                isNotEmptyNumber(participantSlots[0].slot.maxAttendees) && (
+                    <div className="relative mt-1 rounded-md px-3 py-2 text-gray-800 shadow-lg backdrop-blur-2xl md:px-5">
+                        <SlotAttendeeData slot={participantSlots[0].slot} />
+                    </div>
+                )}
 
             {status === 'authenticated' && hasSlotOrVenue(type) === 'slot' && (
                 <div className="relative mt-1 rounded-md px-3 py-2 text-gray-800 shadow-lg backdrop-blur-2xl md:px-5">

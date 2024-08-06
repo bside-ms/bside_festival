@@ -15,6 +15,7 @@ const TypeSelect = ({ type }: { type: Type }): ReactElement => {
 
             <div
                 className="absolute inset-x-0 bottom-0 px-3 py-1 font-display text-lg text-white md:px-6 md:py-3 md:text-xl"
+                // eslint-disable-next-line react/no-danger
                 dangerouslySetInnerHTML={{ __html: typeLabelsWithSoftHyphens[type] }}
             />
         </Link>

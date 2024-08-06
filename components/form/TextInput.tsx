@@ -9,13 +9,14 @@ import useIsMounted from 'lib/common/hooks/useIsMounted';
 
 interface Props<T extends FieldValues> {
     name: FieldPath<T>;
-    label: string;
+    label?: string;
     defaultValue?: string;
     info?: string;
     additionalInfo?: string;
     required?: boolean;
     maxLength?: number;
     validate?: (value: string) => string | undefined;
+    isDisabled?: boolean;
 }
 
 const TextInput = <T extends FieldValues>({
@@ -27,6 +28,7 @@ const TextInput = <T extends FieldValues>({
     validate,
     required = false,
     maxLength,
+    isDisabled,
 }: Props<T>): ReactElement => {
     const {
         formState: { errors, isSubmitting },
@@ -55,7 +57,7 @@ const TextInput = <T extends FieldValues>({
                 }`}
                 required={required}
                 placeholder={required ? `${label} *` : label}
-                disabled={isSubmitting}
+                disabled={isSubmitting || isDisabled}
                 {...register(name, {
                     required: {
                         value: required,
@@ -71,7 +73,7 @@ const TextInput = <T extends FieldValues>({
                 })}
             />
 
-            {isNotEmptyString(additionalInfo) && <div className="px-1 text-base text-black">{additionalInfo}</div>}
+            {isNotEmptyString(additionalInfo) && <div className="px-1 pt-1 text-xs text-black">{additionalInfo}</div>}
 
             {typeof errorMessage === 'string' && <div className="px-1 text-rose-900">{errorMessage}</div>}
         </div>

@@ -1,6 +1,6 @@
 import type { PropsWithChildren, ReactElement } from 'react';
 import { createContext, useCallback, useContext, useState } from 'react';
-import type { Link, Location, Participant, ParticipantLabel, Type, Venue } from '@prisma/client';
+import type { Attendee, Link, Location, Participant, ParticipantLabel, Type, Venue } from '@prisma/client';
 import { addHours, endOfHour, isAfter, isBefore, isSameMinute, startOfHour, subHours } from 'date-fns';
 import { first, last, uniq } from 'lodash';
 import { dateRangeFilterQueryName } from 'components/participants/overview/ParticipantsOverviewDateRangeFilter';
@@ -14,6 +14,7 @@ import isValidType from 'lib/participants/isValidType';
 import serializeParticipant from 'lib/participants/serializeParticipant';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 import type { SerializableSlot } from 'typings/SerializableSlot';
+import AllAttendees from 'typings/AllAttendees';
 
 interface ParticipantsOverviewContextData {
     allParticipants: Array<SerializableParticipant>;
@@ -38,6 +39,8 @@ interface ParticipantsOverviewContextData {
     updateParticipant: (participant: Participant) => void;
     updateAllSlots: (allSlots: Array<SerializableSlot>) => void;
     updateAllVenues: (allVenues: Array<Venue>) => void;
+    allAttendees: Array<AllAttendees>;
+    updateAllAttendees: (allAttendees: Array<AllAttendees>) => void;
     slotsDateRange: [Date, Date] | null;
     areLocationOrDateRangeFiltersSet: boolean;
 }
@@ -48,6 +51,7 @@ interface Props extends PropsWithChildren {
     participants: Array<SerializableParticipant>;
     slots: Array<SerializableSlot>;
     venues: Array<Venue>;
+    allAttendees: Array<AllAttendees>;
     participantLabels: Array<ParticipantLabel>;
     allLinks: Array<Link>;
     allLocations: Array<Location>;
@@ -59,6 +63,7 @@ export const ParticipantsOverviewContextProvider = ({
     allLinks,
     slots: initialSlots,
     venues: initialVenues,
+    allAttendees: initialAllAttendees,
     allLocations,
     children,
 }: Props): ReactElement => {
@@ -68,6 +73,7 @@ export const ParticipantsOverviewContextProvider = ({
 
     const [slots, setSlots] = useState<Array<SerializableSlot>>(initialSlots);
     const [venues, setVenues] = useState<Array<Venue>>(initialVenues);
+    const [allAttendees, setAllAttendees] = useState<Array<AllAttendees>>(initialAllAttendees);
 
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
 
@@ -177,6 +183,8 @@ export const ParticipantsOverviewContextProvider = ({
 
     const updateAllVenues = useCallback((allVenues: Array<Venue>): void => setVenues(allVenues), []);
 
+    const updateAllAttendees = useCallback((allAttendees: Array<AllAttendees>): void => setAllAttendees(allAttendees), []);
+
     const typesOfParticipants = uniq(participants.map(({ type }) => type));
 
     const actuallyAvailableTypes = availableTypes.filter((type) => typesOfParticipants.includes(type));
@@ -225,6 +233,8 @@ export const ParticipantsOverviewContextProvider = ({
                 allLocations,
                 updateAllSlots,
                 updateAllVenues,
+                allAttendees,
+                updateAllAttendees,
                 slotsDateRange: earliestBegin === null || latestBegin === null ? null : [earliestBegin, latestBegin],
                 areLocationOrDateRangeFiltersSet: filteredLocationIds.length > 0 || filteredDateRange !== null,
                 pinnedParticipantIds,
@@ -255,6 +265,12 @@ interface ParticipantVenue {
     venue: Venue;
     location: Location;
 }
+
+export const useSlotAttendees = (slotId: number): Array<Omit<Attendee, 'attendedAt'>> => {
+    const { allAttendees } = useParticipantsOverviewContext();
+
+    return allAttendees.find((slot) => slot.slotId === slotId)?.attendees ?? [];
+};
 
 export const useParticipantSlots = (participantId: number): Array<ParticipantSlot> => {
     const { allLocations, slots } = useParticipantsOverviewContext();

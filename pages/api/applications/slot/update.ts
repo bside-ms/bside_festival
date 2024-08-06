@@ -8,6 +8,7 @@ export interface UpsertSlotRequest {
     begin: Date;
     locationId: number;
     duration: number;
+    maxAttendees?: number;
 }
 
 export interface SuccessfulUpdateSlotResponse {
@@ -22,7 +23,7 @@ export default async (
     request: NextApiRequest,
     response: NextApiResponse<SuccessfulUpdateSlotResponse | ErroneousUpdateSlotResponse>,
 ): Promise<void> => {
-    const { participantId, begin, locationId, duration } = request.body as UpsertSlotRequest;
+    const { participantId, begin, locationId, duration, maxAttendees } = request.body as UpsertSlotRequest;
 
     // Just deleting slot before creating new one, since upsert only works with unique fields
     await prismaClient.slot.deleteMany({ where: { participantId } });
@@ -33,6 +34,7 @@ export default async (
             locationId,
             begin,
             duration,
+            maxAttendees,
         },
     });
 
