@@ -24,6 +24,8 @@ import VenueForm from 'components/participants/venueForm/VenueForm';
 import AttendeeForm from 'components/participants/attendeeForm/AttendeeForm';
 import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
 import SlotAttendeeData from 'components/participants/details/SlotAttendeeData';
+import MaterialExpenses from 'components/participants/details/MaterialExpenses';
+import CanProvideBackline from 'components/participants/details/CanProvideBackline';
 
 interface Props {
     participant: SerializableParticipant;
@@ -108,6 +110,10 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
                     <Links links={links} />
 
                     <Contacts participant={participant} />
+
+                    <MaterialExpenses participant={participant} />
+
+                    <CanProvideBackline participant={participant} />
 
                     <TechnicalRider participant={participant} />
 
