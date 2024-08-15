@@ -11,7 +11,6 @@ const getAllParticipants = async (isInDataPrivacyGroup: boolean): Promise<Array<
     return applications
         .map<Participant>((application) => ({
             ...application,
-            contactName: null,
             contactMail: null,
             contactPhone: null,
             address: null,

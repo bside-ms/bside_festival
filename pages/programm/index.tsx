@@ -12,7 +12,6 @@ import getAllVenues from 'lib/participants/getAllVenues';
 import serializeParticipant from 'lib/participants/serializeParticipant';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 import type { SerializableSlot } from 'typings/SerializableSlot';
-import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 import getAllParticipants from 'lib/participants/getAllParticipants';
 import { getServerSession } from 'next-auth';
 import authOptions from 'lib/next-auth/authOptions';
