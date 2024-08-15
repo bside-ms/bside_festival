@@ -101,18 +101,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, res }
 };
 
 export default ({ participants, slots, venues, participantLabels, allLinks, allLocations, allAttendees }: Props): ReactElement => {
-    useEffectOnMount(() => {
-        (async () => {
-            const response = await fetch('/api/applications/all');
-
-            if (response.ok) {
-                const data = await response.json();
-
-                console.log('data', data);
-            }
-        })();
-    });
-
     return (
         <div>
             <div className="relative min-h-screen w-full pt-8">
