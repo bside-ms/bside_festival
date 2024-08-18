@@ -2,7 +2,6 @@ import type { Link, Location, ParticipantLabel, Venue } from '@prisma/client';
 import { isAfter, isEqual } from 'date-fns';
 import type { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import { ReactElement } from 'react';
-import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
 import ParticipantsOverview from 'components/participants/overview/ParticipantsOverview';
 import { ParticipantsOverviewContextProvider } from 'components/participants/overview/ParticipantsOverviewContext';

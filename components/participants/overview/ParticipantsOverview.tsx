@@ -1,7 +1,7 @@
-import { faFilePdf, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import { ReactElement, useCallback, useEffect, useState } from 'react';
+import { ReactElement, useCallback, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import ParticipantOverview from 'components/participants/overview/ParticipantOverview';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
@@ -12,7 +12,7 @@ import { IoTriangle } from 'react-icons/io5';
 import cn from 'lib/common/helper/cn';
 
 const ParticipantsOverview = (): ReactElement => {
-    const { filteredParticipants, pinnedParticipantIds, areFiltersSet, filteredDateRange } = useParticipantsOverviewContext();
+    const { filteredParticipants, pinnedParticipantIds, areFiltersSet } = useParticipantsOverviewContext();
 
     const pinnedParticipants = filteredParticipants.filter(({ id }) => pinnedParticipantIds.includes(id));
 
