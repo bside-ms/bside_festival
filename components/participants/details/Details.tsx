@@ -53,80 +53,86 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
 
     return (
         <div>
-            <div className="relative flex flex-col justify-between gap-4 rounded-md p-3 text-gray-800 shadow-lg backdrop-blur-2xl md:flex-row-reverse md:p-5">
-                <ParticipantImage participant={participant} />
+            <div className="h-3 w-full bg-black" />
 
-                <div className="shrink grow-0">
-                    <div className="mb-1">
-                        <TypeBadge type={type} />
+            <div className="relative flex flex-col justify-between gap-4 bg-white p-3 text-gray-800 md:p-5">
+                <div className="flex flex-col justify-between gap-4 md:flex-row-reverse">
+                    <ParticipantImage participant={participant} />
+
+                    <div className="shrink grow-0">
+                        <div className="mb-1">
+                            <TypeBadge type={type} />
+                        </div>
+
+                        <div className="font-display text-2xl">{name}</div>
+
+                        {participant.status === 'Canceled' && (
+                            <div className="mt-3 text-lg font-bold text-red-900">Leider kann dieser Programmpunkt nicht stattfinden!</div>
+                        )}
+
+                        {participantSlots.length > 0 && <ParticipantSlots participantSlots={participantSlots} />}
+
+                        <ParticipantVenues participantId={id} />
+
+                        <DescriptionForm participant={participant} />
                     </div>
+                </div>
 
-                    <div className="font-display text-2xl">{name}</div>
-
-                    {participant.status === 'Canceled' && (
-                        <div className="mt-3 text-lg font-bold text-red-900">Leider kann dieser Programmpunkt nicht stattfinden!</div>
+                {participantSlots.length === 1 &&
+                    participantSlots[0] !== undefined &&
+                    isNotEmptyNumber(participantSlots[0].slot.maxAttendees) && (
+                        <div className="relative mt-1 rounded-md py-2 text-gray-800">
+                            <AttendeeForm slot={participantSlots[0]} />
+                        </div>
                     )}
 
-                    {participantSlots.length > 0 && <ParticipantSlots participantSlots={participantSlots} />}
+                {status === 'authenticated' &&
+                    hasSlotOrVenue(type) === 'slot' &&
+                    participantSlots.length === 1 &&
+                    participantSlots[0] !== undefined &&
+                    isNotEmptyNumber(participantSlots[0].slot.maxAttendees) && (
+                        <div className="relative mt-1 rounded-md py-2 text-gray-800">
+                            <SlotAttendeeData slot={participantSlots[0].slot} />
+                        </div>
+                    )}
 
-                    <ParticipantVenues participantId={id} />
-
-                    <DescriptionForm participant={participant} />
-                </div>
-            </div>
-
-            {participantSlots.length === 1 &&
-                participantSlots[0] !== undefined &&
-                isNotEmptyNumber(participantSlots[0].slot.maxAttendees) && (
-                    <div className="relative mt-1 rounded-md px-3 py-2 text-gray-800 shadow-lg backdrop-blur-2xl md:px-5">
-                        <AttendeeForm slot={participantSlots[0]} />
+                {status === 'authenticated' && hasSlotOrVenue(type) === 'slot' && (
+                    <div className="relative mt-1 rounded-md py-2 text-gray-800">
+                        <SlotForm participantId={id} />
                     </div>
                 )}
 
-            {status === 'authenticated' &&
-                hasSlotOrVenue(type) === 'slot' &&
-                participantSlots.length === 1 &&
-                participantSlots[0] !== undefined &&
-                isNotEmptyNumber(participantSlots[0].slot.maxAttendees) && (
-                    <div className="relative mt-1 rounded-md px-3 py-2 text-gray-800 shadow-lg backdrop-blur-2xl md:px-5">
-                        <SlotAttendeeData slot={participantSlots[0].slot} />
+                {status === 'authenticated' && hasSlotOrVenue(type) === 'venue' && (
+                    <div className="relative mt-1 rounded-md py-2 text-gray-800">
+                        <VenueForm participantId={id} />
                     </div>
                 )}
 
-            {status === 'authenticated' && hasSlotOrVenue(type) === 'slot' && (
-                <div className="relative mt-1 rounded-md px-3 py-2 text-gray-800 shadow-lg backdrop-blur-2xl md:px-5">
-                    <SlotForm participantId={id} />
+                {status === 'authenticated' && (
+                    <div className="relative mt-1 rounded-md py-2 text-gray-800">
+                        <Links links={links} />
+
+                        <Contacts participant={participant} />
+
+                        <MaterialExpenses participant={participant} />
+
+                        <CanProvideBackline participant={participant} />
+
+                        <TechnicalRider participant={participant} />
+
+                        <AdditionalInfo participant={participant} />
+                    </div>
+                )}
+
+                <div
+                    className="relative mt-1 flex justify-center rounded-md p-1 text-gray-800 hover:brightness-110 md:hover:cursor-pointer"
+                    onClick={onCloseClick}
+                >
+                    <FontAwesomeIcon className="w-5" icon={faTimes} />
                 </div>
-            )}
-
-            {status === 'authenticated' && hasSlotOrVenue(type) === 'venue' && (
-                <div className="relative mt-1 rounded-md px-3 py-2 text-gray-800 shadow-lg backdrop-blur-2xl md:px-5">
-                    <VenueForm participantId={id} />
-                </div>
-            )}
-
-            {status === 'authenticated' && (
-                <div className="relative mt-1 rounded-md px-3 py-2 text-gray-800 shadow-lg backdrop-blur-2xl md:px-5">
-                    <Links links={links} />
-
-                    <Contacts participant={participant} />
-
-                    <MaterialExpenses participant={participant} />
-
-                    <CanProvideBackline participant={participant} />
-
-                    <TechnicalRider participant={participant} />
-
-                    <AdditionalInfo participant={participant} />
-                </div>
-            )}
-
-            <div
-                className="relative mt-1 flex justify-center rounded-md p-1 text-gray-800 shadow-lg backdrop-blur-2xl hover:brightness-110 md:hover:cursor-pointer"
-                onClick={onCloseClick}
-            >
-                <FontAwesomeIcon className="w-5" icon={faTimes} />
             </div>
+
+            <div className="h-3 w-full bg-black" />
         </div>
     );
 };

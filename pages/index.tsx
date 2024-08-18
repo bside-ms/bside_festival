@@ -1,71 +1,109 @@
-import Image from 'next/image';
-import type { ReactElement } from 'react';
-import BHeartLinesSvg from 'components/common/BHeartLinesSvg';
+import { ReactElement, useRef, useState } from 'react';
 import Footer from 'components/common/Footer';
+import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
+import { range } from 'lodash';
+import cn from 'lib/common/helper/cn';
+import Link from 'next/link';
+
+const lastImage = 22;
 
 export default (): ReactElement => {
+    const [currentBgImage, setCurrentBgImage] = useState(2);
+
+    const intervalId = useRef<number>();
+
+    useEffectOnMount(() => {
+        intervalId.current = window.setInterval(() => {
+            setCurrentBgImage((prevState) => {
+                if (prevState === lastImage) {
+                    window.clearInterval(intervalId.current);
+                    return lastImage;
+                }
+
+                return prevState + 2;
+            });
+        }, 500);
+    });
+
     return (
         <div>
-            <div className="relative min-h-screen w-full font-display">
-                <div className="relative z-10">
-                    <div className="flex">
-                        <div className="relative min-h-max w-1/4 max-w-[385px] sm:w-2/5">
-                            <div className="absolute w-full min-w-[200px]">
-                                <div className="relative aspect-square w-full">
-                                    <Image
-                                        src="/assets/frontpage-heart-red.webp"
-                                        alt="Eyecatcher"
-                                        fill={true}
-                                        className="object-contain object-left"
-                                    />
-                                </div>
-                                <div className="relative -mt-4 hidden aspect-square w-full sm:block">
-                                    <BHeartLinesSvg color="#000" />
-                                </div>
-                                <div className="relative -mt-2 aspect-square w-full sm:hidden">
-                                    <BHeartLinesSvg color="#888" />
-                                </div>
-                            </div>
-                        </div>
+            <div className="relative mx-auto min-h-screen w-full max-w-2xl font-display">
+                <div className="py-3 text-center font-bold uppercase tracking-[0.3em] text-[#5ff450]">20. & 21. September 2024</div>
 
-                        <div className="mb-14 flex max-w-[540px] pr-7 pt-16 sm:pl-5 sm:pr-10 sm:pt-24">
-                            <div className="relative mb-[70rem] md:mb-[60rem]">
-                                <div className="text-4xl font-semibold [text-align-last:justify] sm:text-5xl md:text-6xl">B - S i d e</div>
-                                <div className="text-4xl font-semibold [text-align-last:justify] sm:text-5xl md:text-6xl">
-                                    F e s t i v a l
-                                </div>
-                                <div className="text-xl [text-align-last:justify] sm:text-3xl">2 0 2 4</div>
+                <div className="h-10 w-full bg-black" />
 
-                                <div className="absolute inset-x-0 top-full flex flex-col">
-                                    <div className="mt-8 text-justify text-xl">
-                                        Es geht wieder los: Das 8. B-Side Festival steht vor der Tür!
-                                    </div>
-                                    <div className="mt-2 text-justify text-xl">…und diesmal sogar vor neuen Türen:</div>
+                <div className="relative h-96 overflow-hidden md:h-[580px]">
+                    {range(2, lastImage + 1, 2).map((bgImage) => (
+                        <div
+                            key={`bg${bgImage}`}
+                            className={cn(
+                                'absolute h-full w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-cover bg-center bg-no-repeat opacity-0',
+                                currentBgImage === bgImage && 'opacity-100',
+                            )}
+                            style={{
+                                backgroundImage: `url("/assets/2024-animation/animation${bgImage.toString().padStart(2, '0')}.png")`,
+                            }}
+                        />
+                    ))}
+                </div>
 
-                                    <div className="mt-3 text-justify text-xs">
-                                        Nachdem wir im letzten Jahr noch in unserer Zwischennutzung am Hawerkamp zu finden waren, freuen wir
-                                        uns in diesem Jahr besonders den Hill-Speicher am Hafen wieder mit neuem Leben zu füllen. Vom 20.
-                                        bis 21.09.2024 weihen wir das frisch renovierte Gebäude mit Kunst, Musik, Literatur und Workshops
-                                        ein.
-                                    </div>
-                                    <div className="mt-14 text-justify text-lg sm:text-2xl">Bewerbungsphase beendet</div>
+                <div className="py-3 text-center">
+                    <div className="font-bold uppercase tracking-[0.3em] text-[#5ff450]">Spielplatz für Kreative</div>
+                    <div className="text-xs text-black">Veranstaltet vom B-Side Kultur e.V.</div>
+                </div>
 
-                                    <div className="mt-3 text-justify text-xs">
-                                        Die diesjährige Bewerbungsphase ist beendet. Und wir sind überwältigt von den unzähligen
-                                        wundervollen Bewerbungen! Nun stecken wir die Köpfe zusammen, um für euch ein unterhaltsames und
-                                        diverses Programm für das diesjährige B-Side Festival zusammenzustellen. Wir halten euch hier und in
-                                        den sozialen Medien auf dem Laufenden!
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div className="h-5 w-full bg-black" />
+
+                <Link
+                    className="block w-full cursor-pointer select-none bg-[#FDF85D] py-3 text-center font-bold uppercase tracking-[0.3em] text-[#FEC7DB]"
+                    href="/programm"
+                >
+                    zum Programm {'>>'}
+                </Link>
+
+                <div className="h-5 w-full bg-[#5ff450]" />
+
+                <div className="px-5 py-3 text-left">
+                    <div className="font-bold uppercase tracking-[0.3em] text-black">Welcome back</div>
+
+                    <div className="pt-3 text-xs text-black">
+                        Festival 2024 feiern wir dieses Jahr unter dem Motto „Spielplatz für Kreative“ die kulturelle Eröffnung der B-Side.
+                        Vom 20. bis zum 21. September bietet der B-Side Kultur e.V. ein vielfältiges Angebot aus Musik, Ausstellungen,
+                        Performances, Workshops, Lesungen uvm. Alle Menschen sind herzlich eingeladen, an dem bunten, nicht kommerziellen
+                        Programm teilzunehmen, es mitzugestalten und das neue soziokulturelle Zentrum zu erkunden. Für Interessierte an den
+                        gemeinnützigen Projekten des B-Side Kollektivs sind außerdem Infostände und eine Ausstellung über die
+                        B-Side-Geschichte geplant. Das Festival findet dieses Jahr vor allem in den frisch renovierten Räumlichkeiten Am
+                        Mittelhafen 42 statt, die anschließende Party ist wie in den Vorjahren in der Sputnikhalle geplant. Um all das zu
+                        realisieren, engagieren sich aktuell über 20 Menschen ehrenamtlich, kollektiv und selbstorganisiert im Festival-Team
+                        des B-Side Kultur e.V.
                     </div>
                 </div>
 
-                <Image src="/assets/background.webp" alt="Hintergrund" className="absolute z-0 object-cover object-top" fill={true} />
-            </div>
+                <div className="h-5 w-full bg-black" />
+                <div className="h-5 w-full bg-[#FEC7DB]" />
 
-            <Footer />
+                <div className="px-5 py-3 text-left">
+                    <div className="font-bold uppercase tracking-[0.3em] text-black">Mithelfen</div>
+
+                    <div className="pt-3 text-xs text-black">
+                        Für unser B-Side Festival 2024 brauchen wir euch! Wir suchen tatkräftige Helfer*innen. Dabei gibt es verschiedene
+                        Aufgaben, bei denen ihr euch einbringen könnt: Die Betreuung von Konzerten, Workshops, Ausstellungen und Lesungen,
+                        die Verpflegung für das Helfer*innen- und B-Side-Team, Hilfe beim Auf- und Abbau und der Technik des Festivals,
+                        Unterstützung des Awareness-Teams auf dem gesamten Festival und beim Spendensammeln.
+                    </div>
+
+                    <a
+                        className="mt-4 block w-full cursor-pointer select-none bg-[#FEC7DB] py-3 text-center text-sm font-bold uppercase tracking-[0.3em] text-[#FDF85D]"
+                        href="/mithelfen"
+                    >
+                        zum Anmeldeformular {'>>'}
+                    </a>
+                </div>
+
+                <div className="h-10 w-full bg-[#5ff450]" />
+
+                <Footer />
+            </div>
         </div>
     );
 };

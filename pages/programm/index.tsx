@@ -19,6 +19,7 @@ import isGroupMember from 'lib/next-auth/isGroupMember';
 import getAllAttendees from 'lib/participants/getAllAttendees';
 import AllAttendees from 'typings/AllAttendees';
 import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
+import Image from 'next/image';
 
 interface Props {
     participants: Array<SerializableParticipant>;
@@ -32,15 +33,6 @@ interface Props {
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({ req, res }): Promise<GetServerSidePropsResult<Props>> => {
     const session = await getServerSession(req, res, authOptions);
-
-    if (session === null) {
-        return {
-            redirect: {
-                statusCode: 302,
-                destination: '/',
-            },
-        };
-    }
 
     const isInDataPrivacyGroup = isGroupMember(dataPrivacyGroup, session);
 
@@ -84,7 +76,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, res }
 
     const allLocations = await prismaClient.location.findMany({ orderBy: { name: 'asc' } });
 
-    const allAttendees = await getAllAttendees(session.user !== undefined, isInDataPrivacyGroup);
+    const allAttendees = await getAllAttendees(session !== null && session.user !== undefined, isInDataPrivacyGroup);
 
     return {
         props: {
@@ -102,27 +94,53 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, res }
 export default ({ participants, slots, venues, participantLabels, allLinks, allLocations, allAttendees }: Props): ReactElement => {
     return (
         <div>
-            <div className="relative min-h-screen w-full pt-8">
-                <div className="relative z-10">
-                    <div className="mx-auto max-w-7xl px-3 pb-9">
-                        <ParticipantsOverviewContextProvider
-                            participants={participants}
-                            slots={slots}
-                            venues={venues}
-                            participantLabels={participantLabels}
-                            allLinks={allLinks}
-                            allLocations={allLocations}
-                            allAttendees={allAttendees}
-                        >
-                            <ParticipantsOverview />
-                        </ParticipantsOverviewContextProvider>
-                    </div>
+            <div className="relative z-10 mx-auto min-h-screen w-full max-w-2xl font-display">
+                <div className="py-3 text-center font-bold uppercase tracking-[0.3em] text-[#5ff450]">20. & 21. September 2024</div>
+                <div className="h-10 w-full bg-black" />
+                <a href="/" className="block w-full cursor-pointer py-3 text-center font-bold uppercase tracking-[0.3em] text-black">
+                    B-Side Festival 2024
+                </a>
+
+                <div className="h-5 w-full bg-black" />
+
+                <div className="block w-full cursor-pointer select-none bg-[#FDF85D] py-3 text-center text-xl font-bold uppercase tracking-[0.3em]">
+                    Programm
                 </div>
 
-                <BackgroundImage />
+                <div className="h-5 w-full bg-[#5ff450]" />
+
+                <div className="relative min-h-screen w-full pt-8">
+                    <div className="relative z-10">
+                        <div className="mx-auto max-w-7xl pb-9">
+                            <ParticipantsOverviewContextProvider
+                                participants={participants}
+                                slots={slots}
+                                venues={venues}
+                                participantLabels={participantLabels}
+                                allLinks={allLinks}
+                                allLocations={allLocations}
+                                allAttendees={allAttendees}
+                            >
+                                <ParticipantsOverview />
+                            </ParticipantsOverviewContextProvider>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <Footer />
+            <div className="fixed inset-0 z-0">
+                <Image
+                    src="/assets/2024-bg1.png"
+                    alt="background"
+                    className="fixed inset-0 z-0 object-contain object-center blur"
+                    fill={true}
+                    priority={true}
+                />
+            </div>
+
+            <div className="relative z-10">
+                <Footer />
+            </div>
         </div>
     );
 };

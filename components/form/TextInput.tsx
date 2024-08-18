@@ -52,7 +52,7 @@ const TextInput = <T extends FieldValues>({
                 id={id}
                 type="text"
                 defaultValue={defaultValue}
-                className={`rounded p-2 outline-0 ${
+                className={`border border-black p-2 outline-0 ${
                     typeof errorMessage === 'string' ? 'bg-rose-600 text-gray-100 placeholder:text-gray-100' : ''
                 }`}
                 required={required}

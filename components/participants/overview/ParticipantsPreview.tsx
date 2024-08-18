@@ -40,42 +40,48 @@ const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | nu
     }
 
     return (
-        <div
-            className="relative flex flex-col justify-between gap-4 rounded-md p-3 text-gray-800 shadow-lg backdrop-blur-2xl md:cursor-pointer md:flex-row-reverse md:p-5 md:hover:brightness-110"
-            onClick={onClick}
-        >
+        <div>
+            <div className="h-3 w-full bg-black" />
+
             <div
-                className={cn(
-                    'relative min-h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3',
-                    isEmptyString(imageUrl) && 'min-h-0 h-[50px]',
-                )}
+                className="relative flex flex-col justify-between gap-4 bg-white p-3 text-gray-800 md:cursor-pointer md:flex-row-reverse md:p-5"
+                onClick={onClick}
             >
-                <PinParticipantToggle participantId={id} />
+                <div
+                    className={cn(
+                        'relative min-h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3',
+                        isEmptyString(imageUrl) && 'min-h-0 h-[50px]',
+                    )}
+                >
+                    <PinParticipantToggle participantId={id} />
 
-                {participant.status === 'Canceled' && (
-                    <div className="absolute inset-0 z-30 flex items-center justify-center bg-red-800/70 p-5 text-center text-6xl text-gray-100">
-                        Fällt leider aus
-                    </div>
-                )}
+                    {participant.status === 'Canceled' && (
+                        <div className="absolute inset-0 z-30 flex items-center justify-center bg-red-800/70 p-5 text-center text-6xl text-gray-100">
+                            Fällt leider aus
+                        </div>
+                    )}
 
-                {isNotEmptyString(imageUrl) && <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />}
-            </div>
-
-            <div>
-                <div className="mb-1">
-                    <TypeBadge type={type} />
+                    {isNotEmptyString(imageUrl) && <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />}
                 </div>
 
-                <div className="line-clamp-3 font-display text-2xl">{name}</div>
+                <div>
+                    <div className="mb-1">
+                        <TypeBadge type={type} />
+                    </div>
 
-                {participantSlots.length > 0 && <ParticipantSlots participantSlots={participantSlots} isInPreview={true} />}
+                    <div className="line-clamp-3 font-display text-2xl">{name}</div>
 
-                <ParticipantVenues participantId={id} isInPreview={true} />
+                    {participantSlots.length > 0 && <ParticipantSlots participantSlots={participantSlots} isInPreview={true} />}
 
-                {isNotEmptyString(updatedDescription ?? description) && (
-                    <div className="mt-4 line-clamp-3">{updatedDescription ?? description}</div>
-                )}
+                    <ParticipantVenues participantId={id} isInPreview={true} />
+
+                    {isNotEmptyString(updatedDescription ?? description) && (
+                        <div className="mt-4 line-clamp-3">{updatedDescription ?? description}</div>
+                    )}
+                </div>
             </div>
+
+            <div className="h-3 w-full bg-black" />
         </div>
     );
 };

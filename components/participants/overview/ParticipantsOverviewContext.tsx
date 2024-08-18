@@ -43,6 +43,7 @@ interface ParticipantsOverviewContextData {
     updateAllAttendees: (allAttendees: Array<AllAttendees>) => void;
     slotsDateRange: [Date, Date] | null;
     areLocationOrDateRangeFiltersSet: boolean;
+    areFiltersSet: boolean;
 }
 
 const ParticipantsOverviewContext = createContext<ParticipantsOverviewContextData | null>(null);
@@ -239,6 +240,7 @@ export const ParticipantsOverviewContextProvider = ({
                 areLocationOrDateRangeFiltersSet: filteredLocationIds.length > 0 || filteredDateRange !== null,
                 pinnedParticipantIds,
                 togglePinnedParticipantId,
+                areFiltersSet: filteredDateRange !== null || filteredTypes.length > 0 || filteredLocationIds.length > 0,
             }}
         >
             {children}
