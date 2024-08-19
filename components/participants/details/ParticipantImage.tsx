@@ -16,12 +16,15 @@ import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
 import { ReplaceImageRequest } from 'pages/api/applications/update/image/replace';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import cn from 'lib/common/helper/cn';
+import { useSession } from 'next-auth/react';
 
 interface Props {
     participant: SerializableParticipant;
 }
 
 const ParticipantImage = ({ participant: { id, name, status, imageFileName } }: Props): ReactElement => {
+    const { status: sessionStatus } = useSession();
+
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const { updateParticipant } = useParticipantsOverviewContext();
@@ -120,12 +123,41 @@ const ParticipantImage = ({ participant: { id, name, status, imageFileName } }: 
                         <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />
                     </NextLink>
 
-                    <div className="absolute bottom-2 right-2 flex gap-2">
+                    {sessionStatus === 'authenticated' && (
+                        <div className="absolute bottom-2 right-2 flex gap-2">
+                            <label
+                                className="cursor-pointer rounded bg-white/50 p-1 text-gray-700 hover:bg-white/70"
+                                htmlFor={`file-upload-${id}`}
+                            >
+                                <GrEdit />
+                            </label>
+                            <input
+                                id={`file-upload-${id}`}
+                                type="file"
+                                onChange={handleReplace}
+                                className="hidden"
+                                accept={allowedImageContentTypes.join(', ')}
+                                disabled={isSubmitting}
+                            />
+
+                            <button
+                                onClick={handleDelete}
+                                className="rounded bg-white/50 p-1 text-gray-700 hover:bg-white/70"
+                                title="Bild ändern"
+                            >
+                                <BiTrash />
+                            </button>
+                        </div>
+                    )}
+                </>
+            ) : (
+                sessionStatus === 'authenticated' && (
+                    <>
                         <label
-                            className="cursor-pointer rounded bg-white/50 p-1 text-gray-700 hover:bg-white/70"
+                            className="absolute left-2 top-2 cursor-pointer rounded bg-white/50 px-2 py-1 text-gray-700 hover:bg-white/70"
                             htmlFor={`file-upload-${id}`}
                         >
-                            <GrEdit />
+                            Bild hinzufügen
                         </label>
                         <input
                             id={`file-upload-${id}`}
@@ -135,33 +167,8 @@ const ParticipantImage = ({ participant: { id, name, status, imageFileName } }: 
                             accept={allowedImageContentTypes.join(', ')}
                             disabled={isSubmitting}
                         />
-
-                        <button
-                            onClick={handleDelete}
-                            className="rounded bg-white/50 p-1 text-gray-700 hover:bg-white/70"
-                            title="Bild ändern"
-                        >
-                            <BiTrash />
-                        </button>
-                    </div>
-                </>
-            ) : (
-                <>
-                    <label
-                        className="absolute left-2 top-2 cursor-pointer rounded bg-white/50 px-2 py-1 text-gray-700 hover:bg-white/70"
-                        htmlFor={`file-upload-${id}`}
-                    >
-                        Bild hinzufügen
-                    </label>
-                    <input
-                        id={`file-upload-${id}`}
-                        type="file"
-                        onChange={handleReplace}
-                        className="hidden"
-                        accept={allowedImageContentTypes.join(', ')}
-                        disabled={isSubmitting}
-                    />
-                </>
+                    </>
+                )
             )}
         </div>
     );
