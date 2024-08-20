@@ -41,7 +41,7 @@ export default (): ReactElement => {
                                 currentBgImage === bgImage && 'opacity-100',
                             )}
                             style={{
-                                backgroundImage: `url("/assets/2024-animation/animation${bgImage.toString().padStart(2, '0')}.png")`,
+                                backgroundImage: `url("/assets/2024-bg.webp")`,
                             }}
                         />
                     ))}
@@ -63,19 +63,27 @@ export default (): ReactElement => {
 
                 <div className="h-5 w-full bg-[#5ff450]" />
 
-                <div className="px-5 py-3 text-left">
+                <div className="p-5 text-left">
                     <div className="font-bold uppercase tracking-[0.3em] text-black">Welcome back</div>
 
-                    <div className="pt-3 text-xs text-black">
-                        Festival 2024 feiern wir dieses Jahr unter dem Motto „Spielplatz für Kreative“ die kulturelle Eröffnung der B-Side.
-                        Vom 20. bis zum 21. September bietet der B-Side Kultur e.V. ein vielfältiges Angebot aus Musik, Ausstellungen,
-                        Performances, Workshops, Lesungen uvm. Alle Menschen sind herzlich eingeladen, an dem bunten, nicht kommerziellen
-                        Programm teilzunehmen, es mitzugestalten und das neue soziokulturelle Zentrum zu erkunden. Für Interessierte an den
-                        gemeinnützigen Projekten des B-Side Kollektivs sind außerdem Infostände und eine Ausstellung über die
-                        B-Side-Geschichte geplant. Das Festival findet dieses Jahr vor allem in den frisch renovierten Räumlichkeiten Am
-                        Mittelhafen 42 statt, die anschließende Party ist wie in den Vorjahren in der Sputnikhalle geplant. Um all das zu
-                        realisieren, engagieren sich aktuell über 20 Menschen ehrenamtlich, kollektiv und selbstorganisiert im Festival-Team
-                        des B-Side Kultur e.V.
+                    <div className="space-y-3 pt-3 text-sm text-black">
+                        <p>
+                            Die B-Side ist wieder zurück am Mittelhafen! Mit dem B-Side Festival 2024 feiern wir dieses Jahr unter dem Motto{' '}
+                            <strong>„Spielplatz für Kreative"</strong> die kulturelle Eröffnung der B-Side.
+                        </p>
+                        <p>
+                            <strong>Vom 20. bis zum 21. September</strong> bietet der B-Side Kultur e.V. ein vielfältiges Angebot aus Musik,
+                            Ausstellungen, Performances, Workshops, Lesungen uvm. Alle Menschen sind herzlich eingeladen, an dem bunten,
+                            nicht kommerziellen Programm teilzunehmen, es mitzugestalten und das neue soziokulturelle Zentrum zu erkunden.
+                            Für Interessierte an den gemeinnützigen Projekten des B-Side Kollektivs sind außerdem Infostände und eine
+                            Ausstellung über die B-Side-Geschichte geplant.
+                        </p>
+                        <p>
+                            Das Festival findet dieses Jahr vor allem in den frisch renovierten Räumlichkeiten Am Mittelhafen 42 statt, die
+                            anschließende Party ist wie in den Vorjahren in der Sputnikhalle geplant. Um all das zu realisieren, engagieren
+                            sich aktuell über 20 Menschen ehrenamtlich, kollektiv und selbstorganisiert im Festival-Team des B-Side Kultur
+                            e.V.
+                        </p>
                     </div>
                 </div>
 
@@ -85,7 +93,7 @@ export default (): ReactElement => {
                 <div className="px-5 py-3 text-left">
                     <div className="font-bold uppercase tracking-[0.3em] text-black">Mithelfen</div>
 
-                    <div className="pt-3 text-xs text-black">
+                    <div className="pt-3 text-sm text-black">
                         Für unser B-Side Festival 2024 brauchen wir euch! Wir suchen tatkräftige Helfer*innen. Dabei gibt es verschiedene
                         Aufgaben, bei denen ihr euch einbringen könnt: Die Betreuung von Konzerten, Workshops, Ausstellungen und Lesungen,
                         die Verpflegung für das Helfer*innen- und B-Side-Team, Hilfe beim Auf- und Abbau und der Technik des Festivals,

@@ -94,9 +94,14 @@ export default ({ participants, slots, venues, participantLabels, allLinks, allL
     return (
         <div>
             <div className="relative z-10 mx-auto min-h-screen w-full max-w-2xl font-display">
-                <div className="py-3 text-center font-bold uppercase tracking-[0.3em] text-[#5ff450]">20. & 21. September 2024</div>
+                <div className="bg-white py-3 text-center font-bold uppercase tracking-[0.3em] text-[#5ff450]">
+                    20. & 21. September 2024
+                </div>
                 <div className="h-10 w-full bg-black" />
-                <a href="/" className="block w-full cursor-pointer py-3 text-center font-bold uppercase tracking-[0.3em] text-black">
+                <a
+                    href="/"
+                    className="block w-full cursor-pointer bg-white py-3 text-center font-bold uppercase tracking-[0.3em] text-black"
+                >
                     B-Side Festival 2024
                 </a>
 
@@ -108,9 +113,9 @@ export default ({ participants, slots, venues, participantLabels, allLinks, allL
 
                 <div className="h-5 w-full bg-[#5ff450]" />
 
-                <div className="relative min-h-screen w-full pt-8">
+                <div className="relative min-h-screen w-full">
                     <div className="relative z-10">
-                        <div className="mx-auto max-w-7xl pb-9">
+                        <div className="mx-auto max-w-7xl">
                             <ParticipantsOverviewContextProvider
                                 participants={participants}
                                 slots={slots}
@@ -131,7 +136,7 @@ export default ({ participants, slots, venues, participantLabels, allLinks, allL
                 <Image
                     src="/assets/2024-bg1.png"
                     alt="background"
-                    className="fixed inset-0 z-0 object-contain object-center blur"
+                    className="fixed inset-0 z-0 object-cover object-center blur-md"
                     fill={true}
                     priority={true}
                 />

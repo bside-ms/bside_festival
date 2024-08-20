@@ -65,7 +65,8 @@ const DescriptionForm = ({ participant }: Props): ReactElement => {
     if (!showForm) {
         return (
             <div className="mt-4">
-                <div>{participant.updatedDescription ?? participant.description}</div>
+                <pre className="whitespace-pre-wrap font-display">{participant.updatedDescription ?? participant.description}</pre>
+
                 {status === 'authenticated' && (
                     <a onClick={toggleShowForm} className="cursor-pointer text-sky-700">
                         Beschreibung bearbeiten…

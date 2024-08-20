@@ -1,4 +1,4 @@
-import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
+import { faFilePdf, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { ReactElement, useCallback, useState } from 'react';
@@ -21,7 +21,7 @@ const ParticipantsOverview = (): ReactElement => {
 
     return (
         <div>
-            <div className="mb-10 px-3">
+            <div className="bg-white/60 px-3 py-7">
                 <a className="mb-5 flex w-full cursor-pointer items-baseline gap-2" onClick={toggleFilter}>
                     Filter {showFilter ? 'ausblenden' : 'anzeigen'}
                     <span className={cn('text-xs', !showFilter && 'rotate-180')}>
@@ -45,7 +45,15 @@ const ParticipantsOverview = (): ReactElement => {
                     </div>
                 )}
 
-                <div className="mb-4 mt-5 flex flex-wrap gap-4">
+                <div className="mt-5 flex flex-wrap gap-4">
+                    <Link
+                        href="/assets/2024-lageplan-b%20side%20festival.jpg"
+                        target="_blank"
+                        className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-900 px-3 py-1"
+                    >
+                        <FontAwesomeIcon className="w-5" icon={faMapLocationDot} /> Lageplan
+                    </Link>
+
                     <Link
                         href="/assets/b-side-festival 2024 programm.pdf"
                         target="_blank"
