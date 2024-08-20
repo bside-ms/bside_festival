@@ -134,7 +134,7 @@ export default ({ participants, slots, venues, participantLabels, allLinks, allL
 
             <div className="fixed inset-0 z-0">
                 <Image
-                    src="/assets/2024-bg1.png"
+                    src="/assets/2024-bg1.webp"
                     alt="background"
                     className="fixed inset-0 z-0 object-cover object-center blur-md"
                     fill={true}
