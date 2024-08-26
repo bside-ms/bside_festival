@@ -6,10 +6,11 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { useParticipantsOverviewContext, useParticipantVenues } from 'components/participants/overview/ParticipantsOverviewContext';
 import { SuccessfulUpdateVenueResponse, UpsertVenueRequest } from 'pages/api/applications/venue/update';
 import { DeleteVenueRequest, SuccessfulDeleteVenueResponse } from 'pages/api/applications/venue/delete';
+import Checkbox from 'components/form/Checkbox';
+import formatDate from 'lib/common/helper/formatDate';
+import { isSameDay } from 'date-fns';
 
-interface VenueFormValues {
-    locationId: number;
-}
+type VenueFormValues = { locationId: number } & Record<string, boolean>;
 
 interface Props {
     participantId: number;
@@ -18,7 +19,7 @@ interface Props {
 const VenueForm = ({ participantId }: Props): ReactElement => {
     const participantVenues = useParticipantVenues(participantId);
 
-    const { updateAllVenues, allLocations } = useParticipantsOverviewContext();
+    const { updateAllVenues, allLocations, venuesDateRange } = useParticipantsOverviewContext();
 
     const methods = useForm<VenueFormValues>();
     const {
@@ -30,12 +31,17 @@ const VenueForm = ({ participantId }: Props): ReactElement => {
     } = methods;
 
     const handleFormSubmit = useCallback(
-        async ({ locationId }: VenueFormValues) => {
+        async ({ locationId, ...dateValues }: VenueFormValues) => {
             clearErrors('root');
+
+            const dates = Object.entries(dateValues)
+                .filter(([date, isActive]) => /\d{4}-\d{2}-\d{2}/.test(date) && isActive)
+                .map(([date]) => date);
 
             const request: UpsertVenueRequest = {
                 participantId,
                 locationId: Number(locationId),
+                dates,
             };
 
             const response = await fetch('/api/applications/venue/update', {
@@ -80,6 +86,8 @@ const VenueForm = ({ participantId }: Props): ReactElement => {
         label: name,
     }));
 
+    console.log('participantVenues', participantVenues);
+
     return (
         <div>
             <div className="font-display">Ort</div>
@@ -94,6 +102,21 @@ const VenueForm = ({ participantId }: Props): ReactElement => {
                             required={true}
                             defaultValue={participantVenues[0]?.location.id.toString()}
                         />
+
+                        <div className="space-y-2">
+                            {venuesDateRange?.map((date) => {
+                                const name = formatDate(date, 'yyyy-MM-dd');
+
+                                return (
+                                    <Checkbox
+                                        key={name}
+                                        name={name}
+                                        label={formatDate(date, 'EEEE, dd.MM.')}
+                                        initiallyChecked={participantVenues[0]?.dates.some((venueDate) => isSameDay(date, venueDate))}
+                                    />
+                                );
+                            })}
+                        </div>
 
                         <label className="block max-w-[300px] bg-black p-1">
                             <button

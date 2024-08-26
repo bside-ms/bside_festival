@@ -11,9 +11,10 @@ interface Props<T extends FieldValues> {
     label: string;
     info?: string;
     required?: boolean;
+    initiallyChecked?: boolean;
 }
 
-const Checkbox = <T extends FieldValues>({ label, name, info, required = false }: Props<T>): ReactElement => {
+const Checkbox = <T extends FieldValues>({ label, name, info, required = false, initiallyChecked = false }: Props<T>): ReactElement => {
     const {
         formState: { errors, isSubmitting },
         register,
@@ -31,6 +32,7 @@ const Checkbox = <T extends FieldValues>({ label, name, info, required = false }
                 type="checkbox"
                 required={required}
                 disabled={isSubmitting}
+                defaultChecked={initiallyChecked}
                 className="size-4 cursor-pointer rounded border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500"
                 {...register(name, {
                     required: {

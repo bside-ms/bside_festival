@@ -6,6 +6,7 @@ import getAllVenues from 'lib/participants/getAllVenues';
 export interface UpsertVenueRequest {
     participantId: number;
     locationId: number;
+    dates: Array<string>;
 }
 
 export interface SuccessfulUpdateVenueResponse {
@@ -13,12 +14,12 @@ export interface SuccessfulUpdateVenueResponse {
 }
 
 export default async (request: NextApiRequest, response: NextApiResponse<SuccessfulUpdateVenueResponse>): Promise<void> => {
-    const { participantId, locationId } = request.body as UpsertVenueRequest;
+    const { participantId, locationId, dates } = request.body as UpsertVenueRequest;
 
     // Just deleting venue before creating new one, since upsert only works with unique fields.
     await prismaClient.venue.deleteMany({ where: { participantId } });
 
-    await prismaClient.venue.create({ data: { participantId, locationId } });
+    await prismaClient.venue.create({ data: { participantId, locationId, dates: dates.join(',') } });
 
     const updatedVenues = await getAllVenues();
 

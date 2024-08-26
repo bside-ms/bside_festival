@@ -2,20 +2,28 @@ import type { Location } from '@prisma/client';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 import isEmptyString from 'lib/common/helper/isEmptyString';
+import formatDate from 'lib/common/helper/formatDate';
 
 interface Props {
     location: Location;
+    dates: Array<Date>;
     showAccessibleInfo: boolean;
 }
 
-const ParticipantVenue = ({ location: { name: location, awarenessInfo }, showAccessibleInfo }: Props): ReactElement | null => {
+const ParticipantVenue = ({ location: { name: location, awarenessInfo }, dates, showAccessibleInfo }: Props): ReactElement | null => {
     if (!showAccessibleInfo) {
-        return <div>{location}</div>;
+        return (
+            <>
+                <div>{location}</div>
+                <div>{dates.map((date) => formatDate(date, 'EEE dd.MM.')).join(' & ')}</div>
+            </>
+        );
     }
 
     return (
         <div>
             <div>{location}</div>
+            <div>{dates.map((date) => formatDate(date, 'EEE dd.MM.')).join(' & ')}</div>
             <div className="flex items-center gap-2">
                 {isEmptyString(awarenessInfo) ? (
                     <>

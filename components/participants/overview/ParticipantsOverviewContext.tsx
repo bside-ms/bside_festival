@@ -42,6 +42,7 @@ interface ParticipantsOverviewContextData {
     allAttendees: Array<AllAttendees>;
     updateAllAttendees: (allAttendees: Array<AllAttendees>) => void;
     slotsDateRange: [Date, Date] | null;
+    venuesDateRange: [Date, Date] | null;
     areLocationOrDateRangeFiltersSet: boolean;
     areFiltersSet: boolean;
 }
@@ -237,6 +238,7 @@ export const ParticipantsOverviewContextProvider = ({
                 allAttendees,
                 updateAllAttendees,
                 slotsDateRange: earliestBegin === null || latestBegin === null ? null : [earliestBegin, latestBegin],
+                venuesDateRange: [new Date(`2024-09-20T12:00:00+02:00`), new Date(`2024-09-21T12:00:00+02:00`)],
                 areLocationOrDateRangeFiltersSet: filteredLocationIds.length > 0 || filteredDateRange !== null,
                 pinnedParticipantIds,
                 togglePinnedParticipantId,
@@ -266,6 +268,7 @@ export interface ParticipantSlot {
 interface ParticipantVenue {
     venue: Venue;
     location: Location;
+    dates: Array<Date>;
 }
 
 export const useSlotAttendees = (slotId: number): Array<Omit<Attendee, 'attendedAt'>> => {
@@ -309,6 +312,11 @@ export const useParticipantVenues = (participantId: number): Array<ParticipantVe
             return {
                 venue: venueItem,
                 location,
+                dates:
+                    venueItem.dates
+                        ?.split(',')
+                        .filter((date) => /\d{4}-\d{2}-\d{2}/.test(date))
+                        .map((date) => new Date(`${date}T12:00:00+02:00`)) ?? [],
             };
         })
         .filter((venueItem): venueItem is ParticipantVenue => venueItem !== null);

@@ -124,6 +124,7 @@ model Venue {
   participant   Participant @relation(fields: [participantId], references: [id])
   locationId    Int
   location      Location    @relation(fields: [locationId], references: [id])
+  dates         String?     @db.Text
 }
 
 model Volunteer {
