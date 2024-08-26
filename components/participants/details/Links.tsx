@@ -31,7 +31,7 @@ const LinkBadge = ({ link }: { link: URL }): ReactElement => {
 
     return (
         <>
-            <CiGlobe /> {link.hostname.replace(/^www./, '')}
+            <CiGlobe /> <span className="text-xs">{link.hostname.replace(/^www./, '')}</span>
         </>
     );
 };

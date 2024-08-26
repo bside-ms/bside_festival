@@ -75,6 +75,8 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
                         <ParticipantVenues participantId={id} />
 
                         <DescriptionForm participant={participant} />
+
+                        <Links links={links} />
                     </div>
                 </div>
 
@@ -110,8 +112,6 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
 
                 {status === 'authenticated' && (
                     <div className="relative mt-1 rounded-md py-2 text-gray-800">
-                        <Links links={links} />
-
                         <Contacts participant={participant} />
 
                         <MaterialExpenses participant={participant} />
