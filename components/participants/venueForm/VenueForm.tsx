@@ -86,8 +86,6 @@ const VenueForm = ({ participantId }: Props): ReactElement => {
         label: name,
     }));
 
-    console.log('participantVenues', participantVenues);
-
     return (
         <div>
             <div className="font-display">Ort</div>

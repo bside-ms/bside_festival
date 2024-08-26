@@ -33,8 +33,6 @@ export default async (
 
     const existingAttendee = await prismaClient.attendee.findFirst({ where: { slotId, fullName, mailAddress } });
 
-    console.log('existingAttendee', existingAttendee);
-
     if (existingAttendee !== null) {
         response.status(200).json({ errorCode: 1721561870451 });
         return;

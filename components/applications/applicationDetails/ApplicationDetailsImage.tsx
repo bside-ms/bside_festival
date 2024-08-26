@@ -86,8 +86,6 @@ const ApplicationDetailsImage = ({ application: { id, name, imageFileName } }: P
 
         const request: ReplaceImageRequest = { id, encodedImage: imageDataUrl };
 
-        console.log('request', request);
-
         const response = await fetch('/api/applications/update/image/replace', {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },

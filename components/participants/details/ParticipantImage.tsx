@@ -90,8 +90,6 @@ const ParticipantImage = ({ participant: { id, name, status, imageFileName } }: 
 
         const request: ReplaceImageRequest = { id, encodedImage: imageDataUrl };
 
-        console.log('request', request);
-
         const response = await fetch('/api/applications/update/image/replace', {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
