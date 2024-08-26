@@ -15,7 +15,7 @@ const Contacts = ({ participant: { contactName, contactPhone, contactMail, resid
     }
 
     return (
-        <div className="mt-4">
+        <div>
             {isNotEmptyString(residence) && (
                 <div className="flex items-center">
                     <div className="mr-2 w-4 shrink-0 text-center text-sm">

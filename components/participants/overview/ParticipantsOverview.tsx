@@ -64,7 +64,7 @@ const ParticipantsOverview = (): ReactElement => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-10">
+            <div className="mb-20 grid grid-cols-1 gap-10">
                 {pinnedParticipants.map((participant) => (
                     <ParticipantOverview key={participant.id} participant={participant} />
                 ))}

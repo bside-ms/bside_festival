@@ -111,7 +111,7 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
                 )}
 
                 {status === 'authenticated' && (
-                    <div className="relative mt-1 rounded-md py-2 text-gray-800">
+                    <div className="relative rounded-md py-2 text-gray-800">
                         <Contacts participant={participant} />
 
                         <MaterialExpenses participant={participant} />

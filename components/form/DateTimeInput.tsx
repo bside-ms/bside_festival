@@ -6,6 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import isEmptyNumber from 'lib/common/helper/isEmptyNumber';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import useIsMounted from 'lib/common/hooks/useIsMounted';
+import cn from 'lib/common/helper/cn';
 
 interface Props<T extends FieldValues> {
     name: FieldPath<T>;
@@ -41,9 +42,10 @@ const DateTimeInput = <T extends FieldValues>({
             <input
                 id={id}
                 type="datetime-local"
-                className={`rounded p-2 outline-0 ${
-                    typeof errorMessage === 'string' ? 'bg-rose-600 text-gray-100 placeholder:text-gray-100' : ''
-                }`}
+                className={cn(
+                    'rounded border border-black p-2 outline-0',
+                    typeof errorMessage === 'string' && 'bg-rose-600 text-gray-100 placeholder:text-gray-100',
+                )}
                 required={required}
                 defaultValue={defaultValue}
                 placeholder={required ? `${label} *` : label}
