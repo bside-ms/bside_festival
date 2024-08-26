@@ -136,9 +136,12 @@ export default ({ participants, slots, venues, participantLabels, allLinks, allL
                 <Image
                     src="/assets/2024-bg1.webp"
                     alt="background"
-                    className="fixed inset-0 z-0 object-cover object-center blur-md"
+                    className="fixed inset-0 z-0 blur-md"
                     fill={true}
                     priority={true}
+                    fetchPriority="high"
+                    objectFit="cover"
+                    objectPosition="center"
                 />
             </div>
 
