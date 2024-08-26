@@ -8,13 +8,31 @@ import { SuccessfulUpdateVenueResponse, UpsertVenueRequest } from 'pages/api/app
 import { DeleteVenueRequest, SuccessfulDeleteVenueResponse } from 'pages/api/applications/venue/delete';
 import Checkbox from 'components/form/Checkbox';
 import formatDate from 'lib/common/helper/formatDate';
-import { isSameDay } from 'date-fns';
+import { addDays, differenceInDays, isSameDay } from 'date-fns';
 
 type VenueFormValues = { locationId: number } & Record<string, boolean>;
 
 interface Props {
     participantId: number;
 }
+
+const getDateOptions = (venuesDateRange: [Date, Date] | null): Array<Date> => {
+    if (venuesDateRange === null) {
+        return [];
+    }
+
+    const [startDate, endDate] = venuesDateRange;
+
+    const options = new Array<Date>();
+    let nextDate = startDate;
+
+    do {
+        options.push(nextDate);
+        nextDate = addDays(nextDate, 1);
+    } while (differenceInDays(nextDate, endDate) <= 0);
+
+    return options;
+};
 
 const VenueForm = ({ participantId }: Props): ReactElement => {
     const participantVenues = useParticipantVenues(participantId);
@@ -102,7 +120,7 @@ const VenueForm = ({ participantId }: Props): ReactElement => {
                         />
 
                         <div className="space-y-2">
-                            {venuesDateRange?.map((date) => {
+                            {getDateOptions(venuesDateRange).map((date) => {
                                 const name = formatDate(date, 'yyyy-MM-dd');
 
                                 return (
