@@ -14,7 +14,7 @@ import {
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isValidEmail from 'lib/common/helper/isValidEmail';
 
-interface VenueFormValues {
+interface AttendeeFormValues {
     fullName: string;
     mailAddress: string;
 }
@@ -34,7 +34,7 @@ const AttendeeForm = ({
 
     const slotAttendees = useSlotAttendees(slotId);
 
-    const methods = useForm<VenueFormValues>();
+    const methods = useForm<AttendeeFormValues>();
     const {
         handleSubmit,
         setError,
@@ -43,7 +43,7 @@ const AttendeeForm = ({
         reset,
     } = methods;
 
-    const handleFormSubmit = useCallback(async ({ fullName, mailAddress }: VenueFormValues) => {
+    const handleFormSubmit = useCallback(async ({ fullName, mailAddress }: AttendeeFormValues) => {
         clearErrors('root');
 
         const request: AttendSlotRequest = {
@@ -112,14 +112,14 @@ const AttendeeForm = ({
                 <div className="mt-2">
                     <FormProvider {...methods}>
                         <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex max-w-[350px] flex-col gap-4">
-                            <TextInput<VenueFormValues>
+                            <TextInput<AttendeeFormValues>
                                 name="fullName"
                                 label="Vor- und Nachname"
                                 required={true}
                                 isDisabled={!hasOpenSeats}
                             />
 
-                            <TextInput<VenueFormValues>
+                            <TextInput<AttendeeFormValues>
                                 name="mailAddress"
                                 label="E-Mail"
                                 required={true}
