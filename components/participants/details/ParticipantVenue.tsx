@@ -12,18 +12,12 @@ interface Props {
 
 const ParticipantVenue = ({ location: { name: location, awarenessInfo }, dates, showAccessibleInfo }: Props): ReactElement | null => {
     if (!showAccessibleInfo) {
-        return (
-            <>
-                <div>{location}</div>
-                <div>{dates.map((date) => formatDate(date, 'EEE dd.MM.')).join(' & ')}</div>
-            </>
-        );
+        return <div>{[location, dates.map((date) => formatDate(date, 'EEE dd.MM.')).join(' & ')].join(' / ')}</div>;
     }
 
     return (
         <div>
-            <div>{location}</div>
-            <div>{dates.map((date) => formatDate(date, 'EEE dd.MM.')).join(' & ')}</div>
+            <div>{[location, dates.map((date) => formatDate(date, 'EEE dd.MM.')).join(' & ')].join(' / ')}</div>
             <div className="flex items-center gap-2">
                 {isEmptyString(awarenessInfo) ? (
                     <>

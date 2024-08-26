@@ -7,11 +7,11 @@ const hasSlotOrVenue = (type: Type): 'slot' | 'venue' => {
         case Type.InfoBooth:
         case Type.Catering:
         case Type.Food:
+        case Type.FamilyProgram:
             return 'venue';
 
         case Type.Concert:
         case Type.Reading:
-        case Type.FamilyProgram:
         case Type.DiskJockey:
         case Type.Workshop:
         case Type.Performance:
