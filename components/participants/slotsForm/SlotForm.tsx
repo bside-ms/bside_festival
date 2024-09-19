@@ -9,7 +9,7 @@ import TextInput from 'components/form/TextInput';
 import { useParticipantSlots, useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import formatDate from 'lib/common/helper/formatDate';
 import type { DeleteSlotRequest, SuccessfulDeleteSlotResponse } from 'pages/api/applications/slot/delete';
-import type { SuccessfulUpdateSlotResponse, UpsertSlotRequest } from 'pages/api/applications/slot/update';
+import type { ErroneousUpdateSlotResponse, SuccessfulUpdateSlotResponse, UpsertSlotRequest } from 'pages/api/applications/slot/update';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 
 interface SlotFormValues {
@@ -43,7 +43,7 @@ const SlotForm = ({ participantId }: Props): ReactElement => {
 
     const handleFormSubmit = useCallback(
         async ({ locationId, beginDate, duration, maxAttendees }: SlotFormValues) => {
-            // clearErrors('root');
+            clearErrors('root');
 
             if (isNaN(Number(duration))) {
                 setError('duration', { message: 'Bitte nur eine Zahl angeben' });
@@ -70,9 +70,13 @@ const SlotForm = ({ participantId }: Props): ReactElement => {
             if (!response.ok) {
                 setError('root', { message: 'Fehler beim Submit!' });
             } else {
-                const { updatedSlots } = (await response.json()) as SuccessfulUpdateSlotResponse;
+                const updateSlotResponse = (await response.json()) as SuccessfulUpdateSlotResponse | ErroneousUpdateSlotResponse;
 
-                updateAllSlots(updatedSlots);
+                if ('message' in updateSlotResponse) {
+                    setError('root', { message: updateSlotResponse.message });
+                } else {
+                    updateAllSlots(updateSlotResponse.updatedSlots);
+                }
             }
         },
         [clearErrors, participantId, setError, updateAllSlots],

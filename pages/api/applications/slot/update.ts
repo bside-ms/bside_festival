@@ -25,17 +25,47 @@ export default async (
 ): Promise<void> => {
     const { participantId, begin, locationId, duration, maxAttendees } = request.body as UpsertSlotRequest;
 
-    // Just deleting slot before creating new one, since upsert only works with unique fields
-    await prismaClient.slot.deleteMany({ where: { participantId } });
+    const slotData = await prismaClient.slot.findFirst({ where: { participantId } });
 
-    await prismaClient.slot.create({
+    if (slotData === null) {
+        await prismaClient.slot.create({
+            data: {
+                participantId,
+                locationId,
+                begin,
+                duration,
+                maxAttendees,
+            },
+        });
+
+        const slots = await getAllSlots();
+
+        response.status(200).json({ updatedSlots: slots });
+
+        return;
+    }
+
+    const attendees = await prismaClient.attendee.findMany({ where: { slotId: slotData.id } });
+
+    if (attendees.length > (maxAttendees ?? 0)) {
+        response.status(200).json({
+            message:
+                (maxAttendees ?? 0) > 0
+                    ? `Es gibt bereits mehr als ${maxAttendees} Anmeldungen, sorry, du kannst die Anzahl nicht mehr hierüber reduzieren. Wende dich bitte an die IT 😇`
+                    : 'Es gibt bereits Anmeldungen, sorry, aber wir können die Anmeldung auch komplett entfernen, wende dich bitte an die IT 😇',
+        });
+
+        return;
+    }
+
+    await prismaClient.slot.update({
         data: {
-            participantId,
             locationId,
             begin,
             duration,
             maxAttendees,
         },
+        where: { id: slotData.id },
     });
 
     const slots = await getAllSlots();
