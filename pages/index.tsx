@@ -10,7 +10,7 @@ const lastImage = 22;
 export default (): ReactElement => {
     const [currentBgImage, setCurrentBgImage] = useState(2);
 
-    const intervalId = useRef<number>();
+    const intervalId = useRef<number | undefined>(undefined);
 
     useEffectOnMount(() => {
         intervalId.current = window.setInterval(() => {
