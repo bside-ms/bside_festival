@@ -12,7 +12,7 @@ import TextArea from 'components/form/TextArea';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import statusLabels from 'lib/participants/status/statusLabels';
 import statusOrder from 'lib/participants/status/statusOrder';
-import type { SetCurationRequest, SuccessfulSetCurationResponse } from 'pages/api/applications/curation/set';
+import type { SetCurationRequest, SuccessfulSetCurationResponse } from '_pages/api/applications/curation/set';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 export const curationScoreOptions = [

@@ -16,7 +16,7 @@ import TextInput from 'components/form/TextInput';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import typeLabels from 'lib/participants/typeLabels';
-import type { AddParticipantRequest } from 'pages/api/applications/add';
+import type { AddParticipantRequest } from '_pages/api/applications/add';
 
 export interface ApplicationFormValues {
     name: string;

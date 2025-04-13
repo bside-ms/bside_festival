@@ -4,7 +4,7 @@ import Checkbox from 'components/form/Checkbox';
 import TextInput from 'components/form/TextInput';
 import VolunteerInfo from 'components/volunteers/volunteerForm/VolunteerInfo';
 import volunteerDayPreferences from 'lib/volunteers/volunteerDayPreferences';
-import type { AddVolunteerRequest } from 'pages/api/volunteers/add';
+import type { AddVolunteerRequest } from '_pages/api/volunteers/add';
 import TextArea from 'components/form/TextArea';
 
 export interface VolunteerFormValues {

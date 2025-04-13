@@ -1,3 +1,5 @@
+'use client';
+
 import type { PropsWithChildren, ReactElement } from 'react';
 import { createContext, useCallback, useContext, useState } from 'react';
 import type { Attendee, Link, Location, Participant, ParticipantLabel, Type, Venue } from '@prisma/client';
@@ -45,6 +47,7 @@ interface ParticipantsOverviewContextData {
     venuesDateRange: [Date, Date] | null;
     areLocationOrDateRangeFiltersSet: boolean;
     areFiltersSet: boolean;
+    isInDataPrivacyGroup: boolean;
 }
 
 const ParticipantsOverviewContext = createContext<ParticipantsOverviewContextData | null>(null);
@@ -57,6 +60,7 @@ interface Props extends PropsWithChildren {
     participantLabels: Array<ParticipantLabel>;
     allLinks: Array<Link>;
     allLocations: Array<Location>;
+    isInDataPrivacyGroup: boolean;
 }
 
 export const ParticipantsOverviewContextProvider = ({
@@ -67,6 +71,7 @@ export const ParticipantsOverviewContextProvider = ({
     venues: initialVenues,
     allAttendees: initialAllAttendees,
     allLocations,
+    isInDataPrivacyGroup,
     children,
 }: Props): ReactElement => {
     const [participantLabels, setParticipantLabels] = useState<Array<ParticipantLabel>>(initialParticipantLabels);
@@ -243,6 +248,7 @@ export const ParticipantsOverviewContextProvider = ({
                 pinnedParticipantIds,
                 togglePinnedParticipantId,
                 areFiltersSet: filteredDateRange !== null || filteredTypes.length > 0 || filteredLocationIds.length > 0,
+                isInDataPrivacyGroup,
             }}
         >
             {children}

@@ -13,7 +13,7 @@ interface Props {
 const VolunteersOverview = ({ volunteers }: Props): ReactElement => {
     const { data: session } = useSession();
 
-    const isInDataPrivacyGroup = isGroupMember(dataPrivacyGroup, session);
+    const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
 
     const portalLink = (
         <Link

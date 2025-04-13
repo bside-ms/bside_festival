@@ -1,0 +1,154 @@
+import type { Link as PrismaLink, Location, ParticipantLabel, Venue } from '@prisma/client';
+import { isAfter, isEqual } from 'date-fns';
+import { ReactElement } from 'react';
+import Footer from 'components/common/Footer';
+import ParticipantsOverview from 'components/participants/overview/ParticipantsOverview';
+import { ParticipantsOverviewContextProvider } from 'components/participants/overview/ParticipantsOverviewContext';
+import prismaClient from 'lib/common/prismaClient';
+import getAllSlots from 'lib/participants/getAllSlots';
+import getAllVenues from 'lib/participants/getAllVenues';
+import serializeParticipant from 'lib/participants/serializeParticipant';
+import type { SerializableParticipant } from 'typings/SerializableParticipant';
+import type { SerializableSlot } from 'typings/SerializableSlot';
+import getAllParticipants from 'lib/participants/getAllParticipants';
+import getAllAttendees from 'lib/participants/getAllAttendees';
+import type AllAttendees from 'typings/AllAttendees';
+import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
+import Image from 'next/image';
+import Link from 'next/link';
+import isGroupMember from 'lib/next-auth/isGroupMember';
+
+interface Props {
+    participants: Array<SerializableParticipant>;
+    slots: Array<SerializableSlot>;
+    venues: Array<Venue>;
+    participantLabels: Array<ParticipantLabel>;
+    allLinks: Array<PrismaLink>;
+    allLocations: Array<Location>;
+    allAttendees: Array<AllAttendees>;
+}
+
+async function getData(): Promise<Props> {
+    const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
+
+    const participants = (await getAllParticipants(isInDataPrivacyGroup)).filter(({ status }) =>
+        ['Confirmed', 'Canceled'].includes(status),
+    );
+
+    const slots = await getAllSlots();
+
+    const venues = await getAllVenues();
+
+    const sortedParticipant = participants.sort((participantA, participantB) => {
+        const firstSlotA = slots.find(({ participantId }) => participantId === participantA.id);
+        const firstSlotB = slots.find(({ participantId }) => participantId === participantB.id);
+
+        if (firstSlotA === undefined && firstSlotB === undefined) {
+            return 0;
+        }
+
+        if (firstSlotA === undefined) {
+            return 1;
+        }
+
+        if (firstSlotB === undefined) {
+            return -1;
+        }
+
+        const firstSlotABegin = new Date(firstSlotA.begin);
+        const firstSlotBBegin = new Date(firstSlotB.begin);
+
+        if (isEqual(firstSlotABegin, firstSlotBBegin)) {
+            return 0;
+        }
+
+        return isAfter(firstSlotABegin, firstSlotBBegin) ? 1 : -1;
+    });
+
+    const participantLabels = await prismaClient.participantLabel.findMany();
+
+    const allLinks = await prismaClient.link.findMany();
+
+    const allLocations = await prismaClient.location.findMany({ orderBy: { name: 'asc' } });
+
+    const allAttendees = await getAllAttendees();
+
+    return {
+        participants: sortedParticipant.map(serializeParticipant),
+        slots,
+        venues,
+        participantLabels,
+        allLinks,
+        allLocations,
+        allAttendees,
+    };
+}
+
+const ProgramPage = async (): Promise<ReactElement> => {
+    const { participants, slots, venues, participantLabels, allLinks, allLocations, allAttendees } = await getData();
+
+    const isInDataPrivacyGroup = isGroupMember(dataPrivacyGroup);
+
+    return (
+        <div>
+            <div className="relative z-10 mx-auto min-h-screen w-full max-w-2xl font-display">
+                <div className="bg-white py-3 text-center font-bold uppercase tracking-[0.3em] text-[#5ff450]">
+                    20. & 21. September 2024
+                </div>
+                <div className="h-10 w-full bg-black" />
+                <Link
+                    href="/"
+                    className="block w-full cursor-pointer bg-white py-3 text-center font-bold uppercase tracking-[0.3em] text-black"
+                >
+                    B-Side Festival 2024
+                </Link>
+
+                <div className="h-5 w-full bg-black" />
+
+                <div className="block w-full cursor-pointer select-none bg-[#FDF85D] py-3 text-center text-xl font-bold uppercase tracking-[0.3em]">
+                    Programm
+                </div>
+
+                <div className="h-5 w-full bg-[#5ff450]" />
+
+                <div className="relative min-h-screen w-full">
+                    <div className="relative z-10">
+                        <div className="mx-auto max-w-7xl">
+                            <ParticipantsOverviewContextProvider
+                                participants={participants}
+                                slots={slots}
+                                venues={venues}
+                                participantLabels={participantLabels}
+                                allLinks={allLinks}
+                                allLocations={allLocations}
+                                allAttendees={allAttendees}
+                                isInDataPrivacyGroup={isInDataPrivacyGroup}
+                            >
+                                <ParticipantsOverview />
+                            </ParticipantsOverviewContextProvider>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="fixed inset-0 z-0">
+                <Image
+                    src="/assets/2024-bg1.webp"
+                    alt="background"
+                    className="fixed inset-0 z-0 blur-md"
+                    fill={true}
+                    priority={true}
+                    fetchPriority="high"
+                    objectFit="cover"
+                    objectPosition="center"
+                />
+            </div>
+
+            <div className="relative z-10">
+                <Footer />
+            </div>
+        </div>
+    );
+};
+
+export default ProgramPage;

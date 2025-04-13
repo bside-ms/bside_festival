@@ -7,9 +7,9 @@ import isEmptyString from 'lib/common/helper/isEmptyString';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import { BiTrash } from 'react-icons/bi';
 import { GrEdit } from 'react-icons/gr';
-import { DeleteImageRequest, SuccessfulDeleteImageResponse } from 'pages/api/applications/update/image/delete';
+import { DeleteImageRequest, SuccessfulDeleteImageResponse } from '_pages/api/applications/update/image/delete';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
-import { ReplaceImageRequest } from 'pages/api/applications/update/image/replace';
+import { ReplaceImageRequest } from '_pages/api/applications/update/image/replace';
 import { allowedImageContentTypes, allowedImageMaxFileSize } from 'components/applications/applicationForm/ImageUpload';
 import { extension } from 'mime-types';
 import bytes from 'bytes';
@@ -61,10 +61,7 @@ const ApplicationDetailsImage = ({ application: { id, name, imageFileName } }: P
 
         if (!allowedImageContentTypes.includes(file.type)) {
             alert(
-                `Dateityp nicht zulässig, erlaubt sind ${allowedImageContentTypes
-                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                    .map((type) => `.${extension(type)}`)
-                    .join(', ')}`,
+                `Dateityp nicht zulässig, erlaubt sind ${allowedImageContentTypes.map((type) => `.${extension(type)}`).join(', ')}`,
             );
             setIsSubmitting(false);
             return;

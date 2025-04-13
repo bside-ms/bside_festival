@@ -1,11 +1,17 @@
 import prismaClient from 'lib/common/prismaClient';
 import type { Attendee } from '@prisma/client';
 import AllAttendees from 'typings/AllAttendees';
+import getUserSession from 'lib/next-auth/getUserSession';
+import isGroupMember from 'lib/next-auth/isGroupMember';
+import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
 
-const getAllAttendees = async (isLoggedIn: boolean, isInDataPrivacyGroup: boolean): Promise<Array<AllAttendees>> => {
+const getAllAttendees = async (): Promise<Array<AllAttendees>> => {
+    const userSession = await getUserSession();
+    const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
+
     const createSanitizedAttendee = (attendee: Attendee) => ({
         id: attendee.id,
-        fullName: isLoggedIn ? attendee.fullName : Math.random() > 0.5 ? 'Jane Doe' : 'John Doe',
+        fullName: userSession !== null ? (Math.random() > 0.5 ? 'Jane Doe' : 'John Doe') : attendee.fullName,
         mailAddress: isInDataPrivacyGroup ? attendee.mailAddress : '',
         slotId: attendee.slotId,
     });
