@@ -5,7 +5,7 @@ import type { ReactElement } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import TextArea from 'components/form/TextArea';
-import type { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } from '_pages/api/applications/update/description';
+import type { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } from 'app/api/applications/update/description/route';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface DescriptionFormValues {

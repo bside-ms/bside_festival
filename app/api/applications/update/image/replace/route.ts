@@ -1,8 +1,8 @@
 import type { Participant } from '@prisma/client';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import prismaClient from 'lib/common/prismaClient';
 import uploadFileToIonos from 'lib/upload/uploadFileToIonos';
 import { allowedImageContentTypes, allowedImageMaxFileSize } from 'components/applications/applicationForm/ImageUpload';
+import { NextResponse } from 'next/server';
 
 export interface ReplaceImageRequest {
     id: number;
@@ -25,11 +25,8 @@ export const config = {
     },
 };
 
-export default async (
-    request: NextApiRequest,
-    response: NextApiResponse<SuccessfulReplaceImageResponse | ErroneousReplaceImageResponse>,
-): Promise<void> => {
-    const { id, encodedImage } = request.body as ReplaceImageRequest;
+export const POST = async (request: Request): Promise<NextResponse<SuccessfulReplaceImageResponse | ErroneousReplaceImageResponse>> => {
+    const { id, encodedImage } = (await request.json()) as ReplaceImageRequest;
 
     const imageFileName = await uploadFileToIonos(encodedImage, allowedImageContentTypes, allowedImageMaxFileSize);
 
@@ -46,5 +43,5 @@ export default async (
         updatedParticipant,
     };
 
-    response.status(200).json(successfulResponse);
+    return NextResponse.json(successfulResponse);
 };

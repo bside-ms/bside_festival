@@ -1,10 +1,16 @@
 import Image from 'next/image';
 import type { ReactElement } from 'react';
-import Footer from '../../components/common/Footer';
-import Header from '../../components/common/Header';
-import VolunteerForm from '../../components/volunteers/volunteerForm/VolunteerForm';
+import Footer from 'components/common/Footer';
+import Header from 'components/common/Header';
+import VolunteerForm from 'components/volunteers/volunteerForm/VolunteerForm';
+import { redirect } from 'next/navigation';
+import isLoggedIn from 'lib/next-auth/isLoggedIn';
 
-export default function MithelfenPage(): ReactElement {
+export default async (): Promise<ReactElement> => {
+    if (!(await isLoggedIn())) {
+        redirect('/');
+    }
+
     return (
         <div>
             <div className="relative min-h-screen w-full ">
@@ -24,4 +30,4 @@ export default function MithelfenPage(): ReactElement {
             <Footer />
         </div>
     );
-} 
+};

@@ -57,7 +57,7 @@ export const getTechnicalRiderInfo = (applicationType: Type): null | { info: str
 };
 
 export const allowedTechnicRiderContentType = 'application/pdf';
-export const allowedTechnicalRiderMaxFileSize = bytes('20MB');
+export const allowedTechnicalRiderMaxFileSize = bytes('20MB')!;
 
 interface Props {
     chosenType: Type;

@@ -11,7 +11,7 @@ export interface SuccessfulDeleteVenueResponse {
     updatedVenues: Array<Venue>;
 }
 
-export async function POST(request: Request): Promise<NextResponse<SuccessfulDeleteVenueResponse>> {
+export const POST = async (request: Request): Promise<NextResponse<SuccessfulDeleteVenueResponse>> => {
     const { participantId } = (await request.json()) as DeleteVenueRequest;
 
     await prismaClient.venue.deleteMany({ where: { participantId } });
@@ -19,4 +19,4 @@ export async function POST(request: Request): Promise<NextResponse<SuccessfulDel
     const updatedVenues = await getAllVenues();
 
     return NextResponse.json({ updatedVenues });
-}
+};

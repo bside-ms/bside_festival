@@ -16,7 +16,7 @@ const fieldName: keyof ApplicationFormValues = 'encodedImage';
 
 export const allowedImageContentTypes = ['image/bmp', 'image/jpeg', 'image/tiff', 'image/png'];
 
-export const allowedImageMaxFileSize = bytes('20MB');
+export const allowedImageMaxFileSize = bytes('20MB')!;
 
 const typesRequiringImage = new Array<Type>(Type.Concert, Type.Performance, Type.Exhibition);
 
@@ -52,7 +52,7 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
                 setValue(fieldName, '');
                 setError(fieldName, {
                     message: `Dateityp nicht zulässig, erlaubt sind ${allowedImageContentTypes
-                        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+
                         .map((type) => `.${extension(type)}`)
                         .join(', ')}`,
                 });

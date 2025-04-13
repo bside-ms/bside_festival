@@ -10,7 +10,7 @@ const Header = (): ReactElement => {
                 <Image src="/assets/frontpage-heart-red.webp" alt="Eyecatcher" fill={true} className="object-contain object-left" />
             </div>
 
-            <div className="pt-1 text-2xl md:pt-2 md:text-3xl">B-Side Festival 2024</div>
+            <div className="pt-1 text-2xl md:pt-2 md:text-3xl">B-Side Festival 2025</div>
 
             <div className="absolute top-8 md:top-10">
                 <div className="relative aspect-square w-12 md:w-16">

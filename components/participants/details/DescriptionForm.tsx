@@ -6,9 +6,9 @@ import type { ReactElement } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import TextArea from 'components/form/TextArea';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
-import type { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } from '_pages/api/applications/update/description';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } from 'app/api/applications/update/description/route';
 
 interface DescriptionFormValues {
     description: string;

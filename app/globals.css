@@ -1,0 +1,6 @@
+@import 'tailwindcss';
+
+@theme {
+    --font-sans: 'Questrial', sans-serif;
+    --font-display: 'obviously', serif;
+}

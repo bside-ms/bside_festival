@@ -1,6 +1,6 @@
 import type { ApplicationStatus, Label, Participant, ParticipantLabel } from '@prisma/client';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import prismaClient from 'lib/common/prismaClient';
+import { NextResponse } from 'next/server';
 
 export interface SetCurationRequest {
     id: number;
@@ -20,11 +20,8 @@ export interface ErroneousSetCurationResponse {
     message: string;
 }
 
-export default async (
-    request: NextApiRequest,
-    response: NextApiResponse<SuccessfulSetCurationResponse | ErroneousSetCurationResponse>,
-): Promise<void> => {
-    const { id, curationScore, curationInfo, applicationStatus, labels } = request.body as SetCurationRequest;
+export const POST = async (request: Request): Promise<NextResponse<SuccessfulSetCurationResponse | ErroneousSetCurationResponse>> => {
+    const { id, curationScore, curationInfo, applicationStatus, labels } = (await request.json()) as SetCurationRequest;
 
     await prismaClient.participantLabel.deleteMany({
         where: {
@@ -69,5 +66,5 @@ export default async (
 
     const participantLabels = await prismaClient.participantLabel.findMany();
 
-    response.status(200).json({ updatedParticipant, allLabels, participantLabels });
+    return NextResponse.json({ updatedParticipant, allLabels, participantLabels });
 };

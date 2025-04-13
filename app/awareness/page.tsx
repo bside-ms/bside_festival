@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import type { ReactElement } from 'react';
-import AwarenessInformation from '../../components/awareness/AwarenessInformation';
-import Footer from '../../components/common/Footer';
+import AwarenessInformation from 'components/awareness/AwarenessInformation';
+import Footer from 'components/common/Footer';
 
 export default function AwarenessPage(): ReactElement {
     return (
@@ -19,4 +19,4 @@ export default function AwarenessPage(): ReactElement {
             <Footer />
         </div>
     );
-} 
+}

@@ -10,9 +10,9 @@ export interface GetAllApplicationsResponse {
     applications: Array<Participant>;
 }
 
-export async function GET(): Promise<NextResponse<GetAllApplicationsResponse>> {
+export const GET = async (): Promise<NextResponse<GetAllApplicationsResponse>> => {
     const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
     const applications = await getAllParticipants(isInDataPrivacyGroup);
 
     return NextResponse.json({ applications });
-}
+};

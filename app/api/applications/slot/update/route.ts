@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import prismaClient from 'lib/common/prismaClient';
-import { Slot } from '@prisma/client';
 import getAllSlots from 'lib/participants/getAllSlots';
+import type { SerializableSlot } from 'typings/SerializableSlot';
 
 export interface UpsertSlotRequest {
     participantId: number;
@@ -12,10 +12,14 @@ export interface UpsertSlotRequest {
 }
 
 export interface SuccessfulUpdateSlotResponse {
-    updatedSlots: Array<Slot>;
+    updatedSlots: Array<SerializableSlot>;
 }
 
-export async function POST(request: Request): Promise<NextResponse<SuccessfulUpdateSlotResponse>> {
+export interface ErroneousUpdateSlotResponse {
+    message: string;
+}
+
+export const POST = async (request: Request): Promise<NextResponse<SuccessfulUpdateSlotResponse>> => {
     const { participantId, locationId, begin, duration, maxAttendees } = (await request.json()) as UpsertSlotRequest;
 
     // Just deleting slot before creating new one, since upsert only works with unique fields.
@@ -34,4 +38,4 @@ export async function POST(request: Request): Promise<NextResponse<SuccessfulUpd
     const updatedSlots = await getAllSlots();
 
     return NextResponse.json({ updatedSlots });
-}
+};

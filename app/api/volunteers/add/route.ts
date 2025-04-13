@@ -28,7 +28,7 @@ export interface SuccessfulAddVolunteerResponse {
     newVolunteer: Volunteer;
 }
 
-export async function POST(request: Request): Promise<NextResponse<SuccessfulAddVolunteerResponse | ErroneousAddVolunteerResponse>> {
+export const POST = async (request: Request): Promise<NextResponse<SuccessfulAddVolunteerResponse | ErroneousAddVolunteerResponse>> => {
     const {
         fullName,
         phoneNumber,
@@ -68,4 +68,4 @@ export async function POST(request: Request): Promise<NextResponse<SuccessfulAdd
     });
 
     return NextResponse.json({ newVolunteer });
-}
+};

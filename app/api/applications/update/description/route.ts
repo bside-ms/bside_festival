@@ -1,6 +1,6 @@
 import type { Participant } from '@prisma/client';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import prismaClient from 'lib/common/prismaClient';
+import { NextResponse } from 'next/server';
 
 export interface UpdateDescriptionRequest {
     id: number;
@@ -15,11 +15,10 @@ export interface ErroneousUpdateDescriptionResponse {
     message: string;
 }
 
-export default async (
-    request: NextApiRequest,
-    response: NextApiResponse<SuccessfulUpdateDescriptionResponse | ErroneousUpdateDescriptionResponse>,
-): Promise<void> => {
-    const { id, description } = request.body as UpdateDescriptionRequest;
+export const POST = async (
+    request: Request,
+): Promise<NextResponse<SuccessfulUpdateDescriptionResponse | ErroneousUpdateDescriptionResponse>> => {
+    const { id, description } = (await request.json()) as UpdateDescriptionRequest;
 
     const updatedParticipant = await prismaClient.participant.update({
         data: {
@@ -34,5 +33,5 @@ export default async (
         updatedParticipant,
     };
 
-    response.status(200).json(successfulResponse);
+    return NextResponse.json(successfulResponse);
 };

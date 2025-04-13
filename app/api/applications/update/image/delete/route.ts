@@ -1,6 +1,6 @@
 import type { Participant } from '@prisma/client';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import prismaClient from 'lib/common/prismaClient';
+import { NextResponse } from 'next/server';
 
 export interface DeleteImageRequest {
     id: number;
@@ -14,11 +14,8 @@ export interface ErroneousDeleteImageResponse {
     message: string;
 }
 
-export default async (
-    request: NextApiRequest,
-    response: NextApiResponse<SuccessfulDeleteImageResponse | ErroneousDeleteImageResponse>,
-): Promise<void> => {
-    const { id } = request.body as DeleteImageRequest;
+export const POST = async (request: Request): Promise<NextResponse<SuccessfulDeleteImageResponse | ErroneousDeleteImageResponse>> => {
+    const { id } = (await request.json()) as DeleteImageRequest;
 
     const updatedParticipant = await prismaClient.participant.update({
         data: {
@@ -33,5 +30,5 @@ export default async (
         updatedParticipant,
     };
 
-    response.status(200).json(successfulResponse);
+    return NextResponse.json(successfulResponse);
 };

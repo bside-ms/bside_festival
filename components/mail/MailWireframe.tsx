@@ -26,17 +26,13 @@ const MailWireframe = ({ title, preview, children }: Props): ReactElement => {
 
                 {isNotEmptyString(preview) && <MjmlPreview>{preview}</MjmlPreview>}
 
-                <MjmlFont
-                    name={
-                        '"Ubuntu", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'
-                    }
-                />
+                <MjmlFont name='"Ubuntu", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"' />
             </MjmlHead>
             <MjmlBody>
                 <MjmlSection fullWidth={true} backgroundColor="#818387">
                     <MjmlColumn padding={0} width="600px">
                         <MjmlText color="#ededed" fontWeight="700" fontSize="20px" align="left">
-                            B-Side Festival 2024
+                            B-Side Festival 2025
                         </MjmlText>
                     </MjmlColumn>
                 </MjmlSection>

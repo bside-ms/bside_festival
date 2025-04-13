@@ -17,6 +17,8 @@ import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
 import Image from 'next/image';
 import Link from 'next/link';
 import isGroupMember from 'lib/next-auth/isGroupMember';
+import isLoggedIn from 'lib/next-auth/isLoggedIn';
+import { redirect } from 'next/navigation';
 
 interface Props {
     participants: Array<SerializableParticipant>;
@@ -84,23 +86,27 @@ async function getData(): Promise<Props> {
     };
 }
 
-const ProgramPage = async (): Promise<ReactElement> => {
+export default async (): Promise<ReactElement> => {
+    if (!(await isLoggedIn())) {
+        redirect('/');
+    }
+
     const { participants, slots, venues, participantLabels, allLinks, allLocations, allAttendees } = await getData();
 
-    const isInDataPrivacyGroup = isGroupMember(dataPrivacyGroup);
+    const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
 
     return (
         <div>
             <div className="relative z-10 mx-auto min-h-screen w-full max-w-2xl font-display">
                 <div className="bg-white py-3 text-center font-bold uppercase tracking-[0.3em] text-[#5ff450]">
-                    20. & 21. September 2024
+                    19. & 20. September 2025
                 </div>
                 <div className="h-10 w-full bg-black" />
                 <Link
                     href="/"
                     className="block w-full cursor-pointer bg-white py-3 text-center font-bold uppercase tracking-[0.3em] text-black"
                 >
-                    B-Side Festival 2024
+                    B-Side Festival 2025
                 </Link>
 
                 <div className="h-5 w-full bg-black" />
@@ -150,5 +156,3 @@ const ProgramPage = async (): Promise<ReactElement> => {
         </div>
     );
 };
-
-export default ProgramPage;

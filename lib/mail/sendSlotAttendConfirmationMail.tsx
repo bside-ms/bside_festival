@@ -10,7 +10,7 @@ const sendSlotAttendConfirmationMail = (
     fullName: string,
     mailAddress: string,
 ): void => {
-    const title = 'B-Side Festival 2024 - Anmeldebestätigung';
+    const title = 'B-Side Festival 2025 - Anmeldebestätigung';
 
     sendMail(
         title,

@@ -2,7 +2,6 @@ import { useCallback, useEffect } from 'react';
 import { addHours, isBefore, isSameMinute } from 'date-fns';
 import { clone } from 'lodash';
 import type { ReactElement } from 'react';
-import ReactSlider from 'react-slider';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import formatDate from 'lib/common/helper/formatDate';
 import useIsMounted from 'lib/common/hooks/useIsMounted';
@@ -83,7 +82,8 @@ const ParticipantsOverviewLDateRangeFilter = (): ReactElement | null => {
                 </div>
 
                 <div>
-                    <ReactSlider
+                    {/* todo..
+                      <ReactSlider
                         value={filteredDateRange === null ? undefined : [filteredDateRange[0], filteredDateRange[1]]}
                         className="h-3 w-full rounded-lg bg-gray-200"
                         min={earliestTimestamp}
@@ -107,7 +107,7 @@ const ParticipantsOverviewLDateRangeFilter = (): ReactElement | null => {
                                 className="top-1/2 size-8 -translate-y-1/2 select-none rounded-full border-2 border-gray-600 bg-gray-200 ring-0"
                             />
                         )}
-                    />
+                    />*/}
                 </div>
             </div>
         </div>

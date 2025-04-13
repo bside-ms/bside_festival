@@ -36,7 +36,7 @@ export interface SuccessfulAddParticipantResponse {
     newParticipant: Participant;
 }
 
-export async function POST(request: Request): Promise<NextResponse<SuccessfulAddParticipantResponse | ErroneousAddParticipantResponse>> {
+export const POST = async (request: Request): Promise<NextResponse<SuccessfulAddParticipantResponse | ErroneousAddParticipantResponse>> => {
     const {
         type,
         motivation,
@@ -103,4 +103,4 @@ export async function POST(request: Request): Promise<NextResponse<SuccessfulAdd
     }
 
     return NextResponse.json({ newParticipant });
-}
+};

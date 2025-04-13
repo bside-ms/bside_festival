@@ -14,7 +14,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2025 ist eröffnet.</div>
                     <div>Du möchtest Dich als Solokünstler:in oder mit deiner Band für ein Konzert bewerben?</div>
                     <div>
                         Bitte beachte, dass wir insbesondere Künstler:innen fördern, die ihre eigenen Kompositionen & Texte präsentieren.
@@ -31,7 +31,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2025 ist eröffnet.</div>
                     <div>Du möchtest Dich mit einer Lesung, einem Vortrag oder einem poetischen Beitrag bewerben?</div>
                     <div>Wir bitten um vollständige & aussagekräftige Bewerbung, das heißt inklusive Text- & Hörproben.</div>
                 </div>
@@ -44,7 +44,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2025 ist eröffnet.</div>
                     <div>Du hast eine Idee für das diesjährige Familienprogramm?</div>
                     <div>
                         Bitte beachte, dass wir insbesondere Bewerbungen berücksichtigen, die generationsübergreifend, interaktiv, kreativ &
@@ -62,7 +62,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2025 ist eröffnet.</div>
                     <div>Ihr möchtet euch mit einem Workshop oder einem (interaktiven) Infostand bewerben?</div>
                     <div>
                         Bitte beachtet, dass wir insbesondere Bewerbungen berücksichtigen, die generationsübergreifend, interaktiv, kreativ
@@ -79,7 +79,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2025 ist eröffnet.</div>
                     <div>Ihr möchtet euch mit einer Performance, einem Theaterstück oder einem kabarettistischen Beitrag bewerben?</div>
                     <div>
                         Wir bitten um vollständige & aussagekräftige Bewerbung, das heißt inklusive Aufzeichnungen in Bild und Ton zu euren
@@ -95,7 +95,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2025 ist eröffnet.</div>
                     <div>
                         Im Sinne unseres Mottos „Spielplatz für Kreative“ soll in einem Raum in der neuen B-Side ein künstlerischer
                         Spielplatz entstehen. Du hast bereits ein Kunstwerk, das zum Thema passt oder möchtest ein neues entwickeln?
@@ -114,7 +114,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2025 ist eröffnet.</div>
                     <div>
                         Du möchtest Dich mit einem Format oder einer Idee bewerben, die nicht in unseren Kategorien zu finden ist? Dann hast
                         du hier die Möglichkeit dich zu bewerben.
@@ -137,7 +137,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <strong>Schön, dass Du Dich für das diesjährige Festival bewerben möchtest!</strong>
                         <br />
                     </div>
-                    <div>Die Bewerbungsphase für das B-Side Festival 2024 ist eröffnet.</div>
+                    <div>Die Bewerbungsphase für das B-Side Festival 2025 ist eröffnet.</div>
                 </div>
             );
     }

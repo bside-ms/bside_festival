@@ -1,10 +1,10 @@
 import type { ReactElement } from 'react';
-import ApplicationTypeSelection from '../../components/applications/applicationForm/ApplicationTypeSelection';
-import BackgroundImage from '../../components/common/BackgroundImage';
-import Footer from '../../components/common/Footer';
-import Header from '../../components/common/Header';
+import ApplicationTypeSelection from 'components/applications/applicationForm/ApplicationTypeSelection';
+import BackgroundImage from 'components/common/BackgroundImage';
+import Footer from 'components/common/Footer';
+import Header from 'components/common/Header';
 import { getServerSession } from 'next-auth';
-import authOptions from '../../lib/next-auth/authOptions';
+import authOptions from 'lib/next-auth/authOptions';
 import { redirect } from 'next/navigation';
 
 async function getData() {
@@ -51,4 +51,4 @@ export default async function BewerbungenPage(): Promise<ReactElement> {
             <Footer />
         </div>
     );
-} 
+}

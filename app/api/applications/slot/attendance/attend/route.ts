@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import prismaClient from 'lib/common/prismaClient';
-import { Attendee } from '@prisma/client';
 import getAllAttendees from 'lib/participants/getAllAttendees';
 import sendSlotAttendConfirmationMail from 'lib/mail/sendSlotAttendConfirmationMail';
 import AllAttendees from 'typings/AllAttendees';
@@ -19,7 +18,7 @@ export interface ErroneousAttendSlotResponse {
     errorCode: number;
 }
 
-export async function POST(request: Request): Promise<NextResponse<SuccessfulAttendSlotResponse | ErroneousAttendSlotResponse>> {
+export const POST = async (request: Request): Promise<NextResponse<SuccessfulAttendSlotResponse | ErroneousAttendSlotResponse>> => {
     const { slotId, fullName, mailAddress } = (await request.json()) as AttendSlotRequest;
 
     const existingAttendee = await prismaClient.attendee.findFirst({ where: { slotId, fullName, mailAddress } });
@@ -48,4 +47,4 @@ export async function POST(request: Request): Promise<NextResponse<SuccessfulAtt
     }
 
     return NextResponse.json({ allAttendees });
-}
+};

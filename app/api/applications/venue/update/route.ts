@@ -13,7 +13,7 @@ export interface SuccessfulUpdateVenueResponse {
     updatedVenues: Array<Venue>;
 }
 
-export async function POST(request: Request): Promise<NextResponse<SuccessfulUpdateVenueResponse>> {
+export const POST = async (request: Request): Promise<NextResponse<SuccessfulUpdateVenueResponse>> => {
     const { participantId, locationId, dates } = (await request.json()) as UpsertVenueRequest;
 
     // Just deleting venue before creating new one, since upsert only works with unique fields.
@@ -24,4 +24,4 @@ export async function POST(request: Request): Promise<NextResponse<SuccessfulUpd
     const updatedVenues = await getAllVenues();
 
     return NextResponse.json({ updatedVenues });
-}
+};

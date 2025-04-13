@@ -1,4 +1,3 @@
-import type { Volunteer } from '@prisma/client';
 import type { ReactElement } from 'react';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
@@ -8,21 +7,18 @@ import prismaClient from 'lib/common/prismaClient';
 import { getServerSession } from 'next-auth';
 import authOptions from 'lib/next-auth/authOptions';
 import { redirect } from 'next/navigation';
+import isGroupMember from 'lib/next-auth/isGroupMember';
+import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
+import isLoggedIn from 'lib/next-auth/isLoggedIn';
 
-async function getData() {
-    const session = await getServerSession(authOptions);
-
-    if (session === null) {
+export default async (): Promise<ReactElement> => {
+    if (!(await isLoggedIn())) {
         redirect('/');
     }
 
     const volunteers = await prismaClient.volunteer.findMany();
 
-    return { volunteers };
-}
-
-export default async function MithelfenUebersichtPage(): Promise<ReactElement> {
-    const { volunteers } = await getData();
+    const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
 
     return (
         <div>
@@ -33,7 +29,7 @@ export default async function MithelfenUebersichtPage(): Promise<ReactElement> {
                     </div>
 
                     <div className="mx-auto max-w-2xl px-3">
-                        <VolunteersOverview volunteers={volunteers} />
+                        <VolunteersOverview volunteers={volunteers} isInDataPrivacyGroup={isInDataPrivacyGroup} />
                     </div>
                 </div>
 
@@ -43,4 +39,4 @@ export default async function MithelfenUebersichtPage(): Promise<ReactElement> {
             <Footer />
         </div>
     );
-}
+};

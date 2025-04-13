@@ -16,7 +16,7 @@ import TextInput from 'components/form/TextInput';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import typeLabels from 'lib/participants/typeLabels';
-import type { AddParticipantRequest } from '_pages/api/applications/add';
+import type { AddParticipantRequest } from 'app/api/applications/add/route';
 
 export interface ApplicationFormValues {
     name: string;
@@ -206,7 +206,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                     <TextArea<ApplicationFormValues>
                         name="motivation"
                         label="Motivation"
-                        info="Warum möchtet ihr Teil des B-Side Festivals 2024 sein?"
+                        info="Warum möchtet ihr Teil des B-Side Festivals 2025 sein?"
                     />
 
                     <TextArea<ApplicationFormValues>
@@ -244,7 +244,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
 
                     <div className="mt-5 flex flex-col gap-2 text-sm">
                         <div>
-                            Das B-Side Festival ist auch 2024 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
+                            Das B-Side Festival ist auch 2025 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
                             insbesondere Räume und Bühnen für FLINTA* und andere marginalisierte Gesellschaftsgruppen schaffen.
                         </div>
                         <div>

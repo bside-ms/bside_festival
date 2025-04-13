@@ -4,11 +4,11 @@ import SelectInput from 'components/form/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { useParticipantsOverviewContext, useParticipantVenues } from 'components/participants/overview/ParticipantsOverviewContext';
-import { SuccessfulUpdateVenueResponse, UpsertVenueRequest } from '_pages/api/applications/venue/update';
-import { DeleteVenueRequest, SuccessfulDeleteVenueResponse } from '_pages/api/applications/venue/delete';
 import Checkbox from 'components/form/Checkbox';
 import formatDate from 'lib/common/helper/formatDate';
 import { addDays, differenceInDays, isSameDay } from 'date-fns';
+import { SuccessfulUpdateVenueResponse, UpsertVenueRequest } from 'app/api/applications/venue/update/route';
+import { DeleteVenueRequest, SuccessfulDeleteVenueResponse } from 'app/api/applications/venue/delete/route';
 
 type VenueFormValues = { locationId: number } & Record<string, boolean>;
 
