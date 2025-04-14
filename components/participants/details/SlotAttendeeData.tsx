@@ -2,9 +2,6 @@ import { ReactElement } from 'react';
 import { SerializableSlot } from 'typings/SerializableSlot';
 import { useParticipantsOverviewContext, useSlotAttendees } from 'components/participants/overview/ParticipantsOverviewContext';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import isGroupMember from 'lib/next-auth/isGroupMember';
-import { useSession } from 'next-auth/react';
-import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
 
 interface Props {
     slot: SerializableSlot;

@@ -9,33 +9,40 @@ datasource db {
 }
 
 model Participant {
-  id                     Int                @id @default(autoincrement())
-  name                   String             @db.Text
-  appliedAt              DateTime?
-  updatedAt              DateTime           @updatedAt
-  contactName            String?            @db.Text
-  contactMail            String?            @db.Text
-  contactPhone           String?            @db.Text
-  description            String?            @db.Text
-  updatedDescription     String?            @db.Text
-  motivation             String?            @db.Text
-  curationScore          Int?
-  curationInfo           String?            @db.Text
-  address                String?            @db.Text
-  residence              String?            @db.Text
-  imageFileName          String?            @db.Text
-  technicalRider         String?            @db.Text
-  technicalRiderFileName String?            @db.Text
-  backlineSharing        String?            @db.Text
-  materialExpenses       String?            @db.Text
-  additionalInfo         String?            @db.Text
-  links                  Link[]
-  comments               Comment[]
-  labels                 ParticipantLabel[]
-  type                   Type
-  status                 ApplicationStatus  @default(Applied)
-  Slot                   Slot[]
-  Venue                  Venue[]
+  id                          Int                          @id @default(autoincrement())
+  name                        String                       @db.Text
+  appliedAt                   DateTime?
+  updatedAt                   DateTime                     @updatedAt
+  contactName                 String?                      @db.Text
+  contactMail                 String?                      @db.Text
+  contactPhone                String?                      @db.Text
+  description                 String?                      @db.Text
+  updatedDescription          String?                      @db.Text
+  motivation                  String?                      @db.Text
+  curationScore               Int?
+  curationInfo                String?                      @db.Text
+  address                     String?                      @db.Text
+  residence                   String?                      @db.Text
+  imageFileName               String?                      @db.Text
+  technicalRider              String?                      @db.Text
+  technicalRiderFileName      String?                      @db.Text
+  backlineSharing             String?                      @db.Text
+  materialExpenses            String?                      @db.Text
+  additionalInfo              String?                      @db.Text
+  participantCount            String?                      @db.Text
+  allergies                   String?                      @db.Text
+  hasFlintaParticipants       Boolean                      @default(false)
+  hasMarginalizedParticipants Boolean                      @default(false)
+  diversityNotes              String?                      @db.Text
+  links                       Link[]
+  comments                    Comment[]
+  labels                      ParticipantLabel[]
+  concertGenres               ParticipantConcertGenre[]
+  diskJockeyGenres            ParticipantDiskJockeyGenre[]
+  type                        Type
+  status                      ApplicationStatus            @default(Applied)
+  Slot                        Slot[]
+  Venue                       Venue[]
 }
 
 model Link {
@@ -67,6 +74,36 @@ model ParticipantLabel {
   labelId       Int
 
   @@id([participantId, labelId])
+}
+
+model ConcertGenre {
+  id           Int                       @id @default(autoincrement())
+  genre        String                    @db.Text
+  participants ParticipantConcertGenre[]
+}
+
+model ParticipantConcertGenre {
+  participant   Participant  @relation(fields: [participantId], references: [id])
+  participantId Int
+  genre         ConcertGenre @relation(fields: [genreId], references: [id])
+  genreId       Int
+
+  @@id([participantId, genreId])
+}
+
+model DiskJockeyGenre {
+  id           Int                          @id @default(autoincrement())
+  genre        String                       @db.Text
+  participants ParticipantDiskJockeyGenre[]
+}
+
+model ParticipantDiskJockeyGenre {
+  participant   Participant     @relation(fields: [participantId], references: [id])
+  participantId Int
+  genre         DiskJockeyGenre @relation(fields: [genreId], references: [id])
+  genreId       Int
+
+  @@id([participantId, genreId])
 }
 
 enum Type {

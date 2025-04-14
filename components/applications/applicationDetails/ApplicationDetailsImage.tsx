@@ -10,11 +10,12 @@ import { GrEdit } from 'react-icons/gr';
 import { DeleteImageRequest, SuccessfulDeleteImageResponse } from 'app/api/applications/update/image/delete/route';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import { ReplaceImageRequest } from 'app/api/applications/update/image/replace/route';
-import { allowedImageContentTypes, allowedImageMaxFileSize } from 'components/applications/applicationForm/ImageUpload';
 import { extension } from 'mime-types';
 import bytes from 'bytes';
 import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
 import cn from 'lib/common/helper/cn';
+import allowedImageContentTypes from 'lib/upload/allowedImageContentTypes';
+import allowedImageMaxFileSize from 'lib/upload/allowedImageMaxFileSize';
 
 interface Props {
     application: SerializableParticipant;

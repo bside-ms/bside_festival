@@ -8,7 +8,7 @@ export default (): ReactElement => {
     return (
         <div>
             <div className="relative mx-auto min-h-screen w-full max-w-2xl font-display">
-                <div className="py-3 text-center font-bold uppercase tracking-[0.3em] text-red-500">19. & 20. September 2025</div>
+                <div className="py-3 text-center font-bold uppercase tracking-[0.3em] text-red-600">19. & 20. September 2025</div>
 
                 <Image src={backgroundImage} alt="Festival-Plakat" className="object-cover" />
 
@@ -16,54 +16,40 @@ export default (): ReactElement => {
                     <div className="text-xs text-black">Veranstaltet vom B-Side Kultur e.V.</div>
                 </div>
 
-                <div className="h-3 w-full bg-red-500" />
+                <div className="h-3 w-full bg-red-600" />
 
-                <div className="p-5 text-left">
-                    <div className="font-bold uppercase tracking-[0.3em] text-black">Welcome back</div>
+                <div className="p-5 text-left space-y-3 text-sm text-black">
+                    <p>
+                        <strong>Es geht wieder los: Das 9. B-Side Festival steht vor der Tür!</strong>
+                    </p>
 
-                    <div className="space-y-3 pt-3 text-sm text-black">
-                        <p>
-                            Die B-Side ist wieder zurück am Mittelhafen! Mit dem B-Side Festival 2025 feiern wir dieses Jahr unter dem Motto{' '}
-                            <strong>„Spielplatz für Kreative"</strong> die kulturelle Eröffnung der B-Side.
-                        </p>
-                        <p>
-                            <strong>Am 19. und 20. September</strong> bietet der B-Side Kultur e.V. ein vielfältiges Angebot aus Musik,
-                            Ausstellungen, Performances, Workshops, Lesungen uvm. Alle Menschen sind herzlich eingeladen, an dem bunten,
-                            nicht kommerziellen Programm teilzunehmen, es mitzugestalten und das neue soziokulturelle Zentrum zu erkunden.
-                            Für Interessierte an den gemeinnützigen Projekten des B-Side Kollektivs sind außerdem Infostände und eine
-                            Ausstellung über die B-Side-Geschichte geplant.
-                        </p>
-                        <p>
-                            Das Festival findet dieses Jahr vor allem in den frisch renovierten Räumlichkeiten Am Mittelhafen 42 statt, die
-                            anschließende Party ist wie in den Vorjahren in der Sputnikhalle geplant. Um all das zu realisieren, engagieren
-                            sich aktuell über 20 Menschen ehrenamtlich, kollektiv und selbstorganisiert im Festival-Team des B-Side Kultur
-                            e.V.
-                        </p>
-                    </div>
-                </div>
+                    <p>
+                        Dieses Jahr sind wir wieder in der B-Side am Mittelhafen und im Hansaviertel! Ganz nach dem Motto{' '}
+                        <strong>B-together, B-loved – B-Side!</strong> möchten wir dieses Jahr ganz besonders die Gemeinschaft, Begegnung
+                        und Empathie feiern. Zusammen schaffen wir über den <strong>19. und 20. September</strong> hinweg einen Ort, an dem
+                        wir gemeinsam kreativ werden können.
+                    </p>
 
-                <div className="h-5 w-full bg-black" />
-                <div className="h-5 w-full bg-[#FEC7DB]" />
+                    <p>
+                        Du willst mit deiner Kunst, deinen Texten oder mit deinem Workshop Teil des bunten Programms werden? Deine Musik
+                        darf auf gar keinen Fall fehlen? Oder du hast eine spannende Idee, auf die wir bisher noch gar nicht gekommen sind?
+                        Dein Beitrag passt zu unserem Motto? Super! Dann bewirb dich bis zu dem 11. Mai auf unserem Bewerbungsportal!
+                    </p>
 
-                <div className="px-5 py-3 text-left">
-                    <div className="font-bold uppercase tracking-[0.3em] text-black">Mithelfen</div>
-
-                    <div className="pt-3 text-sm text-black">
-                        Für unser B-Side Festival 2025 brauchen wir euch! Wir suchen tatkräftige Helfer*innen. Dabei gibt es verschiedene
-                        Aufgaben, bei denen ihr euch einbringen könnt: Die Betreuung von Konzerten, Workshops, Ausstellungen und Lesungen,
-                        die Verpflegung für das Helfer*innen- und B-Side-Team, Hilfe beim Auf- und Abbau und der Technik des Festivals,
-                        Unterstützung des Awareness-Teams auf dem gesamten Festival und beim Spendensammeln.
-                    </div>
+                    <p>
+                        Wichtig: Das B-Side Festival ist ein eintrittsfreies, komplett ehrenamtlich organisiertes Festival, das seit 2016
+                        versucht, einen Gegenpol zu typischen kommerziellen Musikveranstaltungen zu gestalten. Die konkrete Budgetierung des
+                        Festivals ist zu diesem Zeitpunkt noch nicht abgeschlossen, jedoch können wir zur Zeit noch nicht mehr als eine
+                        Aufwandsentschädigung zusagen. Wir geben aber unser bestes, hier noch mehr für euch rauszuholen :)
+                    </p>
 
                     <Link
-                        className="mt-4 block w-full cursor-pointer select-none bg-[#FEC7DB] py-3 text-center text-sm font-bold uppercase tracking-[0.3em] text-[#FDF85D]"
-                        href="/mithelfen"
+                        className="mt-4 block w-full cursor-pointer select-none bg-red-600 py-3 text-center text-sm font-bold uppercase tracking-[0.3em] text-white"
+                        href="/bewerbungen"
                     >
-                        zum Anmeldeformular {'>>'}
+                        zum Bewerbungsformular {'>>'}
                     </Link>
                 </div>
-
-                <div className="h-10 w-full bg-[#5ff450]" />
 
                 <Footer />
             </div>

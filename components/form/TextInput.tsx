@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from 'react';
 import { uniqueId } from 'lodash';
 import type { ReactElement } from 'react';
@@ -44,7 +46,7 @@ const TextInput = <T extends FieldValues>({
     return (
         <div className="flex flex-col">
             {isNotEmptyString(info) && (
-                <label htmlFor={id} className="px-1 text-base text-black">
+                <label htmlFor={id} className="px-1 text-base text-white">
                     {info}
                 </label>
             )}
@@ -54,8 +56,8 @@ const TextInput = <T extends FieldValues>({
                 type="text"
                 defaultValue={defaultValue}
                 className={cn(
-                    'rounded border border-black p-2 outline-0',
-                    typeof errorMessage === 'string' && 'bg-rose-600 text-gray-100 placeholder:text-gray-100',
+                    'rounded border border-white p-2 outline-0 text-white placeholder:text-white placeholder:opacity-55',
+                    typeof errorMessage === 'string' && 'bg-rose-400',
                 )}
                 required={required}
                 placeholder={required ? `${label} *` : label}
@@ -75,9 +77,9 @@ const TextInput = <T extends FieldValues>({
                 })}
             />
 
-            {isNotEmptyString(additionalInfo) && <div className="px-1 pt-1 text-xs text-black">{additionalInfo}</div>}
+            {isNotEmptyString(additionalInfo) && <div className="px-1 pt-1 text-xs text-white">{additionalInfo}</div>}
 
-            {typeof errorMessage === 'string' && <div className="px-1 text-rose-900">{errorMessage}</div>}
+            {typeof errorMessage === 'string' && <div className="px-1 text-rose-600">{errorMessage}</div>}
         </div>
     );
 };

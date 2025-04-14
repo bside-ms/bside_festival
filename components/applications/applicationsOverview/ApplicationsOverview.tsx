@@ -1,3 +1,5 @@
+'use client';
+
 import type { ReactElement } from 'react';
 import Application from 'components/applications/applicationsOverview/Application';
 import ApplicationOverviewAdditionalFilters from 'components/applications/applicationsOverview/ApplicationOverviewAdditionalFilters';

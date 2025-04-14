@@ -1,14 +1,11 @@
 import type { Participant, Type } from '@prisma/client';
 import { NextResponse } from 'next/server';
-import { allowedImageContentTypes, allowedImageMaxFileSize } from 'components/applications/applicationForm/ImageUpload';
-import {
-    allowedTechnicalRiderMaxFileSize,
-    allowedTechnicRiderContentType,
-} from 'components/applications/applicationForm/TechnicalRiderFields';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import prismaClient from 'lib/common/prismaClient';
-import sendApplicationConfirmationMail from 'lib/mail/sendApplicationConfirmationMail';
 import uploadFileToIonos from 'lib/upload/uploadFileToIonos';
+import allowedImageContentTypes from 'lib/upload/allowedImageContentTypes';
+import allowedImageMaxFileSize from 'lib/upload/allowedImageMaxFileSize';
+import allowedTechnicRiderContentType from 'lib/upload/allowedTechnicRiderContentType';
+import allowedTechnicalRiderMaxFileSize from 'lib/upload/allowedTechnicalRiderMaxFileSize';
 
 export interface AddParticipantRequest {
     type: Type;
@@ -17,6 +14,8 @@ export interface AddParticipantRequest {
     contactPhone: string;
     contactMail: string;
     description: string;
+    concertGenres: Array<string | number>;
+    diskJockeyGenres: Array<string | number>;
     encodedImage: string;
     motivation: string;
     additionalInfo: string;
@@ -25,6 +24,11 @@ export interface AddParticipantRequest {
     backlineSharing: string | null;
     materialExpenses: string | null;
     residence: string | null;
+    participantCount: string;
+    hasFlintaParticipants: boolean;
+    hasMarginalizedParticipants: boolean;
+    diversityNotes: string;
+    allergies: string;
     links: Array<string>;
 }
 
@@ -53,6 +57,13 @@ export const POST = async (request: Request): Promise<NextResponse<SuccessfulAdd
         contactName,
         links,
         contactMail,
+        participantCount,
+        hasFlintaParticipants,
+        hasMarginalizedParticipants,
+        diversityNotes,
+        allergies,
+        concertGenres,
+        diskJockeyGenres,
     } = (await request.json()) as AddParticipantRequest;
 
     const imageFileName = await uploadFileToIonos(encodedImage, allowedImageContentTypes, allowedImageMaxFileSize);
@@ -79,6 +90,31 @@ export const POST = async (request: Request): Promise<NextResponse<SuccessfulAdd
             technicalRiderFileName,
             backlineSharing,
             materialExpenses,
+            participantCount,
+            hasFlintaParticipants,
+            hasMarginalizedParticipants,
+            diversityNotes,
+            allergies,
+            concertGenres: {
+                create: [
+                    ...concertGenres
+                        .filter((genre): genre is number => typeof genre === 'number')
+                        .map((id) => ({ genre: { connect: { id } } })),
+                    ...concertGenres
+                        .filter((genre): genre is string => typeof genre === 'string')
+                        .map((genre) => ({ genre: { create: { genre } } })),
+                ],
+            },
+            diskJockeyGenres: {
+                create: [
+                    ...diskJockeyGenres
+                        .filter((genre): genre is number => typeof genre === 'number')
+                        .map((id) => ({ genre: { connect: { id } } })),
+                    ...diskJockeyGenres
+                        .filter((genre): genre is string => typeof genre === 'string')
+                        .map((genre) => ({ genre: { create: { genre } } })),
+                ],
+            },
             appliedAt: new Date(),
         },
     });
@@ -92,15 +128,16 @@ export const POST = async (request: Request): Promise<NextResponse<SuccessfulAdd
         });
     }
 
-    if (isNotEmptyString(newParticipant.contactMail)) {
-        sendApplicationConfirmationMail(
-            {
-                ...newParticipant,
-                contactMail: newParticipant.contactMail,
-            },
-            links,
-        );
-    }
+    // TODO
+    //  if (isNotEmptyString(newParticipant.contactMail)) {
+    //      sendApplicationConfirmationMail(
+    //          {
+    //              ...newParticipant,
+    //              contactMail: newParticipant.contactMail,
+    //          },
+    //          links,
+    //      );
+    //  }
 
     return NextResponse.json({ newParticipant });
 };

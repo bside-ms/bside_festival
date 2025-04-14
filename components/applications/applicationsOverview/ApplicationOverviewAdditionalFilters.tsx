@@ -37,7 +37,6 @@ const ApplicationOverviewAdditionalFilters = (): ReactElement => {
     const handleLabelClick = useCallback(
         (event: MouseEvent) => {
             // @ts-expect-error | Will fix this later..
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             const clickedLabelId = event.target.dataset.labelId as string;
 
             toggleFilteredLabelId(Number(clickedLabelId));

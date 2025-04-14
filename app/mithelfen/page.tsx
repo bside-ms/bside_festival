@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 import Footer from 'components/common/Footer';
-import Header from 'components/common/Header';
 import VolunteerForm from 'components/volunteers/volunteerForm/VolunteerForm';
 import { redirect } from 'next/navigation';
 import isLoggedIn from 'lib/next-auth/isLoggedIn';
+import Link from 'next/link';
 
 export default async (): Promise<ReactElement> => {
     if (!(await isLoggedIn())) {
@@ -15,9 +15,9 @@ export default async (): Promise<ReactElement> => {
         <div>
             <div className="relative min-h-screen w-full ">
                 <div className="relative z-10">
-                    <div className="mx-auto w-full max-w-[700px] md:w-2/3 md:pt-2">
-                        <Header />
-                    </div>
+                    <Link href="/" className="flex items-center gap-3">
+                        <div className="pt-1 text-2xl md:pt-2 md:text-3xl">B-Side Festival 2025</div>
+                    </Link>
 
                     <div className="mx-auto w-full max-w-[700px] p-5 drop-shadow-xl md:w-2/3 md:p-8">
                         <VolunteerForm />

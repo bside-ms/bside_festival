@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback } from 'react';
 import isUrl from 'is-url';
 import type { ReactElement } from 'react';

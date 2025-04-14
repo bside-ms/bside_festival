@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useRef, useState } from 'react';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +12,9 @@ import type { ApplicationFormValues } from 'components/applications/applicationF
 import TextArea from 'components/form/TextArea';
 import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import cn from 'lib/common/helper/cn';
+import allowedTechnicRiderContentType from 'lib/upload/allowedTechnicRiderContentType';
+import allowedTechnicalRiderMaxFileSize from 'lib/upload/allowedTechnicalRiderMaxFileSize';
 
 const fileFieldName: keyof ApplicationFormValues = 'encodedTechnicalRiderPdf';
 
@@ -55,9 +60,6 @@ export const getTechnicalRiderInfo = (applicationType: Type): null | { info: str
             return null;
     }
 };
-
-export const allowedTechnicRiderContentType = 'application/pdf';
-export const allowedTechnicalRiderMaxFileSize = bytes('20MB')!;
 
 interface Props {
     chosenType: Type;
@@ -128,7 +130,7 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
             {withoutTextArea === true ? (
                 <>
                     <input type="hidden" {...register('technicalRider')} />
-                    <label className="px-1 text-base text-black">{info}</label>
+                    <label className="px-1 text-base text-white">{info}</label>
                 </>
             ) : (
                 <TextArea<ApplicationFormValues>
@@ -150,7 +152,7 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
                 tabIndex={-1}
             />
 
-            <div className="text-black">
+            <div className="text-white">
                 {isNotEmptyString(currentFileDataUrl) && isNotEmptyString(currentFileName) ? (
                     <div>
                         <span className="px-2 font-mono">{currentFileName}</span>
@@ -165,19 +167,25 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
                 ) : (
                     <label htmlFor={fileInputId.current} className="cursor-pointer">
                         <div
-                            className={`flex items-center justify-center rounded border border-dashed border-black p-5 ${
-                                typeof technicalRiderErrorMessage === 'string' || typeof technicalRiderPdfErrorMessage === 'string'
-                                    ? 'bg-rose-600 text-white'
-                                    : ''
-                            }`}
+                            className={cn(
+                                'flex p-5 w-full items-center justify-center rounded border border-dashed border-white',
+                                typeof technicalRiderErrorMessage === 'string' && 'bg-rose-400',
+                            )}
                         >
-                            PDF hinzufügen {withoutTextArea === true && required === true && ' *'}
+                            <div
+                                className={cn(
+                                    'text-white opacity-55',
+                                    typeof technicalRiderErrorMessage === 'string' && 'bg-rose-400 opacity-100',
+                                )}
+                            >
+                                PDF hinzufügen {withoutTextArea === true && required === true && ' *'}
+                            </div>
                         </div>
                     </label>
                 )}
             </div>
 
-            <div>
+            <div className="text-white">
                 Solltet ihr selbst noch keinen Tech-Rider haben, nutzt bitte{' '}
                 <a href={templateLink} target="_blank" className="cursor-pointer underline">
                     unsere Vorlage
@@ -185,9 +193,9 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
                 , um unserer Technik-Crew viel Arbeit zu ersparen.
             </div>
 
-            {typeof technicalRiderErrorMessage === 'string' && <div className="px-1 text-rose-900">{technicalRiderErrorMessage}</div>}
+            {typeof technicalRiderErrorMessage === 'string' && <div className="px-1 text-rose-600">{technicalRiderErrorMessage}</div>}
 
-            {typeof technicalRiderPdfErrorMessage === 'string' && <div className="px-1 text-rose-900">{technicalRiderPdfErrorMessage}</div>}
+            {typeof technicalRiderPdfErrorMessage === 'string' && <div className="px-1 text-rose-600">{technicalRiderPdfErrorMessage}</div>}
         </div>
     );
 };

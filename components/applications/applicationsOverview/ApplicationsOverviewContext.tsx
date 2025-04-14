@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import type { Label, Link, Participant, ParticipantLabel, Type } from '@prisma/client';
 import Fuse from 'fuse.js';
