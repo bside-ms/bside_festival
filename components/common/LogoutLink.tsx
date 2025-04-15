@@ -3,7 +3,10 @@
 import type { ReactElement } from 'react';
 
 const LogoutLink = (): ReactElement => {
-    return <a className="cursor-pointer underline">Abmelden (To-Do)</a>;
+    // todo
+    // return <a className="cursor-pointer underline">Abmelden</a>;
+
+    return <div />;
 };
 
 export default LogoutLink;

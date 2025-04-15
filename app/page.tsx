@@ -46,8 +46,8 @@ export default (): ReactElement => {
                         className="mt-4 block w-full cursor-pointer select-none bg-red-600 py-3 text-center text-sm font-bold uppercase tracking-[0.3em] text-white rounded-md sha"
                         href="/bewerbungen"
                     >
-                        <span className="flex gap-2 justify-center items-center">
-                            zum Bewerbungsformular <FaArrowRight className="text-xl pt-[1px]" />
+                        <span className="flex gap-2 justify-center items-center px-2">
+                            hier bewerben <FaArrowRight className="text-xl pt-[1px]" />
                         </span>
                     </Link>
                 </div>

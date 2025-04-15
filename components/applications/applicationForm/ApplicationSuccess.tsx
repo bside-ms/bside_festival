@@ -5,8 +5,8 @@ import type { ReactElement } from 'react';
 
 const ApplicationSuccess = (): ReactElement => {
     return (
-        <div className="text-black">
-            <div className="mb-4 font-display text-black">
+        <div className="text-white">
+            <div className="mb-4 font-display">
                 <div className="text-4xl font-bold">Bewerbung</div>
             </div>
 
