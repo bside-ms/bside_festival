@@ -15,8 +15,7 @@ export const GET = async (
     const { id } = await params;
 
     const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
-    const application =
-        (await getAllParticipants(isInDataPrivacyGroup)).find(({ id: participantId }) => participantId === Number(id)) ?? null;
+    const application = (await getAllParticipants(isInDataPrivacyGroup)).find((participant) => participant.id === Number(id)) ?? null;
 
     return NextResponse.json({ application }, { status: application === null ? 404 : 200 });
 };
