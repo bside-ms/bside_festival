@@ -7,7 +7,6 @@ import { ReactElement, useCallback, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import ParticipantOverview from 'components/participants/overview/ParticipantOverview';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
-import ParticipantsOverviewLDateRangeFilter from 'components/participants/overview/ParticipantsOverviewDateRangeFilter';
 import ParticipantsOverviewLocationFilter from 'components/participants/overview/ParticipantsOverviewLocationFilter';
 import ParticipantsOverviewTypesFilter from 'components/participants/overview/ParticipantsOverviewTypesFilter';
 import { IoTriangle } from 'react-icons/io5';
@@ -40,9 +39,9 @@ const ParticipantsOverview = (): ReactElement => {
                                 <ParticipantsOverviewLocationFilter />
                             </div>
 
-                            <div className="mt-8 empty:mt-0">
-                                <ParticipantsOverviewLDateRangeFilter />
-                            </div>
+                            {/*<div className="mt-8 empty:mt-0">*/}
+                            {/*    <ParticipantsOverviewLDateRangeFilter />*/}
+                            {/*</div>*/}
                         </div>
                     </div>
                 )}
