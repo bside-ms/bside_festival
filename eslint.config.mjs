@@ -1,6 +1,5 @@
 import js from '@eslint/js';
 import ts from 'typescript-eslint';
-import tailwind from 'eslint-plugin-tailwindcss';
 import reactPlugin from 'eslint-plugin-react';
 
 const OFF = 0;
@@ -52,7 +51,7 @@ export default ts.config(
         },
     },
     ...ts.configs.recommended,
-    ...tailwind.configs['flat/recommended'],
+    // todo ...tailwind.configs['flat/recommended'], https://github.com/tailwindlabs/prettier-plugin-tailwindcss
     {
         ignores: ['.next/**/*.*', '**/*.json', '**/*.js'],
     },

@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useState } from 'react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,7 +18,9 @@ import TextInput from 'components/form/TextInput';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import typeLabels from 'lib/participants/typeLabels';
-import type { AddParticipantRequest } from 'pages/api/applications/add';
+import type { AddParticipantRequest } from 'app/api/applications/add/route';
+import Checkbox from 'components/form/Checkbox';
+import MultiSelectInput from 'components/form/MultiSelectInput';
 
 export interface ApplicationFormValues {
     name: string;
@@ -24,6 +28,8 @@ export interface ApplicationFormValues {
     contactPhone: string;
     contactMail: string;
     description: string;
+    concertGenres?: Array<string | number>;
+    diskJockeyGenres?: Array<string | number>;
     encodedImage: string;
     motivation: string;
     additionalInfo: string;
@@ -32,6 +38,11 @@ export interface ApplicationFormValues {
     backlineSharing?: string;
     materialExpenses?: string;
     residence?: string;
+    participantCount: string;
+    hasFlintaParticipants: boolean;
+    hasMarginalizedParticipants: boolean;
+    diversityNotes: string;
+    allergies: string;
 
     // Proud and also ashamed about this lazy solution
     url1: string;
@@ -43,9 +54,11 @@ export interface ApplicationFormValues {
 
 interface Props {
     chosenType: Type;
+    allConcertGenres: Array<{ id: number; name: string }>;
+    allDiskJockeyGenres: Array<{ id: number; name: string }>;
 }
 
-const ApplicationForm = ({ chosenType }: Props): ReactElement => {
+const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: Props): ReactElement => {
     const [wasSuccessfullySubmitted, setWasSuccessfullySubmitted] = useState(false);
 
     const methods = useForm<ApplicationFormValues>();
@@ -94,6 +107,8 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                 contactPhone: values.contactPhone,
                 contactMail: values.contactMail,
                 description: values.description,
+                concertGenres: values.concertGenres ?? [],
+                diskJockeyGenres: values.diskJockeyGenres ?? [],
                 encodedImage: values.encodedImage,
                 motivation: values.motivation,
                 additionalInfo: values.additionalInfo,
@@ -102,6 +117,11 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                 backlineSharing: values.backlineSharing ?? null,
                 materialExpenses: values.materialExpenses ?? null,
                 residence: values.residence ?? null,
+                participantCount: values.participantCount,
+                hasFlintaParticipants: values.hasFlintaParticipants,
+                hasMarginalizedParticipants: values.hasMarginalizedParticipants,
+                diversityNotes: values.diversityNotes,
+                allergies: values.allergies,
                 links: [values.url1, values.url2, values.url3, values.url4, values.url5].filter(isNotEmptyString),
             };
 
@@ -133,8 +153,8 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
         <FormProvider {...methods}>
             <div className="w-full">
                 <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex flex-col gap-6">
-                    <div className="font-display text-black">
-                        <div className="text-4xl font-bold">Bewerbung</div>
+                    <div className="font-display text-white">
+                        <div className="text-4xl font-bold">B-werbung</div>
                     </div>
 
                     <div className="relative h-52">
@@ -155,7 +175,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                         </div>
                     </div>
 
-                    <div className="text-black">
+                    <div className="text-white">
                         <ApplicationTypeIntro type={chosenType} />
                     </div>
 
@@ -172,11 +192,31 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                     <TextArea<ApplicationFormValues>
                         name="description"
                         label="Beschreibung"
+                        required={true}
                         additionalInfo={`
-                            Beachtet: Dies ist ein Pressetext. Dieser Text wird auf unserer Webseite veröffentlicht,
-                            falls ihr beim B-Side Festival dabei sein werdet.
+                            Beachtet: Dies ist euer endgültiger Pressetext. Dieser Text wird auf unserer
+                            Webseite veröffentlicht, falls ihr beim B-Side Festival dabei sein werdet.
+                            Bitte achtet daher auf Vollständigkeit.
                         `}
                     />
+
+                    {chosenType === 'Concert' && (
+                        <MultiSelectInput<ApplicationFormValues>
+                            name="concertGenres"
+                            label="Musikrichtungen"
+                            info="Welche Genres beschreiben eure Musik am besten?"
+                            options={allConcertGenres.map(({ id, name }) => ({ id, label: name }))}
+                        />
+                    )}
+
+                    {chosenType === 'DiskJockey' && (
+                        <MultiSelectInput<ApplicationFormValues>
+                            name="diskJockeyGenres"
+                            label="Musikrichtungen"
+                            info="Welche Genres beschreiben eure Musik am besten?"
+                            options={allDiskJockeyGenres.map(({ id, name }) => ({ id, label: name }))}
+                        />
+                    )}
 
                     <Links />
 
@@ -195,24 +235,48 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                         />
                     )}
 
-                    {chosenType === Type.Exhibition && (
-                        <TextInput<ApplicationFormValues>
-                            name="materialExpenses"
-                            label="Materialkosten"
-                            additionalInfo="Diese Kosten werden gegebenenfalls übernommen."
-                        />
-                    )}
-
                     <TextArea<ApplicationFormValues>
                         name="motivation"
                         label="Motivation"
-                        info="Warum möchtet ihr Teil des B-Side Festivals 2024 sein?"
+                        info="Warum möchtet ihr Teil des B-Side Festivals 2025 sein?"
+                    />
+
+                    <TextInput<ApplicationFormValues>
+                        name="participantCount"
+                        label="Gesamtanzahl"
+                        info="Wie viel Menschen sind an eurem Beitrag beteiligt?"
+                    />
+
+                    <div className="text-white">
+                        Zum Ausgleich bestehender Nachteile freuen wir uns über Bewerbungen von Menschen und Organisationen, die sich für
+                        Menschen mit Diskriminierungserfahrung stark machen oder selbst davon betroffen sind. Dazu zählen zum Beispiel
+                        geflüchtete Menschen, Jüdinnen*Juden, Menschen mit familiärer Migrations- oder Fluchtgeschichte, muslimisch(e)
+                        (gelesene) Menschen, Personen of Color, Sinti/Roma*, schwarze Menschen und/oder Menschen, die aufgrund ihres Alters,
+                        sozialen Status oder einer Behinderung/chronischen Krankheit benachteiligt werden (marginalisierte Gruppen). Wir
+                        freuen uns ebenso über Bewerbungen von Frauen, lesbischen, nicht-binären, intergeschlechtlichen, trans und agender
+                        Personen (FLINTA*).
+                    </div>
+
+                    <Checkbox<ApplicationFormValues> name="hasFlintaParticipants" label="Es sind FLINTA* Personen beteiligt?" />
+
+                    <Checkbox<ApplicationFormValues>
+                        name="hasMarginalizedParticipants"
+                        label="Es sind Personen anderer marginalisierter Gruppen beteiligt?"
+                    />
+
+                    <TextArea<ApplicationFormValues> name="diversityNotes" label="Anmerkungen zur Diversität" rows={2} />
+
+                    <TextInput<ApplicationFormValues>
+                        name="allergies"
+                        label="Allergien für Catering"
+                        info="Unser Catering ist vegan. Habt ihr Allergien?"
                     />
 
                     <TextArea<ApplicationFormValues>
                         name="additionalInfo"
                         label="Weitere Informationen"
-                        info="Was möchten ihr uns noch mitteilen?"
+                        info="Was möchtet ihr uns noch mitteilen?"
+                        rows={3}
                     />
 
                     <TextInput<ApplicationFormValues> name="contactName" label="Ansprechperson" required={true} />
@@ -234,7 +298,7 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                     </label>
 
                     {isSubmitting && (
-                        <div className="text-black">
+                        <div className="text-white">
                             Wird gesendet{' '}
                             <span className="ml-1 inline-block animate-spin">
                                 <FontAwesomeIcon className="w-3" icon={faSpinner} />
@@ -242,9 +306,9 @@ const ApplicationForm = ({ chosenType }: Props): ReactElement => {
                         </div>
                     )}
 
-                    <div className="mt-5 flex flex-col gap-2 text-sm">
+                    <div className="mt-5 flex flex-col gap-2 text-sm text-white">
                         <div>
-                            Das B-Side Festival ist auch 2024 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
+                            Das B-Side Festival ist auch 2025 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
                             insbesondere Räume und Bühnen für FLINTA* und andere marginalisierte Gesellschaftsgruppen schaffen.
                         </div>
                         <div>

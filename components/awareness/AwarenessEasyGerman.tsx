@@ -6,7 +6,7 @@ const AwarenessEasyGerman = (): ReactElement => {
         <div className="flex flex-col gap-5 bg-white p-4 drop-shadow-2xl">
             <div className="font-display text-black">
                 <div className="text-2xl">
-                    <Link href="/">B-Side Festival 2024</Link>
+                    <Link href="/">B-Side Festival 2025</Link>
                 </div>
             </div>
 

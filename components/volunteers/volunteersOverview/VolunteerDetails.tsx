@@ -17,7 +17,7 @@ const dayPreferences = new Array<[VolunteerDayPreferenceKey, string]>(
 
 const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement => {
     return (
-        <div className="rounded-md bg-gray-50 px-4 pb-3 pt-2 drop-shadow">
+        <div className="rounded-md bg-gray-50 px-4 pb-3 pt-2 drop-shadow-sm">
             <div className="mb-2 text-xl">{volunteer.fullName}</div>
 
             {showSensitiveData && (

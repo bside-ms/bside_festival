@@ -10,7 +10,7 @@ import {
     AttendSlotRequest,
     ErroneousAttendSlotResponse,
     SuccessfulAttendSlotResponse,
-} from 'pages/api/applications/slot/attendance/attend';
+} from 'app/api/applications/slot/attendance/attend/route';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isValidEmail from 'lib/common/helper/isValidEmail';
 

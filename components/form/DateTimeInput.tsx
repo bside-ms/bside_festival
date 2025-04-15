@@ -43,8 +43,8 @@ const DateTimeInput = <T extends FieldValues>({
                 id={id}
                 type="datetime-local"
                 className={cn(
-                    'rounded border border-black p-2 outline-0',
-                    typeof errorMessage === 'string' && 'bg-rose-600 text-gray-100 placeholder:text-gray-100',
+                    'rounded border border-black p-2 outline-0 text-white placeholder:text-white placeholder:opacity-55',
+                    typeof errorMessage === 'string' && 'bg-rose-400',
                 )}
                 required={required}
                 defaultValue={defaultValue}
@@ -70,7 +70,7 @@ const DateTimeInput = <T extends FieldValues>({
                 </label>
             )}
 
-            {typeof errorMessage === 'string' && <div className="px-1 text-rose-900">{errorMessage}</div>}
+            {typeof errorMessage === 'string' && <div className="px-1 text-rose-600">{errorMessage}</div>}
         </div>
     );
 };

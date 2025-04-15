@@ -1,30 +1,22 @@
-import { useCallback } from 'react';
-import { signOut, useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 import LoginLink from 'components/common/LoginLink';
+import getUserSession from 'lib/next-auth/getUserSession';
+import LogoutLink from 'components/common/LogoutLink';
 
-const Login = (): ReactElement | null => {
-    const { data: session, status } = useSession();
+const Login = async (): Promise<ReactElement | null> => {
+    const userSession = await getUserSession();
 
-    const handleLogOut = useCallback(() => signOut(), []);
-
-    if (status === 'loading') {
-        return null;
-    }
-
-    if (status === 'unauthenticated') {
+    if (userSession === null) {
         return <LoginLink />;
     }
 
-    const userIdentifier = session?.user?.name ?? session?.user?.email ?? null;
+    const userIdentifier = userSession.name ?? userSession.email ?? null;
 
     return (
         <>
             Angemeldet {userIdentifier !== null ? `als ${userIdentifier}` : ''}
             <br />
-            <a className="cursor-pointer underline" onClick={handleLogOut}>
-                Abmelden
-            </a>
+            <LogoutLink />
         </>
     );
 };

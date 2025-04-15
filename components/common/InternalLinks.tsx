@@ -1,11 +1,12 @@
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
+import { getServerSession } from 'next-auth';
+import authOptions from 'lib/next-auth/authOptions';
 
-const InternalLinks = (): ReactElement | null => {
-    const { status } = useSession();
+const InternalLinks = async (): Promise<ReactElement | null> => {
+    const session = await getServerSession(authOptions);
 
-    if (status !== 'authenticated') {
+    if (session === null) {
         return null;
     }
 

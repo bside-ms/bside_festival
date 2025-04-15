@@ -8,9 +8,9 @@ import SelectInput from 'components/form/SelectInput';
 import TextInput from 'components/form/TextInput';
 import { useParticipantSlots, useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import formatDate from 'lib/common/helper/formatDate';
-import type { DeleteSlotRequest, SuccessfulDeleteSlotResponse } from 'pages/api/applications/slot/delete';
-import type { ErroneousUpdateSlotResponse, SuccessfulUpdateSlotResponse, UpsertSlotRequest } from 'pages/api/applications/slot/update';
 import isEmptyString from 'lib/common/helper/isEmptyString';
+import { ErroneousUpdateSlotResponse, SuccessfulUpdateSlotResponse, UpsertSlotRequest } from 'app/api/applications/slot/update/route';
+import { DeleteSlotRequest, SuccessfulDeleteSlotResponse } from 'app/api/applications/slot/delete/route';
 
 interface SlotFormValues {
     locationId: number;

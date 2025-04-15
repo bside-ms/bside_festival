@@ -29,7 +29,6 @@ const createMailTransport = (): Mail<SentMessageInfo> => {
 
     mailTransport.verify((error) => {
         if (error !== null) {
-            // eslint-disable-next-line no-console
             console.error(`Failed to create mail transport, error: ${error.message}`);
         }
     });

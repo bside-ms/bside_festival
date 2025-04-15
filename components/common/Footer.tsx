@@ -1,13 +1,16 @@
-// Don't know atm what the problem is
-
 import { faFacebookSquare, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import InternalLinks from 'components/common/InternalLinks';
 import Login from 'components/common/Login';
+import cn from 'lib/common/helper/cn';
 
-const Footer = (): ReactElement => {
+interface Props {
+    whiteBackground?: boolean;
+}
+
+const Footer = ({ whiteBackground = false }: Props): ReactElement => {
     const imprintLink = (
         <Link href="https://b-side.ms/kv/impressum/" className="underline">
             Impressum
@@ -32,7 +35,13 @@ const Footer = (): ReactElement => {
     );
 
     return (
-        <div className="space-y-1 bg-black p-4 text-center text-sm text-white">
+        <div
+            className={cn(
+                whiteBackground
+                    ? 'space-y-1 p-4 mt-4 text-center text-sm text-black border-t-4 border-red-600'
+                    : 'space-y-1 bg-black p-4 text-center text-sm text-white',
+            )}
+        >
             <div>Veranstaltet durch den B-Side Kultur e.V.</div>
 
             <div className="flex justify-center gap-3 py-1">

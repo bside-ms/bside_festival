@@ -1,18 +1,14 @@
 import { ReactElement } from 'react';
 import { SerializableSlot } from 'typings/SerializableSlot';
-import { useSlotAttendees } from 'components/participants/overview/ParticipantsOverviewContext';
+import { useParticipantsOverviewContext, useSlotAttendees } from 'components/participants/overview/ParticipantsOverviewContext';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import isGroupMember from 'lib/next-auth/isGroupMember';
-import { useSession } from 'next-auth/react';
-import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
 
 interface Props {
     slot: SerializableSlot;
 }
 
 const SlotAttendeeData = ({ slot: { id: slotId, maxAttendees } }: Props): ReactElement => {
-    const { data: session } = useSession();
-    const isInDataPrivacyGroup = isGroupMember(dataPrivacyGroup, session);
+    const { isInDataPrivacyGroup } = useParticipantsOverviewContext();
 
     const slotAttendees = useSlotAttendees(slotId);
 

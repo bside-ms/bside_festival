@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from 'react';
 import { uniqueId } from 'lodash';
 import type { ReactElement } from 'react';
@@ -26,33 +28,35 @@ const Checkbox = <T extends FieldValues>({ label, name, info, required = false, 
     const errorMessage = errors[name]?.message;
 
     return (
-        <div className="flex items-center gap-2 px-3">
-            <input
-                id={id}
-                type="checkbox"
-                required={required}
-                disabled={isSubmitting}
-                defaultChecked={initiallyChecked}
-                className="size-4 cursor-pointer rounded border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500"
-                {...register(name, {
-                    required: {
-                        value: required,
-                        message: 'Dies ist ein Pflichtfeld',
-                    },
-                })}
-            />
+        <div className="px-3">
+            <div className="flex items-baseline gap-2">
+                <input
+                    id={id}
+                    type="checkbox"
+                    required={required}
+                    disabled={isSubmitting}
+                    defaultChecked={initiallyChecked}
+                    className="size-3 leading-3 cursor-pointer rounded border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500 shrink-0 pt-3"
+                    {...register(name, {
+                        required: {
+                            value: required,
+                            message: 'Dies ist ein Pflichtfeld',
+                        },
+                    })}
+                />
 
-            <label htmlFor={id} className="cursor-pointer text-base font-medium ">
-                {required ? `${label} *` : label}
-            </label>
+                <label htmlFor={id} className="cursor-pointer text-base font-medium text-white">
+                    {required ? `${label} *` : label}
+                </label>
+            </div>
 
             {isNotEmptyString(info) && (
-                <label htmlFor={id} className="px-1 text-base text-black">
+                <label htmlFor={id} className="text-base text-white">
                     {info}
                 </label>
             )}
 
-            {typeof errorMessage === 'string' && <div className="px-1 text-rose-900">{errorMessage}</div>}
+            {typeof errorMessage === 'string' && <div className="text-rose-600">{errorMessage}</div>}
         </div>
     );
 };

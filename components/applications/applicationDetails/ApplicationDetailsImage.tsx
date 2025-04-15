@@ -7,14 +7,15 @@ import isEmptyString from 'lib/common/helper/isEmptyString';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import { BiTrash } from 'react-icons/bi';
 import { GrEdit } from 'react-icons/gr';
-import { DeleteImageRequest, SuccessfulDeleteImageResponse } from 'pages/api/applications/update/image/delete';
+import { DeleteImageRequest, SuccessfulDeleteImageResponse } from 'app/api/applications/update/image/delete/route';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
-import { ReplaceImageRequest } from 'pages/api/applications/update/image/replace';
-import { allowedImageContentTypes, allowedImageMaxFileSize } from 'components/applications/applicationForm/ImageUpload';
+import { ReplaceImageRequest } from 'app/api/applications/update/image/replace/route';
 import { extension } from 'mime-types';
 import bytes from 'bytes';
 import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
 import cn from 'lib/common/helper/cn';
+import allowedImageContentTypes from 'lib/upload/allowedImageContentTypes';
+import allowedImageMaxFileSize from 'lib/upload/allowedImageMaxFileSize';
 
 interface Props {
     application: SerializableParticipant;
@@ -60,12 +61,7 @@ const ApplicationDetailsImage = ({ application: { id, name, imageFileName } }: P
         const file = target.files[0];
 
         if (!allowedImageContentTypes.includes(file.type)) {
-            alert(
-                `Dateityp nicht zulässig, erlaubt sind ${allowedImageContentTypes
-                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                    .map((type) => `.${extension(type)}`)
-                    .join(', ')}`,
-            );
+            alert(`Dateityp nicht zulässig, erlaubt sind ${allowedImageContentTypes.map((type) => `.${extension(type)}`).join(', ')}`);
             setIsSubmitting(false);
             return;
         }
