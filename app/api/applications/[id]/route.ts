@@ -8,9 +8,15 @@ export interface GetApplicationResponse {
     application: Participant | null;
 }
 
-export const GET = async (_request: Request, { params }: { params: { id: string } }): Promise<NextResponse<GetApplicationResponse>> => {
+export const GET = async (
+    _request: Request,
+    { params }: { params: Promise<{ id: string }> },
+): Promise<NextResponse<GetApplicationResponse>> => {
+    const { id } = await params;
+
     const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
-    const application = (await getAllParticipants(isInDataPrivacyGroup)).find(({ id }) => id === Number(params.id)) ?? null;
+    const application =
+        (await getAllParticipants(isInDataPrivacyGroup)).find(({ id: participantId }) => participantId === Number(id)) ?? null;
 
     return NextResponse.json({ application }, { status: application === null ? 404 : 200 });
 };
