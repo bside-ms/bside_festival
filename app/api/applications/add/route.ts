@@ -7,6 +7,8 @@ import allowedImageContentTypes from 'lib/upload/allowedImageContentTypes';
 import allowedImageMaxFileSize from 'lib/upload/allowedImageMaxFileSize';
 import allowedTechnicRiderContentType from 'lib/upload/allowedTechnicRiderContentType';
 import allowedTechnicalRiderMaxFileSize from 'lib/upload/allowedTechnicalRiderMaxFileSize';
+import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import sendApplicationConfirmationMail from 'lib/mail/sendApplicationConfirmationMail';
 
 export interface AddParticipantRequest {
     type: Type;
@@ -125,16 +127,15 @@ export const POST = async (request: Request): Promise<NextResponse<SuccessfulAdd
         });
     }
 
-    // TODO
-    //  if (isNotEmptyString(newParticipant.contactMail)) {
-    //      sendApplicationConfirmationMail(
-    //          {
-    //              ...newParticipant,
-    //              contactMail: newParticipant.contactMail,
-    //          },
-    //          links,
-    //      );
-    //  }
+    if (isNotEmptyString(newParticipant.contactMail)) {
+        sendApplicationConfirmationMail(
+            {
+                ...newParticipant,
+                contactMail: newParticipant.contactMail,
+            },
+            links,
+        );
+    }
 
     return NextResponse.json({ newParticipant });
 };

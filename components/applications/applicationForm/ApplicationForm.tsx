@@ -138,9 +138,9 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
 
             window.scrollTo({ top: 0 });
 
-            // setWasSuccessfullySubmitted(true);
-            //
-            // handleFormReset();
+            setWasSuccessfullySubmitted(true);
+
+            handleFormReset();
         },
         [chosenType, clearErrors, handleFormReset, setError],
     );
@@ -279,9 +279,19 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         rows={3}
                     />
 
-                    <TextInput<ApplicationFormValues> name="contactName" label="Ansprechperson" required={true} />
+                    <TextInput<ApplicationFormValues>
+                        name="contactName"
+                        label="Ansprechperson"
+                        required={true}
+                        defaultValue="Carsten Dietzel"
+                    />
 
-                    <TextInput<ApplicationFormValues> name="contactMail" label="E-Mail-Adresse" required={true} />
+                    <TextInput<ApplicationFormValues>
+                        name="contactMail"
+                        label="E-Mail-Adresse"
+                        required={true}
+                        defaultValue="carsten.dietzel@googlemail.com"
+                    />
 
                     <TextInput<ApplicationFormValues> name="contactPhone" label="Telefonnummer" />
 
