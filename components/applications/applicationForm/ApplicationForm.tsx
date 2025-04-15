@@ -279,19 +279,9 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         rows={3}
                     />
 
-                    <TextInput<ApplicationFormValues>
-                        name="contactName"
-                        label="Ansprechperson"
-                        required={true}
-                        defaultValue="Carsten Dietzel"
-                    />
+                    <TextInput<ApplicationFormValues> name="contactName" label="Ansprechperson" required={true} />
 
-                    <TextInput<ApplicationFormValues>
-                        name="contactMail"
-                        label="E-Mail-Adresse"
-                        required={true}
-                        defaultValue="carsten.dietzel@googlemail.com"
-                    />
+                    <TextInput<ApplicationFormValues> name="contactMail" label="E-Mail-Adresse" required={true} />
 
                     <TextInput<ApplicationFormValues> name="contactPhone" label="Telefonnummer" />
 
