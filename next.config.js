@@ -13,9 +13,9 @@ module.exports = {
         if (!isServer) {
             config.externals = {
                 ...config.externals,
-                'uglify-js': 'uglify-js'
+                'uglify-js': 'uglify-js',
             };
         }
         return config;
-    }
+    },
 };
