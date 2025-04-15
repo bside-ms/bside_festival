@@ -6,9 +6,12 @@ import urlPathTypes from 'lib/participants/urlPathTypes';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import prismaClient from 'lib/common/prismaClient';
+import { Prisma, Type } from '@prisma/client';
+import SortOrder = Prisma.SortOrder;
+import GenreCreateManyInput = Prisma.GenreCreateManyInput;
 
 const getAllConcertGenres = async () => {
-    const allGenres = await prismaClient.concertGenre.findMany({ orderBy: { genre: 'asc' } });
+    const allGenres = await prismaClient.genre.findMany({ where: { type: Type.Concert }, orderBy: { name: SortOrder.asc } });
 
     if (allGenres.length !== 0) {
         return allGenres;
@@ -16,13 +19,13 @@ const getAllConcertGenres = async () => {
 
     const initialGenres = ['Indie', 'Rock', 'Pop', 'Hip-Hop', 'Elektro', 'Techno', 'Jazz', 'Funk', 'Singer-Songwriter', 'Metal'];
 
-    await prismaClient.concertGenre.createMany({ data: initialGenres.map((genre) => ({ genre })) });
+    await prismaClient.genre.createMany({ data: initialGenres.map<GenreCreateManyInput>((name) => ({ name, type: Type.Concert })) });
 
-    return prismaClient.concertGenre.findMany({ orderBy: { genre: 'asc' } });
+    return prismaClient.genre.findMany({ where: { type: Type.Concert }, orderBy: { name: SortOrder.asc } });
 };
 
 const getAllDiskJockeyGenres = async () => {
-    const allGenres = await prismaClient.diskJockeyGenre.findMany({ orderBy: { genre: 'asc' } });
+    const allGenres = await prismaClient.genre.findMany({ where: { type: Type.DiskJockey }, orderBy: { name: SortOrder.asc } });
 
     if (allGenres.length !== 0) {
         return allGenres;
@@ -41,9 +44,9 @@ const getAllDiskJockeyGenres = async () => {
         'Experimental',
     ];
 
-    await prismaClient.diskJockeyGenre.createMany({ data: initialGenres.map((genre) => ({ genre })) });
+    await prismaClient.genre.createMany({ data: initialGenres.map<GenreCreateManyInput>((name) => ({ name, type: Type.DiskJockey })) });
 
-    return prismaClient.diskJockeyGenre.findMany({ orderBy: { genre: 'asc' } });
+    return prismaClient.genre.findMany({ where: { type: Type.DiskJockey }, orderBy: { name: SortOrder.asc } });
 };
 
 export default async ({ params }: { params: Promise<{ type: string }> }): Promise<ReactElement> => {

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Footer from 'components/common/Footer';
 import backgroundImage from 'images/background2025.webp';
 import Image from 'next/image';
+import { FaArrowRight } from 'react-icons/fa';
 
 export default (): ReactElement => {
     return (
@@ -16,12 +17,10 @@ export default (): ReactElement => {
                     <div className="text-xs text-black">Veranstaltet vom B-Side Kultur e.V.</div>
                 </div>
 
-                <div className="h-3 w-full bg-red-600" />
+                <div className="h-1 w-full bg-red-600" />
 
-                <div className="p-5 text-left space-y-3 text-sm text-black">
-                    <p>
-                        <strong>Es geht wieder los: Das 9. B-Side Festival steht vor der Tür!</strong>
-                    </p>
+                <div className="p-5 text-left space-y-3 text-sm text-black leading-7">
+                    <p className="text-xl font-bold">Es geht wieder los: Das 9. B-Side Festival steht vor der Tür!</p>
 
                     <p>
                         Dieses Jahr sind wir wieder in der B-Side am Mittelhafen und im Hansaviertel! Ganz nach dem Motto{' '}
@@ -44,10 +43,12 @@ export default (): ReactElement => {
                     </p>
 
                     <Link
-                        className="mt-4 block w-full cursor-pointer select-none bg-red-600 py-3 text-center text-sm font-bold uppercase tracking-[0.3em] text-white"
+                        className="mt-4 block w-full cursor-pointer select-none bg-red-600 py-3 text-center text-sm font-bold uppercase tracking-[0.3em] text-white rounded-md sha"
                         href="/bewerbungen"
                     >
-                        zum Bewerbungsformular {'>>'}
+                        <span className="flex gap-2 justify-center items-center">
+                            zum Bewerbungsformular <FaArrowRight className="text-xl pt-[1px]" />
+                        </span>
                     </Link>
                 </div>
 

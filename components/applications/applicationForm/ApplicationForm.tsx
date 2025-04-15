@@ -54,8 +54,8 @@ export interface ApplicationFormValues {
 
 interface Props {
     chosenType: Type;
-    allConcertGenres: Array<{ id: number; genre: string }>;
-    allDiskJockeyGenres: Array<{ id: number; genre: string }>;
+    allConcertGenres: Array<{ id: number; name: string }>;
+    allDiskJockeyGenres: Array<{ id: number; name: string }>;
 }
 
 const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: Props): ReactElement => {
@@ -205,7 +205,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                             name="concertGenres"
                             label="Musikrichtungen"
                             info="Welche Genres beschreiben eure Musik am besten?"
-                            options={allConcertGenres.map(({ genre, id }) => ({ id, label: genre }))}
+                            options={allConcertGenres.map(({ id, name }) => ({ id, label: name }))}
                         />
                     )}
 
@@ -214,7 +214,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                             name="diskJockeyGenres"
                             label="Musikrichtungen"
                             info="Welche Genres beschreiben eure Musik am besten?"
-                            options={allDiskJockeyGenres.map(({ genre, id }) => ({ id, label: genre }))}
+                            options={allDiskJockeyGenres.map(({ id, name }) => ({ id, label: name }))}
                         />
                     )}
 

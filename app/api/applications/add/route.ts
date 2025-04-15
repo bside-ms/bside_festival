@@ -1,4 +1,5 @@
-import type { Participant, Type } from '@prisma/client';
+import type { Participant } from '@prisma/client';
+import { Type } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import prismaClient from 'lib/common/prismaClient';
 import uploadFileToIonos from 'lib/upload/uploadFileToIonos';
@@ -95,24 +96,20 @@ export const POST = async (request: Request): Promise<NextResponse<SuccessfulAdd
             hasMarginalizedParticipants,
             diversityNotes,
             allergies,
-            concertGenres: {
+            genres: {
                 create: [
                     ...concertGenres
                         .filter((genre): genre is number => typeof genre === 'number')
                         .map((id) => ({ genre: { connect: { id } } })),
                     ...concertGenres
                         .filter((genre): genre is string => typeof genre === 'string')
-                        .map((genre) => ({ genre: { create: { genre } } })),
-                ],
-            },
-            diskJockeyGenres: {
-                create: [
+                        .map((genre) => ({ genre: { create: { type: Type.Concert, name: genre } } })),
                     ...diskJockeyGenres
                         .filter((genre): genre is number => typeof genre === 'number')
                         .map((id) => ({ genre: { connect: { id } } })),
                     ...diskJockeyGenres
                         .filter((genre): genre is string => typeof genre === 'string')
-                        .map((genre) => ({ genre: { create: { genre } } })),
+                        .map((genre) => ({ genre: { create: { type: Type.DiskJockey, name: genre } } })),
                 ],
             },
             appliedAt: new Date(),

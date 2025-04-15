@@ -1,6 +1,5 @@
 'use client';
 
-/* eslint-disable react/jsx-no-bind */
 import type { ReactElement } from 'react';
 import { Controller, type FieldPath, type FieldValues, useFormContext } from 'react-hook-form';
 import type { MultiValue } from 'react-select';
@@ -26,32 +25,35 @@ const MultiSelectInput = <T extends FieldValues>({ name, label, info, options, d
         <div>
             <div className="text-white">{info}</div>
 
-            <div className="max-w-[350px]">
-                <Controller<T>
-                    control={control}
-                    name={name}
-                    // @ts-expect-error | Currently too late to find a good solution
-                    defaultValue={defaultOptions?.map(({ id }) => id)}
-                    render={({ field: { ref, onChange } }): ReactElement => (
-                        <CreatableSelect
-                            ref={ref}
-                            onChange={(newValues: MultiValue<LabelOption>): void => onChange(newValues.map(({ value }) => value))}
-                            defaultValue={defaultOptions?.map<LabelOption>(({ id, label }) => ({
-                                value: id,
-                                label,
-                            }))}
-                            isMulti={true}
-                            options={options.map<LabelOption>(({ id, label }) => ({
-                                value: id,
-                                label,
-                            }))}
-                            formatCreateLabel={(inputValue: string) => `„${inputValue}” hinzufügen`}
-                            placeholder={label}
-                            noOptionsMessage={() => 'Keine Auswahl verfügbar'}
-                        />
-                    )}
-                />
-            </div>
+            {/* eslint-disable react/jsx-no-bind */}
+            <Controller<T>
+                control={control}
+                name={name}
+                // @ts-expect-error | Currently too late to find a good solution
+                defaultValue={defaultOptions?.map(({ id }) => id)}
+                render={({ field: { ref, onChange } }): ReactElement => (
+                    <CreatableSelect
+                        ref={ref}
+                        onChange={(newValues: MultiValue<LabelOption>): void => onChange(newValues.map(({ value }) => value))}
+                        defaultValue={defaultOptions?.map<LabelOption>(({ id, label }) => ({
+                            value: id,
+                            label,
+                        }))}
+                        isMulti={true}
+                        options={options.map<LabelOption>(({ id, label }) => ({
+                            value: id,
+                            label,
+                        }))}
+                        formatCreateLabel={(inputValue: string) => `„${inputValue}” hinzufügen`}
+                        placeholder={label}
+                        noOptionsMessage={() => 'Keine Auswahl verfügbar'}
+                        classNames={{
+                            control: () => '!bg-transparent !border-white',
+                            placeholder: () => '!text-white/55',
+                        }}
+                    />
+                )}
+            />
         </div>
     );
 };
