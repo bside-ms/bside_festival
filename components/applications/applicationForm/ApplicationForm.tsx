@@ -132,7 +132,10 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
             });
 
             if (!response.ok) {
-                setError('root', { message: 'Fehler beim Submit!' });
+                setError('root', {
+                    message:
+                        'Leider ist beim Absenden ein unerwarteter Fehler aufgetreten. Versuche es bitte später nochmal! Wenn der Fehler bestehen bleibt, dann melde dich gerne bei uns über festival@b-side.ms oder direkt auf Instagram.',
+                });
                 return;
             }
 
@@ -306,6 +309,8 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         </div>
                     )}
 
+                    {errors.root && <div className="mt-2 text-red-600">{errors.root.message}</div>}
+
                     <div className="mt-5 flex flex-col gap-2 text-sm text-white">
                         <div>
                             Das B-Side Festival ist auch 2025 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
@@ -320,8 +325,6 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         </div>
                     </div>
                 </form>
-
-                {errors.root && <div className="mt-2 text-red-600">{errors.root.message}</div>}
             </div>
         </FormProvider>
     );
