@@ -6,6 +6,7 @@ import ApplicationOverviewAdditionalFilters from 'components/applications/applic
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import ApplicationsOverviewSearchTextFilter from 'components/applications/applicationsOverview/ApplicationsOverviewSearchTextFilter';
 import ApplicationsOverviewTypesFilter from 'components/applications/applicationsOverview/ApplicationsOverviewTypesFilter';
+import Link from 'next/link';
 
 const ApplicationsOverview = (): ReactElement => {
     const { allApplications, filteredApplications } = useApplicationsOverviewContext();
@@ -17,7 +18,13 @@ const ApplicationsOverview = (): ReactElement => {
 
     return (
         <div>
-            <div className="mb-5 font-display text-3xl">Bewerbungen ({applicationAmount})</div>
+            <Link href="/" className="flex items-center gap-3 text-red-600">
+                <div className="pt-1 text-2xl md:pt-2 md:text-3xl">B-Side Festival 2025</div>
+            </Link>
+
+            <div className="font-display text-white mb-5">
+                <div className="text-4xl font-bold">B-werbungen ({applicationAmount})</div>
+            </div>
 
             <ApplicationsOverviewSearchTextFilter />
 
@@ -26,10 +33,10 @@ const ApplicationsOverview = (): ReactElement => {
             <ApplicationOverviewAdditionalFilters />
 
             {filteredApplications.length === 0 ? (
-                <div className="mt-5 rounded-md p-3 font-bold text-gray-800 shadow-lg backdrop-blur-2xl md:p-5">
+                <div className="mt-5 rounded-md p-3 font-bold text-gray-200 shadow-lg backdrop-blur-2xl md:p-5">
                     {allApplications.length > 0
-                        ? 'Bisher sind noch keine Bewerbungen eingegangen!'
-                        : 'Zur aktuellen Filterung keine Bewerbungen gefunden!'}
+                        ? 'Zur aktuellen Filterung keine Bewerbungen gefunden!'
+                        : 'Bisher sind noch keine Bewerbungen eingegangen!'}
                 </div>
             ) : (
                 <div className="space-y-5">

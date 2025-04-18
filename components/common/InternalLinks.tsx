@@ -18,17 +18,17 @@ const InternalLinks = async (): Promise<ReactElement | null> => {
                 </Link>
             </div>
 
-            <div>
-                <Link href="/programm/" className="cursor-pointer underline">
-                    Programmübersicht
-                </Link>
-            </div>
+            {/*<div>*/}
+            {/*    <Link href="/programm/" className="cursor-pointer underline">*/}
+            {/*        Programmübersicht*/}
+            {/*    </Link>*/}
+            {/*</div>*/}
 
-            <div>
-                <Link href="/mithelfen/uebersicht" className="cursor-pointer underline">
-                    Helfer:innenübersicht
-                </Link>
-            </div>
+            {/*<div>*/}
+            {/*    <Link href="/mithelfen/uebersicht" className="cursor-pointer underline">*/}
+            {/*        Helfer:innenübersicht*/}
+            {/*    </Link>*/}
+            {/*</div>*/}
         </div>
     );
 };

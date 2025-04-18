@@ -31,7 +31,7 @@ const LinkBadge = ({ link }: { link: URL }): ReactElement => {
 
     return (
         <>
-            <CiGlobe /> {link.hostname.replace(/^www./, '')}
+            <CiGlobe /> <span className="text-sm">{link.hostname.replace(/^www./, '')}</span>
         </>
     );
 };
@@ -43,7 +43,7 @@ const ExternalLink = ({ link: { link } }: { link: Link }): ReactElement => {
         <NextLink
             href={normalizedLink}
             target="_blank"
-            className="inline-flex cursor-pointer items-center gap-1 rounded bg-gray-200/50 p-1  text-sky-700 hover:bg-gray-200/70"
+            className="inline-flex cursor-pointer text-xl items-center rounded bg-gray-400/40 gap-1 p-1 text-sky-400 hover:bg-gray-400/50"
         >
             <LinkBadge link={new URL(normalizedLink)} />
         </NextLink>
@@ -60,7 +60,7 @@ const ApplicationDetailsLinks = ({ links }: Props): ReactElement | null => {
     }
 
     return (
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
             {links.map((link) => (
                 <ExternalLink key={link.id} link={link} />
             ))}

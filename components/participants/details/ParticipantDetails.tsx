@@ -1,15 +1,14 @@
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { Link } from '@prisma/client';
-import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
-import AdditionalInfo from 'components/participants/details/AdditionalInfo';
-import Contacts from 'components/participants/details/Contacts';
-import DescriptionForm from 'components/participants/details/DescriptionForm';
-import Links from 'components/participants/details/Links';
+import ParticipantAdditionalInfo from 'components/participants/details/ParticipantAdditionalInfo';
+import ParticipantContacts from 'components/participants/details/ParticipantContacts';
+import ParticipantDescriptionForm from 'components/participants/details/ParticipantDescriptionForm';
+import ParticipantLinks from 'components/participants/details/ParticipantLinks';
 import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import ParticipantVenues from 'components/participants/details/ParticipantVenues';
-import TechnicalRider from 'components/participants/details/TechnicalRider';
+import ParticipantTechnicalRider from 'components/participants/details/ParticipantTechnicalRider';
 import TypeBadge from 'components/participants/details/TypeBadge';
 import {
     useParticipantSlots,
@@ -24,19 +23,18 @@ import VenueForm from 'components/participants/venueForm/VenueForm';
 import AttendeeForm from 'components/participants/attendeeForm/AttendeeForm';
 import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
 import SlotAttendeeData from 'components/participants/details/SlotAttendeeData';
-import MaterialExpenses from 'components/participants/details/MaterialExpenses';
-import CanProvideBackline from 'components/participants/details/CanProvideBackline';
+import ParticipantMaterialExpenses from 'components/participants/details/ParticipantMaterialExpenses';
+import ParticipantCanProvideBackline from 'components/participants/details/ParticipantCanProvideBackline';
 
 interface Props {
     participant: SerializableParticipant;
     links: Array<Link>;
     onCloseClick: () => void;
+    isLoggedIn: boolean;
 }
 
-const Details = ({ participant, links, onCloseClick }: Props): ReactElement | null => {
+const ParticipantDetails = ({ participant, links, onCloseClick, isLoggedIn }: Props): ReactElement | null => {
     const { areLocationOrDateRangeFiltersSet } = useParticipantsOverviewContext();
-
-    const { status } = useSession();
 
     const { id, name, type } = participant;
 
@@ -57,7 +55,7 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
 
             <div className="relative flex flex-col justify-between gap-4 bg-white p-3 text-gray-800 md:p-5">
                 <div className="flex flex-col justify-between gap-4 md:flex-row-reverse">
-                    <ParticipantImage participant={participant} />
+                    <ParticipantImage participant={participant} isLoggedIn={isLoggedIn} />
 
                     <div className="shrink grow-0">
                         <div className="mb-1">
@@ -74,9 +72,9 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
 
                         <ParticipantVenues participantId={id} />
 
-                        <DescriptionForm participant={participant} />
+                        <ParticipantDescriptionForm participant={participant} isLoggedIn={isLoggedIn} />
 
-                        <Links links={links} />
+                        <ParticipantLinks links={links} />
                     </div>
                 </div>
 
@@ -88,7 +86,7 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
                         </div>
                     )}
 
-                {status === 'authenticated' &&
+                {isLoggedIn &&
                     hasSlotOrVenue(type) === 'slot' &&
                     participantSlots.length === 1 &&
                     participantSlots[0] !== undefined &&
@@ -98,29 +96,29 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
                         </div>
                     )}
 
-                {status === 'authenticated' && hasSlotOrVenue(type) === 'slot' && (
+                {isLoggedIn && hasSlotOrVenue(type) === 'slot' && (
                     <div className="relative mt-1 rounded-md py-2 text-gray-800">
                         <SlotForm participantId={id} />
                     </div>
                 )}
 
-                {status === 'authenticated' && hasSlotOrVenue(type) === 'venue' && (
+                {isLoggedIn && hasSlotOrVenue(type) === 'venue' && (
                     <div className="relative mt-1 rounded-md py-2 text-gray-800">
                         <VenueForm participantId={id} />
                     </div>
                 )}
 
-                {status === 'authenticated' && (
+                {isLoggedIn && (
                     <div className="relative rounded-md py-2 text-gray-800">
-                        <Contacts participant={participant} />
+                        <ParticipantContacts participant={participant} />
 
-                        <MaterialExpenses participant={participant} />
+                        <ParticipantMaterialExpenses participant={participant} />
 
-                        <CanProvideBackline participant={participant} />
+                        <ParticipantCanProvideBackline participant={participant} />
 
-                        <TechnicalRider participant={participant} />
+                        <ParticipantTechnicalRider participant={participant} />
 
-                        <AdditionalInfo participant={participant} />
+                        <ParticipantAdditionalInfo participant={participant} />
                     </div>
                 )}
 
@@ -137,4 +135,4 @@ const Details = ({ participant, links, onCloseClick }: Props): ReactElement | nu
     );
 };
 
-export default Details;
+export default ParticipantDetails;

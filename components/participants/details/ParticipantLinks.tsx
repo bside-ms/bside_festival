@@ -43,7 +43,7 @@ const ExternalLink = ({ link: { link } }: { link: Link }): ReactElement => {
         <NextLink
             href={normalizedLink}
             target="_blank"
-            className="inline-flex cursor-pointer items-center gap-1 rounded bg-gray-200/50 p-1  text-sky-700 hover:bg-gray-200/70"
+            className="inline-flex cursor-pointer items-center gap-1 rounded bg-gray-200/50 p-1 text-sky-500 hover:bg-gray-200/70"
         >
             <LinkBadge link={new URL(normalizedLink)} />
         </NextLink>
@@ -54,7 +54,7 @@ interface Props {
     links: Array<Link>;
 }
 
-const Links = ({ links }: Props): ReactElement | null => {
+const ParticipantLinks = ({ links }: Props): ReactElement | null => {
     if (links.length === 0) {
         return null;
     }
@@ -68,4 +68,4 @@ const Links = ({ links }: Props): ReactElement | null => {
     );
 };
 
-export default Links;
+export default ParticipantLinks;

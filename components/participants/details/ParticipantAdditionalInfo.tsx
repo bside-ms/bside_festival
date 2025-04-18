@@ -6,7 +6,7 @@ interface Props {
     participant: SerializableParticipant;
 }
 
-const AdditionalInfo = ({ participant: { additionalInfo } }: Props): ReactElement | null => {
+const ParticipantAdditionalInfo = ({ participant: { additionalInfo } }: Props): ReactElement | null => {
     if (isEmptyString(additionalInfo)) {
         return null;
     }
@@ -19,4 +19,4 @@ const AdditionalInfo = ({ participant: { additionalInfo } }: Props): ReactElemen
     );
 };
 
-export default AdditionalInfo;
+export default ParticipantAdditionalInfo;

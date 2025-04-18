@@ -1,15 +1,16 @@
 import { useCallback } from 'react';
 import type { ReactElement } from 'react';
-import Details from 'components/participants/details/Details';
+import ParticipantDetails from 'components/participants/details/ParticipantDetails';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
-import ParticipantsPreview from 'components/participants/overview/ParticipantsPreview';
+import ParticipantPreview from 'components/participants/overview/ParticipantPreview';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     participant: SerializableParticipant;
+    isLoggedIn: boolean;
 }
 
-const ParticipantOverview = ({ participant }: Props): ReactElement => {
+const ParticipantOverview = ({ participant, isLoggedIn }: Props): ReactElement => {
     const { enhancedParticipantIds, toggleEnhancedParticipantId, getLinksOfParticipant } = useParticipantsOverviewContext();
 
     const { id } = participant;
@@ -17,10 +18,17 @@ const ParticipantOverview = ({ participant }: Props): ReactElement => {
     const handleEnhancedToggle = useCallback(() => toggleEnhancedParticipantId(id), [id, toggleEnhancedParticipantId]);
 
     if (enhancedParticipantIds.includes(id)) {
-        return <Details participant={participant} links={getLinksOfParticipant(id)} onCloseClick={handleEnhancedToggle} />;
+        return (
+            <ParticipantDetails
+                participant={participant}
+                links={getLinksOfParticipant(id)}
+                onCloseClick={handleEnhancedToggle}
+                isLoggedIn={isLoggedIn}
+            />
+        );
     }
 
-    return <ParticipantsPreview participant={participant} onClick={handleEnhancedToggle} />;
+    return <ParticipantPreview participant={participant} onClick={handleEnhancedToggle} />;
 };
 
 export default ParticipantOverview;

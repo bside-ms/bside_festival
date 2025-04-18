@@ -11,7 +11,7 @@ interface Props {
     participant: SerializableParticipant;
 }
 
-const TechnicalRider = ({ participant: { technicalRider, technicalRiderFileName } }: Props): ReactElement | null => {
+const ParticipantTechnicalRider = ({ participant: { technicalRider, technicalRiderFileName } }: Props): ReactElement | null => {
     if (isEmptyString(technicalRider) && isEmptyString(technicalRiderFileName)) {
         return null;
     }
@@ -33,4 +33,4 @@ const TechnicalRider = ({ participant: { technicalRider, technicalRiderFileName 
     );
 };
 
-export default TechnicalRider;
+export default ParticipantTechnicalRider;

@@ -12,7 +12,11 @@ import ParticipantsOverviewTypesFilter from 'components/participants/overview/Pa
 import { IoTriangle } from 'react-icons/io5';
 import cn from 'lib/common/helper/cn';
 
-const ParticipantsOverview = (): ReactElement => {
+interface Props {
+    isLoggedIn: boolean;
+}
+
+const ParticipantsOverview = ({ isLoggedIn }: Props): ReactElement => {
     const { filteredParticipants, pinnedParticipantIds, areFiltersSet } = useParticipantsOverviewContext();
 
     const pinnedParticipants = filteredParticipants.filter(({ id }) => pinnedParticipantIds.includes(id));
@@ -67,13 +71,13 @@ const ParticipantsOverview = (): ReactElement => {
 
             <div className="mb-20 grid grid-cols-1 gap-10">
                 {pinnedParticipants.map((participant) => (
-                    <ParticipantOverview key={participant.id} participant={participant} />
+                    <ParticipantOverview key={participant.id} participant={participant} isLoggedIn={isLoggedIn} />
                 ))}
 
                 {filteredParticipants
                     .filter(({ id }) => pinnedParticipants.length === 0 || !pinnedParticipantIds.includes(id))
                     .map((participant) => (
-                        <ParticipantOverview key={participant.id} participant={participant} />
+                        <ParticipantOverview key={participant.id} participant={participant} isLoggedIn={isLoggedIn} />
                     ))}
             </div>
 

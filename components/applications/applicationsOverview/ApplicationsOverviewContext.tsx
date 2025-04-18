@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import type { Label, Link, Participant, ParticipantLabel, Type } from '@prisma/client';
+import type { Genre, Label, Link, Participant, ParticipantGenre, ParticipantLabel, Type } from '@prisma/client';
 import Fuse from 'fuse.js';
 import type { Dispatch, PropsWithChildren, ReactElement, SetStateAction } from 'react';
 import { typesFilterQueryName } from 'components/participants/overview/ParticipantsOverviewTypesFilter';
@@ -15,6 +15,7 @@ interface ApplicationsOverviewContextData {
     allApplications: Array<SerializableParticipant>;
     filteredApplications: Array<SerializableParticipant>;
     participantLabels: Array<ParticipantLabel>;
+    participantGenres: Array<ParticipantGenre>;
     updateParticipantLabels: (participantLabels: Array<ParticipantLabel>) => void;
     searchText: string | null;
     setSearchText: Dispatch<SetStateAction<string | null>>;
@@ -25,6 +26,7 @@ interface ApplicationsOverviewContextData {
     toggleFilteredType: (type: Type) => void;
     updateApplication: (application: Participant) => void;
     allLabels: Array<Label & { count: 0 }>;
+    allGenres: Array<Genre & { count: 0 }>;
     updateAllLabels: (allLabels: Array<Label>) => void;
     filteredLabelIds: Array<number>;
     toggleFilteredLabelId: (labelId: number) => void;
@@ -37,15 +39,19 @@ const ApplicationsOverviewContext = createContext<ApplicationsOverviewContextDat
 interface Props extends PropsWithChildren {
     applications: Array<SerializableParticipant>;
     participantLabels: Array<ParticipantLabel>;
+    participantGenres: Array<ParticipantGenre>;
     allLinks: Array<Link>;
     allLabels: Array<Label>;
+    allGenres: Array<Genre>;
 }
 
 const ApplicationsOverviewContextProvider = ({
     applications: initialApplications,
     participantLabels: initialParticipantLabels,
+    participantGenres,
     allLinks,
     allLabels: initialAllLabels,
+    allGenres,
     children,
 }: Props): ReactElement => {
     const [allLabels, setAllLabels] = useState<Array<Label>>(initialAllLabels);
@@ -152,6 +158,7 @@ const ApplicationsOverviewContextProvider = ({
             value={{
                 allApplications: applications,
                 participantLabels,
+                participantGenres,
                 updateParticipantLabels: setParticipantLabels,
                 filteredApplications,
                 searchText,
@@ -163,6 +170,7 @@ const ApplicationsOverviewContextProvider = ({
                 toggleFilteredType,
                 updateApplication,
                 allLabels: allLabels.map((label) => ({ ...label, count: 0 })),
+                allGenres: allGenres.map((genre) => ({ ...genre, count: 0 })),
                 updateAllLabels: setAllLabels,
                 filteredLabelIds,
                 toggleFilteredLabelId: handleLabelFilterClick,

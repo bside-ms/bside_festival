@@ -6,7 +6,7 @@ interface Props {
     participant: SerializableParticipant;
 }
 
-const CanProvideBackline = ({ participant: { backlineSharing } }: Props): ReactElement | null => {
+const ParticipantCanProvideBackline = ({ participant: { backlineSharing } }: Props): ReactElement | null => {
     if (isEmptyString(backlineSharing)) {
         return null;
     }
@@ -19,4 +19,4 @@ const CanProvideBackline = ({ participant: { backlineSharing } }: Props): ReactE
     );
 };
 
-export default CanProvideBackline;
+export default ParticipantCanProvideBackline;

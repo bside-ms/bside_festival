@@ -67,7 +67,7 @@ const ApplicationOverviewAdditionalFilters = (): ReactElement => {
                                     name="minimumScore"
                                     defaultValue={filteredMinimumScore?.toString()}
                                 />
-                                <a className="cursor-pointer text-xs text-sky-700" onClick={handleReset}>
+                                <a className="cursor-pointer text-xs text-sky-500" onClick={handleReset}>
                                     zurücksetzen
                                 </a>
                             </div>

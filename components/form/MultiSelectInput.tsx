@@ -1,9 +1,12 @@
 'use client';
 
-import type { ReactElement } from 'react';
+import { ReactElement, useMemo } from 'react';
 import { Controller, type FieldPath, type FieldValues, useFormContext } from 'react-hook-form';
 import type { MultiValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
+import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import useIsMounted from 'lib/common/hooks/useIsMounted';
+import { uniqueId } from 'lodash';
 
 interface LabelOption {
     value: number | string; // Will be string, when new label
@@ -19,11 +22,23 @@ interface Props<T extends FieldValues> {
 }
 
 const MultiSelectInput = <T extends FieldValues>({ name, label, info, options, defaultOptions }: Props<T>): ReactElement => {
-    const { control } = useFormContext<T>();
+    const {
+        formState: { errors },
+        control,
+    } = useFormContext<T>();
+
+    const isMounted = useIsMounted();
+    const id = useMemo(() => (isMounted ? uniqueId(name) : undefined), [isMounted, name]);
+
+    const errorMessage = errors[name]?.message;
 
     return (
         <div>
-            <div className="text-white">{info}</div>
+            {isNotEmptyString(info) && (
+                <label htmlFor={id} className="px-1 text-base text-white">
+                    {info}
+                </label>
+            )}
 
             {/* eslint-disable react/jsx-no-bind */}
             <Controller<T>
@@ -44,16 +59,20 @@ const MultiSelectInput = <T extends FieldValues>({ name, label, info, options, d
                             value: id,
                             label,
                         }))}
+                        inputId={id}
                         formatCreateLabel={(inputValue: string) => `„${inputValue}” hinzufügen`}
                         placeholder={label}
-                        noOptionsMessage={() => 'Keine Auswahl verfügbar'}
+                        noOptionsMessage={() => 'Keine weiteren Optionen, tippt neue ein'}
                         classNames={{
                             control: () => '!bg-transparent !border-white',
                             placeholder: () => '!text-white/55',
+                            input: () => '!text-white',
                         }}
                     />
                 )}
             />
+
+            {typeof errorMessage === 'string' && <div className="px-1 text-pink-300">{errorMessage}</div>}
         </div>
     );
 };

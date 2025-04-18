@@ -6,17 +6,17 @@ interface Props {
     application: SerializableParticipant;
 }
 
-const ApplicationDetailsCanProvideBackline = ({ application: { backlineSharing } }: Props): ReactElement | null => {
-    if (isEmptyString(backlineSharing)) {
+const ApplicationDetailsAllergies = ({ application: { allergies } }: Props): ReactElement | null => {
+    if (isEmptyString(allergies)) {
         return null;
     }
 
     return (
         <div>
-            <div className="font-display">Backline-Sharing</div>
-            <div>{backlineSharing}</div>
+            <div className="font-display">Allergien</div>
+            <div>{allergies}</div>
         </div>
     );
 };
 
-export default ApplicationDetailsCanProvideBackline;
+export default ApplicationDetailsAllergies;

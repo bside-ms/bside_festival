@@ -1,11 +1,10 @@
-import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { default as NextLink } from 'next/link';
 import type { ReactElement } from 'react';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
+import { FaFilePdf } from 'react-icons/fa6';
 
 interface Props {
     application: SerializableParticipant;
@@ -19,14 +18,18 @@ const ApplicationDetailsTechnicalRider = ({ application: { technicalRider, techn
     const technicalRiderPdfUrl = isEmptyString(technicalRiderFileName) ? null : createPublicObjectUrl(technicalRiderFileName);
 
     return (
-        <div className="mt-4">
+        <div>
             <div className="font-display">Technical Rider</div>
 
             {isNotEmptyString(technicalRider) && <div>{technicalRider}</div>}
 
             {isNotEmptyString(technicalRiderPdfUrl) && (
-                <NextLink href={technicalRiderPdfUrl} target="_blank">
-                    <FontAwesomeIcon className="inline-block w-8 p-1" icon={faFilePdf} />
+                <NextLink
+                    href={technicalRiderPdfUrl}
+                    target="_blank"
+                    className="inline-flex cursor-pointer text-xl items-center rounded bg-gray-400/40 p-1 text-sky-500 hover:bg-gray-400/50"
+                >
+                    <FaFilePdf />
                 </NextLink>
             )}
         </div>

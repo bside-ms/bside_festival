@@ -10,7 +10,6 @@ import isGroupMember from 'lib/next-auth/isGroupMember';
 import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
 import { redirect } from 'next/navigation';
 import isLoggedIn from 'lib/next-auth/isLoggedIn';
-import Link from 'next/link';
 
 export default async (): Promise<ReactElement> => {
     if (!(await isLoggedIn())) {
@@ -23,7 +22,11 @@ export default async (): Promise<ReactElement> => {
 
     const participantLabels = await prismaClient.participantLabel.findMany();
 
+    const participantGenres = await prismaClient.participantGenre.findMany();
+
     const allLinks = await prismaClient.link.findMany();
+
+    const allGenres = await prismaClient.genre.findMany();
 
     // Just use all now, will be filtered out later
     const allLabels = await prismaClient.label.findMany();
@@ -32,16 +35,14 @@ export default async (): Promise<ReactElement> => {
         <div>
             <div className="relative min-h-screen w-full pb-16">
                 <div className="relative z-10">
-                    <Link href="/" className="flex items-center gap-3">
-                        <div className="pt-1 text-2xl md:pt-2 md:text-3xl">B-Side Festival 2025</div>
-                    </Link>
-
                     <div className="mx-auto max-w-7xl px-3">
                         <ApplicationsOverviewContextProvider
                             applications={applications}
                             participantLabels={participantLabels}
+                            participantGenres={participantGenres}
                             allLinks={allLinks}
                             allLabels={allLabels}
+                            allGenres={allGenres}
                         >
                             <ApplicationsOverview />
                         </ApplicationsOverviewContextProvider>

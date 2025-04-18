@@ -5,7 +5,6 @@ import type { ApplicationStatus, Label } from '@prisma/client';
 import { range } from 'lodash';
 import type { ReactElement } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import ApplicationCurationLabelSelect from 'components/applications/applicationCuration/ApplicationCurationLabelSelect';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import SelectInput from 'components/form/SelectInput';
 import TextArea from 'components/form/TextArea';
@@ -14,6 +13,7 @@ import statusLabels from 'lib/participants/status/statusLabels';
 import statusOrder from 'lib/participants/status/statusOrder';
 import type { SetCurationRequest, SuccessfulSetCurationResponse } from 'app/api/applications/curation/set/route';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
+import MultiSelectInput from 'components/form/MultiSelectInput';
 
 export const curationScoreOptions = [
     { value: '', label: 'Unbewertet' },
@@ -77,13 +77,14 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
         [application.id, clearErrors, setError, updateAllLabels, updateApplication, updateParticipantLabels],
     );
 
+    const { allLabels } = useApplicationsOverviewContext();
+
     return (
         <FormProvider {...methods}>
             <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex max-w-3xl flex-col gap-4">
-                <div className="font-display">Kuration</div>
-
                 <div className="max-w-[250px]">
                     <SelectInput<CurationFormValues>
+                        info="Kuration"
                         label="Bewertung"
                         name="curationScore"
                         defaultValue={application.curationScore?.toString()}
@@ -91,7 +92,13 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
                     />
                 </div>
 
-                <ApplicationCurationLabelSelect labels={labels} />
+                <MultiSelectInput<CurationFormValues>
+                    name="labels"
+                    options={allLabels}
+                    defaultOptions={labels}
+                    label="Auswählen…"
+                    info="Labels"
+                />
 
                 <TextArea<CurationFormValues>
                     name="curationInfo"
@@ -99,11 +106,10 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
                     defaultValue={application.curationInfo ?? undefined}
                 />
 
-                <div className="font-display">Status</div>
-
                 <div>
                     <div className="max-w-[250px]">
                         <SelectInput<CurationFormValues>
+                            info="Status"
                             label="Status"
                             name="applicationStatus"
                             defaultValue={application.status}
@@ -114,7 +120,7 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
                         />
                     </div>
 
-                    <div className="mt-1 text-xs">
+                    <div className="mt-1 text-xs text-gray-100">
                         Sobald der Status "{statusLabels.Confirmed}" gesetzt ist, wird der Programmpunkt im Programm aufgelistet! Auch mit
                         Status "{statusLabels.Canceled}" erscheint der Punkt mit entsprechendem Hinweis in der Programmliste.
                     </div>
@@ -131,7 +137,7 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
                 </label>
 
                 {isSubmitting && (
-                    <div className="text-black">
+                    <div className="text-gray-100">
                         <span className="mr-1">Wird gespeichert</span>{' '}
                         <span className="inline-block w-3 animate-spin">
                             <FontAwesomeIcon icon={faSpinner} />

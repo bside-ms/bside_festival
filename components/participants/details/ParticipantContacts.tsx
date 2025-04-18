@@ -9,7 +9,7 @@ interface Props {
     participant: SerializableParticipant;
 }
 
-const Contacts = ({ participant: { contactName, contactPhone, contactMail, residence } }: Props): ReactElement | null => {
+const ParticipantContacts = ({ participant: { contactName, contactPhone, contactMail, residence } }: Props): ReactElement | null => {
     if (isEmptyString(residence) && isEmptyString(contactName) && isEmptyString(contactMail) && isEmptyString(contactPhone)) {
         return null;
     }
@@ -52,4 +52,4 @@ const Contacts = ({ participant: { contactName, contactPhone, contactMail, resid
     );
 };
 
-export default Contacts;
+export default ParticipantContacts;

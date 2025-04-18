@@ -21,7 +21,7 @@ interface Props {
     onClick: () => void;
 }
 
-const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | null => {
+const ParticipantPreview = ({ participant, onClick }: Props): ReactElement | null => {
     const { areLocationOrDateRangeFiltersSet } = useParticipantsOverviewContext();
 
     const participantSlots = useParticipantSlots(participant.id);
@@ -86,4 +86,4 @@ const ParticipantsPreview = ({ participant, onClick }: Props): ReactElement | nu
     );
 };
 
-export default ParticipantsPreview;
+export default ParticipantPreview;

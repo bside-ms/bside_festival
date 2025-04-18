@@ -6,7 +6,7 @@ interface Props {
     participant: SerializableParticipant;
 }
 
-const MaterialExpenses = ({ participant: { materialExpenses } }: Props): ReactElement | null => {
+const ParticipantMaterialExpenses = ({ participant: { materialExpenses } }: Props): ReactElement | null => {
     if (isEmptyString(materialExpenses)) {
         return null;
     }
@@ -19,4 +19,4 @@ const MaterialExpenses = ({ participant: { materialExpenses } }: Props): ReactEl
     );
 };
 
-export default MaterialExpenses;
+export default ParticipantMaterialExpenses;

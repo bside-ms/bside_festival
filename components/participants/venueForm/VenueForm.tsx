@@ -145,7 +145,7 @@ const VenueForm = ({ participantId }: Props): ReactElement => {
                         </label>
 
                         {isSubmitting && (
-                            <div className="text-black">
+                            <div className="text-gray-100">
                                 <span className="mr-1">Wird gespeichert</span>{' '}
                                 <span className="inline-block w-3 animate-spin">
                                     <FontAwesomeIcon icon={faSpinner} />
@@ -160,7 +160,7 @@ const VenueForm = ({ participantId }: Props): ReactElement => {
 
             {participantVenues.length > 0 && (
                 <div className="mt-4 max-w-[350px]">
-                    <a onClick={handleVenueDelete} className="cursor-pointer text-sky-700">
+                    <a onClick={handleVenueDelete} className="cursor-pointer text-sky-500 hover:text-sky-600">
                         Ort löschen
                     </a>
                 </div>

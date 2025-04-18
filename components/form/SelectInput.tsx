@@ -27,7 +27,7 @@ const SelectInput = <T extends FieldValues>({
     const {
         formState: { errors },
         register,
-    } = useFormContext();
+    } = useFormContext<T>();
 
     const isMounted = useIsMounted();
     const id = useMemo(() => (isMounted ? uniqueId(name) : undefined), [isMounted, name]);
@@ -36,9 +36,15 @@ const SelectInput = <T extends FieldValues>({
 
     return (
         <div className="flex flex-col">
+            {isNotEmptyString(info) && (
+                <label htmlFor={id} className="px-1 text-base text-white">
+                    {info}
+                </label>
+            )}
+
             <select
                 id={id}
-                className="rounded border border-black bg-white p-1 py-2 outline-0"
+                className="rounded border border-white p-1 py-2 outline-0 text-white"
                 required={required}
                 defaultValue={defaultValue}
                 {...register(name, {
@@ -57,11 +63,6 @@ const SelectInput = <T extends FieldValues>({
                     </option>
                 ))}
             </select>
-            {isNotEmptyString(info) && (
-                <label htmlFor={id} className="px-1">
-                    {info}
-                </label>
-            )}
 
             {typeof errorMessage === 'string' && <div className="px-1 text-pink-300">{errorMessage}</div>}
         </div>

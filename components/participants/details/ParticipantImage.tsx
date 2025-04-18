@@ -13,7 +13,6 @@ import bytes from 'bytes';
 import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import cn from 'lib/common/helper/cn';
-import { useSession } from 'next-auth/react';
 import { DeleteImageRequest, SuccessfulDeleteImageResponse } from 'app/api/applications/update/image/delete/route';
 import { ReplaceImageRequest } from 'app/api/applications/update/image/replace/route';
 import allowedImageContentTypes from 'lib/upload/allowedImageContentTypes';
@@ -21,11 +20,10 @@ import allowedImageMaxFileSize from 'lib/upload/allowedImageMaxFileSize';
 
 interface Props {
     participant: SerializableParticipant;
+    isLoggedIn: boolean;
 }
 
-const ParticipantImage = ({ participant: { id, name, status, imageFileName } }: Props): ReactElement => {
-    const { status: sessionStatus } = useSession();
-
+const ParticipantImage = ({ participant: { id, name, status, imageFileName }, isLoggedIn }: Props): ReactElement => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const { updateParticipant } = useParticipantsOverviewContext();
@@ -117,7 +115,7 @@ const ParticipantImage = ({ participant: { id, name, status, imageFileName } }: 
                         <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />
                     </NextLink>
 
-                    {sessionStatus === 'authenticated' && (
+                    {isLoggedIn && (
                         <div className="absolute bottom-2 right-2 flex gap-2">
                             <label
                                 className="cursor-pointer rounded bg-white/50 p-1 text-gray-700 hover:bg-white/70"
@@ -145,7 +143,7 @@ const ParticipantImage = ({ participant: { id, name, status, imageFileName } }: 
                     )}
                 </>
             ) : (
-                sessionStatus === 'authenticated' && (
+                isLoggedIn && (
                     <>
                         <label
                             className="absolute left-2 top-2 cursor-pointer rounded bg-white/50 px-2 py-1 text-gray-700 hover:bg-white/70"

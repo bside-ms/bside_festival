@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useSession } from 'next-auth/react';
 import type { ReactElement } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import TextArea from 'components/form/TextArea';
@@ -16,11 +15,10 @@ interface DescriptionFormValues {
 
 interface Props {
     participant: SerializableParticipant;
+    isLoggedIn: boolean;
 }
 
-const DescriptionForm = ({ participant }: Props): ReactElement => {
-    const { status } = useSession();
-
+const ParticipantDescriptionForm = ({ participant, isLoggedIn }: Props): ReactElement => {
     const { updateParticipant } = useParticipantsOverviewContext();
 
     const [showForm, setShowForm] = useState(false);
@@ -67,8 +65,8 @@ const DescriptionForm = ({ participant }: Props): ReactElement => {
             <div className="mt-4">
                 <pre className="whitespace-pre-wrap font-display">{participant.updatedDescription ?? participant.description}</pre>
 
-                {status === 'authenticated' && (
-                    <a onClick={toggleShowForm} className="cursor-pointer text-sky-700">
+                {isLoggedIn && (
+                    <a onClick={toggleShowForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
                         Beschreibung bearbeiten…
                     </a>
                 )}
@@ -104,13 +102,13 @@ const DescriptionForm = ({ participant }: Props): ReactElement => {
                                 Speichern
                             </button>
                         </label>
-                        <a onClick={toggleShowForm} className="cursor-pointer text-sky-700">
+                        <a onClick={toggleShowForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
                             abbrechen
                         </a>
                     </div>
 
                     {isSubmitting && (
-                        <div className="text-black">
+                        <div className="text-gray-100">
                             <span className="mr-1">Wird gespeichert</span>{' '}
                             <span className="inline-block w-3 animate-spin">
                                 <FontAwesomeIcon icon={faSpinner} />
@@ -125,4 +123,4 @@ const DescriptionForm = ({ participant }: Props): ReactElement => {
     );
 };
 
-export default DescriptionForm;
+export default ParticipantDescriptionForm;

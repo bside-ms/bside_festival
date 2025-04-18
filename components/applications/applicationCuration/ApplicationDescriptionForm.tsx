@@ -60,9 +60,9 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
 
     if (!showForm) {
         return (
-            <div className="mt-4">
+            <div className="mt-4 text-gray-100">
                 <div>{application.updatedDescription ?? application.description}</div>
-                <a onClick={toggleShowForm} className="cursor-pointer text-sky-700">
+                <a onClick={toggleShowForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
                     Beschreibung bearbeiten…
                 </a>
             </div>
@@ -80,8 +80,8 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
                         rows={10}
                     />
 
-                    <div className="text-sm text-gray-800">
-                        <div className="font-bold text-gray-900">Ursprüngliche Beschreibung</div>
+                    <div className="text-sm text-gray-100">
+                        <div className="font-bold text-gray-400">Ursprüngliche Beschreibung</div>
                         <div>{application.description}</div>
                     </div>
 
@@ -95,13 +95,13 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
                                 Speichern
                             </button>
                         </label>
-                        <a onClick={toggleShowForm} className="cursor-pointer text-sky-700">
+                        <a onClick={toggleShowForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
                             abbrechen
                         </a>
                     </div>
 
                     {isSubmitting && (
-                        <div className="text-black">
+                        <div className="text-gray-100">
                             <span className="mr-1">Wird gespeichert</span>{' '}
                             <span className="inline-block w-3 animate-spin">
                                 <FontAwesomeIcon icon={faSpinner} />

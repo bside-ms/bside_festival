@@ -12,10 +12,10 @@ const ApplicationDetailsMaterialExpenses = ({ application: { materialExpenses } 
     }
 
     return (
-        <>
+        <div>
             <div className="font-display">Materialkosten</div>
             <div>{materialExpenses}</div>
-        </>
+        </div>
     );
 };
 

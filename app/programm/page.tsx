@@ -87,7 +87,9 @@ async function getData(): Promise<Props> {
 }
 
 export default async (): Promise<ReactElement> => {
-    if (!(await isLoggedIn())) {
+    const loggedIn = await isLoggedIn();
+
+    if (!loggedIn) {
         redirect('/');
     }
 
@@ -130,7 +132,7 @@ export default async (): Promise<ReactElement> => {
                                 allAttendees={allAttendees}
                                 isInDataPrivacyGroup={isInDataPrivacyGroup}
                             >
-                                <ParticipantsOverview />
+                                <ParticipantsOverview isLoggedIn={loggedIn} />
                             </ParticipantsOverviewContextProvider>
                         </div>
                     </div>
