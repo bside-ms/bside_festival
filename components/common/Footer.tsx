@@ -38,8 +38,8 @@ const Footer = ({ whiteBackground = false }: Props): ReactElement => {
         <div
             className={cn(
                 whiteBackground
-                    ? 'space-y-1 p-4 mt-4 text-center text-sm text-black border-t-4 border-red-600'
-                    : 'space-y-1 bg-black p-4 text-center text-sm text-white',
+                    ? 'space-y-1 p-4 pb-6 mt-4 text-center text-sm text-black border-t-4 border-red-600'
+                    : 'space-y-1 bg-black p-4 pb-6 text-center text-sm text-white',
             )}
         >
             <div>Veranstaltet durch den B-Side Kultur e.V.</div>

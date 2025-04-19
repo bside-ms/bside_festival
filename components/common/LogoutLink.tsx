@@ -1,12 +1,16 @@
 'use client';
 
-import type { ReactElement } from 'react';
+import { ReactElement, useCallback } from 'react';
+import { signOut } from 'next-auth/react';
 
 const LogoutLink = (): ReactElement => {
-    // todo
-    // return <a className="cursor-pointer underline">Abmelden</a>;
+    const handleLogOut = useCallback(() => signOut(), []);
 
-    return <div />;
+    return (
+        <a className="cursor-pointer underline" onClick={handleLogOut}>
+            Abmelden
+        </a>
+    );
 };
 
 export default LogoutLink;
