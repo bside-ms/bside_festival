@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
 import prismaClient from 'lib/common/prismaClient';
-import getAllAttendees from 'lib/participants/getAllAttendees';
 import sendSlotAttendConfirmationMail from 'lib/mail/sendSlotAttendConfirmationMail';
+import getAllAttendees from 'lib/participants/getAllAttendees';
+import { NextResponse } from 'next/server';
 import AllAttendees from 'typings/AllAttendees';
 
 export interface AttendSlotRequest {

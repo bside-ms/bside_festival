@@ -1,21 +1,21 @@
-import { type ChangeEvent, ReactElement, SyntheticEvent, useCallback, useState } from 'react';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import { default as NextLink } from 'next/link';
-import Image from 'next/image';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
-import isEmptyString from 'lib/common/helper/isEmptyString';
-import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
-import { BiTrash } from 'react-icons/bi';
-import { GrEdit } from 'react-icons/gr';
 import { DeleteImageRequest, SuccessfulDeleteImageResponse } from 'app/api/applications/update/image/delete/route';
-import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import { ReplaceImageRequest } from 'app/api/applications/update/image/replace/route';
-import { extension } from 'mime-types';
 import bytes from 'bytes';
+import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
 import cn from 'lib/common/helper/cn';
+import isEmptyString from 'lib/common/helper/isEmptyString';
+import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import allowedImageContentTypes from 'lib/upload/allowedImageContentTypes';
 import allowedImageMaxFileSize from 'lib/upload/allowedImageMaxFileSize';
+import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
+import { extension } from 'mime-types';
+import Image from 'next/image';
+import { default as NextLink } from 'next/link';
+import { type ChangeEvent, ReactElement, SyntheticEvent, useCallback, useState } from 'react';
+import { BiTrash } from 'react-icons/bi';
+import { GrEdit } from 'react-icons/gr';
+import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;
@@ -105,7 +105,7 @@ const ApplicationDetailsImage = ({ application: { id, name, imageFileName } }: P
                         <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />
                     </NextLink>
 
-                    <div className="absolute right-2 top-2 z-50 flex gap-2">
+                    <div className="absolute top-2 right-2 z-50 flex gap-2">
                         <label
                             className="cursor-pointer rounded bg-white/50 p-1 text-gray-700 hover:bg-white/70"
                             htmlFor={`file-upload-${id}`}
@@ -134,7 +134,7 @@ const ApplicationDetailsImage = ({ application: { id, name, imageFileName } }: P
             ) : (
                 <>
                     <label
-                        className="absolute left-2 top-2 cursor-pointer rounded bg-white/50 px-2 py-1 text-gray-700 hover:bg-white/70"
+                        className="absolute top-2 left-2 cursor-pointer rounded bg-white/50 px-2 py-1 text-gray-700 hover:bg-white/70"
                         htmlFor={`file-upload-${id}`}
                     >
                         Bild hinzufügen

@@ -1,12 +1,12 @@
 'use client';
 
-import { useCallback } from 'react';
-import isUrl from 'is-url';
-import type { ReactElement } from 'react';
-import { useFormContext } from 'react-hook-form';
 import type { ApplicationFormValues } from 'components/applications/applicationForm/ApplicationForm';
 import TextInput from 'components/form/TextInput';
+import isUrl from 'is-url';
 import isEmptyString from 'lib/common/helper/isEmptyString';
+import type { ReactElement } from 'react';
+import { useCallback } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 const Links = (): ReactElement => {
     const {

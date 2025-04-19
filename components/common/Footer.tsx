@@ -1,10 +1,10 @@
 import { faFacebookSquare, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Link from 'next/link';
-import type { ReactElement } from 'react';
 import InternalLinks from 'components/common/InternalLinks';
 import Login from 'components/common/Login';
 import cn from 'lib/common/helper/cn';
+import Link from 'next/link';
+import type { ReactElement } from 'react';
 
 interface Props {
     whiteBackground?: boolean;
@@ -38,7 +38,7 @@ const Footer = ({ whiteBackground = false }: Props): ReactElement => {
         <div
             className={cn(
                 whiteBackground
-                    ? 'space-y-1 p-4 pb-6 mt-4 text-center text-sm text-black border-t-4 border-red-600'
+                    ? 'mt-4 space-y-1 border-t-4 border-red-600 p-4 pb-6 text-center text-sm text-black'
                     : 'space-y-1 bg-black p-4 pb-6 text-center text-sm text-white',
             )}
         >

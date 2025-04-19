@@ -1,14 +1,14 @@
 'use client';
 
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import type { Genre, Label, Link, Participant, ParticipantGenre, ParticipantLabel, Type } from '@prisma/client';
-import Fuse from 'fuse.js';
-import type { Dispatch, PropsWithChildren, ReactElement, SetStateAction } from 'react';
 import { typesFilterQueryName } from 'components/participants/overview/ParticipantsOverviewTypesFilter';
+import Fuse from 'fuse.js';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 import isValidType from 'lib/participants/isValidType';
 import serializeParticipant from 'lib/participants/serializeParticipant';
+import type { Dispatch, PropsWithChildren, ReactElement, SetStateAction } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface ApplicationsOverviewContextData {

@@ -1,15 +1,15 @@
-import type { ReactElement } from 'react';
 import ApplicationsOverview from 'components/applications/applicationsOverview/ApplicationsOverview';
 import { ApplicationsOverviewContextProvider } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
 import prismaClient from 'lib/common/prismaClient';
-import serializeParticipant from 'lib/participants/serializeParticipant';
-import getAllParticipants from 'lib/participants/getAllParticipants';
 import isGroupMember from 'lib/next-auth/isGroupMember';
-import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
-import { redirect } from 'next/navigation';
 import isLoggedIn from 'lib/next-auth/isLoggedIn';
+import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
+import getAllParticipants from 'lib/participants/getAllParticipants';
+import serializeParticipant from 'lib/participants/serializeParticipant';
+import { redirect } from 'next/navigation';
+import type { ReactElement } from 'react';
 
 export default async (): Promise<ReactElement> => {
     if (!(await isLoggedIn())) {

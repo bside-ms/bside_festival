@@ -1,14 +1,18 @@
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { Link } from '@prisma/client';
-import type { ReactElement } from 'react';
+import AttendeeForm from 'components/participants/attendeeForm/AttendeeForm';
 import ParticipantAdditionalInfo from 'components/participants/details/ParticipantAdditionalInfo';
+import ParticipantCanProvideBackline from 'components/participants/details/ParticipantCanProvideBackline';
 import ParticipantContacts from 'components/participants/details/ParticipantContacts';
 import ParticipantDescriptionForm from 'components/participants/details/ParticipantDescriptionForm';
+import ParticipantImage from 'components/participants/details/ParticipantImage';
 import ParticipantLinks from 'components/participants/details/ParticipantLinks';
+import ParticipantMaterialExpenses from 'components/participants/details/ParticipantMaterialExpenses';
 import ParticipantSlots from 'components/participants/details/ParticipantSlots';
-import ParticipantVenues from 'components/participants/details/ParticipantVenues';
 import ParticipantTechnicalRider from 'components/participants/details/ParticipantTechnicalRider';
+import ParticipantVenues from 'components/participants/details/ParticipantVenues';
+import SlotAttendeeData from 'components/participants/details/SlotAttendeeData';
 import TypeBadge from 'components/participants/details/TypeBadge';
 import {
     useParticipantSlots,
@@ -16,15 +20,11 @@ import {
     useParticipantVenues,
 } from 'components/participants/overview/ParticipantsOverviewContext';
 import SlotForm from 'components/participants/slotsForm/SlotForm';
-import hasSlotOrVenue from 'lib/participants/hasSlotOrVenue';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
-import ParticipantImage from 'components/participants/details/ParticipantImage';
 import VenueForm from 'components/participants/venueForm/VenueForm';
-import AttendeeForm from 'components/participants/attendeeForm/AttendeeForm';
 import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
-import SlotAttendeeData from 'components/participants/details/SlotAttendeeData';
-import ParticipantMaterialExpenses from 'components/participants/details/ParticipantMaterialExpenses';
-import ParticipantCanProvideBackline from 'components/participants/details/ParticipantCanProvideBackline';
+import hasSlotOrVenue from 'lib/participants/hasSlotOrVenue';
+import type { ReactElement } from 'react';
+import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     participant: SerializableParticipant;

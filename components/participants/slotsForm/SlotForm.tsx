@@ -1,16 +1,16 @@
-import { useCallback, useState } from 'react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { ReactElement } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { DeleteSlotRequest, SuccessfulDeleteSlotResponse } from 'app/api/applications/slot/delete/route';
+import { ErroneousUpdateSlotResponse, SuccessfulUpdateSlotResponse, UpsertSlotRequest } from 'app/api/applications/slot/update/route';
 import DateTimeInput from 'components/form/DateTimeInput';
 import SelectInput from 'components/form/SelectInput';
 import TextInput from 'components/form/TextInput';
 import { useParticipantSlots, useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import formatDate from 'lib/common/helper/formatDate';
 import isEmptyString from 'lib/common/helper/isEmptyString';
-import { ErroneousUpdateSlotResponse, SuccessfulUpdateSlotResponse, UpsertSlotRequest } from 'app/api/applications/slot/update/route';
-import { DeleteSlotRequest, SuccessfulDeleteSlotResponse } from 'app/api/applications/slot/delete/route';
+import type { ReactElement } from 'react';
+import { useCallback, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 interface SlotFormValues {
     locationId: number;

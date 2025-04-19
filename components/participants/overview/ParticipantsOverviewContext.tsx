@@ -1,22 +1,22 @@
 'use client';
 
-import type { PropsWithChildren, ReactElement } from 'react';
-import { createContext, useCallback, useContext, useState } from 'react';
 import type { Attendee, Link, Location, Participant, ParticipantLabel, Type, Venue } from '@prisma/client';
-import { addHours, endOfHour, isAfter, isBefore, isSameMinute, startOfHour, subHours } from 'date-fns';
-import { first, last, uniq } from 'lodash';
 import { dateRangeFilterQueryName } from 'components/participants/overview/ParticipantsOverviewDateRangeFilter';
 import { locationsFilterQueryName } from 'components/participants/overview/ParticipantsOverviewLocationFilter';
 import { typesFilterQueryName } from 'components/participants/overview/ParticipantsOverviewTypesFilter';
+import { addHours, endOfHour, isAfter, isBefore, isSameMinute, startOfHour, subHours } from 'date-fns';
 import availableTypes from 'lib/applications/availableTypes';
 import { pinnedParticipantsCookieName, readCookie, setCookie } from 'lib/applications/cookies';
 import formatDate from 'lib/common/helper/formatDate';
 import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
 import isValidType from 'lib/participants/isValidType';
 import serializeParticipant from 'lib/participants/serializeParticipant';
+import { first, last, uniq } from 'lodash';
+import type { PropsWithChildren, ReactElement } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
+import AllAttendees from 'typings/AllAttendees';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 import type { SerializableSlot } from 'typings/SerializableSlot';
-import AllAttendees from 'typings/AllAttendees';
 
 interface ParticipantsOverviewContextData {
     allParticipants: Array<SerializableParticipant>;

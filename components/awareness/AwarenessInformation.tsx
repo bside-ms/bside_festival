@@ -1,6 +1,6 @@
+import AwarenessAlternativeLinks from 'components/awareness/AwarenessAlternativeLinks';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
-import AwarenessAlternativeLinks from 'components/awareness/AwarenessAlternativeLinks';
 
 const AwarenessInformation = (): ReactElement => {
     return (

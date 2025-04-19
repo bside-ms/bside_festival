@@ -1,10 +1,10 @@
 import type { Location } from '@prisma/client';
-import Image from 'next/image';
-import type { ReactElement } from 'react';
 import formatDate from 'lib/common/helper/formatDate';
 import isEmptyString from 'lib/common/helper/isEmptyString';
-import type { SerializableSlot } from 'typings/SerializableSlot';
 import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
+import Image from 'next/image';
+import type { ReactElement } from 'react';
+import type { SerializableSlot } from 'typings/SerializableSlot';
 
 interface Props {
     slot: SerializableSlot;

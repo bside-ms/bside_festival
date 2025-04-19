@@ -1,11 +1,11 @@
-import { useCallback, useEffect } from 'react';
 import type { Type } from '@prisma/client';
-import type { ReactElement } from 'react';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import useIsMounted from 'lib/common/hooks/useIsMounted';
 import typeColors from 'lib/participants/typeColors';
 import typeLabels from 'lib/participants/typeLabels';
+import type { ReactElement } from 'react';
+import { useCallback, useEffect } from 'react';
 
 export const typesFilterQueryName = 'types';
 
@@ -18,7 +18,7 @@ const TypeToggle = ({ type }: { type: Type }): ReactElement => {
 
     return (
         <div
-            className="select-none rounded-2xl border-2 border-dashed px-3 py-1 text-sm uppercase hover:opacity-90 md:cursor-pointer"
+            className="rounded-2xl border-2 border-dashed px-3 py-1 text-sm uppercase select-none hover:opacity-90 md:cursor-pointer"
             style={{
                 backgroundColor: typeColors[type],
                 borderColor: active ? '#444' : typeColors[type],

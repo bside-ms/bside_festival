@@ -1,10 +1,10 @@
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { default as NextLink } from 'next/link';
-import type { ReactElement } from 'react';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
+import { default as NextLink } from 'next/link';
+import type { ReactElement } from 'react';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {

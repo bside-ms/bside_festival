@@ -1,7 +1,7 @@
 'use client';
 
-import { ReactElement, useCallback } from 'react';
 import { signOut } from 'next-auth/react';
+import { ReactElement, useCallback } from 'react';
 
 const LogoutLink = (): ReactElement => {
     const handleLogOut = useCallback(() => signOut(), []);

@@ -1,6 +1,6 @@
-import type { ReactElement } from 'react';
 import ParticipantSlot from 'components/participants/details/ParticipantSlot';
 import type { ParticipantSlot as IParticipantSlot } from 'components/participants/overview/ParticipantsOverviewContext';
+import type { ReactElement } from 'react';
 
 interface Props {
     participantSlots: Array<IParticipantSlot>;

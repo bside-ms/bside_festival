@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import prismaClient from 'lib/common/prismaClient';
 import getAllSlots from 'lib/participants/getAllSlots';
+import { NextResponse } from 'next/server';
 import { SerializableSlot } from 'typings/SerializableSlot';
 
 export interface DeleteSlotRequest {

@@ -1,22 +1,22 @@
-import { type ChangeEvent, ReactElement, SyntheticEvent, useCallback, useState } from 'react';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import { default as NextLink } from 'next/link';
-import Image from 'next/image';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
-import isEmptyString from 'lib/common/helper/isEmptyString';
-import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
-import { BiTrash } from 'react-icons/bi';
-import { GrEdit } from 'react-icons/gr';
-import PinParticipantToggle from 'components/participants/overview/PinParticipantToggle';
-import { extension } from 'mime-types';
-import bytes from 'bytes';
-import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
-import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
-import cn from 'lib/common/helper/cn';
 import { DeleteImageRequest, SuccessfulDeleteImageResponse } from 'app/api/applications/update/image/delete/route';
 import { ReplaceImageRequest } from 'app/api/applications/update/image/replace/route';
+import bytes from 'bytes';
+import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
+import PinParticipantToggle from 'components/participants/overview/PinParticipantToggle';
+import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
+import cn from 'lib/common/helper/cn';
+import isEmptyString from 'lib/common/helper/isEmptyString';
+import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import allowedImageContentTypes from 'lib/upload/allowedImageContentTypes';
 import allowedImageMaxFileSize from 'lib/upload/allowedImageMaxFileSize';
+import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
+import { extension } from 'mime-types';
+import Image from 'next/image';
+import { default as NextLink } from 'next/link';
+import { type ChangeEvent, ReactElement, SyntheticEvent, useCallback, useState } from 'react';
+import { BiTrash } from 'react-icons/bi';
+import { GrEdit } from 'react-icons/gr';
+import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     participant: SerializableParticipant;
@@ -116,7 +116,7 @@ const ParticipantImage = ({ participant: { id, name, status, imageFileName }, is
                     </NextLink>
 
                     {isLoggedIn && (
-                        <div className="absolute bottom-2 right-2 flex gap-2">
+                        <div className="absolute right-2 bottom-2 flex gap-2">
                             <label
                                 className="cursor-pointer rounded bg-white/50 p-1 text-gray-700 hover:bg-white/70"
                                 htmlFor={`file-upload-${id}`}
@@ -146,7 +146,7 @@ const ParticipantImage = ({ participant: { id, name, status, imageFileName }, is
                 isLoggedIn && (
                     <>
                         <label
-                            className="absolute left-2 top-2 cursor-pointer rounded bg-white/50 px-2 py-1 text-gray-700 hover:bg-white/70"
+                            className="absolute top-2 left-2 cursor-pointer rounded bg-white/50 px-2 py-1 text-gray-700 hover:bg-white/70"
                             htmlFor={`file-upload-${id}`}
                         >
                             Bild hinzufügen

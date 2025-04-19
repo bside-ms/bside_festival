@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { ReactElement } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
 import { curationScoreOptions } from 'components/applications/applicationCuration/ApplicationCurationForm';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import SelectInput from 'components/form/SelectInput';
 import isEmptyString from 'lib/common/helper/isEmptyString';
+import type { ReactElement } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 interface AdditionFiltersFormValues {
     minimumScore: string;
@@ -52,7 +52,7 @@ const ApplicationOverviewAdditionalFilters = (): ReactElement => {
                         <div className="flex">
                             <a
                                 onClick={toggleShowAdditionalFilters}
-                                className="flex cursor-pointer select-none items-center gap-1 rounded-t-xl bg-gray-200 px-3 py-2 text-sm"
+                                className="flex cursor-pointer items-center gap-1 rounded-t-xl bg-gray-200 px-3 py-2 text-sm select-none"
                             >
                                 Weitere Filter <FontAwesomeIcon className="w-2" icon={faChevronUp} />
                             </a>
@@ -78,7 +78,7 @@ const ApplicationOverviewAdditionalFilters = (): ReactElement => {
                                     {usedLabels.map(({ id, label }) => (
                                         <div
                                             key={id}
-                                            className="cursor-pointer select-none rounded-2xl border border-gray-700 bg-gray-200 px-3 py-1 text-xs uppercase text-gray-700"
+                                            className="cursor-pointer rounded-2xl border border-gray-700 bg-gray-200 px-3 py-1 text-xs text-gray-700 uppercase select-none"
                                             data-label-id={id}
                                             style={{ borderStyle: filteredLabelIds.includes(id) ? 'dashed' : undefined }}
                                             // @ts-expect-error | Will fix this later
@@ -95,7 +95,7 @@ const ApplicationOverviewAdditionalFilters = (): ReactElement => {
                     <div className="flex">
                         <a
                             onClick={toggleShowAdditionalFilters}
-                            className="flex cursor-pointer select-none items-center gap-1 rounded-xl bg-gray-200 px-3 py-2 text-sm"
+                            className="flex cursor-pointer items-center gap-1 rounded-xl bg-gray-200 px-3 py-2 text-sm select-none"
                         >
                             Weitere Filter <FontAwesomeIcon className="w-2" icon={faChevronDown} />
                         </a>

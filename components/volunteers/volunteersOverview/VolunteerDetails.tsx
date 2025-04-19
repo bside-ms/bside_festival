@@ -1,8 +1,8 @@
 import type { Volunteer } from '@prisma/client';
-import type { ReactElement } from 'react';
-import type { VolunteerDayPreferenceKey } from 'lib/volunteers/VolunteerPreference';
 import cn from 'lib/common/helper/cn';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import type { VolunteerDayPreferenceKey } from 'lib/volunteers/VolunteerPreference';
+import type { ReactElement } from 'react';
 
 interface Props {
     volunteer: Volunteer;
@@ -17,7 +17,7 @@ const dayPreferences = new Array<[VolunteerDayPreferenceKey, string]>(
 
 const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement => {
     return (
-        <div className="rounded-md bg-gray-50 px-4 pb-3 pt-2 drop-shadow-sm">
+        <div className="rounded-md bg-gray-50 px-4 pt-2 pb-3 drop-shadow-sm">
             <div className="mb-2 text-xl">{volunteer.fullName}</div>
 
             {showSensitiveData && (
@@ -44,7 +44,7 @@ const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement
             </div>
 
             {isNotEmptyString(volunteer.additionalInfo) && (
-                <pre className="mt-4 whitespace-pre-wrap border-l-2 border-gray-400 pl-3 font-sans italic text-gray-600">
+                <pre className="mt-4 border-l-2 border-gray-400 pl-3 font-sans whitespace-pre-wrap text-gray-600 italic">
                     {volunteer.additionalInfo}
                 </pre>
             )}

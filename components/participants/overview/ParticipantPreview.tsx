@@ -1,5 +1,3 @@
-import Image from 'next/image';
-import type { ReactElement } from 'react';
 import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import ParticipantVenues from 'components/participants/details/ParticipantVenues';
 import TypeBadge from 'components/participants/details/TypeBadge';
@@ -9,12 +7,14 @@ import {
     useParticipantVenues,
 } from 'components/participants/overview/ParticipantsOverviewContext';
 import PinParticipantToggle from 'components/participants/overview/PinParticipantToggle';
+import cn from 'lib/common/helper/cn';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import hasSlotOrVenue from 'lib/participants/hasSlotOrVenue';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
+import Image from 'next/image';
+import type { ReactElement } from 'react';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
-import cn from 'lib/common/helper/cn';
 
 interface Props {
     participant: SerializableParticipant;
@@ -50,7 +50,7 @@ const ParticipantPreview = ({ participant, onClick }: Props): ReactElement | nul
                 <div
                     className={cn(
                         'relative min-h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3',
-                        isEmptyString(imageUrl) && 'min-h-0 h-[50px]',
+                        isEmptyString(imageUrl) && 'h-[50px] min-h-0',
                     )}
                 >
                     <PinParticipantToggle participantId={id} />

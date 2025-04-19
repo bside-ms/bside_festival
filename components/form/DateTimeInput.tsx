@@ -1,12 +1,12 @@
-import { useMemo } from 'react';
-import { uniqueId } from 'lodash';
-import type { ReactElement } from 'react';
-import type { FieldPath, FieldValues } from 'react-hook-form';
-import { useFormContext } from 'react-hook-form';
+import cn from 'lib/common/helper/cn';
 import isEmptyNumber from 'lib/common/helper/isEmptyNumber';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import useIsMounted from 'lib/common/hooks/useIsMounted';
-import cn from 'lib/common/helper/cn';
+import { uniqueId } from 'lodash';
+import type { ReactElement } from 'react';
+import { useMemo } from 'react';
+import type { FieldPath, FieldValues } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 interface Props<T extends FieldValues> {
     name: FieldPath<T>;
@@ -43,7 +43,7 @@ const DateTimeInput = <T extends FieldValues>({
                 id={id}
                 type="datetime-local"
                 className={cn(
-                    'rounded border border-black p-2 outline-0 text-white placeholder:text-white placeholder:opacity-55',
+                    'rounded border border-black p-2 text-white outline-0 placeholder:text-white placeholder:opacity-55',
                     typeof errorMessage === 'string' && 'bg-rose-400',
                 )}
                 required={required}

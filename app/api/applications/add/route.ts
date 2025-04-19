@@ -1,14 +1,14 @@
 import type { Participant } from '@prisma/client';
 import { Type } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import prismaClient from 'lib/common/prismaClient';
-import uploadFileToIonos from 'lib/upload/uploadFileToIonos';
+import sendApplicationConfirmationMail from 'lib/mail/sendApplicationConfirmationMail';
 import allowedImageContentTypes from 'lib/upload/allowedImageContentTypes';
 import allowedImageMaxFileSize from 'lib/upload/allowedImageMaxFileSize';
 import allowedTechnicRiderContentType from 'lib/upload/allowedTechnicRiderContentType';
 import allowedTechnicalRiderMaxFileSize from 'lib/upload/allowedTechnicalRiderMaxFileSize';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import sendApplicationConfirmationMail from 'lib/mail/sendApplicationConfirmationMail';
+import uploadFileToIonos from 'lib/upload/uploadFileToIonos';
+import { NextResponse } from 'next/server';
 
 export interface AddParticipantRequest {
     type: Type;

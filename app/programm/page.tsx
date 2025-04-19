@@ -1,24 +1,24 @@
-import type { Link as PrismaLink, Location, ParticipantLabel, Venue } from '@prisma/client';
-import { isAfter, isEqual } from 'date-fns';
-import { ReactElement } from 'react';
+import type { Location, ParticipantLabel, Link as PrismaLink, Venue } from '@prisma/client';
 import Footer from 'components/common/Footer';
 import ParticipantsOverview from 'components/participants/overview/ParticipantsOverview';
 import { ParticipantsOverviewContextProvider } from 'components/participants/overview/ParticipantsOverviewContext';
+import { isAfter, isEqual } from 'date-fns';
 import prismaClient from 'lib/common/prismaClient';
+import isGroupMember from 'lib/next-auth/isGroupMember';
+import isLoggedIn from 'lib/next-auth/isLoggedIn';
+import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
+import getAllAttendees from 'lib/participants/getAllAttendees';
+import getAllParticipants from 'lib/participants/getAllParticipants';
 import getAllSlots from 'lib/participants/getAllSlots';
 import getAllVenues from 'lib/participants/getAllVenues';
 import serializeParticipant from 'lib/participants/serializeParticipant';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
-import type { SerializableSlot } from 'typings/SerializableSlot';
-import getAllParticipants from 'lib/participants/getAllParticipants';
-import getAllAttendees from 'lib/participants/getAllAttendees';
-import type AllAttendees from 'typings/AllAttendees';
-import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
 import Image from 'next/image';
 import Link from 'next/link';
-import isGroupMember from 'lib/next-auth/isGroupMember';
-import isLoggedIn from 'lib/next-auth/isLoggedIn';
 import { redirect } from 'next/navigation';
+import { ReactElement } from 'react';
+import type AllAttendees from 'typings/AllAttendees';
+import type { SerializableParticipant } from 'typings/SerializableParticipant';
+import type { SerializableSlot } from 'typings/SerializableSlot';
 
 interface Props {
     participants: Array<SerializableParticipant>;
@@ -100,20 +100,20 @@ export default async (): Promise<ReactElement> => {
     return (
         <div>
             <div className="relative z-10 mx-auto min-h-screen w-full max-w-2xl font-display">
-                <div className="bg-white py-3 text-center font-bold uppercase tracking-[0.3em] text-[#5ff450]">
+                <div className="bg-white py-3 text-center font-bold tracking-[0.3em] text-[#5ff450] uppercase">
                     19. & 20. September 2025
                 </div>
                 <div className="h-10 w-full bg-black" />
                 <Link
                     href="/"
-                    className="block w-full cursor-pointer bg-white py-3 text-center font-bold uppercase tracking-[0.3em] text-black"
+                    className="block w-full cursor-pointer bg-white py-3 text-center font-bold tracking-[0.3em] text-black uppercase"
                 >
                     B-Side Festival 2025
                 </Link>
 
                 <div className="h-5 w-full bg-black" />
 
-                <div className="block w-full cursor-pointer select-none bg-[#FDF85D] py-3 text-center text-xl font-bold uppercase tracking-[0.3em]">
+                <div className="block w-full cursor-pointer bg-[#FDF85D] py-3 text-center text-xl font-bold tracking-[0.3em] uppercase select-none">
                     Programm
                 </div>
 

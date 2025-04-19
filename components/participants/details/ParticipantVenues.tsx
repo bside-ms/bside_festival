@@ -1,6 +1,6 @@
-import type { ReactElement } from 'react';
 import ParticipantVenue from 'components/participants/details/ParticipantVenue';
 import { useParticipantVenues } from 'components/participants/overview/ParticipantsOverviewContext';
+import type { ReactElement } from 'react';
 
 interface Props {
     participantId: number;

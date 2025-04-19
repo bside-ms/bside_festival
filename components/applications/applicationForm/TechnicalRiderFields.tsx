@@ -1,20 +1,20 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Type } from '@prisma/client';
 import bytes from 'bytes';
-import { uniqueId } from 'lodash';
-import type { ChangeEvent, ReactElement } from 'react';
-import { useFormContext } from 'react-hook-form';
 import type { ApplicationFormValues } from 'components/applications/applicationForm/ApplicationForm';
 import TextArea from 'components/form/TextArea';
 import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import cn from 'lib/common/helper/cn';
+import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import allowedTechnicRiderContentType from 'lib/upload/allowedTechnicRiderContentType';
 import allowedTechnicalRiderMaxFileSize from 'lib/upload/allowedTechnicalRiderMaxFileSize';
+import { uniqueId } from 'lodash';
+import type { ChangeEvent, ReactElement } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 const fileFieldName: keyof ApplicationFormValues = 'encodedTechnicalRiderPdf';
 
@@ -168,7 +168,7 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
                     <label htmlFor={fileInputId.current} className="cursor-pointer">
                         <div
                             className={cn(
-                                'flex p-5 w-full items-center justify-center rounded border border-dashed border-white',
+                                'flex w-full items-center justify-center rounded border border-dashed border-white p-5',
                                 typeof technicalRiderErrorMessage === 'string' && 'bg-rose-400',
                             )}
                         >

@@ -1,7 +1,7 @@
 import { createTransport } from 'nodemailer';
 import type Mail from 'nodemailer/lib/mailer';
-import type { SentMessageInfo } from 'nodemailer/lib/smtp-transport';
 import type SMTPTransport from 'nodemailer/lib/smtp-transport';
+import type { SentMessageInfo } from 'nodemailer/lib/smtp-transport';
 
 let mailTransport: Mail<SentMessageInfo> | null = null;
 

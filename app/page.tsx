@@ -1,15 +1,15 @@
-import { ReactElement } from 'react';
-import Link from 'next/link';
 import Footer from 'components/common/Footer';
 import backgroundImage from 'images/background2025.webp';
 import Image from 'next/image';
+import Link from 'next/link';
+import { ReactElement } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 
 export default (): ReactElement => {
     return (
         <div>
             <div className="relative mx-auto min-h-screen w-full max-w-2xl font-display">
-                <div className="py-3 text-center font-bold uppercase tracking-[0.3em] text-red-600">19. & 20. September 2025</div>
+                <div className="py-3 text-center font-bold tracking-[0.3em] text-red-600 uppercase">19. & 20. September 2025</div>
 
                 <Image src={backgroundImage} alt="Festival-Plakat" className="object-cover" />
 
@@ -19,7 +19,7 @@ export default (): ReactElement => {
 
                 <div className="h-1 w-full bg-red-600" />
 
-                <div className="p-5 text-left space-y-3 text-sm text-black leading-7">
+                <div className="space-y-3 p-5 text-left text-sm leading-7 text-black">
                     <p className="text-xl font-bold">Es geht wieder los: Das 9. B-Side Festival steht vor der Tür!</p>
 
                     <p>
@@ -43,11 +43,11 @@ export default (): ReactElement => {
                     </p>
 
                     <Link
-                        className="mt-4 block w-full cursor-pointer select-none bg-red-600 py-3 text-center text-sm font-bold uppercase tracking-[0.3em] text-white rounded-md sha"
+                        className="sha mt-4 block w-full cursor-pointer rounded-md bg-red-600 py-3 text-center text-sm font-bold tracking-[0.3em] text-white uppercase select-none"
                         href="/bewerbungen"
                     >
-                        <span className="flex gap-2 justify-center items-center px-2">
-                            hier bewerben <FaArrowRight className="text-xl pt-[1px]" />
+                        <span className="flex items-center justify-center gap-2 px-2">
+                            hier bewerben <FaArrowRight className="pt-[1px] text-xl" />
                         </span>
                     </Link>
                 </div>

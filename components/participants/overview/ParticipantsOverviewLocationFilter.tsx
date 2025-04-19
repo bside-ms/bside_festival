@@ -1,9 +1,9 @@
-import { useCallback, useEffect } from 'react';
 import type { Location } from '@prisma/client';
-import type { ReactElement } from 'react';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import useIsMounted from 'lib/common/hooks/useIsMounted';
+import type { ReactElement } from 'react';
+import { useCallback, useEffect } from 'react';
 
 export const locationsFilterQueryName = 'locations';
 
@@ -24,7 +24,7 @@ const LocationGroupToggle = ({ locations }: { locations: Array<Location> }): Rea
 
     return (
         <div
-            className="select-none rounded border-2 border-dashed border-gray-200 bg-gray-200 px-3 py-1 text-sm uppercase hover:opacity-90 md:cursor-pointer"
+            className="rounded border-2 border-dashed border-gray-200 bg-gray-200 px-3 py-1 text-sm uppercase select-none hover:opacity-90 md:cursor-pointer"
             style={{ borderColor: isActive ? '#444' : undefined }}
             onClick={handleClick}
         >
@@ -44,7 +44,7 @@ const LocationIdToggle = ({ locationId }: { locationId: number }): ReactElement 
 
     return (
         <div
-            className="select-none rounded border-2 border-dashed border-gray-200 bg-gray-200 px-3 py-1 text-sm uppercase md:cursor-pointer"
+            className="rounded border-2 border-dashed border-gray-200 bg-gray-200 px-3 py-1 text-sm uppercase select-none md:cursor-pointer"
             style={{ borderColor: isActive ? '#444' : undefined }}
             onClick={handleClick}
         >

@@ -1,8 +1,8 @@
-import { extension } from 'mime-types';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import hashData from 'lib/crypto/hashData';
 import createPutObjectCommand from 'lib/upload/createPutObjectCommand';
 import createS3Client from 'lib/upload/createS3Client';
+import { extension } from 'mime-types';
 
 const generateFileName = (base64Data: string, contentType: string): string => {
     const fileExtension = extension(contentType);

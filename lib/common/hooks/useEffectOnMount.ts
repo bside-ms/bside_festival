@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import type { EffectCallback } from 'react';
+import { useEffect } from 'react';
 
 /**
  * Just a small hook to use when you want to make it explicit that this

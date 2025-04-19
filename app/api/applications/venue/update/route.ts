@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
-import prismaClient from 'lib/common/prismaClient';
 import { Venue } from '@prisma/client';
+import prismaClient from 'lib/common/prismaClient';
 import getAllVenues from 'lib/participants/getAllVenues';
+import { NextResponse } from 'next/server';
 
 export interface UpsertVenueRequest {
     participantId: number;

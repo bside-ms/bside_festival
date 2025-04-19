@@ -1,5 +1,5 @@
-import process from 'process';
 import isEmptyString from 'lib/common/helper/isEmptyString';
+import process from 'process';
 
 const createPublicObjectUrl = (fileName: string): string => {
     if (isEmptyString(process.env.NEXT_PUBLIC_IONOS_HOST_NAME) || isEmptyString(process.env.NEXT_PUBLIC_IONOS_BUCKET_NAME)) {

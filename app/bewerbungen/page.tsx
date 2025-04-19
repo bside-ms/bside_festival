@@ -1,8 +1,8 @@
-import type { ReactElement } from 'react';
 import ApplicationTypeSelection from 'components/applications/applicationForm/ApplicationTypeSelection';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
 import Link from 'next/link';
+import type { ReactElement } from 'react';
 
 export default async (): Promise<ReactElement> => {
     return (
@@ -15,7 +15,7 @@ export default async (): Promise<ReactElement> => {
                         </Link>
 
                         <div className="flex w-full flex-col gap-6">
-                            <div className="font-display text-white text-4xl font-bold">B-werbung</div>
+                            <div className="font-display text-4xl font-bold text-white">B-werbung</div>
 
                             <div className="text-white">
                                 Auf dem B-Side Festival gibt es viele verschiedene Möglichkeiten, sich einzubringen. Damit wir den Überblick

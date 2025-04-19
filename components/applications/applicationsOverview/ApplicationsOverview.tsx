@@ -1,12 +1,12 @@
 'use client';
 
-import type { ReactElement } from 'react';
 import Application from 'components/applications/applicationsOverview/Application';
 import ApplicationOverviewAdditionalFilters from 'components/applications/applicationsOverview/ApplicationOverviewAdditionalFilters';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import ApplicationsOverviewSearchTextFilter from 'components/applications/applicationsOverview/ApplicationsOverviewSearchTextFilter';
 import ApplicationsOverviewTypesFilter from 'components/applications/applicationsOverview/ApplicationsOverviewTypesFilter';
 import Link from 'next/link';
+import type { ReactElement } from 'react';
 
 const ApplicationsOverview = (): ReactElement => {
     const { allApplications, filteredApplications } = useApplicationsOverviewContext();
@@ -22,7 +22,7 @@ const ApplicationsOverview = (): ReactElement => {
                 <div className="pt-1 text-2xl md:pt-2 md:text-3xl">B-Side Festival 2025</div>
             </Link>
 
-            <div className="font-display text-white mb-5">
+            <div className="mb-5 font-display text-white">
                 <div className="text-4xl font-bold">B-werbungen ({applicationAmount})</div>
             </div>
 

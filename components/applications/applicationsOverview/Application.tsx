@@ -1,8 +1,8 @@
-import { useCallback } from 'react';
-import type { ReactElement } from 'react';
 import ApplicationDetails from 'components/applications/applicationDetails/ApplicationDetails';
 import ApplicationPreview from 'components/applications/applicationPreview/ApplicationPreview';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
+import type { ReactElement } from 'react';
+import { useCallback } from 'react';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {

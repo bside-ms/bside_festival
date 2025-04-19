@@ -1,15 +1,15 @@
 import type { Genre, Label } from '@prisma/client';
-import Image from 'next/image';
-import type { ReactElement } from 'react';
 import ApplicationLabels from 'components/applications/common/ApplicationLabels';
 import TypeBadge from 'components/participants/details/TypeBadge';
+import cn from 'lib/common/helper/cn';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import statusLabels from 'lib/participants/status/statusLabels';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
+import Image from 'next/image';
+import type { ReactElement } from 'react';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
-import cn from 'lib/common/helper/cn';
 
 interface Props {
     application: SerializableParticipant;
@@ -25,7 +25,7 @@ const ApplicationPreview = ({ application, labels, genres, onClick }: Props): Re
 
     return (
         <div
-            className="relative flex flex-col justify-between gap-4 rounded-md p-3 shadow-lg bg-white/20 backdrop-blur-2xl md:cursor-pointer md:flex-row-reverse md:p-5 md:hover:brightness-110"
+            className="relative flex flex-col justify-between gap-4 rounded-md bg-white/20 p-3 shadow-lg backdrop-blur-2xl md:cursor-pointer md:flex-row-reverse md:p-5 md:hover:brightness-110"
             onClick={onClick}
         >
             <div className={cn('relative h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3', isEmptyString(imageUrl) && 'h-auto')}>
@@ -33,13 +33,13 @@ const ApplicationPreview = ({ application, labels, genres, onClick }: Props): Re
             </div>
 
             <div>
-                <div className="mb-2 flex gap-2 flex-wrap">
+                <div className="mb-2 flex flex-wrap gap-2">
                     <TypeBadge type={type} />
 
                     {genres.map(({ id, name: genreName }) => (
                         <div
                             key={id}
-                            className="rounded-2xl bg-gray-200/60 px-3 py-1 text-sm text-gray-700 uppercase whitespace-nowrap max-w-50 overflow-hidden text-ellipsis"
+                            className="max-w-50 overflow-hidden rounded-2xl bg-gray-200/60 px-3 py-1 text-sm text-ellipsis whitespace-nowrap text-gray-700 uppercase"
                             title={genreName}
                         >
                             {genreName}
@@ -50,7 +50,7 @@ const ApplicationPreview = ({ application, labels, genres, onClick }: Props): Re
                         <div className="rounded-2xl bg-gray-800 px-3 py-1 text-sm text-gray-100">{curationScore}</div>
                     )}
 
-                    <div className="inline-block select-none rounded-2xl bg-gray-800 px-3 py-1 text-sm uppercase text-white">
+                    <div className="inline-block rounded-2xl bg-gray-800 px-3 py-1 text-sm text-white uppercase select-none">
                         {statusLabels[status]}
                     </div>
                 </div>

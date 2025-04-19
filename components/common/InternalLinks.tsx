@@ -1,7 +1,7 @@
+import authOptions from 'lib/next-auth/authOptions';
+import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
-import { getServerSession } from 'next-auth';
-import authOptions from 'lib/next-auth/authOptions';
 
 const InternalLinks = async (): Promise<ReactElement | null> => {
     const session = await getServerSession(authOptions);

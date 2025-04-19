@@ -1,6 +1,6 @@
 import js from '@eslint/js';
-import ts from 'typescript-eslint';
 import reactPlugin from 'eslint-plugin-react';
+import ts from 'typescript-eslint';
 
 const OFF = 0;
 const ERROR = 2;

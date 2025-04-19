@@ -1,9 +1,9 @@
-import prismaClient from 'lib/common/prismaClient';
 import type { Attendee } from '@prisma/client';
-import AllAttendees from 'typings/AllAttendees';
+import prismaClient from 'lib/common/prismaClient';
 import getUserSession from 'lib/next-auth/getUserSession';
 import isGroupMember from 'lib/next-auth/isGroupMember';
 import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
+import AllAttendees from 'typings/AllAttendees';
 
 const getAllAttendees = async (): Promise<Array<AllAttendees>> => {
     const userSession = await getUserSession();

@@ -1,6 +1,6 @@
+import cleanBackground from 'images/cleanBackground2025.webp';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
-import cleanBackground from 'images/cleanBackground2025.webp';
 
 const BackgroundImage = (): ReactElement => {
     return (

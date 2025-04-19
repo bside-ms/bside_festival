@@ -1,9 +1,9 @@
 import type { Participant } from '@prisma/client';
 import prismaClient from 'lib/common/prismaClient';
-import uploadFileToIonos from 'lib/upload/uploadFileToIonos';
-import { NextResponse } from 'next/server';
 import allowedImageContentTypes from 'lib/upload/allowedImageContentTypes';
 import allowedImageMaxFileSize from 'lib/upload/allowedImageMaxFileSize';
+import uploadFileToIonos from 'lib/upload/uploadFileToIonos';
+import { NextResponse } from 'next/server';
 
 export interface ReplaceImageRequest {
     id: number;

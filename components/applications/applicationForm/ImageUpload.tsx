@@ -1,21 +1,21 @@
 'use client';
 
-import { useCallback, useRef } from 'react';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Type } from '@prisma/client';
 import bytes from 'bytes';
+import type { ApplicationFormValues } from 'components/applications/applicationForm/ApplicationForm';
+import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
+import cn from 'lib/common/helper/cn';
+import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import allowedImageContentTypes from 'lib/upload/allowedImageContentTypes';
+import allowedImageMaxFileSize from 'lib/upload/allowedImageMaxFileSize';
 import { uniqueId } from 'lodash';
 import { extension } from 'mime-types';
 import Image from 'next/image';
 import type { ChangeEvent, ReactElement } from 'react';
+import { useCallback, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
-import type { ApplicationFormValues } from 'components/applications/applicationForm/ApplicationForm';
-import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import cn from 'lib/common/helper/cn';
-import allowedImageMaxFileSize from 'lib/upload/allowedImageMaxFileSize';
-import allowedImageContentTypes from 'lib/upload/allowedImageContentTypes';
 
 const fieldName: keyof ApplicationFormValues = 'encodedImage';
 
@@ -96,7 +96,7 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
         <div className="relative flex flex-col gap-1 text-white">
             {isNotEmptyString(currentImageDataUrl) && !isSubmitting && (
                 <div
-                    className="absolute right-1 top-1 z-10 cursor-pointer rounded-md bg-gray-800 px-2 py-1 text-sm text-gray-50 hover:bg-gray-700"
+                    className="absolute top-1 right-1 z-10 cursor-pointer rounded-md bg-gray-800 px-2 py-1 text-sm text-gray-50 hover:bg-gray-700"
                     onClick={handleImageDelete}
                 >
                     Entfernen&nbsp;&nbsp;&nbsp;

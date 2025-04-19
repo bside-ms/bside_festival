@@ -1,12 +1,12 @@
-import type { ReactElement } from 'react';
+import { Prisma, Type } from '@prisma/client';
 import ApplicationForm from 'components/applications/applicationForm/ApplicationForm';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
-import urlPathTypes from 'lib/participants/urlPathTypes';
-import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import prismaClient from 'lib/common/prismaClient';
-import { Prisma, Type } from '@prisma/client';
+import urlPathTypes from 'lib/participants/urlPathTypes';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import type { ReactElement } from 'react';
 import SortOrder = Prisma.SortOrder;
 import GenreCreateManyInput = Prisma.GenreCreateManyInput;
 

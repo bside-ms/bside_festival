@@ -1,7 +1,7 @@
-import { ReactElement } from 'react';
-import { SerializableSlot } from 'typings/SerializableSlot';
 import { useParticipantsOverviewContext, useSlotAttendees } from 'components/participants/overview/ParticipantsOverviewContext';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import { ReactElement } from 'react';
+import { SerializableSlot } from 'typings/SerializableSlot';
 
 interface Props {
     slot: SerializableSlot;

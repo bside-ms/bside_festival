@@ -1,8 +1,8 @@
 import type { Link } from '@prisma/client';
 import { default as NextLink } from 'next/link';
 import type { ReactElement } from 'react';
-import { FaBandcamp, FaFacebook, FaInstagram, FaSoundcloud, FaSpotify, FaYoutube } from 'react-icons/fa';
 import { CiGlobe } from 'react-icons/ci';
+import { FaBandcamp, FaFacebook, FaInstagram, FaSoundcloud, FaSpotify, FaYoutube } from 'react-icons/fa';
 
 const LinkBadge = ({ link }: { link: URL }): ReactElement => {
     if (link.hostname.includes('instagram.')) {

@@ -1,12 +1,12 @@
 'use client';
 
-import { useMemo } from 'react';
-import { uniqueId } from 'lodash';
-import type { ReactElement } from 'react';
-import type { FieldPath, FieldValues } from 'react-hook-form';
-import { useFormContext } from 'react-hook-form';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import useIsMounted from 'lib/common/hooks/useIsMounted';
+import { uniqueId } from 'lodash';
+import type { ReactElement } from 'react';
+import { useMemo } from 'react';
+import type { FieldPath, FieldValues } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 interface Props<T extends FieldValues> {
     name: FieldPath<T>;
@@ -36,7 +36,7 @@ const Checkbox = <T extends FieldValues>({ label, name, info, required = false, 
                     required={required}
                     disabled={isSubmitting}
                     defaultChecked={initiallyChecked}
-                    className="size-3 leading-3 cursor-pointer rounded border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500 shrink-0 pt-3"
+                    className="size-3 shrink-0 cursor-pointer rounded border-gray-300 bg-gray-100 pt-3 leading-3 focus:ring-2 focus:ring-blue-500"
                     {...register(name, {
                         required: {
                             value: required,

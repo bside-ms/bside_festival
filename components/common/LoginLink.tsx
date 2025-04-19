@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback } from 'react';
 import { signIn } from 'next-auth/react';
 import type { ReactElement } from 'react';
+import { useCallback } from 'react';
 
 const LoginLink = (): ReactElement => {
     const handleLogIn = useCallback(() => signIn('keycloak'), []);

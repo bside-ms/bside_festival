@@ -10,8 +10,8 @@ import {
     MjmlText,
     MjmlTitle,
 } from '@faire/mjml-react';
-import type { PropsWithChildren, ReactElement } from 'react';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import type { PropsWithChildren, ReactElement } from 'react';
 
 interface Props extends PropsWithChildren {
     title: string;

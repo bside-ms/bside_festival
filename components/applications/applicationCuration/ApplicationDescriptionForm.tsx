@@ -1,11 +1,11 @@
-import { useCallback, useState } from 'react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { ReactElement } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import type { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } from 'app/api/applications/update/description/route';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import TextArea from 'components/form/TextArea';
-import type { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } from 'app/api/applications/update/description/route';
+import type { ReactElement } from 'react';
+import { useCallback, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface DescriptionFormValues {

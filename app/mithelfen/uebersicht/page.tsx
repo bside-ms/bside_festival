@@ -1,13 +1,13 @@
-import type { ReactElement } from 'react';
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
 import VolunteersOverview from 'components/volunteers/volunteersOverview/VolunteersOverview';
 import prismaClient from 'lib/common/prismaClient';
-import { redirect } from 'next/navigation';
 import isGroupMember from 'lib/next-auth/isGroupMember';
-import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
 import isLoggedIn from 'lib/next-auth/isLoggedIn';
+import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import type { ReactElement } from 'react';
 
 export default async (): Promise<ReactElement> => {
     if (!(await isLoggedIn())) {

@@ -1,7 +1,7 @@
-import type { ReactElement } from 'react';
 import LoginLink from 'components/common/LoginLink';
-import getUserSession from 'lib/next-auth/getUserSession';
 import LogoutLink from 'components/common/LogoutLink';
+import getUserSession from 'lib/next-auth/getUserSession';
+import type { ReactElement } from 'react';
 
 const Login = async (): Promise<ReactElement | null> => {
     const userSession = await getUserSession();

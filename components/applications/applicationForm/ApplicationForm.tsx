@@ -1,26 +1,26 @@
 'use client';
 
-import { useCallback, useState } from 'react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Type } from '@prisma/client';
-import Link from 'next/link';
-import type { ReactElement } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import type { AddParticipantRequest } from 'app/api/applications/add/route';
 import ApplicationSuccess from 'components/applications/applicationForm/ApplicationSuccess';
 import ApplicationTypeImage from 'components/applications/applicationForm/ApplicationTypeImage';
 import ApplicationTypeIntro from 'components/applications/applicationForm/ApplicationTypeIntro';
 import ImageUpload from 'components/applications/applicationForm/ImageUpload';
 import Links from 'components/applications/applicationForm/Links';
 import TechnicalRiderFields, { getTechnicalRiderInfo } from 'components/applications/applicationForm/TechnicalRiderFields';
+import Checkbox from 'components/form/Checkbox';
+import MultiSelectInput from 'components/form/MultiSelectInput';
 import TextArea from 'components/form/TextArea';
 import TextInput from 'components/form/TextInput';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import typeLabels from 'lib/participants/typeLabels';
-import type { AddParticipantRequest } from 'app/api/applications/add/route';
-import Checkbox from 'components/form/Checkbox';
-import MultiSelectInput from 'components/form/MultiSelectInput';
+import Link from 'next/link';
+import type { ReactElement } from 'react';
+import { useCallback, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 export interface ApplicationFormValues {
     name: string;

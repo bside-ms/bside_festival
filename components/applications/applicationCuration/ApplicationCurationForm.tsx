@@ -1,19 +1,19 @@
-import { useCallback } from 'react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ApplicationStatus, Label } from '@prisma/client';
-import { range } from 'lodash';
-import type { ReactElement } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import type { SetCurationRequest, SuccessfulSetCurationResponse } from 'app/api/applications/curation/set/route';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
+import MultiSelectInput from 'components/form/MultiSelectInput';
 import SelectInput from 'components/form/SelectInput';
 import TextArea from 'components/form/TextArea';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import statusLabels from 'lib/participants/status/statusLabels';
 import statusOrder from 'lib/participants/status/statusOrder';
-import type { SetCurationRequest, SuccessfulSetCurationResponse } from 'app/api/applications/curation/set/route';
+import { range } from 'lodash';
+import type { ReactElement } from 'react';
+import { useCallback } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
-import MultiSelectInput from 'components/form/MultiSelectInput';
 
 export const curationScoreOptions = [
     { value: '', label: 'Unbewertet' },

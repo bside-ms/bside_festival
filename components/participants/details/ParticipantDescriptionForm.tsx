@@ -1,13 +1,13 @@
-import { useCallback, useState } from 'react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { ReactElement } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } from 'app/api/applications/update/description/route';
 import TextArea from 'components/form/TextArea';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } from 'app/api/applications/update/description/route';
+import type { ReactElement } from 'react';
+import { useCallback, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface DescriptionFormValues {
     description: string;
@@ -63,7 +63,7 @@ const ParticipantDescriptionForm = ({ participant, isLoggedIn }: Props): ReactEl
     if (!showForm) {
         return (
             <div className="mt-4">
-                <pre className="whitespace-pre-wrap font-display">{participant.updatedDescription ?? participant.description}</pre>
+                <pre className="font-display whitespace-pre-wrap">{participant.updatedDescription ?? participant.description}</pre>
 
                 {isLoggedIn && (
                     <a onClick={toggleShowForm} className="cursor-pointer text-sky-500 hover:text-sky-600">

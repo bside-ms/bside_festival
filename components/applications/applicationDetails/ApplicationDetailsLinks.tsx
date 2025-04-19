@@ -43,7 +43,7 @@ const ExternalLink = ({ link: { link } }: { link: Link }): ReactElement => {
         <NextLink
             href={normalizedLink}
             target="_blank"
-            className="inline-flex cursor-pointer text-xl items-center rounded bg-gray-400/40 gap-1 p-1 text-sky-400 hover:bg-gray-400/50"
+            className="inline-flex cursor-pointer items-center gap-1 rounded bg-gray-400/40 p-1 text-xl text-sky-400 hover:bg-gray-400/50"
         >
             <LinkBadge link={new URL(normalizedLink)} />
         </NextLink>

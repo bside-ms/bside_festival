@@ -1,12 +1,12 @@
 'use client';
 
+import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import useIsMounted from 'lib/common/hooks/useIsMounted';
+import { uniqueId } from 'lodash';
 import { ReactElement, useMemo } from 'react';
 import { Controller, type FieldPath, type FieldValues, useFormContext } from 'react-hook-form';
 import type { MultiValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import useIsMounted from 'lib/common/hooks/useIsMounted';
-import { uniqueId } from 'lodash';
 
 interface LabelOption {
     value: number | string; // Will be string, when new label

@@ -1,11 +1,11 @@
-import { useMemo } from 'react';
+import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import useIsMounted from 'lib/common/hooks/useIsMounted';
 import { uniqueId } from 'lodash';
 import type { ReactElement } from 'react';
+import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import type { FieldValues } from 'react-hook-form/dist/types/fields';
 import type { FieldPath } from 'react-hook-form/dist/types/path/eager';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import useIsMounted from 'lib/common/hooks/useIsMounted';
 
 interface Props<T extends FieldValues> {
     name: FieldPath<T>;
@@ -44,7 +44,7 @@ const SelectInput = <T extends FieldValues>({
 
             <select
                 id={id}
-                className="rounded border border-white p-1 py-2 outline-0 text-white"
+                className="rounded border border-white p-1 py-2 text-white outline-0"
                 required={required}
                 defaultValue={defaultValue}
                 {...register(name, {

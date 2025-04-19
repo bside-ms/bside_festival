@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer';
 import crypto from 'crypto';
-import process from 'process';
 import hashAlgorithm from 'lib/crypto/hashAlgorithm';
+import process from 'process';
 
 const hashData = (data: string): string => {
     return crypto
