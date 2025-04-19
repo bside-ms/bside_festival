@@ -8,14 +8,12 @@ const getAllParticipants = async (isInDataPrivacyGroup: boolean): Promise<Array<
         return applications;
     }
 
-    return applications
-        .map<Participant>((application) => ({
-            ...application,
-            contactMail: null,
-            contactPhone: null,
-            address: null,
-        }))
-        .filter(({ status }) => ['Confirmed', 'Canceled'].includes(status));
+    return applications.map<Participant>((application) => ({
+        ...application,
+        contactMail: null,
+        contactPhone: null,
+        address: null,
+    }));
 };
 
 export default getAllParticipants;
