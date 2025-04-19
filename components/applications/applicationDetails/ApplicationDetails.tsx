@@ -38,11 +38,15 @@ const ApplicationDetails = ({ application, labels, genres, links, onCloseClick }
                 <ApplicationDetailsImage application={application} />
 
                 <div className="shrink grow-0">
-                    <div className="mb-2 flex gap-2">
+                    <div className="mb-2 flex gap-2 flex-wrap">
                         <TypeBadge type={type} />
 
                         {genres.map(({ id, name: genreName }) => (
-                            <div key={id} className="rounded-2xl bg-gray-200/60 px-3 py-1 text-sm text-gray-700 uppercase">
+                            <div
+                                key={id}
+                                className="rounded-2xl bg-gray-200/60 px-3 py-1 text-sm text-gray-700 uppercase whitespace-nowrap max-w-50 overflow-hidden text-ellipsis"
+                                title={genreName}
+                            >
                                 {genreName}
                             </div>
                         ))}
