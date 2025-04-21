@@ -22,7 +22,7 @@ const ParticipantTechnicalRider = ({ participant: { technicalRider, technicalRid
         <div className="mt-4">
             <div className="font-display">Technical Rider</div>
 
-            {isNotEmptyString(technicalRider) && <div>{technicalRider}</div>}
+            {isNotEmptyString(technicalRider) && <div className="whitespace-pre-wrap">{technicalRider}</div>}
 
             {isNotEmptyString(technicalRiderPdfUrl) && (
                 <NextLink href={technicalRiderPdfUrl}>

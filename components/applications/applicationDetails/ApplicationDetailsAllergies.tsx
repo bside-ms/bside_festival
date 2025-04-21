@@ -14,7 +14,7 @@ const ApplicationDetailsAllergies = ({ application: { allergies } }: Props): Rea
     return (
         <div>
             <div className="font-display">Allergien</div>
-            <div>{allergies}</div>
+            <div className="whitespace-pre-wrap">{allergies}</div>
         </div>
     );
 };

@@ -14,7 +14,7 @@ const ApplicationDetailsAdditionalInfo = ({ application: { additionalInfo } }: P
     return (
         <div>
             <div className="font-display">Weitere Infos</div>
-            <div>{additionalInfo}</div>
+            <div className="whitespace-pre-wrap">{additionalInfo}</div>
         </div>
     );
 };

@@ -14,7 +14,7 @@ const ParticipantCanProvideBackline = ({ participant: { backlineSharing } }: Pro
     return (
         <div className="mt-4">
             <div className="font-display">Backline-Sharing</div>
-            <div>{backlineSharing}</div>
+            <div className="whitespace-pre-wrap">{backlineSharing}</div>
         </div>
     );
 };

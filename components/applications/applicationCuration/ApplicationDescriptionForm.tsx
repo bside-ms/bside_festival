@@ -61,7 +61,7 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
     if (!showForm) {
         return (
             <div className="mt-4 text-gray-100">
-                <div>{application.updatedDescription ?? application.description}</div>
+                <div className="whitespace-pre-wrap">{application.updatedDescription ?? application.description}</div>
                 <a onClick={toggleShowForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
                     Beschreibung bearbeiten…
                 </a>
@@ -82,7 +82,7 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
 
                     <div className="text-sm text-gray-100">
                         <div className="font-bold text-gray-400">Ursprüngliche Beschreibung</div>
-                        <div>{application.description}</div>
+                        <div className="whitespace-pre-wrap">{application.description}</div>
                     </div>
 
                     <div>

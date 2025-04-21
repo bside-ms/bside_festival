@@ -15,7 +15,7 @@ const ApplicationDetailsDiversity = ({
             <div>FLINTA* Personen: {hasFlintaParticipants ? 'ja' : 'nein'}</div>
             <div>Personen anderer marginalisierter Gruppen: {hasMarginalizedParticipants ? 'ja' : 'nein'}</div>
 
-            {isNotEmptyString(diversityNotes) && <div className="mt-1">{diversityNotes}</div>}
+            {isNotEmptyString(diversityNotes) && <div className="mt-1 whitespace-pre-wrap">{diversityNotes}</div>}
         </div>
     );
 };

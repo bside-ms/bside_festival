@@ -14,7 +14,7 @@ const ApplicationDetailsCanProvideBackline = ({ application: { backlineSharing }
     return (
         <div>
             <div className="font-display">Backline-Sharing</div>
-            <div>{backlineSharing}</div>
+            <div className="whitespace-pre-wrap">{backlineSharing}</div>
         </div>
     );
 };

@@ -21,7 +21,7 @@ const ApplicationDetailsTechnicalRider = ({ application: { technicalRider, techn
         <div>
             <div className="font-display">Technical Rider</div>
 
-            {isNotEmptyString(technicalRider) && <div>{technicalRider}</div>}
+            {isNotEmptyString(technicalRider) && <div className="whitespace-pre-wrap">{technicalRider}</div>}
 
             {isNotEmptyString(technicalRiderPdfUrl) && (
                 <NextLink

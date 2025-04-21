@@ -14,7 +14,7 @@ const ApplicationDetailsMotivation = ({ application: { motivation } }: Props): R
     return (
         <div>
             <div className="font-display">Motivation</div>
-            <div>{motivation}</div>
+            <div className="whitespace-pre-wrap">{motivation}</div>
         </div>
     );
 };
