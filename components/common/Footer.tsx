@@ -1,39 +1,15 @@
-import { faFacebookSquare, faInstagram } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import InternalLinks from 'components/common/InternalLinks';
 import Login from 'components/common/Login';
 import cn from 'lib/common/helper/cn';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
+import { FaFacebookSquare, FaInstagram, FaMastodon } from 'react-icons/fa';
 
 interface Props {
     whiteBackground?: boolean;
 }
 
 const Footer = ({ whiteBackground = false }: Props): ReactElement => {
-    const imprintLink = (
-        <Link href="https://b-side.ms/kv/impressum/" className="underline">
-            Impressum
-        </Link>
-    );
-    const privacyPolicyLink = (
-        <Link href="https://b-side.ms/kv/datenschutz/" className="underline">
-            Datenschutz
-        </Link>
-    );
-
-    const instagramLink = (
-        <Link href="https://www.instagram.com/bsidemuenster/" target="_blank">
-            <FontAwesomeIcon className="w-[25px]" icon={faInstagram} />
-        </Link>
-    );
-
-    const facebookLink = (
-        <Link href="https://www.facebook.com/bsidemuenster" target="_blank">
-            <FontAwesomeIcon className="w-[25px]" icon={faFacebookSquare} />
-        </Link>
-    );
-
     return (
         <div
             className={cn(
@@ -45,11 +21,24 @@ const Footer = ({ whiteBackground = false }: Props): ReactElement => {
             <div>Veranstaltet durch den B-Side Kultur e.V.</div>
 
             <div className="flex justify-center gap-3 py-1">
-                <span>{instagramLink}</span> <span>{facebookLink}</span>
+                <Link href="https://www.instagram.com/bsidemuenster/" target="_blank" rel="me" className="text-2xl hover:text-red-600">
+                    <FaInstagram />
+                </Link>
+                <Link href="https://www.facebook.com/bsidemuenster" target="_blank" rel="me" className="text-2xl hover:text-red-600">
+                    <FaFacebookSquare />
+                </Link>
+                <Link href="https://muenster.im/@bside" target="_blank" rel="me" className="text-2xl hover:text-red-600">
+                    <FaMastodon />
+                </Link>
             </div>
 
             <div className="flex justify-center gap-3">
-                <span>{imprintLink}</span> <span>{privacyPolicyLink}</span>
+                <Link href="https://b-side.ms/kv/impressum/" className="underline hover:text-red-600">
+                    Impressum
+                </Link>
+                <Link href="https://b-side.ms/kv/datenschutz/" className="underline hover:text-red-600">
+                    Datenschutz
+                </Link>
             </div>
 
             <div className="space-y-1">
