@@ -17,27 +17,32 @@ export default (): ReactElement => {
 
                 <div className="h-1 w-full bg-red-600" />
 
-                <div className="space-y-3 p-5 text-left text-sm leading-7 text-black">
-                    <p className="text-xl font-bold">Es geht wieder los: Das 9. B-Side Festival steht vor der Tür!</p>
+                <div className="space-y-3 p-5 text-justify text-sm leading-7 text-black">
+                    <p className="text-xl font-bold">Es geht wieder los: Das 9. B-Side Festival rückt näher!</p>
 
                     <p>
                         Dieses Jahr sind wir wieder in der B-Side am Mittelhafen und im Hansaviertel! Ganz nach dem Motto{' '}
-                        <strong>B-together, B-loved – B-Side!</strong> möchten wir dieses Jahr ganz besonders die Gemeinschaft, Begegnung
-                        und Empathie feiern. Zusammen schaffen wir über den <strong>19. und 20. September</strong> hinweg einen Ort, an dem
-                        wir gemeinsam kreativ werden können.
+                        <strong>B-together, B-loved – B-Side!</strong> möchten wir besonders die Gemeinschaft, Begegnung und Empathie
+                        feiern. Über den <strong>19. und 20. September</strong> erschaffen wir gemeinsam einen Ort voller Kreativität und
+                        Miteinander.
                     </p>
 
                     <p>
-                        Du willst mit deiner Kunst, deinen Texten oder mit deinem Workshop Teil des bunten Programms werden? Deine Musik
-                        darf auf gar keinen Fall fehlen? Oder du hast eine spannende Idee, auf die wir bisher noch gar nicht gekommen sind?
-                        Dein Beitrag passt zu unserem Motto? Super! Dann bewirb dich bis zu dem 11. Mai auf unserem Bewerbungsportal!
+                        Die Bewerbungsphase ist nun beendet – und wir sind überwältigt! Zahlreiche tolle Bewerbungen haben uns erreicht,
+                        voller spannender Ideen, Kunst, Musik und Workshops. Wir freuen uns riesig über eure Kreativität und das Vertrauen
+                        in unser Festival.
+                    </p>
+
+                    <p>
+                        Jetzt nehmen wir uns Zeit, alle Einsendungen sorgfältig zu sichten und melden uns bald bei euch, wenn wir mit der
+                        Programmplanung ein Stück weiter sind. Danke für euren Beitrag zum B-Side Festival 2025!
                     </p>
 
                     <p>
                         Wichtig: Das B-Side Festival ist ein eintrittsfreies, komplett ehrenamtlich organisiertes Festival, das seit 2016
                         versucht, einen Gegenpol zu typischen kommerziellen Musikveranstaltungen zu gestalten. Die konkrete Budgetierung des
                         Festivals ist zu diesem Zeitpunkt noch nicht abgeschlossen, jedoch können wir zur Zeit noch nicht mehr als eine
-                        Aufwandsentschädigung zusagen. Wir geben aber unser bestes, hier noch mehr für euch rauszuholen :)
+                        Aufwandsentschädigung zusagen. Wir geben aber unser Bestes, hier noch mehr für euch rauszuholen :)
                     </p>
                 </div>
 
