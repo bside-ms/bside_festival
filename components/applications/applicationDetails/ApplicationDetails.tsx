@@ -1,6 +1,6 @@
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { Genre, Label, Link } from '@prisma/client';
+import type { Genre, Link } from '@prisma/client';
 import ApplicationCurationForm from 'components/applications/applicationCuration/ApplicationCurationForm';
 import ApplicationDescriptionForm from 'components/applications/applicationCuration/ApplicationDescriptionForm';
 import ApplicationDetailsAdditionalInfo from 'components/applications/applicationDetails/ApplicationDetailsAdditionalInfo';
@@ -14,7 +14,6 @@ import ApplicationDetailsMaterialExpenses from 'components/applications/applicat
 import ApplicationDetailsMotivation from 'components/applications/applicationDetails/ApplicationDetailsMotivation';
 import ApplicationDetailsParticipantCount from 'components/applications/applicationDetails/ApplicationDetailsParticipantCount';
 import ApplicationDetailsTechnicalRider from 'components/applications/applicationDetails/ApplicationDetailsTechnicalRider';
-import ApplicationLabels from 'components/applications/common/ApplicationLabels';
 import TypeBadge from 'components/participants/details/TypeBadge';
 import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
 import statusLabels from 'lib/participants/status/statusLabels';
@@ -23,13 +22,12 @@ import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;
-    labels: Array<Label>;
     genres: Array<Genre>;
     links: Array<Link>;
     onCloseClick: () => void;
 }
 
-const ApplicationDetails = ({ application, labels, genres, links, onCloseClick }: Props): ReactElement => {
+const ApplicationDetails = ({ application, genres, links, onCloseClick }: Props): ReactElement => {
     const { name, type, curationScore, status } = application;
 
     return (
@@ -60,8 +58,6 @@ const ApplicationDetails = ({ application, labels, genres, links, onCloseClick }
                         </div>
                     </div>
 
-                    <ApplicationLabels labels={labels} />
-
                     <div className="font-display text-2xl text-gray-100">{name}</div>
 
                     <ApplicationDescriptionForm application={application} />
@@ -91,7 +87,7 @@ const ApplicationDetails = ({ application, labels, genres, links, onCloseClick }
             </div>
 
             <div className="relative mt-1 rounded-md bg-white/20 px-3 py-2 shadow-lg backdrop-blur-2xl md:px-5">
-                <ApplicationCurationForm application={application} labels={labels} />
+                <ApplicationCurationForm application={application} />
             </div>
 
             <div

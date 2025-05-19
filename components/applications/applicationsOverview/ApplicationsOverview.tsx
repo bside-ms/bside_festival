@@ -1,7 +1,6 @@
 'use client';
 
 import Application from 'components/applications/applicationsOverview/Application';
-import ApplicationOverviewAdditionalFilters from 'components/applications/applicationsOverview/ApplicationOverviewAdditionalFilters';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import ApplicationsOverviewSearchTextFilter from 'components/applications/applicationsOverview/ApplicationsOverviewSearchTextFilter';
 import ApplicationsOverviewTypesFilter from 'components/applications/applicationsOverview/ApplicationsOverviewTypesFilter';
@@ -29,8 +28,6 @@ const ApplicationsOverview = (): ReactElement => {
             <ApplicationsOverviewSearchTextFilter />
 
             <ApplicationsOverviewTypesFilter />
-
-            <ApplicationOverviewAdditionalFilters />
 
             {filteredApplications.length === 0 ? (
                 <div className="mt-5 rounded-md p-3 font-bold text-gray-200 shadow-lg backdrop-blur-2xl md:p-5">

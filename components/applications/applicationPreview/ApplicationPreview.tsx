@@ -1,5 +1,4 @@
-import type { Genre, Label } from '@prisma/client';
-import ApplicationLabels from 'components/applications/common/ApplicationLabels';
+import type { Genre } from '@prisma/client';
 import TypeBadge from 'components/participants/details/TypeBadge';
 import cn from 'lib/common/helper/cn';
 import isEmptyString from 'lib/common/helper/isEmptyString';
@@ -13,12 +12,11 @@ import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;
-    labels: Array<Label>;
     genres: Array<Genre>;
     onClick: () => void;
 }
 
-const ApplicationPreview = ({ application, labels, genres, onClick }: Props): ReactElement => {
+const ApplicationPreview = ({ application, genres, onClick }: Props): ReactElement => {
     const { name, imageFileName, type, curationScore, status, description, updatedDescription } = application;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
@@ -54,8 +52,6 @@ const ApplicationPreview = ({ application, labels, genres, onClick }: Props): Re
                         {statusLabels[status]}
                     </div>
                 </div>
-
-                <ApplicationLabels labels={labels} />
 
                 <div className="line-clamp-3 font-display text-2xl text-gray-100">{name}</div>
 

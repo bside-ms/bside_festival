@@ -20,16 +20,11 @@ export default async (): Promise<ReactElement> => {
 
     const applications = (await getAllParticipants(isInDataPrivacyGroup)).map(serializeParticipant);
 
-    const participantLabels = await prismaClient.participantLabel.findMany();
-
     const participantGenres = await prismaClient.participantGenre.findMany();
 
     const allLinks = await prismaClient.link.findMany();
 
     const allGenres = await prismaClient.genre.findMany();
-
-    // Just use all now, will be filtered out later
-    const allLabels = await prismaClient.label.findMany();
 
     return (
         <div>
@@ -38,10 +33,8 @@ export default async (): Promise<ReactElement> => {
                     <div className="mx-auto max-w-7xl px-3">
                         <ApplicationsOverviewContextProvider
                             applications={applications}
-                            participantLabels={participantLabels}
                             participantGenres={participantGenres}
                             allLinks={allLinks}
-                            allLabels={allLabels}
                             allGenres={allGenres}
                         >
                             <ApplicationsOverview />

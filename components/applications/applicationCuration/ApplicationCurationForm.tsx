@@ -1,42 +1,26 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { ApplicationStatus, Label } from '@prisma/client';
+import type { ApplicationStatus } from '@prisma/client';
 import type { SetCurationRequest, SuccessfulSetCurationResponse } from 'app/api/applications/curation/set/route';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
-import MultiSelectInput from 'components/form/MultiSelectInput';
 import SelectInput from 'components/form/SelectInput';
-import TextArea from 'components/form/TextArea';
-import isEmptyString from 'lib/common/helper/isEmptyString';
 import statusLabels from 'lib/participants/status/statusLabels';
 import statusOrder from 'lib/participants/status/statusOrder';
-import { range } from 'lodash';
 import type { ReactElement } from 'react';
 import { useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
-export const curationScoreOptions = [
-    { value: '', label: 'Unbewertet' },
-    ...range(0, 11).map((scoreValue) => ({
-        value: scoreValue.toString(),
-        label: scoreValue.toString(),
-    })),
-];
-
-export interface CurationFormValues {
-    curationScore: string;
-    curationInfo: string | null;
+interface CurationFormValues {
     applicationStatus: ApplicationStatus;
-    labels: Array<string | number>;
 }
 
 interface Props {
     application: SerializableParticipant;
-    labels: Array<Label>;
 }
 
-const ApplicationCurationForm = ({ application, labels }: Props): ReactElement => {
-    const { updateApplication, updateAllLabels, updateParticipantLabels } = useApplicationsOverviewContext();
+const ApplicationCurationForm = ({ application }: Props): ReactElement => {
+    const { updateApplication } = useApplicationsOverviewContext();
 
     const methods = useForm<CurationFormValues>();
     const {
@@ -47,15 +31,12 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
     } = methods;
 
     const handleFormSubmit = useCallback(
-        async ({ curationInfo, curationScore, applicationStatus, labels: updatedLabels }: CurationFormValues) => {
+        async ({ applicationStatus }: CurationFormValues) => {
             clearErrors('root');
 
             const request: SetCurationRequest = {
                 id: application.id,
-                curationScore: isEmptyString(curationScore) ? null : Number(curationScore),
-                curationInfo: isEmptyString(curationInfo) ? null : curationInfo,
                 applicationStatus,
-                labels: updatedLabels,
             };
 
             const response = await fetch('/api/applications/curation/set', {
@@ -67,45 +48,17 @@ const ApplicationCurationForm = ({ application, labels }: Props): ReactElement =
             if (!response.ok) {
                 setError('root', { message: 'Fehler beim Submit!' });
             } else {
-                const { updatedParticipant, allLabels, participantLabels } = (await response.json()) as SuccessfulSetCurationResponse;
+                const { updatedParticipant } = (await response.json()) as SuccessfulSetCurationResponse;
 
                 updateApplication(updatedParticipant);
-                updateAllLabels(allLabels);
-                updateParticipantLabels(participantLabels);
             }
         },
-        [application.id, clearErrors, setError, updateAllLabels, updateApplication, updateParticipantLabels],
+        [application.id, clearErrors, setError, updateApplication],
     );
-
-    const { allLabels } = useApplicationsOverviewContext();
 
     return (
         <FormProvider {...methods}>
             <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex max-w-3xl flex-col gap-4">
-                <div className="max-w-[250px]">
-                    <SelectInput<CurationFormValues>
-                        info="Kuration"
-                        label="Bewertung"
-                        name="curationScore"
-                        defaultValue={application.curationScore?.toString()}
-                        options={curationScoreOptions}
-                    />
-                </div>
-
-                <MultiSelectInput<CurationFormValues>
-                    name="labels"
-                    options={allLabels}
-                    defaultOptions={labels}
-                    label="Auswählen…"
-                    info="Labels"
-                />
-
-                <TextArea<CurationFormValues>
-                    name="curationInfo"
-                    label="Kommentar zur Bewertung"
-                    defaultValue={application.curationInfo ?? undefined}
-                />
-
                 <div>
                     <div className="max-w-[250px]">
                         <SelectInput<CurationFormValues>

@@ -10,21 +10,10 @@ interface Props {
 }
 
 const Application = ({ application }: Props): ReactElement => {
-    const {
-        enhancedApplicationIds,
-        toggleEnhancedApplicationId,
-        getLinksOfApplication,
-        participantLabels,
-        participantGenres,
-        allLabels,
-        allGenres,
-    } = useApplicationsOverviewContext();
+    const { enhancedApplicationIds, toggleEnhancedApplicationId, getLinksOfApplication, participantGenres, allGenres } =
+        useApplicationsOverviewContext();
 
     const { id } = application;
-
-    const ownParticipantLabelIds = participantLabels.filter((label) => label.participantId === id).map((label) => label.labelId);
-
-    const labels = allLabels.filter((label) => ownParticipantLabelIds.includes(label.id));
 
     const ownParticipantGenreIds = participantGenres.filter((genre) => genre.participantId === id).map((genre) => genre.genreId);
 
@@ -36,7 +25,6 @@ const Application = ({ application }: Props): ReactElement => {
         return (
             <ApplicationDetails
                 application={application}
-                labels={labels}
                 genres={genres}
                 links={getLinksOfApplication(id)}
                 onCloseClick={handleEnhancedToggle}
@@ -44,7 +32,7 @@ const Application = ({ application }: Props): ReactElement => {
         );
     }
 
-    return <ApplicationPreview application={application} labels={labels} genres={genres} onClick={handleEnhancedToggle} />;
+    return <ApplicationPreview application={application} genres={genres} onClick={handleEnhancedToggle} />;
 };
 
 export default Application;
