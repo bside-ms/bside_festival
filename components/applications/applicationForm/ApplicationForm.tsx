@@ -21,6 +21,7 @@ import Link from 'next/link';
 import type { ReactElement } from 'react';
 import { useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { IoWarning } from 'react-icons/io5';
 
 export interface ApplicationFormValues {
     name: string;
@@ -175,6 +176,23 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                                     ändern
                                 </Link>
                             )}
+                        </div>
+                    </div>
+
+                    <div className="rounded-md bg-yellow-50 p-4">
+                        <div className="flex">
+                            <div className="flex-shrink-0">
+                                <IoWarning className="h-5 w-5 text-yellow-400" />
+                            </div>
+                            <div className="ml-3">
+                                <h3 className="text-sm font-medium text-yellow-800">Hinweis</h3>
+                                <div className="mt-2 text-sm text-yellow-700">
+                                    <p>
+                                        Die reguläre Bewerbungsphase ist bereits abgeschlossen. Das Formular steht nur noch für manuelle
+                                        Nachträge zur Verfügung.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

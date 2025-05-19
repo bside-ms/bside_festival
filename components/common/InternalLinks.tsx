@@ -17,6 +17,11 @@ const InternalLinks = async (): Promise<ReactElement | null> => {
                     Bewerbungsübersicht
                 </Link>
             </div>
+            <div>
+                <Link href="/bewerbungen" className="cursor-pointer underline hover:text-red-600">
+                    Bewerbungsformular
+                </Link>
+            </div>
 
             {/*<div>*/}
             {/*    <Link href="/programm/" className="cursor-pointer underline">*/}

@@ -3,6 +3,7 @@ import ApplicationForm from 'components/applications/applicationForm/Application
 import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
 import prismaClient from 'lib/common/prismaClient';
+import isLoggedIn from 'lib/next-auth/isLoggedIn';
 import urlPathTypes from 'lib/participants/urlPathTypes';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -50,6 +51,10 @@ const getAllDiskJockeyGenres = async () => {
 };
 
 export default async ({ params }: { params: Promise<{ type: string }> }): Promise<ReactElement> => {
+    if (!(await isLoggedIn())) {
+        redirect('/');
+    }
+
     const { type } = await params;
 
     const chosenType = urlPathTypes[type] ?? null;

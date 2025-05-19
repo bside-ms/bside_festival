@@ -1,10 +1,7 @@
 import Footer from 'components/common/Footer';
 import backgroundImage from 'images/background2025.webp';
-import formatDate from 'lib/common/helper/formatDate';
 import Image from 'next/image';
-import Link from 'next/link';
 import { ReactElement } from 'react';
-import { FaArrowRight } from 'react-icons/fa';
 
 export default (): ReactElement => {
     const applicationDeadline = new Date(1747605599000);
@@ -44,20 +41,6 @@ export default (): ReactElement => {
                         Festivals ist zu diesem Zeitpunkt noch nicht abgeschlossen, jedoch können wir zur Zeit noch nicht mehr als eine
                         Aufwandsentschädigung zusagen. Wir geben aber unser bestes, hier noch mehr für euch rauszuholen :)
                     </p>
-
-                    <Link
-                        className="sticky bottom-4 mt-4 block w-full cursor-pointer rounded-md bg-red-600 py-3 text-center select-none"
-                        href="/bewerbungen"
-                    >
-                        <span className="flex items-center justify-center gap-2 px-2 text-sm font-bold tracking-[0.3em] text-white uppercase">
-                            hier bewerben <FaArrowRight className="pt-[1px] text-xl" />
-                        </span>
-                        <div className="absolute -right-4 bottom-full -mb-3 flex h-10 items-center justify-center rounded-full border border-red-600 bg-white px-2 text-center text-xs leading-tight text-red-600 shadow-md">
-                            nur noch bis
-                            <br />
-                            zum {formatDate(applicationDeadline, 'dd.MM.')}!
-                        </div>
-                    </Link>
                 </div>
 
                 <Footer />
