@@ -11,8 +11,8 @@ export default ts.config(
         ...reactPlugin.configs.flat.recommended,
         settings: {
             react: {
-                version: 'detect'
-            }
+                version: 'detect',
+            },
         },
         files: ['**/*.{ts,tsx}'],
         rules: {
