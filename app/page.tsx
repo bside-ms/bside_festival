@@ -4,8 +4,6 @@ import Image from 'next/image';
 import { ReactElement } from 'react';
 
 export default (): ReactElement => {
-    const applicationDeadline = new Date(1747605599000);
-
     return (
         <div>
             <div className="relative mx-auto min-h-screen w-full max-w-2xl font-display">
