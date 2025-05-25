@@ -1,28 +1,28 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } from 'app/api/applications/update/description/route';
+import { SuccessfulUpdateDetailsResponse, UpdateDetailsRequest } from 'app/api/applications/update/details/route';
 import TextArea from 'components/form/TextArea';
+import TextInput from 'components/form/TextInput';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import type { ReactElement } from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface DescriptionFormValues {
+    name: string;
     description: string;
 }
 
 interface Props {
     participant: SerializableParticipant;
     isLoggedIn: boolean;
+    showForm: boolean;
+    toggleForm: () => void;
 }
 
-const ParticipantDescriptionForm = ({ participant, isLoggedIn }: Props): ReactElement => {
+const ParticipantNameAndDescriptionForm = ({ participant, isLoggedIn, showForm, toggleForm }: Props): ReactElement => {
     const { updateParticipant } = useParticipantsOverviewContext();
-
-    const [showForm, setShowForm] = useState(false);
-    const toggleShowForm = useCallback(() => setShowForm((prevState) => !prevState), []);
 
     const methods = useForm<DescriptionFormValues>();
     const {
@@ -33,15 +33,16 @@ const ParticipantDescriptionForm = ({ participant, isLoggedIn }: Props): ReactEl
     } = methods;
 
     const handleFormSubmit = useCallback(
-        async ({ description }: DescriptionFormValues) => {
+        async ({ name, description }: DescriptionFormValues) => {
             clearErrors('root');
 
-            const request: UpdateDescriptionRequest = {
+            const request: UpdateDetailsRequest = {
                 id: participant.id,
+                name,
                 description,
             };
 
-            const response = await fetch('/api/applications/update/description', {
+            const response = await fetch('/api/applications/update/details', {
                 method: 'POST',
                 headers: { 'Content-type': 'application/json' },
                 body: JSON.stringify(request),
@@ -50,14 +51,14 @@ const ParticipantDescriptionForm = ({ participant, isLoggedIn }: Props): ReactEl
             if (!response.ok) {
                 setError('root', { message: 'Fehler beim Submit!' });
             } else {
-                const { updatedParticipant } = (await response.json()) as SuccessfulUpdateDescriptionResponse;
+                const { updatedParticipant } = (await response.json()) as SuccessfulUpdateDetailsResponse;
 
                 updateParticipant(updatedParticipant);
 
-                toggleShowForm();
+                toggleForm();
             }
         },
-        [participant.id, clearErrors, setError, toggleShowForm, updateParticipant],
+        [participant.id, clearErrors, setError, toggleForm, updateParticipant],
     );
 
     if (!showForm) {
@@ -66,8 +67,8 @@ const ParticipantDescriptionForm = ({ participant, isLoggedIn }: Props): ReactEl
                 <pre className="font-display whitespace-pre-wrap">{participant.updatedDescription ?? participant.description}</pre>
 
                 {isLoggedIn && (
-                    <a onClick={toggleShowForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
-                        Beschreibung bearbeiten…
+                    <a onClick={toggleForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
+                        Name und Beschreibung bearbeiten…
                     </a>
                 )}
             </div>
@@ -78,6 +79,20 @@ const ParticipantDescriptionForm = ({ participant, isLoggedIn }: Props): ReactEl
         <div className="mt-4">
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex max-w-3xl flex-col gap-4">
+                    <TextInput<DescriptionFormValues>
+                        name="name"
+                        label="Name"
+                        required={true}
+                        defaultValue={participant.updatedName ?? participant.name}
+                    />
+
+                    {participant.updatedName !== participant.name && (
+                        <div className="text-sm text-gray-800">
+                            <div className="font-bold text-gray-900">Ursprünglicher Name</div>
+                            <div>{participant.name}</div>
+                        </div>
+                    )}
+
                     <TextArea<DescriptionFormValues>
                         name="description"
                         label="Beschreibung"
@@ -85,7 +100,7 @@ const ParticipantDescriptionForm = ({ participant, isLoggedIn }: Props): ReactEl
                         rows={10}
                     />
 
-                    {isNotEmptyString(participant.description) && (
+                    {participant.updatedDescription !== participant.description && (
                         <div className="text-sm text-gray-800">
                             <div className="font-bold text-gray-900">Ursprüngliche Beschreibung</div>
                             <div>{participant.description}</div>
@@ -102,7 +117,7 @@ const ParticipantDescriptionForm = ({ participant, isLoggedIn }: Props): ReactEl
                                 Speichern
                             </button>
                         </label>
-                        <a onClick={toggleShowForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
+                        <a onClick={toggleForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
                             abbrechen
                         </a>
                     </div>
@@ -123,4 +138,4 @@ const ParticipantDescriptionForm = ({ participant, isLoggedIn }: Props): ReactEl
     );
 };
 
-export default ParticipantDescriptionForm;
+export default ParticipantNameAndDescriptionForm;

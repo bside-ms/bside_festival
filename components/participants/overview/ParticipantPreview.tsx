@@ -27,7 +27,7 @@ const ParticipantPreview = ({ participant, onClick }: Props): ReactElement | nul
     const participantSlots = useParticipantSlots(participant.id);
     const participantVenues = useParticipantVenues(participant.id);
 
-    const { id, name, imageFileName, description, type, updatedDescription } = participant;
+    const { id, name, updatedName, imageFileName, description, type, updatedDescription } = participant;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -41,10 +41,8 @@ const ParticipantPreview = ({ participant, onClick }: Props): ReactElement | nul
 
     return (
         <div>
-            <div className="h-3 w-full bg-black" />
-
             <div
-                className="relative flex flex-col justify-between gap-4 bg-white p-3 text-gray-800 md:cursor-pointer md:flex-row-reverse md:p-5"
+                className="relative flex flex-col justify-between gap-4 rounded-md bg-white/20 p-3 shadow-lg backdrop-blur-2xl md:cursor-pointer md:flex-row-reverse md:p-5 md:hover:brightness-110"
                 onClick={onClick}
             >
                 <div
@@ -61,7 +59,9 @@ const ParticipantPreview = ({ participant, onClick }: Props): ReactElement | nul
                         </div>
                     )}
 
-                    {isNotEmptyString(imageUrl) && <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />}
+                    {isNotEmptyString(imageUrl) && (
+                        <Image src={imageUrl} alt={updatedName ?? name} fill={true} priority={true} className="object-cover" />
+                    )}
                 </div>
 
                 <div>
@@ -69,7 +69,7 @@ const ParticipantPreview = ({ participant, onClick }: Props): ReactElement | nul
                         <TypeBadge type={type} />
                     </div>
 
-                    <div className="line-clamp-3 font-display text-2xl">{name}</div>
+                    <div className="line-clamp-3 font-display text-2xl">{updatedName ?? name}</div>
 
                     {participantSlots.length > 0 && <ParticipantSlots participantSlots={participantSlots} isInPreview={true} />}
 

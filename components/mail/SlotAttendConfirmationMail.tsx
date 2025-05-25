@@ -18,7 +18,7 @@ const SlotAttendConfirmationMail = ({ slot, title, fullName, participant, locati
             <MailParagraph>Hey {fullName},</MailParagraph>
 
             <MailParagraph>
-                du hast dich erfolgreich für die Veranstaltung <strong>{participant.name}</strong> angemeldet.
+                du hast dich erfolgreich für die Veranstaltung <strong>{participant.updatedName ?? participant.name}</strong> angemeldet.
             </MailParagraph>
 
             <MailParagraph>

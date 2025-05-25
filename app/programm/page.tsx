@@ -1,4 +1,5 @@
 import type { Location, ParticipantLabel, Link as PrismaLink, Venue } from '@prisma/client';
+import BackgroundImage from 'components/common/BackgroundImage';
 import Footer from 'components/common/Footer';
 import ParticipantsOverview from 'components/participants/overview/ParticipantsOverview';
 import { ParticipantsOverviewContextProvider } from 'components/participants/overview/ParticipantsOverviewContext';
@@ -12,7 +13,6 @@ import getAllParticipants from 'lib/participants/getAllParticipants';
 import getAllSlots from 'lib/participants/getAllSlots';
 import getAllVenues from 'lib/participants/getAllVenues';
 import serializeParticipant from 'lib/participants/serializeParticipant';
-import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { ReactElement } from 'react';
@@ -99,62 +99,42 @@ export default async (): Promise<ReactElement> => {
 
     return (
         <div>
-            <div className="relative z-10 mx-auto min-h-screen w-full max-w-2xl font-display">
-                <div className="bg-white py-3 text-center font-bold tracking-[0.3em] text-[#5ff450] uppercase">
-                    19. & 20. September 2025
-                </div>
-                <div className="h-10 w-full bg-black" />
-                <Link
-                    href="/"
-                    className="block w-full cursor-pointer bg-white py-3 text-center font-bold tracking-[0.3em] text-black uppercase"
-                >
-                    B-Side Festival 2025
-                </Link>
+            <div className="relative min-h-screen w-full pb-16">
+                <div className="relative z-10">
+                    <div className="bg-white py-3 text-center font-bold tracking-[0.3em] text-[#5ff450] uppercase">
+                        19. & 20. September 2025
+                    </div>
+                    <Link
+                        href="/"
+                        className="block w-full cursor-pointer bg-white py-3 text-center font-bold tracking-[0.3em] text-black uppercase"
+                    >
+                        B-Side Festival 2025
+                    </Link>
 
-                <div className="h-5 w-full bg-black" />
+                    <div className="block w-full cursor-pointer bg-[#FDF85D] py-3 text-center text-xl font-bold tracking-[0.3em] uppercase select-none">
+                        Programm
+                    </div>
 
-                <div className="block w-full cursor-pointer bg-[#FDF85D] py-3 text-center text-xl font-bold tracking-[0.3em] uppercase select-none">
-                    Programm
-                </div>
-
-                <div className="h-5 w-full bg-[#5ff450]" />
-
-                <div className="relative min-h-screen w-full">
-                    <div className="relative z-10">
-                        <div className="mx-auto max-w-7xl">
-                            <ParticipantsOverviewContextProvider
-                                participants={participants}
-                                slots={slots}
-                                venues={venues}
-                                participantLabels={participantLabels}
-                                allLinks={allLinks}
-                                allLocations={allLocations}
-                                allAttendees={allAttendees}
-                                isInDataPrivacyGroup={isInDataPrivacyGroup}
-                            >
-                                <ParticipantsOverview isLoggedIn={loggedIn} />
-                            </ParticipantsOverviewContextProvider>
-                        </div>
+                    <div className="mx-auto max-w-7xl">
+                        <ParticipantsOverviewContextProvider
+                            participants={participants}
+                            slots={slots}
+                            venues={venues}
+                            participantLabels={participantLabels}
+                            allLinks={allLinks}
+                            allLocations={allLocations}
+                            allAttendees={allAttendees}
+                            isInDataPrivacyGroup={isInDataPrivacyGroup}
+                        >
+                            <ParticipantsOverview isLoggedIn={loggedIn} />
+                        </ParticipantsOverviewContextProvider>
                     </div>
                 </div>
+
+                <BackgroundImage />
             </div>
 
-            <div className="fixed inset-0 z-0">
-                <Image
-                    src="/assets/2024-bg1.webp"
-                    alt="background"
-                    className="fixed inset-0 z-0 blur-md"
-                    fill={true}
-                    priority={true}
-                    fetchPriority="high"
-                    objectFit="cover"
-                    objectPosition="center"
-                />
-            </div>
-
-            <div className="relative z-10">
-                <Footer />
-            </div>
+            <Footer />
         </div>
     );
 };

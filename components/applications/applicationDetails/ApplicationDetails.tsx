@@ -2,7 +2,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { Genre, Link } from '@prisma/client';
 import ApplicationCurationForm from 'components/applications/applicationCuration/ApplicationCurationForm';
-import ApplicationDescriptionForm from 'components/applications/applicationCuration/ApplicationDescriptionForm';
+import ApplicationNameAndDescriptionForm from 'components/applications/applicationCuration/ApplicationNameAndDescriptionForm';
 import ApplicationDetailsAdditionalInfo from 'components/applications/applicationDetails/ApplicationDetailsAdditionalInfo';
 import ApplicationDetailsAllergies from 'components/applications/applicationDetails/ApplicationDetailsAllergies';
 import ApplicationDetailsCanProvideBackline from 'components/applications/applicationDetails/ApplicationDetailsCanProvideBackline';
@@ -28,7 +28,7 @@ interface Props {
 }
 
 const ApplicationDetails = ({ application, genres, links, onCloseClick }: Props): ReactElement => {
-    const { name, type, curationScore, status } = application;
+    const { type, curationScore, status } = application;
 
     return (
         <div>
@@ -58,9 +58,7 @@ const ApplicationDetails = ({ application, genres, links, onCloseClick }: Props)
                         </div>
                     </div>
 
-                    <div className="font-display text-2xl text-gray-100">{name}</div>
-
-                    <ApplicationDescriptionForm application={application} />
+                    <ApplicationNameAndDescriptionForm application={application} />
                 </div>
             </div>
 

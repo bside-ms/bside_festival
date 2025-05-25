@@ -66,7 +66,7 @@ const ApplicationsOverviewContextProvider = ({
         }
 
         const fuse = new Fuse(applicationsFilteredByType, {
-            keys: ['name'],
+            keys: ['name', 'updatedName'],
             shouldSort: true,
             includeScore: true,
             includeMatches: true,

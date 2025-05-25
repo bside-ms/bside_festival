@@ -1,179 +1,180 @@
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+    provider      = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
 
 model Participant {
-  id                          Int                          @id @default(autoincrement())
-  name                        String                       @db.Text
-  appliedAt                   DateTime?
-  updatedAt                   DateTime                     @updatedAt
-  contactName                 String?                      @db.Text
-  contactMail                 String?                      @db.Text
-  contactPhone                String?                      @db.Text
-  description                 String?                      @db.Text
-  updatedDescription          String?                      @db.Text
-  motivation                  String?                      @db.Text
-  curationScore               Int?
-  curationInfo                String?                      @db.Text
-  address                     String?                      @db.Text
-  residence                   String?                      @db.Text
-  imageFileName               String?                      @db.Text
-  technicalRider              String?                      @db.Text
-  technicalRiderFileName      String?                      @db.Text
-  backlineSharing             String?                      @db.Text
-  materialExpenses            String?                      @db.Text
-  additionalInfo              String?                      @db.Text
-  participantCount            String?                      @db.Text
-  allergies                   String?                      @db.Text
-  hasFlintaParticipants       Boolean                      @default(false)
-  hasMarginalizedParticipants Boolean                      @default(false)
-  diversityNotes              String?                      @db.Text
-  links                       Link[]
-  comments                    Comment[]
-  labels                      ParticipantLabel[]
-  genres                      ParticipantGenre[]
-  type                        Type
-  status                      ApplicationStatus            @default(Applied)
-  Slot                        Slot[]
-  Venue                       Venue[]
+    id                          Int                @id @default(autoincrement())
+    name                        String             @db.Text
+    updatedName                 String?            @db.Text
+    appliedAt                   DateTime?
+    updatedAt                   DateTime           @updatedAt
+    contactName                 String?            @db.Text
+    contactMail                 String?            @db.Text
+    contactPhone                String?            @db.Text
+    description                 String?            @db.Text
+    updatedDescription          String?            @db.Text
+    motivation                  String?            @db.Text
+    curationScore               Int?
+    curationInfo                String?            @db.Text
+    address                     String?            @db.Text
+    residence                   String?            @db.Text
+    imageFileName               String?            @db.Text
+    technicalRider              String?            @db.Text
+    technicalRiderFileName      String?            @db.Text
+    backlineSharing             String?            @db.Text
+    materialExpenses            String?            @db.Text
+    additionalInfo              String?            @db.Text
+    participantCount            String?            @db.Text
+    allergies                   String?            @db.Text
+    hasFlintaParticipants       Boolean            @default(false)
+    hasMarginalizedParticipants Boolean            @default(false)
+    diversityNotes              String?            @db.Text
+    links                       Link[]
+    comments                    Comment[]
+    labels                      ParticipantLabel[]
+    genres                      ParticipantGenre[]
+    type                        Type
+    status                      ApplicationStatus  @default(Applied)
+    Slot                        Slot[]
+    Venue                       Venue[]
 }
 
 model Link {
-  id            Int         @id @default(autoincrement())
-  participant   Participant @relation(fields: [participantId], references: [id])
-  participantId Int
-  link          String      @db.Text
+    id            Int         @id @default(autoincrement())
+    participant   Participant @relation(fields: [participantId], references: [id])
+    participantId Int
+    link          String      @db.Text
 }
 
 model Comment {
-  id            Int         @id @default(autoincrement())
-  participant   Participant @relation(fields: [participantId], references: [id])
-  participantId Int
-  comment       String      @db.Text
-  commentator   String      @db.Text
-  updatedAt     DateTime    @updatedAt
+    id            Int         @id @default(autoincrement())
+    participant   Participant @relation(fields: [participantId], references: [id])
+    participantId Int
+    comment       String      @db.Text
+    commentator   String      @db.Text
+    updatedAt     DateTime    @updatedAt
 }
 
 model Label {
-  id           Int                @id @default(autoincrement())
-  label        String             @db.Text
-  particapants ParticipantLabel[]
+    id           Int                @id @default(autoincrement())
+    label        String             @db.Text
+    particapants ParticipantLabel[]
 }
 
 model ParticipantLabel {
-  participant   Participant @relation(fields: [participantId], references: [id])
-  participantId Int
-  label         Label       @relation(fields: [labelId], references: [id])
-  labelId       Int
+    participant   Participant @relation(fields: [participantId], references: [id])
+    participantId Int
+    label         Label       @relation(fields: [labelId], references: [id])
+    labelId       Int
 
-  @@id([participantId, labelId])
+    @@id([participantId, labelId])
 }
 
 model Genre {
-  id           Int               @id @default(autoincrement())
-  name         String            @db.Text
-  type         Type
-  participants ParticipantGenre[]
+    id           Int                @id @default(autoincrement())
+    name         String             @db.Text
+    type         Type
+    participants ParticipantGenre[]
 }
 
 model ParticipantGenre {
-  participant   Participant @relation(fields: [participantId], references: [id])
-  participantId Int
-  genre         Genre       @relation(fields: [genreId], references: [id])
-  genreId       Int
+    participant   Participant @relation(fields: [participantId], references: [id])
+    participantId Int
+    genre         Genre       @relation(fields: [genreId], references: [id])
+    genreId       Int
 
-  @@id([participantId, genreId])
+    @@id([participantId, genreId])
 }
 
 enum Type {
-  Concert
-  Workshop
-  Reading
-  Performance
-  FamilyProgram
-  Exhibition
-  Food
-  Neighbor
-  Misc
-  DiskJockey
-  InfoBooth
-  Catering
+    Concert
+    Workshop
+    Reading
+    Performance
+    FamilyProgram
+    Exhibition
+    Food
+    Neighbor
+    Misc
+    DiskJockey
+    InfoBooth
+    Catering
 }
 
 enum ApplicationStatus {
-  Applied
-  Rejected
-  InProgress
-  WaitingForConfirmation
-  Confirmed
-  Canceled
+    Applied
+    Rejected
+    InProgress
+    WaitingForConfirmation
+    Confirmed
+    Canceled
 }
 
 model Location {
-  id            Int     @id @default(autoincrement())
-  name          String  @db.Text
-  address       String? @db.Text
-  latitude      Float?  @db.Float
-  longitude     Float?  @db.Float
-  awarenessInfo String? @db.Text
-  Slot          Slot[]
-  Venue         Venue[]
+    id            Int     @id @default(autoincrement())
+    name          String  @db.Text
+    address       String? @db.Text
+    latitude      Float?  @db.Float
+    longitude     Float?  @db.Float
+    awarenessInfo String? @db.Text
+    Slot          Slot[]
+    Venue         Venue[]
 }
 
 // Slot is for program that starts at a specific time at the location
 model Slot {
-  id            Int         @id @default(autoincrement())
-  begin         DateTime
-  duration      Int
-  participantId Int
-  participant   Participant @relation(fields: [participantId], references: [id])
-  locationId    Int
-  location      Location    @relation(fields: [locationId], references: [id])
-  maxAttendees  Int?
-  Attendee      Attendee[]
+    id            Int         @id @default(autoincrement())
+    begin         DateTime
+    duration      Int
+    participantId Int
+    participant   Participant @relation(fields: [participantId], references: [id])
+    locationId    Int
+    location      Location    @relation(fields: [locationId], references: [id])
+    maxAttendees  Int?
+    Attendee      Attendee[]
 }
 
 // Venue is for program that is at the location during the entire festival
 model Venue {
-  id            Int         @id @default(autoincrement())
-  participantId Int
-  participant   Participant @relation(fields: [participantId], references: [id])
-  locationId    Int
-  location      Location    @relation(fields: [locationId], references: [id])
-  dates         String?     @db.Text
+    id            Int         @id @default(autoincrement())
+    participantId Int
+    participant   Participant @relation(fields: [participantId], references: [id])
+    locationId    Int
+    location      Location    @relation(fields: [locationId], references: [id])
+    dates         String?     @db.Text
 }
 
 model Volunteer {
-  // Primary key is called int instead of id by accident >_<
-  int                   Int     @id @default(autoincrement())
-  fullName              String  @db.Text
-  mailAddress           String  @db.Text
-  phoneNumber           String  @db.Text
-  canCook               Boolean @default(false)
-  hasCar                Boolean @default(false)
-  canCarryHeavyStuff    Boolean @default(false)
-  isSocial              Boolean @default(false)
-  canSupportTechnician  Boolean @default(false)
-  canSupportArtist      Boolean @default(false)
-  hasMultipleTalents    Boolean @default(false)
-  canWorkWithChildren   Boolean @default(false)
-  isAvailableOnFriday   Boolean @default(false)
-  isAvailableOnSaturday Boolean @default(false)
-  isAvailableOnSunday   Boolean @default(false)
-  additionalInfo        String? @db.Text
+    // Primary key is called int instead of id by accident >_<
+    int                   Int     @id @default(autoincrement())
+    fullName              String  @db.Text
+    mailAddress           String  @db.Text
+    phoneNumber           String  @db.Text
+    canCook               Boolean @default(false)
+    hasCar                Boolean @default(false)
+    canCarryHeavyStuff    Boolean @default(false)
+    isSocial              Boolean @default(false)
+    canSupportTechnician  Boolean @default(false)
+    canSupportArtist      Boolean @default(false)
+    hasMultipleTalents    Boolean @default(false)
+    canWorkWithChildren   Boolean @default(false)
+    isAvailableOnFriday   Boolean @default(false)
+    isAvailableOnSaturday Boolean @default(false)
+    isAvailableOnSunday   Boolean @default(false)
+    additionalInfo        String? @db.Text
 }
 
 model Attendee {
-  id          Int      @id @default(autoincrement())
-  fullName    String   @db.Text
-  mailAddress String   @db.Text
-  attendedAt  DateTime
-  slotId      Int
-  slot        Slot     @relation(fields: [slotId], references: [id])
+    id          Int      @id @default(autoincrement())
+    fullName    String   @db.Text
+    mailAddress String   @db.Text
+    attendedAt  DateTime
+    slotId      Int
+    slot        Slot     @relation(fields: [slotId], references: [id])
 }

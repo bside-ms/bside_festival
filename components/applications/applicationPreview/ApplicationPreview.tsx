@@ -17,7 +17,7 @@ interface Props {
 }
 
 const ApplicationPreview = ({ application, genres, onClick }: Props): ReactElement => {
-    const { name, imageFileName, type, curationScore, status, description, updatedDescription } = application;
+    const { name, updatedName, imageFileName, type, curationScore, status, description, updatedDescription } = application;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -27,7 +27,9 @@ const ApplicationPreview = ({ application, genres, onClick }: Props): ReactEleme
             onClick={onClick}
         >
             <div className={cn('relative h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3', isEmptyString(imageUrl) && 'h-auto')}>
-                {isNotEmptyString(imageUrl) && <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />}
+                {isNotEmptyString(imageUrl) && (
+                    <Image src={imageUrl} alt={updatedName ?? name} fill={true} priority={true} className="object-cover" />
+                )}
             </div>
 
             <div>
@@ -53,7 +55,7 @@ const ApplicationPreview = ({ application, genres, onClick }: Props): ReactEleme
                     </div>
                 </div>
 
-                <div className="line-clamp-3 font-display text-2xl text-gray-100">{name}</div>
+                <div className="line-clamp-3 font-display text-2xl text-gray-100">{updatedName ?? name}</div>
 
                 {isNotEmptyString(description) && (
                     <div className="mt-4 line-clamp-6 text-gray-100">{updatedDescription ?? description}</div>

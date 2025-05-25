@@ -5,10 +5,10 @@ import AttendeeForm from 'components/participants/attendeeForm/AttendeeForm';
 import ParticipantAdditionalInfo from 'components/participants/details/ParticipantAdditionalInfo';
 import ParticipantCanProvideBackline from 'components/participants/details/ParticipantCanProvideBackline';
 import ParticipantContacts from 'components/participants/details/ParticipantContacts';
-import ParticipantDescriptionForm from 'components/participants/details/ParticipantDescriptionForm';
 import ParticipantImage from 'components/participants/details/ParticipantImage';
 import ParticipantLinks from 'components/participants/details/ParticipantLinks';
 import ParticipantMaterialExpenses from 'components/participants/details/ParticipantMaterialExpenses';
+import ParticipantNameAndDescriptionForm from 'components/participants/details/ParticipantNameAndDescriptionForm';
 import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import ParticipantTechnicalRider from 'components/participants/details/ParticipantTechnicalRider';
 import ParticipantVenues from 'components/participants/details/ParticipantVenues';
@@ -23,7 +23,7 @@ import SlotForm from 'components/participants/slotsForm/SlotForm';
 import VenueForm from 'components/participants/venueForm/VenueForm';
 import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
 import hasSlotOrVenue from 'lib/participants/hasSlotOrVenue';
-import type { ReactElement } from 'react';
+import { ReactElement, useCallback, useState } from 'react';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
@@ -36,10 +36,13 @@ interface Props {
 const ParticipantDetails = ({ participant, links, onCloseClick, isLoggedIn }: Props): ReactElement | null => {
     const { areLocationOrDateRangeFiltersSet } = useParticipantsOverviewContext();
 
-    const { id, name, type } = participant;
+    const { id, name, updatedName, type } = participant;
 
     const participantSlots = useParticipantSlots(participant.id);
     const participantVenues = useParticipantVenues(participant.id);
+
+    const [showDetailsForm, setShowDetailsForm] = useState(false);
+    const toggleDetailsForm = useCallback(() => setShowDetailsForm((prevState) => !prevState), []);
 
     if (
         areLocationOrDateRangeFiltersSet &&
@@ -51,9 +54,7 @@ const ParticipantDetails = ({ participant, links, onCloseClick, isLoggedIn }: Pr
 
     return (
         <div>
-            <div className="h-3 w-full bg-black" />
-
-            <div className="relative flex flex-col justify-between gap-4 bg-white p-3 text-gray-800 md:p-5">
+            <div className="relative flex flex-col justify-between gap-4 rounded-md bg-white/20 p-3 shadow-lg backdrop-blur-2xl md:flex-row-reverse md:p-5">
                 <div className="flex flex-col justify-between gap-4 md:flex-row-reverse">
                     <ParticipantImage participant={participant} isLoggedIn={isLoggedIn} />
 
@@ -62,17 +63,28 @@ const ParticipantDetails = ({ participant, links, onCloseClick, isLoggedIn }: Pr
                             <TypeBadge type={type} />
                         </div>
 
-                        <div className="font-display text-2xl">{name}</div>
+                        {!showDetailsForm && (
+                            <>
+                                <div className="font-display text-2xl">{updatedName ?? name}</div>
 
-                        {participant.status === 'Canceled' && (
-                            <div className="mt-3 text-lg font-bold text-red-900">Leider kann dieser Programmpunkt nicht stattfinden!</div>
+                                {participant.status === 'Canceled' && (
+                                    <div className="mt-3 text-lg font-bold text-red-900">
+                                        Leider kann dieser Programmpunkt nicht stattfinden!
+                                    </div>
+                                )}
+
+                                {participantSlots.length > 0 && <ParticipantSlots participantSlots={participantSlots} />}
+
+                                <ParticipantVenues participantId={id} />
+                            </>
                         )}
 
-                        {participantSlots.length > 0 && <ParticipantSlots participantSlots={participantSlots} />}
-
-                        <ParticipantVenues participantId={id} />
-
-                        <ParticipantDescriptionForm participant={participant} isLoggedIn={isLoggedIn} />
+                        <ParticipantNameAndDescriptionForm
+                            participant={participant}
+                            isLoggedIn={isLoggedIn}
+                            showForm={showDetailsForm}
+                            toggleForm={toggleDetailsForm}
+                        />
 
                         <ParticipantLinks links={links} />
                     </div>

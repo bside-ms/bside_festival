@@ -1,14 +1,16 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { SuccessfulUpdateDescriptionResponse, UpdateDescriptionRequest } from 'app/api/applications/update/description/route';
+import type { SuccessfulUpdateDetailsResponse, UpdateDetailsRequest } from 'app/api/applications/update/details/route';
 import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import TextArea from 'components/form/TextArea';
+import TextInput from 'components/form/TextInput';
 import type { ReactElement } from 'react';
 import { useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
-interface DescriptionFormValues {
+interface NameAndDescriptionFormValues {
+    name: string;
     description: string;
 }
 
@@ -16,13 +18,13 @@ interface Props {
     application: SerializableParticipant;
 }
 
-const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
+const ApplicationNameAndDescriptionForm = ({ application }: Props): ReactElement => {
     const { updateApplication } = useApplicationsOverviewContext();
 
     const [showForm, setShowForm] = useState(false);
     const toggleShowForm = useCallback(() => setShowForm((prevState) => !prevState), []);
 
-    const methods = useForm<DescriptionFormValues>();
+    const methods = useForm<NameAndDescriptionFormValues>();
     const {
         handleSubmit,
         setError,
@@ -31,15 +33,16 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
     } = methods;
 
     const handleFormSubmit = useCallback(
-        async ({ description }: DescriptionFormValues) => {
+        async ({ name, description }: NameAndDescriptionFormValues) => {
             clearErrors('root');
 
-            const request: UpdateDescriptionRequest = {
+            const request: UpdateDetailsRequest = {
                 id: application.id,
+                name,
                 description,
             };
 
-            const response = await fetch('/api/applications/update/description', {
+            const response = await fetch('/api/applications/update/details', {
                 method: 'POST',
                 headers: { 'Content-type': 'application/json' },
                 body: JSON.stringify(request),
@@ -48,7 +51,7 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
             if (!response.ok) {
                 setError('root', { message: 'Fehler beim Submit!' });
             } else {
-                const { updatedParticipant } = (await response.json()) as SuccessfulUpdateDescriptionResponse;
+                const { updatedParticipant } = (await response.json()) as SuccessfulUpdateDetailsResponse;
 
                 updateApplication(updatedParticipant);
 
@@ -60,12 +63,16 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
 
     if (!showForm) {
         return (
-            <div className="mt-4 text-gray-100">
-                <div className="whitespace-pre-wrap">{application.updatedDescription ?? application.description}</div>
-                <a onClick={toggleShowForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
-                    Beschreibung bearbeiten…
-                </a>
-            </div>
+            <>
+                <div className="font-display text-2xl text-gray-100">{application.updatedName ?? application.name}</div>
+
+                <div className="mt-4 text-gray-100">
+                    <div className="whitespace-pre-wrap">{application.updatedDescription ?? application.description}</div>
+                    <a onClick={toggleShowForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
+                        Name und Beschreibung bearbeiten…
+                    </a>
+                </div>
+            </>
         );
     }
 
@@ -73,17 +80,33 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
         <div className="mt-4">
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex max-w-3xl flex-col gap-4">
-                    <TextArea<DescriptionFormValues>
+                    <TextInput<NameAndDescriptionFormValues>
+                        name="name"
+                        label="Name"
+                        required={true}
+                        defaultValue={application.updatedName ?? application.name}
+                    />
+
+                    {application.updatedName !== application.name && (
+                        <div className="text-sm text-gray-100">
+                            <div className="font-bold text-gray-400">Ursprünglicher Name</div>
+                            <div className="whitespace-pre-wrap">{application.name}</div>
+                        </div>
+                    )}
+
+                    <TextArea<NameAndDescriptionFormValues>
                         name="description"
                         label="Beschreibung"
                         defaultValue={application.updatedDescription ?? application.description ?? ''}
                         rows={10}
                     />
 
-                    <div className="text-sm text-gray-100">
-                        <div className="font-bold text-gray-400">Ursprüngliche Beschreibung</div>
-                        <div className="whitespace-pre-wrap">{application.description}</div>
-                    </div>
+                    {application.updatedDescription !== application.description && (
+                        <div className="text-sm text-gray-100">
+                            <div className="font-bold text-gray-400">Ursprüngliche Beschreibung</div>
+                            <div className="whitespace-pre-wrap">{application.description}</div>
+                        </div>
+                    )}
 
                     <div>
                         <label className="block max-w-[300px] bg-black p-1">
@@ -116,4 +139,4 @@ const ApplicationDescriptionForm = ({ application }: Props): ReactElement => {
     );
 };
 
-export default ApplicationDescriptionForm;
+export default ApplicationNameAndDescriptionForm;

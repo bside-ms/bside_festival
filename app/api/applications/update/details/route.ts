@@ -2,26 +2,26 @@ import type { Participant } from '@prisma/client';
 import prismaClient from 'lib/common/prismaClient';
 import { NextResponse } from 'next/server';
 
-export interface UpdateDescriptionRequest {
+export interface UpdateDetailsRequest {
     id: number;
+    name: string;
     description: string;
 }
 
-export interface SuccessfulUpdateDescriptionResponse {
+export interface SuccessfulUpdateDetailsResponse {
     updatedParticipant: Participant;
 }
 
-export interface ErroneousUpdateDescriptionResponse {
+export interface ErroneousUpdateDetailsResponse {
     message: string;
 }
 
-export const POST = async (
-    request: Request,
-): Promise<NextResponse<SuccessfulUpdateDescriptionResponse | ErroneousUpdateDescriptionResponse>> => {
-    const { id, description } = (await request.json()) as UpdateDescriptionRequest;
+export const POST = async (request: Request): Promise<NextResponse<SuccessfulUpdateDetailsResponse | ErroneousUpdateDetailsResponse>> => {
+    const { id, name, description } = (await request.json()) as UpdateDetailsRequest;
 
     const updatedParticipant = await prismaClient.participant.update({
         data: {
+            updatedName: name,
             updatedDescription: description,
         },
         where: {
@@ -29,7 +29,7 @@ export const POST = async (
         },
     });
 
-    const successfulResponse: SuccessfulUpdateDescriptionResponse = {
+    const successfulResponse: SuccessfulUpdateDetailsResponse = {
         updatedParticipant,
     };
 
