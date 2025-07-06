@@ -44,7 +44,7 @@ const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement
             </div>
 
             {isNotEmptyString(volunteer.additionalInfo) && (
-                <pre className="mt-4 border-l-2 border-gray-400 pl-3 font-sans whitespace-pre-wrap text-gray-600 italic">
+                <pre className="mt-4 border-l-2 border-gray-400 pl-3 whitespace-pre-wrap text-gray-600 italic">
                     {volunteer.additionalInfo}
                 </pre>
             )}

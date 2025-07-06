@@ -15,7 +15,7 @@ const ParticipantVenues = ({ participantId, isInPreview = false }: Props): React
     }
 
     return (
-        <div className="mt-3 space-y-1">
+        <div className="space-y-1">
             {participantVenues.map(({ location, dates }) => (
                 <ParticipantVenue key={location.id} location={location} dates={dates} showAccessibleInfo={!isInPreview} />
             ))}

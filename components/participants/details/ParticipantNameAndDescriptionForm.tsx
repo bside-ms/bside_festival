@@ -63,7 +63,7 @@ const ParticipantNameAndDescriptionForm = ({ participant, isLoggedIn, showForm, 
 
     if (!showForm) {
         return (
-            <div className="mt-4">
+            <div>
                 <pre className="font-display whitespace-pre-wrap">{participant.updatedDescription ?? participant.description}</pre>
 
                 {isLoggedIn && (
@@ -76,7 +76,7 @@ const ParticipantNameAndDescriptionForm = ({ participant, isLoggedIn, showForm, 
     }
 
     return (
-        <div className="mt-4">
+        <div>
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex max-w-3xl flex-col gap-4">
                     <TextInput<DescriptionFormValues>

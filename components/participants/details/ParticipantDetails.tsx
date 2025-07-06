@@ -58,8 +58,8 @@ const ParticipantDetails = ({ participant, links, onCloseClick, isLoggedIn }: Pr
                 <div className="flex flex-col justify-between gap-4 md:flex-row-reverse">
                     <ParticipantImage participant={participant} isLoggedIn={isLoggedIn} />
 
-                    <div className="shrink grow-0">
-                        <div className="mb-1">
+                    <div className="shrink grow-0 space-y-3">
+                        <div>
                             <TypeBadge type={type} />
                         </div>
 
@@ -68,7 +68,7 @@ const ParticipantDetails = ({ participant, links, onCloseClick, isLoggedIn }: Pr
                                 <div className="font-display text-2xl">{updatedName ?? name}</div>
 
                                 {participant.status === 'Canceled' && (
-                                    <div className="mt-3 text-lg font-bold text-red-900">
+                                    <div className="text-lg font-bold text-red-900">
                                         Leider kann dieser Programmpunkt nicht stattfinden!
                                     </div>
                                 )}
