@@ -1,12 +1,11 @@
-import authOptions from 'lib/next-auth/authOptions';
-import { getServerSession } from 'next-auth';
+import isLoggedIn from 'lib/next-auth/isLoggedIn';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 
 const InternalLinks = async (): Promise<ReactElement | null> => {
-    const session = await getServerSession(authOptions);
+    const loggedIn = await isLoggedIn();
 
-    if (session === null) {
+    if (!loggedIn) {
         return null;
     }
 
@@ -23,11 +22,11 @@ const InternalLinks = async (): Promise<ReactElement | null> => {
                 </Link>
             </div>
 
-            {/*<div>*/}
-            {/*    <Link href="/programm/" className="cursor-pointer underline">*/}
-            {/*        Programmübersicht*/}
-            {/*    </Link>*/}
-            {/*</div>*/}
+            <div>
+                <Link href="/programm/" className="cursor-pointer underline">
+                    Programmübersicht
+                </Link>
+            </div>
 
             {/*<div>*/}
             {/*    <Link href="/mithelfen/uebersicht" className="cursor-pointer underline">*/}

@@ -1,7 +1,6 @@
 import ApplicationsOverview from 'components/applications/applicationsOverview/ApplicationsOverview';
 import { ApplicationsOverviewContextProvider } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
 import BackgroundImage from 'components/common/BackgroundImage';
-import Footer from 'components/common/Footer';
 import prismaClient from 'lib/common/prismaClient';
 import isGroupMember from 'lib/next-auth/isGroupMember';
 import isLoggedIn from 'lib/next-auth/isLoggedIn';
@@ -27,25 +26,21 @@ export default async (): Promise<ReactElement> => {
     const allGenres = await prismaClient.genre.findMany();
 
     return (
-        <div>
-            <div className="relative min-h-screen w-full pb-16">
-                <div className="relative z-10">
-                    <div className="mx-auto max-w-7xl px-3">
-                        <ApplicationsOverviewContextProvider
-                            applications={applications}
-                            participantGenres={participantGenres}
-                            allLinks={allLinks}
-                            allGenres={allGenres}
-                        >
-                            <ApplicationsOverview />
-                        </ApplicationsOverviewContextProvider>
-                    </div>
+        <div className="relative min-h-screen w-full pb-16">
+            <div className="relative z-10">
+                <div className="mx-auto max-w-7xl px-3">
+                    <ApplicationsOverviewContextProvider
+                        applications={applications}
+                        participantGenres={participantGenres}
+                        allLinks={allLinks}
+                        allGenres={allGenres}
+                    >
+                        <ApplicationsOverview />
+                    </ApplicationsOverviewContextProvider>
                 </div>
-
-                <BackgroundImage />
             </div>
 
-            <Footer />
+            <BackgroundImage />
         </div>
     );
 };

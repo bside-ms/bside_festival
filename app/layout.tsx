@@ -1,3 +1,5 @@
+import Footer from 'components/common/Footer';
+import PageHeader from 'components/common/PageHeader';
 import type { Metadata } from 'next';
 import './globals.css';
 
@@ -24,14 +26,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="de">
-            <head>
-                <link rel="preconnect" href="https://use.typekit.net" />
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link href="https://use.typekit.net/hvw2qua.css" rel="stylesheet" />
-                <link href="https://use.typekit.net/gbo5uob.css" rel="stylesheet" />
-                <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet" />
-            </head>
-            <body className="font-sans">{children}</body>
+            <head />
+            <body className="bg-[#EAEBEB] font-sans">
+                <PageHeader />
+
+                {children}
+
+                <Footer />
+            </body>
         </html>
     );
 }

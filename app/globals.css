@@ -1,6 +1,22 @@
 @import 'tailwindcss';
 
 @theme {
-    --font-sans: 'Questrial', sans-serif;
-    --font-display: 'obviously', serif;
+    --font-display: 'NewEdge666', serif;
+    --font-mono: 'StepsMono', serif;
+
+    --breakpoint-xs: 25rem;
+}
+
+@font-face {
+    font-family: 'NewEdge666';
+    src: url('/fonts/NewEdge666-RegularRounded.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'StepsMono';
+    src: url('/fonts/Steps-Mono.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
 }
