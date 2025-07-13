@@ -23,8 +23,18 @@ const LocationGroupToggle = ({ locations }: { locations: Array<Location> }): Rea
 
     return (
         <div
-            className="rounded border-2 border-dashed border-gray-200 bg-gray-200 px-3 py-1 text-sm uppercase select-none hover:opacity-90 md:cursor-pointer"
-            style={{ borderColor: isActive ? '#444' : undefined }}
+            className="rounded-2xl px-3 py-1 font-mono text-sm select-none hover:opacity-90 md:cursor-pointer"
+            style={
+                isActive
+                    ? {
+                          color: 'white',
+                          backgroundColor: 'black',
+                      }
+                    : {
+                          color: 'black',
+                          backgroundColor: 'white',
+                      }
+            }
             onClick={handleClick}
         >
             {simplifyLocationName(locations[0]!.name)}
@@ -43,8 +53,18 @@ const LocationIdToggle = ({ locationId }: { locationId: number }): ReactElement 
 
     return (
         <div
-            className="rounded border-2 border-dashed border-gray-200 bg-gray-200 px-3 py-1 text-sm uppercase select-none md:cursor-pointer"
-            style={{ borderColor: isActive ? '#444' : undefined }}
+            className="rounded-2xl px-3 py-1 font-mono text-sm select-none hover:opacity-90 md:cursor-pointer"
+            style={
+                isActive
+                    ? {
+                          color: 'white',
+                          backgroundColor: 'black',
+                      }
+                    : {
+                          color: 'black',
+                          backgroundColor: 'white',
+                      }
+            }
             onClick={handleClick}
         >
             {locationName}
@@ -106,8 +126,10 @@ const ParticipantsOverviewLocationFilter = (): ReactElement => {
     });
 
     return (
-        <div className="mb-3">
-            <div className="mb-3 flex flex-wrap gap-2">
+        <div className="mb-2 rounded-2xl border border-black bg-[#ebc9de]">
+            <div className="border-b border-black p-2 text-center text-2xl uppercase">Location</div>
+
+            <div className="flex flex-wrap gap-2 p-2">
                 {locationGroups.map((locations) => (
                     <LocationGroupToggle key={locations[0]!.id} locations={locations} />
                 ))}

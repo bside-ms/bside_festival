@@ -6,10 +6,8 @@ import { useParticipantsOverviewContext } from '@/components/participants/overvi
 import ParticipantsOverviewDateRangeFilter from '@/components/participants/overview/ParticipantsOverviewDateRangeFilter';
 import ParticipantsOverviewLocationFilter from '@/components/participants/overview/ParticipantsOverviewLocationFilter';
 import ParticipantsOverviewTypesFilter from '@/components/participants/overview/ParticipantsOverviewTypesFilter';
-import cn from '@/lib/common/helper/cn';
 import Link from 'next/link';
 import { ReactElement, useCallback, useState } from 'react';
-import { IoTriangle } from 'react-icons/io5';
 import { ToastContainer } from 'react-toastify';
 
 interface Props {
@@ -24,28 +22,25 @@ const ParticipantsOverview = ({ isLoggedIn }: Props): ReactElement => {
     const [showFilter, setShowFilter] = useState(areFiltersSet);
     const toggleFilter = useCallback(() => setShowFilter((prevState) => !prevState), []);
 
+    const handleFilterClick = useCallback(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setShowFilter(true);
+    }, []);
+
     return (
         <>
             <div className="px-2 pb-4">
-                <a className="mb-5 flex w-full cursor-pointer items-baseline gap-2" onClick={toggleFilter}>
-                    <span>Filter {showFilter ? 'ausblenden' : 'anzeigen'}</span>
-
-                    <span className={cn('text-xs', !showFilter && 'rotate-180')}>
-                        <IoTriangle />
-                    </span>
-                </a>
-
                 {showFilter && (
                     <div>
                         <ParticipantsOverviewTypesFilter />
 
                         <div className="mb-3">
-                            <div className="mt-4">
-                                <ParticipantsOverviewLocationFilter />
+                            <div className="mt-4 empty:mt-0">
+                                <ParticipantsOverviewDateRangeFilter />
                             </div>
 
-                            <div className="mt-8 empty:mt-0">
-                                <ParticipantsOverviewDateRangeFilter />
+                            <div className="mt-4">
+                                <ParticipantsOverviewLocationFilter />
                             </div>
                         </div>
                     </div>
@@ -63,7 +58,16 @@ const ParticipantsOverview = ({ isLoggedIn }: Props): ReactElement => {
             </div>
 
             {filteredParticipants.length > 0 && (
-                <div className="empty-placeholder mb-2 grid grid-cols-1 gap-4">
+                <div className="empty-placeholder relative mb-2 grid grid-cols-1 gap-4">
+                    <div className="sticky top-10 z-20">
+                        <div
+                            onClick={handleFilterClick}
+                            className="absolute -top-5 right-5 flex h-17 w-17 items-center justify-center rounded-full bg-[#f0ee0a] font-mono text-sm"
+                        >
+                            Filtern
+                        </div>
+                    </div>
+
                     {pinnedParticipants.map((participant) => (
                         <ParticipantOverview key={participant.id} participant={participant} isLoggedIn={isLoggedIn} />
                     ))}

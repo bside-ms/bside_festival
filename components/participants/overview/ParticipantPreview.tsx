@@ -74,7 +74,7 @@ const ParticipantPreview = ({ participant, onClick }: Props): ReactElement | nul
 
                         {participantSlots.map(({ slot: { id, begin, maxAttendees }, location: { name } }) => (
                             <Fragment key={id}>
-                                <Badge label={formatDate(new Date(begin), 'EEE HH:mm')} backgroundColor="#b1c32c" />
+                                <Badge label={formatDate(new Date(begin), 'EEEEEE HH:mm')} backgroundColor="#b1c32c" />
                                 <Badge label={name} backgroundColor="#ebc9de" />
                                 {isNotEmptyNumber(maxAttendees) && <Badge label="Anmeldung erforderlich" backgroundColor="#b0e4cc" />}
                             </Fragment>
@@ -83,7 +83,7 @@ const ParticipantPreview = ({ participant, onClick }: Props): ReactElement | nul
                         {participantVenues.map(({ dates, venue: { id }, location: { name } }) => (
                             <Fragment key={id}>
                                 {dates.map((date) => {
-                                    const formattedDate = formatDate(new Date(date), 'EEE HH:mm');
+                                    const formattedDate = formatDate(new Date(date), 'EEEEEE HH:mm');
                                     return <Badge key={formattedDate} label={formattedDate} backgroundColor="#b1c32c" />;
                                 })}
 

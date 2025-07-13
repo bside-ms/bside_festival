@@ -15,6 +15,7 @@ import type { SerializableParticipant } from '@/typings/SerializableParticipant'
 import type { SerializableSlot } from '@/typings/SerializableSlot';
 import type { Location, ParticipantLabel, Link as PrismaLink, Venue } from '@prisma/client';
 import { isAfter, isEqual } from 'date-fns';
+import { redirect } from 'next/navigation';
 import { ReactElement } from 'react';
 
 interface Props {
@@ -86,9 +87,9 @@ async function getData(): Promise<Props> {
 export default async (props: { searchParams: Promise<Record<string, string | string[]>> }): Promise<ReactElement> => {
     const loggedIn = await isLoggedIn();
 
-    // if (!loggedIn) {
-    //     redirect('/');
-    // }
+    if (!loggedIn) {
+        redirect('/');
+    }
 
     const searchParams = await props.searchParams;
     const initialDateRangeFilter = searchParams[dateRangeFilterQueryName];

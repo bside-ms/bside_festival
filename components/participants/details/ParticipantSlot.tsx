@@ -17,7 +17,7 @@ const ParticipantSlot = ({
     location: { name, awarenessInfo },
     showAccessibleInfo,
 }: Props): ReactElement | null => {
-    let dateAndLocation = `${formatDate(new Date(begin), 'EEE dd.MM. / HH:mm')} / ${name}`;
+    let dateAndLocation = `${formatDate(new Date(begin), 'EE dd.MM. / HH:mm')} / ${name}`;
 
     if (isNotEmptyNumber(maxAttendees)) {
         dateAndLocation += ' / Anmeldung erforderlich';

@@ -65,33 +65,19 @@ const ParticipantsOverviewDateRangeFilter = (): ReactElement | null => {
     } while (isBefore(currentDate, slotsDateRange[1]));
 
     return (
-        <div className="mb-9">
-            <div className="mb-3 flex max-w-lg flex-col flex-wrap gap-4">
-                <div className="flex justify-between">
-                    {filteredDateRange !== null ? (
-                        <>
-                            <div>{formatDate(filteredDateRange[0], 'EEE dd.MM. / HH:mm')}</div>
-                            <div>{formatDate(filteredDateRange[1], 'EEE dd.MM. / HH:mm')}</div>
-                        </>
-                    ) : (
-                        <>
-                            <div>{formatDate(slotsDateRange[0], 'EEE dd.MM. / HH:mm')}</div>
-                            <div>{formatDate(slotsDateRange[1], 'EEE dd.MM. / HH:mm')}</div>
-                        </>
-                    )}
-                </div>
+        <div className="mb-4 rounded-2xl border border-black bg-[#b1c32c]">
+            <div className="border-b border-black p-2 text-center text-2xl uppercase">Zeitraum</div>
 
-                <div>
-                    <Slider
-                        value={filteredDateRange === null ? undefined : [filteredDateRange[0], filteredDateRange[1]]}
-                        className="h-3 w-full rounded-lg bg-gray-200"
-                        min={earliestTimestamp}
-                        max={latestTimestamp}
-                        defaultValue={[earliestTimestamp, latestTimestamp]}
-                        step={halfHourInMilliseconds}
-                        onValueChange={handleChange}
-                    />
-                </div>
+            <div className="px-2 py-4">
+                <Slider
+                    value={filteredDateRange === null ? undefined : [filteredDateRange[0], filteredDateRange[1]]}
+                    className="h-3 w-full rounded-lg bg-gray-200"
+                    min={earliestTimestamp}
+                    max={latestTimestamp}
+                    defaultValue={[earliestTimestamp, latestTimestamp]}
+                    step={halfHourInMilliseconds}
+                    onValueChange={handleChange}
+                />
             </div>
         </div>
     );

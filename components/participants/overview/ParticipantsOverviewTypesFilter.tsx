@@ -2,7 +2,6 @@ import { useParticipantsOverviewContext } from '@/components/participants/overvi
 import { typesFilterQueryName } from '@/lib/applications/filterQueryNames';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import useIsMounted from '@/lib/common/hooks/useIsMounted';
-import typeColors from '@/lib/participants/typeColors';
 import typeLabels from '@/lib/participants/typeLabels';
 import type { Type } from '@prisma/client';
 import type { ReactElement } from 'react';
@@ -17,11 +16,18 @@ const TypeToggle = ({ type }: { type: Type }): ReactElement => {
 
     return (
         <div
-            className="rounded-2xl border-2 border-dashed px-3 py-1 text-sm uppercase select-none hover:opacity-90 md:cursor-pointer"
-            style={{
-                backgroundColor: typeColors[type],
-                borderColor: active ? '#444' : typeColors[type],
-            }}
+            className="rounded-2xl px-3 py-1 font-mono text-sm select-none hover:opacity-90 md:cursor-pointer"
+            style={
+                active
+                    ? {
+                          color: 'white',
+                          backgroundColor: 'black',
+                      }
+                    : {
+                          color: 'black',
+                          backgroundColor: 'white',
+                      }
+            }
             onClick={handleClick}
         >
             {typeLabels[type]}
@@ -53,10 +59,14 @@ const ParticipantsOverviewTypesFilter = (): ReactElement => {
     }, [isMounted, filteredTypes]);
 
     return (
-        <div className="mb-3 flex flex-wrap gap-2">
-            {actuallyAvailableTypes.map((availableType) => (
-                <TypeToggle key={availableType} type={availableType} />
-            ))}
+        <div className="mb-2 rounded-2xl border border-black bg-[#f0ee0a]">
+            <div className="border-b border-black p-2 text-center text-2xl uppercase">Kategorie</div>
+
+            <div className="flex flex-wrap gap-2 p-2">
+                {actuallyAvailableTypes.map((availableType) => (
+                    <TypeToggle key={availableType} type={availableType} />
+                ))}
+            </div>
         </div>
     );
 };
