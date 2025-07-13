@@ -1,5 +1,5 @@
+import sendMail from '@/lib/mail/sendMail';
 import type { Location, Participant, Slot } from '@prisma/client';
-import sendMail from 'lib/mail/sendMail';
 
 const sendSlotAttendConfirmationMail = (
     participant: Participant,

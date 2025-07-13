@@ -1,4 +1,4 @@
-import AwarenessEasyGerman from 'components/awareness/AwarenessEasyGerman';
+import AwarenessEasyGerman from '@/components/awareness/AwarenessEasyGerman';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 

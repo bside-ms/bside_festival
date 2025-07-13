@@ -1,9 +1,9 @@
-import BackgroundImage from 'components/common/BackgroundImage';
-import VolunteersOverview from 'components/volunteers/volunteersOverview/VolunteersOverview';
-import prismaClient from 'lib/common/prismaClient';
-import isGroupMember from 'lib/next-auth/isGroupMember';
-import isLoggedIn from 'lib/next-auth/isLoggedIn';
-import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
+import BackgroundImage from '@/components/common/BackgroundImage';
+import VolunteersOverview from '@/components/volunteers/volunteersOverview/VolunteersOverview';
+import prismaClient from '@/lib/common/prismaClient';
+import isGroupMember from '@/lib/next-auth/isGroupMember';
+import isLoggedIn from '@/lib/next-auth/isLoggedIn';
+import { dataPrivacyGroup } from '@/lib/next-auth/KeycloakGroups';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import type { ReactElement } from 'react';

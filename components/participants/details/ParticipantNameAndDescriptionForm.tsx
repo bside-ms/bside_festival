@@ -1,13 +1,13 @@
+import { SuccessfulUpdateDetailsResponse, UpdateDetailsRequest } from '@/app/api/applications/update/details/route';
+import TextArea from '@/components/form/TextArea';
+import TextInput from '@/components/form/TextInput';
+import { useParticipantsOverviewContext } from '@/components/participants/overview/ParticipantsOverviewContext';
+import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SuccessfulUpdateDetailsResponse, UpdateDetailsRequest } from 'app/api/applications/update/details/route';
-import TextArea from 'components/form/TextArea';
-import TextInput from 'components/form/TextInput';
-import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import type { ReactElement } from 'react';
 import { useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface DescriptionFormValues {
     name: string;
@@ -64,7 +64,9 @@ const ParticipantNameAndDescriptionForm = ({ participant, isLoggedIn, showForm, 
     if (!showForm) {
         return (
             <div>
-                <pre className="font-display whitespace-pre-wrap">{participant.updatedDescription ?? participant.description}</pre>
+                <pre className="mt-4 font-display text-sm leading-5 whitespace-pre-wrap md:text-base md:leading-6">
+                    {participant.updatedDescription ?? participant.description}
+                </pre>
 
                 {isLoggedIn && (
                     <a onClick={toggleForm} className="cursor-pointer text-sky-500 hover:text-sky-600">

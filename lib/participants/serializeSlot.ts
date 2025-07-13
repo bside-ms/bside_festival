@@ -1,5 +1,5 @@
+import type { SerializableSlot } from '@/typings/SerializableSlot';
 import type { Slot } from '@prisma/client';
-import type { SerializableSlot } from 'typings/SerializableSlot';
 
 const serializeSlot = (slot: Slot): SerializableSlot => ({
     ...slot,

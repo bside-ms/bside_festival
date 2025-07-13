@@ -1,11 +1,10 @@
+import { useParticipantsOverviewContext } from '@/components/participants/overview/ParticipantsOverviewContext';
+import { locationsFilterQueryName } from '@/lib/applications/filterQueryNames';
+import isEmptyString from '@/lib/common/helper/isEmptyString';
+import useIsMounted from '@/lib/common/hooks/useIsMounted';
 import type { Location } from '@prisma/client';
-import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
-import isEmptyString from 'lib/common/helper/isEmptyString';
-import useIsMounted from 'lib/common/hooks/useIsMounted';
 import type { ReactElement } from 'react';
 import { useCallback, useEffect } from 'react';
-
-export const locationsFilterQueryName = 'locations';
 
 /**
  * Strips appendices in parens from location names.

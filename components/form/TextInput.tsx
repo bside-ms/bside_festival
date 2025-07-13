@@ -1,9 +1,9 @@
 'use client';
 
-import cn from 'lib/common/helper/cn';
-import isEmptyNumber from 'lib/common/helper/isEmptyNumber';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import useIsMounted from 'lib/common/hooks/useIsMounted';
+import cn from '@/lib/common/helper/cn';
+import isEmptyNumber from '@/lib/common/helper/isEmptyNumber';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import useIsMounted from '@/lib/common/hooks/useIsMounted';
 import { uniqueId } from 'lodash';
 import type { ReactElement } from 'react';
 import { useMemo } from 'react';
@@ -55,7 +55,10 @@ const TextInput = <T extends FieldValues>({
                 id={id}
                 type="text"
                 defaultValue={defaultValue}
-                className={cn('rounded border p-2 outline-0 placeholder:opacity-55', typeof errorMessage === 'string' && 'bg-rose-400')}
+                className={cn(
+                    'rounded border border-black p-2 outline-0 placeholder:opacity-55',
+                    typeof errorMessage === 'string' && 'bg-rose-400',
+                )}
                 required={required}
                 placeholder={required ? `${label} *` : label}
                 disabled={isSubmitting || isDisabled}

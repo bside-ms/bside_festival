@@ -1,4 +1,4 @@
-import isEmptyString from 'lib/common/helper/isEmptyString';
+import isEmptyString from '@/lib/common/helper/isEmptyString';
 import process from 'process';
 
 const createPublicObjectUrl = (fileName: string): string => {

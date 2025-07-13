@@ -1,9 +1,9 @@
 'use client';
 
-import cn from 'lib/common/helper/cn';
-import isEmptyNumber from 'lib/common/helper/isEmptyNumber';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import useIsMounted from 'lib/common/hooks/useIsMounted';
+import cn from '@/lib/common/helper/cn';
+import isEmptyNumber from '@/lib/common/helper/isEmptyNumber';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import useIsMounted from '@/lib/common/hooks/useIsMounted';
 import { uniqueId } from 'lodash';
 import type { ReactElement } from 'react';
 import { useMemo } from 'react';
@@ -44,7 +44,7 @@ const TextArea = <T extends FieldValues>({
     return (
         <div className="flex flex-col">
             {isNotEmptyString(info) && (
-                <label htmlFor={id} className="px-1 text-base text-white">
+                <label htmlFor={id} className="px-1 text-base">
                     {info}
                 </label>
             )}
@@ -52,7 +52,7 @@ const TextArea = <T extends FieldValues>({
             <textarea
                 id={id}
                 className={cn(
-                    'rounded border border-white p-2 text-white outline-0 placeholder:text-white placeholder:opacity-55',
+                    'rounded border border-black p-2 outline-0 placeholder:opacity-55',
                     typeof errorMessage === 'string' && 'bg-rose-400',
                 )}
                 rows={rows}
@@ -74,7 +74,7 @@ const TextArea = <T extends FieldValues>({
                 })}
             />
 
-            {isNotEmptyString(additionalInfo) && <div className="px-1 text-base text-white">{additionalInfo}</div>}
+            {isNotEmptyString(additionalInfo) && <div className="px-1 text-base">{additionalInfo}</div>}
 
             {typeof errorMessage === 'string' && <div className="px-1 text-rose-600">{errorMessage}</div>}
         </div>

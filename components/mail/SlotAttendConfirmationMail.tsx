@@ -1,7 +1,7 @@
+import MailParagraph from '@/components/mail/MailParagraph';
+import MailWireframe from '@/components/mail/MailWireframe';
+import formatDate from '@/lib/common/helper/formatDate';
 import type { Location, Participant, Slot } from '@prisma/client';
-import MailParagraph from 'components/mail/MailParagraph';
-import MailWireframe from 'components/mail/MailWireframe';
-import formatDate from 'lib/common/helper/formatDate';
 import type { ReactElement } from 'react';
 
 interface Props {

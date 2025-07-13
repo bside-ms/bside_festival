@@ -1,13 +1,13 @@
+import type { SuccessfulUpdateDetailsResponse, UpdateDetailsRequest } from '@/app/api/applications/update/details/route';
+import { useApplicationsOverviewContext } from '@/components/applications/applicationsOverview/ApplicationsOverviewContext';
+import TextArea from '@/components/form/TextArea';
+import TextInput from '@/components/form/TextInput';
+import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { SuccessfulUpdateDetailsResponse, UpdateDetailsRequest } from 'app/api/applications/update/details/route';
-import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
-import TextArea from 'components/form/TextArea';
-import TextInput from 'components/form/TextInput';
 import type { ReactElement } from 'react';
 import { useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface NameAndDescriptionFormValues {
     name: string;

@@ -1,7 +1,7 @@
 'use client';
 
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import useIsMounted from 'lib/common/hooks/useIsMounted';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import useIsMounted from '@/lib/common/hooks/useIsMounted';
 import { uniqueId } from 'lodash';
 import type { ReactElement } from 'react';
 import { useMemo } from 'react';

@@ -1,5 +1,5 @@
-import ParticipantSlot from 'components/participants/details/ParticipantSlot';
-import type { ParticipantSlot as IParticipantSlot } from 'components/participants/overview/ParticipantsOverviewContext';
+import ParticipantSlot from '@/components/participants/details/ParticipantSlot';
+import type { ParticipantSlot as IParticipantSlot } from '@/components/participants/overview/ParticipantsOverviewContext';
 import type { ReactElement } from 'react';
 
 interface Props {

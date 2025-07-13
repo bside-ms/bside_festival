@@ -1,6 +1,6 @@
+import hashAlgorithm from '@/lib/crypto/hashAlgorithm';
 import { Buffer } from 'buffer';
 import crypto from 'crypto';
-import hashAlgorithm from 'lib/crypto/hashAlgorithm';
 import process from 'process';
 
 const hashData = (data: string): string => {

@@ -2,15 +2,15 @@ import {
     AttendSlotRequest,
     ErroneousAttendSlotResponse,
     SuccessfulAttendSlotResponse,
-} from 'app/api/applications/slot/attendance/attend/route';
-import TextInput from 'components/form/TextInput';
+} from '@/app/api/applications/slot/attendance/attend/route';
+import TextInput from '@/components/form/TextInput';
 import {
     ParticipantSlot,
     useParticipantsOverviewContext,
     useSlotAttendees,
-} from 'components/participants/overview/ParticipantsOverviewContext';
-import isEmptyString from 'lib/common/helper/isEmptyString';
-import isValidEmail from 'lib/common/helper/isValidEmail';
+} from '@/components/participants/overview/ParticipantsOverviewContext';
+import isEmptyString from '@/lib/common/helper/isEmptyString';
+import isValidEmail from '@/lib/common/helper/isValidEmail';
 import { ReactElement, useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 

@@ -1,5 +1,5 @@
+import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { Participant } from '@prisma/client';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 const serializeParticipant = (application: Participant): SerializableParticipant => ({
     ...application,

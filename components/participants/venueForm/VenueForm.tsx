@@ -1,12 +1,12 @@
+import { DeleteVenueRequest, SuccessfulDeleteVenueResponse } from '@/app/api/applications/venue/delete/route';
+import { SuccessfulUpdateVenueResponse, UpsertVenueRequest } from '@/app/api/applications/venue/update/route';
+import Checkbox from '@/components/form/Checkbox';
+import SelectInput from '@/components/form/SelectInput';
+import { useParticipantsOverviewContext, useParticipantVenues } from '@/components/participants/overview/ParticipantsOverviewContext';
+import formatDate from '@/lib/common/helper/formatDate';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { DeleteVenueRequest, SuccessfulDeleteVenueResponse } from 'app/api/applications/venue/delete/route';
-import { SuccessfulUpdateVenueResponse, UpsertVenueRequest } from 'app/api/applications/venue/update/route';
-import Checkbox from 'components/form/Checkbox';
-import SelectInput from 'components/form/SelectInput';
-import { useParticipantsOverviewContext, useParticipantVenues } from 'components/participants/overview/ParticipantsOverviewContext';
 import { addDays, differenceInDays, isSameDay } from 'date-fns';
-import formatDate from 'lib/common/helper/formatDate';
 import { ReactElement, useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 

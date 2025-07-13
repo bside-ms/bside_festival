@@ -1,16 +1,16 @@
+import Badge from '@/components/participants/details/Badge';
+import cn from '@/lib/common/helper/cn';
+import isEmptyString from '@/lib/common/helper/isEmptyString';
+import isNotEmptyNumber from '@/lib/common/helper/isNotEmptyNumber';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import statusLabels from '@/lib/participants/status/statusLabels';
+import typeColors from '@/lib/participants/typeColors';
+import typeLabels from '@/lib/participants/typeLabels';
+import createPublicObjectUrl from '@/lib/upload/createPublicObjectUrl';
+import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { Genre } from '@prisma/client';
-import Badge from 'components/participants/details/Badge';
-import cn from 'lib/common/helper/cn';
-import isEmptyString from 'lib/common/helper/isEmptyString';
-import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import statusLabels from 'lib/participants/status/statusLabels';
-import typeColors from 'lib/participants/typeColors';
-import typeLabels from 'lib/participants/typeLabels';
-import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;

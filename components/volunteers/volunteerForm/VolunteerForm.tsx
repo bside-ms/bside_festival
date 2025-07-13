@@ -1,11 +1,11 @@
 'use client';
 
-import { AddVolunteerRequest } from 'app/api/volunteers/add/route';
-import Checkbox from 'components/form/Checkbox';
-import TextArea from 'components/form/TextArea';
-import TextInput from 'components/form/TextInput';
-import VolunteerInfo from 'components/volunteers/volunteerForm/VolunteerInfo';
-import volunteerDayPreferences from 'lib/volunteers/volunteerDayPreferences';
+import { AddVolunteerRequest } from '@/app/api/volunteers/add/route';
+import Checkbox from '@/components/form/Checkbox';
+import TextArea from '@/components/form/TextArea';
+import TextInput from '@/components/form/TextInput';
+import VolunteerInfo from '@/components/volunteers/volunteerForm/VolunteerInfo';
+import volunteerDayPreferences from '@/lib/volunteers/volunteerDayPreferences';
 import { type ReactElement, useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 

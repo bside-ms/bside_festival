@@ -1,5 +1,5 @@
-import ParticipantVenue from 'components/participants/details/ParticipantVenue';
-import { useParticipantVenues } from 'components/participants/overview/ParticipantsOverviewContext';
+import ParticipantVenue from '@/components/participants/details/ParticipantVenue';
+import { useParticipantVenues } from '@/components/participants/overview/ParticipantsOverviewContext';
 import type { ReactElement } from 'react';
 
 interface Props {

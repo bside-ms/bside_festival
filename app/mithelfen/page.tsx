@@ -1,5 +1,5 @@
-import VolunteerForm from 'components/volunteers/volunteerForm/VolunteerForm';
-import isLoggedIn from 'lib/next-auth/isLoggedIn';
+import VolunteerForm from '@/components/volunteers/volunteerForm/VolunteerForm';
+import isLoggedIn from '@/lib/next-auth/isLoggedIn';
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';

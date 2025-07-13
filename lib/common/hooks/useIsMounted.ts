@@ -1,4 +1,4 @@
-import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
+import useEffectOnMount from '@/lib/common/hooks/useEffectOnMount';
 import { useState } from 'react';
 
 const useIsMounted = (): boolean => {

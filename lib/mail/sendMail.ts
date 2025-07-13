@@ -1,5 +1,5 @@
-import createMailTransport from 'lib/mail/createMailTransport';
-import type ConvertedHtml from 'typings/ConvertedHtml';
+import createMailTransport from '@/lib/mail/createMailTransport';
+import type ConvertedHtml from '@/typings/ConvertedHtml';
 
 const fromName = 'B-Side Festival';
 const fromMail = 'no-reply@b-side.ms';

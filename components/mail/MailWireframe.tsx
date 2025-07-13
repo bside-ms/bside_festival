@@ -1,3 +1,4 @@
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import {
     Mjml,
     MjmlBody,
@@ -10,7 +11,6 @@ import {
     MjmlText,
     MjmlTitle,
 } from '@faire/mjml-react';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import type { PropsWithChildren, ReactElement } from 'react';
 
 interface Props extends PropsWithChildren {

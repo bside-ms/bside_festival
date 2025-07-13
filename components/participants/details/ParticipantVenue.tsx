@@ -1,6 +1,6 @@
+import formatDate from '@/lib/common/helper/formatDate';
+import isEmptyString from '@/lib/common/helper/isEmptyString';
 import type { Location } from '@prisma/client';
-import formatDate from 'lib/common/helper/formatDate';
-import isEmptyString from 'lib/common/helper/isEmptyString';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 

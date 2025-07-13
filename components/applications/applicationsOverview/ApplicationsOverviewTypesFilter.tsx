@@ -1,11 +1,11 @@
+import { useApplicationsOverviewContext } from '@/components/applications/applicationsOverview/ApplicationsOverviewContext';
+import availableTypes from '@/lib/applications/availableTypes';
+import { typesFilterQueryName } from '@/lib/applications/filterQueryNames';
+import isEmptyString from '@/lib/common/helper/isEmptyString';
+import useEffectOnMount from '@/lib/common/hooks/useEffectOnMount';
+import typeColors from '@/lib/participants/typeColors';
+import typeLabels from '@/lib/participants/typeLabels';
 import type { Type } from '@prisma/client';
-import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
-import { typesFilterQueryName } from 'components/participants/overview/ParticipantsOverviewTypesFilter';
-import availableTypes from 'lib/applications/availableTypes';
-import isEmptyString from 'lib/common/helper/isEmptyString';
-import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
-import typeColors from 'lib/participants/typeColors';
-import typeLabels from 'lib/participants/typeLabels';
 import type { ReactElement } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 

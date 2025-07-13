@@ -1,4 +1,4 @@
-import AwarenessEnglishVersion from 'components/awareness/AwarenessEnglishVersion';
+import AwarenessEnglishVersion from '@/components/awareness/AwarenessEnglishVersion';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 

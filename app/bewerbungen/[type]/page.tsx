@@ -1,9 +1,9 @@
+import ApplicationForm from '@/components/applications/applicationForm/ApplicationForm';
+import BackgroundImage from '@/components/common/BackgroundImage';
+import prismaClient from '@/lib/common/prismaClient';
+import isLoggedIn from '@/lib/next-auth/isLoggedIn';
+import urlPathTypes from '@/lib/participants/urlPathTypes';
 import { Prisma, Type } from '@prisma/client';
-import ApplicationForm from 'components/applications/applicationForm/ApplicationForm';
-import BackgroundImage from 'components/common/BackgroundImage';
-import prismaClient from 'lib/common/prismaClient';
-import isLoggedIn from 'lib/next-auth/isLoggedIn';
-import urlPathTypes from 'lib/participants/urlPathTypes';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import type { ReactElement } from 'react';

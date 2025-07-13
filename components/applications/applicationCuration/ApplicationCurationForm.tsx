@@ -1,15 +1,15 @@
+import type { SetCurationRequest, SuccessfulSetCurationResponse } from '@/app/api/applications/curation/set/route';
+import { useApplicationsOverviewContext } from '@/components/applications/applicationsOverview/ApplicationsOverviewContext';
+import SelectInput from '@/components/form/SelectInput';
+import statusLabels from '@/lib/participants/status/statusLabels';
+import statusOrder from '@/lib/participants/status/statusOrder';
+import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ApplicationStatus } from '@prisma/client';
-import type { SetCurationRequest, SuccessfulSetCurationResponse } from 'app/api/applications/curation/set/route';
-import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
-import SelectInput from 'components/form/SelectInput';
-import statusLabels from 'lib/participants/status/statusLabels';
-import statusOrder from 'lib/participants/status/statusOrder';
 import type { ReactElement } from 'react';
 import { useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface CurationFormValues {
     applicationStatus: ApplicationStatus;

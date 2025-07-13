@@ -1,6 +1,6 @@
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { ReactElement } from 'react';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;

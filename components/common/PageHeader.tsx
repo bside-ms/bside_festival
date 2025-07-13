@@ -1,5 +1,5 @@
-import bsideHeartIcon from 'images/icons/bsideHeart.svg';
-import instagramIcon from 'images/icons/instagram.svg';
+import bsideHeartIcon from '@/images/icons/bsideHeart.svg';
+import instagramIcon from '@/images/icons/instagram.svg';
 import Image from 'next/image';
 import Link from 'next/link';
 

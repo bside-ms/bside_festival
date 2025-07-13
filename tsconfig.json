@@ -16,6 +16,9 @@
         "jsx": "preserve",
         "incremental": true,
         "noUncheckedIndexedAccess": true,
+        "paths": {
+            "@/*": ["./*"]
+        },
         "plugins": [
             {
                 "name": "next"

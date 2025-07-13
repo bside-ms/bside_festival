@@ -1,8 +1,8 @@
+import ApplicationTypeImage from '@/components/applications/applicationForm/ApplicationTypeImage';
+import availableTypes from '@/lib/applications/availableTypes';
+import { typeLabelsWithSoftHyphens } from '@/lib/participants/typeLabels';
+import typeUrlPaths from '@/lib/participants/typeUrlPaths';
 import type { Type } from '@prisma/client';
-import ApplicationTypeImage from 'components/applications/applicationForm/ApplicationTypeImage';
-import availableTypes from 'lib/applications/availableTypes';
-import { typeLabelsWithSoftHyphens } from 'lib/participants/typeLabels';
-import typeUrlPaths from 'lib/participants/typeUrlPaths';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 

@@ -8,7 +8,7 @@ interface Props {
 const Badge = ({ label, backgroundColor }: Props): ReactElement => {
     return (
         <div
-            className="inline-flex h-5 items-center justify-center rounded-2xl px-5 font-mono text-xs leading-4 select-none"
+            className="inline-flex h-5 items-center justify-center rounded-2xl px-5 font-mono text-xs leading-4 whitespace-nowrap select-none"
             style={{ backgroundColor }}
         >
             <div>{label}</div>

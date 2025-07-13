@@ -1,7 +1,7 @@
-import type ExtendedJWT from 'lib/next-auth/ExtendedJWT';
-import type ExtendedSession from 'lib/next-auth/ExtendedSession';
-import isExtendedJwt from 'lib/next-auth/isExtendedJwt';
-import isExtendedKeycloakProfile from 'lib/next-auth/isExtendedKeycloakProfile';
+import type ExtendedJWT from '@/lib/next-auth/ExtendedJWT';
+import type ExtendedSession from '@/lib/next-auth/ExtendedSession';
+import isExtendedJwt from '@/lib/next-auth/isExtendedJwt';
+import isExtendedKeycloakProfile from '@/lib/next-auth/isExtendedKeycloakProfile';
 import type { AuthOptions } from 'next-auth';
 import Keycloak from 'next-auth/providers/keycloak';
 import process from 'process';

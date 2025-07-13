@@ -1,4 +1,4 @@
-import AwarenessInformation from 'components/awareness/AwarenessInformation';
+import AwarenessInformation from '@/components/awareness/AwarenessInformation';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 

@@ -1,5 +1,5 @@
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import useIsMounted from 'lib/common/hooks/useIsMounted';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import useIsMounted from '@/lib/common/hooks/useIsMounted';
 import { uniqueId } from 'lodash';
 import type { ReactElement } from 'react';
 import { useMemo } from 'react';
@@ -44,7 +44,7 @@ const SelectInput = <T extends FieldValues>({
 
             <select
                 id={id}
-                className="rounded border p-1 py-2 outline-0"
+                className="rounded border border-black p-1 py-2 outline-0"
                 required={required}
                 defaultValue={defaultValue}
                 {...register(name, {

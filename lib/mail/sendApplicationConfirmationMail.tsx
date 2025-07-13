@@ -1,7 +1,7 @@
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import sendMail from '@/lib/mail/sendMail';
+import typeLabels from '@/lib/participants/typeLabels';
 import type { Participant } from '@prisma/client';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import sendMail from 'lib/mail/sendMail';
-import typeLabels from 'lib/participants/typeLabels';
 
 const generateApplicationContent = (
     application: Omit<Participant, 'contactMail'> & { contactMail: string },

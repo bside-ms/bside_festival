@@ -1,6 +1,6 @@
-import ApplicationTypeSelection from 'components/applications/applicationForm/ApplicationTypeSelection';
-import BackgroundImage from 'components/common/BackgroundImage';
-import isLoggedIn from 'lib/next-auth/isLoggedIn';
+import ApplicationTypeSelection from '@/components/applications/applicationForm/ApplicationTypeSelection';
+import BackgroundImage from '@/components/common/BackgroundImage';
+import isLoggedIn from '@/lib/next-auth/isLoggedIn';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import type { ReactElement } from 'react';

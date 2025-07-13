@@ -1,15 +1,15 @@
 'use client';
 
+import type { ApplicationFormValues } from '@/components/applications/applicationForm/ApplicationForm';
+import blobToDataUrl from '@/lib/common/helper/blobToDataUrl';
+import cn from '@/lib/common/helper/cn';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import allowedImageContentTypes from '@/lib/upload/allowedImageContentTypes';
+import allowedImageMaxFileSize from '@/lib/upload/allowedImageMaxFileSize';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Type } from '@prisma/client';
 import bytes from 'bytes';
-import type { ApplicationFormValues } from 'components/applications/applicationForm/ApplicationForm';
-import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
-import cn from 'lib/common/helper/cn';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import allowedImageContentTypes from 'lib/upload/allowedImageContentTypes';
-import allowedImageMaxFileSize from 'lib/upload/allowedImageMaxFileSize';
 import { uniqueId } from 'lodash';
 import { extension } from 'mime-types';
 import Image from 'next/image';

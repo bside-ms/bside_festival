@@ -1,4 +1,4 @@
-import type { VolunteerFormValues } from 'components/volunteers/volunteerForm/VolunteerForm';
+import type { VolunteerFormValues } from '@/components/volunteers/volunteerForm/VolunteerForm';
 
 export type VolunteerPreferenceKey = keyof Pick<
     VolunteerFormValues,

@@ -1,7 +1,7 @@
 'use client';
 
+import VolunteerDetails from '@/components/volunteers/volunteersOverview/VolunteerDetails';
 import type { Volunteer } from '@prisma/client';
-import VolunteerDetails from 'components/volunteers/volunteersOverview/VolunteerDetails';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 

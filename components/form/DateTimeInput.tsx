@@ -1,7 +1,7 @@
-import cn from 'lib/common/helper/cn';
-import isEmptyNumber from 'lib/common/helper/isEmptyNumber';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import useIsMounted from 'lib/common/hooks/useIsMounted';
+import cn from '@/lib/common/helper/cn';
+import isEmptyNumber from '@/lib/common/helper/isEmptyNumber';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import useIsMounted from '@/lib/common/hooks/useIsMounted';
 import { uniqueId } from 'lodash';
 import type { ReactElement } from 'react';
 import { useMemo } from 'react';

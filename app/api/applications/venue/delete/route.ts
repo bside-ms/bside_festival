@@ -1,6 +1,6 @@
+import prismaClient from '@/lib/common/prismaClient';
+import getAllVenues from '@/lib/participants/getAllVenues';
 import { Venue } from '@prisma/client';
-import prismaClient from 'lib/common/prismaClient';
-import getAllVenues from 'lib/participants/getAllVenues';
 import { NextResponse } from 'next/server';
 
 export interface DeleteVenueRequest {

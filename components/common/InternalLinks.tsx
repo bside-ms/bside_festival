@@ -1,4 +1,4 @@
-import isLoggedIn from 'lib/next-auth/isLoggedIn';
+import isLoggedIn from '@/lib/next-auth/isLoggedIn';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 

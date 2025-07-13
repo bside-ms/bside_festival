@@ -1,7 +1,7 @@
+import { useParticipantsOverviewContext } from '@/components/participants/overview/ParticipantsOverviewContext';
+import cn from '@/lib/common/helper/cn';
 import { faThumbtack } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
-import cn from 'lib/common/helper/cn';
 import type { ReactElement, SyntheticEvent } from 'react';
 import { useCallback } from 'react';
 import { toast } from 'react-toastify';

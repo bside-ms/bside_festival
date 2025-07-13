@@ -1,10 +1,10 @@
-import isEmptyString from 'lib/common/helper/isEmptyString';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
+import isEmptyString from '@/lib/common/helper/isEmptyString';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import createPublicObjectUrl from '@/lib/upload/createPublicObjectUrl';
+import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import { default as NextLink } from 'next/link';
 import type { ReactElement } from 'react';
 import { FaFilePdf } from 'react-icons/fa6';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;

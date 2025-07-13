@@ -1,5 +1,5 @@
+import prismaClient from '@/lib/common/prismaClient';
 import type { Participant } from '@prisma/client';
-import prismaClient from 'lib/common/prismaClient';
 import { NextResponse } from 'next/server';
 
 export interface UpdateDetailsRequest {

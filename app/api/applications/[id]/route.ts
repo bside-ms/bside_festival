@@ -1,7 +1,7 @@
+import isGroupMember from '@/lib/next-auth/isGroupMember';
+import { dataPrivacyGroup } from '@/lib/next-auth/KeycloakGroups';
+import getAllParticipants from '@/lib/participants/getAllParticipants';
 import type { Participant } from '@prisma/client';
-import isGroupMember from 'lib/next-auth/isGroupMember';
-import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
-import getAllParticipants from 'lib/participants/getAllParticipants';
 import { NextResponse } from 'next/server';
 
 export interface GetApplicationResponse {

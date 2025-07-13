@@ -1,13 +1,12 @@
+import { useParticipantsOverviewContext } from '@/components/participants/overview/ParticipantsOverviewContext';
+import { typesFilterQueryName } from '@/lib/applications/filterQueryNames';
+import isEmptyString from '@/lib/common/helper/isEmptyString';
+import useIsMounted from '@/lib/common/hooks/useIsMounted';
+import typeColors from '@/lib/participants/typeColors';
+import typeLabels from '@/lib/participants/typeLabels';
 import type { Type } from '@prisma/client';
-import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
-import isEmptyString from 'lib/common/helper/isEmptyString';
-import useIsMounted from 'lib/common/hooks/useIsMounted';
-import typeColors from 'lib/participants/typeColors';
-import typeLabels from 'lib/participants/typeLabels';
 import type { ReactElement } from 'react';
 import { useCallback, useEffect } from 'react';
-
-export const typesFilterQueryName = 'types';
 
 const TypeToggle = ({ type }: { type: Type }): ReactElement => {
     const { filteredTypes, toggleFilteredType } = useParticipantsOverviewContext();

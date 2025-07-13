@@ -1,4 +1,4 @@
-import AwarenessAlternativeLinks from 'components/awareness/AwarenessAlternativeLinks';
+import AwarenessAlternativeLinks from '@/components/awareness/AwarenessAlternativeLinks';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 

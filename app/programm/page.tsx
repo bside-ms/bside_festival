@@ -1,21 +1,21 @@
+import ParticipantsOverview from '@/components/participants/overview/ParticipantsOverview';
+import { ParticipantsOverviewContextProvider } from '@/components/participants/overview/ParticipantsOverviewContext';
+import { dateRangeFilterQueryName, locationsFilterQueryName, typesFilterQueryName } from '@/lib/applications/filterQueryNames';
+import prismaClient from '@/lib/common/prismaClient';
+import isGroupMember from '@/lib/next-auth/isGroupMember';
+import isLoggedIn from '@/lib/next-auth/isLoggedIn';
+import { dataPrivacyGroup } from '@/lib/next-auth/KeycloakGroups';
+import getAllAttendees from '@/lib/participants/getAllAttendees';
+import getAllParticipants from '@/lib/participants/getAllParticipants';
+import getAllSlots from '@/lib/participants/getAllSlots';
+import getAllVenues from '@/lib/participants/getAllVenues';
+import serializeParticipant from '@/lib/participants/serializeParticipant';
+import type AllAttendees from '@/typings/AllAttendees';
+import type { SerializableParticipant } from '@/typings/SerializableParticipant';
+import type { SerializableSlot } from '@/typings/SerializableSlot';
 import type { Location, ParticipantLabel, Link as PrismaLink, Venue } from '@prisma/client';
-import ParticipantsOverview from 'components/participants/overview/ParticipantsOverview';
-import { ParticipantsOverviewContextProvider } from 'components/participants/overview/ParticipantsOverviewContext';
 import { isAfter, isEqual } from 'date-fns';
-import prismaClient from 'lib/common/prismaClient';
-import isGroupMember from 'lib/next-auth/isGroupMember';
-import isLoggedIn from 'lib/next-auth/isLoggedIn';
-import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
-import getAllAttendees from 'lib/participants/getAllAttendees';
-import getAllParticipants from 'lib/participants/getAllParticipants';
-import getAllSlots from 'lib/participants/getAllSlots';
-import getAllVenues from 'lib/participants/getAllVenues';
-import serializeParticipant from 'lib/participants/serializeParticipant';
-import { redirect } from 'next/navigation';
 import { ReactElement } from 'react';
-import type AllAttendees from 'typings/AllAttendees';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
-import type { SerializableSlot } from 'typings/SerializableSlot';
 
 interface Props {
     participants: Array<SerializableParticipant>;
@@ -83,12 +83,17 @@ async function getData(): Promise<Props> {
     };
 }
 
-export default async (): Promise<ReactElement> => {
+export default async (props: { searchParams: Promise<Record<string, string | string[]>> }): Promise<ReactElement> => {
     const loggedIn = await isLoggedIn();
 
-    if (!loggedIn) {
-        redirect('/');
-    }
+    // if (!loggedIn) {
+    //     redirect('/');
+    // }
+
+    const searchParams = await props.searchParams;
+    const initialDateRangeFilter = searchParams[dateRangeFilterQueryName];
+    const initialTypesFilter = searchParams[typesFilterQueryName];
+    const initialLocationsFilter = searchParams[locationsFilterQueryName];
 
     const { participants, slots, venues, participantLabels, allLinks, allLocations, allAttendees } = await getData();
 
@@ -107,6 +112,9 @@ export default async (): Promise<ReactElement> => {
                 allLocations={allLocations}
                 allAttendees={allAttendees}
                 isInDataPrivacyGroup={isInDataPrivacyGroup}
+                initialDateRangeDateRangeFilter={typeof initialDateRangeFilter === 'string' ? initialDateRangeFilter : undefined}
+                initialTypesFilter={typeof initialTypesFilter === 'string' ? initialTypesFilter : undefined}
+                initialLocationsFilter={typeof initialLocationsFilter === 'string' ? initialLocationsFilter : undefined}
             >
                 <ParticipantsOverview isLoggedIn={loggedIn} />
             </ParticipantsOverviewContextProvider>

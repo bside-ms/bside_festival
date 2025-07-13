@@ -1,9 +1,9 @@
 'use client';
 
-import type { ApplicationFormValues } from 'components/applications/applicationForm/ApplicationForm';
-import TextInput from 'components/form/TextInput';
+import type { ApplicationFormValues } from '@/components/applications/applicationForm/ApplicationForm';
+import TextInput from '@/components/form/TextInput';
+import isEmptyString from '@/lib/common/helper/isEmptyString';
 import isUrl from 'is-url';
-import isEmptyString from 'lib/common/helper/isEmptyString';
 import type { ReactElement } from 'react';
 import { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';

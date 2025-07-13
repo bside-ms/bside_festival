@@ -1,12 +1,12 @@
-import ApplicationsOverview from 'components/applications/applicationsOverview/ApplicationsOverview';
-import { ApplicationsOverviewContextProvider } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
-import BackgroundImage from 'components/common/BackgroundImage';
-import prismaClient from 'lib/common/prismaClient';
-import isGroupMember from 'lib/next-auth/isGroupMember';
-import isLoggedIn from 'lib/next-auth/isLoggedIn';
-import { dataPrivacyGroup } from 'lib/next-auth/KeycloakGroups';
-import getAllParticipants from 'lib/participants/getAllParticipants';
-import serializeParticipant from 'lib/participants/serializeParticipant';
+import ApplicationsOverview from '@/components/applications/applicationsOverview/ApplicationsOverview';
+import { ApplicationsOverviewContextProvider } from '@/components/applications/applicationsOverview/ApplicationsOverviewContext';
+import BackgroundImage from '@/components/common/BackgroundImage';
+import prismaClient from '@/lib/common/prismaClient';
+import isGroupMember from '@/lib/next-auth/isGroupMember';
+import isLoggedIn from '@/lib/next-auth/isLoggedIn';
+import { dataPrivacyGroup } from '@/lib/next-auth/KeycloakGroups';
+import getAllParticipants from '@/lib/participants/getAllParticipants';
+import serializeParticipant from '@/lib/participants/serializeParticipant';
 import { redirect } from 'next/navigation';
 import type { ReactElement } from 'react';
 

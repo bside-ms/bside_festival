@@ -1,6 +1,6 @@
-import InternalLinks from 'components/common/InternalLinks';
-import Login from 'components/common/Login';
-import cn from 'lib/common/helper/cn';
+import InternalLinks from '@/components/common/InternalLinks';
+import Login from '@/components/common/Login';
+import cn from '@/lib/common/helper/cn';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import { FaFacebookSquare, FaInstagram, FaMastodon } from 'react-icons/fa';

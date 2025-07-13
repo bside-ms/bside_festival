@@ -1,5 +1,5 @@
+import isEmptyString from '@/lib/common/helper/isEmptyString';
 import { S3Client } from '@aws-sdk/client-s3';
-import isEmptyString from 'lib/common/helper/isEmptyString';
 import process from 'process';
 
 const createS3Client = (): S3Client => {

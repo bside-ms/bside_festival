@@ -1,8 +1,8 @@
+import MailParagraph from '@/components/mail/MailParagraph';
+import MailWireframe from '@/components/mail/MailWireframe';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import typeLabels from '@/lib/participants/typeLabels';
 import type { Participant } from '@prisma/client';
-import MailParagraph from 'components/mail/MailParagraph';
-import MailWireframe from 'components/mail/MailWireframe';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import typeLabels from 'lib/participants/typeLabels';
 import type { ReactElement } from 'react';
 
 interface Props {

@@ -1,5 +1,5 @@
+import prismaClient from '@/lib/common/prismaClient';
 import type { Volunteer } from '@prisma/client';
-import prismaClient from 'lib/common/prismaClient';
 import { NextResponse } from 'next/server';
 
 export interface AddVolunteerRequest {

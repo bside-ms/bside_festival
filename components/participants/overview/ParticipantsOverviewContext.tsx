@@ -1,22 +1,19 @@
 'use client';
 
+import availableTypes from '@/lib/applications/availableTypes';
+import { pinnedParticipantsCookieName, readCookie, setCookie } from '@/lib/applications/cookies';
+import formatDate from '@/lib/common/helper/formatDate';
+import useEffectOnMount from '@/lib/common/hooks/useEffectOnMount';
+import isValidType from '@/lib/participants/isValidType';
+import serializeParticipant from '@/lib/participants/serializeParticipant';
+import AllAttendees from '@/typings/AllAttendees';
+import type { SerializableParticipant } from '@/typings/SerializableParticipant';
+import type { SerializableSlot } from '@/typings/SerializableSlot';
 import type { Attendee, Link, Location, Participant, ParticipantLabel, Type, Venue } from '@prisma/client';
-import { dateRangeFilterQueryName } from 'components/participants/overview/ParticipantsOverviewDateRangeFilter';
-import { locationsFilterQueryName } from 'components/participants/overview/ParticipantsOverviewLocationFilter';
-import { typesFilterQueryName } from 'components/participants/overview/ParticipantsOverviewTypesFilter';
 import { addHours, endOfHour, isAfter, isBefore, isSameMinute, startOfHour, subHours } from 'date-fns';
-import availableTypes from 'lib/applications/availableTypes';
-import { pinnedParticipantsCookieName, readCookie, setCookie } from 'lib/applications/cookies';
-import formatDate from 'lib/common/helper/formatDate';
-import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
-import isValidType from 'lib/participants/isValidType';
-import serializeParticipant from 'lib/participants/serializeParticipant';
 import { first, last, uniq } from 'lodash';
 import type { PropsWithChildren, ReactElement } from 'react';
 import { createContext, useCallback, useContext, useState } from 'react';
-import AllAttendees from 'typings/AllAttendees';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
-import type { SerializableSlot } from 'typings/SerializableSlot';
 
 interface ParticipantsOverviewContextData {
     allParticipants: Array<SerializableParticipant>;
@@ -61,6 +58,9 @@ interface Props extends PropsWithChildren {
     allLinks: Array<Link>;
     allLocations: Array<Location>;
     isInDataPrivacyGroup: boolean;
+    initialDateRangeDateRangeFilter: string | undefined;
+    initialTypesFilter: string | undefined;
+    initialLocationsFilter: string | undefined;
 }
 
 export const ParticipantsOverviewContextProvider = ({
@@ -72,6 +72,9 @@ export const ParticipantsOverviewContextProvider = ({
     allAttendees: initialAllAttendees,
     allLocations,
     isInDataPrivacyGroup,
+    initialDateRangeDateRangeFilter,
+    initialTypesFilter,
+    initialLocationsFilter,
     children,
 }: Props): ReactElement => {
     const [participantLabels, setParticipantLabels] = useState<Array<ParticipantLabel>>(initialParticipantLabels);
@@ -82,11 +85,9 @@ export const ParticipantsOverviewContextProvider = ({
     const [venues, setVenues] = useState<Array<Venue>>(initialVenues);
     const [allAttendees, setAllAttendees] = useState<Array<AllAttendees>>(initialAllAttendees);
 
-    const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
+    const [filteredTypes, setFilteredTypes] = useState<Array<Type>>((initialTypesFilter?.split(',') ?? []).filter(isValidType));
 
-    const [filteredLocationIds, setFilteredLocationIds] = useState<Array<number>>([]);
-
-    const [filteredDateRange, setFilteredDateRange] = useState<[number, number] | null>(null);
+    const [filteredLocationIds, setFilteredLocationIds] = useState<Array<number>>((initialLocationsFilter?.split(',') ?? []).map(Number));
 
     const earliestSlot = first(slots);
     const latestSlot = last(slots);
@@ -95,28 +96,15 @@ export const ParticipantsOverviewContextProvider = ({
     const latestBegin =
         latestSlot === undefined ? null : startOfHour(addHours(endOfHour(addHours(new Date(latestSlot.begin), timeBufferInHours)), 1));
 
-    useEffectOnMount(() => {
-        const queryParams = new URLSearchParams(window.location.search);
-
-        const initialTypes = queryParams.get(typesFilterQueryName)?.split(',') ?? [];
-        setFilteredTypes(initialTypes.filter(isValidType));
-
-        const initialLocations = queryParams.get(locationsFilterQueryName)?.split(',') ?? [];
-        setFilteredLocationIds(initialLocations.map(Number));
-
-        const initialDateRange = queryParams.get(dateRangeFilterQueryName)?.split(',') ?? [];
-        if (initialDateRange.length === 2 && !isNaN(Number(initialDateRange[0])) && !isNaN(Number(initialDateRange[1]))) {
-            setFilteredDateRange([Number(initialDateRange[0]), Number(initialDateRange[1])]);
-        } else if (
-            earliestBegin !== null &&
-            latestBegin !== null &&
-            isAfter(new Date(), earliestBegin) &&
-            isBefore(new Date(), latestBegin)
-        ) {
-            const aboutOneHourAgo = startOfHour(subHours(new Date(), 1));
-            setFilteredDateRange([Number(formatDate(aboutOneHourAgo, 'T')), Number(formatDate(latestBegin, 'T'))]);
-        }
-    });
+    const initialDateRange = initialDateRangeDateRangeFilter?.split(',') ?? [];
+    let initialDateRangeValue: [number, number] | null = null;
+    if (initialDateRange.length === 2 && !isNaN(Number(initialDateRange[0])) && !isNaN(Number(initialDateRange[1]))) {
+        initialDateRangeValue = [Number(initialDateRange[0]), Number(initialDateRange[1])];
+    } else if (earliestBegin !== null && latestBegin !== null && isAfter(new Date(), earliestBegin) && isBefore(new Date(), latestBegin)) {
+        const aboutOneHourAgo = startOfHour(subHours(new Date(), 1));
+        initialDateRangeValue = [Number(formatDate(aboutOneHourAgo, 'T')), Number(formatDate(latestBegin, 'T'))];
+    }
+    const [filteredDateRange, setFilteredDateRange] = useState<[number, number] | null>(initialDateRangeValue);
 
     const [enhancedParticipantIds, setEnhancedParticipantIds] = useState<Array<number>>([]);
 
@@ -243,7 +231,7 @@ export const ParticipantsOverviewContextProvider = ({
                 allAttendees,
                 updateAllAttendees,
                 slotsDateRange: earliestBegin === null || latestBegin === null ? null : [earliestBegin, latestBegin],
-                venuesDateRange: [new Date(`2025-09-19T12:00:00+02:00`), new Date(`2025-09-20T12:00:00+02:00`)],
+                venuesDateRange: [new Date(`2025-09-19T12:00:00+02:00`), new Date(`2025-09-21T12:00:00+02:00`)],
                 areLocationOrDateRangeFiltersSet: filteredLocationIds.length > 0 || filteredDateRange !== null,
                 pinnedParticipantIds,
                 togglePinnedParticipantId,

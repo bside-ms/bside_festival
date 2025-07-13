@@ -1,9 +1,9 @@
 'use client';
 
-import Application from 'components/applications/applicationsOverview/Application';
-import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
-import ApplicationsOverviewSearchTextFilter from 'components/applications/applicationsOverview/ApplicationsOverviewSearchTextFilter';
-import ApplicationsOverviewTypesFilter from 'components/applications/applicationsOverview/ApplicationsOverviewTypesFilter';
+import Application from '@/components/applications/applicationsOverview/Application';
+import { useApplicationsOverviewContext } from '@/components/applications/applicationsOverview/ApplicationsOverviewContext';
+import ApplicationsOverviewSearchTextFilter from '@/components/applications/applicationsOverview/ApplicationsOverviewSearchTextFilter';
+import ApplicationsOverviewTypesFilter from '@/components/applications/applicationsOverview/ApplicationsOverviewTypesFilter';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 

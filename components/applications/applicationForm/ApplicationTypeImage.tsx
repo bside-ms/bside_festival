@@ -1,14 +1,14 @@
+import concertImage from '@/images/types/concert.jpg';
+import diskjockeyImage from '@/images/types/diskjockey.jpg';
+import exhibitionImage from '@/images/types/exhibition.jpg';
+import familyProgramImage from '@/images/types/familyProgram.jpg';
+import infoBoothImage from '@/images/types/infoBooth.jpg';
+import miscImage from '@/images/types/misc.jpg';
+import performanceImage from '@/images/types/performance.jpg';
+import readingImage from '@/images/types/reading.jpg';
+import workshopsImage from '@/images/types/workshops.jpg';
+import typeLabels from '@/lib/participants/typeLabels';
 import { Type } from '@prisma/client';
-import concertImage from 'images/types/concert.jpg';
-import diskjockeyImage from 'images/types/diskjockey.jpg';
-import exhibitionImage from 'images/types/exhibition.jpg';
-import familyProgramImage from 'images/types/familyProgram.jpg';
-import infoBoothImage from 'images/types/infoBooth.jpg';
-import miscImage from 'images/types/misc.jpg';
-import performanceImage from 'images/types/performance.jpg';
-import readingImage from 'images/types/reading.jpg';
-import workshopsImage from 'images/types/workshops.jpg';
-import typeLabels from 'lib/participants/typeLabels';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 

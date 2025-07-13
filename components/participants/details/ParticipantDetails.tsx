@@ -1,32 +1,31 @@
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { Link } from '@prisma/client';
-import AttendeeForm from 'components/participants/attendeeForm/AttendeeForm';
-import Badge from 'components/participants/details/Badge';
-import ParticipantAdditionalInfo from 'components/participants/details/ParticipantAdditionalInfo';
-import ParticipantCanProvideBackline from 'components/participants/details/ParticipantCanProvideBackline';
-import ParticipantContacts from 'components/participants/details/ParticipantContacts';
-import ParticipantImage from 'components/participants/details/ParticipantImage';
-import ParticipantLinks from 'components/participants/details/ParticipantLinks';
-import ParticipantMaterialExpenses from 'components/participants/details/ParticipantMaterialExpenses';
-import ParticipantNameAndDescriptionForm from 'components/participants/details/ParticipantNameAndDescriptionForm';
-import ParticipantSlots from 'components/participants/details/ParticipantSlots';
-import ParticipantTechnicalRider from 'components/participants/details/ParticipantTechnicalRider';
-import ParticipantVenues from 'components/participants/details/ParticipantVenues';
-import SlotAttendeeData from 'components/participants/details/SlotAttendeeData';
+import AttendeeForm from '@/components/participants/attendeeForm/AttendeeForm';
+import Badge from '@/components/participants/details/Badge';
+import ParticipantAdditionalInfo from '@/components/participants/details/ParticipantAdditionalInfo';
+import ParticipantCanProvideBackline from '@/components/participants/details/ParticipantCanProvideBackline';
+import ParticipantContacts from '@/components/participants/details/ParticipantContacts';
+import ParticipantImage from '@/components/participants/details/ParticipantImage';
+import ParticipantLinks from '@/components/participants/details/ParticipantLinks';
+import ParticipantMaterialExpenses from '@/components/participants/details/ParticipantMaterialExpenses';
+import ParticipantNameAndDescriptionForm from '@/components/participants/details/ParticipantNameAndDescriptionForm';
+import ParticipantTechnicalRider from '@/components/participants/details/ParticipantTechnicalRider';
+import SlotAttendeeData from '@/components/participants/details/SlotAttendeeData';
 import {
     useParticipantSlots,
     useParticipantsOverviewContext,
     useParticipantVenues,
-} from 'components/participants/overview/ParticipantsOverviewContext';
-import SlotForm from 'components/participants/slotsForm/SlotForm';
-import VenueForm from 'components/participants/venueForm/VenueForm';
-import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
-import hasSlotOrVenue from 'lib/participants/hasSlotOrVenue';
-import typeColors from 'lib/participants/typeColors';
-import typeLabels from 'lib/participants/typeLabels';
-import { ReactElement, useCallback, useState } from 'react';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
+} from '@/components/participants/overview/ParticipantsOverviewContext';
+import SlotForm from '@/components/participants/slotsForm/SlotForm';
+import VenueForm from '@/components/participants/venueForm/VenueForm';
+import formatDate from '@/lib/common/helper/formatDate';
+import isNotEmptyNumber from '@/lib/common/helper/isNotEmptyNumber';
+import hasSlotOrVenue from '@/lib/participants/hasSlotOrVenue';
+import typeColors from '@/lib/participants/typeColors';
+import typeLabels from '@/lib/participants/typeLabels';
+import type { SerializableParticipant } from '@/typings/SerializableParticipant';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { Link } from '@prisma/client';
+import { Fragment, ReactElement, useCallback, useState } from 'react';
 
 interface Props {
     participant: SerializableParticipant;
@@ -56,28 +55,45 @@ const ParticipantDetails = ({ participant, links, onCloseClick, isLoggedIn }: Pr
 
     return (
         <div className="px-2 font-display">
-            <div className="relative flex flex-col justify-between rounded-2xl border border-black bg-white/20 md:cursor-pointer md:flex-row-reverse md:p-5">
-                <div>
+            <div className="relative rounded-2xl border border-black bg-white/20 md:cursor-pointer md:p-5">
+                <div className="flex flex-col justify-between md:flex-row-reverse">
                     <ParticipantImage participant={participant} isLoggedIn={isLoggedIn} />
 
                     <div className="px-3 pt-3 pb-2">
-                        <div>
-                            <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
-                        </div>
-
                         {!showDetailsForm && (
                             <>
                                 <div className="font-display text-2xl">{updatedName ?? name}</div>
+
+                                <div className="my-2 flex flex-wrap gap-2">
+                                    <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
+
+                                    {participantSlots.map(({ slot: { id, begin, maxAttendees }, location: { name } }) => (
+                                        <Fragment key={id}>
+                                            <Badge label={formatDate(new Date(begin), 'EEE HH:mm')} backgroundColor="#b1c32c" />
+                                            <Badge label={name} backgroundColor="#ebc9de" />
+                                            {isNotEmptyNumber(maxAttendees) && (
+                                                <Badge label="Anmeldung erforderlich" backgroundColor="#b0e4cc" />
+                                            )}
+                                        </Fragment>
+                                    ))}
+
+                                    {participantVenues.map(({ dates, venue: { id }, location: { name } }) => (
+                                        <Fragment key={id}>
+                                            {dates.map((date) => {
+                                                const formattedDate = formatDate(new Date(date), 'EEE HH:mm');
+                                                return <Badge key={formattedDate} label={formattedDate} backgroundColor="#b1c32c" />;
+                                            })}
+
+                                            <Badge label={name} backgroundColor="#ebc9de" />
+                                        </Fragment>
+                                    ))}
+                                </div>
 
                                 {participant.status === 'Canceled' && (
                                     <div className="text-lg font-bold text-red-900">
                                         Leider kann dieser Programmpunkt nicht stattfinden!
                                     </div>
                                 )}
-
-                                {participantSlots.length > 0 && <ParticipantSlots participantSlots={participantSlots} />}
-
-                                <ParticipantVenues participantId={id} />
                             </>
                         )}
 

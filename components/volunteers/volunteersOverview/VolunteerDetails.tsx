@@ -1,7 +1,7 @@
+import cn from '@/lib/common/helper/cn';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import type { VolunteerDayPreferenceKey } from '@/lib/volunteers/VolunteerPreference';
 import type { Volunteer } from '@prisma/client';
-import cn from 'lib/common/helper/cn';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import type { VolunteerDayPreferenceKey } from 'lib/volunteers/VolunteerPreference';
 import type { ReactElement } from 'react';
 
 interface Props {

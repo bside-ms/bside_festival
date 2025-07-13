@@ -1,7 +1,7 @@
-import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
-import isEmptyString from 'lib/common/helper/isEmptyString';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import useEffectOnMount from 'lib/common/hooks/useEffectOnMount';
+import { useApplicationsOverviewContext } from '@/components/applications/applicationsOverview/ApplicationsOverviewContext';
+import isEmptyString from '@/lib/common/helper/isEmptyString';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import useEffectOnMount from '@/lib/common/hooks/useEffectOnMount';
 import type { ChangeEvent, ReactElement } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 

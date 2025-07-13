@@ -1,4 +1,4 @@
-import cleanBackground from 'images/cleanBackground2025.webp';
+import cleanBackground from '@/images/cleanBackground2025.webp';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 

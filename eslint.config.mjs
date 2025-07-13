@@ -1,6 +1,6 @@
+import reactPlugin from '@/appslint-plugin-react';
+import ts from '@/appypescript-eslint';
 import js from '@eslint/js';
-import reactPlugin from 'eslint-plugin-react';
-import ts from 'typescript-eslint';
 
 const OFF = 0;
 const ERROR = 2;

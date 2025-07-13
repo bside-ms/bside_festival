@@ -1,21 +1,21 @@
-import { DeleteImageRequest, SuccessfulDeleteImageResponse } from 'app/api/applications/update/image/delete/route';
-import { ReplaceImageRequest } from 'app/api/applications/update/image/replace/route';
+import { DeleteImageRequest, SuccessfulDeleteImageResponse } from '@/app/api/applications/update/image/delete/route';
+import { ReplaceImageRequest } from '@/app/api/applications/update/image/replace/route';
+import { useApplicationsOverviewContext } from '@/components/applications/applicationsOverview/ApplicationsOverviewContext';
+import blobToDataUrl from '@/lib/common/helper/blobToDataUrl';
+import cn from '@/lib/common/helper/cn';
+import isEmptyString from '@/lib/common/helper/isEmptyString';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import allowedImageContentTypes from '@/lib/upload/allowedImageContentTypes';
+import allowedImageMaxFileSize from '@/lib/upload/allowedImageMaxFileSize';
+import createPublicObjectUrl from '@/lib/upload/createPublicObjectUrl';
+import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import bytes from 'bytes';
-import { useApplicationsOverviewContext } from 'components/applications/applicationsOverview/ApplicationsOverviewContext';
-import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
-import cn from 'lib/common/helper/cn';
-import isEmptyString from 'lib/common/helper/isEmptyString';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import allowedImageContentTypes from 'lib/upload/allowedImageContentTypes';
-import allowedImageMaxFileSize from 'lib/upload/allowedImageMaxFileSize';
-import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import { extension } from 'mime-types';
 import Image from 'next/image';
 import { default as NextLink } from 'next/link';
 import { type ChangeEvent, ReactElement, SyntheticEvent, useCallback, useState } from 'react';
 import { BiTrash } from 'react-icons/bi';
 import { GrEdit } from 'react-icons/gr';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     application: SerializableParticipant;
