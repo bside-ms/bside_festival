@@ -1,21 +1,22 @@
-import Badge from 'components/participants/details/Badge';
-import ParticipantVenues from 'components/participants/details/ParticipantVenues';
+import Badge from '@/components/participants/details/Badge';
+import ParticipantVenues from '@/components/participants/details/ParticipantVenues';
 import {
     useParticipantSlots,
     useParticipantsOverviewContext,
     useParticipantVenues,
-} from 'components/participants/overview/ParticipantsOverviewContext';
-import cn from 'lib/common/helper/cn';
-import formatDate from 'lib/common/helper/formatDate';
-import isEmptyString from 'lib/common/helper/isEmptyString';
-import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
-import hasSlotOrVenue from 'lib/participants/hasSlotOrVenue';
-import typeColors from 'lib/participants/typeColors';
-import typeLabels from 'lib/participants/typeLabels';
-import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
+} from '@/components/participants/overview/ParticipantsOverviewContext';
+import cn from '@/lib/common/helper/cn';
+import formatDate from '@/lib/common/helper/formatDate';
+import isEmptyString from '@/lib/common/helper/isEmptyString';
+import isNotEmptyNumber from '@/lib/common/helper/isNotEmptyNumber';
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import hasSlotOrVenue from '@/lib/participants/hasSlotOrVenue';
+import typeColors from '@/lib/participants/typeColors';
+import typeLabels from '@/lib/participants/typeLabels';
+import createPublicObjectUrl from '@/lib/upload/createPublicObjectUrl';
+import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import Image from 'next/image';
 import { Fragment, ReactElement } from 'react';
-import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
 interface Props {
     participant: SerializableParticipant;
@@ -43,7 +44,7 @@ const ParticipantPreview = ({ participant, onClick }: Props): ReactElement | nul
     return (
         <div className="px-2">
             <div
-                className="relative flex flex-col justify-between rounded-2xl border border-black bg-white/20 md:cursor-pointer md:flex-row-reverse md:p-5"
+                className="relative flex flex-col justify-between rounded-2xl border border-black bg-[#eaebeb] hover:brightness-105 md:cursor-pointer md:flex-row-reverse md:p-5"
                 onClick={onClick}
             >
                 <div
@@ -68,13 +69,14 @@ const ParticipantPreview = ({ participant, onClick }: Props): ReactElement | nul
                 <div className="px-3 pt-3 pb-2">
                     <div className="line-clamp-3 font-display text-2xl">{updatedName ?? name}</div>
 
-                    <div className="my-2 flex gap-2">
+                    <div className="my-2 flex flex-wrap gap-2">
                         <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
 
-                        {participantSlots.map(({ slot: { id, begin }, location: { name } }) => (
+                        {participantSlots.map(({ slot: { id, begin, maxAttendees }, location: { name } }) => (
                             <Fragment key={id}>
                                 <Badge label={formatDate(new Date(begin), 'EEE HH:mm')} backgroundColor="#b1c32c" />
                                 <Badge label={name} backgroundColor="#ebc9de" />
+                                {isNotEmptyNumber(maxAttendees) && <Badge label="Anmeldung erforderlich" backgroundColor="#b0e4cc" />}
                             </Fragment>
                         ))}
 
@@ -93,7 +95,9 @@ const ParticipantPreview = ({ participant, onClick }: Props): ReactElement | nul
                     <ParticipantVenues participantId={id} isInPreview={true} />
 
                     {isNotEmptyString(updatedDescription ?? description) && (
-                        <div className="mt-4 line-clamp-5 font-display text-sm leading-5">{updatedDescription ?? description}</div>
+                        <div className="mt-4 line-clamp-5 font-display text-sm leading-5 md:line-clamp-[8] md:text-base md:leading-6">
+                            {updatedDescription ?? description}
+                        </div>
                     )}
                 </div>
             </div>
