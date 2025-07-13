@@ -2,6 +2,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { Link } from '@prisma/client';
 import AttendeeForm from 'components/participants/attendeeForm/AttendeeForm';
+import Badge from 'components/participants/details/Badge';
 import ParticipantAdditionalInfo from 'components/participants/details/ParticipantAdditionalInfo';
 import ParticipantCanProvideBackline from 'components/participants/details/ParticipantCanProvideBackline';
 import ParticipantContacts from 'components/participants/details/ParticipantContacts';
@@ -13,7 +14,6 @@ import ParticipantSlots from 'components/participants/details/ParticipantSlots';
 import ParticipantTechnicalRider from 'components/participants/details/ParticipantTechnicalRider';
 import ParticipantVenues from 'components/participants/details/ParticipantVenues';
 import SlotAttendeeData from 'components/participants/details/SlotAttendeeData';
-import TypeBadge from 'components/participants/details/TypeBadge';
 import {
     useParticipantSlots,
     useParticipantsOverviewContext,
@@ -23,6 +23,8 @@ import SlotForm from 'components/participants/slotsForm/SlotForm';
 import VenueForm from 'components/participants/venueForm/VenueForm';
 import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
 import hasSlotOrVenue from 'lib/participants/hasSlotOrVenue';
+import typeColors from 'lib/participants/typeColors';
+import typeLabels from 'lib/participants/typeLabels';
 import { ReactElement, useCallback, useState } from 'react';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
@@ -53,14 +55,14 @@ const ParticipantDetails = ({ participant, links, onCloseClick, isLoggedIn }: Pr
     }
 
     return (
-        <div>
-            <div className="relative flex flex-col justify-between gap-4 rounded-md bg-white/20 p-3 shadow-lg backdrop-blur-2xl md:flex-row-reverse md:p-5">
-                <div className="flex flex-col justify-between gap-4 md:flex-row-reverse">
+        <div className="px-2 font-display">
+            <div className="relative flex flex-col justify-between rounded-2xl border border-black bg-white/20 md:cursor-pointer md:flex-row-reverse md:p-5">
+                <div>
                     <ParticipantImage participant={participant} isLoggedIn={isLoggedIn} />
 
-                    <div className="shrink grow-0 space-y-3">
+                    <div className="px-3 pt-3 pb-2">
                         <div>
-                            <TypeBadge type={type} />
+                            <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
                         </div>
 
                         {!showDetailsForm && (
@@ -93,7 +95,7 @@ const ParticipantDetails = ({ participant, links, onCloseClick, isLoggedIn }: Pr
                 {participantSlots.length === 1 &&
                     participantSlots[0] !== undefined &&
                     isNotEmptyNumber(participantSlots[0].slot.maxAttendees) && (
-                        <div className="relative mt-1 rounded-md py-2 text-gray-800">
+                        <div className="relative mt-1 rounded-md p-2">
                             <AttendeeForm slot={participantSlots[0]} />
                         </div>
                     )}
@@ -103,25 +105,25 @@ const ParticipantDetails = ({ participant, links, onCloseClick, isLoggedIn }: Pr
                     participantSlots.length === 1 &&
                     participantSlots[0] !== undefined &&
                     isNotEmptyNumber(participantSlots[0].slot.maxAttendees) && (
-                        <div className="relative mt-1 rounded-md py-2 text-gray-800">
+                        <div className="relative mt-1 rounded-md p-2">
                             <SlotAttendeeData slot={participantSlots[0].slot} />
                         </div>
                     )}
 
                 {isLoggedIn && hasSlotOrVenue(type) === 'slot' && (
-                    <div className="relative mt-1 rounded-md py-2 text-gray-800">
+                    <div className="relative mt-1 rounded-md p-2">
                         <SlotForm participantId={id} />
                     </div>
                 )}
 
                 {isLoggedIn && hasSlotOrVenue(type) === 'venue' && (
-                    <div className="relative mt-1 rounded-md py-2 text-gray-800">
+                    <div className="relative mt-1 rounded-md p-2">
                         <VenueForm participantId={id} />
                     </div>
                 )}
 
                 {isLoggedIn && (
-                    <div className="relative rounded-md py-2 text-gray-800">
+                    <div className="relative rounded-md p-2">
                         <ParticipantContacts participant={participant} />
 
                         <ParticipantMaterialExpenses participant={participant} />
@@ -135,14 +137,12 @@ const ParticipantDetails = ({ participant, links, onCloseClick, isLoggedIn }: Pr
                 )}
 
                 <div
-                    className="relative mt-1 flex justify-center rounded-md p-1 text-gray-800 hover:brightness-110 md:hover:cursor-pointer"
+                    className="relative mt-1 flex justify-center rounded-md p-1 hover:brightness-110 md:hover:cursor-pointer"
                     onClick={onCloseClick}
                 >
                     <FontAwesomeIcon className="w-5" icon={faTimes} />
                 </div>
             </div>
-
-            <div className="h-3 w-full bg-black" />
         </div>
     );
 };

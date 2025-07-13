@@ -37,14 +37,14 @@ const SelectInput = <T extends FieldValues>({
     return (
         <div className="flex flex-col">
             {isNotEmptyString(info) && (
-                <label htmlFor={id} className="px-1 text-base text-white">
+                <label htmlFor={id} className="px-1 text-base">
                     {info}
                 </label>
             )}
 
             <select
                 id={id}
-                className="rounded border border-white p-1 py-2 text-white outline-0"
+                className="rounded border p-1 py-2 outline-0"
                 required={required}
                 defaultValue={defaultValue}
                 {...register(name, {

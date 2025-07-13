@@ -2,7 +2,6 @@ import { DeleteImageRequest, SuccessfulDeleteImageResponse } from 'app/api/appli
 import { ReplaceImageRequest } from 'app/api/applications/update/image/replace/route';
 import bytes from 'bytes';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
-import PinParticipantToggle from 'components/participants/overview/PinParticipantToggle';
 import blobToDataUrl from 'lib/common/helper/blobToDataUrl';
 import cn from 'lib/common/helper/cn';
 import isEmptyString from 'lib/common/helper/isEmptyString';
@@ -100,8 +99,8 @@ const ParticipantImage = ({ participant: { id, name, updatedName, status, imageF
     }, []);
 
     return (
-        <div className={cn('relative h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3', isEmptyString(imageUrl) && 'h-[50px]')}>
-            <PinParticipantToggle participantId={id} />
+        <div className={cn('relative h-[300px] shrink-0 overflow-auto rounded-t-2xl md:w-1/3', isEmptyString(imageUrl) && 'h-[50px]')}>
+            {/*<PinParticipantToggle participantId={id} />*/}
 
             {status === 'Canceled' && (
                 <div className="absolute inset-0 z-30 flex items-center justify-center bg-red-800/70 p-5 text-center text-6xl text-gray-100">

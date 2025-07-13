@@ -1,7 +1,6 @@
 'use client';
 
-import { faFilePdf, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Badge from 'components/participants/details/Badge';
 import ParticipantOverview from 'components/participants/overview/ParticipantOverview';
 import { useParticipantsOverviewContext } from 'components/participants/overview/ParticipantsOverviewContext';
 import ParticipantsOverviewLocationFilter from 'components/participants/overview/ParticipantsOverviewLocationFilter';
@@ -25,8 +24,8 @@ const ParticipantsOverview = ({ isLoggedIn }: Props): ReactElement => {
     const toggleFilter = useCallback(() => setShowFilter((prevState) => !prevState), []);
 
     return (
-        <div>
-            <div className="bg-white/60 px-3 py-7">
+        <>
+            <div className="px-2 pb-4">
                 <a className="mb-5 flex w-full cursor-pointer items-baseline gap-2" onClick={toggleFilter}>
                     Filter {showFilter ? 'ausblenden' : 'anzeigen'}
                     <span className={cn('text-xs', !showFilter && 'rotate-180')}>
@@ -50,26 +49,18 @@ const ParticipantsOverview = ({ isLoggedIn }: Props): ReactElement => {
                     </div>
                 )}
 
-                <div className="mt-5 flex flex-wrap gap-4">
-                    <Link
-                        href="/assets/2024-lageplan-b%20side%20festival.jpg"
-                        target="_blank"
-                        className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-900 px-3 py-1"
-                    >
-                        <FontAwesomeIcon className="w-5" icon={faMapLocationDot} /> Lageplan
+                <div className="flex flex-wrap gap-4">
+                    <Link href="/assets/2024-lageplan-b%20side%20festival.jpg" target="_blank" className="cursor-pointer">
+                        <Badge label="Programm.PDF" backgroundColor="#ebc9de" />
                     </Link>
 
-                    <Link
-                        href="/assets/b-side-festival 2024 programm.pdf"
-                        target="_blank"
-                        className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-900 px-3 py-1 hover:bg-white/10"
-                    >
-                        <FontAwesomeIcon className="w-5" icon={faFilePdf} /> Programmheft
+                    <Link href="/assets/b-side-festival 2024 programm.pdf" target="_blank" className="cursor-pointer">
+                        <Badge label="Lageplan.PDF" backgroundColor="#ebc9de" />
                     </Link>
                 </div>
             </div>
 
-            <div className="mb-20 grid grid-cols-1 gap-10">
+            <div className="mb-2 grid grid-cols-1 gap-4">
                 {pinnedParticipants.map((participant) => (
                     <ParticipantOverview key={participant.id} participant={participant} isLoggedIn={isLoggedIn} />
                 ))}
@@ -93,7 +84,7 @@ const ParticipantsOverview = ({ isLoggedIn }: Props): ReactElement => {
                 pauseOnHover={false}
                 theme="dark"
             />
-        </div>
+        </>
     );
 };
 

@@ -1,5 +1,4 @@
 import type { Location, ParticipantLabel, Link as PrismaLink, Venue } from '@prisma/client';
-import BackgroundImage from 'components/common/BackgroundImage';
 import ParticipantsOverview from 'components/participants/overview/ParticipantsOverview';
 import { ParticipantsOverviewContextProvider } from 'components/participants/overview/ParticipantsOverviewContext';
 import { isAfter, isEqual } from 'date-fns';
@@ -12,7 +11,6 @@ import getAllParticipants from 'lib/participants/getAllParticipants';
 import getAllSlots from 'lib/participants/getAllSlots';
 import getAllVenues from 'lib/participants/getAllVenues';
 import serializeParticipant from 'lib/participants/serializeParticipant';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { ReactElement } from 'react';
 import type AllAttendees from 'typings/AllAttendees';
@@ -97,39 +95,21 @@ export default async (): Promise<ReactElement> => {
     const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
 
     return (
-        <div className="relative min-h-screen w-full pb-16">
-            <div className="relative z-10">
-                <div className="bg-white py-3 text-center font-bold tracking-[0.3em] text-[#5ff450] uppercase">
-                    19. & 20. September 2025
-                </div>
-                <Link
-                    href="/"
-                    className="block w-full cursor-pointer bg-white py-3 text-center font-bold tracking-[0.3em] text-black uppercase"
-                >
-                    B-Side Festival 2025
-                </Link>
+        <div className="relative mx-auto min-h-screen w-full max-w-7xl pt-5 pb-3">
+            <div className="text-center font-display text-6xl uppercase">Programm</div>
 
-                <div className="block w-full cursor-pointer bg-[#FDF85D] py-3 text-center text-xl font-bold tracking-[0.3em] uppercase select-none">
-                    Programm
-                </div>
-
-                <div className="mx-auto max-w-7xl">
-                    <ParticipantsOverviewContextProvider
-                        participants={participants}
-                        slots={slots}
-                        venues={venues}
-                        participantLabels={participantLabels}
-                        allLinks={allLinks}
-                        allLocations={allLocations}
-                        allAttendees={allAttendees}
-                        isInDataPrivacyGroup={isInDataPrivacyGroup}
-                    >
-                        <ParticipantsOverview isLoggedIn={loggedIn} />
-                    </ParticipantsOverviewContextProvider>
-                </div>
-            </div>
-
-            <BackgroundImage />
+            <ParticipantsOverviewContextProvider
+                participants={participants}
+                slots={slots}
+                venues={venues}
+                participantLabels={participantLabels}
+                allLinks={allLinks}
+                allLocations={allLocations}
+                allAttendees={allAttendees}
+                isInDataPrivacyGroup={isInDataPrivacyGroup}
+            >
+                <ParticipantsOverview isLoggedIn={loggedIn} />
+            </ParticipantsOverviewContextProvider>
         </div>
     );
 };

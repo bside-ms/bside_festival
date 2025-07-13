@@ -1,10 +1,12 @@
 import type { Genre } from '@prisma/client';
-import TypeBadge from 'components/participants/details/TypeBadge';
+import Badge from 'components/participants/details/Badge';
 import cn from 'lib/common/helper/cn';
 import isEmptyString from 'lib/common/helper/isEmptyString';
 import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
 import isNotEmptyString from 'lib/common/helper/isNotEmptyString';
 import statusLabels from 'lib/participants/status/statusLabels';
+import typeColors from 'lib/participants/typeColors';
+import typeLabels from 'lib/participants/typeLabels';
 import createPublicObjectUrl from 'lib/upload/createPublicObjectUrl';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
@@ -34,7 +36,7 @@ const ApplicationPreview = ({ application, genres, onClick }: Props): ReactEleme
 
             <div>
                 <div className="mb-2 flex flex-wrap gap-2">
-                    <TypeBadge type={type} />
+                    <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
 
                     {genres.map(({ id, name: genreName }) => (
                         <div

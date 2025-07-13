@@ -14,9 +14,11 @@ import ApplicationDetailsMaterialExpenses from 'components/applications/applicat
 import ApplicationDetailsMotivation from 'components/applications/applicationDetails/ApplicationDetailsMotivation';
 import ApplicationDetailsParticipantCount from 'components/applications/applicationDetails/ApplicationDetailsParticipantCount';
 import ApplicationDetailsTechnicalRider from 'components/applications/applicationDetails/ApplicationDetailsTechnicalRider';
-import TypeBadge from 'components/participants/details/TypeBadge';
+import Badge from 'components/participants/details/Badge';
 import isNotEmptyNumber from 'lib/common/helper/isNotEmptyNumber';
 import statusLabels from 'lib/participants/status/statusLabels';
+import typeColors from 'lib/participants/typeColors';
+import typeLabels from 'lib/participants/typeLabels';
 import type { ReactElement } from 'react';
 import type { SerializableParticipant } from 'typings/SerializableParticipant';
 
@@ -37,7 +39,7 @@ const ApplicationDetails = ({ application, genres, links, onCloseClick }: Props)
 
                 <div className="shrink grow-0">
                     <div className="mb-2 flex flex-wrap gap-2">
-                        <TypeBadge type={type} />
+                        <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
 
                         {genres.map(({ id, name: genreName }) => (
                             <div

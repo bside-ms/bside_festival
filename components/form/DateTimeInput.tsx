@@ -43,7 +43,7 @@ const DateTimeInput = <T extends FieldValues>({
                 id={id}
                 type="datetime-local"
                 className={cn(
-                    'rounded border border-black p-2 text-white outline-0 placeholder:text-white placeholder:opacity-55',
+                    'rounded border border-black p-2 outline-0 placeholder:opacity-55',
                     typeof errorMessage === 'string' && 'bg-rose-400',
                 )}
                 required={required}
@@ -65,7 +65,7 @@ const DateTimeInput = <T extends FieldValues>({
                 })}
             />
             {isNotEmptyString(info) && (
-                <label htmlFor={id} className="px-1 text-base text-black">
+                <label htmlFor={id} className="px-1 text-base">
                     {info}
                 </label>
             )}

@@ -46,7 +46,7 @@ const TextInput = <T extends FieldValues>({
     return (
         <div className="flex flex-col">
             {isNotEmptyString(info) && (
-                <label htmlFor={id} className="px-1 text-base text-white">
+                <label htmlFor={id} className="px-1 text-base">
                     {info}
                 </label>
             )}
@@ -55,10 +55,7 @@ const TextInput = <T extends FieldValues>({
                 id={id}
                 type="text"
                 defaultValue={defaultValue}
-                className={cn(
-                    'rounded border border-white p-2 text-white outline-0 placeholder:text-white placeholder:opacity-55',
-                    typeof errorMessage === 'string' && 'bg-rose-400',
-                )}
+                className={cn('rounded border p-2 outline-0 placeholder:opacity-55', typeof errorMessage === 'string' && 'bg-rose-400')}
                 required={required}
                 placeholder={required ? `${label} *` : label}
                 disabled={isSubmitting || isDisabled}
@@ -77,7 +74,7 @@ const TextInput = <T extends FieldValues>({
                 })}
             />
 
-            {isNotEmptyString(additionalInfo) && <div className="px-1 pt-1 text-xs text-white">{additionalInfo}</div>}
+            {isNotEmptyString(additionalInfo) && <div className="px-1 pt-1 text-xs">{additionalInfo}</div>}
 
             {typeof errorMessage === 'string' && <div className="px-1 text-rose-600">{errorMessage}</div>}
         </div>
