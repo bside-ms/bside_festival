@@ -43,6 +43,10 @@ const ParticipantsOverview = ({ isLoggedIn }: Props): ReactElement => {
                                 <ParticipantsOverviewLocationFilter />
                             </div>
                         </div>
+
+                        <div onClick={toggleFilter} className="mb-5 rounded-2xl border border-black bg-gray-200 p-2 text-center font-mono">
+                            Filter ausblenden
+                        </div>
                     </div>
                 )}
 

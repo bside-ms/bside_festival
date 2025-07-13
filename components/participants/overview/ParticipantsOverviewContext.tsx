@@ -23,8 +23,6 @@ interface ParticipantsOverviewContextData {
     filteredParticipants: Array<SerializableParticipant>;
     participantLabels: Array<ParticipantLabel>;
     updateParticipantLabels: (participantLabels: Array<ParticipantLabel>) => void;
-    enhancedParticipantIds: Array<number>;
-    toggleEnhancedParticipantId: (id: number) => void;
     pinnedParticipantIds: Array<number>;
     togglePinnedParticipantId: (id: number) => void;
     getLinksOfParticipant: (id: number) => Array<Link>;
@@ -106,18 +104,6 @@ export const ParticipantsOverviewContextProvider = ({
     }
     const [filteredDateRange, setFilteredDateRange] = useState<[number, number] | null>(initialDateRangeValue);
 
-    const [enhancedParticipantIds, setEnhancedParticipantIds] = useState<Array<number>>([]);
-
-    const toggleEnhancedParticipantId = useCallback((id: number) => {
-        setEnhancedParticipantIds((enhancedIds) => {
-            if (enhancedIds.includes(id)) {
-                return enhancedIds.filter((enhancedId) => enhancedId !== id);
-            } else {
-                return [...enhancedIds, id];
-            }
-        });
-    }, []);
-
     const [pinnedParticipantIds, setPinnedParticipantIds] = useState<Array<number>>([]);
 
     const togglePinnedParticipantId = useCallback((participantId: number) => {
@@ -191,8 +177,6 @@ export const ParticipantsOverviewContextProvider = ({
                 participantLabels,
                 updateParticipantLabels: setParticipantLabels,
                 filteredParticipants,
-                enhancedParticipantIds,
-                toggleEnhancedParticipantId,
                 getLinksOfParticipant,
                 actuallyAvailableTypes,
                 filteredTypes,

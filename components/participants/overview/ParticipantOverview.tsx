@@ -10,7 +10,7 @@ interface Props {
 }
 
 const ParticipantOverview = ({ participant, isLoggedIn }: Props): ReactElement => {
-    const { enhancedParticipantIds, toggleEnhancedParticipantId, getLinksOfParticipant } = useParticipantsOverviewContext();
+    const { getLinksOfParticipant } = useParticipantsOverviewContext();
 
     const [isEnhanced, setIsEnhanced] = useState(false);
 

@@ -34,7 +34,7 @@ export default async (): Promise<ReactElement> => {
             </div>
 
             <div className="relative z-20 mt-8 xs:mt-5 md:mt-11">
-                <Image src={pinkBackgroundTop} alt="" width={2000} className="hidden object-cover xs:block" />
+                <Image src={pinkBackgroundTop} alt="" width={2000} className="object-cover" />
 
                 <div className="bg-[#ebc9de] px-4">
                     <div className="mb-3 text-center font-mono text-2xl uppercase sm:mb-7 sm:text-3xl md:mb-11 md:text-4xl">
@@ -49,7 +49,7 @@ export default async (): Promise<ReactElement> => {
                     </div>
                 </div>
 
-                <Image src={pinkBackgroundBottom} alt="" width={2000} className="hidden object-cover xs:block" />
+                <Image src={pinkBackgroundBottom} alt="" width={2000} className="object-cover" />
             </div>
 
             <Image
@@ -91,7 +91,7 @@ export default async (): Promise<ReactElement> => {
 
             {loggedIn && (
                 <div className="relative z-20 mt-8 mb-14 xs:mt-5 md:mt-11">
-                    <Image src={whiteBackgroundTop} alt="" width={2000} className="hidden object-cover xs:block" />
+                    <Image src={whiteBackgroundTop} alt="" width={2000} className="object-cover" />
 
                     <div className="bg-white px-4 py-4">
                         <div className="mb-14 text-center font-mono text-2xl uppercase sm:mb-14 sm:text-3xl md:mb-11 md:text-4xl">
@@ -108,7 +108,7 @@ export default async (): Promise<ReactElement> => {
                         </div>
                     </div>
 
-                    <Image src={whiteBackgroundBottom} alt="" width={2000} className="hidden object-cover xs:block" />
+                    <Image src={whiteBackgroundBottom} alt="" width={2000} className="object-cover" />
                 </div>
             )}
         </div>
