@@ -98,7 +98,12 @@ const ApplicationDetailsImage = ({ application: { id, name, updatedName, imageFi
     }, []);
 
     return (
-        <div className={cn('relative h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3', isEmptyString(imageUrl) && 'h-[50px]')}>
+        <div
+            className={cn(
+                'relative h-[300px] shrink-0 overflow-auto rounded-md rounded-b-none border-b border-black md:w-1/3 md:rounded-tl-none md:rounded-bl-md md:border-l',
+                isEmptyString(imageUrl) && 'h-[50px]',
+            )}
+        >
             {isNotEmptyString(imageUrl) ? (
                 <>
                     <NextLink href={imageUrl} className="md:cursor-pointer" target="_blank">

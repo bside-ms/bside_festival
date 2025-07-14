@@ -1,12 +1,13 @@
-import { useApplicationsOverviewContext } from '@/components/applications/applicationsOverview/ApplicationsOverviewContext';
+import { useParticipantsOverviewContext } from '@/components/participants/overview/ParticipantsOverviewContext';
+import { textFilterQueryName } from '@/lib/applications/filterQueryNames';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import useEffectOnMount from '@/lib/common/hooks/useEffectOnMount';
 import type { ChangeEvent, ReactElement } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-const ApplicationsOverviewSearchTextFilter = (): ReactElement => {
-    const { searchText, setSearchText } = useApplicationsOverviewContext();
+const ParticipantsOverviewSearchTextFilter = (): ReactElement => {
+    const { filteredText, setFilteredText } = useParticipantsOverviewContext();
 
     const [isMounted, setIsMounted] = useState(false);
 
@@ -14,34 +15,22 @@ const ApplicationsOverviewSearchTextFilter = (): ReactElement => {
 
     const handleSearchChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
-            setSearchText(event.target.value);
+            setFilteredText(event.target.value);
         },
-        [setSearchText],
+        [setFilteredText],
     );
 
     useEffectOnMount(() => {
-        const queryParams = new URLSearchParams(window.location.search);
-
-        const initialSearchText = queryParams.get('search');
-
-        if (isNotEmptyString(initialSearchText)) {
-            setSearchText(queryParams.get('search'));
-
-            if (inputRef.current !== null) {
-                inputRef.current.value = initialSearchText;
-            }
-        }
-
         setIsMounted(true);
     });
 
     const handleClearSearchFilter = useCallback(() => {
-        setSearchText(null);
+        setFilteredText(null);
 
         if (inputRef.current !== null) {
             inputRef.current.value = '';
         }
-    }, [setSearchText]);
+    }, [setFilteredText]);
 
     useEffect(() => {
         if (!isMounted) {
@@ -50,14 +39,14 @@ const ApplicationsOverviewSearchTextFilter = (): ReactElement => {
 
         const currentUrl = new URL(window.location.href);
 
-        if (isEmptyString(searchText)) {
-            currentUrl.searchParams.delete('search');
+        if (isEmptyString(filteredText)) {
+            currentUrl.searchParams.delete(textFilterQueryName);
         } else {
-            currentUrl.searchParams.set('search', searchText);
+            currentUrl.searchParams.set(textFilterQueryName, filteredText);
         }
 
         history.replaceState(null, '', currentUrl.toString());
-    }, [isMounted, searchText]);
+    }, [isMounted, filteredText]);
 
     return (
         <div className="relative mb-4 flex items-center gap-2">
@@ -67,9 +56,10 @@ const ApplicationsOverviewSearchTextFilter = (): ReactElement => {
                 className="w-full rounded-xl border border-none border-gray-300 bg-gray-50 pt-2 pr-7 pb-1 pl-3 font-mono text-sm text-gray-900 ring-0 outline-0"
                 onChange={handleSearchChange}
                 ref={inputRef}
+                value={filteredText ?? ''}
             />
 
-            {isNotEmptyString(searchText) && (
+            {isNotEmptyString(filteredText) && (
                 <div onClick={handleClearSearchFilter} className="absolute right-2 text-gray-600 md:cursor-pointer">
                     ✕
                 </div>
@@ -78,4 +68,4 @@ const ApplicationsOverviewSearchTextFilter = (): ReactElement => {
     );
 };
 
-export default ApplicationsOverviewSearchTextFilter;
+export default ParticipantsOverviewSearchTextFilter;

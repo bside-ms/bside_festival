@@ -18,7 +18,7 @@ const TypeToggle = ({ type }: { type: Type }): ReactElement => {
 
     return (
         <div
-            className="rounded-2xl border-2 border-dashed px-3 py-1 text-sm uppercase select-none hover:opacity-90 md:cursor-pointer"
+            className="rounded-2xl border-2 border-dashed px-3 py-1 font-mono text-xs select-none hover:opacity-90 md:cursor-pointer"
             style={{
                 backgroundColor: typeColors[type],
                 borderColor: active ? '#444' : typeColors[type],

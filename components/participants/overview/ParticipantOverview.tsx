@@ -10,11 +10,15 @@ interface Props {
 }
 
 const ParticipantOverview = ({ participant, isLoggedIn }: Props): ReactElement => {
-    const { getLinksOfParticipant } = useParticipantsOverviewContext();
+    const { getLinksOfParticipant, participantGenres, allGenres } = useParticipantsOverviewContext();
 
     const [isEnhanced, setIsEnhanced] = useState(false);
 
     const { id } = participant;
+
+    const ownParticipantGenreIds = participantGenres.filter((genre) => genre.participantId === id).map((genre) => genre.genreId);
+
+    const genres = allGenres.filter((genre) => ownParticipantGenreIds.includes(genre.id));
 
     const handleEnhancedToggle = useCallback(() => setIsEnhanced((prevState) => !prevState), []);
 
@@ -22,6 +26,7 @@ const ParticipantOverview = ({ participant, isLoggedIn }: Props): ReactElement =
         return (
             <ParticipantDetails
                 participant={participant}
+                genres={genres}
                 links={getLinksOfParticipant(id)}
                 onCloseClick={handleEnhancedToggle}
                 isLoggedIn={isLoggedIn}
@@ -29,7 +34,7 @@ const ParticipantOverview = ({ participant, isLoggedIn }: Props): ReactElement =
         );
     }
 
-    return <ParticipantPreview participant={participant} onClick={handleEnhancedToggle} />;
+    return <ParticipantPreview participant={participant} genres={genres} onClick={handleEnhancedToggle} />;
 };
 
 export default ParticipantOverview;

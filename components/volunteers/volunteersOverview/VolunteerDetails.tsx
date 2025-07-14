@@ -10,9 +10,9 @@ interface Props {
 }
 
 const dayPreferences = new Array<[VolunteerDayPreferenceKey, string]>(
-    ['isAvailableOnFriday', 'Fr'],
-    ['isAvailableOnSaturday', 'Sa'],
-    ['isAvailableOnSunday', 'So'],
+    ['isAvailableBefore', 'Vorher'],
+    ['isAvailableOnFriday', 'Freitag'],
+    ['isAvailableOnSaturday', 'Samstag'],
 );
 
 const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement => {
@@ -37,14 +37,14 @@ const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement
 
             <div className="flex items-center gap-2">
                 {dayPreferences.map(([dayPreference, label]) => (
-                    <div key={dayPreference} className={cn('text-xl leading-4', !volunteer[dayPreference] && 'text-gray-300')}>
+                    <div key={dayPreference} className={cn('text-base leading-4', !volunteer[dayPreference] && 'text-gray-300')}>
                         {label}
                     </div>
                 ))}
             </div>
 
             {isNotEmptyString(volunteer.additionalInfo) && (
-                <pre className="mt-4 border-l-2 border-gray-400 pl-3 whitespace-pre-wrap text-gray-600 italic">
+                <pre className="mt-4 border-l-2 border-gray-400 pl-3 font-display whitespace-pre-wrap text-gray-600 italic">
                     {volunteer.additionalInfo}
                 </pre>
             )}

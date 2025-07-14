@@ -22,8 +22,8 @@ const VolunteersOverview = ({ volunteers, isInDataPrivacyGroup }: Props): ReactE
     );
 
     return (
-        <div>
-            <div className="mb-5 font-display text-3xl">Helfer:innen ({volunteers.length})</div>
+        <>
+            <div className="mb-3 text-center font-display text-4xl uppercase">Helfer:innen ({volunteers.length})</div>
 
             {volunteers.length === 0 ? (
                 <div className="mt-3 rounded-md bg-gray-50 p-2 drop-shadow-sm">Bisher sind keine Helfer:innen-Anmeldungen eingegangen</div>
@@ -40,7 +40,7 @@ const VolunteersOverview = ({ volunteers, isInDataPrivacyGroup }: Props): ReactE
                     </div>
                 </>
             )}
-        </div>
+        </>
     );
 };
 

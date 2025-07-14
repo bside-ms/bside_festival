@@ -24,6 +24,7 @@ export interface VolunteerFormValues {
     isAvailableOnFriday: boolean;
     isAvailableOnSaturday: boolean;
     isAvailableOnSunday: boolean;
+    isAvailableBefore: boolean;
     additionalInfo: string;
 }
 
@@ -58,6 +59,7 @@ const VolunteerForm = (): ReactElement => {
                 isAvailableOnFriday: values.isAvailableOnFriday,
                 isAvailableOnSaturday: values.isAvailableOnSaturday,
                 isAvailableOnSunday: values.isAvailableOnSunday,
+                isAvailableBefore: values.isAvailableBefore,
                 additionalInfo: values.additionalInfo,
             };
 
@@ -78,17 +80,9 @@ const VolunteerForm = (): ReactElement => {
         [clearErrors, reset, setError],
     );
 
-    const title = (
-        <div className="mb-4 font-display text-black">
-            <div className="text-4xl font-bold">Mithelfen</div>
-        </div>
-    );
-
     if (wasSuccessfullySubmitted) {
         return (
-            <div className="rounded-md p-2">
-                {title}
-
+            <div className="p-2">
                 <div className="mb-3">
                     <VolunteerInfo />
                 </div>
@@ -101,10 +95,8 @@ const VolunteerForm = (): ReactElement => {
     }
 
     return (
-        <div className="rounded-md p-2">
-            {title}
-
-            <div className="mb-3">
+        <div className="p-2">
+            <div className="mb-3 font-display">
                 <VolunteerInfo />
             </div>
 
@@ -117,7 +109,7 @@ const VolunteerForm = (): ReactElement => {
 
                         <TextInput<VolunteerFormValues> name="mailAddress" label="E-Mail-Adresse" required={true} />
 
-                        <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-3 font-display">
                             An welchen Tagen kannst du uns unterstützen?
                             {volunteerDayPreferences.map(({ key, label }) => (
                                 <Checkbox<VolunteerFormValues> key={key} name={key} label={label} />

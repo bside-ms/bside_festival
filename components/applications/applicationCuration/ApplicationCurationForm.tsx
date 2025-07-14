@@ -73,7 +73,7 @@ const ApplicationCurationForm = ({ application }: Props): ReactElement => {
                         />
                     </div>
 
-                    <div className="mt-1 text-xs text-gray-100">
+                    <div className="mt-1 text-xs">
                         Sobald der Status "{statusLabels.Confirmed}" gesetzt ist, wird der Programmpunkt im Programm aufgelistet! Auch mit
                         Status "{statusLabels.Canceled}" erscheint der Punkt mit entsprechendem Hinweis in der Programmliste.
                     </div>
@@ -90,7 +90,7 @@ const ApplicationCurationForm = ({ application }: Props): ReactElement => {
                 </label>
 
                 {isSubmitting && (
-                    <div className="text-gray-100">
+                    <div>
                         <span className="mr-1">Wird gespeichert</span>{' '}
                         <span className="inline-block w-3 animate-spin">
                             <FontAwesomeIcon icon={faSpinner} />

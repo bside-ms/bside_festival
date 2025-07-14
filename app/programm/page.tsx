@@ -1,6 +1,11 @@
 import ParticipantsOverview from '@/components/participants/overview/ParticipantsOverview';
 import { ParticipantsOverviewContextProvider } from '@/components/participants/overview/ParticipantsOverviewContext';
-import { dateRangeFilterQueryName, locationsFilterQueryName, typesFilterQueryName } from '@/lib/applications/filterQueryNames';
+import {
+    dateRangeFilterQueryName,
+    locationsFilterQueryName,
+    textFilterQueryName,
+    typesFilterQueryName,
+} from '@/lib/applications/filterQueryNames';
 import prismaClient from '@/lib/common/prismaClient';
 import isGroupMember from '@/lib/next-auth/isGroupMember';
 import isLoggedIn from '@/lib/next-auth/isLoggedIn';
@@ -95,10 +100,15 @@ export default async (props: { searchParams: Promise<Record<string, string | str
     const initialDateRangeFilter = searchParams[dateRangeFilterQueryName];
     const initialTypesFilter = searchParams[typesFilterQueryName];
     const initialLocationsFilter = searchParams[locationsFilterQueryName];
+    const initialTextFilter = searchParams[textFilterQueryName];
 
     const { participants, slots, venues, participantLabels, allLinks, allLocations, allAttendees } = await getData();
 
     const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
+
+    const participantGenres = await prismaClient.participantGenre.findMany();
+
+    const allGenres = await prismaClient.genre.findMany();
 
     return (
         <div className="relative mx-auto min-h-screen w-full max-w-7xl pt-5 pb-3">
@@ -116,6 +126,9 @@ export default async (props: { searchParams: Promise<Record<string, string | str
                 initialDateRangeDateRangeFilter={typeof initialDateRangeFilter === 'string' ? initialDateRangeFilter : undefined}
                 initialTypesFilter={typeof initialTypesFilter === 'string' ? initialTypesFilter : undefined}
                 initialLocationsFilter={typeof initialLocationsFilter === 'string' ? initialLocationsFilter : undefined}
+                initialTextFilter={typeof initialTextFilter === 'string' ? initialTextFilter : undefined}
+                participantGenres={participantGenres}
+                allGenres={allGenres}
             >
                 <ParticipantsOverview isLoggedIn={loggedIn} />
             </ParticipantsOverviewContextProvider>

@@ -15,15 +15,17 @@ import typeColors from '@/lib/participants/typeColors';
 import typeLabels from '@/lib/participants/typeLabels';
 import createPublicObjectUrl from '@/lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
+import type { Genre } from '@prisma/client';
 import Image from 'next/image';
 import { Fragment, ReactElement } from 'react';
 
 interface Props {
     participant: SerializableParticipant;
+    genres: Array<Genre>;
     onClick: () => void;
 }
 
-const ParticipantPreview = ({ participant, onClick }: Props): ReactElement | null => {
+const ParticipantPreview = ({ participant, genres, onClick }: Props): ReactElement | null => {
     const { areLocationOrDateRangeFiltersSet } = useParticipantsOverviewContext();
 
     const participantSlots = useParticipantSlots(participant.id);
@@ -71,6 +73,10 @@ const ParticipantPreview = ({ participant, onClick }: Props): ReactElement | nul
 
                     <div className="my-2 flex flex-wrap gap-2">
                         <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
+
+                        {genres.map(({ id, name: genreName }) => (
+                            <Badge key={id} label={genreName} backgroundColor="#fcb8b8" />
+                        ))}
 
                         {participantSlots.map(({ slot: { id, begin, maxAttendees }, location: { name } }) => (
                             <Fragment key={id}>

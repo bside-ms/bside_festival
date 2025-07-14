@@ -33,38 +33,28 @@ const ApplicationDetails = ({ application, genres, links, onCloseClick }: Props)
     const { type, curationScore, status } = application;
 
     return (
-        <div>
-            <div className="relative flex flex-col justify-between gap-4 rounded-md bg-white/20 p-3 shadow-lg backdrop-blur-2xl md:flex-row-reverse md:p-5">
+        <div className="rounded-md border border-black">
+            <div className="relative flex flex-col justify-between gap-2 md:flex-row-reverse">
                 <ApplicationDetailsImage application={application} />
 
-                <div className="shrink grow-0">
+                <div className="shrink grow-0 p-2">
                     <div className="mb-2 flex flex-wrap gap-2">
                         <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
 
                         {genres.map(({ id, name: genreName }) => (
-                            <div
-                                key={id}
-                                className="max-w-50 overflow-hidden rounded-2xl bg-gray-200/60 px-3 py-1 text-sm text-ellipsis whitespace-nowrap text-gray-700 uppercase"
-                                title={genreName}
-                            >
-                                {genreName}
-                            </div>
+                            <Badge key={id} label={genreName} backgroundColor="#fcb8b8" />
                         ))}
 
-                        {isNotEmptyNumber(curationScore) && (
-                            <div className="rounded-2xl bg-gray-800 px-3 py-1 text-sm text-white">{curationScore}</div>
-                        )}
+                        {isNotEmptyNumber(curationScore) && <Badge label={curationScore.toString()} backgroundColor="lightgray" />}
 
-                        <div className="inline-block rounded-2xl bg-gray-800 px-3 py-1 text-sm text-white uppercase select-none">
-                            {statusLabels[status]}
-                        </div>
+                        <Badge label={statusLabels[status]} backgroundColor="lightgray" />
                     </div>
 
                     <ApplicationNameAndDescriptionForm application={application} />
                 </div>
             </div>
 
-            <div className="relative mt-1 space-y-6 rounded-md bg-white/20 px-3 py-4 text-gray-100 shadow-lg backdrop-blur-2xl md:px-5">
+            <div className="relative mt-1 space-y-6 p-2">
                 <ApplicationDetailsMotivation application={application} />
 
                 <ApplicationDetailsParticipantCount application={application} />
@@ -86,12 +76,12 @@ const ApplicationDetails = ({ application, genres, links, onCloseClick }: Props)
                 <ApplicationDetailsAllergies application={application} />
             </div>
 
-            <div className="relative mt-1 rounded-md bg-white/20 px-3 py-2 shadow-lg backdrop-blur-2xl md:px-5">
+            <div className="relative mt-1 p-2">
                 <ApplicationCurationForm application={application} />
             </div>
 
             <div
-                className="relative mt-1 flex justify-center rounded-md bg-white/20 p-1 text-gray-100 shadow-lg backdrop-blur-2xl hover:brightness-110 md:hover:cursor-pointer"
+                className="relative mt-1 flex justify-center border-t border-black p-1 hover:brightness-110 md:hover:cursor-pointer"
                 onClick={onCloseClick}
             >
                 <FontAwesomeIcon className="w-5" icon={faTimes} />

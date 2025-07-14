@@ -3,17 +3,18 @@
 import availableTypes from '@/lib/applications/availableTypes';
 import { pinnedParticipantsCookieName, readCookie, setCookie } from '@/lib/applications/cookies';
 import formatDate from '@/lib/common/helper/formatDate';
+import isEmptyString from '@/lib/common/helper/isEmptyString';
 import useEffectOnMount from '@/lib/common/hooks/useEffectOnMount';
 import isValidType from '@/lib/participants/isValidType';
 import serializeParticipant from '@/lib/participants/serializeParticipant';
 import AllAttendees from '@/typings/AllAttendees';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { SerializableSlot } from '@/typings/SerializableSlot';
-import type { Attendee, Link, Location, Participant, ParticipantLabel, Type, Venue } from '@prisma/client';
+import type { Attendee, Genre, Link, Location, Participant, ParticipantGenre, ParticipantLabel, Type, Venue } from '@prisma/client';
 import { addHours, endOfHour, isAfter, isBefore, isSameMinute, startOfHour, subHours } from 'date-fns';
+import Fuse from 'fuse.js';
 import { first, last, uniq } from 'lodash';
-import type { PropsWithChildren, ReactElement } from 'react';
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, PropsWithChildren, ReactElement, useCallback, useContext, useMemo, useState } from 'react';
 
 interface ParticipantsOverviewContextData {
     allParticipants: Array<SerializableParticipant>;
@@ -27,6 +28,8 @@ interface ParticipantsOverviewContextData {
     togglePinnedParticipantId: (id: number) => void;
     getLinksOfParticipant: (id: number) => Array<Link>;
     actuallyAvailableTypes: Array<Type>;
+    filteredText: string | null;
+    setFilteredText: (text: string | null) => void;
     filteredTypes: Array<Type>;
     toggleFilteredType: (type: Type) => void;
     filteredLocationIds: Array<number>;
@@ -43,6 +46,8 @@ interface ParticipantsOverviewContextData {
     areLocationOrDateRangeFiltersSet: boolean;
     areFiltersSet: boolean;
     isInDataPrivacyGroup: boolean;
+    participantGenres: Array<ParticipantGenre>;
+    allGenres: Array<Genre & { count: 0 }>;
 }
 
 const ParticipantsOverviewContext = createContext<ParticipantsOverviewContextData | null>(null);
@@ -59,6 +64,9 @@ interface Props extends PropsWithChildren {
     initialDateRangeDateRangeFilter: string | undefined;
     initialTypesFilter: string | undefined;
     initialLocationsFilter: string | undefined;
+    initialTextFilter: string | undefined;
+    participantGenres: Array<ParticipantGenre>;
+    allGenres: Array<Genre>;
 }
 
 export const ParticipantsOverviewContextProvider = ({
@@ -73,6 +81,9 @@ export const ParticipantsOverviewContextProvider = ({
     initialDateRangeDateRangeFilter,
     initialTypesFilter,
     initialLocationsFilter,
+    initialTextFilter,
+    participantGenres,
+    allGenres,
     children,
 }: Props): ReactElement => {
     const [participantLabels, setParticipantLabels] = useState<Array<ParticipantLabel>>(initialParticipantLabels);
@@ -84,6 +95,8 @@ export const ParticipantsOverviewContextProvider = ({
     const [allAttendees, setAllAttendees] = useState<Array<AllAttendees>>(initialAllAttendees);
 
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>((initialTypesFilter?.split(',') ?? []).filter(isValidType));
+
+    const [filteredText, setFilteredText] = useState<string | null>(initialTextFilter ?? null);
 
     const [filteredLocationIds, setFilteredLocationIds] = useState<Array<number>>((initialLocationsFilter?.split(',') ?? []).map(Number));
 
@@ -122,9 +135,27 @@ export const ParticipantsOverviewContextProvider = ({
         setPinnedParticipantIds(readCookie(pinnedParticipantsCookieName)?.split(',').map(Number) ?? []);
     });
 
-    const filteredParticipants = participants.filter(
-        (participant) => filteredTypes.length === 0 || filteredTypes.includes(participant.type),
-    );
+    const filteredParticipants = useMemo<Array<SerializableParticipant>>(() => {
+        const participantsFilteredByType = participants.filter(
+            (application) => filteredTypes.length === 0 || filteredTypes.includes(application.type),
+        );
+
+        if (isEmptyString(filteredText)) {
+            return participantsFilteredByType;
+        }
+
+        const fuse = new Fuse(participantsFilteredByType, {
+            keys: ['name', 'updatedName'],
+            shouldSort: true,
+            includeScore: true,
+            includeMatches: true,
+            minMatchCharLength: 3,
+            isCaseSensitive: false,
+            findAllMatches: true,
+        });
+
+        return fuse.search(filteredText).map((result) => result.item);
+    }, [filteredText, participants, filteredTypes.length]);
 
     const toggleFilteredType = useCallback((type: Type) => {
         setFilteredTypes((types) => {
@@ -221,6 +252,10 @@ export const ParticipantsOverviewContextProvider = ({
                 togglePinnedParticipantId,
                 areFiltersSet: filteredDateRange !== null || filteredTypes.length > 0 || filteredLocationIds.length > 0,
                 isInDataPrivacyGroup,
+                participantGenres,
+                allGenres: allGenres.map((genre) => ({ ...genre, count: 0 })),
+                filteredText,
+                setFilteredText,
             }}
         >
             {children}

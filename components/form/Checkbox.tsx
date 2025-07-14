@@ -45,13 +45,13 @@ const Checkbox = <T extends FieldValues>({ label, name, info, required = false, 
                     })}
                 />
 
-                <label htmlFor={id} className="cursor-pointer text-base font-medium text-white">
+                <label htmlFor={id} className="cursor-pointer text-base font-medium">
                     {required ? `${label} *` : label}
                 </label>
             </div>
 
             {isNotEmptyString(info) && (
-                <label htmlFor={id} className="text-base text-white">
+                <label htmlFor={id} className="text-base">
                     {info}
                 </label>
             )}

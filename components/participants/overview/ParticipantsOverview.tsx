@@ -5,6 +5,7 @@ import ParticipantOverview from '@/components/participants/overview/ParticipantO
 import { useParticipantsOverviewContext } from '@/components/participants/overview/ParticipantsOverviewContext';
 import ParticipantsOverviewDateRangeFilter from '@/components/participants/overview/ParticipantsOverviewDateRangeFilter';
 import ParticipantsOverviewLocationFilter from '@/components/participants/overview/ParticipantsOverviewLocationFilter';
+import ParticipantsOverviewSearchTextFilter from '@/components/participants/overview/ParticipantsOverviewSearchTextFilter';
 import ParticipantsOverviewTypesFilter from '@/components/participants/overview/ParticipantsOverviewTypesFilter';
 import Link from 'next/link';
 import { ReactElement, useCallback, useState } from 'react';
@@ -30,6 +31,8 @@ const ParticipantsOverview = ({ isLoggedIn }: Props): ReactElement => {
     return (
         <>
             <div className="px-2 pb-4">
+                <ParticipantsOverviewSearchTextFilter />
+
                 {showFilter && (
                     <div>
                         <ParticipantsOverviewTypesFilter />

@@ -7,7 +7,7 @@ export type VolunteerPreferenceKey = keyof Pick<
 
 export type VolunteerDayPreferenceKey = keyof Pick<
     VolunteerFormValues,
-    'isAvailableOnFriday' | 'isAvailableOnSaturday' | 'isAvailableOnSunday'
+    'isAvailableOnFriday' | 'isAvailableOnSaturday' | 'isAvailableOnSunday' | 'isAvailableBefore'
 >;
 
 export default interface VolunteerPreference {

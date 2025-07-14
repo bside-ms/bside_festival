@@ -4,7 +4,6 @@ import Application from '@/components/applications/applicationsOverview/Applicat
 import { useApplicationsOverviewContext } from '@/components/applications/applicationsOverview/ApplicationsOverviewContext';
 import ApplicationsOverviewSearchTextFilter from '@/components/applications/applicationsOverview/ApplicationsOverviewSearchTextFilter';
 import ApplicationsOverviewTypesFilter from '@/components/applications/applicationsOverview/ApplicationsOverviewTypesFilter';
-import Link from 'next/link';
 import type { ReactElement } from 'react';
 
 const ApplicationsOverview = (): ReactElement => {
@@ -16,14 +15,8 @@ const ApplicationsOverview = (): ReactElement => {
             : `${filteredApplications.length} von ${allApplications.length}`;
 
     return (
-        <div>
-            <Link href="/" className="flex items-center gap-3 text-red-600">
-                <div className="pt-1 text-2xl md:pt-2 md:text-3xl">B-Side Festival 2025</div>
-            </Link>
-
-            <div className="mb-5 font-display text-white">
-                <div className="text-4xl font-bold">B-werbungen ({applicationAmount})</div>
-            </div>
+        <>
+            <div className="mb-2 text-center font-display text-4xl uppercase">B-werbungen ({applicationAmount})</div>
 
             <ApplicationsOverviewSearchTextFilter />
 
@@ -42,7 +35,7 @@ const ApplicationsOverview = (): ReactElement => {
                     ))}
                 </div>
             )}
-        </div>
+        </>
     );
 };
 

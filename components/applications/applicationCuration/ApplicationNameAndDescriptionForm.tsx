@@ -64,9 +64,9 @@ const ApplicationNameAndDescriptionForm = ({ application }: Props): ReactElement
     if (!showForm) {
         return (
             <>
-                <div className="font-display text-2xl text-gray-100">{application.updatedName ?? application.name}</div>
+                <div className="font-display text-2xl">{application.updatedName ?? application.name}</div>
 
-                <div className="mt-4 text-gray-100">
+                <div className="mt-4">
                     <div className="whitespace-pre-wrap">{application.updatedDescription ?? application.description}</div>
                     <a onClick={toggleShowForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
                         Name und Beschreibung bearbeiten…
@@ -88,7 +88,7 @@ const ApplicationNameAndDescriptionForm = ({ application }: Props): ReactElement
                     />
 
                     {application.updatedName !== application.name && (
-                        <div className="text-sm text-gray-100">
+                        <div className="text-sm">
                             <div className="font-bold text-gray-400">Ursprünglicher Name</div>
                             <div className="whitespace-pre-wrap">{application.name}</div>
                         </div>
@@ -102,7 +102,7 @@ const ApplicationNameAndDescriptionForm = ({ application }: Props): ReactElement
                     />
 
                     {application.updatedDescription !== application.description && (
-                        <div className="text-sm text-gray-100">
+                        <div className="text-sm">
                             <div className="font-bold text-gray-400">Ursprüngliche Beschreibung</div>
                             <div className="whitespace-pre-wrap">{application.description}</div>
                         </div>
@@ -124,7 +124,7 @@ const ApplicationNameAndDescriptionForm = ({ application }: Props): ReactElement
                     </div>
 
                     {isSubmitting && (
-                        <div className="text-gray-100">
+                        <div>
                             <span className="mr-1">Wird gespeichert</span>{' '}
                             <span className="inline-block w-3 animate-spin">
                                 <FontAwesomeIcon icon={faSpinner} />

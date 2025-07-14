@@ -25,43 +25,36 @@ const ApplicationPreview = ({ application, genres, onClick }: Props): ReactEleme
 
     return (
         <div
-            className="relative flex flex-col justify-between gap-4 rounded-md bg-white/20 p-3 shadow-lg backdrop-blur-2xl md:cursor-pointer md:flex-row-reverse md:p-5 md:hover:brightness-110"
+            className="relative flex flex-col justify-between gap-2 rounded-md border border-black bg-white/20 shadow-lg backdrop-blur-2xl md:cursor-pointer md:flex-row-reverse md:hover:brightness-110"
             onClick={onClick}
         >
-            <div className={cn('relative h-[300px] shrink-0 overflow-auto rounded-md md:w-1/3', isEmptyString(imageUrl) && 'h-auto')}>
+            <div
+                className={cn(
+                    'relative h-[300px] shrink-0 overflow-auto rounded-t-md border-b border-black md:w-1/3 md:rounded-md md:rounded-l-none md:border-b-0 md:border-l',
+                    isEmptyString(imageUrl) && 'h-auto',
+                )}
+            >
                 {isNotEmptyString(imageUrl) && (
                     <Image src={imageUrl} alt={updatedName ?? name} fill={true} priority={true} className="object-cover" />
                 )}
             </div>
 
-            <div>
+            <div className="p-2">
                 <div className="mb-2 flex flex-wrap gap-2">
                     <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
 
                     {genres.map(({ id, name: genreName }) => (
-                        <div
-                            key={id}
-                            className="max-w-50 overflow-hidden rounded-2xl bg-gray-200/60 px-3 py-1 text-sm text-ellipsis whitespace-nowrap text-gray-700 uppercase"
-                            title={genreName}
-                        >
-                            {genreName}
-                        </div>
+                        <Badge key={id} label={genreName} backgroundColor="#fcb8b8" />
                     ))}
 
-                    {isNotEmptyNumber(curationScore) && (
-                        <div className="rounded-2xl bg-gray-800 px-3 py-1 text-sm text-gray-100">{curationScore}</div>
-                    )}
+                    {isNotEmptyNumber(curationScore) && <Badge label={curationScore.toString()} backgroundColor="lightgray" />}
 
-                    <div className="inline-block rounded-2xl bg-gray-800 px-3 py-1 text-sm text-white uppercase select-none">
-                        {statusLabels[status]}
-                    </div>
+                    <Badge label={statusLabels[status]} backgroundColor="lightgray" />
                 </div>
 
-                <div className="line-clamp-3 font-display text-2xl text-gray-100">{updatedName ?? name}</div>
+                <div className="line-clamp-3 font-display text-2xl">{updatedName ?? name}</div>
 
-                {isNotEmptyString(description) && (
-                    <div className="mt-4 line-clamp-6 text-gray-100">{updatedDescription ?? description}</div>
-                )}
+                {isNotEmptyString(description) && <div className="mt-4 line-clamp-6">{updatedDescription ?? description}</div>}
             </div>
         </div>
     );

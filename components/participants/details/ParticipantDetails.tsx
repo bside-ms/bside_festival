@@ -24,17 +24,18 @@ import typeLabels from '@/lib/participants/typeLabels';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { Link } from '@prisma/client';
+import type { Genre, Link } from '@prisma/client';
 import { Fragment, ReactElement, useCallback, useState } from 'react';
 
 interface Props {
     participant: SerializableParticipant;
+    genres: Array<Genre>;
     links: Array<Link>;
     onCloseClick: () => void;
     isLoggedIn: boolean;
 }
 
-const ParticipantDetails = ({ participant, links, onCloseClick, isLoggedIn }: Props): ReactElement | null => {
+const ParticipantDetails = ({ participant, genres, links, onCloseClick, isLoggedIn }: Props): ReactElement | null => {
     const { areLocationOrDateRangeFiltersSet } = useParticipantsOverviewContext();
 
     const { id, name, updatedName, type } = participant;
@@ -66,6 +67,10 @@ const ParticipantDetails = ({ participant, links, onCloseClick, isLoggedIn }: Pr
 
                                 <div className="my-2 flex flex-wrap gap-2">
                                     <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
+
+                                    {genres.map(({ id, name: genreName }) => (
+                                        <Badge key={id} label={genreName} backgroundColor="#fcb8b8" />
+                                    ))}
 
                                     {participantSlots.map(({ slot: { id, begin, maxAttendees }, location: { name } }) => (
                                         <Fragment key={id}>

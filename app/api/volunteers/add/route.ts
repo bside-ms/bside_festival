@@ -17,6 +17,7 @@ export interface AddVolunteerRequest {
     isAvailableOnFriday: boolean;
     isAvailableOnSaturday: boolean;
     isAvailableOnSunday: boolean;
+    isAvailableBefore: boolean;
     additionalInfo: string;
 }
 
@@ -44,6 +45,7 @@ export const POST = async (request: Request): Promise<NextResponse<SuccessfulAdd
         isAvailableOnFriday,
         isAvailableOnSaturday,
         isAvailableOnSunday,
+        isAvailableBefore,
         additionalInfo,
     } = (await request.json()) as AddVolunteerRequest;
 
@@ -63,6 +65,7 @@ export const POST = async (request: Request): Promise<NextResponse<SuccessfulAdd
             isAvailableOnFriday,
             isAvailableOnSaturday,
             isAvailableOnSunday,
+            isAvailableBefore,
             additionalInfo,
         },
     });
