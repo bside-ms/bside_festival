@@ -89,28 +89,35 @@ export default async (): Promise<ReactElement> => {
                 </div>
             )}
 
-            {loggedIn && (
-                <div className="relative z-20 mt-8 mb-14 xs:mt-5 md:mt-11">
-                    <Image src={whiteBackgroundTop} alt="" width={2000} className="object-cover" />
+            <div className="relative z-20 mt-8 mb-14 xs:mt-5 md:mt-11">
+                <Image src={whiteBackgroundTop} alt="" width={2000} className="object-cover" />
 
-                    <div className="bg-white px-4 py-4">
-                        <div className="mb-14 text-center font-mono text-2xl uppercase sm:mb-14 sm:text-3xl md:mb-11 md:text-4xl">
-                            Lust mitzumachen?
-                        </div>
-
-                        <div className="text-sm xs:text-base md:text-xl">
-                            Am 19. & 20. September heißt es wieder: B-together, B-loved – B-Side! Damit das Festival im Mittelhafen und
-                            Hansaviertel lebendig, vielfältig und offen für alle wird, brauchen wir deine Unterstützung. Ob beim Aufbau, in
-                            der Technik, bei Konzerten, Workshops, Lesungen oder als Teil der Awareness- und Verpflegungsteams – es gibt
-                            viele Möglichkeiten, mitzumachen. Du musst nichts mitbringen außer Zeit, Lust und Offenheit. Ganz egal, ob du
-                            zum ersten Mal hilfst oder schon Erfahrung hast: Du bist willkommen! Gemeinsam gestalten wir ein Festival, das
-                            verbindet – mach mit und werde Teil von B-Side 2025!
-                        </div>
+                <div className="bg-white px-4 py-4">
+                    <div className="mb-10 text-center font-mono text-2xl uppercase sm:mb-14 sm:text-3xl md:mb-11 md:text-4xl">
+                        Lust mitzumachen?
                     </div>
 
-                    <Image src={whiteBackgroundBottom} alt="" width={2000} className="object-cover" />
+                    <div className="text-sm xs:text-base md:text-xl">
+                        Am 19. & 20. September heißt es wieder: B-together, B-loved – B-Side! Damit das Festival am Mittelhafen und
+                        Hansaviertel lebendig, vielfältig und offen für alle wird, brauchen wir deine Unterstützung. Ob beim Aufbau, in der
+                        Technik, bei Konzerten, Workshops, Lesungen oder als Teil der Awareness- und Verpflegungsteams – es gibt viele
+                        Möglichkeiten, mitzumachen. Du musst nichts mitbringen außer Zeit, Lust und Offenheit. Ganz egal, ob du zum ersten
+                        Mal hilfst oder schon Erfahrung hast: Du bist willkommen! Gemeinsam gestalten wir etwas, das verbindet – mach mit
+                        und werde Teil des B-Side Festivals 2025!
+                    </div>
+
+                    <div className="mt-10 space-y-4 px-8">
+                        <Link href="/mithelfen" className="flex items-center justify-center gap-2 hover:text-[#B0C42A]">
+                            <div className="rotate-[270deg] pl-2">
+                                <ArrowIcon size={40} color="black" />
+                            </div>
+                            <div className="text-3xl uppercase">Zur Anmeldung</div>
+                        </Link>
+                    </div>
                 </div>
-            )}
+
+                <Image src={whiteBackgroundBottom} alt="" width={2000} className="object-cover" />
+            </div>
         </div>
     );
 };
