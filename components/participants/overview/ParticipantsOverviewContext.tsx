@@ -145,11 +145,10 @@ export const ParticipantsOverviewContextProvider = ({
         }
 
         const fuse = new Fuse(participantsFilteredByType, {
-            keys: ['name', 'updatedName'],
+            keys: ['name'],
             shouldSort: true,
             includeScore: true,
             includeMatches: true,
-            minMatchCharLength: 3,
             isCaseSensitive: false,
             findAllMatches: true,
         });

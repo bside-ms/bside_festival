@@ -66,11 +66,10 @@ const ApplicationsOverviewContextProvider = ({
         }
 
         const fuse = new Fuse(applicationsFilteredByType, {
-            keys: ['name', 'updatedName'],
+            keys: ['name'],
             shouldSort: true,
             includeScore: true,
             includeMatches: true,
-            minMatchCharLength: 3,
             isCaseSensitive: false,
             findAllMatches: true,
         });
