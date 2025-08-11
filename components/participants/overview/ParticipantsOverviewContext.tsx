@@ -245,7 +245,7 @@ export const ParticipantsOverviewContextProvider = ({
                 allAttendees,
                 updateAllAttendees,
                 slotsDateRange: earliestBegin === null || latestBegin === null ? null : [earliestBegin, latestBegin],
-                venuesDateRange: [new Date(`2025-09-19T12:00:00+02:00`), new Date(`2025-09-21T12:00:00+02:00`)],
+                venuesDateRange: [new Date(`2025-09-19T12:00:00+02:00`), new Date(`2025-09-20T12:00:00+02:00`)],
                 areLocationOrDateRangeFiltersSet: filteredLocationIds.length > 0 || filteredDateRange !== null,
                 pinnedParticipantIds,
                 togglePinnedParticipantId,
