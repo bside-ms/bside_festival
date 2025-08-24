@@ -216,19 +216,20 @@ const Slotplan = ({ initialDayFilter }: { initialDayFilter?: string }): ReactEle
                                             const top = getTopPx(s.begin) + HEADER_PX;
                                             const height = getHeightPx(s.duration);
                                             return (
-                                                <div
+                                                <a
                                                     key={s.id}
-                                                    className="absolute right-2 left-2 rounded-md border border-gray-300 bg-white p-2 shadow-sm"
+                                                    className="absolute right-2 left-2 inline-block rounded-md border border-gray-300 bg-white p-2 shadow-sm transition-colors hover:bg-gray-100"
                                                     style={{ top, height }}
-                                                    title={participant?.name ?? 'Unbekannt'}
+                                                    title={participant?.updatedName ?? participant?.name ?? 'Unbekannt'}
+                                                    href={`/programm?text=${participant?.updatedName ?? participant?.name ?? 'Unbekannt'}`}
                                                 >
                                                     <div className="line-clamp-2 text-xs leading-tight font-medium">
-                                                        {participant?.name ?? 'Unbekannt'}
+                                                        {participant?.updatedName ?? participant?.name ?? 'Unbekannt'}
                                                     </div>
                                                     <div className="mt-1 text-[10px] text-gray-500">
                                                         {format(new Date(s.begin), 'HH:mm')} · {s.duration} Min
                                                     </div>
-                                                </div>
+                                                </a>
                                             );
                                         })}
                                 </div>
