@@ -1,5 +1,6 @@
 import { ParticipantsOverviewContextProvider } from '@/components/participants/overview/ParticipantsOverviewContext';
 import Slotplan from '@/components/participants/Slotplan';
+import { slotPlanDayFilterQueryName } from '@/lib/applications/filterQueryNames';
 import prismaClient from '@/lib/common/prismaClient';
 import isGroupMember from '@/lib/next-auth/isGroupMember';
 import isLoggedIn from '@/lib/next-auth/isLoggedIn';
@@ -83,12 +84,15 @@ async function getData(): Promise<Props> {
     };
 }
 
-export default async (): Promise<ReactElement> => {
+export default async (props: { searchParams: Promise<Record<string, string | string[]>> }): Promise<ReactElement> => {
     const loggedIn = await isLoggedIn();
 
     if (!loggedIn) {
         redirect('/');
     }
+
+    const searchParams = await props.searchParams;
+    const initialDayFilter = searchParams[slotPlanDayFilterQueryName] ?? 'friday';
 
     const { participants, slots, venues, participantLabels, allLinks, allLocations, allAttendees } = await getData();
 
@@ -118,7 +122,7 @@ export default async (): Promise<ReactElement> => {
                 participantGenres={participantGenres}
                 allGenres={allGenres}
             >
-                <Slotplan />
+                <Slotplan initialDayFilter={typeof initialDayFilter === 'string' ? initialDayFilter : undefined} />
             </ParticipantsOverviewContextProvider>
         </div>
     );

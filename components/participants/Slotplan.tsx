@@ -1,6 +1,7 @@
 'use client';
 
 import { useParticipantsOverviewContext } from '@/components/participants/overview/ParticipantsOverviewContext';
+import { slotPlanDayFilterQueryName } from '@/lib/applications/filterQueryNames';
 import formatDate from '@/lib/common/helper/formatDate';
 import type { Location } from '@prisma/client';
 import { addMinutes, differenceInMinutes, format } from 'date-fns';
@@ -10,7 +11,7 @@ const PX_PER_MINUTE = 1.5;
 const TIME_STEP_MINUTES = 30;
 const HEADER_PX = 40;
 
-const Slotplan = (): ReactElement => {
+const Slotplan = ({ initialDayFilter }: { initialDayFilter?: string }): ReactElement => {
     const { slots, allLocations, allParticipants, slotsDateRange, filteredDateRange, setFilteredDateRange } =
         useParticipantsOverviewContext();
 
@@ -43,6 +44,11 @@ const Slotplan = (): ReactElement => {
             const dynamicStart = computeDynamicStart(dayStart, dayEnd);
             const startTs = Number(formatDate(dynamicStart, 'T'));
             const endTs = Number(formatDate(dayEnd, 'T'));
+
+            const currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set(slotPlanDayFilterQueryName, day);
+            history.replaceState(null, '', currentUrl.toString());
+
             setFilteredDateRange([startTs, endTs]);
         },
         [fridayBoundaryStart, fridayBoundaryEnd, saturdayBoundaryStart, saturdayBoundaryEnd, slots, setFilteredDateRange],
@@ -51,7 +57,9 @@ const Slotplan = (): ReactElement => {
     // Default to Friday range on first load if no range selected
     useEffect(() => {
         if (filteredDateRange === null) {
-            selectDay('friday');
+            if (initialDayFilter === 'friday' || initialDayFilter === 'saturday') {
+                selectDay(initialDayFilter);
+            }
         }
     }, [filteredDateRange, fridayBoundaryStart.getTime(), fridayBoundaryEnd.getTime(), slots.length]);
 
