@@ -54,12 +54,8 @@ const ParticipantsOverview = ({ isLoggedIn }: Props): ReactElement => {
                 )}
 
                 <div className="flex flex-wrap gap-4">
-                    <Link href="/assets/b-side-festival 2024 programm.pdf" target="_blank" className="cursor-pointer">
-                        <Badge label="Programm.PDF" backgroundColor="#ebc9de" />
-                    </Link>
-
-                    <Link href="/assets/2024-lageplan-b%20side%20festival.jpg" target="_blank" className="cursor-pointer">
-                        <Badge label="Lageplan.PDF" backgroundColor="#ebc9de" />
+                    <Link href="/assets/2025_Programmheft.pdf" target="_blank" className="cursor-pointer">
+                        <Badge label="Programm und Lageplan.PDF" backgroundColor="#ebc9de" />
                     </Link>
                 </div>
             </div>
