@@ -60,23 +60,23 @@ export default async (): Promise<ReactElement> => {
 
             <div className="mb-11 flex text-center font-mono text-7xl leading-20 text-[#E9531F] uppercase">Eintritt kostenlos</div>
 
-            {loggedIn && (
-                <div className="mb-5 space-y-4 px-8">
-                    <Link href="/programm" className="flex rotate-2 items-center justify-center gap-2 hover:text-[#B0C42A]">
-                        <div className="rotate-[270deg] pl-2">
-                            <ArrowIcon size={40} color="black" />
-                        </div>
-                        <div className="text-5xl uppercase">Programm</div>
-                    </Link>
+            <div className="mb-5 space-y-4 px-8">
+                <Link href="/programm" className="flex rotate-2 items-center justify-center gap-2 hover:text-[#B0C42A]">
+                    <div className="rotate-[270deg] pl-2">
+                        <ArrowIcon size={40} color="black" />
+                    </div>
+                    <div className="text-5xl uppercase">Programm</div>
+                </Link>
 
+                {loggedIn && (
                     <Link href="/awareness" className="flex -rotate-2 items-center justify-center gap-2 hover:text-[#B0C42A]">
                         <div className="text-5xl uppercase">Awareness</div>
                         <div className="rotate-[90deg] pr-2">
                             <ArrowIcon size={40} color="black" />
                         </div>
                     </Link>
-                </div>
-            )}
+                )}
+            </div>
 
             {loggedIn && (
                 <div className="px-8">
