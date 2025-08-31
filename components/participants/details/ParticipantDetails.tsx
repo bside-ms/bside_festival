@@ -109,7 +109,7 @@ const ParticipantDetails = ({ participant, genres, links, onCloseClick, isLogged
                             toggleForm={toggleDetailsForm}
                         />
 
-                        <ParticipantLinks links={links} />
+                        <ParticipantLinks links={links} isLoggedIn={isLoggedIn} />
                     </div>
                 </div>
 

@@ -46,10 +46,11 @@ model Participant {
 }
 
 model Link {
-    id            Int         @id @default(autoincrement())
-    participant   Participant @relation(fields: [participantId], references: [id])
-    participantId Int
-    link          String      @db.Text
+    id             Int         @id @default(autoincrement())
+    participant    Participant @relation(fields: [participantId], references: [id])
+    participantId  Int
+    link           String      @db.Text
+    isConfidential Boolean     @default(false)
 }
 
 model Comment {
