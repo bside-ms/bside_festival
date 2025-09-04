@@ -23,13 +23,13 @@ const InternalLinks = async (): Promise<ReactElement | null> => {
             </div>
 
             <div>
-                <Link href="/programm/" className="cursor-pointer underline">
+                <Link href="/programm/" className="cursor-pointer underline hover:text-red-600">
                     Programmübersicht
                 </Link>
             </div>
 
             <div>
-                <Link href="/mithelfen/uebersicht" className="cursor-pointer underline">
+                <Link href="/mithelfen/uebersicht" className="cursor-pointer underline hover:text-red-600">
                     Helfer:innenübersicht
                 </Link>
             </div>

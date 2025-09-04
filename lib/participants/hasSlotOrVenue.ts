@@ -7,7 +7,6 @@ const hasSlotOrVenue = (type: Type): 'slot' | 'venue' => {
         case Type.InfoBooth:
         case Type.Catering:
         case Type.Food:
-        case Type.FamilyProgram:
             return 'venue';
 
         case Type.Concert:
@@ -16,6 +15,7 @@ const hasSlotOrVenue = (type: Type): 'slot' | 'venue' => {
         case Type.Workshop:
         case Type.Performance:
         case Type.Misc:
+        case Type.FamilyProgram:
             return 'slot';
     }
 };
