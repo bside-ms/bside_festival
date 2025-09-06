@@ -157,7 +157,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
         <FormProvider {...methods}>
             <div className="w-full">
                 <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex flex-col gap-6">
-                    <div className="font-display text-white">
+                    <div className="font-display">
                         <div className="text-4xl font-bold">B-werbung</div>
                     </div>
 
@@ -196,9 +196,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         </div>
                     </div>
 
-                    <div className="text-white">
-                        <ApplicationTypeIntro type={chosenType} />
-                    </div>
+                    <ApplicationTypeIntro type={chosenType} />
 
                     <TextInput<ApplicationFormValues>
                         name="name"
@@ -268,7 +266,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         info="Wie viel Menschen sind an eurem Beitrag beteiligt?"
                     />
 
-                    <div className="text-white">
+                    <div>
                         Zum Ausgleich bestehender Nachteile freuen wir uns über Bewerbungen von Menschen und Organisationen, die sich für
                         Menschen mit Diskriminierungserfahrung stark machen oder selbst davon betroffen sind. Dazu zählen zum Beispiel
                         geflüchtete Menschen, Jüdinnen*Juden, Menschen mit familiärer Migrations- oder Fluchtgeschichte, muslimisch(e)
@@ -312,14 +310,14 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 text-white disabled:bg-gray-600"
+                            className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 disabled:bg-gray-600"
                         >
                             Absenden
                         </button>
                     </label>
 
                     {isSubmitting && (
-                        <div className="text-white">
+                        <div>
                             Wird gesendet{' '}
                             <span className="ml-1 inline-block animate-spin">
                                 <FontAwesomeIcon className="w-3" icon={faSpinner} />
@@ -329,7 +327,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
 
                     {errors.root && <div className="mt-2 text-red-600">{errors.root.message}</div>}
 
-                    <div className="mt-5 flex flex-col gap-2 text-sm text-white">
+                    <div className="mt-5 flex flex-col gap-2 text-sm">
                         <div>
                             Das B-Side Festival ist auch 2025 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
                             insbesondere Räume und Bühnen für FLINTA* und andere marginalisierte Gesellschaftsgruppen schaffen.

@@ -93,7 +93,7 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
     const fileInputId = useRef(uniqueId('image-upload'));
 
     return (
-        <div className="relative flex flex-col gap-1 text-white">
+        <div className="relative flex flex-col gap-1">
             {isNotEmptyString(currentImageDataUrl) && !isSubmitting && (
                 <div
                     className="absolute top-1 right-1 z-10 cursor-pointer rounded-md bg-gray-800 px-2 py-1 text-sm text-gray-50 hover:bg-gray-700"
@@ -134,11 +134,11 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
                 ) : (
                     <div
                         className={cn(
-                            'flex h-24 w-full items-center justify-center rounded border border-dashed border-white',
+                            'flex h-24 w-full items-center justify-center rounded border border-dashed border-gray-500',
                             typeof errorMessage === 'string' && 'bg-rose-400',
                         )}
                     >
-                        <div className={cn('text-white opacity-55', typeof errorMessage === 'string' && 'bg-rose-400 opacity-100')}>
+                        <div className={cn('opacity-55', typeof errorMessage === 'string' && 'bg-rose-400 opacity-100')}>
                             {required ? 'Bild hinzufügen *' : 'Bild hinzufügen'}
                         </div>
                     </div>
@@ -147,7 +147,7 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
 
             {typeof errorMessage === 'string' && <div className="px-1 text-rose-600">{errorMessage}</div>}
 
-            <div className="px-1 text-base text-white">
+            <div className="px-1 text-base">
                 Beachtet: Dieses Foto wird auf unserer Webseite veröffentlicht, falls ihr beim B-Side Festival dabei sein werdet.
             </div>
         </div>

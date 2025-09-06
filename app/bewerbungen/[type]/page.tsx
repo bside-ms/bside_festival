@@ -1,10 +1,8 @@
 import ApplicationForm from '@/components/applications/applicationForm/ApplicationForm';
-import BackgroundImage from '@/components/common/BackgroundImage';
 import prismaClient from '@/lib/common/prismaClient';
 import isLoggedIn from '@/lib/next-auth/isLoggedIn';
 import urlPathTypes from '@/lib/participants/urlPathTypes';
 import { Prisma, Type } from '@prisma/client';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import type { ReactElement } from 'react';
 import SortOrder = Prisma.SortOrder;
@@ -68,14 +66,8 @@ export default async ({ params }: { params: Promise<{ type: string }> }): Promis
     return (
         <div className="relative min-h-screen w-full">
             <div className="relative z-10 mx-auto w-full max-w-[700px] p-5 drop-shadow-xl md:w-2/3 md:p-8">
-                <Link href="/" className="flex items-center gap-3 text-red-600">
-                    <div className="pt-1 text-2xl md:pt-2 md:text-3xl">B-Side Festival 2025</div>
-                </Link>
-
                 <ApplicationForm chosenType={chosenType} allConcertGenres={allConcertGenres} allDiskJockeyGenres={allDiskJockeyGenres} />
             </div>
-
-            <BackgroundImage />
         </div>
     );
 };
