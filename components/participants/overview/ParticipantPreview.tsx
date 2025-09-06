@@ -17,7 +17,7 @@ import createPublicObjectUrl from '@/lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { Genre } from '@prisma/client';
 import Image from 'next/image';
-import { Fragment, ReactElement } from 'react';
+import { ReactElement } from 'react';
 
 interface Props {
     participant: SerializableParticipant;
@@ -79,22 +79,22 @@ const ParticipantPreview = ({ participant, genres, onClick }: Props): ReactEleme
                         ))}
 
                         {participantSlots.map(({ slot: { id, begin, maxAttendees }, location: { name } }) => (
-                            <Fragment key={id}>
+                            <div key={id} className="inline-flex gap-2 rounded-2xl bg-[#b1c32c]/30">
                                 <Badge label={formatDate(new Date(begin), 'EEEEEE HH:mm')} backgroundColor="#b1c32c" />
                                 <Badge label={name} backgroundColor="#ebc9de" />
                                 {isNotEmptyNumber(maxAttendees) && <Badge label="Anmeldung erforderlich" backgroundColor="#b0e4cc" />}
-                            </Fragment>
+                            </div>
                         ))}
 
                         {participantVenues.map(({ dates, venue: { id }, location: { name } }) => (
-                            <Fragment key={id}>
+                            <div key={id} className="inline-flex gap-2 rounded-2xl bg-[#b1c32c]/30">
                                 {dates.map((date) => {
                                     const formattedDate = formatDate(new Date(date), 'EEEEEE HH:mm');
                                     return <Badge key={formattedDate} label={formattedDate} backgroundColor="#b1c32c" />;
                                 })}
 
-                                <Badge label={name} backgroundColor="#ebc9de" />
-                            </Fragment>
+                                <Badge label={name} backgroundColor="ebc9de" />
+                            </div>
                         ))}
                     </div>
 

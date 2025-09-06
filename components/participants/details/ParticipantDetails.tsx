@@ -25,7 +25,7 @@ import type { SerializableParticipant } from '@/typings/SerializableParticipant'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { Genre, Link } from '@prisma/client';
-import { Fragment, ReactElement, useCallback, useState } from 'react';
+import { ReactElement, useCallback, useState } from 'react';
 
 interface Props {
     participant: SerializableParticipant;
@@ -73,24 +73,24 @@ const ParticipantDetails = ({ participant, genres, links, onCloseClick, isLogged
                                     ))}
 
                                     {participantSlots.map(({ slot: { id, begin, maxAttendees }, location: { name } }) => (
-                                        <Fragment key={id}>
+                                        <div key={id} className="inline-flex gap-2 rounded-2xl bg-[#b1c32c]/30">
                                             <Badge label={formatDate(new Date(begin), 'EEEEEE HH:mm')} backgroundColor="#b1c32c" />
                                             <Badge label={name} backgroundColor="#ebc9de" />
                                             {isNotEmptyNumber(maxAttendees) && (
                                                 <Badge label="Anmeldung erforderlich" backgroundColor="#b0e4cc" />
                                             )}
-                                        </Fragment>
+                                        </div>
                                     ))}
 
                                     {participantVenues.map(({ dates, venue: { id }, location: { name } }) => (
-                                        <Fragment key={id}>
+                                        <div key={id} className="inline-flex gap-2 rounded-2xl bg-[#b1c32c]/30">
                                             {dates.map((date) => {
                                                 const formattedDate = formatDate(new Date(date), 'EEEEEE HH:mm');
                                                 return <Badge key={formattedDate} label={formattedDate} backgroundColor="#b1c32c" />;
                                             })}
 
                                             <Badge label={name} backgroundColor="#ebc9de" />
-                                        </Fragment>
+                                        </div>
                                     ))}
                                 </div>
 
