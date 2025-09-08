@@ -1,3 +1,4 @@
+import Badge from '@/components/participants/details/Badge';
 import formatDate from '@/lib/common/helper/formatDate';
 import prismaClient from '@/lib/common/prismaClient';
 import isGroupMember from '@/lib/next-auth/isGroupMember';
@@ -8,6 +9,8 @@ import getAllParticipants from '@/lib/participants/getAllParticipants';
 import getAllSlots from '@/lib/participants/getAllSlots';
 import getAllVenues from '@/lib/participants/getAllVenues';
 import serializeParticipant from '@/lib/participants/serializeParticipant';
+import typeColors from '@/lib/participants/typeColors';
+import typeLabels from '@/lib/participants/typeLabels';
 import { cn } from '@/lib/utils';
 import type AllAttendees from '@/typings/AllAttendees';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
@@ -158,15 +161,15 @@ export default async (): Promise<ReactElement> => {
     minutes.push(clone(currentMinuteDate));
 
     return (
-        <div className="fixed inset-0 w-full max-w-none bg-white">
+        <div className="fixed inset-0 w-full max-w-none bg-[#eaebeb]">
             <div className="h-[10vh]" />
 
             <div className="relative h-[90vh] overflow-x-auto overflow-y-visible">
                 <div
-                    className="relative grid gap-x-2 gap-y-[1px]"
+                    className="relative grid gap-x-2 gap-y-[1px] pb-8"
                     style={{
-                        gridTemplateColumns: `40px repeat(${myLocationsMap.size + 2}, 80px)`,
-                        gridTemplateRows: `30px repeat(${2000}, 2px)`, // TODO: amount of minutes
+                        gridTemplateColumns: `55px repeat(${myLocationsMap.size + 2}, 200px)`,
+                        gridTemplateRows: `30px repeat(${differenceInMinutes(latestEnd, earliestStart)}, 2px)`,
                     }}
                 >
                     {minutes.map((minute, minuteIndex) => {
@@ -178,18 +181,17 @@ export default async (): Promise<ReactElement> => {
 
                         return (
                             <div
-                                // eslint-disable-next-line react/no-array-index-key
-                                key={formatDate(currentMinuteDate, 'dd.MM.HH:mm') + minuteIndex}
-                                className="sticky left-0 col-start-1 truncate overflow-visible text-xs text-black"
+                                key={formatDate(minute, 'dd.MM.HH:mm')}
+                                className="sticky left-0 z-30 col-start-1 truncate overflow-visible text-xs text-black"
                                 style={{ gridRowStart: minuteIndex + 2 }}
-                                data-date={formatDate(minute, 'dd.MM.')}
-                                data-time={time}
                             >
-                                {time === '00:00' || minuteIndex === 0 ? (
-                                    <div className="absolute bottom-0 font-bold">{formatDate(minute, 'dd.MM.')}</div>
-                                ) : (
-                                    <div className={cn('absolute bottom-0', time.endsWith('30') && 'text-gray-400')}>{time}</div>
-                                )}
+                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-xl border border-black bg-gray-200 px-2 pt-1 font-display leading-4 text-gray-800">
+                                    {time === '00:00' || minuteIndex === 0 ? (
+                                        <div className="font-bold">{formatDate(minute, 'dd.MM.')}</div>
+                                    ) : (
+                                        <div className={cn(time.endsWith('30') && 'text-gray-500')}>{time}</div>
+                                    )}
+                                </div>
                             </div>
                         );
                     })}
@@ -198,7 +200,7 @@ export default async (): Promise<ReactElement> => {
                         return (
                             <div
                                 key={locationId}
-                                className="sticky top-0 row-start-1 truncate bg-blue-700 text-xs whitespace-nowrap text-white"
+                                className="sticky top-0 z-40 row-start-1 rounded-xl border border-black bg-[#ebc9de] px-3 pt-[3px] font-mono whitespace-nowrap"
                                 style={{ gridColumnStart: locationIndex + 2 }}
                             >
                                 {location.name}
@@ -214,8 +216,26 @@ export default async (): Promise<ReactElement> => {
                         const gridColumnStart = locationIndex + 2;
 
                         return (
-                            <div key={event.id} className="bg-yellow-300 text-[12px]" style={{ gridColumnStart, gridRowStart, gridRowEnd }}>
-                                {event.name}, {formatDate(event.startTime, 'HH:mm')} - {formatDate(event.endTime, 'HH:mm')}
+                            <div
+                                key={event.id}
+                                className="relative rounded-xl border border-black p-3 font-display text-[12px]"
+                                style={{ gridColumnStart, gridRowStart, gridRowEnd, backgroundColor: typeColors[event.type] }}
+                            >
+                                <div className="sticky top-10 space-y-2 text-sm">
+                                    <div className="text-base font-bold">{event.name}</div>
+
+                                    <div>{typeLabels[event.type]}</div>
+
+                                    <div>
+                                        {event.genres.map((genreName) => (
+                                            <Badge key={genreName} label={genreName} backgroundColor="#fcb8b8" />
+                                        ))}
+                                    </div>
+
+                                    <div>
+                                        {formatDate(event.startTime, 'HH:mm')} - {formatDate(event.endTime, 'HH:mm')} Uhr
+                                    </div>
+                                </div>
                             </div>
                         );
                     })}
