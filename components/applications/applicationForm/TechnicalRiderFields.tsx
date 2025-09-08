@@ -130,7 +130,7 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
             {withoutTextArea === true ? (
                 <>
                     <input type="hidden" {...register('technicalRider')} />
-                    <label className="px-1 text-base text-white">{info}</label>
+                    <label className="px-1 text-base">{info}</label>
                 </>
             ) : (
                 <TextArea<ApplicationFormValues>
@@ -152,7 +152,7 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
                 tabIndex={-1}
             />
 
-            <div className="text-white">
+            <div>
                 {isNotEmptyString(currentFileDataUrl) && isNotEmptyString(currentFileName) ? (
                     <div>
                         <span className="px-2 font-mono">{currentFileName}</span>
@@ -168,16 +168,11 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
                     <label htmlFor={fileInputId.current} className="cursor-pointer">
                         <div
                             className={cn(
-                                'flex w-full items-center justify-center rounded border border-dashed border-white p-5',
+                                'flex w-full items-center justify-center rounded border border-dashed border-black p-5',
                                 typeof technicalRiderErrorMessage === 'string' && 'bg-rose-400',
                             )}
                         >
-                            <div
-                                className={cn(
-                                    'text-white opacity-55',
-                                    typeof technicalRiderErrorMessage === 'string' && 'bg-rose-400 opacity-100',
-                                )}
-                            >
+                            <div className={cn('opacity-55', typeof technicalRiderErrorMessage === 'string' && 'bg-rose-400 opacity-100')}>
                                 PDF hinzufügen {withoutTextArea === true && required === true && ' *'}
                             </div>
                         </div>
@@ -185,7 +180,7 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
                 )}
             </div>
 
-            <div className="text-white">
+            <div>
                 Solltet ihr selbst noch keinen Tech-Rider haben, nutzt bitte{' '}
                 <a href={templateLink} target="_blank" className="cursor-pointer underline">
                     unsere Vorlage

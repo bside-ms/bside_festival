@@ -35,7 +35,7 @@ const MultiSelectInput = <T extends FieldValues>({ name, label, info, options, d
     return (
         <div>
             {isNotEmptyString(info) && (
-                <label htmlFor={id} className="px-1 text-base text-white">
+                <label htmlFor={id} className="px-1 text-base">
                     {info}
                 </label>
             )}
@@ -64,9 +64,7 @@ const MultiSelectInput = <T extends FieldValues>({ name, label, info, options, d
                         placeholder={label}
                         noOptionsMessage={() => 'Keine weiteren Optionen, tippt neue ein'}
                         classNames={{
-                            control: () => '!bg-transparent !border-white',
-                            placeholder: () => '!text-white/55',
-                            input: () => '!text-white',
+                            control: () => '!bg-transparent !border-black',
                         }}
                     />
                 )}
