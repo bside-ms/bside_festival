@@ -157,18 +157,6 @@ export default async (): Promise<ReactElement> => {
     }
     minutes.push(clone(currentMinuteDate));
 
-    console.log('minutes', minutes);
-
-    type MySlot = { location: number; start: number; duration: number; name: string };
-
-    const mySlots = new Array<MySlot>({ duration: 40, start: 200, location: 2, name: 'foo' });
-
-    const mySlotMap = new Map<string, MySlot>();
-
-    mySlots.forEach((s) => {
-        mySlotMap.set(`${s.location}-${s.start}`, s);
-    });
-
     return (
         <div className="fixed inset-0 w-full max-w-none bg-white">
             <div className="h-[10vh]" />
@@ -218,7 +206,7 @@ export default async (): Promise<ReactElement> => {
                         );
                     })}
 
-                    {events.splice(0, 20).map((event) => {
+                    {events.map((event) => {
                         const locationIndex = Array.from(myLocationsMap.values()).findIndex(({ id }) => id === event.location.id);
 
                         const gridRowStart = differenceInMinutes(event.startTime, earliestStart);
