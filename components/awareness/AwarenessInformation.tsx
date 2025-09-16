@@ -8,50 +8,90 @@ const AwarenessInformation = (): ReactElement => {
             <AwarenessAlternativeLinks />
 
             <div>
-                <div className="mb-1 underline">Ansprechpersonen während des Festivals:</div>
+                <div className="mb-1 font-bold text-lg">Barrieren</div>
+                <div className="space-y-2">
+                    <div>
+                        <span className="underline">Eingang:</span> Am Mittelhafen 42 ist unser Eingang: Straßenseitig einen zum EG
+                        (Rampe, barrierefrei) oder über die große Wendeltreppe (nicht-barrierefrei) zum 1. OG. Es gibt links neben dem
+                        Eingang einen Aufzug für Menschen, die die Treppe nicht benutzen können.
+                    </div>
+                    <div>
+                        <span className="underline">Ausgang:</span> Wasserseitig über die große Hafentreppe von der Dachterasse aus.
+                        Menschen, die barrierefreie Zu- und Ausgänge brauchen, dürfen auch den Aufzug benutzen.
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div className="mb-1 font-bold text-lg">Toiletten</div>
+                <div className="space-y-2">
+                    <div>
+                        Im 1. OG und im EG gibt es barrierefreie Toiletten. Es gibt nur Unisex-Toiletten, bei denen die Ausstattung
+                        beschrieben wird (Sitz- und/oder Stehklos). Bitte nehmt Rücksicht auf FLINTA*-Personen. Das (selbstgewählte)
+                        Geschlecht von anderen lässt sich nicht an Äußerlichkeiten ablesen: <span className="italic">Gender has no looks!</span>
+                    </div>
+                    <div>
+                        <span className="underline">Plan B:</span> Das Plan B hat drei Stufen am Eingang.
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div className="mb-1 font-bold text-lg">Ansprechpersonen während des Festivals</div>
 
                 <div>
-                    Auf dem B-Side Festival wird es ein <strong>Awareness-Team</strong> geben. Das Team hilft dir, wenn Menschen dich
-                    belästigen, beleidigen oder du dich aus anderen Gründen diskriminiert oder unwohl fühlst.
+                    Auf dem B-Side Festival wird es ein <strong>Awareness-Team</strong> geben. Das Team hilft dir, wenn Menschen dich belästigen,
+                    beleidigen oder du dich aus anderen Gründen diskriminiert oder unwohl fühlst.
                 </div>
             </div>
 
             <div>
                 <ul className="list-outside list-disc space-y-2 pl-7">
-                    <li className="pl-2">Du erkennst das Awareness-Team an neon-pinken Westen oder Armbinden.</li>
+                    <li className="pl-2">Du erkennst das Awareness-Team an neon-pinken Westen.</li>
                     <li className="pl-2">Du kannst die Menschen jederzeit ansprechen, wenn du dich unwohl fühlst oder Fragen hast.</li>
-                    <li className="pl-2">Du findest Ansprechpersonen an der Awareness-Anlaufstelle vor dem B-Side Gebäude</li>
-                    <li className="pl-2">Das Awareness-Team kann dich jederzeit an einen Rückzugsort begleiten</li>
-                    <li className="pl-2">Du kannst das Awareness-Team jederzeit per Anruf oder Messenger erreichen.</li>
+                    <li className="pl-2">Das Awareness-Team kann dich jederzeit an einen Rückzugsort begleiten.</li>
+                    <li className="pl-2">Awareness-Telefon: 01788887435</li>
                 </ul>
             </div>
 
             <div>
-                <div>Gegen Diskriminierung, Gewalt und Grenzüberschreitung</div>
-                Auf dem B-Side Festival sollen sich alle Menschen sicher und wohl fühlen. Das ist leider leichter gesagt als garantiert. Was
-                für einzelne Menschen dazu beiträgt, sich sicher oder unsicher zu fühlen, ist von Person zu Person verschieden. Auch unsere
-                individuellen Erfahrungen mit Übergriffen und Diskriminierungen unterscheiden sich grundlegend.
+                <div className="mb-1 font-bold text-lg">Unser Awareness-Konzept gegen Diskriminierung, Gewalt und Grenzüberschreitung</div>
+                Wir möchten einen rücksichtsvollen, verantwortungsbewussten und solidarischen Umgang miteinander etablieren und pflegen. Wir
+                vertreten dabei eine Haltung und Praxis, die Diskriminierung und Gewalt entgegenwirkt und sich auf konsensbasiertes Handeln
+                stützt. Dafür haben wir eigene Richtlinien entwickelt, die während der Festivalzeit für alle gelten. Alle an dem Festival
+                beteiligten Personen können so Verantwortung für sich selbst und den geteilten Raum übernehmen. Jegliche Form der
+                Diskriminierung oder Grenzüberschreitung oder Verhalten zum Nachteil anderer Menschen wird in der B-Side nicht toleriert.
             </div>
 
             <div>
-                <div className="mb-2">Deswegen bitten wir dich, an folgende Dinge zu denken:</div>
+                <div className="mb-2">Daher bitten wir dich, auf folgende Dinge zu achten:</div>
 
                 <div>
                     <ol className="list-outside list-decimal space-y-2 pl-7">
                         <li className="pl-2">
-                            Persönliche Grenzen sind individuell und subjektiv. Sie zu achten und zu respektieren sollte selbstverständlich
-                            sein! Nur ein ganz klares Ja heißt Ja. Frag lieber einmal zu viel als zu wenig nach.
+                            Persönliche Grenzen sind individuell und subjektiv. Sie zu achten und zu respektieren ist wichtig. Nur ein klares
+                            „Ja“ heißt „Ja“. Frag lieber einmal zu viel als zu wenig nach. Wir bitten dich, auch dein Oberteil anzubehalten,
+                            um niemand in eine unangenehme Situation zu bringen.
                         </li>
                         <li className="pl-2">
-                            Grenzüberschreitungen passieren alltäglich (Ja, leider auch auf alternativen Festivals in Münster) und betreffen
-                            oft Personen, die von existierenden gesellschaftlichen Machtverhältnissen bereits diskriminiert werden. Sexismus
-                            und sexualisierte Gewalt, LGBTQ*-feindlichkeit, Rassismus, Ableismus und Antisemitismus sind einige Beispiele
-                            für Diskriminierungsformen, die Menschen erleben und die wir nicht tolerieren.
+                            Grenzüberschreitungen und Diskriminierung passieren überall und alltäglich. Es gibt keinen (öffentlichen) Raum der
+                            frei davon ist. Diskriminierung bedeutet, (strukturelle) Benachteiligung, Herabwürdigung und Ungleichbehandlung
+                            aufgrund von Herkunft, Klasse, Geschlecht, Alter, Gesundheit, Sexualität, Hautfarbe oder Besitz. Grenzüberschreitung
+                            kann ein unangenehmer Spruch sein, eine ungewollte Berührung, eine zu persönliche Frage oder Ausgrenzung. Wir
+                            tolerieren dieses Verhalten nicht und werden, wenn möglich, dagegen vorgehen.
                         </li>
                         <li className="pl-2">
-                            Alle Beteiligten des Festivals (Gäste, Veranstalter*innen, Artists etc.) sind für ein diskriminierungsfreies und
-                            sicheres Miteinander verantwortlich. Jeder, der sich übergriffig oder diskriminierend verhält, muss mit
-                            Konsequenzen rechnen.
+                            Zeig Verständnis, Anerkennung und Achtung für Dinge, Praktiken oder Traditionen von Kulturen. Wir möchten keine
+                            Aneignung oder Instrumentalisierung kultureller, religiöser und politischer Symbole.
+                        </li>
+                        <li className="pl-2">
+                            Schließe nicht von Äußerlichkeiten auf Geschlechteridentitäten. Frage nach den Pronomen („they, dey, name, sie, er,
+                            name“), mit denen die Person angesprochen werden möchte.
+                        </li>
+                        <li className="pl-2">
+                            Selfcare (Selbstfürsorge) ist ein wichtiger Grundsatz in der Awareness-Arbeit. Wenn du dich unsicher fühlst,
+                            kommuniziere das mit deinen Friends. Schütze dein Getränk vor K.O Tropfen, indem du den Flaschendeckel weiterverwendest
+                            oder dein Getränk immer festhältst und im Blick hast.
                         </li>
                     </ol>
                 </div>
@@ -63,31 +103,51 @@ const AwarenessInformation = (): ReactElement => {
                 </div>
 
                 <div>
-                    <ol className="list-outside list-decimal space-y-2 pl-7">
+                    <ul className="list-outside list-disc space-y-2 pl-7">
                         <li className="pl-2">
-                            Dich selbst und/oder den betroffenen Menschen in Sicherheit bringen. Versuche dabei zu vermeiden, fremden
-                            Menschen ungefragt zu helfen. Frage Betroffene, ob du einschreiten sollst. Im Fokus stehen immer die Bedürfnisse
-                            von Betroffenen.
+                            Solidarisiere dich mit Betroffenen. Biete deine Hilfe an, höre zu und erkenne die geschilderte Perspektive an und
+                            stelle sie nicht in Frage. Im Fokus stehen immer die Bedürfnisse der betroffenen Personen.
                         </li>
                         <li className="pl-2">
-                            <span className="underline">Awareness-Team</span> ansprechen. Im öffentlichen Bereich des Festivals und auf
-                            unseren Partys sind Menschen mit neon-pinken Warnwesten und mit Armbinden unterwegs. Sie helfen dir aus
-                            unangenehmen Situationen, hören dir zu, bringen dich an einen sicheren Ort und vermitteln dir weitere
-                            Unterstützung.
+                            Spreche das Awareness-Team an. Es ist an den pinken Westen zu erkennen. Du kannst auch die Awareness-Anlaufstelle,
+                            an der Theke oder bei den Ordner*innen nach der Awareness fragen oder rufe das Team an.
                         </li>
-                        <li className="pl-2">
-                            <span className="underline">Awareness-Anlaufstelle</span> aufsuchen. Vor dem B-Side Gebäude (Am Hawerkamp 29)
-                            findest du während der gesamten Festivalzeit Ansprechpersonen und einen sicheren Ort zum Reden und Ausruhen.
-                            Während der Party am Samstagabend in der Sputnikhalle findest du immer eine Awareness-Person am Einlass, die
-                            dich auch dort an einen Rückzugsort begleiten kann.
-                        </li>
-                    </ol>
+                    </ul>
+                    <div className="mt-2">Telefonnummer: 01788887435</div>
                 </div>
             </div>
 
             <div className="italic">
                 Wichtig: Das Awareness-Team ersetzt nicht den Rettungsdienst. In Notfällen, die Gesundheit betreffen, bitten wir euch 112
                 anzurufen.
+            </div>
+
+            <div>
+                <div className="mb-1 font-bold text-lg">Kinder & Jugendliche</div>
+                <div className="space-y-2">
+                    <div>
+                        Es gibt kein explizites Kinder- und Jugendschutzkonzept. Die B-Side bietet nicht per se einen sicheren Raum für Kinder
+                        und Jugendliche. Wir bitten Eltern, ihre Kinder während des gesamten Besuchs in der B-Side im Blick zu haben und zu
+                        betreuen. Es gelten ansonsten die gesetzlichen Regelungen:
+                    </div>
+                    <div>
+                        <span className="underline">Aufenthaltszeiten:</span> Kindern und Jugendlichen unter 16 Jahren dürfen unsere Partys und Konzerte nicht besuchen,
+                        außer sie werden von ihren Eltern oder einer erziehungsbeauftragten Person begleitet und betreut. Jugendliche ab 16 Jahren
+                        dürfen auch allein an unseren Partys und Konzerten bis 24.00 Uhr teilnehmen. Wollen sie dort länger bleiben, dürfen sie das
+                        nur in Begleitung der Eltern oder einer erziehungsbeauftragten Person, die die Verantwortung übernimmt. Die erziehungsbeauftragte
+                        Person wird mit einem „Mutti-Zettel“ von den Eltern bestimmt. Die gesetzlichen Aufenthaltszeiten von Jugendlichen werden vom
+                        Security-Personal sichergestellt und garantiert.
+                    </div>
+                    <div>
+                        <span className="underline">Rauchen:</span> Jugendliche unter 18 Jahren dürfen in der Öffentlichkeit nicht rauchen und keine
+                        Tabakwaren kaufen.
+                    </div>
+                    <div>
+                        <span className="underline">Alkohol:</span> Alkohol darf in der Öffentlichkeit grundsätzlich an unter 16-Jährige nicht abgegeben
+                        werden. Auch der Konsum von Alkohol ist in der Öffentlichkeit Kindern und Jugendlichen unter 16 Jahren verboten. Bier, Sekt,
+                        Wein und deren Mischgetränke dürfen an Jugendliche über 16 Jahren abgegeben werden und von ihnen konsumiert werden.
+                    </div>
+                </div>
             </div>
 
             <AwarenessAlternativeLinks />
