@@ -14,7 +14,7 @@ const AwarenessEasyGerman = (): ReactElement => {
                     <li className="pl-2">Du kannst jederzeit mit ihnen sprechen, wenn du dich nicht gut fühlst oder Fragen hast.</li>
                     <li className="pl-2">Du findest das Team im B-Side Wohnzimmer. Dort kannst du mit ihnen reden.</li>
                     <li className="pl-2">Wenn du einen ruhigen Ort brauchst, bringen sie dich dorthin.</li>
-                    <li className="pl-2">Awareness-Telefon: 01788887435</li>
+                    <li className="pl-2">Awareness-Telefon: 0176 25050139</li>
                 </ul>
             </div>
 
@@ -96,7 +96,7 @@ const AwarenessEasyGerman = (): ReactElement => {
                     </li>
                     <li className="pl-2">
                         <span className="font-semibold">Wende dich an das Awareness-Team, die Theke oder das Sicherheitspersonal.</span> Das Team
-                        trägt pinke Westen. Du kannst sie ansprechen, wenn du Hilfe brauchst. Du kannst auch anrufen: 01788887435.
+                        trägt pinke Westen. Du kannst sie ansprechen, wenn du Hilfe brauchst. Du kannst auch anrufen: 0176 25050139.
                     </li>
                 </ol>
             </div>

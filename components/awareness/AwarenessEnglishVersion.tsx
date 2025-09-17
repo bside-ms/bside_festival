@@ -46,7 +46,7 @@ const AwarenessEnglishVersion = (): ReactElement => {
                     <li className="pl-2">You can recognize the Awareness Team by their neon pink vests.</li>
                     <li className="pl-2">You can approach them at any time if you feel uncomfortable or have questions.</li>
                     <li className="pl-2">The Awareness Team can accompany you to a retreat/safe space at any time.</li>
-                    <li className="pl-2">Awareness phone: 01788887435</li>
+                    <li className="pl-2">Awareness phone: 0176 25050139</li>
                 </ul>
             </div>
 
@@ -109,7 +109,7 @@ const AwarenessEnglishVersion = (): ReactElement => {
                             info point, at the bar or the stewards about awareness, or call the team.
                         </li>
                     </ul>
-                    <div className="mt-2">Phone number: 01788887435</div>
+                    <div className="mt-2">Phone number: 0176 25050139</div>
                 </div>
             </div>
 

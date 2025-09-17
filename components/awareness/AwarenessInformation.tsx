@@ -51,7 +51,7 @@ const AwarenessInformation = (): ReactElement => {
                     <li className="pl-2">Du erkennst das Awareness-Team an neon-pinken Westen.</li>
                     <li className="pl-2">Du kannst die Menschen jederzeit ansprechen, wenn du dich unwohl fühlst oder Fragen hast.</li>
                     <li className="pl-2">Das Awareness-Team kann dich jederzeit an einen Rückzugsort begleiten.</li>
-                    <li className="pl-2">Awareness-Telefon: 01788887435</li>
+                    <li className="pl-2">Awareness-Telefon: 0176 25050139</li>
                 </ul>
             </div>
 
@@ -114,7 +114,7 @@ const AwarenessInformation = (): ReactElement => {
                             Awareness-Anlaufstelle, an der Theke oder bei den Ordner*innen nach der Awareness fragen oder das Team anrufen.
                         </li>
                     </ul>
-                    <div className="mt-2">Telefonnummer: 01788887435</div>
+                    <div className="mt-2">Telefonnummer: 0176 25050139</div>
                 </div>
             </div>
 
