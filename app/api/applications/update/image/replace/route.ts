@@ -18,14 +18,6 @@ export interface ErroneousReplaceImageResponse {
     message: string;
 }
 
-export const config = {
-    api: {
-        bodyParser: {
-            sizeLimit: '50mb',
-        },
-    },
-};
-
 export const POST = async (request: Request): Promise<NextResponse<SuccessfulReplaceImageResponse | ErroneousReplaceImageResponse>> => {
     const { id, encodedImage } = (await request.json()) as ReplaceImageRequest;
 
