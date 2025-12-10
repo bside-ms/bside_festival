@@ -4,7 +4,6 @@ import isExtendedJwt from '@/lib/next-auth/isExtendedJwt';
 import isExtendedKeycloakProfile from '@/lib/next-auth/isExtendedKeycloakProfile';
 import type { AuthOptions } from 'next-auth';
 import Keycloak from 'next-auth/providers/keycloak';
-import process from 'process';
 
 const authOptions: AuthOptions = {
     providers: [

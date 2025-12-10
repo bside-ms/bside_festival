@@ -1,6 +1,5 @@
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import type { PutObjectCommandInput } from '@aws-sdk/client-s3/dist-types/commands/PutObjectCommand';
-import process from 'process';
 
 const createPutObjectCommand = (objectKey: string, objectContentType: string, object: PutObjectCommandInput['Body']): PutObjectCommand => {
     return new PutObjectCommand({
