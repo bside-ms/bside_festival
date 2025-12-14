@@ -36,7 +36,7 @@ const sendSlotAttendConfirmationMail = (
     const content = generateAttendContent(participant, slot, location, fullName);
     const html = createMailHtml(content);
 
-    sendMail(title, mailAddress, { html });
+    sendMail(title, mailAddress, html);
 };
 
 export default sendSlotAttendConfirmationMail;

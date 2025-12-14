@@ -76,7 +76,7 @@ const sendApplicationConfirmationMail = (
     const content = generateApplicationContent(application, links);
     const html = createMailHtml(content);
 
-    sendMail(title, application.contactMail, { html });
+    sendMail(title, application.contactMail, html);
 };
 
 export default sendApplicationConfirmationMail;
