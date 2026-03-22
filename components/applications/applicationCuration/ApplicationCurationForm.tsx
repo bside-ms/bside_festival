@@ -1,6 +1,5 @@
-import type { SetCurationRequest, SuccessfulSetCurationResponse } from '@/app/api/applications/curation/set/route';
-import { useApplicationsOverviewContext } from '@/components/applications/applicationsOverview/ApplicationsOverviewContext';
 import SelectInput from '@/components/form/SelectInput';
+import { setCuration } from '@/lib/actions/applicationActions';
 import statusLabels from '@/lib/participants/status/statusLabels';
 import statusOrder from '@/lib/participants/status/statusOrder';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
@@ -20,8 +19,6 @@ interface Props {
 }
 
 const ApplicationCurationForm = ({ application }: Props): ReactElement => {
-    const { updateApplication } = useApplicationsOverviewContext();
-
     const methods = useForm<CurationFormValues>();
     const {
         handleSubmit,
@@ -34,26 +31,13 @@ const ApplicationCurationForm = ({ application }: Props): ReactElement => {
         async ({ applicationStatus }: CurationFormValues) => {
             clearErrors('root');
 
-            const request: SetCurationRequest = {
-                id: application.id,
-                applicationStatus,
-            };
-
-            const response = await fetch('/api/applications/curation/set', {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify(request),
-            });
-
-            if (!response.ok) {
+            try {
+                await setCuration(application.id, applicationStatus);
+            } catch {
                 setError('root', { message: 'Fehler beim Submit!' });
-            } else {
-                const { updatedParticipant } = (await response.json()) as SuccessfulSetCurationResponse;
-
-                updateApplication(updatedParticipant);
             }
         },
-        [application.id, clearErrors, setError, updateApplication],
+        [application.id, clearErrors, setError],
     );
 
     return (

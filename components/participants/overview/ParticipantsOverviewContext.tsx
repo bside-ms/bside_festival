@@ -6,14 +6,13 @@ import formatDate from '@/lib/common/helper/formatDate';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import useEffectOnMount from '@/lib/common/hooks/useEffectOnMount';
 import isValidType from '@/lib/participants/isValidType';
-import serializeParticipant from '@/lib/participants/serializeParticipant';
 import AllAttendees from '@/typings/AllAttendees';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { SerializableSlot } from '@/typings/SerializableSlot';
-import type { Attendee, Genre, Link, Location, Participant, ParticipantGenre, ParticipantLabel, Type, Venue } from '@prisma/client';
+import type { Attendee, Genre, Link, Location, ParticipantGenre, ParticipantLabel, Type, Venue } from '@prisma/client';
 import { addHours, endOfHour, isAfter, isBefore, isSameMinute, startOfHour, subHours } from 'date-fns';
 import Fuse from 'fuse.js';
-import { first, last, uniq } from 'lodash';
+import { first, last, uniq, xor } from 'lodash';
 import { createContext, PropsWithChildren, ReactElement, useCallback, useContext, useMemo, useState } from 'react';
 
 interface ParticipantsOverviewContextData {
@@ -23,7 +22,6 @@ interface ParticipantsOverviewContextData {
     allLocations: Array<Location>;
     filteredParticipants: Array<SerializableParticipant>;
     participantLabels: Array<ParticipantLabel>;
-    updateParticipantLabels: (participantLabels: Array<ParticipantLabel>) => void;
     pinnedParticipantIds: Array<number>;
     togglePinnedParticipantId: (id: number) => void;
     getLinksOfParticipant: (id: number) => Array<Link>;
@@ -36,11 +34,7 @@ interface ParticipantsOverviewContextData {
     toggleFilteredLocationId: (locationId: number) => void;
     filteredDateRange: [number, number] | null;
     setFilteredDateRange: (dateRange: [number, number] | null) => void;
-    updateParticipant: (participant: Participant) => void;
-    updateAllSlots: (allSlots: Array<SerializableSlot>) => void;
-    updateAllVenues: (allVenues: Array<Venue>) => void;
     allAttendees: Array<AllAttendees>;
-    updateAllAttendees: (allAttendees: Array<AllAttendees>) => void;
     slotsDateRange: [Date, Date] | null;
     venuesDateRange: [Date, Date] | null;
     areLocationOrDateRangeFiltersSet: boolean;
@@ -70,12 +64,12 @@ interface Props extends PropsWithChildren {
 }
 
 export const ParticipantsOverviewContextProvider = ({
-    participants: initialParticipants,
-    participantLabels: initialParticipantLabels,
+    participants,
+    participantLabels,
     allLinks,
-    slots: initialSlots,
-    venues: initialVenues,
-    allAttendees: initialAllAttendees,
+    slots,
+    venues,
+    allAttendees,
     allLocations,
     isInDataPrivacyGroup,
     initialDateRangeDateRangeFilter,
@@ -86,14 +80,6 @@ export const ParticipantsOverviewContextProvider = ({
     allGenres,
     children,
 }: Props): ReactElement => {
-    const [participantLabels, setParticipantLabels] = useState<Array<ParticipantLabel>>(initialParticipantLabels);
-
-    const [participants, setParticipants] = useState<Array<SerializableParticipant>>(initialParticipants);
-
-    const [slots, setSlots] = useState<Array<SerializableSlot>>(initialSlots);
-    const [venues, setVenues] = useState<Array<Venue>>(initialVenues);
-    const [allAttendees, setAllAttendees] = useState<Array<AllAttendees>>(initialAllAttendees);
-
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>((initialTypesFilter?.split(',') ?? []).filter(isValidType));
 
     const [filteredText, setFilteredText] = useState<string | null>(initialTextFilter ?? null);
@@ -121,12 +107,8 @@ export const ParticipantsOverviewContextProvider = ({
 
     const togglePinnedParticipantId = useCallback((participantId: number) => {
         setPinnedParticipantIds((prevPinnedParticipantIds) => {
-            const newPinnedParticipantIds = prevPinnedParticipantIds.includes(participantId)
-                ? prevPinnedParticipantIds.filter((enhancedId) => enhancedId !== participantId)
-                : [...prevPinnedParticipantIds, participantId];
-
+            const newPinnedParticipantIds = xor(prevPinnedParticipantIds, [participantId]);
             setCookie(pinnedParticipantsCookieName, newPinnedParticipantIds.join(','));
-
             return newPinnedParticipantIds;
         });
     }, []);
@@ -157,44 +139,14 @@ export const ParticipantsOverviewContextProvider = ({
     }, [filteredText, participants, filteredTypes.length]);
 
     const toggleFilteredType = useCallback((type: Type) => {
-        setFilteredTypes((types) => {
-            if (types.includes(type)) {
-                return types.filter((filteredType) => filteredType !== type);
-            } else {
-                return [...types, type];
-            }
-        });
+        setFilteredTypes((types) => xor(types, [type]));
     }, []);
 
     const toggleFilteredLocationId = useCallback((locationId: number) => {
-        setFilteredLocationIds((locationIds) => {
-            if (locationIds.includes(locationId)) {
-                return locationIds.filter((filteredLocationId) => filteredLocationId !== locationId);
-            } else {
-                return [...locationIds, locationId];
-            }
-        });
+        setFilteredLocationIds((locationIds) => xor(locationIds, [locationId]));
     }, []);
 
     const getLinksOfParticipant = useCallback((id: number) => allLinks.filter(({ participantId }) => participantId === id), [allLinks]);
-
-    const updateParticipant = useCallback((participant: Participant) => {
-        setParticipants((prevState) => {
-            return prevState.map((participantItem) => {
-                if (participantItem.id === participant.id) {
-                    return serializeParticipant(participant);
-                }
-
-                return participantItem;
-            });
-        });
-    }, []);
-
-    const updateAllSlots = useCallback((allSlots: Array<SerializableSlot>): void => setSlots(allSlots), []);
-
-    const updateAllVenues = useCallback((allVenues: Array<Venue>): void => setVenues(allVenues), []);
-
-    const updateAllAttendees = useCallback((allAttendees: Array<AllAttendees>): void => setAllAttendees(allAttendees), []);
 
     const typesOfParticipants = uniq(participants.map(({ type }) => type));
 
@@ -205,7 +157,6 @@ export const ParticipantsOverviewContextProvider = ({
             value={{
                 allParticipants: participants,
                 participantLabels,
-                updateParticipantLabels: setParticipantLabels,
                 filteredParticipants,
                 getLinksOfParticipant,
                 actuallyAvailableTypes,
@@ -215,7 +166,6 @@ export const ParticipantsOverviewContextProvider = ({
                 toggleFilteredLocationId,
                 filteredDateRange,
                 setFilteredDateRange,
-                updateParticipant,
                 slots: slots.filter((slot) => {
                     if (filteredLocationIds.length > 0 && !filteredLocationIds.includes(slot.locationId)) {
                         return false;
@@ -240,10 +190,7 @@ export const ParticipantsOverviewContextProvider = ({
                         filteredDateRange === null && (filteredLocationIds.length === 0 || filteredLocationIds.includes(venue.locationId)),
                 ),
                 allLocations,
-                updateAllSlots,
-                updateAllVenues,
                 allAttendees,
-                updateAllAttendees,
                 slotsDateRange: earliestBegin === null || latestBegin === null ? null : [earliestBegin, latestBegin],
                 venuesDateRange: [new Date(`2025-09-19T12:00:00+02:00`), new Date(`2025-09-20T12:00:00+02:00`)],
                 areLocationOrDateRangeFiltersSet: filteredLocationIds.length > 0 || filteredDateRange !== null,

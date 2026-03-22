@@ -1,12 +1,12 @@
-import { DeleteVenueRequest, SuccessfulDeleteVenueResponse } from '@/app/api/applications/venue/delete/route';
-import { SuccessfulUpdateVenueResponse, UpsertVenueRequest } from '@/app/api/applications/venue/update/route';
 import Checkbox from '@/components/form/Checkbox';
 import SelectInput from '@/components/form/SelectInput';
 import { useParticipantsOverviewContext, useParticipantVenues } from '@/components/participants/overview/ParticipantsOverviewContext';
+import { deleteVenue, updateVenue } from '@/lib/actions/venueActions';
 import formatDate from '@/lib/common/helper/formatDate';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { addDays, differenceInDays, isSameDay } from 'date-fns';
+import { range } from 'lodash';
 import { ReactElement, useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -23,21 +23,13 @@ const getDateOptions = (venuesDateRange: [Date, Date] | null): Array<Date> => {
 
     const [startDate, endDate] = venuesDateRange;
 
-    const options = new Array<Date>();
-    let nextDate = startDate;
-
-    do {
-        options.push(nextDate);
-        nextDate = addDays(nextDate, 1);
-    } while (differenceInDays(nextDate, endDate) <= 0);
-
-    return options;
+    return range(differenceInDays(endDate, startDate) + 1).map((i) => addDays(startDate, i));
 };
 
 const VenueForm = ({ participantId }: Props): ReactElement => {
     const participantVenues = useParticipantVenues(participantId);
 
-    const { updateAllVenues, allLocations, venuesDateRange } = useParticipantsOverviewContext();
+    const { allLocations, venuesDateRange } = useParticipantsOverviewContext();
 
     const methods = useForm<VenueFormValues>();
     const {
@@ -56,46 +48,21 @@ const VenueForm = ({ participantId }: Props): ReactElement => {
                 .filter(([date, isActive]) => /\d{4}-\d{2}-\d{2}/.test(date) && isActive)
                 .map(([date]) => date);
 
-            const request: UpsertVenueRequest = {
-                participantId,
-                locationId: Number(locationId),
-                dates,
-            };
-
-            const response = await fetch('/api/applications/venue/update', {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify(request),
-            });
-
-            if (!response.ok) {
+            try {
+                await updateVenue(participantId, Number(locationId), dates);
+            } catch {
                 setError('root', { message: 'Fehler beim Submit!' });
-            } else {
-                const { updatedVenues } = (await response.json()) as SuccessfulUpdateVenueResponse;
-
-                updateAllVenues(updatedVenues);
             }
         },
-        [clearErrors, participantId, setError, updateAllVenues],
+        [clearErrors, participantId, setError],
     );
 
     const handleVenueDelete = useCallback(async () => {
-        const request: DeleteVenueRequest = { participantId };
-
-        const response = await fetch('/api/applications/venue/delete', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(request),
-        });
-
-        if (!response.ok) {
-            setError('root', { message: 'Fehler beim Submit!' });
-        } else {
-            const { updatedVenues } = (await response.json()) as SuccessfulDeleteVenueResponse;
-
-            updateAllVenues(updatedVenues);
-
+        try {
+            await deleteVenue(participantId);
             resetField('locationId');
+        } catch {
+            setError('root', { message: 'Fehler beim Submit!' });
         }
     }, [participantId, resetField, setError]);
 

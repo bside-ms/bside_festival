@@ -6,8 +6,8 @@ const AwarenessEasyGerman = (): ReactElement => {
             <div>
                 <div className="mb-1 text-lg font-bold">Menschen, die dir helfen können</div>
                 <div>
-                    Beim B-Side Festival gibt es ein Team, das auf dich aufpasst. Dieses Team hilft dir, wenn jemand gemein zu dir ist
-                    oder du dich nicht wohlfühlst.
+                    Beim B-Side Festival gibt es ein Team, das auf dich aufpasst. Dieses Team hilft dir, wenn jemand gemein zu dir ist oder
+                    du dich nicht wohlfühlst.
                 </div>
                 <ul className="list-outside list-disc space-y-2 pl-7">
                     <li className="pl-2">Du erkennst das Team an den leuchtend pinken Westen.</li>
@@ -45,8 +45,8 @@ const AwarenessEasyGerman = (): ReactElement => {
                     <div>
                         <div className="underline">Diskriminierung und Grenzen überschreiten</div>
                         <div>
-                            Diskriminierung bedeutet: Menschen werden schlecht behandelt, weil sie anders sind. Das ist nicht erlaubt. Gründe
-                            können sein: Herkunft, Geschlecht, Alter, Hautfarbe, Sexualität, Gesundheit oder Besitz.
+                            Diskriminierung bedeutet: Menschen werden schlecht behandelt, weil sie anders sind. Das ist nicht erlaubt.
+                            Gründe können sein: Herkunft, Geschlecht, Alter, Hautfarbe, Sexualität, Gesundheit oder Besitz.
                         </div>
                         <div>Grenzüberschreitungen sind zum Beispiel:</div>
                         <ul className="list-outside list-disc space-y-1 pl-7">
@@ -81,7 +81,9 @@ const AwarenessEasyGerman = (): ReactElement => {
                         <ul className="list-outside list-disc space-y-1 pl-7">
                             <li className="pl-2">Pass auf dich auf.</li>
                             <li className="pl-2">Wenn du dich unsicher fühlst, sprich mit Freund*innen darüber.</li>
-                            <li className="pl-2">Schütze dein Getränk vor K.-o.-Tropfen. Nutze einen Deckel und lass dein Getränk nicht aus den Augen.</li>
+                            <li className="pl-2">
+                                Schütze dein Getränk vor K.-o.-Tropfen. Nutze einen Deckel und lass dein Getränk nicht aus den Augen.
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -95,8 +97,8 @@ const AwarenessEasyGerman = (): ReactElement => {
                         glaube der Person. Frage, was die Person braucht.
                     </li>
                     <li className="pl-2">
-                        <span className="font-semibold">Wende dich an das Awareness-Team, die Theke oder das Sicherheitspersonal.</span> Das Team
-                        trägt pinke Westen. Du kannst sie ansprechen, wenn du Hilfe brauchst. Du kannst auch anrufen: 0176 25050139.
+                        <span className="font-semibold">Wende dich an das Awareness-Team, die Theke oder das Sicherheitspersonal.</span> Das
+                        Team trägt pinke Westen. Du kannst sie ansprechen, wenn du Hilfe brauchst. Du kannst auch anrufen: 0176 25050139.
                     </li>
                 </ol>
             </div>

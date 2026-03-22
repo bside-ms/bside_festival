@@ -1,3 +1,5 @@
+'use server';
+
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import prismaClient from '@/lib/common/prismaClient';
 import sendApplicationConfirmationMail from '@/lib/mail/sendApplicationConfirmationMail';
@@ -6,11 +8,10 @@ import allowedImageMaxFileSize from '@/lib/upload/allowedImageMaxFileSize';
 import allowedTechnicRiderContentType from '@/lib/upload/allowedTechnicRiderContentType';
 import allowedTechnicalRiderMaxFileSize from '@/lib/upload/allowedTechnicalRiderMaxFileSize';
 import uploadFileToIonos from '@/lib/upload/uploadFileToIonos';
-import type { Participant } from '@prisma/client';
-import { Type } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import { Type, type ApplicationStatus } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 
-export interface AddParticipantRequest {
+export interface AddParticipantData {
     type: Type;
     name: string;
     contactName: string;
@@ -35,40 +36,30 @@ export interface AddParticipantRequest {
     links: Array<string>;
 }
 
-interface ErroneousAddParticipantResponse {
-    message: string;
-}
-
-export interface SuccessfulAddParticipantResponse {
-    newParticipant: Participant;
-}
-
-export const POST = async (request: Request): Promise<NextResponse<SuccessfulAddParticipantResponse | ErroneousAddParticipantResponse>> => {
-    const {
-        type,
-        motivation,
-        encodedImage,
-        name,
-        description,
-        residence,
-        additionalInfo,
-        contactPhone,
-        encodedTechnicalRiderPdf,
-        technicalRider,
-        backlineSharing,
-        materialExpenses,
-        contactName,
-        links,
-        contactMail,
-        participantCount,
-        hasFlintaParticipants,
-        hasMarginalizedParticipants,
-        diversityNotes,
-        allergies,
-        concertGenres,
-        diskJockeyGenres,
-    } = (await request.json()) as AddParticipantRequest;
-
+export const addApplication = async ({
+    type,
+    motivation,
+    encodedImage,
+    name,
+    description,
+    residence,
+    additionalInfo,
+    contactPhone,
+    encodedTechnicalRiderPdf,
+    technicalRider,
+    backlineSharing,
+    materialExpenses,
+    contactName,
+    links,
+    contactMail,
+    participantCount,
+    hasFlintaParticipants,
+    hasMarginalizedParticipants,
+    diversityNotes,
+    allergies,
+    concertGenres,
+    diskJockeyGenres,
+}: AddParticipantData): Promise<void> => {
     const imageFileName = await uploadFileToIonos(encodedImage, allowedImageContentTypes, allowedImageMaxFileSize);
 
     const technicalRiderFileName = await uploadFileToIonos(
@@ -119,23 +110,38 @@ export const POST = async (request: Request): Promise<NextResponse<SuccessfulAdd
     });
 
     for (const link of links) {
-        await prismaClient.link.create({
-            data: {
-                link,
-                participantId: newParticipant.id,
-            },
-        });
+        await prismaClient.link.create({ data: { link, participantId: newParticipant.id } });
     }
 
     if (isNotEmptyString(newParticipant.contactMail)) {
-        sendApplicationConfirmationMail(
-            {
-                ...newParticipant,
-                contactMail: newParticipant.contactMail,
-            },
-            links,
-        );
+        sendApplicationConfirmationMail({ ...newParticipant, contactMail: newParticipant.contactMail }, links);
     }
 
-    return NextResponse.json({ newParticipant });
+    revalidatePath('/bewerbungen/uebersicht');
+};
+
+export const updateApplicationDetails = async (id: number, name: string, description: string): Promise<void> => {
+    await prismaClient.participant.update({ data: { updatedName: name, updatedDescription: description }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/programm');
+};
+
+export const deleteApplicationImage = async (id: number): Promise<void> => {
+    await prismaClient.participant.update({ data: { imageFileName: null }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/programm');
+};
+
+export const replaceApplicationImage = async (id: number, encodedImage: string): Promise<void> => {
+    const imageFileName = await uploadFileToIonos(encodedImage, allowedImageContentTypes, allowedImageMaxFileSize);
+    await prismaClient.participant.update({ data: { imageFileName }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/programm');
+};
+
+export const setCuration = async (id: number, applicationStatus: ApplicationStatus): Promise<void> => {
+    await prismaClient.participantLabel.deleteMany({ where: { participantId: id } });
+    await prismaClient.participant.update({ data: { status: applicationStatus }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/programm');
 };

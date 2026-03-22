@@ -1,6 +1,5 @@
 'use client';
 
-import type { AddParticipantRequest } from '@/app/api/applications/add/route';
 import ApplicationSuccess from '@/components/applications/applicationForm/ApplicationSuccess';
 import ApplicationTypeImage from '@/components/applications/applicationForm/ApplicationTypeImage';
 import ApplicationTypeIntro from '@/components/applications/applicationForm/ApplicationTypeIntro';
@@ -11,6 +10,7 @@ import Checkbox from '@/components/form/Checkbox';
 import MultiSelectInput from '@/components/form/MultiSelectInput';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
+import { addApplication } from '@/lib/actions/applicationActions';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import typeLabels from '@/lib/participants/typeLabels';
@@ -101,38 +101,32 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                 return;
             }
 
-            const request: AddParticipantRequest = {
-                type: chosenType,
-                name: values.name,
-                contactName: values.contactName,
-                contactPhone: values.contactPhone,
-                contactMail: values.contactMail,
-                description: values.description,
-                concertGenres: values.concertGenres ?? [],
-                diskJockeyGenres: values.diskJockeyGenres ?? [],
-                encodedImage: values.encodedImage,
-                motivation: values.motivation,
-                additionalInfo: values.additionalInfo,
-                technicalRider: values.technicalRider ?? null,
-                encodedTechnicalRiderPdf: values.encodedTechnicalRiderPdf ?? null,
-                backlineSharing: values.backlineSharing ?? null,
-                materialExpenses: values.materialExpenses ?? null,
-                residence: values.residence ?? null,
-                participantCount: values.participantCount,
-                hasFlintaParticipants: values.hasFlintaParticipants,
-                hasMarginalizedParticipants: values.hasMarginalizedParticipants,
-                diversityNotes: values.diversityNotes,
-                allergies: values.allergies,
-                links: [values.url1, values.url2, values.url3, values.url4, values.url5].filter(isNotEmptyString),
-            };
-
-            const response = await fetch('/api/applications/add', {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify(request),
-            });
-
-            if (!response.ok) {
+            try {
+                await addApplication({
+                    type: chosenType,
+                    name: values.name,
+                    contactName: values.contactName,
+                    contactPhone: values.contactPhone,
+                    contactMail: values.contactMail,
+                    description: values.description,
+                    concertGenres: values.concertGenres ?? [],
+                    diskJockeyGenres: values.diskJockeyGenres ?? [],
+                    encodedImage: values.encodedImage,
+                    motivation: values.motivation,
+                    additionalInfo: values.additionalInfo,
+                    technicalRider: values.technicalRider ?? null,
+                    encodedTechnicalRiderPdf: values.encodedTechnicalRiderPdf ?? null,
+                    backlineSharing: values.backlineSharing ?? null,
+                    materialExpenses: values.materialExpenses ?? null,
+                    residence: values.residence ?? null,
+                    participantCount: values.participantCount,
+                    hasFlintaParticipants: values.hasFlintaParticipants,
+                    hasMarginalizedParticipants: values.hasMarginalizedParticipants,
+                    diversityNotes: values.diversityNotes,
+                    allergies: values.allergies,
+                    links: [values.url1, values.url2, values.url3, values.url4, values.url5].filter(isNotEmptyString),
+                });
+            } catch {
                 setError('root', {
                     message:
                         'Leider ist beim Absenden ein unerwarteter Fehler aufgetreten. Versuche es bitte später nochmal! Wenn der Fehler bestehen bleibt, dann melde dich gerne bei uns über festival@b-side.ms oder direkt auf Instagram.',

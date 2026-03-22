@@ -1,14 +1,6 @@
-import {
-    AttendSlotRequest,
-    ErroneousAttendSlotResponse,
-    SuccessfulAttendSlotResponse,
-} from '@/app/api/applications/slot/attendance/attend/route';
 import TextInput from '@/components/form/TextInput';
-import {
-    ParticipantSlot,
-    useParticipantsOverviewContext,
-    useSlotAttendees,
-} from '@/components/participants/overview/ParticipantsOverviewContext';
+import { ParticipantSlot, useSlotAttendees } from '@/components/participants/overview/ParticipantsOverviewContext';
+import { attendSlot } from '@/lib/actions/slotActions';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import isValidEmail from '@/lib/common/helper/isValidEmail';
 import { ReactElement, useCallback, useState } from 'react';
@@ -28,8 +20,6 @@ const AttendeeForm = ({
         slot: { id: slotId, maxAttendees },
     },
 }: Props): ReactElement => {
-    const { updateAllAttendees } = useParticipantsOverviewContext();
-
     const [hasSuccessfullyAttended, setHasSuccessfullyAttended] = useState(false);
 
     const slotAttendees = useSlotAttendees(slotId);
@@ -43,40 +33,30 @@ const AttendeeForm = ({
         reset,
     } = methods;
 
-    const handleFormSubmit = useCallback(async ({ fullName, mailAddress }: AttendeeFormValues) => {
-        clearErrors('root');
+    const handleFormSubmit = useCallback(
+        async ({ fullName, mailAddress }: AttendeeFormValues) => {
+            clearErrors('root');
 
-        const request: AttendSlotRequest = {
-            slotId,
-            fullName,
-            mailAddress,
-        };
+            try {
+                const result = await attendSlot(slotId, fullName, mailAddress);
 
-        const response = await fetch('/api/applications/slot/attendance/attend', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(request),
-        });
+                if (result !== null) {
+                    if (result.errorCode === 1721561870451) {
+                        setError('root', { message: 'Du bist bereits für die Veranstaltung angemeldet!' });
+                        return;
+                    }
 
-        if (!response.ok) {
-            setError('root', { message: 'Technischer Fehler beim Submit!' });
-        } else {
-            const responseData = (await response.json()) as SuccessfulAttendSlotResponse | ErroneousAttendSlotResponse;
-
-            if ('errorCode' in responseData) {
-                if (responseData.errorCode === 1721561870451) {
-                    setError('root', { message: 'Du bist bereits für die Veranstaltung angemeldet!' });
-                    return;
+                    setError('root', { message: 'Unbekannter Fehler beim Submit!' });
+                } else {
+                    setHasSuccessfullyAttended(true);
+                    reset();
                 }
-
-                setError('root', { message: 'Unbekannter Fehler beim Submit!' });
-            } else {
-                updateAllAttendees(responseData.allAttendees);
-                setHasSuccessfullyAttended(true);
-                reset();
+            } catch {
+                setError('root', { message: 'Technischer Fehler beim Submit!' });
             }
-        }
-    }, []);
+        },
+        [clearErrors, reset, setError, slotId],
+    );
 
     const validateEmail = useCallback((email: string): string | undefined => {
         if (isEmptyString(email)) {
