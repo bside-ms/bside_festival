@@ -30,9 +30,10 @@ model Participant {
     backlineSharing             String?            @db.Text
     materialExpenses            String?            @db.Text
     additionalInfo              String?            @db.Text
-    participantCount            String?            @db.Text
+    participantCount            Int                @default(1)
     allergies                   String?            @db.Text
-    hasFlintaParticipants       Boolean            @default(false)
+    flintaParticipantsCount     Int                @default(0)
+    professionalParticipantsCount Int              @default(0)
     hasMarginalizedParticipants Boolean            @default(false)
     diversityNotes              String?            @db.Text
     links                       Link[]

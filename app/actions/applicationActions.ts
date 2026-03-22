@@ -55,11 +55,11 @@ export async function submitApplicationAction(values: ApplicationFormValues, cho
                 materialExpenses: values.materialExpenses ?? null,
                 participantCount: values.participantCount,
                 flintaParticipantsCount: values.flintaParticipantsCount,
-                marginalizedParticipantsCount: values.marginalizedParticipantsCount,
+                hasMarginalizedParticipants: values.hasMarginalizedParticipants,
                 professionalParticipantsCount: values.professionalParticipantsCount,
                 diversityNotes: values.diversityNotes,
                 allergies: values.allergies,
-                
+
                 // Nested Genre Creation
                 genres: {
                     create: [

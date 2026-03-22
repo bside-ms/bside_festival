@@ -19,7 +19,6 @@ export const createApplicationSchema = (chosenType: Type) => z.object({
     description: z.string().min(10, "Die Beschreibung ist etwas zu kurz"),
     motivation: z.string().optional(),
     additionalInfo: z.string().optional(),
-    participantCount: z.string().min(1, "Bitte gib die Personenzahl an"),
     residence: z.string().optional(),
     // Genres
     concertGenres: z.array(z.union([z.string(), z.number()])).optional(),
@@ -31,7 +30,11 @@ export const createApplicationSchema = (chosenType: Type) => z.object({
             message: "Bitte gib uns mindestens einen privaten Link (z.B. ein Video von euch)!",
         }),
     // Logic for these usually depends on checkboxes, ensure they are boolean or optional
-    hasFlintaParticipants: z.boolean().optional(),
+    participantCount: z.coerce.number().min(1, "Mindestens eine Person muss dabei sein"),
+    hasProfessionalParticipants: z.boolean().default(false),
+    professionalParticipantsCount: z.coerce.number().min(0).default(0),
+    flintaParticipantsCount: z.coerce.number().min(0).default(0),
+    hasMarginalizedParticipants: z.boolean().default(false),
     diversityNotes: z.string().optional(),
     allergies: z.string().optional(),
     encodedImage: z.string().min(1, "Ein Bild ist erforderlich"),
@@ -53,5 +56,30 @@ export const createApplicationSchema = (chosenType: Type) => z.object({
                 path: ["technicalRider"],
             });
         }
+    }
+    // Flinta count cannot exceed total
+    if (data.flintaParticipantsCount > data.participantCount) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Die Anzahl der FLINTA* Personen kann nicht größer sein als die Gesamtzahl.",
+            path: ["flintaParticipantsCount"],
+        });
+    }
+    // Logic: Professional count cannot exceed total
+    if (data.hasProfessionalParticipants && data.professionalParticipantsCount > data.participantCount) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Mehr Profis als Bandmitglieder? Das geht leider nicht.",
+            path: ["professionalParticipantsCount"],
+        });
+    }
+
+    // Logic: Ensure professionalCount is > 0 if isProfessional is checked
+    if (data.hasProfessionalParticipants && data.professionalParticipantsCount <= 0) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Bitte gib an, wie viele Profis dabei sind.",
+            path: ["professionalParticipantsCount"],
+        });
     }
 });

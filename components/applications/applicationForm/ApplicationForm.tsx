@@ -8,6 +8,7 @@ import {
     ApplicationTypeImage,
     ApplicationTypeIntro,
     ApplicationLinkList,
+    ApplicationParticipantInfo,
     ImageUpload,
     TechnicalRiderFields
 } from '@/components/applications/applicationForm';
@@ -72,10 +73,15 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
     const [wasSuccessfullySubmitted, setWasSuccessfullySubmitted] = useState(false);
 
     const methods = useForm<ApplicationFormValues>({
-        resolver: zodResolver(createApplicationSchema(chosenType)), // Hook up Zod
+        resolver: zodResolver(createApplicationSchema(chosenType)),
         defaultValues: {
             publicLinks: [{ url: "" }],
-            privateLinks: [{ url: "" }]
+            privateLinks: [{ url: "" }],
+            participantCount: 1,
+            flintaParticipantsCount: 0,
+            professionalParticipantsCount: 0,
+            hasProfessionalParticipants: false,
+            hasMarginalizedParticipants: false,
         }
     });
     const { handleSubmit, setError, formState: { errors, isSubmitting }, clearErrors, reset } = methods;
@@ -227,28 +233,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         info="Warum möchtet ihr Teil des B-Side Festivals 2025 sein?"
                     />
 
-                    <TextInput<ApplicationFormValues>
-                        name="participantCount"
-                        label="Gesamtanzahl"
-                        info="Wie viel Menschen sind an eurem Beitrag beteiligt?"
-                    />
-
-                    <div>
-                        Zum Ausgleich bestehender Nachteile freuen wir uns über Bewerbungen von Menschen und Organisationen, die sich für
-                        Menschen mit Diskriminierungserfahrung stark machen oder selbst davon betroffen sind. Dazu zählen zum Beispiel
-                        geflüchtete Menschen, Jüdinnen*Juden, Menschen mit familiärer Migrations- oder Fluchtgeschichte, muslimisch(e)
-                        (gelesene) Menschen, Personen of Color, Sinti/Roma*, schwarze Menschen und/oder Menschen, die aufgrund ihres Alters,
-                        sozialen Status oder einer Behinderung/chronischen Krankheit benachteiligt werden (marginalisierte Gruppen). Wir
-                        freuen uns ebenso über Bewerbungen von Frauen, lesbischen, nicht-binären, intergeschlechtlichen, trans und agender
-                        Personen (FLINTA*).
-                    </div>
-
-                    <Checkbox<ApplicationFormValues> name="hasFlintaParticipants" label="Es sind FLINTA* Personen beteiligt?" />
-
-                    {/* <Checkbox<ApplicationFormValues>
-                        name="hasMarginalizedParticipants"
-                        label="Es sind Personen anderer marginalisierter Gruppen beteiligt?"
-                    /> */}
+                    <ApplicationParticipantInfo />
 
                     <TextArea<ApplicationFormValues> name="diversityNotes" label="Anmerkungen zur Diversität" rows={2} />
 
