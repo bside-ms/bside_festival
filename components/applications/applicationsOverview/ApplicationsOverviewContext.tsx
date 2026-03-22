@@ -4,10 +4,10 @@ import { typesFilterQueryName } from '@/lib/applications/filterQueryNames';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import useEffectOnMount from '@/lib/common/hooks/useEffectOnMount';
 import isValidType from '@/lib/participants/isValidType';
-import serializeParticipant from '@/lib/participants/serializeParticipant';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
-import type { Genre, Link, Participant, ParticipantGenre, Type } from '@prisma/client';
+import type { Genre, Link, ParticipantGenre, Type } from '@prisma/client';
 import Fuse from 'fuse.js';
+import { xor } from 'lodash';
 import type { Dispatch, PropsWithChildren, ReactElement, SetStateAction } from 'react';
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
@@ -22,7 +22,6 @@ interface ApplicationsOverviewContextData {
     getLinksOfApplication: (id: number) => Array<Link>;
     filteredTypes: Array<Type>;
     toggleFilteredType: (type: Type) => void;
-    updateApplication: (application: Participant) => void;
     allGenres: Array<Genre & { count: 0 }>;
 }
 
@@ -35,15 +34,7 @@ interface Props extends PropsWithChildren {
     allGenres: Array<Genre>;
 }
 
-const ApplicationsOverviewContextProvider = ({
-    applications: initialApplications,
-    participantGenres,
-    allLinks,
-    allGenres,
-    children,
-}: Props): ReactElement => {
-    const [applications, setApplications] = useState<Array<SerializableParticipant>>(initialApplications);
-
+const ApplicationsOverviewContextProvider = ({ applications, participantGenres, allLinks, allGenres, children }: Props): ReactElement => {
     const [searchText, setSearchText] = useState<string | null>(null);
 
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
@@ -80,38 +71,14 @@ const ApplicationsOverviewContextProvider = ({
     const [enhancedApplicationIds, setEnhancedApplicationIds] = useState<Array<number>>([]);
 
     const toggleEnhancedApplicationId = useCallback((id: number) => {
-        setEnhancedApplicationIds((enhancedIds) => {
-            if (enhancedIds.includes(id)) {
-                return enhancedIds.filter((enhancedId) => enhancedId !== id);
-            } else {
-                return [...enhancedIds, id];
-            }
-        });
+        setEnhancedApplicationIds((enhancedIds) => xor(enhancedIds, [id]));
     }, []);
 
     const toggleFilteredType = useCallback((type: Type) => {
-        setFilteredTypes((types) => {
-            if (types.includes(type)) {
-                return types.filter((filteredType) => filteredType !== type);
-            } else {
-                return [...types, type];
-            }
-        });
+        setFilteredTypes((types) => xor(types, [type]));
     }, []);
 
     const getLinksOfApplication = useCallback((id: number) => allLinks.filter(({ participantId }) => participantId === id), [allLinks]);
-
-    const updateApplication = useCallback((application: Participant) => {
-        setApplications((prevState) => {
-            return prevState.map((applicationItem) => {
-                if (applicationItem.id === application.id) {
-                    return serializeParticipant(application);
-                }
-
-                return applicationItem;
-            });
-        });
-    }, []);
 
     return (
         <ApplicationsOverviewContext.Provider
@@ -126,7 +93,6 @@ const ApplicationsOverviewContextProvider = ({
                 getLinksOfApplication,
                 filteredTypes,
                 toggleFilteredType,
-                updateApplication,
                 allGenres: allGenres.map((genre) => ({ ...genre, count: 0 })),
             }}
         >

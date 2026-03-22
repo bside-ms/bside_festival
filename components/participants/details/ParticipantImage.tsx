@@ -1,6 +1,4 @@
-import { DeleteImageRequest, SuccessfulDeleteImageResponse } from '@/app/api/applications/update/image/delete/route';
-import { ReplaceImageRequest } from '@/app/api/applications/update/image/replace/route';
-import { useParticipantsOverviewContext } from '@/components/participants/overview/ParticipantsOverviewContext';
+import { deleteApplicationImage, replaceApplicationImage } from '@/lib/actions/applicationActions';
 import blobToDataUrl from '@/lib/common/helper/blobToDataUrl';
 import cn from '@/lib/common/helper/cn';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
@@ -25,78 +23,58 @@ interface Props {
 const ParticipantImage = ({ participant: { id, name, updatedName, status, imageFileName }, isLoggedIn }: Props): ReactElement => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { updateParticipant } = useParticipantsOverviewContext();
-
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
-    const handleDelete = useCallback(async (event: SyntheticEvent<HTMLButtonElement>) => {
-        event.stopPropagation();
+    const handleDelete = useCallback(
+        async (event: SyntheticEvent<HTMLButtonElement>) => {
+            event.stopPropagation();
 
-        if (!window.confirm('Bild unwiderruflich löschen?')) {
-            return;
-        }
+            if (!window.confirm('Bild unwiderruflich löschen?')) {
+                return;
+            }
 
-        const request: DeleteImageRequest = { id };
+            await deleteApplicationImage(id);
+        },
+        [id],
+    );
 
-        const response = await fetch('/api/applications/update/image/delete', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(request),
-        });
+    const handleReplace = useCallback(
+        async ({ target }: ChangeEvent<HTMLInputElement>) => {
+            setIsSubmitting(true);
 
-        if (response.ok) {
-            const { updatedParticipant } = (await response.json()) as SuccessfulDeleteImageResponse;
+            if (target.files === null || target.files[0] === undefined) {
+                setIsSubmitting(false);
+                return;
+            }
 
-            updateParticipant(updatedParticipant);
-        }
-    }, []);
+            const file = target.files[0];
 
-    const handleReplace = useCallback(async ({ target }: ChangeEvent<HTMLInputElement>) => {
-        setIsSubmitting(true);
+            if (!allowedImageContentTypes.includes(file.type)) {
+                alert(`Dateityp nicht zulässig, erlaubt sind ${allowedImageContentTypes.map((type) => `.${extension(type)}`).join(', ')}`);
+                setIsSubmitting(false);
+                return;
+            }
 
-        if (target.files === null || target.files[0] === undefined) {
+            if (file.size > allowedImageMaxFileSize) {
+                alert(`Max. ${bytes.format(allowedImageMaxFileSize, { unitSeparator: '', unit: 'MB' })} zulässig`);
+                setIsSubmitting(false);
+                return;
+            }
+
+            const imageDataUrl = await blobToDataUrl(file);
+
+            if (typeof imageDataUrl !== 'string') {
+                alert(`Es ist ein technischer Fehler aufgetreten`);
+                setIsSubmitting(false);
+                return;
+            }
+
+            await replaceApplicationImage(id, imageDataUrl);
+
             setIsSubmitting(false);
-            return;
-        }
-
-        const file = target.files[0];
-
-        if (!allowedImageContentTypes.includes(file.type)) {
-            alert(`Dateityp nicht zulässig, erlaubt sind ${allowedImageContentTypes.map((type) => `.${extension(type)}`).join(', ')}`);
-            setIsSubmitting(false);
-            return;
-        }
-
-        if (file.size > allowedImageMaxFileSize) {
-            alert(`Max. ${bytes.format(allowedImageMaxFileSize, { unitSeparator: '', unit: 'MB' })} zulässig`);
-            setIsSubmitting(false);
-            return;
-        }
-
-        const imageDataUrl = await blobToDataUrl(file);
-
-        if (typeof imageDataUrl !== 'string') {
-            alert(`Es ist ein technischer Fehler aufgetreten`);
-            setIsSubmitting(false);
-            return;
-        }
-
-        const request: ReplaceImageRequest = { id, encodedImage: imageDataUrl };
-
-        const response = await fetch('/api/applications/update/image/replace', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(request),
-        });
-
-        if (response.ok) {
-            const { updatedParticipant } = (await response.json()) as SuccessfulDeleteImageResponse;
-
-            updateParticipant(updatedParticipant);
-        }
-
-        setIsSubmitting(false);
-    }, []);
+        },
+        [id],
+    );
 
     return (
         <div className={cn('relative h-[300px] shrink-0 overflow-auto rounded-t-2xl md:w-1/3', isEmptyString(imageUrl) && 'h-[50px]')}>
