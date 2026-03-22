@@ -41,8 +41,10 @@ const ApplicationParticipantInfo = () => {
             {/* 3. FLINTA Count */}
             <TextInput
                 name="flintaParticipantsCount"
-                label="Wie viele FLINTA* Personen sind beteiligt?"
+                info="Wie viele FLINTA* Personen sind beteiligt?"
+                label="Anzahl"
                 type="number"
+                required={true}
             />
 
             {/* 4. Professional Artist Checkbox */}
