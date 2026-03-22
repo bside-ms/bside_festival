@@ -6,7 +6,8 @@ import type { Participant } from '@prisma/client';
 
 const generateApplicationContent = (
     application: Omit<Participant, 'contactMail'> & { contactMail: string },
-    links: Array<string>,
+    publicLinks: Array<string>,
+    privateLinks: Array<string>
 ): string => {
     const {
         type,
@@ -45,7 +46,8 @@ const generateApplicationContent = (
             `<strong>Technical Rider:</strong><br>${technicalRider ?? ''}<br>${technicalRiderFileName ? '(PDF bereitgestellt)' : ''}`,
         isNotEmptyString(backlineSharing) && `<strong>Backline-Sharing:</strong><br>${backlineSharing}`,
         isNotEmptyString(materialExpenses) && `<strong>Materialkosten:</strong><br>${materialExpenses}`,
-        links.length > 0 && `<strong>Links:</strong><br>${links.map((l) => `${l}`).join('<br>')}`,
+        publicLinks.length > 0 && `<strong>öffentliche Links:</strong><br>${publicLinks.map((l) => `${l}`).join('<br>')}`,
+        privateLinks.length > 0 && `<strong>private Links:</strong><br>${privateLinks.map((l) => `${l}`).join('<br>')}`,
         isNotEmptyString(contactName) && `<strong>Ansprechperson:</strong><br>${contactName}`,
         isNotEmptyString(contactMail) && `<strong>E-Mail-Adresse:</strong><br>${contactMail}`,
         isNotEmptyString(contactPhone) && `<strong>Telefonnummer:</strong><br>${contactPhone}`,
@@ -70,10 +72,10 @@ const generateApplicationContent = (
 
 const sendApplicationConfirmationMail = (
     application: Omit<Participant, 'contactMail'> & { contactMail: string },
-    links: Array<string>,
+    publicLinks: Array<string>, privateLinks: Array<string>
 ): void => {
     const title = 'B-Side Festival 2025 - Bewerbungsbestätigung';
-    const content = generateApplicationContent(application, links);
+    const content = generateApplicationContent(application, publicLinks, privateLinks);
     const html = createMailHtml(content);
 
     sendMail(title, application.contactMail, html);

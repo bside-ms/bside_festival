@@ -1,18 +1,23 @@
 'use client';
 
-import type { AddParticipantRequest } from '@/app/api/applications/add/route';
-import ApplicationSuccess from '@/components/applications/applicationForm/ApplicationSuccess';
-import ApplicationTypeImage from '@/components/applications/applicationForm/ApplicationTypeImage';
-import ApplicationTypeIntro from '@/components/applications/applicationForm/ApplicationTypeIntro';
-import ImageUpload from '@/components/applications/applicationForm/ImageUpload';
-import Links from '@/components/applications/applicationForm/Links';
-import TechnicalRiderFields, { getTechnicalRiderInfo } from '@/components/applications/applicationForm/TechnicalRiderFields';
+import { submitApplicationAction } from '@/app/actions/applicationActions';
+import { createApplicationSchema } from '@/app/actions/schemas/applicationSchema';
+
+import {
+    ApplicationSuccess,
+    ApplicationTypeImage,
+    ApplicationTypeIntro,
+    ApplicationLinkList,
+    ImageUpload,
+    TechnicalRiderFields
+} from '@/components/applications/applicationForm';
+
+import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import Checkbox from '@/components/form/Checkbox';
 import MultiSelectInput from '@/components/form/MultiSelectInput';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
-import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import typeLabels from '@/lib/participants/typeLabels';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,35 +28,39 @@ import { useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { IoWarning } from 'react-icons/io5';
 
-export interface ApplicationFormValues {
-    name: string;
-    contactName: string;
-    contactPhone: string;
-    contactMail: string;
-    description: string;
-    concertGenres?: Array<string | number>;
-    diskJockeyGenres?: Array<string | number>;
-    encodedImage: string;
-    motivation: string;
-    additionalInfo: string;
-    technicalRider?: string;
-    encodedTechnicalRiderPdf?: string;
-    backlineSharing?: string;
-    materialExpenses?: string;
-    residence?: string;
-    participantCount: string;
-    hasFlintaParticipants: boolean;
-    hasMarginalizedParticipants: boolean;
-    diversityNotes: string;
-    allergies: string;
+import { zodResolver } from '@hookform/resolvers/zod';
 
-    // Proud and also ashamed about this lazy solution
-    url1: string;
-    url2?: string;
-    url3?: string;
-    url4?: string;
-    url5?: string;
-}
+// Use Zod to extract the Type automatically
+export type ApplicationFormValues = z.infer<ReturnType<typeof createApplicationSchema>>;
+
+// export interface ApplicationFormValues {
+//     name: string;
+//     contactName: string;
+//     contactPhone: string;
+//     contactMail: string;
+//     description: string;
+//     concertGenres?: Array<string | number>;
+//     diskJockeyGenres?: Array<string | number>;
+//     encodedImage: string;
+//     motivation: string;
+//     additionalInfo: string;
+//     technicalRider?: string;
+//     encodedTechnicalRiderPdf?: string;
+//     backlineSharing?: string;
+//     materialExpenses?: string;
+//     residence?: string;
+//     participantCount: string;
+//     flintaParticipantsCount: string;
+//     marginalizedParticipantsCount: string;
+//     professionalParticipantsCount: string;
+//     zip_codes: string;
+//     // hasFlintaParticipants: boolean;
+//     // hasMarginalizedParticipants: boolean;
+//     diversityNotes: string;
+//     allergies: string;
+//     publicLinks: { url: string }[];
+//     privateLinks: { url: string }[];
+// }
 
 interface Props {
     chosenType: Type;
@@ -62,14 +71,14 @@ interface Props {
 const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: Props): ReactElement => {
     const [wasSuccessfullySubmitted, setWasSuccessfullySubmitted] = useState(false);
 
-    const methods = useForm<ApplicationFormValues>();
-    const {
-        handleSubmit,
-        setError,
-        formState: { errors, isSubmitting },
-        clearErrors,
-        reset,
-    } = methods;
+    const methods = useForm<ApplicationFormValues>({
+        resolver: zodResolver(createApplicationSchema(chosenType)), // Hook up Zod
+        defaultValues: {
+            publicLinks: [{ url: "" }],
+            privateLinks: [{ url: "" }]
+        }
+    });
+    const { handleSubmit, setError, formState: { errors, isSubmitting }, clearErrors, reset } = methods;
 
     const handleFormReset = useCallback(() => reset(), [reset]);
 
@@ -77,73 +86,17 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
         async (values: ApplicationFormValues) => {
             clearErrors('root');
 
-            const technicalRiderInfo = getTechnicalRiderInfo(chosenType);
-
-            if (
-                technicalRiderInfo !== null &&
-                technicalRiderInfo.required === true &&
-                isEmptyString(values.technicalRider) &&
-                isEmptyString(values.encodedTechnicalRiderPdf)
-            ) {
-                setError(
-                    'technicalRider',
-                    {
-                        type: 'manual',
-                        message:
-                            technicalRiderInfo.withoutTextArea === true
-                                ? 'Bitte sende uns euren Technical Rider in PDF-Form'
-                                : 'Bitte sende uns euren Technical Rider in Text- oder PDF-Form',
-                    },
-                    {
-                        shouldFocus: true,
-                    },
-                );
-                return;
-            }
-
-            const request: AddParticipantRequest = {
-                type: chosenType,
-                name: values.name,
-                contactName: values.contactName,
-                contactPhone: values.contactPhone,
-                contactMail: values.contactMail,
-                description: values.description,
-                concertGenres: values.concertGenres ?? [],
-                diskJockeyGenres: values.diskJockeyGenres ?? [],
-                encodedImage: values.encodedImage,
-                motivation: values.motivation,
-                additionalInfo: values.additionalInfo,
-                technicalRider: values.technicalRider ?? null,
-                encodedTechnicalRiderPdf: values.encodedTechnicalRiderPdf ?? null,
-                backlineSharing: values.backlineSharing ?? null,
-                materialExpenses: values.materialExpenses ?? null,
-                residence: values.residence ?? null,
-                participantCount: values.participantCount,
-                hasFlintaParticipants: values.hasFlintaParticipants,
-                hasMarginalizedParticipants: values.hasMarginalizedParticipants,
-                diversityNotes: values.diversityNotes,
-                allergies: values.allergies,
-                links: [values.url1, values.url2, values.url3, values.url4, values.url5].filter(isNotEmptyString),
-            };
-
-            const response = await fetch('/api/applications/add', {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify(request),
-            });
-
-            if (!response.ok) {
+            const result = await submitApplicationAction(values, chosenType);
+            
+            if (!result.success) {
                 setError('root', {
-                    message:
-                        'Leider ist beim Absenden ein unerwarteter Fehler aufgetreten. Versuche es bitte später nochmal! Wenn der Fehler bestehen bleibt, dann melde dich gerne bei uns über festival@b-side.ms oder direkt auf Instagram.',
+                    message: 'Leider ist beim Absenden ein unerwarteter Fehler aufgetreten. Versuche es bitte später nochmal! Wenn der Fehler bestehen bleibt, dann melde dich gerne bei uns über festival@b-side.ms oder direkt auf Instagram.'
                 });
                 return;
             }
 
             window.scrollTo({ top: 0 });
-
             setWasSuccessfullySubmitted(true);
-
             handleFormReset();
         },
         [chosenType, clearErrors, handleFormReset, setError],
@@ -237,7 +190,21 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         />
                     )}
 
-                    <Links />
+                    <div className="flex flex-col gap-10">
+                        <ApplicationLinkList 
+                            name="publicLinks" 
+                            title="Öffentliche Präsenz" 
+                            description="Wo können Besucher*innen mehr über euch erfahren? (Insta, Web, Spotify)" 
+                            maxItems={10} 
+                        />
+
+                        <ApplicationLinkList 
+                            name="privateLinks" 
+                            title="Internes Material" 
+                            description="Videos von Jams, Cloud-Ordner oder andere Informationen für unser Programm-Team."
+                            maxItems={10} 
+                        />
+                    </div>
 
                     <TechnicalRiderFields chosenType={chosenType} />
 
@@ -278,10 +245,10 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
 
                     <Checkbox<ApplicationFormValues> name="hasFlintaParticipants" label="Es sind FLINTA* Personen beteiligt?" />
 
-                    <Checkbox<ApplicationFormValues>
+                    {/* <Checkbox<ApplicationFormValues>
                         name="hasMarginalizedParticipants"
                         label="Es sind Personen anderer marginalisierter Gruppen beteiligt?"
-                    />
+                    /> */}
 
                     <TextArea<ApplicationFormValues> name="diversityNotes" label="Anmerkungen zur Diversität" rows={2} />
 
