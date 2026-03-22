@@ -1,4 +1,4 @@
-'use server'
+'use server';
 
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import prismaClient from '@/lib/common/prismaClient';
@@ -8,10 +8,11 @@ import allowedImageMaxFileSize from '@/lib/upload/allowedImageMaxFileSize';
 import allowedTechnicRiderContentType from '@/lib/upload/allowedTechnicRiderContentType';
 import allowedTechnicalRiderMaxFileSize from '@/lib/upload/allowedTechnicalRiderMaxFileSize';
 import uploadFileToIonos from '@/lib/upload/uploadFileToIonos';
-import { Type } from '@prisma/client';
+import { Type, type ApplicationStatus } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 import { ApplicationFormValues } from '@/components/applications/applicationForm/ApplicationForm';
 
-export async function submitApplicationAction(values: ApplicationFormValues, chosenType: Type) {
+export async function addApplication(values: ApplicationFormValues, chosenType: Type) {
     try {
         // 1. Handle File Uploads (Ionos)
         const imageFileName = await uploadFileToIonos(
@@ -108,3 +109,29 @@ export async function submitApplicationAction(values: ApplicationFormValues, cho
         };
     }
 }
+
+export const updateApplicationDetails = async (id: number, name: string, description: string): Promise<void> => {
+    await prismaClient.participant.update({ data: { updatedName: name, updatedDescription: description }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/programm');
+};
+
+export const deleteApplicationImage = async (id: number): Promise<void> => {
+    await prismaClient.participant.update({ data: { imageFileName: null }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/programm');
+};
+
+export const replaceApplicationImage = async (id: number, encodedImage: string): Promise<void> => {
+    const imageFileName = await uploadFileToIonos(encodedImage, allowedImageContentTypes, allowedImageMaxFileSize);
+    await prismaClient.participant.update({ data: { imageFileName }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/programm');
+};
+
+export const setCuration = async (id: number, applicationStatus: ApplicationStatus): Promise<void> => {
+    await prismaClient.participantLabel.deleteMany({ where: { participantId: id } });
+    await prismaClient.participant.update({ data: { status: applicationStatus }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/programm');
+};

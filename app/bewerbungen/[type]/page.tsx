@@ -3,7 +3,7 @@ import prismaClient from '@/lib/common/prismaClient';
 import isLoggedIn from '@/lib/next-auth/isLoggedIn';
 import urlPathTypes from '@/lib/participants/urlPathTypes';
 import { Prisma, Type } from '@prisma/client';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import type { ReactElement } from 'react';
 import SortOrder = Prisma.SortOrder;
 import GenreCreateManyInput = Prisma.GenreCreateManyInput;
@@ -47,6 +47,8 @@ const getAllDiskJockeyGenres = async () => {
     return prismaClient.genre.findMany({ where: { type: Type.DiskJockey }, orderBy: { name: SortOrder.asc } });
 };
 
+export const generateStaticParams = () => Object.keys(urlPathTypes).map((type) => ({ type }));
+
 export default async ({ params }: { params: Promise<{ type: string }> }): Promise<ReactElement> => {
     if (!(await isLoggedIn())) {
         redirect('/');
@@ -57,7 +59,7 @@ export default async ({ params }: { params: Promise<{ type: string }> }): Promis
     const chosenType = urlPathTypes[type] ?? null;
 
     if (chosenType === null) {
-        redirect('/bewerbungen');
+        notFound();
     }
 
     const allConcertGenres = await getAllConcertGenres();

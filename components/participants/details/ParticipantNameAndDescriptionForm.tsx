@@ -1,7 +1,6 @@
-import { SuccessfulUpdateDetailsResponse, UpdateDetailsRequest } from '@/app/api/applications/update/details/route';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
-import { useParticipantsOverviewContext } from '@/components/participants/overview/ParticipantsOverviewContext';
+import { updateApplicationDetails } from '@/lib/actions/applicationActions';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,8 +21,6 @@ interface Props {
 }
 
 const ParticipantNameAndDescriptionForm = ({ participant, isLoggedIn, showForm, toggleForm }: Props): ReactElement => {
-    const { updateParticipant } = useParticipantsOverviewContext();
-
     const methods = useForm<DescriptionFormValues>();
     const {
         handleSubmit,
@@ -36,29 +33,14 @@ const ParticipantNameAndDescriptionForm = ({ participant, isLoggedIn, showForm, 
         async ({ name, description }: DescriptionFormValues) => {
             clearErrors('root');
 
-            const request: UpdateDetailsRequest = {
-                id: participant.id,
-                name,
-                description,
-            };
-
-            const response = await fetch('/api/applications/update/details', {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify(request),
-            });
-
-            if (!response.ok) {
-                setError('root', { message: 'Fehler beim Submit!' });
-            } else {
-                const { updatedParticipant } = (await response.json()) as SuccessfulUpdateDetailsResponse;
-
-                updateParticipant(updatedParticipant);
-
+            try {
+                await updateApplicationDetails(participant.id, name, description);
                 toggleForm();
+            } catch {
+                setError('root', { message: 'Fehler beim Submit!' });
             }
         },
-        [participant.id, clearErrors, setError, toggleForm, updateParticipant],
+        [participant.id, clearErrors, setError, toggleForm],
     );
 
     if (!showForm) {

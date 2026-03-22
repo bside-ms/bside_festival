@@ -1,8 +1,5 @@
 'use client';
 
-import { submitApplicationAction } from '@/app/actions/applicationActions';
-import { createApplicationSchema } from '@/app/actions/schemas/applicationSchema';
-
 import {
     ApplicationSuccess,
     ApplicationTypeImage,
@@ -12,13 +9,12 @@ import {
     ImageUpload,
     TechnicalRiderFields
 } from '@/components/applications/applicationForm';
+import { addApplication } from '@/lib/actions/applicationActions';
+import { createApplicationSchema } from '@/lib/schemas/applicationSchema';
 
-import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
-import Checkbox from '@/components/form/Checkbox';
 import MultiSelectInput from '@/components/form/MultiSelectInput';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
-import isEmptyString from '@/lib/common/helper/isEmptyString';
 import typeLabels from '@/lib/participants/typeLabels';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -91,10 +87,10 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
     const handleFormSubmit = useCallback(
         async (values: ApplicationFormValues) => {
             clearErrors('root');
-
-            const result = await submitApplicationAction(values, chosenType);
+            const result = await addApplication(values, chosenType);
             
             if (!result.success) {
+
                 setError('root', {
                     message: 'Leider ist beim Absenden ein unerwarteter Fehler aufgetreten. Versuche es bitte später nochmal! Wenn der Fehler bestehen bleibt, dann melde dich gerne bei uns über festival@b-side.ms oder direkt auf Instagram.'
                 });

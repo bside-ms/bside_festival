@@ -65,9 +65,9 @@ const AwarenessEnglishVersion = (): ReactElement => {
                 <div>
                     <ol className="list-outside list-decimal space-y-2 pl-7">
                         <li className="pl-2">
-                            Personal boundaries are individual and subjective. Respecting them is important. Only a clear “Yes” means
-                            “Yes.” When in doubt, ask one time too often rather than too seldom. We also ask you to keep your top on to
-                            avoid putting anyone in an uncomfortable situation.
+                            Personal boundaries are individual and subjective. Respecting them is important. Only a clear “Yes” means “Yes.”
+                            When in doubt, ask one time too often rather than too seldom. We also ask you to keep your top on to avoid
+                            putting anyone in an uncomfortable situation.
                         </li>
                         <li className="pl-2">
                             Boundary violations and discrimination happen everywhere and every day. There is no (public) space free from
@@ -105,8 +105,8 @@ const AwarenessEnglishVersion = (): ReactElement => {
                             questioning it. The needs of the affected person(s) always come first.
                         </li>
                         <li className="pl-2">
-                            Speak to the Awareness Team. They can be recognized by their pink vests. You can also ask at the awareness
-                            info point, at the bar or the stewards about awareness, or call the team.
+                            Speak to the Awareness Team. They can be recognized by their pink vests. You can also ask at the awareness info
+                            point, at the bar or the stewards about awareness, or call the team.
                         </li>
                     </ul>
                     <div className="mt-2">Phone number: 0176 25050139</div>
@@ -121,17 +121,17 @@ const AwarenessEnglishVersion = (): ReactElement => {
                 <div className="mb-1 text-lg font-bold">Children & young people</div>
                 <div className="space-y-2">
                     <div>
-                        There is no explicit child and youth protection concept. The B-Side is not per se a safe space for children and young
-                        people. We ask parents to keep an eye on and supervise their children throughout their visit. Otherwise, the legal
-                        regulations apply:
+                        There is no explicit child and youth protection concept. The B-Side is not per se a safe space for children and
+                        young people. We ask parents to keep an eye on and supervise their children throughout their visit. Otherwise, the
+                        legal regulations apply:
                     </div>
                     <div>
                         <span className="underline">Stay times:</span> Children and young people under 16 may not attend our parties and
-                        concerts unless accompanied and supervised by their parents or a person with parental authority. Young people aged 16
-                        and over may attend our parties and concerts alone until 24:00. If they wish to stay longer, they may do so only when
-                        accompanied by their parents or a person with parental authority who takes responsibility. The person with parental
-                        authority is designated by the parents with a “Mutti-Zettel” (parental consent form). Compliance with the legal stay
-                        times for young people is ensured and guaranteed by security staff.
+                        concerts unless accompanied and supervised by their parents or a person with parental authority. Young people aged
+                        16 and over may attend our parties and concerts alone until 24:00. If they wish to stay longer, they may do so only
+                        when accompanied by their parents or a person with parental authority who takes responsibility. The person with
+                        parental authority is designated by the parents with a “Mutti-Zettel” (parental consent form). Compliance with the
+                        legal stay times for young people is ensured and guaranteed by security staff.
                     </div>
                     <div>
                         <span className="underline">Smoking:</span> Young people under 18 may not smoke in public and may not purchase
