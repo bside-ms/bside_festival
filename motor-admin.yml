@@ -1,0 +1,273 @@
+---
+engine_version: 0.4.21
+file_version: 2026-03-18 00:23:17.769725000 Z
+resources:
+- name: comment
+  preferences:
+    visible: false
+  updated_at: 2026-03-16 23:21:26.702317000 +00:00
+- name: label
+  preferences:
+    visible: false
+  updated_at: 2026-03-16 23:21:29.175964000 +00:00
+- name: link
+  preferences:
+    visible: false
+  updated_at: 2026-03-16 23:21:30.257634000 +00:00
+- name: participant
+  preferences:
+    actions:
+    - name: zusagen_vormerken
+      display_name: Zusagen vormerken
+      action_type: form
+      preferences:
+        form_id: 2
+        show_on_table: true
+    custom_sql: |-
+      SELECT `Participant`.*, 2 / participantCount * 100 AS flinta_quota
+      FROM `Participant`
+    columns:
+    - access_type: hidden
+      name: updatedAt
+    - access_type: hidden
+      name: contactMail
+    - access_type: hidden
+      name: contactPhone
+    - access_type: hidden
+      name: description
+    - access_type: hidden
+      name: motivation
+    - access_type: hidden
+      name: curationScore
+    - access_type: hidden
+      name: curationInfo
+    - access_type: hidden
+      name: address
+    - access_type: hidden
+      name: residence
+    - access_type: hidden
+      name: imageFileName
+    - access_type: hidden
+      name: technicalRider
+    - access_type: hidden
+      name: technicalRiderFileName
+    - access_type: hidden
+      name: additionalInfo
+    - access_type: hidden
+      name: status
+    - access_type: hidden
+      name: updatedDescription
+    - access_type: hidden
+      name: backlineSharing
+    - access_type: hidden
+      name: materialExpenses
+    - access_type: hidden
+      name: allergies
+    - access_type: hidden
+      name: diversityNotes
+    - access_type: hidden
+      name: hasFlintaParticipants
+    - access_type: hidden
+      name: hasMarginalizedParticipants
+    - name: flinta_quota
+      display_name: Flinta quota
+      column_type: percentage
+      access_type: read_only
+      virtual: false
+      format: {}
+      validators: []
+      description: ''
+    - access_type: hidden
+      name: id
+    display_name: Bewerbungen - Bands
+    scopes:
+    - name: bands
+      display_name: Bands
+      scope_type: filter
+      preferences:
+        filter:
+        - type:
+            eq: concert
+    - name: other
+      display_name: Other
+      scope_type: filter
+      preferences:
+        filter:
+        - type:
+            neq: concert
+  updated_at: 2026-03-18 00:11:28.592521000 +00:00
+- name: participant_genre
+  preferences:
+    visible: false
+  updated_at: 2026-03-16 23:21:32.555253000 +00:00
+- name: participant_label
+  preferences:
+    visible: false
+  updated_at: 2026-03-16 23:21:33.229145000 +00:00
+- name: prisma_migration
+  preferences:
+    visible: false
+  updated_at: 2026-03-16 23:21:34.960695000 +00:00
+configs:
+- key: header.links
+  value:
+  - name: "\U0001F60E Motor Admin Pro"
+    path: https://www.getmotoradmin.com/pro
+  - name: "⭐ Star on GitHub"
+    path: https://github.com/motor-admin/motor-admin
+  updated_at: 2026-03-16 22:50:22.924526000 +00:00
+- key: homepage.layout
+  value:
+  - type: dashboard
+    id: 2
+  updated_at: 2026-03-17 23:07:21.708862000 +00:00
+- key: resources.participant.actions.order
+  value:
+  - create
+  - edit
+  - remove
+  - zusagen_vormerken
+  updated_at: 2026-03-17 22:49:14.867972000 +00:00
+- key: resources.participant.columns.order
+  value:
+  - id
+  - name
+  - appliedAt
+  - updatedAt
+  - contactName
+  - flinta_quota
+  - contactMail
+  - contactPhone
+  - description
+  - motivation
+  - curationScore
+  - curationInfo
+  - address
+  - residence
+  - type
+  - imageFileName
+  - technicalRider
+  - technicalRiderFileName
+  - additionalInfo
+  - status
+  - updatedDescription
+  - backlineSharing
+  - materialExpenses
+  - allergies
+  - diversityNotes
+  - hasFlintaParticipants
+  - hasMarginalizedParticipants
+  - participantCount
+  - updatedName
+  updated_at: 2026-03-17 22:48:27.914503000 +00:00
+queries:
+- id: 1
+  name: Hello Query
+  sql_body: SELECT 'Hello there'
+  description:
+  preferences:
+    visualization: value
+  tags: []
+  updated_at: 2026-03-16 22:50:22.927182000 +00:00
+- id: 2
+  name: Flinta quota Query
+  sql_body: |-
+    SELECT type, AVG(3 / participantCount) from Participant
+    GROUP BY type
+  description:
+  preferences:
+    query_type: sql
+    database: Default
+    visualization: bar_chart
+    visualization_options:
+      label_format: percent
+      label_format_options: {}
+      chart_stacked: false
+      chart_values_axis: true
+    variables: []
+  tags: []
+  updated_at: 2026-03-17 23:06:40.955112000 +00:00
+dashboards:
+- id: 1
+  title: Hello Dashboard
+  description:
+  preferences:
+    layout:
+    - title: Hello
+      query_id: 1
+      size: 2x1
+  tags: []
+  updated_at: 2026-03-16 22:50:22.928865000 +00:00
+- id: 2
+  title: Flinta Dashboard
+  description:
+  preferences:
+    layout:
+    - title: Flinta quota Query
+      query_id: 2
+      size: 3x2
+    variables: []
+  tags: []
+  updated_at: 2026-03-17 23:03:20.647004000 +00:00
+forms:
+- id: 1
+  name: Hello Form
+  http_method: POST
+  api_path: "/todos"
+  description:
+  preferences:
+    fields:
+    - display_name: Message
+      name: message
+      field_type: richtext
+      validators:
+      - required: true
+      is_array: false
+  api_config_name: https://jsonplaceholder.typicode.com
+  tags: []
+  updated_at: 2026-03-16 22:50:22.967730000 +00:00
+- id: 2
+  name: Zusagen vormerken Bewerbungen - Band
+  http_method: POST
+  api_path: "/api/motoradmin"
+  description:
+  preferences:
+    fields:
+    - display_name: Bewerbung
+      name: id
+      field_type: reference
+      default_value: ''
+      validators:
+      - required: true
+      reference:
+        model_name: participant
+    request_type: rest
+  api_config_name: 192.168.10.80:3000
+  tags: []
+  updated_at: 2026-03-18 00:23:17.769725000 +00:00
+alerts: []
+api_configs:
+- id: 1
+  name: https://jsonplaceholder.typicode.com
+  url: https://jsonplaceholder.typicode.com
+  preferences: {}
+  description:
+  updated_at: 2026-03-16 22:50:22.966980000 +00:00
+- id: 2
+  name: origin
+  url: "/"
+  preferences: {}
+  description:
+  updated_at: 2026-03-16 22:50:22.971078000 +00:00
+- id: 3
+  name: Next.JS
+  url: http://localhost:3000
+  preferences: {}
+  description:
+  updated_at: 2026-03-17 23:14:09.967405000 +00:00
+- id: 4
+  name: 192.168.10.80:3000
+  url: http://192.168.10.80:3000
+  preferences: {}
+  description:
+  updated_at: 2026-03-17 23:54:54.554827000 +00:00

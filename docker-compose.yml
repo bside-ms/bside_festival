@@ -16,5 +16,27 @@ services:
         volumes:
             - db_test_festival:/var/lib/mysql
 
+    adminpanel:
+        depends_on:
+            - 'admindb'
+        image: 'motoradmin/motoradmin:latest'
+        ports:
+            - '3001:3000'
+        volumes:
+        - '.:/app'
+        environment:
+            SECRET_KEY_BASE: 1e09ef3ccf15c86b13db396cdfd4ffa982ff3a7cbf9ba0ed3fd382f54ba1dd60ca3812ff46263469add77f9c570b202fd5278537cc9d9e1b4185e7a88c947723
+            DATABASE_URL: postgresql://postgres:postgres@admindb:5432/motoradmin
+
+    admindb:
+        image: 'postgres:13.4'
+        volumes:
+            - 'postgres:/var/lib/postgresql/data'
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: motoradmin
+
 volumes:
     db_test_festival:
+    postgres:
