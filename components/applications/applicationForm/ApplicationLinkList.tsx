@@ -1,6 +1,48 @@
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import React, { memo, useCallback } from 'react';
+import { useFieldArray, useFormContext, get } from 'react-hook-form';
 import { HiPlus, HiTrash } from 'react-icons/hi';
 import TextInput from '@/components/form/TextInput';
+
+interface LinkItemProps {
+    index: number;
+    name: string;
+    onRemove: (index: number) => void;
+    error?: { message?: string };
+}
+
+const LinkItem = memo(({ index, name, onRemove, error }: LinkItemProps) => {
+    // This handler is now defined inside the component scope
+    const handleRemove = useCallback(() => {
+        onRemove(index);
+    }, [index, onRemove]);
+
+    return (
+        <div className="flex items-end gap-2 animate-in fade-in slide-in-from-left-1">
+            <div className="flex-1">
+                <TextInput
+                    name={`${name}.${index}.url`}
+                    label={`Link #${index + 1}`}
+                    placeholder="https://..."
+                />
+                {error && (
+                    <span className="text-xs font-medium text-red-600">
+                        {error.message}
+                    </span>
+                )}
+            </div>
+            <button
+                type="button"
+                onClick={handleRemove} // Stable reference, linter is happy!
+                className="mb-1 p-2 text-red-500 transition-colors hover:bg-red-50 rounded"
+                aria-label="Remove link"
+            >
+                <HiTrash className="h-5 w-5" />
+            </button>
+        </div>
+    );
+});
+
+LinkItem.displayName = 'LinkItem';
 
 interface ApplicationLinkListProps {
     name: "publicLinks" | "privateLinks"; // Must match your interface keys
@@ -15,8 +57,13 @@ const ApplicationLinkList = ({ name, title, description, maxItems = 10 }: Applic
         control,
         name: name,
     });
-    const arrayError = errors[name] as any;
+    const arrayError = get(errors, name);
     const rootErrorMessage = arrayError?.message || arrayError?.root?.message;
+
+    // Stable handler for the Add button
+    const handleAppend = useCallback(() => {
+        append({ url: "" });
+    }, [append]);
 
     return (
         <section className="flex flex-col gap-4">
@@ -33,41 +80,21 @@ const ApplicationLinkList = ({ name, title, description, maxItems = 10 }: Applic
 
 
             <div className="flex flex-col gap-3">
-                {fields.map((field, index) => {
-                    const individualError = arrayError?.[index]?.url;
-
-                    return(
-                        <div key={field.id} className="flex items-end gap-2">
-                            <div className="flex-1">
-                                <TextInput
-                                    name={`${name}.${index}.url`}
-                                    label={`Link #${index + 1}`}
-                                    placeholder="https://..."
-                                />
-                                {individualError && (
-                                    <span className="text-xs text-red-600 font-medium">
-                                        {individualError.message}
-                                    </span>
-                                )}
-
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() => remove(index)}
-                                className="mb-1 p-2 text-red-500 hover:bg-red-50 rounded transition-colors"
-                                aria-label="Remove link"
-                            >
-                                <HiTrash className="h-5 w-5" />
-                            </button>
-                        </div>
-                    )
-                })}
+                {fields.map((field, index) => (
+                    <LinkItem
+                        key={field.id}
+                        index={index}
+                        name={name}
+                        onRemove={remove}
+                        error={arrayError?.[index]?.url}
+                    />
+                ))}
             </div>
 
             {fields.length < maxItems && (
                 <button
                     type="button"
-                    onClick={() => append({ url: "" })}
+                    onClick={handleAppend}
                     className="mt-2 flex w-fit items-center gap-2 rounded-md border border-dashed border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 hover:border-gray-400 hover:bg-gray-50"
                 >
                     <HiPlus /> Weiteren Link hinzufügen
