@@ -13,33 +13,36 @@ const linkSchema = z.object({
 
 export const createApplicationSchema = (chosenType: Type) => z.object({
     name: z.string().min(1, "Name ist erforderlich"),
-    contactName: z.string().min(1, "Ansprechperson ist erforderlich"),
-    contactMail: z.email("Ungültige E-Mail-Adresse"),
-    contactPhone: z.string().optional(),
+    encodedImage: z.string().min(1, "Ein Bild ist erforderlich"),
     description: z.string().min(10, "Die Beschreibung ist etwas zu kurz"),
-    motivation: z.string().optional(),
-    additionalInfo: z.string().optional(),
-    residence: z.string().optional(),
-    // Genres
     concertGenres: z.array(z.union([z.string(), z.number()])).optional(),
     diskJockeyGenres: z.array(z.union([z.string(), z.number()])).optional(),
-    // Links
+    durationPreference: z.string().min(1, "Bitte gib an, wie lange du/ihr spielen möchtet."),
+
     publicLinks: z.array(linkSchema),
     privateLinks: z.array(linkSchema)
         .refine(links => links.some(l => l.url.trim().length > 0), {
             message: "Bitte gib uns mindestens einen privaten Link (z.B. ein Video von euch)!",
         }),
-    // Logic for these usually depends on checkboxes, ensure they are boolean or optional
-    participantCount: z.coerce.number().min(1, "Mindestens eine Person muss dabei sein"),
-    hasProfessionalParticipants: z.boolean().default(false),
-    professionalParticipantsCount: z.coerce.number().min(0).default(0),
-    flintaParticipantsCount: z.coerce.number().min(0).default(0),
-    hasMarginalizedParticipants: z.boolean().default(false),
-    diversityNotes: z.string().optional(),
-    allergies: z.string().optional(),
-    encodedImage: z.string().min(1, "Ein Bild ist erforderlich"),
     technicalRider: z.string().optional(),
     encodedTechnicalRiderPdf: z.string().optional(),
+    backlineSharing: z.string().optional(),
+
+    motivation: z.string().optional(),
+    participantCount: z.coerce.number().min(1, "Mindestens eine Person muss dabei sein"),
+    hasMarginalizedParticipants: z.boolean().default(false),
+    flintaParticipantsCount: z.coerce.number().min(0).default(0),
+    hasProfessionalParticipants: z.boolean().default(false),
+    professionalParticipantsCount: z.coerce.number().min(0).default(0),
+    diversityNotes: z.string().optional(),
+    allergies: z.string().optional(),
+    additionalInfo: z.string().optional(),
+
+    contactName: z.string().min(1, "Ansprechperson ist erforderlich"),
+    contactMail: z.email("Ungültige E-Mail-Adresse"),
+    contactPhone: z.string().optional(),
+
+    residence: z.string().optional(),
 }).superRefine((data, ctx) => {
     // Technical Rider Validation Logic
     const riderInfo = getTechnicalRiderInfo(chosenType);

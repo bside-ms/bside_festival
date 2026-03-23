@@ -20,6 +20,7 @@ interface Props<T extends FieldValues> {
     maxLength?: number;
     validate?: (value: string) => string | undefined;
     isDisabled?: boolean;
+    type?: string;
 }
 
 const TextInput = <T extends FieldValues>({
@@ -27,6 +28,7 @@ const TextInput = <T extends FieldValues>({
     name,
     defaultValue,
     info,
+    type="text",
     additionalInfo,
     validate,
     required = false,
@@ -53,7 +55,7 @@ const TextInput = <T extends FieldValues>({
 
             <input
                 id={id}
-                type="text"
+                type={type}
                 defaultValue={defaultValue}
                 className={cn(
                     'rounded border border-black p-2 outline-0 placeholder:opacity-55',

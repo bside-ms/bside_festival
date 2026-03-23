@@ -6,6 +6,7 @@ import {
     ApplicationTypeIntro,
     ApplicationLinkList,
     ApplicationParticipantInfo,
+    ApplicationDurationSelect,
     ImageUpload,
     TechnicalRiderFields
 } from '@/components/applications/applicationForm';
@@ -26,6 +27,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { IoWarning } from 'react-icons/io5';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 // Use Zod to extract the Type automatically
 export type ApplicationFormValues = z.infer<ReturnType<typeof createApplicationSchema>>;
@@ -191,6 +193,8 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                             options={allDiskJockeyGenres.map(({ id, name }) => ({ id, label: name }))}
                         />
                     )}
+
+                    <ApplicationDurationSelect chosenType={chosenType}/>
 
                     <div className="flex flex-col gap-10">
                         <ApplicationLinkList 
