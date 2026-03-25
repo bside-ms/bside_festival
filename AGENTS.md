@@ -23,7 +23,7 @@ When in doubt: if a future agent reading this file would be surprised or misled 
 
 ## Code Style
 
-- **Do not add obvious comments** — comments must explain *why*, not *what*. Never add comments that restate what the code already clearly expresses (e.g. `// Nested Genre Creation` above a genres block, `// Stable handler` above a `useCallback`). Only comment when the reasoning is non-obvious or there's a gotcha that can't be inferred from reading the code.
+- **Do not add obvious comments** — comments must explain _why_, not _what_. Never add comments that restate what the code already clearly expresses (e.g. `// Nested Genre Creation` above a genres block, `// Stable handler` above a `useCallback`). Only comment when the reasoning is non-obvious or there's a gotcha that can't be inferred from reading the code.
 - **Always use arrow functions** — never named function declarations. `const Foo = () => ...` not `function Foo() {}`. This applies to components, helpers, callbacks, server actions — everything.
 - **Prefer lodash** when a utility function exists for the task (`xor`, `range`, `uniq`, `first`, `last`, `filter`, `map`, etc.) over hand-rolled equivalents.
 - **Imports are sorted alphabetically** by prettier-plugin-tailwindcss config. Run `npm run prettier:fix` after every change.
