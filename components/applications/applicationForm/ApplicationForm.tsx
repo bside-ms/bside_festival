@@ -1,65 +1,31 @@
 'use client';
 
-import {
-    ApplicationSuccess,
-    ApplicationTypeImage,
-    ApplicationTypeIntro,
-    ApplicationLinkList,
-    ApplicationParticipantInfo,
-    ApplicationDurationSelect,
-    ImageUpload,
-    TechnicalRiderFields
-} from '@/components/applications/applicationForm';
-import { addApplication } from '@/lib/actions/applicationActions';
-import { createApplicationSchema } from '@/lib/schemas/applicationSchema';
-
+import ApplicationDurationSelect from '@/components/applications/applicationForm/ApplicationDurationSelect';
+import ApplicationLinkList from '@/components/applications/applicationForm/ApplicationLinkList';
+import ApplicationParticipantInfo from '@/components/applications/applicationForm/ApplicationParticipantInfo';
+import ApplicationSuccess from '@/components/applications/applicationForm/ApplicationSuccess';
+import ApplicationTypeImage from '@/components/applications/applicationForm/ApplicationTypeImage';
+import ApplicationTypeIntro from '@/components/applications/applicationForm/ApplicationTypeIntro';
+import ImageUpload from '@/components/applications/applicationForm/ImageUpload';
+import TechnicalRiderFields from '@/components/applications/applicationForm/TechnicalRiderFields';
 import MultiSelectInput from '@/components/form/MultiSelectInput';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
+import { addApplication } from '@/lib/actions/applicationActions';
 import typeLabels from '@/lib/participants/typeLabels';
+import { createApplicationSchema } from '@/lib/schemas/applicationSchema';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Type } from '@prisma/client';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import { useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { IoWarning } from 'react-icons/io5';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-// Use Zod to extract the Type automatically
 export type ApplicationFormValues = z.infer<ReturnType<typeof createApplicationSchema>>;
-
-// export interface ApplicationFormValues {
-//     name: string;
-//     contactName: string;
-//     contactPhone: string;
-//     contactMail: string;
-//     description: string;
-//     concertGenres?: Array<string | number>;
-//     diskJockeyGenres?: Array<string | number>;
-//     encodedImage: string;
-//     motivation: string;
-//     additionalInfo: string;
-//     technicalRider?: string;
-//     encodedTechnicalRiderPdf?: string;
-//     backlineSharing?: string;
-//     materialExpenses?: string;
-//     residence?: string;
-//     participantCount: string;
-//     flintaParticipantsCount: string;
-//     marginalizedParticipantsCount: string;
-//     professionalParticipantsCount: string;
-//     zip_codes: string;
-//     // hasFlintaParticipants: boolean;
-//     // hasMarginalizedParticipants: boolean;
-//     diversityNotes: string;
-//     allergies: string;
-//     publicLinks: { url: string }[];
-//     privateLinks: { url: string }[];
-// }
 
 interface Props {
     chosenType: Type;
@@ -73,16 +39,22 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
     const methods = useForm<ApplicationFormValues>({
         resolver: zodResolver(createApplicationSchema(chosenType)),
         defaultValues: {
-            publicLinks: [{ url: "" }],
-            privateLinks: [{ url: "" }],
+            publicLinks: [{ url: '' }],
+            privateLinks: [{ url: '' }],
             participantCount: 1,
             flintaParticipantsCount: 0,
             professionalParticipantsCount: 0,
             hasProfessionalParticipants: false,
             hasMarginalizedParticipants: false,
-        }
+        },
     });
-    const { handleSubmit, setError, formState: { errors, isSubmitting }, clearErrors, reset } = methods;
+    const {
+        handleSubmit,
+        setError,
+        formState: { errors, isSubmitting },
+        clearErrors,
+        reset,
+    } = methods;
 
     const handleFormReset = useCallback(() => reset(), [reset]);
 
@@ -90,11 +62,11 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
         async (values: ApplicationFormValues) => {
             clearErrors('root');
             const result = await addApplication(values, chosenType);
-            
-            if (!result.success) {
 
+            if (!result.success) {
                 setError('root', {
-                    message: 'Leider ist beim Absenden ein unerwarteter Fehler aufgetreten. Versuche es bitte später nochmal! Wenn der Fehler bestehen bleibt, dann melde dich gerne bei uns über festival@b-side.ms oder direkt auf Instagram.'
+                    message:
+                        'Leider ist beim Absenden ein unerwarteter Fehler aufgetreten. Versuche es bitte später nochmal! Wenn der Fehler bestehen bleibt, dann melde dich gerne bei uns über festival@b-side.ms oder direkt auf Instagram.',
                 });
                 return;
             }
@@ -138,7 +110,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
 
                     <div className="rounded-md bg-yellow-50 p-4">
                         <div className="flex">
-                            <div className="flex-shrink-0">
+                            <div className="shrink-0">
                                 <IoWarning className="h-5 w-5 text-yellow-400" />
                             </div>
                             <div className="ml-3">
@@ -194,21 +166,21 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         />
                     )}
 
-                    <ApplicationDurationSelect chosenType={chosenType}/>
+                    <ApplicationDurationSelect chosenType={chosenType} />
 
                     <div className="flex flex-col gap-10">
-                        <ApplicationLinkList 
-                            name="publicLinks" 
-                            title="Öffentliche Präsenz" 
-                            description="Wo können Besucher*innen mehr über euch erfahren? (Insta, Web, Spotify)" 
-                            maxItems={10} 
+                        <ApplicationLinkList
+                            name="publicLinks"
+                            title="Öffentliche Präsenz"
+                            description="Wo können Besucher*innen mehr über euch erfahren? (Insta, Web, Spotify)"
+                            maxItems={10}
                         />
 
-                        <ApplicationLinkList 
-                            name="privateLinks" 
-                            title="Internes Material" 
+                        <ApplicationLinkList
+                            name="privateLinks"
+                            title="Internes Material"
                             description="Videos von Jams, Cloud-Ordner oder andere Informationen für unser Programm-Team."
-                            maxItems={10} 
+                            maxItems={10}
                         />
                     </div>
 

@@ -1,5 +1,6 @@
 'use server';
 
+import { ApplicationFormValues } from '@/components/applications/applicationForm/ApplicationForm';
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import prismaClient from '@/lib/common/prismaClient';
 import sendApplicationConfirmationMail from '@/lib/mail/sendApplicationConfirmationMail';
@@ -10,34 +11,19 @@ import allowedTechnicalRiderMaxFileSize from '@/lib/upload/allowedTechnicalRider
 import uploadFileToIonos from '@/lib/upload/uploadFileToIonos';
 import { Type, type ApplicationStatus } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
-import { ApplicationFormValues } from '@/components/applications/applicationForm/ApplicationForm';
 
 export async function addApplication(values: ApplicationFormValues, chosenType: Type) {
     try {
-        // 1. Handle File Uploads (Ionos)
-        const imageFileName = await uploadFileToIonos(
-            values.encodedImage, 
-            allowedImageContentTypes, 
-            allowedImageMaxFileSize
-        );
+        const imageFileName = await uploadFileToIonos(values.encodedImage, allowedImageContentTypes, allowedImageMaxFileSize);
 
-        const technicalRiderFileName = values.encodedTechnicalRiderPdf 
-            ? await uploadFileToIonos(
-                values.encodedTechnicalRiderPdf,
-                [allowedTechnicRiderContentType],
-                allowedTechnicalRiderMaxFileSize,
-              )
+        const technicalRiderFileName = values.encodedTechnicalRiderPdf
+            ? await uploadFileToIonos(values.encodedTechnicalRiderPdf, [allowedTechnicRiderContentType], allowedTechnicalRiderMaxFileSize)
             : null;
 
-        const publicLinks = values.publicLinks
-            .map(l => l.url)
-            .filter(url => url.trim() !== "");
-            
-        const privateLinks = values.privateLinks
-            .map(l => l.url)
-            .filter(url => url.trim() !== "");
+        const publicLinks = values.publicLinks.map((l) => l.url).filter((url) => url.trim() !== '');
 
-        // 3. Database Transaction with Prisma
+        const privateLinks = values.privateLinks.map((l) => l.url).filter((url) => url.trim() !== '');
+
         const newParticipant = await prismaClient.participant.create({
             data: {
                 type: chosenType,
@@ -53,7 +39,6 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
                 imageFileName,
                 technicalRiderFileName,
                 backlineSharing: values.backlineSharing ?? null,
-                materialExpenses: values.materialExpenses ?? null,
                 participantCount: values.participantCount,
                 flintaParticipantsCount: values.flintaParticipantsCount,
                 hasMarginalizedParticipants: values.hasMarginalizedParticipants,
@@ -61,51 +46,48 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
                 diversityNotes: values.diversityNotes,
                 allergies: values.allergies,
 
-                // Nested Genre Creation
                 genres: {
                     create: [
-                        ...(values.concertGenres ?? []).map((genre) => 
-                            typeof genre === 'number' 
-                                ? { genre: { connect: { id: genre } } } 
-                                : { genre: { create: { type: Type.Concert, name: genre } } }
+                        ...(values.concertGenres ?? []).map((genre) =>
+                            typeof genre === 'number'
+                                ? { genre: { connect: { id: genre } } }
+                                : { genre: { create: { type: Type.Concert, name: genre } } },
                         ),
-                        ...(values.diskJockeyGenres ?? []).map((genre) => 
-                            typeof genre === 'number' 
-                                ? { genre: { connect: { id: genre } } } 
-                                : { genre: { create: { type: Type.DiskJockey, name: genre } } }
+                        ...(values.diskJockeyGenres ?? []).map((genre) =>
+                            typeof genre === 'number'
+                                ? { genre: { connect: { id: genre } } }
+                                : { genre: { create: { type: Type.DiskJockey, name: genre } } },
                         ),
                     ],
                 },
                 links: {
                     create: [
-                        ...publicLinks.map(link => ({ link, isConfidential: false })),
-                        ...privateLinks.map(link => ({ link, isConfidential: true }))
-                    ]
+                        ...publicLinks.map((link) => ({ link, isConfidential: false })),
+                        ...privateLinks.map((link) => ({ link, isConfidential: true })),
+                    ],
                 },
                 appliedAt: new Date(),
             },
         });
 
-        // 4. Send Confirmation Email
         if (isNotEmptyString(newParticipant.contactMail)) {
-            // We pass the filtered links so they appear in the email
-            await sendApplicationConfirmationMail(
+            sendApplicationConfirmationMail(
                 {
                     ...newParticipant,
                     contactMail: newParticipant.contactMail,
                 },
-                publicLinks, privateLinks
+                publicLinks,
+                privateLinks,
             );
         }
 
         return { success: true };
-
     } catch (error) {
-        console.error("Submission Error:", error);
+        console.error('Submission Error:', error);
         // We throw or return an error object to be caught by the Client Component
-        return { 
-            success: false, 
-            message: error instanceof Error ? error.message : "An unexpected error occurred." 
+        return {
+            success: false,
+            message: error instanceof Error ? error.message : 'An unexpected error occurred.',
         };
     }
 }

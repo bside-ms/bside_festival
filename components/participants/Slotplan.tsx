@@ -54,7 +54,6 @@ const Slotplan = ({ initialDayFilter }: { initialDayFilter?: string }): ReactEle
         [fridayBoundaryStart, fridayBoundaryEnd, saturdayBoundaryStart, saturdayBoundaryEnd, slots, setFilteredDateRange],
     );
 
-    // Default to Friday range on first load if no range selected
     useEffect(() => {
         if (filteredDateRange === null) {
             if (initialDayFilter === 'friday' || initialDayFilter === 'saturday') {
@@ -157,7 +156,7 @@ const Slotplan = ({ initialDayFilter }: { initialDayFilter?: string }): ReactEle
             </div>
             <div className="relative inline-block w-full">
                 {/* Sticky header row for location names */}
-                <div className="sticky top-0 z-30 flex bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+                <div className="sticky top-0 z-30 flex bg-white/90 backdrop-blur supports-backdrop-filter:bg-white/60">
                     {/* Time gutter spacer */}
                     <div className="w-16 shrink-0 border-b border-gray-200" />
                     {locationsWithSlots.map((location) => (
@@ -168,7 +167,7 @@ const Slotplan = ({ initialDayFilter }: { initialDayFilter?: string }): ReactEle
                 </div>
                 <div className="flex">
                     {/* Time gutter with sticky header and ticks */}
-                    <div className="sticky left-0 z-20 w-16 shrink-0 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+                    <div className="sticky left-0 z-20 w-16 shrink-0 bg-white/90 backdrop-blur supports-backdrop-filter:bg-white/60">
                         <div className="relative" style={{ height: `${heightPx + HEADER_PX}px` }}>
                             {timeTicks.map((tick) => {
                                 const top = differenceInMinutes(tick, rangeStart ?? new Date()) * PX_PER_MINUTE + HEADER_PX;

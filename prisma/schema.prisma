@@ -8,6 +8,7 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+
 model Participant {
     id                          Int                @id @default(autoincrement())
     name                        String             @db.Text
@@ -28,7 +29,6 @@ model Participant {
     technicalRider              String?            @db.Text
     technicalRiderFileName      String?            @db.Text
     backlineSharing             String?            @db.Text
-    materialExpenses            String?            @db.Text
     additionalInfo              String?            @db.Text
     participantCount            Int                @default(1)
     allergies                   String?            @db.Text

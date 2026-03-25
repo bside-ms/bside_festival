@@ -7,7 +7,7 @@ import type { Participant } from '@prisma/client';
 const generateApplicationContent = (
     application: Omit<Participant, 'contactMail'> & { contactMail: string },
     publicLinks: Array<string>,
-    privateLinks: Array<string>
+    privateLinks: Array<string>,
 ): string => {
     const {
         type,
@@ -23,9 +23,7 @@ const generateApplicationContent = (
         technicalRider,
         technicalRiderFileName,
         backlineSharing,
-        materialExpenses,
         participantCount,
-        hasFlintaParticipants,
         hasMarginalizedParticipants,
         diversityNotes,
         allergies,
@@ -35,8 +33,7 @@ const generateApplicationContent = (
         `<strong>Typ:</strong><br>${typeLabels[type]}`,
         `<strong>Name:</strong><br>${name}`,
         isNotEmptyString(description) && `<strong>Beschreibung:</strong><br>${description}`,
-        isNotEmptyString(participantCount) && `<strong>Personenanzahl:</strong><br>${participantCount}`,
-        hasFlintaParticipants && `<strong>FLINTA* Personen:</strong><br>ja`,
+        `<strong>Personenanzahl:</strong><br>${participantCount}`,
         hasMarginalizedParticipants && `<strong>Personen marginalisierter Gruppen:</strong><br>ja`,
         isNotEmptyString(diversityNotes) && `<strong>Diversität:</strong><br>${diversityNotes}`,
         isNotEmptyString(allergies) && `<strong>Allergien:</strong><br>${allergies}`,
@@ -45,7 +42,6 @@ const generateApplicationContent = (
         (isNotEmptyString(technicalRider) || isNotEmptyString(technicalRiderFileName)) &&
             `<strong>Technical Rider:</strong><br>${technicalRider ?? ''}<br>${technicalRiderFileName ? '(PDF bereitgestellt)' : ''}`,
         isNotEmptyString(backlineSharing) && `<strong>Backline-Sharing:</strong><br>${backlineSharing}`,
-        isNotEmptyString(materialExpenses) && `<strong>Materialkosten:</strong><br>${materialExpenses}`,
         publicLinks.length > 0 && `<strong>öffentliche Links:</strong><br>${publicLinks.map((l) => `${l}`).join('<br>')}`,
         privateLinks.length > 0 && `<strong>private Links:</strong><br>${privateLinks.map((l) => `${l}`).join('<br>')}`,
         isNotEmptyString(contactName) && `<strong>Ansprechperson:</strong><br>${contactName}`,
@@ -72,7 +68,8 @@ const generateApplicationContent = (
 
 const sendApplicationConfirmationMail = (
     application: Omit<Participant, 'contactMail'> & { contactMail: string },
-    publicLinks: Array<string>, privateLinks: Array<string>
+    publicLinks: Array<string>,
+    privateLinks: Array<string>,
 ): void => {
     const title = 'B-Side Festival 2025 - Bewerbungsbestätigung';
     const content = generateApplicationContent(application, publicLinks, privateLinks);
