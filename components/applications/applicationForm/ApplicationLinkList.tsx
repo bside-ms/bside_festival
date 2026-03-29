@@ -32,7 +32,6 @@ const LinkItem = memo(({ index, name, onRemove, error }: LinkItemProps) => {
         </div>
     );
 });
-
 LinkItem.displayName = 'LinkItem';
 
 interface ApplicationLinkListProps {

@@ -6,6 +6,7 @@ import ApplicationParticipantInfo from '@/components/applications/applicationFor
 import ApplicationSuccess from '@/components/applications/applicationForm/ApplicationSuccess';
 import ApplicationTypeImage from '@/components/applications/applicationForm/ApplicationTypeImage';
 import ApplicationTypeIntro from '@/components/applications/applicationForm/ApplicationTypeIntro';
+import ApplicationZipcodes from '@/components/applications/applicationForm/ApplicationZipcodes';
 import ImageUpload from '@/components/applications/applicationForm/ImageUpload';
 import TechnicalRiderFields from '@/components/applications/applicationForm/TechnicalRiderFields';
 import MultiSelectInput from '@/components/form/MultiSelectInput';
@@ -42,6 +43,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
             publicLinks: [{ url: '' }],
             privateLinks: [{ url: '' }],
             participantCount: 1,
+            participantZipcodes: [{ code: "", isInternational: false }],
             flintaParticipantsCount: 0,
             professionalParticipantsCount: 0,
             hasProfessionalParticipants: false,
@@ -202,12 +204,11 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                     <TextArea<ApplicationFormValues>
                         name="motivation"
                         label="Motivation"
-                        info="Warum möchtet ihr Teil des B-Side Festivals 2025 sein?"
+                        info="Warum möchtet ihr Teil des B-Side Festivals 2026 sein?"
                     />
 
                     <ApplicationParticipantInfo />
-
-                    <TextArea<ApplicationFormValues> name="diversityNotes" label="Anmerkungen zur Diversität" rows={2} />
+                    <ApplicationZipcodes />
 
                     <TextInput<ApplicationFormValues>
                         name="allergies"

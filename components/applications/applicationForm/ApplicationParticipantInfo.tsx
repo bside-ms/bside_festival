@@ -1,7 +1,9 @@
 import Checkbox from '@/components/form/Checkbox';
+import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
 import { useFormContext } from 'react-hook-form';
 import { IoInformationCircleOutline } from 'react-icons/io5';
+import { ApplicationFormValues } from './ApplicationForm';
 
 const ApplicationParticipantInfo = () => {
     const { watch } = useFormContext();
@@ -30,6 +32,7 @@ const ApplicationParticipantInfo = () => {
             </div>
 
             <Checkbox name="hasMarginalizedParticipants" label="Es sind Personen anderer marginalisierter Gruppen beteiligt?" />
+            <TextArea<ApplicationFormValues> name="diversityNotes" label="Anmerkungen zur Diversität" rows={2} />
 
             <TextInput
                 name="flintaParticipantsCount"
@@ -38,7 +41,7 @@ const ApplicationParticipantInfo = () => {
                 type="number"
                 required={true}
             />
-
+    
             <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
                     <Checkbox name="hasProfessionalParticipants" label="Arbeiten einige von euch als professionelle Künstler*innen?" />

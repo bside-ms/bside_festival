@@ -12,6 +12,22 @@ const linkSchema = z.object({
         }),
 });
 
+const zipcodeSchema = z.object({
+    code: z.string().trim(),
+    isInternational: z.boolean(),
+}).refine((data) => {
+    if (!data.isInternational) {
+        // German Zipcode Regex: 5 digits
+        // TODO: Refine this
+        return /^\d{5}$/.test(data.code);
+    }
+    // For international, just ensure it's not empty
+    return data.code.length > 0;
+}, {
+    message: "Bitte gültige PLZ (5 Stellen) oder Land angeben",
+    path: [ "code" ]
+});
+
 export const createApplicationSchema = (chosenType: Type) =>
     z
         .object({
@@ -36,6 +52,8 @@ export const createApplicationSchema = (chosenType: Type) =>
             flintaParticipantsCount: z.number().min(0),
             hasProfessionalParticipants: z.boolean(),
             professionalParticipantsCount: z.number().min(0),
+            participantZipcodes: z.array(zipcodeSchema),
+
             diversityNotes: z.string().optional(),
             allergies: z.string().optional(),
             additionalInfo: z.string().optional(),
