@@ -4,11 +4,11 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-    title: 'B-Side Festival 2025',
-    description: 'B-Side Festival 2025',
+    title: 'B-Side Festival 2026',
+    description: 'B-Side Festival 2026',
     openGraph: {
-        title: 'B-Side Festival 2025',
-        description: 'B-Side Festival 2025',
+        title: 'B-Side Festival 2026',
+        description: 'B-Side Festival 2026',
         images: ['https://festival.b-side.ms/assets/images/festival/19-537-min.jpg'],
         type: 'website',
         locale: 'de_DE',

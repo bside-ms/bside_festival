@@ -228,7 +228,9 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                     <TextInput<ApplicationFormValues> name="contactMail" label="E-Mail-Adresse" required={true} />
 
                     <TextInput<ApplicationFormValues> name="contactPhone" label="Telefonnummer" />
-
+                    <div className="-mt-6 flex flex gap-2 text-sm">
+                        <b>Hinweis:</b> Spätestens wenn wir dich buchen benötigen wir eine Telefonnummer für kurzfristige Rückfragen vor dem Festival.
+                    </div>
                     {chosenType !== Type.Neighbor && <TextInput<ApplicationFormValues> name="residence" label="Wohnort" />}
 
                     <label className="block w-full bg-black p-1">
@@ -254,7 +256,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
 
                     <div className="mt-5 flex flex-col gap-2 text-sm">
                         <div>
-                            Das B-Side Festival ist auch 2025 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
+                            Das B-Side Festival ist auch 2026 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
                             insbesondere Räume und Bühnen für FLINTA* und andere marginalisierte Gesellschaftsgruppen schaffen.
                         </div>
                         <div>

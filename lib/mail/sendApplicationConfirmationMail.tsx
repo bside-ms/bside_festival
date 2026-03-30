@@ -71,7 +71,7 @@ const sendApplicationConfirmationMail = (
     publicLinks: Array<string>,
     privateLinks: Array<string>,
 ): void => {
-    const title = 'B-Side Festival 2025 - Bewerbungsbestätigung';
+    const title = 'B-Side Festival 2026 - Bewerbungsbestätigung';
     const content = generateApplicationContent(application, publicLinks, privateLinks);
     const html = createMailHtml(content);
 
