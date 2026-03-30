@@ -21,7 +21,6 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
             : null;
 
         const publicLinks = values.publicLinks.map((l) => l.url).filter((url) => url.trim() !== '');
-
         const privateLinks = values.privateLinks.map((l) => l.url).filter((url) => url.trim() !== '');
 
         const newParticipant = await prismaClient.participant.create({
@@ -58,6 +57,13 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
                                 ? { genre: { connect: { id: genre } } }
                                 : { genre: { create: { type: Type.DiskJockey, name: genre } } },
                         ),
+                    ],
+                },
+                zipcodes: {
+                    create: [
+                        ...(values.participantZipcodes ?? []).map((pz) => (
+                            { code: pz.code, isInternational: pz.isInternational }
+                        )),
                     ],
                 },
                 links: {

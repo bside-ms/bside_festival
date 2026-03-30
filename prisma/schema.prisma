@@ -37,6 +37,7 @@ model Participant {
     hasMarginalizedParticipants Boolean            @default(false)
     durationPreference          String?            @db.Text
     diversityNotes              String?            @db.Text
+    zipcodes                    Zipcode[]
     links                       Link[]
     comments                    Comment[]
     labels                      ParticipantLabel[]
@@ -45,6 +46,14 @@ model Participant {
     status                      ApplicationStatus  @default(Applied)
     Slot                        Slot[]
     Venue                       Venue[]
+}
+
+model Zipcode {
+    id              Int         @id @default(autoincrement())
+    participant     Participant @relation(fields: [participantId], references: [id])
+    participantId   Int
+    code            String      @db.Text
+    isInternational Boolean     @default(false)
 }
 
 model Link {

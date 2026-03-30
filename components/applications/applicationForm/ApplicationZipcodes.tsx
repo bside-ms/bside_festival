@@ -50,7 +50,10 @@ const ApplicationZipcodes = () => {
         const currentLength = fields.length;
         if (totalCount > currentLength) {
             for (let i = 0; i < totalCount - currentLength; i++) {
-                append({ code: "", isInternational: false });
+                append(
+                    { code: "", isInternational: false },
+                    { shouldFocus: false }
+                );
             }
         } else if (totalCount < currentLength) {
             for (let i = 0; i < currentLength - totalCount; i++) {
