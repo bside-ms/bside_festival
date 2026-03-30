@@ -1,8 +1,8 @@
 'use server';
 
 import prismaClient from '@/lib/common/prismaClient';
-import { Participant } from '@prisma/client';
 import sendApplicationConfirmationMail from '@/lib/mail/sendApplicationConfirmationMail';
+import { Participant } from '@prisma/client';
 
 export async function createVerification(participant: Participant) {
     try {
@@ -12,15 +12,15 @@ export async function createVerification(participant: Participant) {
                 token: token,
                 expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
                 participant: {
-                    connect: { id: participant.id }
-                }
-            }
+                    connect: { id: participant.id },
+                },
+            },
         });
 
         sendApplicationConfirmationMail(participant, newVerification.token);
 
         return {
-            token: newVerification.token
+            token: newVerification.token,
         };
     } catch (error) {
         console.error('Verification Error:', error);
@@ -34,7 +34,7 @@ export async function createVerification(participant: Participant) {
 export async function checkVerification(token: string) {
     try {
         const emailVerification = await prismaClient.emailVerificationToken.findFirst({
-            where: { token }
+            where: { token },
         });
 
         if (!emailVerification) {
@@ -46,7 +46,7 @@ export async function checkVerification(token: string) {
         }
 
         const participant = await prismaClient.participant.findUnique({
-            where: { id: emailVerification.participantId }
+            where: { id: emailVerification.participantId },
         });
 
         if (participant?.emailVerified) {
@@ -55,7 +55,7 @@ export async function checkVerification(token: string) {
 
         await prismaClient.participant.update({
             where: { id: emailVerification.participantId },
-            data: { emailVerified: new Date() }
+            data: { emailVerified: new Date() },
         });
 
         return { success: true };

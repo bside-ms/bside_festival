@@ -41,7 +41,7 @@ const ApplicationParticipantInfo = () => {
                 type="number"
                 required={true}
             />
-    
+
             <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
                     <Checkbox name="hasProfessionalParticipants" label="Arbeiten einige von euch als professionelle Künstler*innen?" />

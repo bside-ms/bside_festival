@@ -1,6 +1,5 @@
-import type { ReactElement } from 'react';
 import { checkVerification } from '@/lib/actions/emailConfirmationActions';
-
+import type { ReactElement } from 'react';
 
 export default async ({ params }: { params: Promise<{ token: string }> }): Promise<ReactElement> => {
     const { token } = await params;

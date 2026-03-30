@@ -1,13 +1,13 @@
 'use server';
 
 import { ApplicationFormValues } from '@/components/applications/applicationForm/ApplicationForm';
+import { createVerification } from '@/lib/actions/emailConfirmationActions';
 import prismaClient from '@/lib/common/prismaClient';
 import allowedImageContentTypes from '@/lib/upload/allowedImageContentTypes';
 import allowedImageMaxFileSize from '@/lib/upload/allowedImageMaxFileSize';
 import allowedTechnicRiderContentType from '@/lib/upload/allowedTechnicRiderContentType';
 import allowedTechnicalRiderMaxFileSize from '@/lib/upload/allowedTechnicalRiderMaxFileSize';
 import uploadFileToIonos from '@/lib/upload/uploadFileToIonos';
-import { createVerification } from '@/lib/actions/emailConfirmationActions';
 import { Type, type ApplicationStatus } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
@@ -59,11 +59,7 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
                     ],
                 },
                 zipcodes: {
-                    create: [
-                        ...(values.participantZipcodes ?? []).map((pz) => (
-                            { code: pz.code, isInternational: pz.isInternational }
-                        )),
-                    ],
+                    create: [...(values.participantZipcodes ?? []).map((pz) => ({ code: pz.code, isInternational: pz.isInternational }))],
                 },
                 links: {
                     create: [
@@ -77,7 +73,7 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
         createVerification(newParticipant);
 
         return {
-            id: newParticipant.id
+            id: newParticipant.id,
         };
     } catch (error) {
         console.error('Submission Error:', error);

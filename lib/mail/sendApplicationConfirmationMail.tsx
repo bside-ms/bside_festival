@@ -5,10 +5,7 @@ import typeLabels from '@/lib/participants/typeLabels';
 import type { Participant } from '@prisma/client';
 import prisma from '../common/prismaClient';
 
-const generateApplicationContent = async (
-    application: Participant,
-    token: string
-): Promise<string> => {
+const generateApplicationContent = async (application: Participant, token: string): Promise<string> => {
     const {
         id,
         type,
@@ -27,13 +24,13 @@ const generateApplicationContent = async (
         participantCount,
         hasMarginalizedParticipants,
         diversityNotes,
-        allergies
+        allergies,
     } = application;
 
     const links = await prisma.link.findMany({
         where: {
-            participantId: id
-        }
+            participantId: id,
+        },
     });
     const publicLinks = links.filter((l) => !l.isConfidential).map((l) => l.link);
     const privateLinks = links.filter((l) => l.isConfidential).map((l) => l.link);
@@ -60,7 +57,7 @@ const generateApplicationContent = async (
         isNotEmptyString(residence) && `<strong>Wohnort:</strong><br>${residence}`,
     ].filter(Boolean);
 
-    const formatParticipantId = `2026-${id.toString().padStart(5, '0')}`;       
+    const formatParticipantId = `2026-${id.toString().padStart(5, '0')}`;
 
     return `
     <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">Vielen Dank für eure Bewerbung und euer Interesse, Teil des diesjährigen B-Side Festivals zu sein.</p>
@@ -80,10 +77,7 @@ const generateApplicationContent = async (
   `;
 };
 
-const sendApplicationConfirmationMail = async (
-    application: Participant,
-    token: string
-): Promise<void> => {
+const sendApplicationConfirmationMail = async (application: Participant, token: string): Promise<void> => {
     const title = 'B-Side Festival 2026 - Bewerbungsbestätigung';
     const content = await generateApplicationContent(application, token);
     const html = createMailHtml(content);

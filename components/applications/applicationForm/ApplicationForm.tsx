@@ -43,7 +43,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
             publicLinks: [{ url: '' }],
             privateLinks: [{ url: '' }],
             participantCount: 1,
-            participantZipcodes: [{ code: "", isInternational: false }],
+            participantZipcodes: [{ code: '', isInternational: false }],
             flintaParticipantsCount: 0,
             professionalParticipantsCount: 0,
             hasProfessionalParticipants: false,
@@ -228,8 +228,9 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                     <TextInput<ApplicationFormValues> name="contactMail" label="E-Mail-Adresse" required={true} />
 
                     <TextInput<ApplicationFormValues> name="contactPhone" label="Telefonnummer" />
-                    <div className="-mt-6 flex flex gap-2 text-sm">
-                        <b>Hinweis:</b> Spätestens wenn wir dich buchen benötigen wir eine Telefonnummer für kurzfristige Rückfragen vor dem Festival.
+                    <div className="-mt-6 flex gap-2 text-sm">
+                        <b>Hinweis:</b> Spätestens wenn wir dich buchen benötigen wir eine Telefonnummer für kurzfristige Rückfragen vor dem
+                        Festival.
                     </div>
                     {chosenType !== Type.Neighbor && <TextInput<ApplicationFormValues> name="residence" label="Wohnort" />}
 
