@@ -13,7 +13,7 @@ const createMailTransport = (): Mail<SentMessageInfo> => {
     const transportOptions: SMTPTransport.Options = {
         host: process.env.MAIL_HOST,
         port: Number(process.env.MAIL_PORT),
-        secure: true,
+        secure: ['true', 'True', '1'].includes(process.env.MAIL_INSECURE ?? '') ? false : true,
         auth: {
             user: process.env.MAIL_USER,
             pass: process.env.MAIL_PASSWORD,
