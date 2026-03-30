@@ -1,14 +1,13 @@
 'use server';
 
 import { ApplicationFormValues } from '@/components/applications/applicationForm/ApplicationForm';
-import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import prismaClient from '@/lib/common/prismaClient';
-import sendApplicationConfirmationMail from '@/lib/mail/sendApplicationConfirmationMail';
 import allowedImageContentTypes from '@/lib/upload/allowedImageContentTypes';
 import allowedImageMaxFileSize from '@/lib/upload/allowedImageMaxFileSize';
 import allowedTechnicRiderContentType from '@/lib/upload/allowedTechnicRiderContentType';
 import allowedTechnicalRiderMaxFileSize from '@/lib/upload/allowedTechnicalRiderMaxFileSize';
 import uploadFileToIonos from '@/lib/upload/uploadFileToIonos';
+import { createVerification } from '@/lib/actions/emailConfirmationActions';
 import { Type, type ApplicationStatus } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
@@ -75,24 +74,16 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
                 appliedAt: new Date(),
             },
         });
+        createVerification(newParticipant);
 
-        if (isNotEmptyString(newParticipant.contactMail)) {
-            sendApplicationConfirmationMail(
-                {
-                    ...newParticipant,
-                    contactMail: newParticipant.contactMail,
-                },
-                publicLinks,
-                privateLinks,
-            );
-        }
-
-        return { success: true };
+        return {
+            id: newParticipant.id
+        };
     } catch (error) {
         console.error('Submission Error:', error);
         // We throw or return an error object to be caught by the Client Component
         return {
-            success: false,
+            id: null,
             message: error instanceof Error ? error.message : 'An unexpected error occurred.',
         };
     }

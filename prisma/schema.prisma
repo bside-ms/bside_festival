@@ -8,7 +8,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-
 model Participant {
     id                          Int                @id @default(autoincrement())
     name                        String             @db.Text
@@ -16,7 +15,7 @@ model Participant {
     appliedAt                   DateTime?
     updatedAt                   DateTime           @updatedAt
     contactName                 String?            @db.Text
-    contactMail                 String?            @db.Text
+    contactMail                 String             @db.Text
     contactPhone                String?            @db.Text
     description                 String?            @db.Text
     updatedDescription          String?            @db.Text
@@ -37,6 +36,8 @@ model Participant {
     hasMarginalizedParticipants Boolean            @default(false)
     durationPreference          String?            @db.Text
     diversityNotes              String?            @db.Text
+    emailVerified               DateTime?
+    verificationTokens          EmailVerificationToken[]
     zipcodes                    Zipcode[]
     links                       Link[]
     comments                    Comment[]
@@ -46,6 +47,14 @@ model Participant {
     status                      ApplicationStatus  @default(Applied)
     Slot                        Slot[]
     Venue                       Venue[]
+}
+
+model EmailVerificationToken {
+    id              Int         @id @default(autoincrement())
+    participant     Participant @relation(fields: [participantId], references: [id])
+    participantId   Int
+    token           String      @unique
+    expires         DateTime
 }
 
 model Zipcode {

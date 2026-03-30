@@ -35,7 +35,7 @@ interface Props {
 }
 
 const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: Props): ReactElement => {
-    const [wasSuccessfullySubmitted, setWasSuccessfullySubmitted] = useState(false);
+    const [submittedRecordId, setSubmittedRecordId] = useState<number | null>(null);
 
     const methods = useForm<ApplicationFormValues>({
         resolver: zodResolver(createApplicationSchema(chosenType)),
@@ -65,7 +65,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
             clearErrors('root');
             const result = await addApplication(values, chosenType);
 
-            if (!result.success) {
+            if (!result.id) {
                 setError('root', {
                     message:
                         'Leider ist beim Absenden ein unerwarteter Fehler aufgetreten. Versuche es bitte später nochmal! Wenn der Fehler bestehen bleibt, dann melde dich gerne bei uns über festival@b-side.ms oder direkt auf Instagram.',
@@ -74,14 +74,14 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
             }
 
             window.scrollTo({ top: 0 });
-            setWasSuccessfullySubmitted(true);
+            setSubmittedRecordId(result.id);
             handleFormReset();
         },
         [chosenType, clearErrors, handleFormReset, setError],
     );
 
-    if (wasSuccessfullySubmitted) {
-        return <ApplicationSuccess />;
+    if (submittedRecordId) {
+        return <ApplicationSuccess participantId={submittedRecordId} />;
     }
 
     return (

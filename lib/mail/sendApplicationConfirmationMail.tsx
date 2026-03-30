@@ -3,13 +3,14 @@ import createMailHtml from '@/lib/mail/createMailHtml';
 import sendMail from '@/lib/mail/sendMail';
 import typeLabels from '@/lib/participants/typeLabels';
 import type { Participant } from '@prisma/client';
+import prisma from '../common/prismaClient';
 
-const generateApplicationContent = (
-    application: Omit<Participant, 'contactMail'> & { contactMail: string },
-    publicLinks: Array<string>,
-    privateLinks: Array<string>,
-): string => {
+const generateApplicationContent = async (
+    application: Participant,
+    token: string
+): Promise<string> => {
     const {
+        id,
         type,
         description,
         name,
@@ -26,8 +27,16 @@ const generateApplicationContent = (
         participantCount,
         hasMarginalizedParticipants,
         diversityNotes,
-        allergies,
+        allergies
     } = application;
+
+    const links = await prisma.link.findMany({
+        where: {
+            participantId: id
+        }
+    });
+    const publicLinks = links.filter((l) => !l.isConfidential).map((l) => l.link);
+    const privateLinks = links.filter((l) => l.isConfidential).map((l) => l.link);
 
     const sections = [
         `<strong>Typ:</strong><br>${typeLabels[type]}`,
@@ -51,8 +60,13 @@ const generateApplicationContent = (
         isNotEmptyString(residence) && `<strong>Wohnort:</strong><br>${residence}`,
     ].filter(Boolean);
 
+    const formatParticipantId = `2026-${id.toString().padStart(5, '0')}`;       
+
     return `
     <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">Vielen Dank für eure Bewerbung und euer Interesse, Teil des diesjährigen B-Side Festivals zu sein.</p>
+    <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">Bitte bestätige deine E-Mail Adresse unter folgendem Link: <a href="${process.env.APP_URL}/bewerbungen/confirm/${token}" style="color: #000; text-decoration: underline;">Bestätigen</a></p>
+    <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">Bei Fragen zur Bewerbung können ihr euch per Mail an uns wenden unter festival@b-side.ms mit eurer Bewerbernummer im Betreff "${formatParticipantId}". Bitte versucht nicht uns bezüglich Festival-Orga über Social Media zu erreichen - E-Mail ist der Weg. Der Eine. Wenn wir nicht antworten haben die ehrenamtlichen Mitarbeiter keine Zeit gefunden. Wir bitten um Verständniss</p>
+</p>
 
     <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 0 20px;">
       Hier eine kurze Zusammenfassung eurer Bewerbung:
@@ -66,16 +80,15 @@ const generateApplicationContent = (
   `;
 };
 
-const sendApplicationConfirmationMail = (
-    application: Omit<Participant, 'contactMail'> & { contactMail: string },
-    publicLinks: Array<string>,
-    privateLinks: Array<string>,
-): void => {
+const sendApplicationConfirmationMail = async (
+    application: Participant,
+    token: string
+): Promise<void> => {
     const title = 'B-Side Festival 2026 - Bewerbungsbestätigung';
-    const content = generateApplicationContent(application, publicLinks, privateLinks);
+    const content = await generateApplicationContent(application, token);
     const html = createMailHtml(content);
 
-    sendMail(title, application.contactMail, html);
+    await sendMail(title, application.contactMail, html);
 };
 
 export default sendApplicationConfirmationMail;
