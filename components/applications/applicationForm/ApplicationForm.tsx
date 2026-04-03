@@ -174,14 +174,14 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         <ApplicationLinkList
                             name="publicLinks"
                             title="Öffentliche Präsenz"
-                            description="Wo können Besucher*innen mehr über euch erfahren? (Insta, Web, Spotify)"
+                            description="Wo können Besucher*innen unserer Festival-Seite mehr über euch erfahren? (Insta, Web, Spotify). Diese Links werden auf unserer Webseite veröffentlicht, falls ihr beim B-Side Festival dabei seid."
                             maxItems={10}
                         />
 
                         <ApplicationLinkList
                             name="privateLinks"
-                            title="Internes Material"
-                            description="Videos von Jams, Cloud-Ordner oder andere Informationen für unser Programm-Team."
+                            title="Material für die Kuration"
+                            description="Hörproben, Demotapes, Videos von Auftritten o.ä. für den Auswahl-Prozess unseres Programm-Teams. Beispielsweise als Link zu einem privaten YouTube-Video oder einer Dropbox. Diese Links werden nicht veröffentlicht."
                             maxItems={10}
                         />
                     </div>
@@ -238,7 +238,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 disabled:bg-gray-600"
+                            className="w-full rounded border border-white text-white bg-black p-3 font-display text-sm leading-3 disabled:bg-gray-600"
                         >
                             Absenden
                         </button>

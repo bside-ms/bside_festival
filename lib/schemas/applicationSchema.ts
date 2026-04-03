@@ -55,6 +55,7 @@ export const createApplicationSchema = (chosenType: Type) =>
             participantCount: z.number().min(1, 'Mindestens eine Person muss dabei sein'),
             hasMarginalizedParticipants: z.boolean(),
             flintaParticipantsCount: z.number().min(0),
+            isProfessionalBooking: z.boolean(),
             hasProfessionalParticipants: z.boolean(),
             professionalParticipantsCount: z.number().min(0),
             participantZipcodes: z.array(zipcodeSchema),

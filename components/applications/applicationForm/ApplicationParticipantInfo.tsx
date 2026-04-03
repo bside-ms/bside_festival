@@ -1,6 +1,7 @@
 import Checkbox from '@/components/form/Checkbox';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
+import cn from '@/lib/common/helper/cn';
 import { useFormContext } from 'react-hook-form';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import { ApplicationFormValues } from './ApplicationForm';
@@ -9,6 +10,7 @@ const ApplicationParticipantInfo = () => {
     const { watch } = useFormContext();
 
     const hasProfessionalParticipants = watch('hasProfessionalParticipants');
+    const isProfessionalBooking = watch('isProfessionalBooking');
 
     return (
         <section className="flex flex-col gap-6 py-2">
@@ -42,29 +44,41 @@ const ApplicationParticipantInfo = () => {
                 required={true}
             />
 
-            <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                    <Checkbox name="hasProfessionalParticipants" label="Arbeiten einige von euch als professionelle Künstler*innen?" />
+            <div className="flex items-center gap-2">
+                <Checkbox name="isProfessionalBooking" label="Erfolgt diese Bewerbung durch eine Agentur in Vertretung für die Künstler*innen?" />
+            </div>
 
-                    <div className="group relative cursor-help">
-                        <IoInformationCircleOutline className="h-5 w-5 text-gray-400" />
-                        <div className="invisible absolute left-full z-50 ml-2 w-64 rounded bg-gray-800 p-3 text-xs text-white shadow-lg group-hover:visible">
-                            Als „professionell“ gilt, wer den Hauptlebensunterhalt durch Kunst bestreitet oder in der KSK versichert ist.
-                            <br />
-                            <br />
-                            <a href="https://www.kuenstlersozialkasse.de/" target="_blank" className="text-blue-300 underline">
-                                Mehr Infos zur KSK
+            {!isProfessionalBooking && (
+                <div className={cn("flex flex-col gap-2", hasProfessionalParticipants && 'border-l-4 border-lime-400')}>
+                    <div className="flex items-center">
+                        <Checkbox name="hasProfessionalParticipants" label="Arbeiten einige von euch als professionelle Künstler*innen?" />
+
+                        <div className="group relative cursor-help">
+                            <a href="https://www.kulturrat.de/themen/honoraruntergrenzen/professionelle-kuenstler/" target='_blank'>
+                                <IoInformationCircleOutline className="h-5 w-5 text-gray-400" />
                             </a>
+                            <div className="invisible absolute right-full z-50 ml-2 w-128 rounded bg-gray-800 p-3 text-xs text-white shadow-lg group-hover:visible">
+                                Als „professionell“ gilt man z.B. wenn:
+                                <ul className="list-inside list-disc">
+                                    <li>Mitgliedschaft in der Künstlersozialkasse</li>
+                                    <li>Dokument des Finanzamtes mit Steuernummer</li>
+                                    <li>Nachweislich entsprechende Tätigkeitspraxis</li>
+                                    <li>Vermittlung über eine Agentur</li>
+                                </ul>
+                                <br />
+                                Für weitere Infos: https://www.kulturrat.de/themen/honoraruntergrenzen/professionelle-kuenstler/
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {hasProfessionalParticipants && (
-                    <div className="ml-8 animate-in fade-in slide-in-from-left-2">
-                        <TextInput name="professionalParticipantsCount" label="Anzahl der Profis" type="number" />
-                    </div>
-                )}
-            </div>
+                    {hasProfessionalParticipants && (
+                        <div className="ml-8 animate-in fade-in slide-in-from-left-2">
+                            <div>Wie viele von euch?</div>
+                            <TextInput name="professionalParticipantsCount" label="Anzahl der Profis" type="number" />
+                        </div>
+                    )}
+                </div>
+            )}
         </section>
     );
 };

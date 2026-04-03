@@ -135,10 +135,10 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
                     <div
                         className={cn(
                             'flex h-24 w-full items-center justify-center rounded border border-dashed border-gray-500',
-                            typeof errorMessage === 'string' && 'bg-rose-400',
+                            typeof errorMessage === 'string' ? 'bg-rose-400 hover:bg-rose-300' : 'hover:bg-gray-50',
                         )}
                     >
-                        <div className={cn('opacity-55', typeof errorMessage === 'string' && 'bg-rose-400 opacity-100')}>
+                        <div className={cn('opacity-55', typeof errorMessage === 'string' && 'opacity-100')}>
                             {required ? 'Bild hinzufügen *' : 'Bild hinzufügen'}
                         </div>
                     </div>

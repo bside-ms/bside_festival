@@ -21,6 +21,7 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
 
         const publicLinks = values.publicLinks.map((l) => l.url).filter((url) => url.trim() !== '');
         const privateLinks = values.privateLinks.map((l) => l.url).filter((url) => url.trim() !== '');
+        const professionalParticipantsCount = values.isProfessionalBooking ? values.participantCount : values.professionalParticipantsCount;
 
         const newParticipant = await prismaClient.participant.create({
             data: {
@@ -40,7 +41,8 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
                 participantCount: values.participantCount,
                 flintaParticipantsCount: values.flintaParticipantsCount,
                 hasMarginalizedParticipants: values.hasMarginalizedParticipants,
-                professionalParticipantsCount: values.professionalParticipantsCount,
+                isProfessionalBooking: values.isProfessionalBooking,
+                professionalParticipantsCount: professionalParticipantsCount,
                 diversityNotes: values.diversityNotes,
                 allergies: values.allergies,
 

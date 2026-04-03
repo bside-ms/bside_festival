@@ -31,6 +31,7 @@ model Participant {
     additionalInfo              String?            @db.Text
     participantCount            Int                @default(1)
     allergies                   String?            @db.Text
+    isProfessionalBooking       Boolean            @default(false)
     flintaParticipantsCount     Int                @default(0)
     professionalParticipantsCount Int              @default(0)
     hasMarginalizedParticipants Boolean            @default(false)

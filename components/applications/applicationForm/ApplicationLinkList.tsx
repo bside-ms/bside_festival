@@ -19,7 +19,7 @@ const LinkItem = memo(({ index, name, onRemove, error }: LinkItemProps) => {
         <div className="flex animate-in items-end gap-2 fade-in slide-in-from-left-1">
             <div className="flex-1">
                 <TextInput name={`${name}.${index}.url`} label={`Link #${index + 1}`} placeholder="https://..." />
-                {error && <span className="text-xs font-medium text-red-600">{error.message}</span>}
+                {error && <span className="text-sm text-rose-600">{error.message}</span>}
             </div>
             <button
                 type="button"
@@ -57,10 +57,10 @@ const ApplicationLinkList = ({ name, title, description, maxItems = 10 }: Applic
     return (
         <section className="flex flex-col gap-4">
             <div>
-                <h3 className="text-lg font-bold">{title}</h3>
-                {description && <p className="text-sm text-gray-500">{description}</p>}
+                <h3 className="text-lg">{title}</h3>
+                {description && <p className="text-base">{description}</p>}
 
-                {rootErrorMessage && <p className="mt-2 text-sm font-bold text-red-600">{rootErrorMessage}</p>}
+                {rootErrorMessage && <p className="text-rose-600">{rootErrorMessage}</p>}
             </div>
 
             <div className="flex flex-col gap-3">
