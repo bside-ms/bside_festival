@@ -26,15 +26,18 @@ const ApplicationParticipantInfo = () => {
 
             <div>
                 Zum Ausgleich bestehender Nachteile freuen wir uns über Bewerbungen von Menschen und Organisationen, die sich für Menschen
-                mit Diskriminierungserfahrung stark machen oder selbst davon betroffen sind. Dazu zählen zum Beispiel geflüchtete Menschen,
+                mit Diskriminierungserfahrung stark machen oder selbst davon betroffen sind und bevorzugen diese. Dazu zählen zum Beispiel geflüchtete Menschen,
                 Jüdinnen*Juden, Menschen mit familiärer Migrations- oder Fluchtgeschichte, muslimisch(e) (gelesene) Menschen, Personen of
                 Color, Sinti/Roma*, schwarze Menschen und/oder Menschen, die aufgrund ihres Alters, sozialen Status oder einer
-                Behinderung/chronischen Krankheit benachteiligt werden (marginalisierte Gruppen). Wir freuen uns ebenso über Bewerbungen von
-                Frauen, lesbischen, nicht-binären, intergeschlechtlichen, trans und agender Personen (FLINTA*).
+                Behinderung/chronischen Krankheit benachteiligt werden (marginalisierte Gruppen).
             </div>
 
             <Checkbox name="hasMarginalizedParticipants" label="Es sind Personen anderer marginalisierter Gruppen beteiligt?" />
-            <TextArea<ApplicationFormValues> name="diversityNotes" label="Anmerkungen zur Diversität" rows={2} />
+            <TextArea<ApplicationFormValues> name="diversityNotes" label="Platz für Anmerkungen zu Barrierefreiheit oder Support-Wünschen..." rows={4} />
+
+            <div>
+                Wir freuen uns auch besonders über Bewerbungen von Frauen, lesbischen, nicht-binären, intergeschlechtlichen, trans und agender Personen (FLINTA*) und bevorzugen diese ebenfalls.
+            </div>
 
             <TextInput
                 name="flintaParticipantsCount"
@@ -49,7 +52,7 @@ const ApplicationParticipantInfo = () => {
             </div>
 
             {!isProfessionalBooking && (
-                <div className={cn("flex flex-col gap-2", hasProfessionalParticipants && 'border-l-4 border-lime-400')}>
+                <div className="flex flex-col gap-2">
                     <div className="flex items-center">
                         <Checkbox name="hasProfessionalParticipants" label="Arbeiten einige von euch als professionelle Künstler*innen?" />
 
@@ -73,7 +76,7 @@ const ApplicationParticipantInfo = () => {
 
                     {hasProfessionalParticipants && (
                         <div className="ml-8 animate-in fade-in slide-in-from-left-2">
-                            <div>Wie viele von euch?</div>
+                            <div>Wie viele von euch sind professionelle Künstler*innen?</div>
                             <TextInput name="professionalParticipantsCount" label="Anzahl der Profis" type="number" />
                         </div>
                     )}

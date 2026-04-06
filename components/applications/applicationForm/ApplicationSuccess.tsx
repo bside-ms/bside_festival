@@ -25,8 +25,8 @@ const ApplicationSuccess = ({ participantId }: Props): ReactElement => {
                         <p className="text-sm leading-relaxed text-red-800">
                             Eure Bewerbungung ist erst abgeschlossen, wenn ihr eure E-Mail Adresse verifiziert habt. Dafür solltet ihr
                             soeben eine Mail mit einem Bestätigungslink erhalten haben. Der darin enthaltenen Link ist 3 Tage gültig.
-                            Solltet ihr diese Bestätigungs-Mail nicht innerhalb der nächsten 12 Stunden erhalten haben, kontaktiere uns
-                            bitte unter festival@b-side.ms mit dem Betreff "E-Mail Verifikation {formatParticipantId}".
+                            Solltet ihr diese Bestätigungs-Mail nicht innerhalb der nächsten 12 Stunden erhalten haben, kontaktiert uns
+                            bitte unter festival@b-side.ms mit dem Betreff "E-Mail Verifikation [Euer Projektname]".
                         </p>
                     </div>
                 </div>

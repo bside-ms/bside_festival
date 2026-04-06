@@ -173,9 +173,9 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                     <div className="flex flex-col gap-10">
                         <ApplicationLinkList
                             name="publicLinks"
-                            title="Öffentliche Präsenz"
+                            title="Euer Auftritt auf unserer Website"
                             description="Wo können Besucher*innen unserer Festival-Seite mehr über euch erfahren? (Insta, Web, Spotify). Diese Links werden auf unserer Webseite veröffentlicht, falls ihr beim B-Side Festival dabei seid."
-                            maxItems={10}
+                            maxItems={4}
                         />
 
                         <ApplicationLinkList
@@ -207,13 +207,18 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         info="Warum möchtet ihr Teil des B-Side Festivals 2026 sein?"
                     />
 
-                    <ApplicationParticipantInfo />
-                    <ApplicationZipcodes />
+
+                    {chosenType !== Type.InfoBooth && (
+                        <ApplicationParticipantInfo />                        
+                    )}
+                    {chosenType !== Type.InfoBooth && (
+                        <ApplicationZipcodes />
+                    )}
 
                     <TextInput<ApplicationFormValues>
                         name="allergies"
                         label="Allergien für Catering"
-                        info="Unser Catering ist vegan. Habt ihr Allergien?"
+                        info="Unser Catering ist vegan. Habt ihr Allergien oder Unverträglichkeiten?"
                     />
 
                     <TextArea<ApplicationFormValues>
@@ -232,7 +237,6 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         <b>Hinweis:</b> Spätestens wenn wir dich buchen benötigen wir eine Telefonnummer für kurzfristige Rückfragen vor dem
                         Festival.
                     </div>
-                    {chosenType !== Type.Neighbor && <TextInput<ApplicationFormValues> name="residence" label="Wohnort" />}
 
                     <label className="block w-full bg-black p-1">
                         <button
@@ -265,7 +269,12 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                             Allgemeinheit frei zugänglich veranstaltet. Das Festival wird auch dieses Jahr wieder durch öffentliche
                             Fördermittel, Spenden und den Eigenanteil des B-Side Kultur e.V. als Veranstalter finanziert. Im Rahmen unserer
                             finanziellen Möglichkeiten erhalten alle künstlerischen, kulturellen und bildende Programmpunkte eine
-                            Aufwandsentschädigung.
+                            Aufwandsentschädigung unter Einhaltung der Honoraruntergrenzen für professionelle Künstler*innen.
+                        </div>
+                        <div>
+                            Deine Daten sind bei uns in guten Händen. Wir nutzen die hier gemachten Angaben ausschließlich für den Auswahlprozess
+                            und das Booking des B-Side Festivals. Wir geben nichts an Dritte weiter und löschen deine Daten, sobald sie für die
+                            Organisation nicht mehr benötigt werden. Mit dem Absenden erklärst du dich damit einverstanden.
                         </div>
                     </div>
                 </form>

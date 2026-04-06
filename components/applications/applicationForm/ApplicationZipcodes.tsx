@@ -62,7 +62,7 @@ const ApplicationZipcodes = () => {
 
     return (
         <div className="mt-4 flex flex-col gap-2">
-            <p>Wohnorte der Mitglieder (PLZ oder Land)</p>
+            <p>Wohnorte der einzelnen Mitglieder (PLZ oder Land)</p>
             <div className="grid grid-cols-1 gap-1">
                 {fields.map((field, index) => (
                     <ZipcodeItem key={field.id} index={index} error={arrayError?.[index]?.code} />
