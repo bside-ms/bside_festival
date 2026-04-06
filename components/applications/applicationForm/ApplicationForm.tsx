@@ -39,11 +39,13 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
 
     const methods = useForm<ApplicationFormValues>({
         resolver: zodResolver(createApplicationSchema(chosenType)),
+        // participantCount: chosenType === Type.InfoBooth ? undefined : 1,
+        // participantZipcodes: chosenType === Type.InfoBooth ? [] : [{ code: "", isInternational: false }],
         defaultValues: {
             publicLinks: [{ url: '' }],
             privateLinks: [{ url: '' }],
-            participantCount: 1,
-            participantZipcodes: [{ code: '', isInternational: false }],
+            participantCount: chosenType === Type.InfoBooth ? undefined : 1,
+            participantZipcodes: chosenType === Type.InfoBooth ? [] : [{ code: "", isInternational: false }],
             flintaParticipantsCount: 0,
             professionalParticipantsCount: 0,
             hasProfessionalParticipants: false,
@@ -84,6 +86,11 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
         return <ApplicationSuccess participantId={submittedRecordId} />;
     }
 
+    let privateLinkDescription = "Hörproben, Demotapes, Videos von Auftritten o.ä. für den Auswahl-Prozess unseres Programm-Teams. Beispielsweise als Link zu einem privaten YouTube-Video oder einer Dropbox. Diese Links werden nicht veröffentlicht.";
+    if (!(chosenType === Type.Concert || chosenType === Type.DiskJockey)) {
+        privateLinkDescription = "Material für die Kuration, z.B. Fotos, Videos, PDFs o.ä. für den Auswahl-Prozess unseres Programm-Teams. Beispielsweise als Link zu einem privaten YouTube-Video oder einer Dropbox. Diese Links werden nicht veröffentlicht."
+    }
+
     return (
         <FormProvider {...methods}>
             <div className="w-full">
@@ -109,6 +116,8 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                             )}
                         </div>
                     </div>
+
+                    {Object.entries(errors).map(([key, err]) => `${key}: ${err.message}`).filter(Boolean).join(', ')}
 
                     <div className="rounded-md bg-yellow-50 p-4">
                         <div className="flex">
@@ -168,7 +177,9 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         />
                     )}
 
-                    <ApplicationDurationSelect chosenType={chosenType} />
+                    {!(chosenType === 'InfoBooth' || chosenType === 'Exhibition') && (
+                        <ApplicationDurationSelect chosenType={ chosenType } />
+                    )}
 
                     <div className="flex flex-col gap-10">
                         <ApplicationLinkList
@@ -181,7 +192,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         <ApplicationLinkList
                             name="privateLinks"
                             title="Material für die Kuration"
-                            description="Hörproben, Demotapes, Videos von Auftritten o.ä. für den Auswahl-Prozess unseres Programm-Teams. Beispielsweise als Link zu einem privaten YouTube-Video oder einer Dropbox. Diese Links werden nicht veröffentlicht."
+                            description={privateLinkDescription}
                             maxItems={10}
                         />
                     </div>
@@ -209,12 +220,11 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
 
 
                     {chosenType !== Type.InfoBooth && (
-                        <ApplicationParticipantInfo />                        
+                        <>
+                            <ApplicationParticipantInfo />
+                            <ApplicationZipcodes />
+                        </>
                     )}
-                    {chosenType !== Type.InfoBooth && (
-                        <ApplicationZipcodes />
-                    )}
-
                     <TextInput<ApplicationFormValues>
                         name="allergies"
                         label="Allergien für Catering"

@@ -33,7 +33,6 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
                 technicalRider: values.technicalRider ?? null,
                 description: values.description,
                 motivation: values.motivation,
-                residence: values.residence ?? null,
                 additionalInfo: values.additionalInfo,
                 imageFileName,
                 technicalRiderFileName,

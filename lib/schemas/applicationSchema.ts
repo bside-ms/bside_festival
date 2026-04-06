@@ -41,7 +41,7 @@ export const createApplicationSchema = (chosenType: Type) =>
             description: z.string().min(10, 'Die Beschreibung ist etwas zu kurz'),
             concertGenres: z.array(z.union([z.string(), z.number()])).optional(),
             diskJockeyGenres: z.array(z.union([z.string(), z.number()])).optional(),
-            durationPreference: z.string().min(1, 'Bitte gib an, wie lange du/ihr spielen möchtet.'),
+            durationPreference: z.string().optional(),
 
             publicLinks: z.array(linkSchema),
             privateLinks: z.array(linkSchema).refine((links) => links.some((l) => l.url.trim().length > 0), {
@@ -52,13 +52,13 @@ export const createApplicationSchema = (chosenType: Type) =>
             backlineSharing: z.string().optional(),
 
             motivation: z.string().optional(),
-            participantCount: z.number().min(1, 'Mindestens eine Person muss dabei sein'),
+            participantCount: z.number().optional(),
             hasMarginalizedParticipants: z.boolean(),
             flintaParticipantsCount: z.number().min(0),
-            isProfessionalBooking: z.boolean(),
+            isProfessionalBooking: z.boolean().optional(),
             hasProfessionalParticipants: z.boolean(),
-            professionalParticipantsCount: z.number().min(0),
-            participantZipcodes: z.array(zipcodeSchema),
+            professionalParticipantsCount: z.number().optional(),
+            participantZipcodes: z.array(zipcodeSchema).optional(),
 
             diversityNotes: z.string().optional(),
             allergies: z.string().optional(),
@@ -67,8 +67,6 @@ export const createApplicationSchema = (chosenType: Type) =>
             contactName: z.string().min(1, 'Ansprechperson ist erforderlich'),
             contactMail: z.email('Ungültige E-Mail-Adresse'),
             contactPhone: z.string().optional(),
-
-            residence: z.string().optional(),
         })
         .superRefine((data, ctx) => {
             const riderInfo = getTechnicalRiderInfo(chosenType);
@@ -88,27 +86,63 @@ export const createApplicationSchema = (chosenType: Type) =>
                 }
             }
 
-            if (data.flintaParticipantsCount > data.participantCount) {
-                ctx.addIssue({
-                    code: 'custom',
-                    message: 'Die Anzahl der FLINTA* Personen kann nicht größer sein als die Gesamtzahl.',
-                    path: ['flintaParticipantsCount'],
-                });
+            if (!(chosenType === 'InfoBooth' || chosenType === 'Exhibition')) {
+                if (data.durationPreference === undefined || data.durationPreference.length < 1) {
+                    ctx.addIssue({
+                        code: 'custom',
+                        message: 'Bitte gebt an, wie lange ihr performen möchtet.',
+                        path: ['durationPreference'],
+                    });
+                }
             }
 
-            if (data.hasProfessionalParticipants && data.professionalParticipantsCount > data.participantCount) {
-                ctx.addIssue({
-                    code: 'custom',
-                    message: 'Mehr Profis als Bandmitglieder? Das geht leider nicht.',
-                    path: ['professionalParticipantsCount'],
-                });
+            if (chosenType !== Type.InfoBooth ) {
+                if (data.participantCount === undefined || data.participantCount < 1) {
+                    ctx.addIssue({
+                        code: 'custom',
+                        message: 'Mindestens eine Person muss dabei sein',
+                        path: ['participantCount'],
+                    });
+                }
+
+                if (!data.participantZipcodes || data.participantZipcodes.length === 0) {
+                    ctx.addIssue({
+                        code: 'custom',
+                        message: 'Bitte gib die Postleitzahlen der Mitglieder an.',
+                        path: ['participantZipcodes'],
+                    });
+                }
+
+                // Logic checks that rely on participantCount
+                const participantCount = data.participantCount || 0;
+
+                if (data.flintaParticipantsCount > participantCount) {
+                    ctx.addIssue({
+                        code: 'custom',
+                        message: 'Die Anzahl der FLINTA* Personen kann nicht größer sein als die Gesamtzahl.',
+                        path: ['flintaParticipantsCount'],
+                    });
+                }
+
+                if (data.hasProfessionalParticipants) {
+                    const profCount = data.professionalParticipantsCount || 0;
+                    
+                    if (profCount > participantCount) {
+                        ctx.addIssue({
+                            code: 'custom',
+                            message: 'Mehr Profis als Bandmitglieder? Das geht leider nicht.',
+                            path: ['professionalParticipantsCount'],
+                        });
+                    }
+
+                    if (profCount <= 0) {
+                        ctx.addIssue({
+                            code: 'custom',
+                            message: 'Bitte gib an, wie viele Profis dabei sind.',
+                            path: ['professionalParticipantsCount'],
+                        });
+                    }
+                }
             }
 
-            if (data.hasProfessionalParticipants && data.professionalParticipantsCount <= 0) {
-                ctx.addIssue({
-                    code: 'custom',
-                    message: 'Bitte gib an, wie viele Profis dabei sind.',
-                    path: ['professionalParticipantsCount'],
-                });
-            }
         });

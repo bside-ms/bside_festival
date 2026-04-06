@@ -1,7 +1,6 @@
 import Checkbox from '@/components/form/Checkbox';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
-import cn from '@/lib/common/helper/cn';
 import { useFormContext } from 'react-hook-form';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import { ApplicationFormValues } from './ApplicationForm';

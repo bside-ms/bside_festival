@@ -23,6 +23,7 @@ export const getTechnicalRiderInfo = (applicationType: Type): null | { info: str
         case Type.Exhibition:
             return {
                 info: 'Welche technische Ausstattung braucht ihr? Alternativ könnt ihr hierfür auch eine PDF-Datei hochladen',
+                required: true,
             };
 
         case Type.Performance:
@@ -48,12 +49,18 @@ export const getTechnicalRiderInfo = (applicationType: Type): null | { info: str
         case Type.Reading:
             return {
                 info: 'Welche technische Ausstattung braucht ihr? Alternativ könnt ihr hierfür auch eine PDF-Datei hochladen',
+                required: true,
             };
 
         case Type.Workshop:
+            return {
+                info: 'Welche technische Ausstattung braucht ihr? Alternativ könnt ihr hierfür auch eine PDF-Datei hochladen',
+                required: true,
+            };
         case Type.InfoBooth:
             return {
                 info: 'Welche technische Ausstattung braucht ihr? Alternativ könnt ihr hierfür auch eine PDF-Datei hochladen',
+                required: true,
             };
 
         default:

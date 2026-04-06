@@ -17,7 +17,6 @@ const generateApplicationContent = async (application: Participant, token: strin
         contactName,
         contactPhone,
         address,
-        residence,
         technicalRider,
         technicalRiderFileName,
         backlineSharing,
@@ -54,7 +53,6 @@ const generateApplicationContent = async (application: Participant, token: strin
         isNotEmptyString(contactMail) && `<strong>E-Mail-Adresse:</strong><br>${contactMail}`,
         isNotEmptyString(contactPhone) && `<strong>Telefonnummer:</strong><br>${contactPhone}`,
         isNotEmptyString(address) && `<strong>Adresse:</strong><br>${address}`,
-        isNotEmptyString(residence) && `<strong>Wohnort:</strong><br>${residence}`,
     ].filter(Boolean);
 
     const formatParticipantId = `2026-${id.toString().padStart(5, '0')}`;

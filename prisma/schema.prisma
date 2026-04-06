@@ -23,7 +23,6 @@ model Participant {
     curationScore               Int?
     curationInfo                String?            @db.Text
     address                     String?            @db.Text
-    residence                   String?            @db.Text
     imageFileName               String?            @db.Text
     technicalRider              String?            @db.Text
     technicalRiderFileName      String?            @db.Text
