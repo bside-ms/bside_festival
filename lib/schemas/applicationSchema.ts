@@ -96,7 +96,7 @@ export const createApplicationSchema = (chosenType: Type) =>
                 }
             }
 
-            if (chosenType !== Type.InfoBooth ) {
+            if (chosenType !== Type.InfoBooth) {
                 if (data.participantCount === undefined || data.participantCount < 1) {
                     ctx.addIssue({
                         code: 'custom',
@@ -126,7 +126,7 @@ export const createApplicationSchema = (chosenType: Type) =>
 
                 if (data.hasProfessionalParticipants) {
                     const profCount = data.professionalParticipantsCount || 0;
-                    
+
                     if (profCount > participantCount) {
                         ctx.addIssue({
                             code: 'custom',
@@ -144,5 +144,4 @@ export const createApplicationSchema = (chosenType: Type) =>
                     }
                 }
             }
-
         });

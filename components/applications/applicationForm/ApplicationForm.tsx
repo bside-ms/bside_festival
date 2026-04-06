@@ -45,7 +45,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
             publicLinks: [{ url: '' }],
             privateLinks: [{ url: '' }],
             participantCount: chosenType === Type.InfoBooth ? undefined : 1,
-            participantZipcodes: chosenType === Type.InfoBooth ? [] : [{ code: "", isInternational: false }],
+            participantZipcodes: chosenType === Type.InfoBooth ? [] : [{ code: '', isInternational: false }],
             flintaParticipantsCount: 0,
             professionalParticipantsCount: 0,
             hasProfessionalParticipants: false,
@@ -83,12 +83,14 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
     );
 
     if (submittedRecordId) {
-        return <ApplicationSuccess participantId={submittedRecordId} />;
+        return <ApplicationSuccess />;
     }
 
-    let privateLinkDescription = "Hörproben, Demotapes, Videos von Auftritten o.ä. für den Auswahl-Prozess unseres Programm-Teams. Beispielsweise als Link zu einem privaten YouTube-Video oder einer Dropbox. Diese Links werden nicht veröffentlicht.";
+    let privateLinkDescription =
+        'Hörproben, Demotapes, Videos von Auftritten o.ä. für den Auswahl-Prozess unseres Programm-Teams. Beispielsweise als Link zu einem privaten YouTube-Video oder einer Dropbox. Diese Links werden nicht veröffentlicht.';
     if (!(chosenType === Type.Concert || chosenType === Type.DiskJockey)) {
-        privateLinkDescription = "Material für die Kuration, z.B. Fotos, Videos, PDFs o.ä. für den Auswahl-Prozess unseres Programm-Teams. Beispielsweise als Link zu einem privaten YouTube-Video oder einer Dropbox. Diese Links werden nicht veröffentlicht."
+        privateLinkDescription =
+            'Material für die Kuration, z.B. Fotos, Videos, PDFs o.ä. für den Auswahl-Prozess unseres Programm-Teams. Beispielsweise als Link zu einem privaten YouTube-Video oder einer Dropbox. Diese Links werden nicht veröffentlicht.';
     }
 
     return (
@@ -117,7 +119,10 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         </div>
                     </div>
 
-                    {Object.entries(errors).map(([key, err]) => `${key}: ${err.message}`).filter(Boolean).join(', ')}
+                    {Object.entries(errors)
+                        .map(([key, err]) => `${key}: ${err.message}`)
+                        .filter(Boolean)
+                        .join(', ')}
 
                     <div className="rounded-md bg-yellow-50 p-4">
                         <div className="flex">
@@ -177,9 +182,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         />
                     )}
 
-                    {!(chosenType === 'InfoBooth' || chosenType === 'Exhibition') && (
-                        <ApplicationDurationSelect chosenType={ chosenType } />
-                    )}
+                    {!(chosenType === 'InfoBooth' || chosenType === 'Exhibition') && <ApplicationDurationSelect chosenType={chosenType} />}
 
                     <div className="flex flex-col gap-10">
                         <ApplicationLinkList
@@ -218,7 +221,6 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         info="Warum möchtet ihr Teil des B-Side Festivals 2026 sein?"
                     />
 
-
                     {chosenType !== Type.InfoBooth && (
                         <>
                             <ApplicationParticipantInfo />
@@ -252,7 +254,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full rounded border border-white text-white bg-black p-3 font-display text-sm leading-3 disabled:bg-gray-600"
+                            className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 text-white disabled:bg-gray-600"
                         >
                             Absenden
                         </button>
@@ -282,9 +284,10 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                             Aufwandsentschädigung unter Einhaltung der Honoraruntergrenzen für professionelle Künstler*innen.
                         </div>
                         <div>
-                            Deine Daten sind bei uns in guten Händen. Wir nutzen die hier gemachten Angaben ausschließlich für den Auswahlprozess
-                            und das Booking des B-Side Festivals. Wir geben nichts an Dritte weiter und löschen deine Daten, sobald sie für die
-                            Organisation nicht mehr benötigt werden. Mit dem Absenden erklärst du dich damit einverstanden.
+                            Deine Daten sind bei uns in guten Händen. Wir nutzen die hier gemachten Angaben ausschließlich für den
+                            Auswahlprozess und das Booking des B-Side Festivals. Wir geben nichts an Dritte weiter und löschen deine Daten,
+                            sobald sie für die Organisation nicht mehr benötigt werden. Mit dem Absenden erklärst du dich damit
+                            einverstanden.
                         </div>
                     </div>
                 </form>

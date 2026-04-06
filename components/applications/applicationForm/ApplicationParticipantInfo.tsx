@@ -25,17 +25,22 @@ const ApplicationParticipantInfo = () => {
 
             <div>
                 Zum Ausgleich bestehender Nachteile freuen wir uns über Bewerbungen von Menschen und Organisationen, die sich für Menschen
-                mit Diskriminierungserfahrung stark machen oder selbst davon betroffen sind und bevorzugen diese. Dazu zählen zum Beispiel geflüchtete Menschen,
-                Jüdinnen*Juden, Menschen mit familiärer Migrations- oder Fluchtgeschichte, muslimisch(e) (gelesene) Menschen, Personen of
-                Color, Sinti/Roma*, schwarze Menschen und/oder Menschen, die aufgrund ihres Alters, sozialen Status oder einer
-                Behinderung/chronischen Krankheit benachteiligt werden (marginalisierte Gruppen).
+                mit Diskriminierungserfahrung stark machen oder selbst davon betroffen sind und bevorzugen diese. Dazu zählen zum Beispiel
+                geflüchtete Menschen, Jüdinnen*Juden, Menschen mit familiärer Migrations- oder Fluchtgeschichte, muslimisch(e) (gelesene)
+                Menschen, Personen of Color, Sinti/Roma*, schwarze Menschen und/oder Menschen, die aufgrund ihres Alters, sozialen Status
+                oder einer Behinderung/chronischen Krankheit benachteiligt werden (marginalisierte Gruppen).
             </div>
 
             <Checkbox name="hasMarginalizedParticipants" label="Es sind Personen anderer marginalisierter Gruppen beteiligt?" />
-            <TextArea<ApplicationFormValues> name="diversityNotes" label="Platz für Anmerkungen zu Barrierefreiheit oder Support-Wünschen..." rows={4} />
+            <TextArea<ApplicationFormValues>
+                name="diversityNotes"
+                label="Platz für Anmerkungen zu Barrierefreiheit oder Support-Wünschen..."
+                rows={4}
+            />
 
             <div>
-                Wir freuen uns auch besonders über Bewerbungen von Frauen, lesbischen, nicht-binären, intergeschlechtlichen, trans und agender Personen (FLINTA*) und bevorzugen diese ebenfalls.
+                Wir freuen uns auch besonders über Bewerbungen von Frauen, lesbischen, nicht-binären, intergeschlechtlichen, trans und
+                agender Personen (FLINTA*) und bevorzugen diese ebenfalls.
             </div>
 
             <TextInput
@@ -47,7 +52,10 @@ const ApplicationParticipantInfo = () => {
             />
 
             <div className="flex items-center gap-2">
-                <Checkbox name="isProfessionalBooking" label="Erfolgt diese Bewerbung durch eine Agentur in Vertretung für die Künstler*innen?" />
+                <Checkbox
+                    name="isProfessionalBooking"
+                    label="Erfolgt diese Bewerbung durch eine Agentur in Vertretung für die Künstler*innen?"
+                />
             </div>
 
             {!isProfessionalBooking && (
@@ -56,7 +64,7 @@ const ApplicationParticipantInfo = () => {
                         <Checkbox name="hasProfessionalParticipants" label="Arbeiten einige von euch als professionelle Künstler*innen?" />
 
                         <div className="group relative cursor-help">
-                            <a href="https://www.kulturrat.de/themen/honoraruntergrenzen/professionelle-kuenstler/" target='_blank'>
+                            <a href="https://www.kulturrat.de/themen/honoraruntergrenzen/professionelle-kuenstler/" target="_blank">
                                 <IoInformationCircleOutline className="h-5 w-5 text-gray-400" />
                             </a>
                             <div className="invisible absolute right-full z-50 ml-2 w-128 rounded bg-gray-800 p-3 text-xs text-white shadow-lg group-hover:visible">

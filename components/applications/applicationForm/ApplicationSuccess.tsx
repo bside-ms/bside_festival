@@ -4,13 +4,7 @@ import Link from 'next/link';
 import type { ReactElement } from 'react';
 import { HiExclamationCircle } from 'react-icons/hi';
 
-interface Props {
-    participantId: number;
-}
-
-const ApplicationSuccess = ({ participantId }: Props): ReactElement => {
-    const formatParticipantId = `2026-${participantId.toString().padStart(5, '0')}`;
-
+const ApplicationSuccess = (): ReactElement => {
     return (
         <div className="text-white">
             <div className="mb-4 font-display">

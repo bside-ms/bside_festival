@@ -55,8 +55,6 @@ const generateApplicationContent = async (application: Participant, token: strin
         isNotEmptyString(address) && `<strong>Adresse:</strong><br>${address}`,
     ].filter(Boolean);
 
-    const formatParticipantId = `2026-${id.toString().padStart(5, '0')}`;
-
     return `
     <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">Vielen Dank für eure Bewerbung und euer Interesse, Teil des diesjährigen B-Side Festivals zu sein.</p>
     <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">Bitte bestätige deine E-Mail Adresse unter folgendem Link: <a href="${process.env.APP_URL}/bewerbungen/confirm/${token}" style="color: #000; text-decoration: underline;">Bestätigen</a></p>
