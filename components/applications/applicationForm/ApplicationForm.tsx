@@ -119,11 +119,6 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         </div>
                     </div>
 
-                    {Object.entries(errors)
-                        .map(([key, err]) => `${key}: ${err.message}`)
-                        .filter(Boolean)
-                        .join(', ')}
-
                     <div className="rounded-md bg-yellow-50 p-4">
                         <div className="flex">
                             <div className="shrink-0">
