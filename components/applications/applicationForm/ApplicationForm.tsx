@@ -1,57 +1,32 @@
 'use client';
 
+import ApplicationDurationSelect from '@/components/applications/applicationForm/ApplicationDurationSelect';
+import ApplicationLinkList from '@/components/applications/applicationForm/ApplicationLinkList';
+import ApplicationParticipantInfo from '@/components/applications/applicationForm/ApplicationParticipantInfo';
 import ApplicationSuccess from '@/components/applications/applicationForm/ApplicationSuccess';
 import ApplicationTypeImage from '@/components/applications/applicationForm/ApplicationTypeImage';
 import ApplicationTypeIntro from '@/components/applications/applicationForm/ApplicationTypeIntro';
+import ApplicationZipcodes from '@/components/applications/applicationForm/ApplicationZipcodes';
 import ImageUpload from '@/components/applications/applicationForm/ImageUpload';
-import Links from '@/components/applications/applicationForm/Links';
-import TechnicalRiderFields, { getTechnicalRiderInfo } from '@/components/applications/applicationForm/TechnicalRiderFields';
-import Checkbox from '@/components/form/Checkbox';
+import TechnicalRiderFields from '@/components/applications/applicationForm/TechnicalRiderFields';
 import MultiSelectInput from '@/components/form/MultiSelectInput';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
 import { addApplication } from '@/lib/actions/applicationActions';
-import isEmptyString from '@/lib/common/helper/isEmptyString';
-import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import typeLabels from '@/lib/participants/typeLabels';
+import { createApplicationSchema } from '@/lib/schemas/applicationSchema';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Type } from '@prisma/client';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import { useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { IoWarning } from 'react-icons/io5';
+import { z } from 'zod';
 
-export interface ApplicationFormValues {
-    name: string;
-    contactName: string;
-    contactPhone: string;
-    contactMail: string;
-    description: string;
-    concertGenres?: Array<string | number>;
-    diskJockeyGenres?: Array<string | number>;
-    encodedImage: string;
-    motivation: string;
-    additionalInfo: string;
-    technicalRider?: string;
-    encodedTechnicalRiderPdf?: string;
-    backlineSharing?: string;
-    materialExpenses?: string;
-    residence?: string;
-    participantCount: string;
-    hasFlintaParticipants: boolean;
-    hasMarginalizedParticipants: boolean;
-    diversityNotes: string;
-    allergies: string;
-
-    // Proud and also ashamed about this lazy solution
-    url1: string;
-    url2?: string;
-    url3?: string;
-    url4?: string;
-    url5?: string;
-}
+export type ApplicationFormValues = z.infer<ReturnType<typeof createApplicationSchema>>;
 
 interface Props {
     chosenType: Type;
@@ -60,9 +35,23 @@ interface Props {
 }
 
 const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: Props): ReactElement => {
-    const [wasSuccessfullySubmitted, setWasSuccessfullySubmitted] = useState(false);
+    const [submittedRecordId, setSubmittedRecordId] = useState<number | null>(null);
 
-    const methods = useForm<ApplicationFormValues>();
+    const methods = useForm<ApplicationFormValues>({
+        resolver: zodResolver(createApplicationSchema(chosenType)),
+        // participantCount: chosenType === Type.InfoBooth ? undefined : 1,
+        // participantZipcodes: chosenType === Type.InfoBooth ? [] : [{ code: "", isInternational: false }],
+        defaultValues: {
+            publicLinks: [{ url: '' }],
+            privateLinks: [{ url: '' }],
+            participantCount: chosenType === Type.InfoBooth ? undefined : 1,
+            participantZipcodes: chosenType === Type.InfoBooth ? [] : [{ code: '', isInternational: false }],
+            flintaParticipantsCount: 0,
+            professionalParticipantsCount: 0,
+            hasProfessionalParticipants: false,
+            hasMarginalizedParticipants: false,
+        },
+    });
     const {
         handleSubmit,
         setError,
@@ -76,57 +65,9 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
     const handleFormSubmit = useCallback(
         async (values: ApplicationFormValues) => {
             clearErrors('root');
+            const result = await addApplication(values, chosenType);
 
-            const technicalRiderInfo = getTechnicalRiderInfo(chosenType);
-
-            if (
-                technicalRiderInfo !== null &&
-                technicalRiderInfo.required === true &&
-                isEmptyString(values.technicalRider) &&
-                isEmptyString(values.encodedTechnicalRiderPdf)
-            ) {
-                setError(
-                    'technicalRider',
-                    {
-                        type: 'manual',
-                        message:
-                            technicalRiderInfo.withoutTextArea === true
-                                ? 'Bitte sende uns euren Technical Rider in PDF-Form'
-                                : 'Bitte sende uns euren Technical Rider in Text- oder PDF-Form',
-                    },
-                    {
-                        shouldFocus: true,
-                    },
-                );
-                return;
-            }
-
-            try {
-                await addApplication({
-                    type: chosenType,
-                    name: values.name,
-                    contactName: values.contactName,
-                    contactPhone: values.contactPhone,
-                    contactMail: values.contactMail,
-                    description: values.description,
-                    concertGenres: values.concertGenres ?? [],
-                    diskJockeyGenres: values.diskJockeyGenres ?? [],
-                    encodedImage: values.encodedImage,
-                    motivation: values.motivation,
-                    additionalInfo: values.additionalInfo,
-                    technicalRider: values.technicalRider ?? null,
-                    encodedTechnicalRiderPdf: values.encodedTechnicalRiderPdf ?? null,
-                    backlineSharing: values.backlineSharing ?? null,
-                    materialExpenses: values.materialExpenses ?? null,
-                    residence: values.residence ?? null,
-                    participantCount: values.participantCount,
-                    hasFlintaParticipants: values.hasFlintaParticipants,
-                    hasMarginalizedParticipants: values.hasMarginalizedParticipants,
-                    diversityNotes: values.diversityNotes,
-                    allergies: values.allergies,
-                    links: [values.url1, values.url2, values.url3, values.url4, values.url5].filter(isNotEmptyString),
-                });
-            } catch {
+            if (!result.id) {
                 setError('root', {
                     message:
                         'Leider ist beim Absenden ein unerwarteter Fehler aufgetreten. Versuche es bitte später nochmal! Wenn der Fehler bestehen bleibt, dann melde dich gerne bei uns über festival@b-side.ms oder direkt auf Instagram.',
@@ -135,16 +76,21 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
             }
 
             window.scrollTo({ top: 0 });
-
-            setWasSuccessfullySubmitted(true);
-
+            setSubmittedRecordId(result.id);
             handleFormReset();
         },
         [chosenType, clearErrors, handleFormReset, setError],
     );
 
-    if (wasSuccessfullySubmitted) {
+    if (submittedRecordId) {
         return <ApplicationSuccess />;
+    }
+
+    let privateLinkDescription =
+        'Hörproben, Demotapes, Videos von Auftritten o.ä. für den Auswahl-Prozess unseres Programm-Teams. Beispielsweise als Link zu einem privaten YouTube-Video oder einer Dropbox. Diese Links werden nicht veröffentlicht.';
+    if (!(chosenType === Type.Concert || chosenType === Type.DiskJockey)) {
+        privateLinkDescription =
+            'Material für die Kuration, z.B. Fotos, Videos, PDFs o.ä. für den Auswahl-Prozess unseres Programm-Teams. Beispielsweise als Link zu einem privaten YouTube-Video oder einer Dropbox. Diese Links werden nicht veröffentlicht.';
     }
 
     return (
@@ -175,7 +121,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
 
                     <div className="rounded-md bg-yellow-50 p-4">
                         <div className="flex">
-                            <div className="flex-shrink-0">
+                            <div className="shrink-0">
                                 <IoWarning className="h-5 w-5 text-yellow-400" />
                             </div>
                             <div className="ml-3">
@@ -231,7 +177,23 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         />
                     )}
 
-                    <Links />
+                    {!(chosenType === 'InfoBooth' || chosenType === 'Exhibition') && <ApplicationDurationSelect chosenType={chosenType} />}
+
+                    <div className="flex flex-col gap-10">
+                        <ApplicationLinkList
+                            name="publicLinks"
+                            title="Euer Auftritt auf unserer Website"
+                            description="Wo können Besucher*innen unserer Festival-Seite mehr über euch erfahren? (Insta, Web, Spotify). Diese Links werden auf unserer Webseite veröffentlicht, falls ihr beim B-Side Festival dabei seid."
+                            maxItems={4}
+                        />
+
+                        <ApplicationLinkList
+                            name="privateLinks"
+                            title="Material für die Kuration"
+                            description={privateLinkDescription}
+                            maxItems={10}
+                        />
+                    </div>
 
                     <TechnicalRiderFields chosenType={chosenType} />
 
@@ -251,38 +213,19 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                     <TextArea<ApplicationFormValues>
                         name="motivation"
                         label="Motivation"
-                        info="Warum möchtet ihr Teil des B-Side Festivals 2025 sein?"
+                        info="Warum möchtet ihr Teil des B-Side Festivals 2026 sein?"
                     />
 
-                    <TextInput<ApplicationFormValues>
-                        name="participantCount"
-                        label="Gesamtanzahl"
-                        info="Wie viel Menschen sind an eurem Beitrag beteiligt?"
-                    />
-
-                    <div>
-                        Zum Ausgleich bestehender Nachteile freuen wir uns über Bewerbungen von Menschen und Organisationen, die sich für
-                        Menschen mit Diskriminierungserfahrung stark machen oder selbst davon betroffen sind. Dazu zählen zum Beispiel
-                        geflüchtete Menschen, Jüdinnen*Juden, Menschen mit familiärer Migrations- oder Fluchtgeschichte, muslimisch(e)
-                        (gelesene) Menschen, Personen of Color, Sinti/Roma*, schwarze Menschen und/oder Menschen, die aufgrund ihres Alters,
-                        sozialen Status oder einer Behinderung/chronischen Krankheit benachteiligt werden (marginalisierte Gruppen). Wir
-                        freuen uns ebenso über Bewerbungen von Frauen, lesbischen, nicht-binären, intergeschlechtlichen, trans und agender
-                        Personen (FLINTA*).
-                    </div>
-
-                    <Checkbox<ApplicationFormValues> name="hasFlintaParticipants" label="Es sind FLINTA* Personen beteiligt?" />
-
-                    <Checkbox<ApplicationFormValues>
-                        name="hasMarginalizedParticipants"
-                        label="Es sind Personen anderer marginalisierter Gruppen beteiligt?"
-                    />
-
-                    <TextArea<ApplicationFormValues> name="diversityNotes" label="Anmerkungen zur Diversität" rows={2} />
-
+                    {chosenType !== Type.InfoBooth && (
+                        <>
+                            <ApplicationParticipantInfo />
+                            <ApplicationZipcodes />
+                        </>
+                    )}
                     <TextInput<ApplicationFormValues>
                         name="allergies"
                         label="Allergien für Catering"
-                        info="Unser Catering ist vegan. Habt ihr Allergien?"
+                        info="Unser Catering ist vegan. Habt ihr Allergien oder Unverträglichkeiten?"
                     />
 
                     <TextArea<ApplicationFormValues>
@@ -297,14 +240,16 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                     <TextInput<ApplicationFormValues> name="contactMail" label="E-Mail-Adresse" required={true} />
 
                     <TextInput<ApplicationFormValues> name="contactPhone" label="Telefonnummer" />
-
-                    {chosenType !== Type.Neighbor && <TextInput<ApplicationFormValues> name="residence" label="Wohnort" />}
+                    <div className="-mt-6 flex gap-2 text-sm">
+                        <b>Hinweis:</b> Spätestens wenn wir dich buchen benötigen wir eine Telefonnummer für kurzfristige Rückfragen vor dem
+                        Festival.
+                    </div>
 
                     <label className="block w-full bg-black p-1">
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 disabled:bg-gray-600"
+                            className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 text-white disabled:bg-gray-600"
                         >
                             Absenden
                         </button>
@@ -323,7 +268,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
 
                     <div className="mt-5 flex flex-col gap-2 text-sm">
                         <div>
-                            Das B-Side Festival ist auch 2025 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
+                            Das B-Side Festival ist auch 2026 ein Festival für alle mit vielfältigem und buntem Programm. Dabei wollen wir
                             insbesondere Räume und Bühnen für FLINTA* und andere marginalisierte Gesellschaftsgruppen schaffen.
                         </div>
                         <div>
@@ -331,7 +276,13 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                             Allgemeinheit frei zugänglich veranstaltet. Das Festival wird auch dieses Jahr wieder durch öffentliche
                             Fördermittel, Spenden und den Eigenanteil des B-Side Kultur e.V. als Veranstalter finanziert. Im Rahmen unserer
                             finanziellen Möglichkeiten erhalten alle künstlerischen, kulturellen und bildende Programmpunkte eine
-                            Aufwandsentschädigung.
+                            Aufwandsentschädigung unter Einhaltung der Honoraruntergrenzen für professionelle Künstler*innen.
+                        </div>
+                        <div>
+                            Deine Daten sind bei uns in guten Händen. Wir nutzen die hier gemachten Angaben ausschließlich für den
+                            Auswahlprozess und das Booking des B-Side Festivals. Wir geben nichts an Dritte weiter und löschen deine Daten,
+                            sobald sie für die Organisation nicht mehr benötigt werden. Mit dem Absenden erklärst du dich damit
+                            einverstanden.
                         </div>
                     </div>
                 </form>

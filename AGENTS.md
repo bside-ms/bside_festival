@@ -9,6 +9,7 @@ Instructions and context for AI coding agents working on this repository.
 **This file is a living document. Every agent that makes changes to the codebase is responsible for updating it.**
 
 Update this file whenever you:
+
 - Add, rename, or delete a route, server action, context, or major component
 - Change the architecture or data flow (e.g. adding a new mutation pattern, new context)
 - Add, remove, or intentionally hold back a dependency — document the reason
@@ -22,6 +23,7 @@ When in doubt: if a future agent reading this file would be surprised or misled 
 
 ## Code Style
 
+- **Do not add obvious comments** — comments must explain _why_, not _what_. Never add comments that restate what the code already clearly expresses (e.g. `// Nested Genre Creation` above a genres block, `// Stable handler` above a `useCallback`). Only comment when the reasoning is non-obvious or there's a gotcha that can't be inferred from reading the code.
 - **Always use arrow functions** — never named function declarations. `const Foo = () => ...` not `function Foo() {}`. This applies to components, helpers, callbacks, server actions — everything.
 - **Prefer lodash** when a utility function exists for the task (`xor`, `range`, `uniq`, `first`, `last`, `filter`, `map`, etc.) over hand-rolled equivalents.
 - **Imports are sorted alphabetically** by prettier-plugin-tailwindcss config. Run `npm run prettier:fix` after every change.
@@ -31,17 +33,17 @@ When in doubt: if a future agent reading this file would be surprised or misled 
 
 ## Available Scripts
 
-| Script | Purpose |
-|---|---|
-| `npm run dev` | Start dev server |
-| `npm run tsc` | Type-check — run after every non-trivial change |
-| `npm run lint` | ESLint — run after every change |
-| `npm run prettier:fix` | Auto-format everything — run at end of every task |
-| `npm run lint:fix` | ESLint with auto-fix |
-| `npm run prisma:migrations:dev` | Create a new migration during development |
-| `npm run prisma:migrations:deploy` | Apply pending migrations in production |
-| `npm run prisma:client:generate` | Regenerate Prisma client after schema changes |
-| `npm run find-unused-exports` | Find dead exports |
+| Script                             | Purpose                                           |
+| ---------------------------------- | ------------------------------------------------- |
+| `npm run dev`                      | Start dev server                                  |
+| `npm run tsc`                      | Type-check — run after every non-trivial change   |
+| `npm run lint`                     | ESLint — run after every change                   |
+| `npm run prettier:fix`             | Auto-format everything — run at end of every task |
+| `npm run lint:fix`                 | ESLint with auto-fix                              |
+| `npm run prisma:migrations:dev`    | Create a new migration during development         |
+| `npm run prisma:migrations:deploy` | Apply pending migrations in production            |
+| `npm run prisma:client:generate`   | Regenerate Prisma client after schema changes     |
+| `npm run find-unused-exports`      | Find dead exports                                 |
 
 **Verification order after any change:** `npm run tsc` → `npm run lint` → `npm run prettier:fix`
 
@@ -50,6 +52,7 @@ When in doubt: if a future agent reading this file would be surprised or misled 
 ## Architecture
 
 ### Framework & Rendering
+
 - **Next.js 16 App Router** with React 19 and TypeScript 5
 - All pages are **async Server Components** — they query the database directly via Prisma
 - Mutations go through **Server Actions** in `lib/actions/` — never through REST API routes
@@ -57,17 +60,20 @@ When in doubt: if a future agent reading this file would be surprised or misled 
 - Client components use `'use client'` directive; they call server actions directly (no `fetch`)
 
 ### Database
+
 - **Prisma 6** with **MariaDB** (MySQL dialect)
 - Singleton client at `lib/common/prismaClient.ts`
 - Schema at `prisma/schema.prisma`
 - Never use raw SQL — always use Prisma client
 
 ### Authentication
+
 - **NextAuth v4** with Keycloak provider (`lib/next-auth/`)
 - `getUserSession()`, `isLoggedIn()`, `isGroupMember()` — use these in server components
 - The `app/api/auth/[...nextauth]/route.ts` route must never be deleted
 
 ### File Storage
+
 - **IONOS S3** (AWS SDK v3) via `lib/upload/uploadFileToIonos.ts`
 - Public URL helper: `lib/upload/createPublicObjectUrl.ts`
 - Image constraints: `allowedImageContentTypes`, `allowedImageMaxFileSize`
@@ -75,11 +81,13 @@ When in doubt: if a future agent reading this file would be surprised or misled 
 - Server actions body size limit is 50 MB (`next.config.js`)
 
 ### Email
+
 - **Nodemailer v7** via `lib/mail/`
 - `sendApplicationConfirmationMail` — sent on new application
 - `sendSlotAttendConfirmationMail` — sent when someone registers for a slot
 
 ### UI
+
 - **Tailwind CSS v4** for layout and styling
 - **MUI v7** (`@mui/material`) for complex interactive components
 - **React Hook Form** with `FormProvider` pattern in all forms
@@ -153,9 +161,9 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 
 Two main contexts, both using **props directly** (no `useState` for server data) so `revalidatePath` re-renders flow through automatically:
 
-| Context | Used in | Contains |
-|---|---|---|
-| `ApplicationsOverviewContext` | `/bewerbungen/uebersicht` | Filter state (search text, type filter), expanded card IDs |
+| Context                       | Used in                            | Contains                                                      |
+| ----------------------------- | ---------------------------------- | ------------------------------------------------------------- |
+| `ApplicationsOverviewContext` | `/bewerbungen/uebersicht`          | Filter state (search text, type filter), expanded card IDs    |
 | `ParticipantsOverviewContext` | `/programm`, `/programm/timetable` | Filter state (text, types, locations, date range), pinned IDs |
 
 **Do not add `useState` for server-provided data** (participants, slots, venues, attendees, labels) — the server page passes fresh props after each action and revalidation.
@@ -184,11 +192,11 @@ These map to Prisma `Type` enum values. The `/bewerbungen/[type]` route uses `ge
 
 These packages are intentionally NOT on the latest version:
 
-| Package | Current | Cannot upgrade because |
-|---|---|---|
-| `eslint` / `@eslint/js` | v9 | `typescript-eslint@8` only supports ESLint 9; ESLint 10 breaks it |
-| `nodemailer` | v7 | `next-auth@4` peer dependency requires `^7.0.7` |
-| `prisma` / `@prisma/client` | v6 | Stay on stable v6; v7+ is a major rewrite |
+| Package                     | Current | Cannot upgrade because                                            |
+| --------------------------- | ------- | ----------------------------------------------------------------- |
+| `eslint` / `@eslint/js`     | v9      | `typescript-eslint@8` only supports ESLint 9; ESLint 10 breaks it |
+| `nodemailer`                | v7      | `next-auth@4` peer dependency requires `^7.0.7`                   |
+| `prisma` / `@prisma/client` | v6      | Stay on stable v6; v7+ is a major rewrite                         |
 
 ---
 

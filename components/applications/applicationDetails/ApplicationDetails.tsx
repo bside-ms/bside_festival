@@ -7,7 +7,6 @@ import ApplicationDetailsContacts from '@/components/applications/applicationDet
 import ApplicationDetailsDiversity from '@/components/applications/applicationDetails/ApplicationDetailsDiversity';
 import ApplicationDetailsImage from '@/components/applications/applicationDetails/ApplicationDetailsImage';
 import ApplicationDetailsLinks from '@/components/applications/applicationDetails/ApplicationDetailsLinks';
-import ApplicationDetailsMaterialExpenses from '@/components/applications/applicationDetails/ApplicationDetailsMaterialExpenses';
 import ApplicationDetailsMotivation from '@/components/applications/applicationDetails/ApplicationDetailsMotivation';
 import ApplicationDetailsParticipantCount from '@/components/applications/applicationDetails/ApplicationDetailsParticipantCount';
 import ApplicationDetailsTechnicalRider from '@/components/applications/applicationDetails/ApplicationDetailsTechnicalRider';
@@ -68,8 +67,6 @@ const ApplicationDetails = ({ application, genres, links, onCloseClick }: Props)
                 <ApplicationDetailsContacts application={application} />
 
                 <ApplicationDetailsTechnicalRider application={application} />
-
-                <ApplicationDetailsMaterialExpenses application={application} />
 
                 <ApplicationDetailsCanProvideBackline application={application} />
 

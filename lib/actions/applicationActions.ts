@@ -1,8 +1,8 @@
 'use server';
 
-import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import { ApplicationFormValues } from '@/components/applications/applicationForm/ApplicationForm';
+import { createVerification } from '@/lib/actions/emailConfirmationActions';
 import prismaClient from '@/lib/common/prismaClient';
-import sendApplicationConfirmationMail from '@/lib/mail/sendApplicationConfirmationMail';
 import allowedImageContentTypes from '@/lib/upload/allowedImageContentTypes';
 import allowedImageMaxFileSize from '@/lib/upload/allowedImageMaxFileSize';
 import allowedTechnicRiderContentType from '@/lib/upload/allowedTechnicRiderContentType';
@@ -11,114 +11,80 @@ import uploadFileToIonos from '@/lib/upload/uploadFileToIonos';
 import { Type, type ApplicationStatus } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
-export interface AddParticipantData {
-    type: Type;
-    name: string;
-    contactName: string;
-    contactPhone: string;
-    contactMail: string;
-    description: string;
-    concertGenres: Array<string | number>;
-    diskJockeyGenres: Array<string | number>;
-    encodedImage: string;
-    motivation: string;
-    additionalInfo: string;
-    technicalRider: string | null;
-    encodedTechnicalRiderPdf: string | null;
-    backlineSharing: string | null;
-    materialExpenses: string | null;
-    residence: string | null;
-    participantCount: string;
-    hasFlintaParticipants: boolean;
-    hasMarginalizedParticipants: boolean;
-    diversityNotes: string;
-    allergies: string;
-    links: Array<string>;
-}
+export async function addApplication(values: ApplicationFormValues, chosenType: Type) {
+    try {
+        const imageFileName = await uploadFileToIonos(values.encodedImage, allowedImageContentTypes, allowedImageMaxFileSize);
 
-export const addApplication = async ({
-    type,
-    motivation,
-    encodedImage,
-    name,
-    description,
-    residence,
-    additionalInfo,
-    contactPhone,
-    encodedTechnicalRiderPdf,
-    technicalRider,
-    backlineSharing,
-    materialExpenses,
-    contactName,
-    links,
-    contactMail,
-    participantCount,
-    hasFlintaParticipants,
-    hasMarginalizedParticipants,
-    diversityNotes,
-    allergies,
-    concertGenres,
-    diskJockeyGenres,
-}: AddParticipantData): Promise<void> => {
-    const imageFileName = await uploadFileToIonos(encodedImage, allowedImageContentTypes, allowedImageMaxFileSize);
+        const technicalRiderFileName = values.encodedTechnicalRiderPdf
+            ? await uploadFileToIonos(values.encodedTechnicalRiderPdf, [allowedTechnicRiderContentType], allowedTechnicalRiderMaxFileSize)
+            : null;
 
-    const technicalRiderFileName = await uploadFileToIonos(
-        encodedTechnicalRiderPdf,
-        [allowedTechnicRiderContentType],
-        allowedTechnicalRiderMaxFileSize,
-    );
+        const publicLinks = values.publicLinks.map((l) => l.url).filter((url) => url.trim() !== '');
+        const privateLinks = values.privateLinks.map((l) => l.url).filter((url) => url.trim() !== '');
+        const professionalParticipantsCount = values.isProfessionalBooking ? values.participantCount : values.professionalParticipantsCount;
 
-    const newParticipant = await prismaClient.participant.create({
-        data: {
-            type,
-            name,
-            contactName,
-            contactPhone,
-            contactMail,
-            technicalRider,
-            description,
-            motivation,
-            residence,
-            additionalInfo,
-            imageFileName,
-            technicalRiderFileName,
-            backlineSharing,
-            materialExpenses,
-            participantCount,
-            hasFlintaParticipants,
-            hasMarginalizedParticipants,
-            diversityNotes,
-            allergies,
-            genres: {
-                create: [
-                    ...concertGenres
-                        .filter((genre): genre is number => typeof genre === 'number')
-                        .map((id) => ({ genre: { connect: { id } } })),
-                    ...concertGenres
-                        .filter((genre): genre is string => typeof genre === 'string')
-                        .map((genre) => ({ genre: { create: { type: Type.Concert, name: genre } } })),
-                    ...diskJockeyGenres
-                        .filter((genre): genre is number => typeof genre === 'number')
-                        .map((id) => ({ genre: { connect: { id } } })),
-                    ...diskJockeyGenres
-                        .filter((genre): genre is string => typeof genre === 'string')
-                        .map((genre) => ({ genre: { create: { type: Type.DiskJockey, name: genre } } })),
-                ],
+        const newParticipant = await prismaClient.participant.create({
+            data: {
+                type: chosenType,
+                name: values.name,
+                contactName: values.contactName,
+                contactPhone: values.contactPhone,
+                contactMail: values.contactMail,
+                technicalRider: values.technicalRider ?? null,
+                description: values.description,
+                motivation: values.motivation,
+                additionalInfo: values.additionalInfo,
+                imageFileName,
+                technicalRiderFileName,
+                backlineSharing: values.backlineSharing ?? null,
+                participantCount: values.participantCount,
+                flintaParticipantsCount: values.flintaParticipantsCount,
+                hasMarginalizedParticipants: values.hasMarginalizedParticipants,
+                isProfessionalBooking: values.isProfessionalBooking,
+                professionalParticipantsCount: professionalParticipantsCount,
+                diversityNotes: values.diversityNotes,
+                allergies: values.allergies,
+
+                genres: {
+                    create: [
+                        ...(values.concertGenres ?? []).map((genre) =>
+                            typeof genre === 'number'
+                                ? { genre: { connect: { id: genre } } }
+                                : { genre: { create: { type: Type.Concert, name: genre } } },
+                        ),
+                        ...(values.diskJockeyGenres ?? []).map((genre) =>
+                            typeof genre === 'number'
+                                ? { genre: { connect: { id: genre } } }
+                                : { genre: { create: { type: Type.DiskJockey, name: genre } } },
+                        ),
+                    ],
+                },
+                zipcodes: {
+                    create: [...(values.participantZipcodes ?? []).map((pz) => ({ code: pz.code, isInternational: pz.isInternational }))],
+                },
+                links: {
+                    create: [
+                        ...publicLinks.map((link) => ({ link, isConfidential: false })),
+                        ...privateLinks.map((link) => ({ link, isConfidential: true })),
+                    ],
+                },
+                appliedAt: new Date(),
             },
-            appliedAt: new Date(),
-        },
-    });
+        });
+        createVerification(newParticipant);
 
-    for (const link of links) {
-        await prismaClient.link.create({ data: { link, participantId: newParticipant.id } });
+        return {
+            id: newParticipant.id,
+        };
+    } catch (error) {
+        console.error('Submission Error:', error);
+        // We throw or return an error object to be caught by the Client Component
+        return {
+            id: null,
+            message: error instanceof Error ? error.message : 'An unexpected error occurred.',
+        };
     }
-
-    if (isNotEmptyString(newParticipant.contactMail)) {
-        sendApplicationConfirmationMail({ ...newParticipant, contactMail: newParticipant.contactMail }, links);
-    }
-
-    revalidatePath('/bewerbungen/uebersicht');
-};
+}
 
 export const updateApplicationDetails = async (id: number, name: string, description: string): Promise<void> => {
     await prismaClient.participant.update({ data: { updatedName: name, updatedDescription: description }, where: { id } });

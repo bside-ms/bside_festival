@@ -5,7 +5,6 @@ import ParticipantCanProvideBackline from '@/components/participants/details/Par
 import ParticipantContacts from '@/components/participants/details/ParticipantContacts';
 import ParticipantImage from '@/components/participants/details/ParticipantImage';
 import ParticipantLinks from '@/components/participants/details/ParticipantLinks';
-import ParticipantMaterialExpenses from '@/components/participants/details/ParticipantMaterialExpenses';
 import ParticipantNameAndDescriptionForm from '@/components/participants/details/ParticipantNameAndDescriptionForm';
 import ParticipantTechnicalRider from '@/components/participants/details/ParticipantTechnicalRider';
 import SlotAttendeeData from '@/components/participants/details/SlotAttendeeData';
@@ -146,8 +145,6 @@ const ParticipantDetails = ({ participant, genres, links, onCloseClick, isLogged
                 {isLoggedIn && (
                     <div className="relative rounded-md p-2">
                         <ParticipantContacts participant={participant} />
-
-                        <ParticipantMaterialExpenses participant={participant} />
 
                         <ParticipantCanProvideBackline participant={participant} />
 
