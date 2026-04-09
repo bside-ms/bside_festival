@@ -1,10 +1,10 @@
 'use client';
 
-import { AddVolunteerRequest } from '@/app/api/volunteers/add/route';
 import Checkbox from '@/components/form/Checkbox';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
 import VolunteerInfo from '@/components/volunteers/volunteerForm/VolunteerInfo';
+import { addVolunteer } from '@/lib/actions/volunteerActions';
 import volunteerDayPreferences from '@/lib/volunteers/volunteerDayPreferences';
 import { type ReactElement, useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -44,37 +44,30 @@ const VolunteerForm = (): ReactElement => {
         async (values: VolunteerFormValues) => {
             clearErrors('root');
 
-            const request: AddVolunteerRequest = {
-                fullName: values.fullName,
-                mailAddress: values.mailAddress,
-                phoneNumber: values.phoneNumber,
-                canCook: values.canCook,
-                hasCar: values.hasCar,
-                canCarryHeavyStuff: values.canCarryHeavyStuff,
-                isSocial: values.isSocial,
-                canSupportTechnician: values.canSupportTechnician,
-                canSupportArtist: values.canSupportArtist,
-                hasMultipleTalents: values.hasMultipleTalents,
-                canWorkWithChildren: false, // No entertainment for children this year
-                isAvailableOnFriday: values.isAvailableOnFriday,
-                isAvailableOnSaturday: values.isAvailableOnSaturday,
-                isAvailableOnSunday: values.isAvailableOnSunday,
-                isAvailableBefore: values.isAvailableBefore,
-                additionalInfo: values.additionalInfo,
-            };
-
-            const response = await fetch('/api/volunteers/add', {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify(request),
-            });
-
-            if (!response.ok) {
-                setError('root', { message: 'Fehler beim Submit' });
-            } else {
+            try {
+                await addVolunteer({
+                    fullName: values.fullName,
+                    mailAddress: values.mailAddress,
+                    phoneNumber: values.phoneNumber,
+                    canCook: values.canCook,
+                    hasCar: values.hasCar,
+                    canCarryHeavyStuff: values.canCarryHeavyStuff,
+                    isSocial: values.isSocial,
+                    canSupportTechnician: values.canSupportTechnician,
+                    canSupportArtist: values.canSupportArtist,
+                    hasMultipleTalents: values.hasMultipleTalents,
+                    canWorkWithChildren: false, // No entertainment for children this year
+                    isAvailableOnFriday: values.isAvailableOnFriday,
+                    isAvailableOnSaturday: values.isAvailableOnSaturday,
+                    isAvailableOnSunday: values.isAvailableOnSunday,
+                    isAvailableBefore: values.isAvailableBefore,
+                    additionalInfo: values.additionalInfo,
+                });
                 setWasSuccessfullySubmitted(true);
                 reset();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch {
+                setError('root', { message: 'Fehler beim Submit' });
             }
         },
         [clearErrors, reset, setError],

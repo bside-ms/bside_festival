@@ -15,7 +15,7 @@ model Participant {
     appliedAt                   DateTime?
     updatedAt                   DateTime           @updatedAt
     contactName                 String?            @db.Text
-    contactMail                 String?            @db.Text
+    contactMail                 String             @db.Text
     contactPhone                String?            @db.Text
     description                 String?            @db.Text
     updatedDescription          String?            @db.Text
@@ -23,18 +23,22 @@ model Participant {
     curationScore               Int?
     curationInfo                String?            @db.Text
     address                     String?            @db.Text
-    residence                   String?            @db.Text
     imageFileName               String?            @db.Text
     technicalRider              String?            @db.Text
     technicalRiderFileName      String?            @db.Text
     backlineSharing             String?            @db.Text
-    materialExpenses            String?            @db.Text
     additionalInfo              String?            @db.Text
-    participantCount            String?            @db.Text
+    participantCount            Int                @default(1)
     allergies                   String?            @db.Text
-    hasFlintaParticipants       Boolean            @default(false)
+    isProfessionalBooking       Boolean            @default(false)
+    flintaParticipantsCount     Int                @default(0)
+    professionalParticipantsCount Int              @default(0)
     hasMarginalizedParticipants Boolean            @default(false)
+    durationPreference          String?            @db.Text
     diversityNotes              String?            @db.Text
+    emailVerified               DateTime?
+    verificationTokens          EmailVerificationToken[]
+    zipcodes                    Zipcode[]
     links                       Link[]
     comments                    Comment[]
     labels                      ParticipantLabel[]
@@ -43,6 +47,22 @@ model Participant {
     status                      ApplicationStatus  @default(Applied)
     Slot                        Slot[]
     Venue                       Venue[]
+}
+
+model EmailVerificationToken {
+    id              Int         @id @default(autoincrement())
+    participant     Participant @relation(fields: [participantId], references: [id])
+    participantId   Int
+    token           String      @unique
+    expires         DateTime
+}
+
+model Zipcode {
+    id              Int         @id @default(autoincrement())
+    participant     Participant @relation(fields: [participantId], references: [id])
+    participantId   Int
+    code            String      @db.Text
+    isInternational Boolean     @default(false)
 }
 
 model Link {

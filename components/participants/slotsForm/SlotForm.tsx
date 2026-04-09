@@ -1,9 +1,8 @@
-import { DeleteSlotRequest, SuccessfulDeleteSlotResponse } from '@/app/api/applications/slot/delete/route';
-import { ErroneousUpdateSlotResponse, SuccessfulUpdateSlotResponse, UpsertSlotRequest } from '@/app/api/applications/slot/update/route';
 import DateTimeInput from '@/components/form/DateTimeInput';
 import SelectInput from '@/components/form/SelectInput';
 import TextInput from '@/components/form/TextInput';
 import { useParticipantSlots, useParticipantsOverviewContext } from '@/components/participants/overview/ParticipantsOverviewContext';
+import { deleteSlot, updateSlot } from '@/lib/actions/slotActions';
 import formatDate from '@/lib/common/helper/formatDate';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -27,7 +26,7 @@ const SlotForm = ({ participantId }: Props): ReactElement => {
     const [showDeleteButton, setShowDeleteButton] = useState(false);
     const toggleShowDeleteButton = useCallback(() => setShowDeleteButton((prevState) => !prevState), []);
 
-    const { updateAllSlots, allLocations } = useParticipantsOverviewContext();
+    const { allLocations } = useParticipantsOverviewContext();
 
     const participantSlots = useParticipantSlots(participantId);
 
@@ -53,58 +52,31 @@ const SlotForm = ({ participantId }: Props): ReactElement => {
             const usedMaxAttendees = isEmptyString(maxAttendees) || maxAttendees === '0' ? undefined : maxAttendees;
             setValue('maxAttendees', usedMaxAttendees);
 
-            const request: UpsertSlotRequest = {
-                participantId,
-                begin: new Date(beginDate),
-                locationId: Number(locationId),
-                duration: Number(duration),
-                maxAttendees: Number(maxAttendees),
-            };
-
-            const response = await fetch('/api/applications/slot/update', {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify(request),
-            });
-
-            if (!response.ok) {
+            try {
+                await updateSlot(
+                    participantId,
+                    Number(locationId),
+                    new Date(beginDate),
+                    Number(duration),
+                    usedMaxAttendees !== undefined ? Number(maxAttendees) : undefined,
+                );
+            } catch {
                 setError('root', { message: 'Fehler beim Submit!' });
-            } else {
-                const updateSlotResponse = (await response.json()) as SuccessfulUpdateSlotResponse | ErroneousUpdateSlotResponse;
-
-                if ('message' in updateSlotResponse) {
-                    setError('root', { message: updateSlotResponse.message });
-                } else {
-                    updateAllSlots(updateSlotResponse.updatedSlots);
-                }
             }
         },
-        [clearErrors, participantId, setError, updateAllSlots],
+        [clearErrors, participantId, setError, setValue],
     );
 
     const handleSlotDelete = useCallback(async () => {
-        const request: DeleteSlotRequest = {
-            participantId,
-        };
-
-        const response = await fetch('/api/applications/slot/delete', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(request),
-        });
-
-        if (!response.ok) {
-            setError('root', { message: 'Fehler beim Submit!' });
-        } else {
-            const { updatedSlots } = (await response.json()) as SuccessfulDeleteSlotResponse;
-
-            updateAllSlots(updatedSlots);
-
+        try {
+            await deleteSlot(participantId);
             resetField('beginDate');
             resetField('duration');
             resetField('locationId');
+        } catch {
+            setError('root', { message: 'Fehler beim Submit!' });
         }
-    }, [participantId, resetField, setError, updateAllSlots]);
+    }, [participantId, resetField, setError]);
 
     const locationOptions = allLocations.map<{ value: string; label: string }>(({ id, name }) => ({
         value: id.toString(),

@@ -20,6 +20,8 @@ interface Props<T extends FieldValues> {
     maxLength?: number;
     validate?: (value: string) => string | undefined;
     isDisabled?: boolean;
+    type?: string;
+    placeholder?: string;
 }
 
 const TextInput = <T extends FieldValues>({
@@ -27,11 +29,13 @@ const TextInput = <T extends FieldValues>({
     name,
     defaultValue,
     info,
+    type = 'text',
     additionalInfo,
     validate,
     required = false,
     maxLength,
     isDisabled,
+    placeholder,
 }: Props<T>): ReactElement => {
     const {
         formState: { errors, isSubmitting },
@@ -53,20 +57,21 @@ const TextInput = <T extends FieldValues>({
 
             <input
                 id={id}
-                type="text"
+                type={type}
                 defaultValue={defaultValue}
                 className={cn(
                     'rounded border border-black p-2 outline-0 placeholder:opacity-55',
                     typeof errorMessage === 'string' && 'bg-rose-400',
                 )}
                 required={required}
-                placeholder={required ? `${label} *` : label}
+                placeholder={placeholder ?? (required ? `${label} *` : label)}
                 disabled={isSubmitting || isDisabled}
                 {...register(name, {
                     required: {
                         value: required,
                         message: 'Dies ist ein Pflichtfeld',
                     },
+                    valueAsNumber: type === 'number',
                     maxLength: isEmptyNumber(maxLength)
                         ? undefined
                         : {

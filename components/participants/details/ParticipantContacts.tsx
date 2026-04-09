@@ -1,7 +1,7 @@
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
-import { faEnvelope, faLocationDot, faPhone, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faPhone, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ReactElement } from 'react';
 
@@ -9,21 +9,13 @@ interface Props {
     participant: SerializableParticipant;
 }
 
-const ParticipantContacts = ({ participant: { contactName, contactPhone, contactMail, residence } }: Props): ReactElement | null => {
-    if (isEmptyString(residence) && isEmptyString(contactName) && isEmptyString(contactMail) && isEmptyString(contactPhone)) {
+const ParticipantContacts = ({ participant: { contactName, contactPhone, contactMail } }: Props): ReactElement | null => {
+    if (isEmptyString(contactName) && isEmptyString(contactMail) && isEmptyString(contactPhone)) {
         return null;
     }
 
     return (
         <div>
-            {isNotEmptyString(residence) && (
-                <div className="flex items-center">
-                    <div className="mr-2 w-4 shrink-0 text-center text-sm">
-                        <FontAwesomeIcon icon={faLocationDot} />
-                    </div>
-                    <div>{residence}</div>
-                </div>
-            )}
             {isNotEmptyString(contactName) && (
                 <div className="flex items-center">
                     <div className="mr-2 w-4 shrink-0 text-center text-sm">

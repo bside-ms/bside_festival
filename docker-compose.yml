@@ -1,6 +1,12 @@
 version: '3.3'
 
 services:
+    mailcatcher:
+        image: docker.io/schickling/mailcatcher
+        ports:
+            - 1080:1080
+            - 1025:1025
+
     db:
         image: mariadb:10.5.8
         restart: always

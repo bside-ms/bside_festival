@@ -1,7 +1,6 @@
-import type { SuccessfulUpdateDetailsResponse, UpdateDetailsRequest } from '@/app/api/applications/update/details/route';
-import { useApplicationsOverviewContext } from '@/components/applications/applicationsOverview/ApplicationsOverviewContext';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
+import { updateApplicationDetails } from '@/lib/actions/applicationActions';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,8 +18,6 @@ interface Props {
 }
 
 const ApplicationNameAndDescriptionForm = ({ application }: Props): ReactElement => {
-    const { updateApplication } = useApplicationsOverviewContext();
-
     const [showForm, setShowForm] = useState(false);
     const toggleShowForm = useCallback(() => setShowForm((prevState) => !prevState), []);
 
@@ -36,29 +33,14 @@ const ApplicationNameAndDescriptionForm = ({ application }: Props): ReactElement
         async ({ name, description }: NameAndDescriptionFormValues) => {
             clearErrors('root');
 
-            const request: UpdateDetailsRequest = {
-                id: application.id,
-                name,
-                description,
-            };
-
-            const response = await fetch('/api/applications/update/details', {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify(request),
-            });
-
-            if (!response.ok) {
-                setError('root', { message: 'Fehler beim Submit!' });
-            } else {
-                const { updatedParticipant } = (await response.json()) as SuccessfulUpdateDetailsResponse;
-
-                updateApplication(updatedParticipant);
-
+            try {
+                await updateApplicationDetails(application.id, name, description);
                 toggleShowForm();
+            } catch {
+                setError('root', { message: 'Fehler beim Submit!' });
             }
         },
-        [application.id, clearErrors, setError, toggleShowForm, updateApplication],
+        [application.id, clearErrors, setError, toggleShowForm],
     );
 
     if (!showForm) {

@@ -3,7 +3,7 @@ const createMailHtml = (content: string): string => `
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>B-Side Festival 2025</title>
+  <title>B-Side Festival 2026</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { margin: 0; padding: 0; background-color: #f57773; }
@@ -42,7 +42,7 @@ const createMailHtml = (content: string): string => `
 </head>
 <body>
   <center class="email-wrapper">
-    <table width="100%" class="header"><tr><td width="600" style="font-family: sans-serif; padding: 30px;">B-Side Festival 2025</td></tr></table>
+    <table width="100%" class="header"><tr><td width="600" style="font-family: sans-serif; padding: 30px;">B-Side Festival 2026</td></tr></table>
     <table width="100%" class="email-container"><tr><td>
       ${content}
       <div class="divider"></div>

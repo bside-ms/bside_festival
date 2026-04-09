@@ -64,7 +64,7 @@ const SelectInput = <T extends FieldValues>({
                 ))}
             </select>
 
-            {typeof errorMessage === 'string' && <div className="px-1 text-pink-300">{errorMessage}</div>}
+            {typeof errorMessage === 'string' && <div className="px-1 text-rose-600">{errorMessage}</div>}
         </div>
     );
 };
