@@ -1,6 +1,6 @@
 ---
 engine_version: 0.4.21
-file_version: 2026-03-18 00:23:17.769725000 Z
+file_version: 2026-04-09 10:44:08.716072000 Z
 resources:
 - name: comment
   preferences:
@@ -23,9 +23,20 @@ resources:
       preferences:
         form_id: 2
         show_on_table: true
-    custom_sql: |-
-      SELECT `Participant`.*, 2 / participantCount * 100 AS flinta_quota
-      FROM `Participant`
+    - preferences:
+        show_on_table: true
+      name: edit
+    custom_sql: "SELECT `p`.*,\n    p.flintaParticipantsCount / p.participantCount
+      * 100 AS flinta_quota,\n    (\n        SELECT COUNT(*) \n        FROM `Zipcode`
+      z \n        WHERE z.participantId = p.id \n        AND (z.code LIKE '32%' OR\n
+      \            z.code LIKE '33%' OR\n             z.code LIKE '44%' OR\n             z.code
+      LIKE '45%' OR\n             z.code LIKE '46%' OR\n             z.code LIKE '48%'
+      OR\n             z.code LIKE '57%' OR\n             z.code LIKE '58%' OR\n             z.code
+      LIKE '59%'\n         )\n    ) / p.participantCount * 100 AS lwl_quota,\n    (\n
+      \       SELECT COUNT(*) \n        FROM `Zipcode` z \n        WHERE z.participantId
+      = p.id \n        AND z.code in ('48143', '48145', '48147', '48149', '48151',
+      '48153', '48155', '48157', '48159', '48161', '48163', '48165', '48167')\n    )
+      / p.participantCount * 100 AS ms_quota\nFROM `Participant` AS p;"
     columns:
     - access_type: hidden
       name: updatedAt
@@ -37,8 +48,6 @@ resources:
       name: description
     - access_type: hidden
       name: motivation
-    - access_type: hidden
-      name: curationScore
     - access_type: hidden
       name: curationInfo
     - access_type: hidden
@@ -79,6 +88,22 @@ resources:
       description: ''
     - access_type: hidden
       name: id
+    - name: ms_quota
+      display_name: Ms quota
+      column_type: percentage
+      access_type: read_only
+      virtual: false
+      format: {}
+      validators: []
+      description: ''
+    - name: lwl_quota
+      display_name: Lwl quota
+      column_type: percentage
+      access_type: read_only
+      virtual: false
+      format: {}
+      validators: []
+      description: ''
     display_name: Bewerbungen - Bands
     scopes:
     - name: bands
@@ -95,7 +120,7 @@ resources:
         filter:
         - type:
             neq: concert
-  updated_at: 2026-03-18 00:11:28.592521000 +00:00
+  updated_at: 2026-04-09 10:44:08.716072000 +00:00
 - name: participant_genre
   preferences:
     visible: false
@@ -136,6 +161,8 @@ configs:
   - updatedAt
   - contactName
   - flinta_quota
+  - ms_quota
+  - lwl_quota
   - contactMail
   - contactPhone
   - description
@@ -152,14 +179,17 @@ configs:
   - status
   - updatedDescription
   - backlineSharing
-  - materialExpenses
   - allergies
   - diversityNotes
-  - hasFlintaParticipants
   - hasMarginalizedParticipants
   - participantCount
   - updatedName
-  updated_at: 2026-03-17 22:48:27.914503000 +00:00
+  - flintaParticipantsCount
+  - durationPreference
+  - professionalParticipantsCount
+  - emailVerified
+  - isProfessionalBooking
+  updated_at: 2026-04-09 10:43:41.483105000 +00:00
 queries:
 - id: 1
   name: Hello Query
@@ -242,9 +272,9 @@ forms:
       reference:
         model_name: participant
     request_type: rest
-  api_config_name: 192.168.10.80:3000
+  api_config_name: Next.JS
   tags: []
-  updated_at: 2026-03-18 00:23:17.769725000 +00:00
+  updated_at: 2026-04-09 10:11:43.019859000 +00:00
 alerts: []
 api_configs:
 - id: 1
@@ -261,13 +291,13 @@ api_configs:
   updated_at: 2026-03-16 22:50:22.971078000 +00:00
 - id: 3
   name: Next.JS
-  url: http://localhost:3000
+  url: http://192.168.10.93:3000
   preferences: {}
   description:
-  updated_at: 2026-03-17 23:14:09.967405000 +00:00
-- id: 4
-  name: 192.168.10.80:3000
-  url: http://192.168.10.80:3000
+  updated_at: 2026-04-09 09:00:52.793106000 +00:00
+- id: 6
+  name: 192.168.10.93:3002
+  url: http://192.168.10.93:3002
   preferences: {}
   description:
-  updated_at: 2026-03-17 23:54:54.554827000 +00:00
+  updated_at: 2026-04-09 09:47:06.668742000 +00:00

@@ -30,8 +30,9 @@ services:
             - '3001:3000'
         volumes:
         - '.:/app'
+        env_file:
+            - .env
         environment:
-            SECRET_KEY_BASE: 1e09ef3ccf15c86b13db396cdfd4ffa982ff3a7cbf9ba0ed3fd382f54ba1dd60ca3812ff46263469add77f9c570b202fd5278537cc9d9e1b4185e7a88c947723
             DATABASE_URL: postgresql://postgres:postgres@admindb:5432/motoradmin
 
     admindb:
