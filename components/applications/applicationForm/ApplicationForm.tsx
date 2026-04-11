@@ -9,6 +9,7 @@ import ApplicationTypeIntro from '@/components/applications/applicationForm/Appl
 import ApplicationZipcodes from '@/components/applications/applicationForm/ApplicationZipcodes';
 import ImageUpload from '@/components/applications/applicationForm/ImageUpload';
 import TechnicalRiderFields from '@/components/applications/applicationForm/TechnicalRiderFields';
+import Checkbox from '@/components/form/Checkbox';
 import MultiSelectInput from '@/components/form/MultiSelectInput';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
@@ -239,12 +240,21 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
 
                     <TextInput<ApplicationFormValues> name="contactMail" label="E-Mail-Adresse" required={true} />
 
-                    <TextInput<ApplicationFormValues> name="contactPhone" label="Telefonnummer" />
+                    <TextInput<ApplicationFormValues> name="contactPhone" label="Telefonnummer" required={true} />
                     <div className="-mt-6 flex gap-2 text-sm">
-                        <b>Hinweis:</b> Spätestens wenn wir dich buchen benötigen wir eine Telefonnummer für kurzfristige Rückfragen vor dem
-                        Festival.
+                        <b>Hinweis:</b> Wenn wir dich buchen benötigen wir eine Telefonnummer für kurzfristige Rückfragen vor dem Festival.
                     </div>
 
+                    <Checkbox
+                        name="acceptDataProcessing"
+                        label="Ich habe die Datenschutzerklärung gelesen und erkläre mich mit der vertraulichen Verarbeitung meiner Daten einverstanden."
+                    />
+                    <div className="-mt-6 pl-8">
+                        Hier gehts zur{' '}
+                        <Link href="https://b-side.ms/kv/datenschutz/" className="underline hover:text-red-600">
+                            Datenschutzerklärung
+                        </Link>
+                    </div>
                     <label className="block w-full bg-black p-1">
                         <button
                             type="submit"
