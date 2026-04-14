@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+    allowedDevOrigins: ['*', '192.168.10.93', 'localhost'],
     reactStrictMode: true,
     experimental: {
         serverActions: {

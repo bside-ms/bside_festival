@@ -1,18 +1,62 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+.gradient-background {
+    --gradient-h: 150px;
+    background: linear-gradient(
+        to bottom,
+        rgba(214, 130, 181, 1) 0%,
+        rgba(214, 130, 181, 0.76) calc(var(--gradient-h) * 0.22),
+        rgba(214, 130, 181, 0.36) calc(var(--gradient-h) * 0.6),
+        rgba(214, 130, 181, 0.1) calc(var(--gradient-h) * 0.87),
+        rgba(214, 130, 181, 0) var(--gradient-h)
+    );
+}
+
+@media (min-width: 768px) {
+    .f26-background {
+        min-height: 960px;
+
+        /* 1. Define the stack */
+        background-image:
+            linear-gradient(
+                to bottom,
+                rgba(214, 130, 181, 1) 0%,
+                rgba(214, 130, 181, 0.76) calc(var(--gradient-h) * 0.22),
+                rgba(214, 130, 181, 0.36) calc(var(--gradient-h) * 0.6),
+                rgba(214, 130, 181, 0.1) calc(var(--gradient-h) * 0.87),
+                rgba(214, 130, 181, 0) var(--gradient-h)
+            ),
+            url('/assets/images/2026/wavy_background.svg');
+
+        /* 2. Map the attachment to the layers */
+        /* scroll = Gradient (Top layer) moves with the page */
+        /* fixed  = Wavy SVG (Bottom layer) stays stuck to the viewport */
+        background-attachment: scroll, fixed;
+
+        /* 3. Standard positioning */
+        background-position:
+            top center,
+            top center;
+        background-repeat: no-repeat, no-repeat;
+        background-size:
+            100% var(--gradient-h),
+            cover;
+    }
+}
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-    --font-display: 'NewEdge666', serif;
+    --font-display: 'GoogleSansFlex';
+    --font-display: 'GoogleSansFlex';
     --font-mono: 'StepsMono', serif;
 
     --breakpoint-xs: 25rem;
 }
 
 @font-face {
-    font-family: 'NewEdge666';
-    src: url('/fonts/NewEdge666-RegularRounded.otf') format('opentype');
+    font-family: 'GoogleSansFlex';
+    src: url('/fonts/GoogleSansFlex_24pt-Medium.ttf');
     font-weight: normal;
     font-style: normal;
 }
@@ -144,6 +188,7 @@
     .empty-placeholder:empty::after {
         padding: 5px 12px 0;
         content: 'Zu den gesetzten Filtern können wir aktuell leider keine Programmpunkte finden!';
+        font-family: var(--font-display);
         font-family: var(--font-display);
     }
 }

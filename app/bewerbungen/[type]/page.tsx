@@ -1,4 +1,5 @@
 import ApplicationForm from '@/components/applications/applicationForm/ApplicationForm';
+import isWithinApplicationPhase from '@/lib/common/helper/withinApplicationPhase';
 import prismaClient from '@/lib/common/prismaClient';
 import isLoggedIn from '@/lib/next-auth/isLoggedIn';
 import urlPathTypes from '@/lib/participants/urlPathTypes';
@@ -50,8 +51,10 @@ const getAllDiskJockeyGenres = async () => {
 export const generateStaticParams = () => Object.keys(urlPathTypes).map((type) => ({ type }));
 
 export default async ({ params }: { params: Promise<{ type: string }> }): Promise<ReactElement> => {
-    if (!(await isLoggedIn())) {
-        redirect('/');
+    if (!isWithinApplicationPhase()) {
+        if (!(await isLoggedIn())) {
+            redirect('/');
+        }
     }
 
     const { type } = await params;
@@ -67,7 +70,7 @@ export default async ({ params }: { params: Promise<{ type: string }> }): Promis
 
     return (
         <div className="relative min-h-screen w-full">
-            <div className="relative z-10 mx-auto w-full max-w-[700px] p-5 drop-shadow-xl md:w-2/3 md:p-8">
+            <div className="relative z-10 mx-auto w-full max-w-2xl p-5 drop-shadow-xl md:w-2/3 md:p-8">
                 <ApplicationForm chosenType={chosenType} allConcertGenres={allConcertGenres} allDiskJockeyGenres={allDiskJockeyGenres} />
             </div>
         </div>

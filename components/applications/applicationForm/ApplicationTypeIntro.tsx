@@ -66,14 +66,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                         <br />
                     </div>
                     <div>Die Bewerbungsphase für das B-Side Festival 2026 ist eröffnet.</div>
-                    <div>
-                        Im Sinne unseres Mottos: B-together, B-loved – B-Side! soll in den Räumen der neuen B-Side eine Ausstellung rund um
-                        die Themen Gemeinschaft, Liebe und Empathie aus privater und/oder politischer Perspektive entstehen. Du hast bereits
-                        ein Kunstwerk, das zum Thema passt oder möchtest ein neues entwickeln?
-                    </div>
-                    <div>
-                        Losgelöst von dieser Gruppenausstellung kannst du dich auch mit einer Ausstellungsidee für das Viertel bewerben.
-                    </div>
+                    <div>Du möchtest Dich mit einer Ausstellung in den Räumen der B-Side oder im Viertel bewerben?</div>
                     <div>
                         Wir bitten um vollständige & aussagekräftige Bewerbung inklusive der von dir verwendeten Materialien, die Anzahl
                         deiner Werke und der Formate sowie der benötigten Technik (siehe Technical Rider).

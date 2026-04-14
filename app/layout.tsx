@@ -27,11 +27,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="de">
             <head />
-            <body className="bg-[#eaebeb] font-sans">
+            <body className="flex min-h-screen flex-col font-sans">
                 <PageHeader />
 
-                {children}
+                <div className="gradient-background f26-background">{children}</div>
 
+                <div className="grow" />
                 <Footer />
             </body>
         </html>
