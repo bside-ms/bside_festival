@@ -72,10 +72,13 @@ export default async (): Promise<ReactElement> => {
 
                 {/* Bottom Part */}
                 <div className="my-4 text-center text-sm">
-                    Fragen zur Bewerbung? Schreib uns gerne an:{' '}
-                    <Link className="underline" href="mailto:festival@b-side.ms">
-                        festival@b-side.ms
-                    </Link>
+                    Fragen zur Bewerbung?
+                    <div>
+                        Schreib uns gerne an:{' '}
+                        <Link className="underline" href="mailto:festival@b-side.ms">
+                            festival@b-side.ms
+                        </Link>
+                    </div>
                 </div>
             </div>
         </>
