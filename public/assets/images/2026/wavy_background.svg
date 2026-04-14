@@ -20,9 +20,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.45169071"
-     inkscape:cx="893.31038"
-     inkscape:cy="423.96267"
+     inkscape:zoom="0.29652157"
+     inkscape:cx="445.16154"
+     inkscape:cy="726.75993"
      inkscape:window-width="1920"
      inkscape:window-height="944"
      inkscape:window-x="1080"
@@ -249,10 +249,11 @@
   </g>
   <g
      id="weißFläche"
-     transform="matrix(1.1116118,0,0,1.6205676,-85.287481,-462.01525)">
+     transform="matrix(1.7705281,0,0,1.523964,-704.88954,-376.93337)">
     <polygon
        class="st2"
-       points="1388.02,878.38 1037.25,182.97 838.41,182.97 492.65,877.9 "
-       id="polygon55" />
+       points="838.41,182.97 492.65,877.9 1388.02,878.38 1037.25,182.97 "
+       id="polygon55"
+       transform="matrix(0.86246074,0,0,1.1493016,129.33298,-130.23054)" />
   </g>
 </svg>

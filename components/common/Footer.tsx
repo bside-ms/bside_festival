@@ -1,7 +1,5 @@
 import InternalLinks from '@/components/common/InternalLinks';
 import Login from '@/components/common/Login';
-import MobileStage from '@/images/2026/wavy_footer.svg';
-import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import { FaFacebookSquare, FaInstagram, FaMastodon } from 'react-icons/fa';
@@ -9,8 +7,6 @@ import { FaFacebookSquare, FaInstagram, FaMastodon } from 'react-icons/fa';
 const Footer = (): ReactElement => {
     return (
         <div>
-            <Image src={MobileStage} alt="Festival-Logo" className="block w-screen md:hidden" />
-
             <div className="space-y-1 bg-black p-4 pb-6 text-center text-sm text-white">
                 <div>Veranstaltet durch den B-Side Kultur e.V.</div>
 
