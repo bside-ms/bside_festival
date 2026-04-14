@@ -68,8 +68,8 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                     <div>Die Bewerbungsphase für das B-Side Festival 2026 ist eröffnet.</div>
                     <div>Du möchtest Dich mit einer Ausstellung in den Räumen der B-Side oder im Viertel bewerben?</div>
                     <div>
-                        Wir bitten um vollständige & aussagekräftige Bewerbung inklusive der von dir verwendeten Materialien, die Anzahl
-                        deiner Werke und der Formate sowie der benötigten Technik (siehe Technical Rider).
+                        Wir bitten um eine vollständige & aussagekräftige Bewerbung inklusive der von dir verwendeten Materialien, die
+                        Anzahl deiner Werke und der Formate sowie der benötigten Technik (siehe Technical Rider).
                     </div>
                 </div>
             );
@@ -83,7 +83,7 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                     </div>
                     <div>Die Bewerbungsphase für das B-Side Festival 2026 ist eröffnet.</div>
                     <div>Du möchtest Dich mit einer Lesung, einem Vortrag oder einem poetischen Beitrag bewerben?</div>
-                    <div>Wir bitten um vollständige & aussagekräftige Bewerbung, das heißt inklusive Text- & Hörproben.</div>
+                    <div>Wir bitten um eine vollständige & aussagekräftige Bewerbung, das heißt inklusive Text- & Hörproben.</div>
                 </div>
             );
 
@@ -97,8 +97,8 @@ const ApplicationTypeIntro = ({ type }: Props): ReactElement => {
                     <div>Die Bewerbungsphase für das B-Side Festival 2026 ist eröffnet.</div>
                     <div>Du möchtest Dich mit einer Performance, einem Theaterstück oder einem kabarettistischen Beitrag bewerben?</div>
                     <div>
-                        Wir bitten um vollständige & aussagekräftige Bewerbung, das heißt inklusive Aufzeichnungen in Bild und Ton zu euren
-                        Beiträgen sowie dem Technical Rider mit allen technischen Infos.
+                        Wir bitten um eine vollständige & aussagekräftige Bewerbung, das heißt inklusive Aufzeichnungen in Bild und Ton zu
+                        euren Beiträgen sowie dem Technical Rider mit allen technischen Infos.
                     </div>
                 </div>
             );
