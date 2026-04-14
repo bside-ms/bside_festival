@@ -14,6 +14,7 @@ import MultiSelectInput from '@/components/form/MultiSelectInput';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
 import { addApplication } from '@/lib/actions/applicationActions';
+import isWithinApplicationPhase from '@/lib/common/helper/withinApplicationPhase';
 import typeLabels from '@/lib/participants/typeLabels';
 import { createApplicationSchema } from '@/lib/schemas/applicationSchema';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -120,22 +121,24 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         </div>
                     </div>
 
-                    <div className="rounded-md bg-yellow-50 p-4">
-                        <div className="flex">
-                            <div className="shrink-0">
-                                <IoWarning className="h-5 w-5 text-yellow-400" />
-                            </div>
-                            <div className="ml-3">
-                                <h3 className="text-sm font-medium text-yellow-800">Hinweis</h3>
-                                <div className="mt-2 text-sm text-yellow-700">
-                                    <p>
-                                        Die reguläre Bewerbungsphase ist bereits abgeschlossen. Das Formular steht nur noch für manuelle
-                                        Nachträge zur Verfügung.
-                                    </p>
+                    {!isWithinApplicationPhase() && (
+                        <div className="rounded-md bg-yellow-50 p-4">
+                            <div className="flex">
+                                <div className="shrink-0">
+                                    <IoWarning className="h-5 w-5 text-yellow-400" />
+                                </div>
+                                <div className="ml-3">
+                                    <h3 className="text-sm font-medium text-yellow-800">Hinweis</h3>
+                                    <div className="mt-2 text-sm text-yellow-700">
+                                        <p>
+                                            Die reguläre Bewerbungsphase ist bereits abgeschlossen. Das Formular steht nur noch für manuelle
+                                            Nachträge zur Verfügung.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    )}
 
                     <ApplicationTypeIntro type={chosenType} />
 
