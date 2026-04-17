@@ -25,14 +25,19 @@ export default async (): Promise<ReactElement> => {
                     <div className="text-base font-black">
                         Du machst Musik, Kunst oder hast ein Projekt, das gesehen und gehört werden sollte?
                     </div>
-                    <div className="text-xs"><span className='text-red-500'>→</span> Dann bewirb dich jetzt für das B‑Side Festival 2026!</div>
+                    <div className="text-xs">
+                        <span className="text-red-500">→</span> Dann bewirb dich jetzt für das B‑Side Festival 2026!
+                    </div>
                 </div>
 
                 {/* Middle Part */}
                 <div className="grid grid-cols-1 text-center md:grid-cols-5 md:text-left">
                     <div className="col-span-2 flex flex-col items-center justify-center">
                         {isWithinApplicationPhase() && (
-                            <Link href="/bewerbungen" className="m-5 font-black flex aspect-square w-40 flex-col items-center justify-center rounded-full bg-black text-[#d682b5] text-center text-xl leading-tight transition-all duration-300 hover:text-white hover:scale-105 shadow-lg">
+                            <Link
+                                href="/bewerbungen"
+                                className="m-5 flex aspect-square w-40 flex-col items-center justify-center rounded-full bg-black text-center text-xl leading-tight font-black text-[#d682b5] shadow-lg transition-all duration-300 hover:scale-105 hover:text-white"
+                            >
                                 <span>HIER</span>
                                 <span>BEWERBEN</span>
                             </Link>
@@ -50,14 +55,17 @@ export default async (): Promise<ReactElement> => {
                             <span className="text-base font-black">Wen suchen wir?</span> Bands, Musiker:innen, Künstler:innen,
                             Workshopgeber:innen, Speaker:innen, FLINTA*-Acts und Menschen aus allen Lebensrealitäten – mit frischen
                             Perspektiven und neuen Ideen
-                            <div className="mt-2">Ob professionell oder aus Leidenschaft – all welcome. Egal ob Bühne, Raum, Installation oder etwas ganz anderes: Wir sind gespannt auf das, was wir noch nicht
-                                kennen.
+                            <div className="mt-2">
+                                Ob professionell oder aus Leidenschaft – all welcome. Egal ob Bühne, Raum, Installation oder etwas ganz
+                                anderes: Wir sind gespannt auf das, was wir noch nicht kennen.
                             </div>
                         </div>
 
-                        <div className="mt-4 ">
+                        <div className="mt-4">
                             <div className="text-sm font-black">Bewerbungszeitraum</div>
-                            <div className="text-xl"><span className='text-red-500 mr-1'>→</span>19. April bis 10. Mai</div>
+                            <div className="text-xl">
+                                <span className="mr-1 text-red-500">→</span>19. April bis 10. Mai
+                            </div>
                         </div>
 
                         {/* 

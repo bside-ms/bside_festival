@@ -1,9 +1,9 @@
 import InternalLinks from '@/components/common/InternalLinks';
 import Login from '@/components/common/Login';
+import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import { FaFacebookSquare, FaInstagram, FaMastodon } from 'react-icons/fa';
-import Image from 'next/image';
 
 import AKKW from '@/images/logos/ak_kultur_und_wissenschaft.svg';
 import SZNRW from '@/images/logos/sozio_kultur_nrw.svg';
@@ -28,9 +28,9 @@ const Footer = (): ReactElement => {
 
                 <div>
                     Gefördert von
-                    <div className='flex justify-center gap-8 p-5 pt-1 items-center'>
-                        <Image src={AKKW} height="35" alt="AK Kultur und Wissenschaft"/>
-                        <Image src={SZNRW} height="35" alt="Sozio Kultur NRW" className='-mt-2'/>
+                    <div className="flex items-center justify-center gap-8 p-5 pt-1">
+                        <Image src={AKKW} height="35" alt="AK Kultur und Wissenschaft" />
+                        <Image src={SZNRW} height="35" alt="Sozio Kultur NRW" className="-mt-2" />
                     </div>
                 </div>
 
