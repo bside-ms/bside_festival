@@ -12,8 +12,7 @@
         rgba(214, 130, 181, 0) var(--gradient-h)
     );
 }
-
-@media (min-width: 768px) {
+@media (min-width: 640px) {
     .f26-background {
         min-height: 960px;
 
@@ -41,22 +40,21 @@
         background-repeat: no-repeat, no-repeat;
         background-size:
             100% var(--gradient-h),
-            cover;
+            auto;
     }
 }
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-    --font-display: 'GoogleSansFlex';
-    --font-display: 'GoogleSansFlex';
+    --font-display: 'BricolageGrotesque';
     --font-mono: 'StepsMono', serif;
 
     --breakpoint-xs: 25rem;
 }
 
 @font-face {
-    font-family: 'GoogleSansFlex';
-    src: url('/fonts/GoogleSansFlex_24pt-Medium.ttf');
+    font-family: 'BricolageGrotesque';
+    src: url('/fonts/BricolageGrotesque-Medium.ttf');
     font-weight: normal;
     font-style: normal;
 }

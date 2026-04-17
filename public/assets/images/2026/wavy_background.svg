@@ -20,11 +20,11 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.29652157"
-     inkscape:cx="445.16154"
-     inkscape:cy="726.75993"
+     inkscape:zoom="0.50412254"
+     inkscape:cx="809.32703"
+     inkscape:cy="370.94156"
      inkscape:window-width="1920"
-     inkscape:window-height="944"
+     inkscape:window-height="1027"
      inkscape:window-x="1080"
      inkscape:window-y="471"
      inkscape:window-maximized="1"
@@ -248,12 +248,26 @@
     </g>
   </g>
   <g
-     id="weißFläche"
-     transform="matrix(1.7705281,0,0,1.523964,-704.88954,-376.93337)">
-    <polygon
-       class="st2"
-       points="838.41,182.97 492.65,877.9 1388.02,878.38 1037.25,182.97 "
-       id="polygon55"
-       transform="matrix(0.86246074,0,0,1.1493016,129.33298,-130.23054)" />
+     id="g2"
+     transform="matrix(1.0017268,0,0,1.0086339,0.1086369,-8.3150785)">
+    <g
+       id="weißFläche"
+       transform="matrix(1.7705281,0,0,1.4311333,-704.88954,-295.30802)">
+      <polygon
+         class="st2"
+         points="838.41,182.97 492.65,877.9 1388.02,878.38 1037.25,182.97 "
+         id="polygon55"
+         transform="matrix(0.86246074,0,0,1.1493016,129.33298,-130.23054)" />
+    </g>
+    <g
+       id="weißFläche-5"
+       transform="matrix(-1.7705281,0,0,1.4311333,2621.3629,-300.25358)">
+      <polygon
+         class="st2"
+         points="838.41,182.97 492.65,877.9 1388.02,878.38 1037.25,182.97 "
+         id="polygon55-8"
+         transform="matrix(0.86246074,0,0,1.1493016,129.33298,-130.23054)"
+         style="fill:#ffffff" />
+    </g>
   </g>
 </svg>
