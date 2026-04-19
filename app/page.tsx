@@ -16,9 +16,9 @@ export default async (): Promise<ReactElement> => {
 
                 <div className="flex flex-col items-center pt-4">18.-19. September 2026</div>
                 <div className="mt-6 flex flex-col items-center text-4xl font-black sm:text-6xl">
-                    <div>Dein Projekt.</div>
-                    <div>Unsere Bühne.</div>
-                    <div>B-Side Festival ruft.</div>
+                    <div className="text-center">Dein Projekt.</div>
+                    <div className="text-center">Unsere Bühne.</div>
+                    <div className="text-center">B-Side Festival ruft.</div>
                 </div>
 
                 <div className="mx-6 mt-4 text-center">
