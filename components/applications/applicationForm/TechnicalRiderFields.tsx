@@ -130,7 +130,7 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
 
     const { info, required, withoutTextArea } = technicalRiderInfo;
 
-    const templateLink = '/assets/Tech-Rider-Vorlage.pdf';
+    const templateLink = '/assets/Tech-Rider-Vorlage-2026.pdf';
 
     return (
         <div className="relative flex flex-col gap-1">

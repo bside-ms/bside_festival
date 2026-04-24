@@ -58,7 +58,7 @@ const generateApplicationContent = async (application: Participant, token: strin
     return `
     <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">Vielen Dank für eure Bewerbung und euer Interesse, Teil des diesjährigen B-Side Festivals zu sein.</p>
     <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">Bitte bestätige deine E-Mail Adresse unter folgendem Link: <a href="${process.env.APP_URL}/bewerbungen/confirm/${token}" style="color: #000; text-decoration: underline;">Bestätigen</a></p>
-    <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">Bei Fragen zur Bewerbung können ihr euch per Mail an uns wenden unter festival@b-side.ms mit eurem Projektnamen im Betreff. Bitte habt Verständnis, dass das Festival von ehrenamtlichen Mitarbeiter*innen organisiert wird und wir daher ggf. ein paar Tage für eine Antwort brauchen.</p>
+    <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">Bei Fragen zur Bewerbung könnt ihr euch per Mail an uns wenden unter festival@b-side.ms mit eurem Projektnamen im Betreff. Bitte habt Verständnis, dass das Festival von ehrenamtlichen Mitarbeiter*innen organisiert wird und wir daher ggf. ein paar Tage für eine Antwort brauchen.</p>
 </p>
 
     <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 0 20px;">

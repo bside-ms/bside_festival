@@ -1,6 +1,23 @@
 import { getTechnicalRiderInfo } from '@/components/applications/applicationForm/TechnicalRiderFields';
 import { Type } from '@prisma/client';
+import parsePhoneNumberFromString from 'libphonenumber-js';
 import { z } from 'zod';
+
+const phoneSchema = z.string().transform((arg, ctx) => {
+    const cleaned = arg.trim();
+    const phone = parsePhoneNumberFromString(cleaned, 'DE');
+
+    if (phone && phone.isValid()) {
+        return phone.number as string;
+    }
+
+    ctx.addIssue({
+        code: 'custom',
+        message: 'Ungültige Telefonnummer',
+    });
+
+    return '';
+});
 
 const linkSchema = z.object({
     url: z
@@ -66,7 +83,8 @@ export const createApplicationSchema = (chosenType: Type) =>
 
             contactName: z.string().min(1, 'Ansprechperson ist erforderlich'),
             contactMail: z.email('Ungültige E-Mail-Adresse'),
-            contactPhone: z.string().optional(),
+            contactPhone: phoneSchema,
+            acceptDataProcessing: z.literal(true, { message: 'Bitte akzeptiere die Datenschutzerklärung, um fortzufahren.' }),
         })
         .superRefine((data, ctx) => {
             const riderInfo = getTechnicalRiderInfo(chosenType);

@@ -1,121 +1,92 @@
-import Eyecatcher from '@/components/common/Eyecatcher';
-import ArrowIcon from '@/components/common/icons/ArrowIcon';
-import handsHolding from '@/images/handsHolding.webp';
-import keyVisualImage from '@/images/keyVisual.webp';
-import pinkBackgroundBottom from '@/images/pinkBackgroundBottom.svg';
-import pinkBackgroundTop from '@/images/pinkBackgroundTop.svg';
-import whiteBackgroundBottom from '@/images/whiteBackgroundBottom.svg';
-import whiteBackgroundTop from '@/images/whiteBackgroundTop.svg';
-import { isBefore } from 'date-fns';
+import Logo from '@/images/2026/logo_transparent.svg';
+import MobileStage from '@/images/2026/wavy_header.svg';
+import isWithinApplicationPhase from '@/lib/common/helper/withinApplicationPhase';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ReactElement } from 'react';
 
 export default async (): Promise<ReactElement> => {
-    const volunteerDeadline = new Date('2025-09-19');
-
     return (
-        <div className="relative mx-auto min-h-screen w-full max-w-2xl min-w-[300px] pt-2 font-display">
-            <Image src={keyVisualImage} alt="Festival-Plakat" className="object-cover" />
+        <>
+            <Image src={MobileStage} alt="Festival-Logo" className="absolute top-[175px] -z-1 w-screen sm:hidden" />
 
-            <div className="my-3 flex h-20 justify-center md:my-8 md:h-52">
-                <div className="md:hidden">
-                    <ArrowIcon size={80} color="#36a9e1" />
+            <div className="relative mx-auto w-full max-w-2xl min-w-[300px] p-5 font-display md:p-8">
+                {/* Top Part */}
+                <Image src={Logo} alt="Festival-Logo" className="mx-auto w-[150px] sm:w-[250px]" />
+
+                <div className="flex flex-col items-center pt-4">18.-19. September 2026</div>
+                <div className="mt-6 flex flex-col items-center text-center text-4xl font-black sm:text-6xl">
+                    <div>Dein Projekt.</div>
+                    <div>Unsere Bühne.</div>
+                    <div>B-Side Festival ruft.</div>
                 </div>
-                <div className="hidden md:block">
-                    <ArrowIcon size={180} color="#36a9e1" />
-                </div>
-            </div>
 
-            <div className="flex flex-col items-center font-mono text-9xl text-[#36a9e1]">
-                <div className="scale-x-150">19.</div>
-                <div className="scale-x-150">20.</div>
-                <div className="scale-x-125">Sept</div>
-            </div>
-
-            <div className="relative z-20 mt-8 xs:mt-5 md:mt-11">
-                <Image src={pinkBackgroundTop} alt="" width={2000} className="object-cover" />
-
-                <div className="bg-[#ebc9de] px-4">
-                    <div className="mb-3 text-center font-mono text-2xl uppercase sm:mb-7 sm:text-3xl md:mb-11 md:text-4xl">
-                        Wir gehen in die 9. Runde!
+                <div className="mx-6 mt-4 text-center">
+                    <div className="text-base font-black">
+                        Du machst Musik, Kunst oder hast ein Projekt, das gesehen und gehört werden sollte?
                     </div>
-
-                    <div className="text-sm sm:text-base md:text-xl">
-                        Am 19. & 20. September laden wir euch herzlich in den Mittelhafen und in das Hansaviertel ein! Ganz nach dem Motto
-                        B-together, B-loved – B-Side! stehen in diesem Jahr besonders die Gemeinschaft, Begegnung und Empathie im Zentrum.
-                        Mit Musik, Ausstellungen, Workshops, Vorträgen, Familienprogramm, verschiedenen Infoständen und Lesungen bieten wir
-                        euch wieder ein vielfältiges Programm an bei dem für alle etwas dabei ist.
+                    <div className="text-xs">
+                        <span className="text-red-500">→</span> Dann bewirb dich jetzt für das B‑Side Festival 2026!
                     </div>
                 </div>
 
-                <Image src={pinkBackgroundBottom} alt="" width={2000} className="object-cover" />
-            </div>
-
-            <Image
-                src={handsHolding}
-                alt=""
-                className="-translate-x-10 -translate-y-5 -rotate-6 md:translate-x-0 md:-translate-y-10 md:scale-95 md:rotate-0"
-            />
-
-            <div className="mb-11 flex text-center font-mono text-7xl leading-20 text-[#E9531F] uppercase">Eintritt kostenlos</div>
-
-            <div className="mb-5 space-y-4 px-8">
-                <Link href="/programm" className="flex rotate-2 items-center justify-center gap-2 hover:text-[#B0C42A]">
-                    <div className="rotate-[270deg] pl-2">
-                        <ArrowIcon size={40} color="black" />
-                    </div>
-                    <div className="text-5xl uppercase">Programm</div>
-                </Link>
-
-                <Link href="/awareness" className="flex -rotate-2 items-center justify-center gap-2 hover:text-[#B0C42A]">
-                    <div className="text-5xl uppercase">Awareness</div>
-                    <div className="rotate-[90deg] pr-2">
-                        <ArrowIcon size={40} color="black" />
-                    </div>
-                </Link>
-            </div>
-
-            <div className="mb-8 px-8">
-                <Eyecatcher stroke="black" fill="yellow">
-                    <div className="text-center font-mono uppercase">
-                        <div className="text-5xl">Aftershow</div>
-                        <div className="text-xl whitespace-nowrap">Sa 22:00 Sputnikhalle</div>
-                    </div>
-                </Eyecatcher>
-            </div>
-
-            {isBefore(new Date(), volunteerDeadline) && (
-                <div className="relative z-20 mb-14 xs:mt-5 md:mt-11">
-                    <Image src={whiteBackgroundTop} alt="" width={2000} className="object-cover" />
-
-                    <div className="bg-white px-4 py-4">
-                        <div className="mb-10 text-center font-mono text-2xl uppercase sm:mb-14 sm:text-3xl md:mb-11 md:text-4xl">
-                            Lust mitzumachen?
-                        </div>
-
-                        <div className="text-sm xs:text-base md:text-xl">
-                            Am 19. & 20. September heißt es wieder: B-together, B-loved – B-Side! Damit das Festival am Mittelhafen und
-                            Hansaviertel lebendig, vielfältig und offen für alle wird, brauchen wir deine Unterstützung. Ob beim Aufbau, in
-                            der Technik, bei Konzerten, Workshops, Lesungen oder als Teil der Awareness- und Verpflegungsteams – es gibt
-                            viele Möglichkeiten, mitzumachen. Du musst nichts mitbringen außer Zeit, Lust und Offenheit. Ganz egal, ob du
-                            zum ersten Mal hilfst oder schon Erfahrung hast: Du bist willkommen! Gemeinsam gestalten wir etwas, das
-                            verbindet – mach mit und werde Teil des B-Side Festivals 2025!
-                        </div>
-
-                        <div className="mt-10 space-y-4 px-8">
-                            <Link href="/mithelfen" className="flex items-center justify-center gap-2 hover:text-[#B0C42A]">
-                                <div className="rotate-[270deg] pl-2">
-                                    <ArrowIcon size={40} color="black" />
-                                </div>
-                                <div className="text-3xl uppercase">Zur Anmeldung</div>
+                {/* Middle Part */}
+                <div className="grid grid-cols-1 text-center md:grid-cols-5 md:text-left">
+                    <div className="col-span-2 flex flex-col items-center justify-center">
+                        {isWithinApplicationPhase() && (
+                            <Link
+                                href="/bewerbungen"
+                                className="m-5 flex aspect-square w-40 flex-col items-center justify-center rounded-full bg-black text-center text-xl leading-tight font-black text-[#d682b5] shadow-lg transition-all duration-300 hover:scale-105 hover:text-white"
+                            >
+                                <span>HIER</span>
+                                <span>BEWERBEN</span>
                             </Link>
-                        </div>
+                        )}
                     </div>
 
-                    <Image src={whiteBackgroundBottom} alt="" width={2000} className="object-cover" />
+                    <div className="col-span-3 text-xs">
+                        <div className="mt-4">
+                            <span className="text-base font-black">Wann?</span> 18.–19. September 2026
+                        </div>
+                        <div className="mt-4">
+                            <span className="text-base font-black">Wo?</span> Mittelhafen & Hansaviertel Münster
+                        </div>
+                        <div className="mt-4">
+                            <span className="text-base font-black">Wen suchen wir?</span> Bands, Musiker:innen, Künstler:innen,
+                            Workshopgeber:innen, Speaker:innen, FLINTA*-Acts und Menschen aus allen Lebensrealitäten – mit frischen
+                            Perspektiven und neuen Ideen
+                            <div className="mt-2">
+                                Ob professionell oder aus Leidenschaft – all welcome. Egal ob Bühne, Raum, Installation oder etwas ganz
+                                anderes: Wir sind gespannt auf das, was wir noch nicht kennen.
+                            </div>
+                        </div>
+
+                        <div className="mt-4">
+                            <div className="text-sm font-black">Bewerbungszeitraum</div>
+                            <div className="text-xl">
+                                <span className="mr-1 text-red-500">→</span>19. April bis 10. Mai
+                            </div>
+                        </div>
+
+                        {/* 
+                    <div className='mt-4'>
+                        <div className="font-black text-base">Über das Festival</div>
+                        <div>Das B‑Side Festival findet am 18.–19. September 2026 rund um den Mittelhafen und im Hansaviertel Münster statt. Dich erwartet ein vielfältiges, offenes Kulturprogramm in entspannter Hafenatmosphäre.</div>
+                    </div> */}
+                    </div>
                 </div>
-            )}
-        </div>
+
+                {/* Bottom Part */}
+                <div className="my-4 text-center text-base">
+                    Fragen zur Bewerbung?
+                    <div>
+                        Schreib uns gerne an:{' '}
+                        <Link className="underline" href="mailto:festival@b-side.ms">
+                            festival@b-side.ms
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 };
