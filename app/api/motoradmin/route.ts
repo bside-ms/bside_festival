@@ -1,37 +1,22 @@
 import { NextRequest } from "next/server"
-import verifyMotoradminJwt from '@/lib/next-auth/verifyMotoradminJwt';
+import verifyMotoradminJwt from '@/lib/motor-admin/authentication';
+import MotorAdminResponse from '@/lib/motor-admin/response';
 
 export const POST = async (req: NextRequest): Promise<Response> => {
     const { error, decoded } = await verifyMotoradminJwt(req.headers.get('Authorization'));
-    if (error) return error; // Chunking error...
+    if (error) return MotorAdminResponse(401, error);
 
     console.log('Decoded JWT:', decoded);
-    const responseData = JSON.stringify({ 
+
+    return MotorAdminResponse(200, { 
         status: 'success', 
         message: 'Greetings from Next.js API route!', 
-    });
-
-    const contentLength = new TextEncoder().encode(responseData).length;
-    return new Response(responseData, {
-        status: 200,
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': contentLength.toString(), // we need to deactivate chunking
-        },
-    });
+    })
 };
 
 export const GET = async (): Promise<Response> => {
-    const responseData = JSON.stringify({ 
+    return MotorAdminResponse(200, { 
         status: 'success', 
         message: 'Greetings from Next.js API route!' 
-    });
-    const contentLength = new TextEncoder().encode(responseData).length;
-    return new Response(responseData, {
-        status: 200,
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': contentLength.toString(), // we need to deactivate chunking
-        },
-    });
+    })
 };
