@@ -29,7 +29,7 @@ services:
         ports:
             - '3001:3000'
         volumes:
-        - '.:/app'
+            - '.:/app'
         env_file:
             - .env
         environment:

@@ -1,303 +1,413 @@
 ---
 engine_version: 0.4.21
-file_version: 2026-04-09 10:44:08.716072000 Z
+file_version: 2026-04-27 08:36:46.339793000 Z
 resources:
-- name: comment
-  preferences:
-    visible: false
-  updated_at: 2026-03-16 23:21:26.702317000 +00:00
-- name: label
-  preferences:
-    visible: false
-  updated_at: 2026-03-16 23:21:29.175964000 +00:00
-- name: link
-  preferences:
-    visible: false
-  updated_at: 2026-03-16 23:21:30.257634000 +00:00
-- name: participant
-  preferences:
-    actions:
-    - name: zusagen_vormerken
-      display_name: Zusagen vormerken
-      action_type: form
+    - name: attendee
       preferences:
-        form_id: 2
-        show_on_table: true
-    - preferences:
-        show_on_table: true
-      name: edit
-    custom_sql: "SELECT `p`.*,\n    p.flintaParticipantsCount / p.participantCount
-      * 100 AS flinta_quota,\n    (\n        SELECT COUNT(*) \n        FROM `Zipcode`
-      z \n        WHERE z.participantId = p.id \n        AND (z.code LIKE '32%' OR\n
-      \            z.code LIKE '33%' OR\n             z.code LIKE '44%' OR\n             z.code
-      LIKE '45%' OR\n             z.code LIKE '46%' OR\n             z.code LIKE '48%'
-      OR\n             z.code LIKE '57%' OR\n             z.code LIKE '58%' OR\n             z.code
-      LIKE '59%'\n         )\n    ) / p.participantCount * 100 AS lwl_quota,\n    (\n
-      \       SELECT COUNT(*) \n        FROM `Zipcode` z \n        WHERE z.participantId
-      = p.id \n        AND z.code in ('48143', '48145', '48147', '48149', '48151',
-      '48153', '48155', '48157', '48159', '48161', '48163', '48165', '48167')\n    )
-      / p.participantCount * 100 AS ms_quota\nFROM `Participant` AS p;"
-    columns:
-    - access_type: hidden
-      name: updatedAt
-    - access_type: hidden
-      name: contactMail
-    - access_type: hidden
-      name: contactPhone
-    - access_type: hidden
-      name: description
-    - access_type: hidden
-      name: motivation
-    - access_type: hidden
-      name: curationInfo
-    - access_type: hidden
-      name: address
-    - access_type: hidden
-      name: residence
-    - access_type: hidden
-      name: imageFileName
-    - access_type: hidden
-      name: technicalRider
-    - access_type: hidden
-      name: technicalRiderFileName
-    - access_type: hidden
-      name: additionalInfo
-    - access_type: hidden
-      name: status
-    - access_type: hidden
-      name: updatedDescription
-    - access_type: hidden
-      name: backlineSharing
-    - access_type: hidden
-      name: materialExpenses
-    - access_type: hidden
-      name: allergies
-    - access_type: hidden
-      name: diversityNotes
-    - access_type: hidden
-      name: hasFlintaParticipants
-    - access_type: hidden
-      name: hasMarginalizedParticipants
-    - name: flinta_quota
-      display_name: Flinta quota
-      column_type: percentage
-      access_type: read_only
-      virtual: false
-      format: {}
-      validators: []
-      description: ''
-    - access_type: hidden
-      name: id
-    - name: ms_quota
-      display_name: Ms quota
-      column_type: percentage
-      access_type: read_only
-      virtual: false
-      format: {}
-      validators: []
-      description: ''
-    - name: lwl_quota
-      display_name: Lwl quota
-      column_type: percentage
-      access_type: read_only
-      virtual: false
-      format: {}
-      validators: []
-      description: ''
-    display_name: Bewerbungen - Bands
-    scopes:
-    - name: bands
-      display_name: Bands
-      scope_type: filter
+          visible: false
+      updated_at: 2026-04-24 18:09:25.396262000 +00:00
+    - name: comment
       preferences:
-        filter:
-        - type:
-            eq: concert
-    - name: other
-      display_name: Other
-      scope_type: filter
+          visible: false
+      updated_at: 2026-03-16 23:21:26.702317000 +00:00
+    - name: email_verification_token
       preferences:
-        filter:
-        - type:
-            neq: concert
-  updated_at: 2026-04-09 10:44:08.716072000 +00:00
-- name: participant_genre
-  preferences:
-    visible: false
-  updated_at: 2026-03-16 23:21:32.555253000 +00:00
-- name: participant_label
-  preferences:
-    visible: false
-  updated_at: 2026-03-16 23:21:33.229145000 +00:00
-- name: prisma_migration
-  preferences:
-    visible: false
-  updated_at: 2026-03-16 23:21:34.960695000 +00:00
+          custom_sql: |-
+              SELECT e.*, p.emailVerified, p.name
+              FROM `EmailVerificationToken` AS e
+              JOIN `Participant` AS p ON e.participantId=p.id;
+          columns:
+              - access_type: hidden
+                name: token
+              - access_type: hidden
+                name: id
+          actions:
+              - name: resend_verification
+                display_name: Resend Verification
+                action_type: form
+                preferences:
+                    form_id: 3
+                    show_on_table: true
+      updated_at: 2026-04-27 08:36:46.339793000 +00:00
+    - name: genre
+      preferences:
+          visible: false
+      updated_at: 2026-04-24 18:09:27.538088000 +00:00
+    - name: label
+      preferences:
+          visible: false
+      updated_at: 2026-03-16 23:21:29.175964000 +00:00
+    - name: link
+      preferences:
+          visible: false
+      updated_at: 2026-03-16 23:21:30.257634000 +00:00
+    - name: location
+      preferences:
+          visible: false
+      updated_at: 2026-04-24 18:09:47.708853000 +00:00
+    - name: participant
+      preferences:
+          actions:
+              - preferences:
+                    show_on_table: true
+                name: edit
+          custom_sql: "SELECT `p`.*,\n    p.flintaParticipantsCount / p.participantCount
+              * 100 AS flinta_quota,\n    (\n        SELECT COUNT(*) \n        FROM `Zipcode`
+              z \n        WHERE z.participantId = p.id \n        AND (z.code LIKE '32%' OR\n
+              \            z.code LIKE '33%' OR\n             z.code LIKE '44%' OR\n             z.code
+              LIKE '45%' OR\n             z.code LIKE '46%' OR\n             z.code LIKE '48%'
+              OR\n             z.code LIKE '57%' OR\n             z.code LIKE '58%' OR\n             z.code
+              LIKE '59%'\n         )\n    ) / p.participantCount * 100 AS lwl_quota,\n    (\n
+              \       SELECT COUNT(*) \n        FROM `Zipcode` z \n        WHERE z.participantId
+              = p.id \n        AND z.code in ('48143', '48145', '48147', '48149', '48151',
+              '48153', '48155', '48157', '48159', '48161', '48163', '48165', '48167')\n    )
+              / p.participantCount * 100 AS ms_quota\nFROM `Participant` AS p;"
+          columns:
+              - access_type: hidden
+                name: updatedAt
+              - access_type: hidden
+                name: contactMail
+              - access_type: hidden
+                name: contactPhone
+              - access_type: hidden
+                name: description
+              - access_type: hidden
+                name: motivation
+              - access_type: hidden
+                name: curationInfo
+              - access_type: hidden
+                name: address
+              - access_type: hidden
+                name: residence
+              - access_type: hidden
+                name: imageFileName
+              - access_type: hidden
+                name: technicalRider
+              - access_type: hidden
+                name: technicalRiderFileName
+              - access_type: hidden
+                name: additionalInfo
+              - access_type: hidden
+                name: status
+              - access_type: hidden
+                name: updatedDescription
+              - access_type: hidden
+                name: backlineSharing
+              - access_type: hidden
+                name: materialExpenses
+              - access_type: hidden
+                name: allergies
+              - access_type: hidden
+                name: diversityNotes
+              - access_type: hidden
+                name: hasFlintaParticipants
+              - access_type: hidden
+                name: hasMarginalizedParticipants
+              - name: flinta_quota
+                display_name: Flinta quota
+                column_type: percentage
+                access_type: read_only
+                virtual: false
+                format: {}
+                validators: []
+                description: ''
+              - access_type: hidden
+                name: id
+              - name: ms_quota
+                display_name: Ms quota
+                column_type: percentage
+                access_type: read_only
+                virtual: false
+                format: {}
+                validators: []
+                description: ''
+              - name: lwl_quota
+                display_name: Lwl quota
+                column_type: percentage
+                access_type: read_only
+                virtual: false
+                format: {}
+                validators: []
+                description: ''
+              - display_name: professional?
+                name: isProfessionalBooking
+              - name: verified
+                display_name: Verified
+                column_type: string
+                access_type: read_only
+                virtual: false
+                format: {}
+                validators: []
+                description: ''
+              - name: is_verified
+                display_name: Is verified
+                column_type: boolean
+                access_type: read_only
+                virtual: false
+                format: {}
+                validators: []
+                description: ''
+          display_name: Bewerbungen - Bands
+          scopes:
+              - name: bands
+                display_name: Bands
+                scope_type: filter
+                preferences:
+                    filter:
+                        - type:
+                              eq: concert
+              - name: other
+                display_name: Other
+                scope_type: filter
+                preferences:
+                    filter:
+                        - type:
+                              neq: concert
+      updated_at: 2026-04-27 08:32:50.451990000 +00:00
+    - name: participant_genre
+      preferences:
+          visible: false
+      updated_at: 2026-03-16 23:21:32.555253000 +00:00
+    - name: participant_label
+      preferences:
+          visible: false
+      updated_at: 2026-03-16 23:21:33.229145000 +00:00
+    - name: prisma_migration
+      preferences:
+          visible: false
+      updated_at: 2026-03-16 23:21:34.960695000 +00:00
+    - name: slot
+      preferences:
+          visible: false
+      updated_at: 2026-04-24 18:09:36.291657000 +00:00
+    - name: venue
+      preferences:
+          visible: false
+      updated_at: 2026-04-24 18:09:36.738145000 +00:00
+    - name: volunteer
+      preferences:
+          visible: false
+      updated_at: 2026-04-24 18:09:37.174493000 +00:00
+    - name: zipcode
+      preferences:
+          visible: false
+      updated_at: 2026-04-24 18:09:45.073251000 +00:00
 configs:
-- key: header.links
-  value:
-  - name: "\U0001F60E Motor Admin Pro"
-    path: https://www.getmotoradmin.com/pro
-  - name: "⭐ Star on GitHub"
-    path: https://github.com/motor-admin/motor-admin
-  updated_at: 2026-03-16 22:50:22.924526000 +00:00
-- key: homepage.layout
-  value:
-  - type: dashboard
-    id: 2
-  updated_at: 2026-03-17 23:07:21.708862000 +00:00
-- key: resources.participant.actions.order
-  value:
-  - create
-  - edit
-  - remove
-  - zusagen_vormerken
-  updated_at: 2026-03-17 22:49:14.867972000 +00:00
-- key: resources.participant.columns.order
-  value:
-  - id
-  - name
-  - appliedAt
-  - updatedAt
-  - contactName
-  - flinta_quota
-  - ms_quota
-  - lwl_quota
-  - contactMail
-  - contactPhone
-  - description
-  - motivation
-  - curationScore
-  - curationInfo
-  - address
-  - residence
-  - type
-  - imageFileName
-  - technicalRider
-  - technicalRiderFileName
-  - additionalInfo
-  - status
-  - updatedDescription
-  - backlineSharing
-  - allergies
-  - diversityNotes
-  - hasMarginalizedParticipants
-  - participantCount
-  - updatedName
-  - flintaParticipantsCount
-  - durationPreference
-  - professionalParticipantsCount
-  - emailVerified
-  - isProfessionalBooking
-  updated_at: 2026-04-09 10:43:41.483105000 +00:00
+    - key: header.links
+      value:
+          - name: "\U0001F60E Motor Admin Pro"
+            path: https://www.getmotoradmin.com/pro
+          - name: '⭐ Star on GitHub'
+            path: https://github.com/motor-admin/motor-admin
+      updated_at: 2026-04-08 17:59:53.283841000 +00:00
+    - key: homepage.layout
+      value:
+          - type: dashboard
+            id: 2
+      updated_at: 2026-03-17 23:07:21.708862000 +00:00
+    - key: resources.email_verification_token.columns.order
+      value:
+          - name
+          - participantId
+          - emailVerified
+          - id
+          - expires
+          - token
+      updated_at: 2026-04-27 08:36:45.395130000 +00:00
+    - key: resources.participant.actions.order
+      value:
+          - create
+          - edit
+          - remove
+          - zusagen_vormerken
+      updated_at: 2026-03-17 22:49:14.867972000 +00:00
+    - key: resources.participant.columns.order
+      value:
+          - id
+          - name
+          - appliedAt
+          - updatedAt
+          - contactName
+          - flinta_quota
+          - ms_quota
+          - lwl_quota
+          - contactMail
+          - contactPhone
+          - description
+          - motivation
+          - curationScore
+          - curationInfo
+          - address
+          - residence
+          - type
+          - imageFileName
+          - technicalRider
+          - technicalRiderFileName
+          - additionalInfo
+          - status
+          - updatedDescription
+          - backlineSharing
+          - allergies
+          - diversityNotes
+          - hasMarginalizedParticipants
+          - participantCount
+          - updatedName
+          - flintaParticipantsCount
+          - durationPreference
+          - professionalParticipantsCount
+          - emailVerified
+          - isProfessionalBooking
+      updated_at: 2026-04-09 10:43:41.483105000 +00:00
 queries:
-- id: 1
-  name: Hello Query
-  sql_body: SELECT 'Hello there'
-  description:
-  preferences:
-    visualization: value
-  tags: []
-  updated_at: 2026-03-16 22:50:22.927182000 +00:00
-- id: 2
-  name: Flinta quota Query
-  sql_body: |-
-    SELECT type, AVG(3 / participantCount) from Participant
-    GROUP BY type
-  description:
-  preferences:
-    query_type: sql
-    database: Default
-    visualization: bar_chart
-    visualization_options:
-      label_format: percent
-      label_format_options: {}
-      chart_stacked: false
-      chart_values_axis: true
-    variables: []
-  tags: []
-  updated_at: 2026-03-17 23:06:40.955112000 +00:00
+    - id: 1
+      name: Hello Query
+      sql_body: SELECT 'Hello there'
+      description:
+      preferences:
+          visualization: value
+      tags: []
+      updated_at: 2026-04-08 17:59:53.287041000 +00:00
+    - id: 2
+      name: Flinta quota Query
+      sql_body: |-
+          SELECT type, AVG(3 / participantCount) from Participant
+          GROUP BY type
+      description:
+      preferences:
+          query_type: sql
+          database: Default
+          visualization: bar_chart
+          visualization_options:
+              label_format: percent
+              label_format_options: {}
+              chart_stacked: false
+              chart_values_axis: true
+          variables: []
+      tags: []
+      updated_at: 2026-03-17 23:06:40.955112000 +00:00
 dashboards:
-- id: 1
-  title: Hello Dashboard
-  description:
-  preferences:
-    layout:
-    - title: Hello
-      query_id: 1
-      size: 2x1
-  tags: []
-  updated_at: 2026-03-16 22:50:22.928865000 +00:00
-- id: 2
-  title: Flinta Dashboard
-  description:
-  preferences:
-    layout:
-    - title: Flinta quota Query
-      query_id: 2
-      size: 3x2
-    variables: []
-  tags: []
-  updated_at: 2026-03-17 23:03:20.647004000 +00:00
+    - id: 1
+      title: Hello Dashboard
+      description:
+      preferences:
+          layout:
+              - title: Hello
+                query_id: 1
+                size: 2x1
+      tags: []
+      updated_at: 2026-04-08 17:59:53.289003000 +00:00
+    - id: 2
+      title: Flinta Dashboard
+      description:
+      preferences:
+          layout:
+              - title: Flinta quota Query
+                query_id: 2
+                size: 3x2
+          variables: []
+      tags: []
+      updated_at: 2026-03-17 23:03:20.647004000 +00:00
 forms:
-- id: 1
-  name: Hello Form
-  http_method: POST
-  api_path: "/todos"
-  description:
-  preferences:
-    fields:
-    - display_name: Message
-      name: message
-      field_type: richtext
-      validators:
-      - required: true
-      is_array: false
-  api_config_name: https://jsonplaceholder.typicode.com
-  tags: []
-  updated_at: 2026-03-16 22:50:22.967730000 +00:00
-- id: 2
-  name: Zusagen vormerken Bewerbungen - Band
-  http_method: POST
-  api_path: "/api/motoradmin"
-  description:
-  preferences:
-    fields:
-    - display_name: Bewerbung
-      name: id
-      field_type: reference
-      default_value: ''
-      validators:
-      - required: true
-      reference:
-        model_name: participant
-    request_type: rest
-  api_config_name: Next.JS
-  tags: []
-  updated_at: 2026-04-09 10:11:43.019859000 +00:00
+    - id: 1
+      name: Hello Form
+      http_method: POST
+      api_path: '/todos'
+      description:
+      preferences:
+          fields:
+              - display_name: Message
+                name: message
+                field_type: richtext
+                validators:
+                    - required: true
+                is_array: false
+      api_config_name: https://jsonplaceholder.typicode.com
+      tags: []
+      updated_at: 2026-04-08 17:59:53.330408000 +00:00
+    - id: 2
+      name: Zusagen vormerken Bewerbungen - Band
+      http_method: POST
+      api_path: '/api/motoradmin'
+      description:
+      preferences:
+          fields:
+              - display_name: Bewerbung
+                name: id
+                field_type: reference
+                default_value: ''
+                validators:
+                    - required: true
+                reference:
+                    model_name: participant
+          request_type: rest
+      api_config_name: Next.JS
+      tags: []
+      updated_at: 2026-04-09 10:11:43.019859000 +00:00
+    - id: 3
+      name: Resend Verification
+      http_method: POST
+      api_path: '/api/motoradmin/'
+      description:
+      preferences:
+          fields:
+              - display_name: participant
+                name: participant_id
+                field_type: reference
+                default_value: ''
+                validators: []
+                reference:
+                    model_name: participant
+          request_type: rest
+      api_config_name: localhost:3000
+      tags: []
+      updated_at: 2026-04-27 06:36:59.790636000 +00:00
 alerts: []
 api_configs:
-- id: 1
-  name: https://jsonplaceholder.typicode.com
-  url: https://jsonplaceholder.typicode.com
-  preferences: {}
-  description:
-  updated_at: 2026-03-16 22:50:22.966980000 +00:00
-- id: 2
-  name: origin
-  url: "/"
-  preferences: {}
-  description:
-  updated_at: 2026-03-16 22:50:22.971078000 +00:00
-- id: 3
-  name: Next.JS
-  url: http://192.168.10.93:3000
-  preferences: {}
-  description:
-  updated_at: 2026-04-09 09:00:52.793106000 +00:00
-- id: 6
-  name: 192.168.10.93:3002
-  url: http://192.168.10.93:3002
-  preferences: {}
-  description:
-  updated_at: 2026-04-09 09:47:06.668742000 +00:00
+    - id: 1
+      name: https://jsonplaceholder.typicode.com
+      url: https://jsonplaceholder.typicode.com
+      preferences: {}
+      description:
+      updated_at: 2026-04-08 17:59:53.329425000 +00:00
+    - id: 2
+      name: origin
+      url: '/'
+      preferences: {}
+      description:
+      updated_at: 2026-04-08 17:59:53.334844000 +00:00
+    - id: 3
+      name: Next.JS
+      url: http://192.168.10.93:3000
+      preferences: {}
+      description:
+      updated_at: 2026-04-09 09:00:52.793106000 +00:00
+    - id: 6
+      name: 192.168.10.93:3002
+      url: http://192.168.10.93:3002
+      preferences: {}
+      description:
+      updated_at: 2026-04-09 09:47:06.668742000 +00:00
+    - id: 7
+      name: 172.20.10.4:3000
+      url: 172.20.10.4:3000
+      preferences: {}
+      description:
+      updated_at: 2026-04-24 19:38:49.359595000 +00:00
+    - id: 22270
+      name: localhost:3000
+      url: http://localhost:3000
+      preferences: {}
+      description:
+      updated_at: 2026-04-24 19:44:54.989682000 +00:00
+    - id: 307324
+      name: 127.0.0.1:3000
+      url: http://127.0.0.1:3000
+      preferences: {}
+      description:
+      updated_at: 2026-04-27 06:35:27.669560000 +00:00
+    - id: 309273
+      name: 10.101.1.106:3000
+      url: http://10.101.1.106:3000
+      preferences: {}
+      description:
+      updated_at: 2026-04-27 06:36:04.126134000 +00:00

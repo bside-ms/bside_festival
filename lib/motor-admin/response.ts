@@ -1,13 +1,9 @@
-const MotorAdminResponse = (
-  status: number = 200, 
-  responseBody: Record<string, unknown> | null = null
-): Response => {
-
+const MotorAdminResponse = (status: number = 200, responseBody: Record<string, unknown> | null = null): Response => {
     const isEmpty = !responseBody || Object.keys(responseBody).length === 0;
 
     if (isEmpty) {
         return new Response(null, {
-            status: 204
+            status: 204,
         });
     }
     const responseData = JSON.stringify(responseBody);

@@ -1,30 +1,29 @@
-import { NextRequest } from "next/server"
-import verifyMotoradminJwt from '@/lib/motor-admin/authentication';
+import { createVerification } from '@/lib/actions/emailConfirmationActions';
+import prismaClient from '@/lib/common/prismaClient';
 import MotorAdminResponse from '@/lib/motor-admin/response';
 import { motorAdminRoute } from '@/lib/motor-admin/route';
 
-export const POST = motorAdminRoute(async (req, { body, authentication }) => {
-    console.log("Payload:", body);
+export const POST = motorAdminRoute(async (req, { body }) => {
+    console.log('Payload:', body);
+
+    const participantId = Number(body.id);
+
+    if (isNaN(participantId)) {
+        return MotorAdminResponse(400, { error: 'Invalid ID format' });
+    }
+
+    const participant = await prismaClient.participant.findUnique({
+        where: { id: participantId },
+    });
+    if (!participant) {
+        throw new Error('Teilnehmer nicht gefunden.');
+    }
+
+    createVerification(participant);
 
     const responseData = {
-        status: 'success'
+        message: 'Resent Verification Email',
     };
 
     return MotorAdminResponse(200, responseData);
 });
-
-
-// async (req: NextRequest): Promise<Response> => {
-//     const { error, au } = await verifyMotoradminJwt(req.headers.get('Authorization'));
-//     if (error) return MotorAdminResponse(401, error);
-
-//     console.log(req.body);
-//     const reqData = req.body ? await req.json() : {};
-
-//     const responseData = {
-//         status: 'success', 
-//         message: 'Greetings from Next.js API route!', 
-//     };
-
-//     return MotorAdminResponse(200, responseData);
-// };

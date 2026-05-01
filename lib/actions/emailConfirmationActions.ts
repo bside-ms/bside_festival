@@ -6,6 +6,10 @@ import { Participant } from '@prisma/client';
 
 export async function createVerification(participant: Participant) {
     try {
+        await prismaClient.emailVerificationToken.deleteMany({
+            where: { participantId: participant.id },
+        });
+
         const token = crypto.randomUUID();
         const newVerification = await prismaClient.emailVerificationToken.create({
             data: {

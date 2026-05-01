@@ -1,7 +1,15 @@
-import { verify, Secret } from 'jsonwebtoken';
+import { JwtPayload, Secret, verify } from 'jsonwebtoken';
 
-export const verifyMotoradminJwt = async (authHeader: string | null) => {
-    const [_, jwtToken] = authHeader?.split(' ') || ["", ""];
+export interface MotorAdminToken extends JwtPayload {
+    email?: string;
+}
+interface VerifyResult {
+    error: { message: string } | null;
+    authentication: MotorAdminToken | null;
+}
+
+export const verifyMotoradminJwt = async (authHeader: string | null): Promise<VerifyResult> => {
+    const jwtToken = authHeader?.split(' ')[1] || '';
     if (!jwtToken) {
         return { error: { message: 'no token' }, authentication: null };
     }
@@ -10,14 +18,21 @@ export const verifyMotoradminJwt = async (authHeader: string | null) => {
     }
 
     try {
-        const authentication = await new Promise((resolve, reject) => {
-            verify(jwtToken, process.env.SECRET_KEY_BASE as Secret, (err, authentication) => {
-                if (err) reject(err);
-                else resolve(authentication);
+        const authentication = await new Promise<MotorAdminToken>((resolve, reject) => {
+            verify(jwtToken, process.env.SECRET_KEY_BASE as Secret, (err, decoded) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                if (typeof decoded === 'string') {
+                    return reject(new Error('Invalid token payload format'));
+                }
+
+                resolve(decoded as MotorAdminToken);
             });
         });
         return { error: null, authentication };
-    } catch (err) {
+    } catch {
         return { error: { message: 'Unauthorized' }, authentication: null };
     }
 };
