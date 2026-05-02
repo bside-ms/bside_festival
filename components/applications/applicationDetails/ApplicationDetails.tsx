@@ -32,7 +32,7 @@ const ApplicationDetails = ({ application, genres, links, onCloseClick }: Props)
     const { type, curationScore, status } = application;
 
     return (
-        <div className="rounded-md border border-black">
+        <div className="rounded-md border border-black bg-white/80">
             <div className="relative flex flex-col justify-between gap-2 md:flex-row-reverse">
                 <ApplicationDetailsImage application={application} />
 

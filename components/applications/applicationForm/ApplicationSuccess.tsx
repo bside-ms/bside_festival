@@ -6,7 +6,7 @@ import { HiExclamationCircle } from 'react-icons/hi';
 
 const ApplicationSuccess = (): ReactElement => {
     return (
-        <div className="text-white">
+        <div className="text-black">
             <div className="mb-4 font-display">
                 <div className="text-4xl font-bold">Bewerbung eingegangen</div>
             </div>
