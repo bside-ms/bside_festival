@@ -1,6 +1,6 @@
 ---
 engine_version: 0.4.21
-file_version: 2026-05-01 17:54:51.643088000 Z
+file_version: 2026-05-04 09:09:47.702628000 Z
 resources:
 - name: attendee
   preferences:
@@ -32,11 +32,11 @@ resources:
 - name: genre
   preferences:
     visible: false
-  updated_at: 2026-04-24 18:09:27.538088000 +00:00
+  updated_at: 2026-05-03 09:10:54.815924000 +00:00
 - name: label
   preferences:
     visible: false
-  updated_at: 2026-03-16 23:21:29.175964000 +00:00
+  updated_at: 2026-05-03 09:10:55.516928000 +00:00
 - name: link
   preferences:
     visible: false
@@ -51,7 +51,10 @@ resources:
     - preferences:
         show_on_table: true
       name: edit
-    custom_sql: "SELECT `p`.*,\n    p.flintaParticipantsCount / p.participantCount
+    custom_sql: "SELECT `p`.*,\n    concat(\"https://s3-eu-central-1.ionoscloud.com/festival/\",
+      imageFileName) as participantImage,\n    if(technicalRiderFileName IS NOT NULL,\n
+      \       concat(\"https://s3-eu-central-1.ionoscloud.com/festival/\", technicalRiderFileName),\n
+      \       NULL\n    ) as riderFile,\n    p.flintaParticipantsCount / p.participantCount
       * 100 AS flinta_quota,\n    (\n        SELECT COUNT(*) \n        FROM `Zipcode`
       z \n        WHERE z.participantId = p.id \n        AND (z.code LIKE '32%' OR\n
       \            z.code LIKE '33%' OR\n             z.code LIKE '44%' OR\n             z.code
@@ -66,25 +69,17 @@ resources:
     - access_type: hidden
       name: updatedAt
     - access_type: hidden
-      name: description
-    - access_type: hidden
-      name: motivation
-    - access_type: hidden
       name: curationInfo
     - access_type: hidden
       name: address
     - access_type: hidden
       name: residence
     - access_type: hidden
-      name: imageFileName
-    - access_type: hidden
       name: technicalRider
     - access_type: hidden
       name: technicalRiderFileName
     - access_type: hidden
       name: additionalInfo
-    - access_type: hidden
-      name: status
     - access_type: hidden
       name: updatedDescription
     - access_type: hidden
@@ -143,6 +138,57 @@ resources:
       format: {}
       validators: []
       description: ''
+    - column_type: select
+      format:
+        select_query_id: 8
+        select_options:
+          Applied: Beworben
+          Rejected: Abgelehnt
+          InProgress: '"In Bearbeitung"'
+          WaitingForConfirmation: '"Warten auf Bestätigung"'
+          Confirmed: Bestätigt
+          Canceled: Abgesagt
+        split_tags_by: ","
+      name: status
+    - column_type: tag
+      format:
+        select_options:
+          Concert: Konzert
+          Workshop: Workshop
+          Reading: Lesung
+          Performance: Performance
+          FamilyProgram: Familien Programm
+          Exhibition: Ausstellung
+          Food: Food
+          Neighbor: Nachbarschaft
+          Misc: Snstige
+          DiskJockey: DJs
+          InfoBooth: Infostand
+          Catering: Catering
+      name: type
+    - column_type: textarea
+      name: motivation
+    - column_type: textarea
+      name: description
+    - access_type: hidden
+      column_type: image
+      name: imageFileName
+    - name: participantImage
+      display_name: Participantimage
+      column_type: image
+      access_type: read_only
+      virtual: false
+      format: {}
+      validators: []
+      description: ''
+    - name: riderFile
+      display_name: Riderfile
+      column_type: file
+      access_type: read_only
+      virtual: false
+      format: {}
+      validators: []
+      description: ''
     display_name: Bewerbungen - Bands
     scopes:
     - name: bands
@@ -159,15 +205,24 @@ resources:
         filter:
         - type:
             neq: concert
-  updated_at: 2026-05-01 17:51:30.006051000 +00:00
+    associations:
+    - name: plz
+      display_name: Mitglieder PLZs
+      model_name: zipcode
+      foreign_key: participantId
+      primary_key: id
+      virtual: true
+      polymorphic: false
+      slug: plz
+  updated_at: 2026-05-04 09:09:47.702628000 +00:00
 - name: participant_genre
   preferences:
     visible: false
-  updated_at: 2026-03-16 23:21:32.555253000 +00:00
+  updated_at: 2026-05-03 09:10:31.269931000 +00:00
 - name: participant_label
   preferences:
     visible: false
-  updated_at: 2026-03-16 23:21:33.229145000 +00:00
+  updated_at: 2026-05-03 09:10:57.999018000 +00:00
 - name: prisma_migration
   preferences:
     visible: false
@@ -220,7 +275,9 @@ configs:
 - key: resources.participant.columns.order
   value:
   - id
+  - status
   - name
+  - participantImage
   - appliedAt
   - updatedAt
   - contactName
@@ -234,13 +291,11 @@ configs:
   - curationScore
   - curationInfo
   - address
-  - residence
   - type
   - imageFileName
   - technicalRider
   - technicalRiderFileName
   - additionalInfo
-  - status
   - updatedDescription
   - backlineSharing
   - allergies
@@ -253,7 +308,7 @@ configs:
   - professionalParticipantsCount
   - emailVerified
   - isProfessionalBooking
-  updated_at: 2026-04-09 10:43:41.483105000 +00:00
+  updated_at: 2026-05-03 20:35:29.251298000 +00:00
 queries:
 - id: 3
   name: Flinta Quota
@@ -371,6 +426,48 @@ queries:
     variables: []
   tags: []
   updated_at: 2026-05-01 17:32:13.232327000 +00:00
+- id: 8
+  name: Enum ApplicationStatus
+  sql_body: |-
+    SELECT ('Applied') as Status UNION ALL
+    SELECT ('Rejected') as Status UNION ALL
+    SELECT ('InProgress') as Status UNION ALL
+    SELECT ('WaitingForConfirmation') as Status UNION ALL
+    SELECT ('Confirmed') as Status UNION ALL
+    SELECT ('Canceled') as Status
+  description:
+  preferences:
+    query_type: sql
+    database: Default
+    visualization: table
+    visualization_options: {}
+    variables: []
+  tags: []
+  updated_at: 2026-05-03 09:40:04.065945000 +00:00
+- id: 9
+  name: Enum ParticipantType
+  sql_body: |-
+    SELECT 'Concert' as Type UNION ALL
+    SELECT 'Workshop' as Type UNION ALL
+    SELECT 'Reading' as Type UNION ALL
+    SELECT 'Performance' as Type UNION ALL
+    SELECT 'FamilyProgram' as Type UNION ALL
+    SELECT 'Exhibition' as Type UNION ALL
+    SELECT 'Food' as Type UNION ALL
+    SELECT 'Neighbor' as Type UNION ALL
+    SELECT 'Misc' as Type UNION ALL
+    SELECT 'DiskJockey' as Type UNION ALL
+    SELECT 'Catering' as Type UNION ALL
+    SELECT 'InfoBooth' as Type
+  description:
+  preferences:
+    query_type: sql
+    database: Default
+    visualization: table
+    visualization_options: {}
+    variables: []
+  tags: []
+  updated_at: 2026-05-03 09:45:36.305930000 +00:00
 dashboards:
 - id: 3
   title: Übersicht Bewerbungen
