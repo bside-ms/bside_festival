@@ -2,573 +2,573 @@
 engine_version: 0.4.21
 file_version: 2026-05-04 09:09:47.702628000 Z
 resources:
-- name: attendee
-  preferences:
-    visible: false
-  updated_at: 2026-04-24 18:09:25.396262000 +00:00
-- name: comment
-  preferences:
-    visible: false
-  updated_at: 2026-03-16 23:21:26.702317000 +00:00
-- name: email_verification_token
-  preferences:
-    custom_sql: |-
-      SELECT e.*, p.emailVerified, p.name
-      FROM `EmailVerificationToken` AS e
-      JOIN `Participant` AS p ON e.participantId=p.id;
-    columns:
-    - access_type: hidden
-      name: token
-    - access_type: hidden
-      name: id
-    actions:
-    - name: resend_verification
-      display_name: Resend Verification
-      action_type: form
+    - name: attendee
       preferences:
-        form_id: 3
-        show_on_table: true
-  updated_at: 2026-04-27 08:36:46.339793000 +00:00
-- name: genre
-  preferences:
-    visible: false
-  updated_at: 2026-05-03 09:10:54.815924000 +00:00
-- name: label
-  preferences:
-    visible: false
-  updated_at: 2026-05-03 09:10:55.516928000 +00:00
-- name: link
-  preferences:
-    visible: false
-  updated_at: 2026-03-16 23:21:30.257634000 +00:00
-- name: location
-  preferences:
-    visible: false
-  updated_at: 2026-04-24 18:09:47.708853000 +00:00
-- name: participant
-  preferences:
-    actions:
-    - preferences:
-        show_on_table: true
-      name: edit
-    custom_sql: "SELECT `p`.*,\n    concat(\"https://s3-eu-central-1.ionoscloud.com/festival/\",
-      imageFileName) as participantImage,\n    if(technicalRiderFileName IS NOT NULL,\n
-      \       concat(\"https://s3-eu-central-1.ionoscloud.com/festival/\", technicalRiderFileName),\n
-      \       NULL\n    ) as riderFile,\n    p.flintaParticipantsCount / p.participantCount
-      * 100 AS flinta_quota,\n    (\n        SELECT COUNT(*) \n        FROM `Zipcode`
-      z \n        WHERE z.participantId = p.id \n        AND (z.code LIKE '32%' OR\n
-      \            z.code LIKE '33%' OR\n             z.code LIKE '44%' OR\n             z.code
-      LIKE '45%' OR\n             z.code LIKE '46%' OR\n             z.code LIKE '48%'
-      OR\n             z.code LIKE '57%' OR\n             z.code LIKE '58%' OR\n             z.code
-      LIKE '59%'\n         )\n    ) / p.participantCount * 100 AS lwl_quota,\n    (\n
-      \       SELECT COUNT(*) \n        FROM `Zipcode` z \n        WHERE z.participantId
-      = p.id \n        AND z.code in ('48143', '48145', '48147', '48149', '48151',
-      '48153', '48155', '48157', '48159', '48161', '48163', '48165', '48167')\n    )
-      / p.participantCount * 100 AS ms_quota\nFROM `Participant` AS p;"
-    columns:
-    - access_type: hidden
-      name: updatedAt
-    - access_type: hidden
-      name: curationInfo
-    - access_type: hidden
-      name: address
-    - access_type: hidden
-      name: residence
-    - access_type: hidden
-      name: technicalRider
-    - access_type: hidden
-      name: technicalRiderFileName
-    - access_type: hidden
-      name: additionalInfo
-    - access_type: hidden
-      name: updatedDescription
-    - access_type: hidden
-      name: backlineSharing
-    - access_type: hidden
-      name: materialExpenses
-    - access_type: hidden
-      name: allergies
-    - access_type: hidden
-      name: diversityNotes
-    - access_type: hidden
-      name: hasFlintaParticipants
-    - access_type: hidden
-      name: hasMarginalizedParticipants
-    - name: flinta_quota
-      display_name: Flinta quota
-      column_type: percentage
-      access_type: read_only
-      virtual: false
-      format: {}
-      validators: []
-      description: ''
-    - access_type: hidden
-      name: id
-    - name: ms_quota
-      display_name: Ms quota
-      column_type: percentage
-      access_type: read_only
-      virtual: false
-      format: {}
-      validators: []
-      description: ''
-    - name: lwl_quota
-      display_name: Lwl quota
-      column_type: percentage
-      access_type: read_only
-      virtual: false
-      format: {}
-      validators: []
-      description: ''
-    - display_name: professional?
-      name: isProfessionalBooking
-    - name: verified
-      display_name: Verified
-      column_type: string
-      access_type: read_only
-      virtual: false
-      format: {}
-      validators: []
-      description: ''
-    - name: is_verified
-      display_name: Is verified
-      column_type: boolean
-      access_type: read_only
-      virtual: false
-      format: {}
-      validators: []
-      description: ''
-    - column_type: select
-      format:
-        select_query_id: 8
-        select_options:
-          Applied: Beworben
-          Rejected: Abgelehnt
-          InProgress: '"In Bearbeitung"'
-          WaitingForConfirmation: '"Warten auf Bestätigung"'
-          Confirmed: Bestätigt
-          Canceled: Abgesagt
-        split_tags_by: ","
-      name: status
-    - column_type: tag
-      format:
-        select_options:
-          Concert: Konzert
-          Workshop: Workshop
-          Reading: Lesung
-          Performance: Performance
-          FamilyProgram: Familien Programm
-          Exhibition: Ausstellung
-          Food: Food
-          Neighbor: Nachbarschaft
-          Misc: Snstige
-          DiskJockey: DJs
-          InfoBooth: Infostand
-          Catering: Catering
-      name: type
-    - column_type: textarea
-      name: motivation
-    - column_type: textarea
-      name: description
-    - access_type: hidden
-      column_type: image
-      name: imageFileName
-    - name: participantImage
-      display_name: Participantimage
-      column_type: image
-      access_type: read_only
-      virtual: false
-      format: {}
-      validators: []
-      description: ''
-    - name: riderFile
-      display_name: Riderfile
-      column_type: file
-      access_type: read_only
-      virtual: false
-      format: {}
-      validators: []
-      description: ''
-    display_name: Bewerbungen - Bands
-    scopes:
-    - name: bands
-      display_name: Bands
-      scope_type: filter
+          visible: false
+      updated_at: 2026-04-24 18:09:25.396262000 +00:00
+    - name: comment
       preferences:
-        filter:
-        - type:
-            eq: concert
-    - name: other
-      display_name: Other
-      scope_type: filter
+          visible: false
+      updated_at: 2026-03-16 23:21:26.702317000 +00:00
+    - name: email_verification_token
       preferences:
-        filter:
-        - type:
-            neq: concert
-    associations:
-    - name: plz
-      display_name: Mitglieder PLZs
-      model_name: zipcode
-      foreign_key: participantId
-      primary_key: id
-      virtual: true
-      polymorphic: false
-      slug: plz
-  updated_at: 2026-05-04 09:09:47.702628000 +00:00
-- name: participant_genre
-  preferences:
-    visible: false
-  updated_at: 2026-05-03 09:10:31.269931000 +00:00
-- name: participant_label
-  preferences:
-    visible: false
-  updated_at: 2026-05-03 09:10:57.999018000 +00:00
-- name: prisma_migration
-  preferences:
-    visible: false
-  updated_at: 2026-03-16 23:21:34.960695000 +00:00
-- name: slot
-  preferences:
-    visible: false
-  updated_at: 2026-04-24 18:09:36.291657000 +00:00
-- name: venue
-  preferences:
-    visible: false
-  updated_at: 2026-04-24 18:09:36.738145000 +00:00
-- name: volunteer
-  preferences:
-    visible: false
-  updated_at: 2026-04-24 18:09:37.174493000 +00:00
-- name: zipcode
-  preferences:
-    visible: false
-  updated_at: 2026-04-24 18:09:45.073251000 +00:00
+          custom_sql: |-
+              SELECT e.*, p.emailVerified, p.name
+              FROM `EmailVerificationToken` AS e
+              JOIN `Participant` AS p ON e.participantId=p.id;
+          columns:
+              - access_type: hidden
+                name: token
+              - access_type: hidden
+                name: id
+          actions:
+              - name: resend_verification
+                display_name: Resend Verification
+                action_type: form
+                preferences:
+                    form_id: 3
+                    show_on_table: true
+      updated_at: 2026-04-27 08:36:46.339793000 +00:00
+    - name: genre
+      preferences:
+          visible: false
+      updated_at: 2026-05-03 09:10:54.815924000 +00:00
+    - name: label
+      preferences:
+          visible: false
+      updated_at: 2026-05-03 09:10:55.516928000 +00:00
+    - name: link
+      preferences:
+          visible: false
+      updated_at: 2026-03-16 23:21:30.257634000 +00:00
+    - name: location
+      preferences:
+          visible: false
+      updated_at: 2026-04-24 18:09:47.708853000 +00:00
+    - name: participant
+      preferences:
+          actions:
+              - preferences:
+                    show_on_table: true
+                name: edit
+          custom_sql: "SELECT `p`.*,\n    concat(\"https://s3-eu-central-1.ionoscloud.com/festival/\",
+              imageFileName) as participantImage,\n    if(technicalRiderFileName IS NOT NULL,\n
+              \       concat(\"https://s3-eu-central-1.ionoscloud.com/festival/\", technicalRiderFileName),\n
+              \       NULL\n    ) as riderFile,\n    p.flintaParticipantsCount / p.participantCount
+              * 100 AS flinta_quota,\n    (\n        SELECT COUNT(*) \n        FROM `Zipcode`
+              z \n        WHERE z.participantId = p.id \n        AND (z.code LIKE '32%' OR\n
+              \            z.code LIKE '33%' OR\n             z.code LIKE '44%' OR\n             z.code
+              LIKE '45%' OR\n             z.code LIKE '46%' OR\n             z.code LIKE '48%'
+              OR\n             z.code LIKE '57%' OR\n             z.code LIKE '58%' OR\n             z.code
+              LIKE '59%'\n         )\n    ) / p.participantCount * 100 AS lwl_quota,\n    (\n
+              \       SELECT COUNT(*) \n        FROM `Zipcode` z \n        WHERE z.participantId
+              = p.id \n        AND z.code in ('48143', '48145', '48147', '48149', '48151',
+              '48153', '48155', '48157', '48159', '48161', '48163', '48165', '48167')\n    )
+              / p.participantCount * 100 AS ms_quota\nFROM `Participant` AS p;"
+          columns:
+              - access_type: hidden
+                name: updatedAt
+              - access_type: hidden
+                name: curationInfo
+              - access_type: hidden
+                name: address
+              - access_type: hidden
+                name: residence
+              - access_type: hidden
+                name: technicalRider
+              - access_type: hidden
+                name: technicalRiderFileName
+              - access_type: hidden
+                name: additionalInfo
+              - access_type: hidden
+                name: updatedDescription
+              - access_type: hidden
+                name: backlineSharing
+              - access_type: hidden
+                name: materialExpenses
+              - access_type: hidden
+                name: allergies
+              - access_type: hidden
+                name: diversityNotes
+              - access_type: hidden
+                name: hasFlintaParticipants
+              - access_type: hidden
+                name: hasMarginalizedParticipants
+              - name: flinta_quota
+                display_name: Flinta quota
+                column_type: percentage
+                access_type: read_only
+                virtual: false
+                format: {}
+                validators: []
+                description: ''
+              - access_type: hidden
+                name: id
+              - name: ms_quota
+                display_name: Ms quota
+                column_type: percentage
+                access_type: read_only
+                virtual: false
+                format: {}
+                validators: []
+                description: ''
+              - name: lwl_quota
+                display_name: Lwl quota
+                column_type: percentage
+                access_type: read_only
+                virtual: false
+                format: {}
+                validators: []
+                description: ''
+              - display_name: professional?
+                name: isProfessionalBooking
+              - name: verified
+                display_name: Verified
+                column_type: string
+                access_type: read_only
+                virtual: false
+                format: {}
+                validators: []
+                description: ''
+              - name: is_verified
+                display_name: Is verified
+                column_type: boolean
+                access_type: read_only
+                virtual: false
+                format: {}
+                validators: []
+                description: ''
+              - column_type: select
+                format:
+                    select_query_id: 8
+                    select_options:
+                        Applied: Beworben
+                        Rejected: Abgelehnt
+                        InProgress: '"In Bearbeitung"'
+                        WaitingForConfirmation: '"Warten auf Bestätigung"'
+                        Confirmed: Bestätigt
+                        Canceled: Abgesagt
+                    split_tags_by: ','
+                name: status
+              - column_type: tag
+                format:
+                    select_options:
+                        Concert: Konzert
+                        Workshop: Workshop
+                        Reading: Lesung
+                        Performance: Performance
+                        FamilyProgram: Familien Programm
+                        Exhibition: Ausstellung
+                        Food: Food
+                        Neighbor: Nachbarschaft
+                        Misc: Snstige
+                        DiskJockey: DJs
+                        InfoBooth: Infostand
+                        Catering: Catering
+                name: type
+              - column_type: textarea
+                name: motivation
+              - column_type: textarea
+                name: description
+              - access_type: hidden
+                column_type: image
+                name: imageFileName
+              - name: participantImage
+                display_name: Participantimage
+                column_type: image
+                access_type: read_only
+                virtual: false
+                format: {}
+                validators: []
+                description: ''
+              - name: riderFile
+                display_name: Riderfile
+                column_type: file
+                access_type: read_only
+                virtual: false
+                format: {}
+                validators: []
+                description: ''
+          display_name: Bewerbungen - Bands
+          scopes:
+              - name: bands
+                display_name: Bands
+                scope_type: filter
+                preferences:
+                    filter:
+                        - type:
+                              eq: concert
+              - name: other
+                display_name: Other
+                scope_type: filter
+                preferences:
+                    filter:
+                        - type:
+                              neq: concert
+          associations:
+              - name: plz
+                display_name: Mitglieder PLZs
+                model_name: zipcode
+                foreign_key: participantId
+                primary_key: id
+                virtual: true
+                polymorphic: false
+                slug: plz
+      updated_at: 2026-05-04 09:09:47.702628000 +00:00
+    - name: participant_genre
+      preferences:
+          visible: false
+      updated_at: 2026-05-03 09:10:31.269931000 +00:00
+    - name: participant_label
+      preferences:
+          visible: false
+      updated_at: 2026-05-03 09:10:57.999018000 +00:00
+    - name: prisma_migration
+      preferences:
+          visible: false
+      updated_at: 2026-03-16 23:21:34.960695000 +00:00
+    - name: slot
+      preferences:
+          visible: false
+      updated_at: 2026-04-24 18:09:36.291657000 +00:00
+    - name: venue
+      preferences:
+          visible: false
+      updated_at: 2026-04-24 18:09:36.738145000 +00:00
+    - name: volunteer
+      preferences:
+          visible: false
+      updated_at: 2026-04-24 18:09:37.174493000 +00:00
+    - name: zipcode
+      preferences:
+          visible: false
+      updated_at: 2026-04-24 18:09:45.073251000 +00:00
 configs:
-- key: header.links
-  value:
-  - name: "\U0001F60E Motor Admin Pro"
-    path: https://www.getmotoradmin.com/pro
-  - name: "⭐ Star on GitHub"
-    path: https://github.com/motor-admin/motor-admin
-  updated_at: 2026-04-08 17:59:53.283841000 +00:00
-- key: homepage.layout
-  value:
-  - type: dashboard
-    id: 3
-  updated_at: 2026-05-01 17:34:24.477464000 +00:00
-- key: resources.email_verification_token.columns.order
-  value:
-  - name
-  - participantId
-  - emailVerified
-  - id
-  - expires
-  - token
-  updated_at: 2026-04-27 08:36:45.395130000 +00:00
-- key: resources.participant.actions.order
-  value:
-  - create
-  - edit
-  - remove
-  - zusagen_vormerken
-  updated_at: 2026-03-17 22:49:14.867972000 +00:00
-- key: resources.participant.columns.order
-  value:
-  - id
-  - status
-  - name
-  - participantImage
-  - appliedAt
-  - updatedAt
-  - contactName
-  - flinta_quota
-  - ms_quota
-  - lwl_quota
-  - contactMail
-  - contactPhone
-  - description
-  - motivation
-  - curationScore
-  - curationInfo
-  - address
-  - type
-  - imageFileName
-  - technicalRider
-  - technicalRiderFileName
-  - additionalInfo
-  - updatedDescription
-  - backlineSharing
-  - allergies
-  - diversityNotes
-  - hasMarginalizedParticipants
-  - participantCount
-  - updatedName
-  - flintaParticipantsCount
-  - durationPreference
-  - professionalParticipantsCount
-  - emailVerified
-  - isProfessionalBooking
-  updated_at: 2026-05-03 20:35:29.251298000 +00:00
+    - key: header.links
+      value:
+          - name: "\U0001F60E Motor Admin Pro"
+            path: https://www.getmotoradmin.com/pro
+          - name: '⭐ Star on GitHub'
+            path: https://github.com/motor-admin/motor-admin
+      updated_at: 2026-04-08 17:59:53.283841000 +00:00
+    - key: homepage.layout
+      value:
+          - type: dashboard
+            id: 3
+      updated_at: 2026-05-01 17:34:24.477464000 +00:00
+    - key: resources.email_verification_token.columns.order
+      value:
+          - name
+          - participantId
+          - emailVerified
+          - id
+          - expires
+          - token
+      updated_at: 2026-04-27 08:36:45.395130000 +00:00
+    - key: resources.participant.actions.order
+      value:
+          - create
+          - edit
+          - remove
+          - zusagen_vormerken
+      updated_at: 2026-03-17 22:49:14.867972000 +00:00
+    - key: resources.participant.columns.order
+      value:
+          - id
+          - status
+          - name
+          - participantImage
+          - appliedAt
+          - updatedAt
+          - contactName
+          - flinta_quota
+          - ms_quota
+          - lwl_quota
+          - contactMail
+          - contactPhone
+          - description
+          - motivation
+          - curationScore
+          - curationInfo
+          - address
+          - type
+          - imageFileName
+          - technicalRider
+          - technicalRiderFileName
+          - additionalInfo
+          - updatedDescription
+          - backlineSharing
+          - allergies
+          - diversityNotes
+          - hasMarginalizedParticipants
+          - participantCount
+          - updatedName
+          - flintaParticipantsCount
+          - durationPreference
+          - professionalParticipantsCount
+          - emailVerified
+          - isProfessionalBooking
+      updated_at: 2026-05-03 20:35:29.251298000 +00:00
 queries:
-- id: 3
-  name: Flinta Quota
-  sql_body: "SELECT \n    'FLINTA' AS category, \n    SUM(flintaParticipantsCount)
-    AS total\nFROM Participant\nUNION ALL\nSELECT \n    'Other' AS category, \n    SUM(participantCount
-    - flintaParticipantsCount) AS total\nFROM Participant;"
-  description:
-  preferences:
-    query_type: sql
-    database: Default
-    visualization: pie_chart
-    visualization_options:
-      label_format: decimal
-      label_format_options: {}
-    variables: []
-  tags: []
-  updated_at: 2026-05-01 17:02:21.517916000 +00:00
-- id: 4
-  name: Professional Quota
-  sql_body: "SELECT \n    'Professional' AS category, \n    SUM(professionalParticipantsCount)
-    AS total\nFROM Participant\nUNION ALL\nSELECT \n    'Other' AS category, \n    SUM(participantCount
-    - professionalParticipantsCount) AS total\nFROM Participant;"
-  description:
-  preferences:
-    query_type: sql
-    database: Default
-    visualization: pie_chart
-    visualization_options:
-      label_format: decimal
-      label_format_options: {}
-    variables: []
-  tags: []
-  updated_at: 2026-05-01 17:06:11.917240000 +00:00
-- id: 5
-  name: LWL Count
-  sql_body: |-
-    SELECT
-        'LWL' AS category,
-        (
-            SELECT COUNT(*)
-            FROM Participant as p JOIN Zipcode as z on z.participantId=p.id
-            WHERE (
-                z.code LIKE '32%' OR
-                z.code LIKE '33%' OR
-                z.code LIKE '44%' OR
-                z.code LIKE '45%' OR
-                z.code LIKE '46%' OR
-                z.code LIKE '48%' OR
-                z.code LIKE '57%' OR
-                z.code LIKE '58%' OR
-                z.code LIKE '59%')
-        ) as lwl_count
-    UNION ALL
-    SELECT
-        'Other' AS category,
-        (
-            SELECT SUM(p.participantCount) FROM Participant as p
-        ) - (
-            SELECT COUNT(*)
-            FROM Participant as p JOIN Zipcode as z on z.participantId=p.id
-            WHERE (
-                z.code LIKE '32%' OR
-                z.code LIKE '33%' OR
-                z.code LIKE '44%' OR
-                z.code LIKE '45%' OR
-                z.code LIKE '46%' OR
-                z.code LIKE '48%' OR
-                z.code LIKE '57%' OR
-                z.code LIKE '58%' OR
-                z.code LIKE '59%')
-        ) as other_count
-  description:
-  preferences:
-    query_type: sql
-    database: Default
-    visualization: pie_chart
-    visualization_options:
-      label_format: decimal
-      label_format_options: {}
-    variables: []
-  tags: []
-  updated_at: 2026-05-01 17:27:02.573181000 +00:00
-- id: 6
-  name: Verified Quota
-  sql_body: |
-    SELECT 'Verified' as category, COUNT(*) FROM Participant as p WHERE p.emailVerified IS NOT NULL
-    UNION ALL
-    SELECT 'Unverified' as category, COUNT(*) FROM Participant as p WHERE p.emailVerified IS NULL
-  description:
-  preferences:
-    query_type: sql
-    database: Default
-    visualization: pie_chart
-    visualization_options:
-      label_format: decimal
-      label_format_options: {}
-    variables: []
-  tags: []
-  updated_at: 2026-05-01 17:26:49.690084000 +00:00
-- id: 7
-  name: Applications Chart
-  sql_body: "SELECT \n    DATE(appliedAt) AS day,\n    SUM(COUNT(*)) OVER (ORDER BY
-    DATE(appliedAt)) AS total_participants\nFROM Participant\nGROUP BY day\nORDER
-    BY day ASC;"
-  description:
-  preferences:
-    query_type: sql
-    database: Default
-    visualization: line_chart
-    visualization_options:
-      label_format: decimal
-      label_format_options:
-        currency: USD
-      chart_values_axis: true
-    variables: []
-  tags: []
-  updated_at: 2026-05-01 17:32:13.232327000 +00:00
-- id: 8
-  name: Enum ApplicationStatus
-  sql_body: |-
-    SELECT ('Applied') as Status UNION ALL
-    SELECT ('Rejected') as Status UNION ALL
-    SELECT ('InProgress') as Status UNION ALL
-    SELECT ('WaitingForConfirmation') as Status UNION ALL
-    SELECT ('Confirmed') as Status UNION ALL
-    SELECT ('Canceled') as Status
-  description:
-  preferences:
-    query_type: sql
-    database: Default
-    visualization: table
-    visualization_options: {}
-    variables: []
-  tags: []
-  updated_at: 2026-05-03 09:40:04.065945000 +00:00
-- id: 9
-  name: Enum ParticipantType
-  sql_body: |-
-    SELECT 'Concert' as Type UNION ALL
-    SELECT 'Workshop' as Type UNION ALL
-    SELECT 'Reading' as Type UNION ALL
-    SELECT 'Performance' as Type UNION ALL
-    SELECT 'FamilyProgram' as Type UNION ALL
-    SELECT 'Exhibition' as Type UNION ALL
-    SELECT 'Food' as Type UNION ALL
-    SELECT 'Neighbor' as Type UNION ALL
-    SELECT 'Misc' as Type UNION ALL
-    SELECT 'DiskJockey' as Type UNION ALL
-    SELECT 'Catering' as Type UNION ALL
-    SELECT 'InfoBooth' as Type
-  description:
-  preferences:
-    query_type: sql
-    database: Default
-    visualization: table
-    visualization_options: {}
-    variables: []
-  tags: []
-  updated_at: 2026-05-03 09:45:36.305930000 +00:00
+    - id: 3
+      name: Flinta Quota
+      sql_body: "SELECT \n    'FLINTA' AS category, \n    SUM(flintaParticipantsCount)
+          AS total\nFROM Participant\nUNION ALL\nSELECT \n    'Other' AS category, \n    SUM(participantCount
+          - flintaParticipantsCount) AS total\nFROM Participant;"
+      description:
+      preferences:
+          query_type: sql
+          database: Default
+          visualization: pie_chart
+          visualization_options:
+              label_format: decimal
+              label_format_options: {}
+          variables: []
+      tags: []
+      updated_at: 2026-05-01 17:02:21.517916000 +00:00
+    - id: 4
+      name: Professional Quota
+      sql_body: "SELECT \n    'Professional' AS category, \n    SUM(professionalParticipantsCount)
+          AS total\nFROM Participant\nUNION ALL\nSELECT \n    'Other' AS category, \n    SUM(participantCount
+          - professionalParticipantsCount) AS total\nFROM Participant;"
+      description:
+      preferences:
+          query_type: sql
+          database: Default
+          visualization: pie_chart
+          visualization_options:
+              label_format: decimal
+              label_format_options: {}
+          variables: []
+      tags: []
+      updated_at: 2026-05-01 17:06:11.917240000 +00:00
+    - id: 5
+      name: LWL Count
+      sql_body: |-
+          SELECT
+              'LWL' AS category,
+              (
+                  SELECT COUNT(*)
+                  FROM Participant as p JOIN Zipcode as z on z.participantId=p.id
+                  WHERE (
+                      z.code LIKE '32%' OR
+                      z.code LIKE '33%' OR
+                      z.code LIKE '44%' OR
+                      z.code LIKE '45%' OR
+                      z.code LIKE '46%' OR
+                      z.code LIKE '48%' OR
+                      z.code LIKE '57%' OR
+                      z.code LIKE '58%' OR
+                      z.code LIKE '59%')
+              ) as lwl_count
+          UNION ALL
+          SELECT
+              'Other' AS category,
+              (
+                  SELECT SUM(p.participantCount) FROM Participant as p
+              ) - (
+                  SELECT COUNT(*)
+                  FROM Participant as p JOIN Zipcode as z on z.participantId=p.id
+                  WHERE (
+                      z.code LIKE '32%' OR
+                      z.code LIKE '33%' OR
+                      z.code LIKE '44%' OR
+                      z.code LIKE '45%' OR
+                      z.code LIKE '46%' OR
+                      z.code LIKE '48%' OR
+                      z.code LIKE '57%' OR
+                      z.code LIKE '58%' OR
+                      z.code LIKE '59%')
+              ) as other_count
+      description:
+      preferences:
+          query_type: sql
+          database: Default
+          visualization: pie_chart
+          visualization_options:
+              label_format: decimal
+              label_format_options: {}
+          variables: []
+      tags: []
+      updated_at: 2026-05-01 17:27:02.573181000 +00:00
+    - id: 6
+      name: Verified Quota
+      sql_body: |
+          SELECT 'Verified' as category, COUNT(*) FROM Participant as p WHERE p.emailVerified IS NOT NULL
+          UNION ALL
+          SELECT 'Unverified' as category, COUNT(*) FROM Participant as p WHERE p.emailVerified IS NULL
+      description:
+      preferences:
+          query_type: sql
+          database: Default
+          visualization: pie_chart
+          visualization_options:
+              label_format: decimal
+              label_format_options: {}
+          variables: []
+      tags: []
+      updated_at: 2026-05-01 17:26:49.690084000 +00:00
+    - id: 7
+      name: Applications Chart
+      sql_body: "SELECT \n    DATE(appliedAt) AS day,\n    SUM(COUNT(*)) OVER (ORDER BY
+          DATE(appliedAt)) AS total_participants\nFROM Participant\nGROUP BY day\nORDER
+          BY day ASC;"
+      description:
+      preferences:
+          query_type: sql
+          database: Default
+          visualization: line_chart
+          visualization_options:
+              label_format: decimal
+              label_format_options:
+                  currency: USD
+              chart_values_axis: true
+          variables: []
+      tags: []
+      updated_at: 2026-05-01 17:32:13.232327000 +00:00
+    - id: 8
+      name: Enum ApplicationStatus
+      sql_body: |-
+          SELECT ('Applied') as Status UNION ALL
+          SELECT ('Rejected') as Status UNION ALL
+          SELECT ('InProgress') as Status UNION ALL
+          SELECT ('WaitingForConfirmation') as Status UNION ALL
+          SELECT ('Confirmed') as Status UNION ALL
+          SELECT ('Canceled') as Status
+      description:
+      preferences:
+          query_type: sql
+          database: Default
+          visualization: table
+          visualization_options: {}
+          variables: []
+      tags: []
+      updated_at: 2026-05-03 09:40:04.065945000 +00:00
+    - id: 9
+      name: Enum ParticipantType
+      sql_body: |-
+          SELECT 'Concert' as Type UNION ALL
+          SELECT 'Workshop' as Type UNION ALL
+          SELECT 'Reading' as Type UNION ALL
+          SELECT 'Performance' as Type UNION ALL
+          SELECT 'FamilyProgram' as Type UNION ALL
+          SELECT 'Exhibition' as Type UNION ALL
+          SELECT 'Food' as Type UNION ALL
+          SELECT 'Neighbor' as Type UNION ALL
+          SELECT 'Misc' as Type UNION ALL
+          SELECT 'DiskJockey' as Type UNION ALL
+          SELECT 'Catering' as Type UNION ALL
+          SELECT 'InfoBooth' as Type
+      description:
+      preferences:
+          query_type: sql
+          database: Default
+          visualization: table
+          visualization_options: {}
+          variables: []
+      tags: []
+      updated_at: 2026-05-03 09:45:36.305930000 +00:00
 dashboards:
-- id: 3
-  title: Übersicht Bewerbungen
-  description:
-  preferences:
-    layout:
-    - title: Applications Chart
-      query_id: 7
-      size: 6x2
-    - title: LWL Count
-      query_id: 5
-      size: 1x1
-    - title: Verified Quota
-      query_id: 6
-      size: 1x1
-    - title: Flinta Quota
-      query_id: 3
-      size: 1x1
-    - title: Professional Quota
-      query_id: 4
-      size: 1x1
-    variables: []
-  tags: []
-  updated_at: 2026-05-01 17:41:35.837478000 +00:00
+    - id: 3
+      title: Übersicht Bewerbungen
+      description:
+      preferences:
+          layout:
+              - title: Applications Chart
+                query_id: 7
+                size: 6x2
+              - title: LWL Count
+                query_id: 5
+                size: 1x1
+              - title: Verified Quota
+                query_id: 6
+                size: 1x1
+              - title: Flinta Quota
+                query_id: 3
+                size: 1x1
+              - title: Professional Quota
+                query_id: 4
+                size: 1x1
+          variables: []
+      tags: []
+      updated_at: 2026-05-01 17:41:35.837478000 +00:00
 forms:
-- id: 1
-  name: Hello Form
-  http_method: POST
-  api_path: "/todos"
-  description:
-  preferences:
-    fields:
-    - display_name: Message
-      name: message
-      field_type: richtext
-      validators:
-      - required: true
-      is_array: false
-  api_config_name: https://jsonplaceholder.typicode.com
-  tags: []
-  updated_at: 2026-04-08 17:59:53.330408000 +00:00
-- id: 2
-  name: Zusagen vormerken Bewerbungen - Band
-  http_method: POST
-  api_path: "/api/motoradmin"
-  description:
-  preferences:
-    fields:
-    - display_name: Bewerbung
-      name: id
-      field_type: reference
-      default_value: ''
-      validators:
-      - required: true
-      reference:
-        model_name: participant
-    request_type: rest
-  api_config_name: Next.JS
-  tags: []
-  updated_at: 2026-04-09 10:11:43.019859000 +00:00
-- id: 3
-  name: Resend Verification
-  http_method: POST
-  api_path: "/api/motoradmin/"
-  description:
-  preferences:
-    fields:
-    - display_name: participant
-      name: participant_id
-      field_type: reference
-      default_value: ''
-      validators: []
-      reference:
-        model_name: participant
-    request_type: rest
-  api_config_name: 172.20.10.4:3000
-  tags: []
-  updated_at: 2026-05-01 17:54:51.643088000 +00:00
+    - id: 1
+      name: Hello Form
+      http_method: POST
+      api_path: '/todos'
+      description:
+      preferences:
+          fields:
+              - display_name: Message
+                name: message
+                field_type: richtext
+                validators:
+                    - required: true
+                is_array: false
+      api_config_name: https://jsonplaceholder.typicode.com
+      tags: []
+      updated_at: 2026-04-08 17:59:53.330408000 +00:00
+    - id: 2
+      name: Zusagen vormerken Bewerbungen - Band
+      http_method: POST
+      api_path: '/api/motoradmin'
+      description:
+      preferences:
+          fields:
+              - display_name: Bewerbung
+                name: id
+                field_type: reference
+                default_value: ''
+                validators:
+                    - required: true
+                reference:
+                    model_name: participant
+          request_type: rest
+      api_config_name: Next.JS
+      tags: []
+      updated_at: 2026-04-09 10:11:43.019859000 +00:00
+    - id: 3
+      name: Resend Verification
+      http_method: POST
+      api_path: '/api/motoradmin/'
+      description:
+      preferences:
+          fields:
+              - display_name: participant
+                name: participant_id
+                field_type: reference
+                default_value: ''
+                validators: []
+                reference:
+                    model_name: participant
+          request_type: rest
+      api_config_name: 172.20.10.4:3000
+      tags: []
+      updated_at: 2026-05-01 17:54:51.643088000 +00:00
 alerts: []
 api_configs:
-- id: 1
-  name: https://jsonplaceholder.typicode.com
-  url: https://jsonplaceholder.typicode.com
-  preferences: {}
-  description:
-  updated_at: 2026-04-08 17:59:53.329425000 +00:00
-- id: 2
-  name: origin
-  url: "/"
-  preferences: {}
-  description:
-  updated_at: 2026-04-08 17:59:53.334844000 +00:00
-- id: 4
-  name: Next.JS
-  url: https://festival.b-side.ms
-  preferences: {}
-  description:
-  updated_at: 2026-04-25 09:00:00.000000000 +00:00
-- id: 312389
-  name: 172.20.10.4:3000
-  url: http://172.20.10.4:3000
-  preferences: {}
-  description:
-  updated_at: 2026-05-01 17:54:51.303225000 +00:00
+    - id: 1
+      name: https://jsonplaceholder.typicode.com
+      url: https://jsonplaceholder.typicode.com
+      preferences: {}
+      description:
+      updated_at: 2026-04-08 17:59:53.329425000 +00:00
+    - id: 2
+      name: origin
+      url: '/'
+      preferences: {}
+      description:
+      updated_at: 2026-04-08 17:59:53.334844000 +00:00
+    - id: 4
+      name: Next.JS
+      url: https://festival.b-side.ms
+      preferences: {}
+      description:
+      updated_at: 2026-04-25 09:00:00.000000000 +00:00
+    - id: 312389
+      name: 172.20.10.4:3000
+      url: http://172.20.10.4:3000
+      preferences: {}
+      description:
+      updated_at: 2026-05-01 17:54:51.303225000 +00:00
