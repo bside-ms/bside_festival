@@ -1,6 +1,6 @@
 import type { VolunteerFormValues } from '@/components/volunteers/volunteerForm/VolunteerForm';
 
-export type VolunteerPreferenceKey = keyof Pick<
+type VolunteerPreferenceKey = keyof Pick<
     VolunteerFormValues,
     'canCook' | 'isSocial' | 'canSupportTechnician' | 'canSupportArtist' | 'hasCar' | 'canCarryHeavyStuff' | 'hasMultipleTalents'
 >;
