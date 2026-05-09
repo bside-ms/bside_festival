@@ -40,10 +40,10 @@ When in doubt: if a future agent reading this file would be surprised or misled 
 | `npm run lint`                     | ESLint — run after every change                   |
 | `npm run prettier:fix`             | Auto-format everything — run at end of every task |
 | `npm run lint:fix`                 | ESLint with auto-fix                              |
+| `npm run find-unused`              | Find unused files, dependencies, and exports      |
 | `npm run prisma:migrations:dev`    | Create a new migration during development         |
 | `npm run prisma:migrations:deploy` | Apply pending migrations in production            |
 | `npm run prisma:client:generate`   | Regenerate Prisma client after schema changes     |
-| `npm run find-unused-exports`      | Find dead exports                                 |
 
 **Verification order after any change:** `npm run tsc` → `npm run lint` → `npm run prettier:fix`
 
@@ -89,7 +89,6 @@ When in doubt: if a future agent reading this file would be surprised or misled 
 ### UI
 
 - **Tailwind CSS v4** for layout and styling
-- **MUI v7** (`@mui/material`) for complex interactive components
 - **React Hook Form** with `FormProvider` pattern in all forms
 - **Fuse.js** for fuzzy search in both overview contexts
 - Font Awesome + React Icons for icons
@@ -197,6 +196,7 @@ These packages are intentionally NOT on the latest version:
 | `eslint` / `@eslint/js`     | v9      | `typescript-eslint@8` only supports ESLint 9; ESLint 10 breaks it |
 | `nodemailer`                | v7      | `next-auth@4` peer dependency requires `^7.0.7`                   |
 | `prisma` / `@prisma/client` | v6      | Stay on stable v6; v7+ is a major rewrite                         |
+| `typescript`                | v5      | `typescript-eslint@8` only supports TypeScript 5                  |
 
 ---
 

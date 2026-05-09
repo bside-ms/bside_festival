@@ -1,6 +1,9 @@
+import LastCallBannerSvg from '@/images/2026/last_call_banner.svg';
+import LastCallTopSvg from '@/images/2026/last_call_top.svg';
 import Logo from '@/images/2026/logo_transparent.svg';
 import MobileStage from '@/images/2026/wavy_header.svg';
-import isWithinApplicationPhase from '@/lib/common/helper/withinApplicationPhase';
+import formatDate from '@/lib/common/helper/formatDate';
+import isWithinApplicationPhase, { applicationEnd, applicationStart } from '@/lib/common/helper/withinApplicationPhase';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ReactElement } from 'react';
@@ -8,21 +11,30 @@ import { ReactElement } from 'react';
 export default async (): Promise<ReactElement> => {
     return (
         <>
-            <Image src={MobileStage} alt="Festival-Logo" className="absolute top-[175px] -z-1 w-screen sm:hidden" />
+            <Image src={MobileStage} alt="Festival-Logo" className="absolute top-43.75 -z-1 w-screen sm:hidden" />
 
-            <div className="relative mx-auto w-full max-w-2xl min-w-[300px] p-5 font-display md:p-8">
-                {/* Top Part */}
-                <Image src={Logo} alt="Festival-Logo" className="mx-auto w-[150px] sm:w-[250px]" />
+            <div className="relative mx-auto w-full max-w-2xl min-w-75 px-8 py-5 font-display md:p-8">
+                <Image src={LastCallTopSvg} alt="Last Call Bewerbungsphase" className="absolute top-32 left-5 w-26 -rotate-11 md:w-35" />
 
-                <div className="flex flex-col items-center pt-4">18.-19. September 2026</div>
-                <div className="mt-6 flex flex-col items-center text-center text-4xl font-black sm:text-6xl">
+                <Image src={Logo} alt="Festival-Logo" className="mx-auto w-37.5 sm:w-62.5" />
+
+                <div className="flex flex-col items-center pt-34 sm:pt-12">18.-19. September 2026</div>
+                <div className="mt-6 flex flex-col items-center px-4 text-center text-4xl font-black sm:text-6xl">
                     <div>Dein Projekt.</div>
                     <div>Unsere Bühne.</div>
                     <div>B-Side Festival ruft.</div>
                 </div>
+            </div>
+
+            <div className="h-10 w-full overflow-hidden sm:hidden">
+                <Image src={LastCallBannerSvg} alt="Last Call Bewerbungsphase" className="w-full scale-150 pt-2" />
+            </div>
+
+            <div className="relative mx-auto w-full max-w-2xl min-w-75 px-8 py-5 font-display md:p-8">
+                <Image src={LastCallBannerSvg} alt="Last Call Bewerbungsphase" className="hidden w-full pt-2 sm:block sm:pb-10" />
 
                 <div className="mx-6 mt-4 text-center">
-                    <div className="text-base font-black">
+                    <div className="text-base font-black text-balance">
                         Du machst Musik, Kunst oder hast ein Projekt, das gesehen und gehört werden sollte?
                     </div>
                     <div className="text-xs">
@@ -44,7 +56,7 @@ export default async (): Promise<ReactElement> => {
                         )}
                     </div>
 
-                    <div className="col-span-3 text-xs">
+                    <div className="col-span-3 text-xs text-balance">
                         <div className="mt-4">
                             <span className="text-base font-black">Wann?</span> 18.–19. September 2026
                         </div>
@@ -64,7 +76,8 @@ export default async (): Promise<ReactElement> => {
                         <div className="mt-4">
                             <div className="text-sm font-black">Bewerbungszeitraum</div>
                             <div className="text-xl">
-                                <span className="mr-1 text-red-500">→</span>19. April bis 10. Mai
+                                <span className="mr-1 text-red-500">→</span>
+                                {formatDate(applicationStart, 'd. MMMM')} bis {formatDate(applicationEnd, 'd. MMMM')}
                             </div>
                         </div>
 
