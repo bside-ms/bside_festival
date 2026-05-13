@@ -31,7 +31,7 @@ const ParticipantPreview = ({ participant, genres, onClick }: Props): ReactEleme
     const participantSlots = useParticipantSlots(participant.id);
     const participantVenues = useParticipantVenues(participant.id);
 
-    const { id, name, updatedName, imageFileName, description, type, updatedDescription } = participant;
+    const { id, name, imageFileName, description, type } = participant;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -63,13 +63,11 @@ const ParticipantPreview = ({ participant, genres, onClick }: Props): ReactEleme
                         </div>
                     )}
 
-                    {isNotEmptyString(imageUrl) && (
-                        <Image src={imageUrl} alt={updatedName ?? name} fill={true} priority={true} className="object-cover" />
-                    )}
+                    {isNotEmptyString(imageUrl) && <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />}
                 </div>
 
                 <div className="px-3 pt-3 pb-2">
-                    <div className="line-clamp-3 font-display text-2xl">{updatedName ?? name}</div>
+                    <div className="line-clamp-3 font-display text-2xl">{name}</div>
 
                     <div className="my-2 flex flex-wrap gap-2">
                         <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
@@ -100,9 +98,9 @@ const ParticipantPreview = ({ participant, genres, onClick }: Props): ReactEleme
 
                     <ParticipantVenues participantId={id} isInPreview={true} />
 
-                    {isNotEmptyString(updatedDescription ?? description) && (
+                    {isNotEmptyString(description) && (
                         <div className="mt-4 line-clamp-5 font-display text-sm leading-5 md:line-clamp-[8] md:text-base md:leading-6">
-                            {updatedDescription ?? description}
+                            {description}
                         </div>
                     )}
                 </div>

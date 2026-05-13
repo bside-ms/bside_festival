@@ -5,7 +5,7 @@ import isEmptyString from '@/lib/common/helper/isEmptyString';
 import useEffectOnMount from '@/lib/common/hooks/useEffectOnMount';
 import isValidType from '@/lib/participants/isValidType';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
-import type { Genre, Link, ParticipantGenre, Type } from '@prisma/client';
+import type { Genre, Link, ParticipantGenre, Type, Zipcode } from '@prisma/client';
 import Fuse from 'fuse.js';
 import { xor } from 'lodash';
 import type { Dispatch, PropsWithChildren, ReactElement, SetStateAction } from 'react';
@@ -20,6 +20,7 @@ interface ApplicationsOverviewContextData {
     enhancedApplicationIds: Array<number>;
     toggleEnhancedApplicationId: (id: number) => void;
     getLinksOfApplication: (id: number) => Array<Link>;
+    getZipcodesOfApplication: (id: number) => Array<Zipcode>;
     filteredTypes: Array<Type>;
     toggleFilteredType: (type: Type) => void;
     allGenres: Array<Genre & { count: 0 }>;
@@ -31,10 +32,18 @@ interface Props extends PropsWithChildren {
     applications: Array<SerializableParticipant>;
     participantGenres: Array<ParticipantGenre>;
     allLinks: Array<Link>;
+    allZipcodes: Array<Zipcode>;
     allGenres: Array<Genre>;
 }
 
-const ApplicationsOverviewContextProvider = ({ applications, participantGenres, allLinks, allGenres, children }: Props): ReactElement => {
+const ApplicationsOverviewContextProvider = ({
+    applications,
+    participantGenres,
+    allLinks,
+    allZipcodes,
+    allGenres,
+    children,
+}: Props): ReactElement => {
     const [searchText, setSearchText] = useState<string | null>(null);
 
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
@@ -80,6 +89,11 @@ const ApplicationsOverviewContextProvider = ({ applications, participantGenres, 
 
     const getLinksOfApplication = useCallback((id: number) => allLinks.filter(({ participantId }) => participantId === id), [allLinks]);
 
+    const getZipcodesOfApplication = useCallback(
+        (id: number) => allZipcodes.filter(({ participantId }) => participantId === id),
+        [allZipcodes],
+    );
+
     return (
         <ApplicationsOverviewContext.Provider
             value={{
@@ -91,6 +105,7 @@ const ApplicationsOverviewContextProvider = ({ applications, participantGenres, 
                 enhancedApplicationIds,
                 toggleEnhancedApplicationId,
                 getLinksOfApplication,
+                getZipcodesOfApplication,
                 filteredTypes,
                 toggleFilteredType,
                 allGenres: allGenres.map((genre) => ({ ...genre, count: 0 })),

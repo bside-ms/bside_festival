@@ -1,6 +1,7 @@
 import Checkbox from '@/components/form/Checkbox';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
+import { applicationDiversityNotesMaxLength } from '@/lib/schemas/applicationSchema';
 import { useFormContext } from 'react-hook-form';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import { ApplicationFormValues } from './ApplicationForm';
@@ -35,6 +36,7 @@ const ApplicationParticipantInfo = () => {
             <TextArea<ApplicationFormValues>
                 name="diversityNotes"
                 label="Platz für Anmerkungen zu Barrierefreiheit oder Support-Wünschen..."
+                maxLength={applicationDiversityNotesMaxLength}
                 rows={4}
             />
 

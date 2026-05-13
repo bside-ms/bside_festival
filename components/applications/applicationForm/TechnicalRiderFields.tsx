@@ -5,6 +5,7 @@ import TextArea from '@/components/form/TextArea';
 import blobToDataUrl from '@/lib/common/helper/blobToDataUrl';
 import cn from '@/lib/common/helper/cn';
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
+import { applicationTechnicalRiderMaxLength } from '@/lib/schemas/applicationSchema';
 import allowedTechnicRiderContentType from '@/lib/upload/allowedTechnicRiderContentType';
 import allowedTechnicalRiderMaxFileSize from '@/lib/upload/allowedTechnicalRiderMaxFileSize';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
@@ -145,6 +146,7 @@ const TechnicalRiderFields = ({ chosenType }: Props): ReactElement | null => {
                     // We do not use `required` of `TextArea` since PDF is fine as well, it's handled manually
                     label={required === true ? 'Technical Rider *' : 'Technical Rider'}
                     info={info}
+                    maxLength={applicationTechnicalRiderMaxLength}
                 />
             )}
 

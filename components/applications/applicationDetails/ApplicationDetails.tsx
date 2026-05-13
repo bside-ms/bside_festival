@@ -5,11 +5,15 @@ import ApplicationDetailsAllergies from '@/components/applications/applicationDe
 import ApplicationDetailsCanProvideBackline from '@/components/applications/applicationDetails/ApplicationDetailsCanProvideBackline';
 import ApplicationDetailsContacts from '@/components/applications/applicationDetails/ApplicationDetailsContacts';
 import ApplicationDetailsDiversity from '@/components/applications/applicationDetails/ApplicationDetailsDiversity';
+import ApplicationDetailsDuration from '@/components/applications/applicationDetails/ApplicationDetailsDuration';
 import ApplicationDetailsImage from '@/components/applications/applicationDetails/ApplicationDetailsImage';
 import ApplicationDetailsLinks from '@/components/applications/applicationDetails/ApplicationDetailsLinks';
+import ApplicationDetailsMeta from '@/components/applications/applicationDetails/ApplicationDetailsMeta';
 import ApplicationDetailsMotivation from '@/components/applications/applicationDetails/ApplicationDetailsMotivation';
 import ApplicationDetailsParticipantCount from '@/components/applications/applicationDetails/ApplicationDetailsParticipantCount';
+import ApplicationDetailsProfessionalInfo from '@/components/applications/applicationDetails/ApplicationDetailsProfessionalInfo';
 import ApplicationDetailsTechnicalRider from '@/components/applications/applicationDetails/ApplicationDetailsTechnicalRider';
+import ApplicationDetailsZipcodes from '@/components/applications/applicationDetails/ApplicationDetailsZipcodes';
 import Badge from '@/components/participants/details/Badge';
 import isNotEmptyNumber from '@/lib/common/helper/isNotEmptyNumber';
 import statusLabels from '@/lib/participants/status/statusLabels';
@@ -18,17 +22,18 @@ import typeLabels from '@/lib/participants/typeLabels';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { Genre, Link } from '@prisma/client';
+import type { Genre, Link, Zipcode } from '@prisma/client';
 import type { ReactElement } from 'react';
 
 interface Props {
     application: SerializableParticipant;
     genres: Array<Genre>;
     links: Array<Link>;
+    zipcodes: Array<Zipcode>;
     onCloseClick: () => void;
 }
 
-const ApplicationDetails = ({ application, genres, links, onCloseClick }: Props): ReactElement => {
+const ApplicationDetails = ({ application, genres, links, zipcodes, onCloseClick }: Props): ReactElement => {
     const { type, curationScore, status } = application;
 
     return (
@@ -58,6 +63,12 @@ const ApplicationDetails = ({ application, genres, links, onCloseClick }: Props)
 
                 <ApplicationDetailsParticipantCount application={application} />
 
+                <ApplicationDetailsDuration application={application} />
+
+                <ApplicationDetailsProfessionalInfo application={application} />
+
+                <ApplicationDetailsZipcodes zipcodes={zipcodes} />
+
                 <ApplicationDetailsDiversity application={application} />
 
                 <ApplicationDetailsAdditionalInfo application={application} />
@@ -71,6 +82,8 @@ const ApplicationDetails = ({ application, genres, links, onCloseClick }: Props)
                 <ApplicationDetailsCanProvideBackline application={application} />
 
                 <ApplicationDetailsAllergies application={application} />
+
+                <ApplicationDetailsMeta application={application} />
             </div>
 
             <div className="relative mt-1 p-2">

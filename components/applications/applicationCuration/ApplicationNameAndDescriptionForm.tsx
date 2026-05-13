@@ -1,124 +1,140 @@
+import ApplicationDetailsEditButton from '@/components/applications/applicationDetails/ApplicationDetailsEditButton';
+import ApplicationDetailsFormControls from '@/components/applications/applicationDetails/ApplicationDetailsFormControls';
+import ApplicationDetailsTitle from '@/components/applications/applicationDetails/ApplicationDetailsTitle';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
-import { updateApplicationDetails } from '@/lib/actions/applicationActions';
+import { updateApplicationDescription, updateApplicationName } from '@/lib/actions/applicationActions';
+import {
+    applicationDescriptionMaxLength,
+    updateApplicationDescriptionSchema,
+    updateApplicationNameSchema,
+} from '@/lib/schemas/applicationSchema';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { zodResolver } from '@hookform/resolvers/zod';
 import type { ReactElement } from 'react';
 import { useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import type { z } from 'zod';
 
-interface NameAndDescriptionFormValues {
-    name: string;
-    description: string;
-}
+type DescriptionFormValues = z.infer<typeof updateApplicationDescriptionSchema>;
+type NameFormValues = z.infer<typeof updateApplicationNameSchema>;
 
 interface Props {
     application: SerializableParticipant;
 }
 
-const ApplicationNameAndDescriptionForm = ({ application }: Props): ReactElement => {
+const ApplicationNameForm = ({ application: { id, name } }: Props): ReactElement => {
     const [showForm, setShowForm] = useState(false);
     const toggleShowForm = useCallback(() => setShowForm((prevState) => !prevState), []);
 
-    const methods = useForm<NameAndDescriptionFormValues>();
+    const methods = useForm<NameFormValues>({ resolver: zodResolver(updateApplicationNameSchema) });
     const {
+        clearErrors,
+        formState: { errors, isSubmitting },
         handleSubmit,
         setError,
-        formState: { errors, isSubmitting },
-        clearErrors,
     } = methods;
 
     const handleFormSubmit = useCallback(
-        async ({ name, description }: NameAndDescriptionFormValues) => {
+        async (values: NameFormValues) => {
             clearErrors('root');
 
             try {
-                await updateApplicationDetails(application.id, name, description);
+                await updateApplicationName(id, values);
                 toggleShowForm();
             } catch {
                 setError('root', { message: 'Fehler beim Submit!' });
             }
         },
-        [application.id, clearErrors, setError, toggleShowForm],
+        [clearErrors, id, setError, toggleShowForm],
     );
 
-    if (!showForm) {
+    if (showForm) {
         return (
-            <>
-                <div className="font-display text-2xl">{application.updatedName ?? application.name}</div>
+            <FormProvider {...methods}>
+                <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex max-w-3xl flex-col gap-4">
+                    <TextInput<NameFormValues> name="name" label="Name" info="Name" required={true} defaultValue={name} />
 
-                <div className="mt-4">
-                    <div className="whitespace-pre-wrap">{application.updatedDescription ?? application.description}</div>
-                    <a onClick={toggleShowForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
-                        Name und Beschreibung bearbeiten…
-                    </a>
-                </div>
-            </>
+                    <ApplicationDetailsFormControls
+                        errorMessage={errors.root?.message}
+                        isSubmitting={isSubmitting}
+                        onCancel={toggleShowForm}
+                    />
+                </form>
+            </FormProvider>
+        );
+    }
+
+    return (
+        <div className="font-display text-2xl">
+            {name}
+            <ApplicationDetailsEditButton onClick={toggleShowForm} />
+        </div>
+    );
+};
+
+const ApplicationDescriptionForm = ({ application: { description, id } }: Props): ReactElement => {
+    const [showForm, setShowForm] = useState(false);
+    const toggleShowForm = useCallback(() => setShowForm((prevState) => !prevState), []);
+
+    const methods = useForm<DescriptionFormValues>({ resolver: zodResolver(updateApplicationDescriptionSchema) });
+    const {
+        clearErrors,
+        formState: { errors, isSubmitting },
+        handleSubmit,
+        setError,
+    } = methods;
+
+    const handleFormSubmit = useCallback(
+        async (values: DescriptionFormValues) => {
+            clearErrors('root');
+
+            try {
+                await updateApplicationDescription(id, values);
+                toggleShowForm();
+            } catch {
+                setError('root', { message: 'Fehler beim Submit!' });
+            }
+        },
+        [clearErrors, id, setError, toggleShowForm],
+    );
+
+    if (showForm) {
+        return (
+            <FormProvider {...methods}>
+                <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="mt-4 flex max-w-3xl flex-col gap-4">
+                    <TextArea<DescriptionFormValues>
+                        name="description"
+                        label="Beschreibung"
+                        info="Beschreibung"
+                        required={true}
+                        defaultValue={description ?? ''}
+                        maxLength={applicationDescriptionMaxLength}
+                    />
+
+                    <ApplicationDetailsFormControls
+                        errorMessage={errors.root?.message}
+                        isSubmitting={isSubmitting}
+                        onCancel={toggleShowForm}
+                    />
+                </form>
+            </FormProvider>
         );
     }
 
     return (
         <div className="mt-4">
-            <FormProvider {...methods}>
-                <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex max-w-3xl flex-col gap-4">
-                    <TextInput<NameAndDescriptionFormValues>
-                        name="name"
-                        label="Name"
-                        required={true}
-                        defaultValue={application.updatedName ?? application.name}
-                    />
-
-                    {application.updatedName !== application.name && (
-                        <div className="text-sm">
-                            <div className="font-bold text-gray-400">Ursprünglicher Name</div>
-                            <div className="whitespace-pre-wrap">{application.name}</div>
-                        </div>
-                    )}
-
-                    <TextArea<NameAndDescriptionFormValues>
-                        name="description"
-                        label="Beschreibung"
-                        defaultValue={application.updatedDescription ?? application.description ?? ''}
-                        rows={10}
-                    />
-
-                    {application.updatedDescription !== application.description && (
-                        <div className="text-sm">
-                            <div className="font-bold text-gray-400">Ursprüngliche Beschreibung</div>
-                            <div className="whitespace-pre-wrap">{application.description}</div>
-                        </div>
-                    )}
-
-                    <div>
-                        <label className="block max-w-[300px] bg-black p-1">
-                            <button
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 text-white disabled:bg-gray-600"
-                            >
-                                Speichern
-                            </button>
-                        </label>
-                        <a onClick={toggleShowForm} className="cursor-pointer text-sky-500 hover:text-sky-600">
-                            abbrechen
-                        </a>
-                    </div>
-
-                    {isSubmitting && (
-                        <div>
-                            <span className="mr-1">Wird gespeichert</span>{' '}
-                            <span className="inline-block w-3 animate-spin">
-                                <FontAwesomeIcon icon={faSpinner} />
-                            </span>
-                        </div>
-                    )}
-
-                    {errors.root && <div className="text-red-600">{errors.root.message}</div>}
-                </form>
-            </FormProvider>
+            <ApplicationDetailsTitle onEditClick={toggleShowForm}>Beschreibung</ApplicationDetailsTitle>
+            <div className="whitespace-pre-wrap">{description}</div>
         </div>
     );
 };
+
+const ApplicationNameAndDescriptionForm = ({ application }: Props): ReactElement => (
+    <>
+        <ApplicationNameForm application={application} />
+        <ApplicationDescriptionForm application={application} />
+    </>
+);
 
 export default ApplicationNameAndDescriptionForm;

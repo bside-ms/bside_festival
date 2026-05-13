@@ -3,13 +3,35 @@
 import { ApplicationFormValues } from '@/components/applications/applicationForm/ApplicationForm';
 import { createVerification } from '@/lib/actions/emailConfirmationActions';
 import prismaClient from '@/lib/common/prismaClient';
+import {
+    createUpdateApplicationBookingInfoSchema,
+    createUpdateApplicationDiversityInfoSchema,
+    createUpdateApplicationParticipantCountSchema,
+    updateApplicationAdditionalInfoSchema,
+    updateApplicationContactInfoSchema,
+    updateApplicationDescriptionSchema,
+    updateApplicationDurationPreferenceSchema,
+    updateApplicationMotivationSchema,
+    updateApplicationNameSchema,
+    updateApplicationParticipantCountSchema,
+} from '@/lib/schemas/applicationSchema';
 import allowedImageContentTypes from '@/lib/upload/allowedImageContentTypes';
 import allowedImageMaxFileSize from '@/lib/upload/allowedImageMaxFileSize';
 import allowedTechnicRiderContentType from '@/lib/upload/allowedTechnicRiderContentType';
 import allowedTechnicalRiderMaxFileSize from '@/lib/upload/allowedTechnicalRiderMaxFileSize';
 import uploadFileToIonos from '@/lib/upload/uploadFileToIonos';
 import { Type, type ApplicationStatus } from '@prisma/client';
+import { max } from 'lodash';
 import { revalidatePath } from 'next/cache';
+import type { z } from 'zod';
+
+const normalizeOptionalText = (value: string | undefined): string | null => {
+    if (value === undefined || value.trim().length === 0) {
+        return null;
+    }
+
+    return value;
+};
 
 export async function addApplication(values: ApplicationFormValues, chosenType: Type) {
     try {
@@ -32,6 +54,7 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
                 contactMail: values.contactMail,
                 technicalRider: values.technicalRider ?? null,
                 description: values.description,
+                durationPreference: values.durationPreference ?? null,
                 motivation: values.motivation,
                 additionalInfo: values.additionalInfo,
                 imageFileName,
@@ -41,7 +64,7 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
                 flintaParticipantsCount: values.flintaParticipantsCount,
                 hasMarginalizedParticipants: values.hasMarginalizedParticipants,
                 isProfessionalBooking: values.isProfessionalBooking,
-                professionalParticipantsCount: professionalParticipantsCount,
+                professionalParticipantsCount,
                 diversityNotes: values.diversityNotes,
                 allergies: values.allergies,
 
@@ -87,7 +110,121 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
 }
 
 export const updateApplicationDetails = async (id: number, name: string, description: string): Promise<void> => {
-    await prismaClient.participant.update({ data: { updatedName: name, updatedDescription: description }, where: { id } });
+    const parsedName = updateApplicationNameSchema.parse({ name }).name;
+    const parsedDescription = updateApplicationDescriptionSchema.parse({ description }).description;
+
+    await prismaClient.participant.update({ data: { description: parsedDescription, name: parsedName }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/programm');
+};
+
+export const updateApplicationName = async (id: number, values: z.infer<typeof updateApplicationNameSchema>): Promise<void> => {
+    const { name } = updateApplicationNameSchema.parse(values);
+
+    await prismaClient.participant.update({ data: { name }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/programm');
+};
+
+export const updateApplicationDescription = async (
+    id: number,
+    values: z.infer<typeof updateApplicationDescriptionSchema>,
+): Promise<void> => {
+    const { description } = updateApplicationDescriptionSchema.parse(values);
+
+    await prismaClient.participant.update({ data: { description }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/programm');
+};
+
+export const updateApplicationMotivation = async (id: number, values: z.infer<typeof updateApplicationMotivationSchema>): Promise<void> => {
+    const { motivation } = updateApplicationMotivationSchema.parse(values);
+
+    await prismaClient.participant.update({ data: { motivation: normalizeOptionalText(motivation) }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+};
+
+export const updateApplicationParticipantCount = async (
+    id: number,
+    values: z.infer<typeof updateApplicationParticipantCountSchema>,
+): Promise<void> => {
+    const currentApplication = await prismaClient.participant.findUniqueOrThrow({
+        select: { flintaParticipantsCount: true, professionalParticipantsCount: true },
+        where: { id },
+    });
+    const minimumParticipantCount =
+        max([1, currentApplication.flintaParticipantsCount, currentApplication.professionalParticipantsCount]) ?? 1;
+    const { participantCount } = createUpdateApplicationParticipantCountSchema(minimumParticipantCount).parse(values);
+
+    await prismaClient.participant.update({ data: { participantCount }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+};
+
+export const updateApplicationDurationPreference = async (
+    id: number,
+    values: z.infer<typeof updateApplicationDurationPreferenceSchema>,
+): Promise<void> => {
+    const { durationPreference } = updateApplicationDurationPreferenceSchema.parse(values);
+
+    await prismaClient.participant.update({ data: { durationPreference }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+};
+
+export const updateApplicationBookingInfo = async (
+    id: number,
+    values: z.infer<ReturnType<typeof createUpdateApplicationBookingInfoSchema>>,
+): Promise<void> => {
+    const { participantCount } = await prismaClient.participant.findUniqueOrThrow({ select: { participantCount: true }, where: { id } });
+    const { isProfessionalBooking, professionalParticipantsCount } =
+        createUpdateApplicationBookingInfoSchema(participantCount).parse(values);
+
+    await prismaClient.participant.update({
+        data: {
+            isProfessionalBooking: isProfessionalBooking ?? false,
+            professionalParticipantsCount: isProfessionalBooking ? participantCount : (professionalParticipantsCount ?? 0),
+        },
+        where: { id },
+    });
+    revalidatePath('/bewerbungen/uebersicht');
+};
+
+export const updateApplicationDiversityInfo = async (
+    id: number,
+    values: z.infer<ReturnType<typeof createUpdateApplicationDiversityInfoSchema>>,
+): Promise<void> => {
+    const { participantCount } = await prismaClient.participant.findUniqueOrThrow({ select: { participantCount: true }, where: { id } });
+    const { flintaParticipantsCount, hasMarginalizedParticipants, diversityNotes } =
+        createUpdateApplicationDiversityInfoSchema(participantCount).parse(values);
+
+    await prismaClient.participant.update({
+        data: {
+            flintaParticipantsCount,
+            hasMarginalizedParticipants,
+            diversityNotes: normalizeOptionalText(diversityNotes),
+        },
+        where: { id },
+    });
+    revalidatePath('/bewerbungen/uebersicht');
+};
+
+export const updateApplicationAdditionalInfo = async (
+    id: number,
+    values: z.infer<typeof updateApplicationAdditionalInfoSchema>,
+): Promise<void> => {
+    const { additionalInfo } = updateApplicationAdditionalInfoSchema.parse(values);
+
+    await prismaClient.participant.update({ data: { additionalInfo: normalizeOptionalText(additionalInfo) }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/programm');
+};
+
+export const updateApplicationContactInfo = async (
+    id: number,
+    values: z.infer<typeof updateApplicationContactInfoSchema>,
+): Promise<void> => {
+    const { contactName, contactMail, contactPhone } = updateApplicationContactInfoSchema.parse(values);
+
+    await prismaClient.participant.update({ data: { contactName, contactMail, contactPhone }, where: { id } });
     revalidatePath('/bewerbungen/uebersicht');
     revalidatePath('/programm');
 };

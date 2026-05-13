@@ -19,7 +19,7 @@ interface Props {
     application: SerializableParticipant;
 }
 
-const ApplicationDetailsImage = ({ application: { id, name, updatedName, imageFileName } }: Props): ReactElement => {
+const ApplicationDetailsImage = ({ application: { id, name, imageFileName } }: Props): ReactElement => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
@@ -85,7 +85,7 @@ const ApplicationDetailsImage = ({ application: { id, name, updatedName, imageFi
             {isNotEmptyString(imageUrl) ? (
                 <>
                     <NextLink href={imageUrl} className="md:cursor-pointer" target="_blank">
-                        <Image src={imageUrl} alt={updatedName ?? name} fill={true} priority={true} className="object-cover" />
+                        <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />
                     </NextLink>
 
                     <div className="absolute top-2 right-2 z-50 flex gap-2">
