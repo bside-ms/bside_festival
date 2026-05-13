@@ -16,7 +16,13 @@ import TextInput from '@/components/form/TextInput';
 import { addApplication } from '@/lib/actions/applicationActions';
 import isWithinApplicationPhase from '@/lib/common/helper/withinApplicationPhase';
 import typeLabels from '@/lib/participants/typeLabels';
-import { createApplicationSchema } from '@/lib/schemas/applicationSchema';
+import {
+    applicationAdditionalInfoMaxLength,
+    applicationBacklineSharingMaxLength,
+    applicationDescriptionMaxLength,
+    applicationMotivationMaxLength,
+    createApplicationSchema,
+} from '@/lib/schemas/applicationSchema';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -161,6 +167,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                             Webseite veröffentlicht, falls ihr beim B-Side Festival dabei sein werdet.
                             Bitte achtet daher auf Vollständigkeit.
                         `}
+                        maxLength={applicationDescriptionMaxLength}
                     />
 
                     {chosenType === 'Concert' && (
@@ -210,6 +217,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                                 Könnt ihr euch vorstellen hierfür, Teile eurer Backline bereitzustellen und wenn ja, was wäre das
                                 (beispielsweise Amps und Boxen)?
                             `}
+                            maxLength={applicationBacklineSharingMaxLength}
                             rows={3}
                         />
                     )}
@@ -218,6 +226,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         name="motivation"
                         label="Motivation"
                         info="Warum möchtet ihr Teil des B-Side Festivals 2026 sein?"
+                        maxLength={applicationMotivationMaxLength}
                     />
 
                     {chosenType !== Type.InfoBooth && (
@@ -236,6 +245,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         name="additionalInfo"
                         label="Weitere Informationen"
                         info="Was möchtet ihr uns noch mitteilen?"
+                        maxLength={applicationAdditionalInfoMaxLength}
                         rows={3}
                     />
 

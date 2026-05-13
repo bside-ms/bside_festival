@@ -10,8 +10,14 @@ interface Props {
 }
 
 const Application = ({ application }: Props): ReactElement => {
-    const { enhancedApplicationIds, toggleEnhancedApplicationId, getLinksOfApplication, participantGenres, allGenres } =
-        useApplicationsOverviewContext();
+    const {
+        enhancedApplicationIds,
+        toggleEnhancedApplicationId,
+        getLinksOfApplication,
+        getZipcodesOfApplication,
+        participantGenres,
+        allGenres,
+    } = useApplicationsOverviewContext();
 
     const { id } = application;
 
@@ -27,6 +33,7 @@ const Application = ({ application }: Props): ReactElement => {
                 application={application}
                 genres={genres}
                 links={getLinksOfApplication(id)}
+                zipcodes={getZipcodesOfApplication(id)}
                 onCloseClick={handleEnhancedToggle}
             />
         );

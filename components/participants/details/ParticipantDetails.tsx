@@ -24,7 +24,7 @@ import type { SerializableParticipant } from '@/typings/SerializableParticipant'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { Genre, Link } from '@prisma/client';
-import { ReactElement, useCallback, useState } from 'react';
+import type { ReactElement } from 'react';
 
 interface Props {
     participant: SerializableParticipant;
@@ -37,13 +37,10 @@ interface Props {
 const ParticipantDetails = ({ participant, genres, links, onCloseClick, isLoggedIn }: Props): ReactElement | null => {
     const { areLocationOrDateRangeFiltersSet } = useParticipantsOverviewContext();
 
-    const { id, name, updatedName, type } = participant;
+    const { id, name, type } = participant;
 
     const participantSlots = useParticipantSlots(participant.id);
     const participantVenues = useParticipantVenues(participant.id);
-
-    const [showDetailsForm, setShowDetailsForm] = useState(false);
-    const toggleDetailsForm = useCallback(() => setShowDetailsForm((prevState) => !prevState), []);
 
     if (
         areLocationOrDateRangeFiltersSet &&
@@ -60,53 +57,40 @@ const ParticipantDetails = ({ participant, genres, links, onCloseClick, isLogged
                     <ParticipantImage participant={participant} isLoggedIn={isLoggedIn} />
 
                     <div className="px-3 pt-3 pb-2">
-                        {!showDetailsForm && (
-                            <>
-                                <div className="font-display text-2xl">{updatedName ?? name}</div>
+                        {!isLoggedIn && <div className="font-display text-2xl">{name}</div>}
 
-                                <div className="my-2 flex flex-wrap gap-2">
-                                    <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
+                        <div className="my-2 flex flex-wrap gap-2">
+                            <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
 
-                                    {genres.map(({ id, name: genreName }) => (
-                                        <Badge key={id} label={genreName} backgroundColor="#fcb8b8" />
-                                    ))}
+                            {genres.map(({ id, name: genreName }) => (
+                                <Badge key={id} label={genreName} backgroundColor="#fcb8b8" />
+                            ))}
 
-                                    {participantSlots.map(({ slot: { id, begin, maxAttendees }, location: { name } }) => (
-                                        <div key={id} className="inline-flex gap-2 rounded-2xl bg-[#b1c32c]/30">
-                                            <Badge label={formatDate(new Date(begin), 'EEEEEE HH:mm')} backgroundColor="#b1c32c" />
-                                            <Badge label={name} backgroundColor="#ebc9de" />
-                                            {isNotEmptyNumber(maxAttendees) && (
-                                                <Badge label="Anmeldung erforderlich" backgroundColor="#b0e4cc" />
-                                            )}
-                                        </div>
-                                    ))}
-
-                                    {participantVenues.map(({ dates, venue: { id }, location: { name } }) => (
-                                        <div key={id} className="inline-flex gap-2 rounded-2xl bg-[#b1c32c]/30">
-                                            {dates.map((date) => {
-                                                const formattedDate = formatDate(new Date(date), 'EEEEEE HH:mm');
-                                                return <Badge key={formattedDate} label={formattedDate} backgroundColor="#b1c32c" />;
-                                            })}
-
-                                            <Badge label={name} backgroundColor="#ebc9de" />
-                                        </div>
-                                    ))}
+                            {participantSlots.map(({ slot: { id, begin, maxAttendees }, location: { name } }) => (
+                                <div key={id} className="inline-flex gap-2 rounded-2xl bg-[#b1c32c]/30">
+                                    <Badge label={formatDate(new Date(begin), 'EEEEEE HH:mm')} backgroundColor="#b1c32c" />
+                                    <Badge label={name} backgroundColor="#ebc9de" />
+                                    {isNotEmptyNumber(maxAttendees) && <Badge label="Anmeldung erforderlich" backgroundColor="#b0e4cc" />}
                                 </div>
+                            ))}
 
-                                {participant.status === 'Canceled' && (
-                                    <div className="text-lg font-bold text-red-900">
-                                        Leider kann dieser Programmpunkt nicht stattfinden!
-                                    </div>
-                                )}
-                            </>
+                            {participantVenues.map(({ dates, venue: { id }, location: { name } }) => (
+                                <div key={id} className="inline-flex gap-2 rounded-2xl bg-[#b1c32c]/30">
+                                    {dates.map((date) => {
+                                        const formattedDate = formatDate(new Date(date), 'EEEEEE HH:mm');
+                                        return <Badge key={formattedDate} label={formattedDate} backgroundColor="#b1c32c" />;
+                                    })}
+
+                                    <Badge label={name} backgroundColor="#ebc9de" />
+                                </div>
+                            ))}
+                        </div>
+
+                        {participant.status === 'Canceled' && (
+                            <div className="text-lg font-bold text-red-900">Leider kann dieser Programmpunkt nicht stattfinden!</div>
                         )}
 
-                        <ParticipantNameAndDescriptionForm
-                            participant={participant}
-                            isLoggedIn={isLoggedIn}
-                            showForm={showDetailsForm}
-                            toggleForm={toggleDetailsForm}
-                        />
+                        <ParticipantNameAndDescriptionForm participant={participant} isLoggedIn={isLoggedIn} />
 
                         <ParticipantLinks links={links} isLoggedIn={isLoggedIn} />
                     </div>

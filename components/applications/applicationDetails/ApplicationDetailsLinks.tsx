@@ -36,7 +36,7 @@ const LinkBadge = ({ link }: { link: URL }): ReactElement => {
     );
 };
 
-const ExternalLink = ({ link: { link } }: { link: Link }): ReactElement => {
+const ExternalLink = ({ link: { isConfidential, link } }: { link: Link }): ReactElement => {
     const normalizedLink = /^https?:\/\//.test(link) ? link : `https://${link}`;
 
     return (
@@ -46,6 +46,7 @@ const ExternalLink = ({ link: { link } }: { link: Link }): ReactElement => {
             className="inline-flex cursor-pointer items-center gap-1 rounded bg-gray-400/40 p-1 text-xl text-sky-400 hover:bg-gray-400/50"
         >
             <LinkBadge link={new URL(normalizedLink)} />
+            <span className="text-xs text-black">{isConfidential ? 'privat' : 'öffentlich'}</span>
         </NextLink>
     );
 };

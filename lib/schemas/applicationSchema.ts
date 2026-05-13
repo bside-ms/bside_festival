@@ -3,7 +3,14 @@ import { Type } from '@prisma/client';
 import parsePhoneNumberFromString from 'libphonenumber-js';
 import { z } from 'zod';
 
-const phoneSchema = z.string().transform((arg, ctx) => {
+export const applicationAdditionalInfoMaxLength = 1500;
+export const applicationBacklineSharingMaxLength = 1000;
+export const applicationDescriptionMaxLength = 1500;
+export const applicationDiversityNotesMaxLength = 1500;
+export const applicationMotivationMaxLength = 1500;
+export const applicationTechnicalRiderMaxLength = 4000;
+
+export const phoneSchema = z.string().transform((arg, ctx) => {
     const cleaned = arg.trim();
     const phone = parsePhoneNumberFromString(cleaned, 'DE');
 
@@ -50,12 +57,100 @@ const zipcodeSchema = z
         },
     );
 
+export const createUpdateApplicationBookingInfoSchema = (participantCount: number) =>
+    z
+        .object({
+            isProfessionalBooking: z.boolean().optional(),
+            professionalParticipantsCount: z.number().min(0, 'Die Anzahl darf nicht negativ sein').optional(),
+        })
+        .superRefine(({ isProfessionalBooking, professionalParticipantsCount }, ctx) => {
+            if (isProfessionalBooking) {
+                return;
+            }
+
+            const professionalCount = professionalParticipantsCount ?? 0;
+
+            if (professionalCount > participantCount) {
+                ctx.addIssue({
+                    code: 'custom',
+                    message: 'Mehr Profis als Bandmitglieder? Das geht leider nicht.',
+                    path: ['professionalParticipantsCount'],
+                });
+            }
+        });
+
+export const createUpdateApplicationDiversityInfoSchema = (participantCount: number) =>
+    z
+        .object({
+            flintaParticipantsCount: z.number().min(0, 'Die Anzahl darf nicht negativ sein'),
+            hasMarginalizedParticipants: z.boolean(),
+            diversityNotes: z
+                .string()
+                .max(applicationDiversityNotesMaxLength, `Max. ${applicationDiversityNotesMaxLength} Zeichen`)
+                .optional(),
+        })
+        .superRefine(({ flintaParticipantsCount }, ctx) => {
+            if (flintaParticipantsCount > participantCount) {
+                ctx.addIssue({
+                    code: 'custom',
+                    message: 'Die Anzahl der FLINTA* Personen kann nicht größer sein als die Gesamtzahl.',
+                    path: ['flintaParticipantsCount'],
+                });
+            }
+        });
+
+export const updateApplicationAdditionalInfoSchema = z.object({
+    additionalInfo: z.string().max(applicationAdditionalInfoMaxLength, `Max. ${applicationAdditionalInfoMaxLength} Zeichen`).optional(),
+});
+
+export const updateApplicationDescriptionSchema = z.object({
+    description: z
+        .string()
+        .min(10, 'Die Beschreibung ist etwas zu kurz')
+        .max(applicationDescriptionMaxLength, `Max. ${applicationDescriptionMaxLength} Zeichen`),
+});
+
+export const updateApplicationContactInfoSchema = z.object({
+    contactName: z.string().min(1, 'Ansprechperson ist erforderlich'),
+    contactMail: z.email('Ungültige E-Mail-Adresse'),
+    contactPhone: phoneSchema,
+});
+
+export const updateApplicationDurationPreferenceSchema = z.object({
+    durationPreference: z.string().min(1, 'Bitte gebt an, wie lange ihr performen möchtet.'),
+});
+
+export const updateApplicationMotivationSchema = z.object({
+    motivation: z.string().max(applicationMotivationMaxLength, `Max. ${applicationMotivationMaxLength} Zeichen`).optional(),
+});
+
+export const updateApplicationNameSchema = z.object({
+    name: z.string().min(1, 'Name ist erforderlich'),
+});
+
+export const createUpdateApplicationParticipantCountSchema = (minimumParticipantCount = 1) =>
+    z.object({
+        participantCount: z
+            .number()
+            .min(
+                minimumParticipantCount,
+                minimumParticipantCount === 1
+                    ? 'Mindestens eine Person muss dabei sein'
+                    : 'Die Personenanzahl darf nicht kleiner als bereits erfasste Teilwerte sein',
+            ),
+    });
+
+export const updateApplicationParticipantCountSchema = createUpdateApplicationParticipantCountSchema();
+
 export const createApplicationSchema = (chosenType: Type) =>
     z
         .object({
             name: z.string().min(1, 'Name ist erforderlich'),
             encodedImage: z.string().min(1, 'Ein Bild ist erforderlich'),
-            description: z.string().min(10, 'Die Beschreibung ist etwas zu kurz'),
+            description: z
+                .string()
+                .min(10, 'Die Beschreibung ist etwas zu kurz')
+                .max(applicationDescriptionMaxLength, `Max. ${applicationDescriptionMaxLength} Zeichen`),
             concertGenres: z.array(z.union([z.string(), z.number()])).optional(),
             diskJockeyGenres: z.array(z.union([z.string(), z.number()])).optional(),
             durationPreference: z.string().optional(),
@@ -64,11 +159,17 @@ export const createApplicationSchema = (chosenType: Type) =>
             privateLinks: z.array(linkSchema).refine((links) => links.some((l) => l.url.trim().length > 0), {
                 message: 'Bitte gib uns mindestens einen privaten Link (z.B. ein Video von euch)!',
             }),
-            technicalRider: z.string().optional(),
+            technicalRider: z
+                .string()
+                .max(applicationTechnicalRiderMaxLength, `Max. ${applicationTechnicalRiderMaxLength} Zeichen`)
+                .optional(),
             encodedTechnicalRiderPdf: z.string().optional(),
-            backlineSharing: z.string().optional(),
+            backlineSharing: z
+                .string()
+                .max(applicationBacklineSharingMaxLength, `Max. ${applicationBacklineSharingMaxLength} Zeichen`)
+                .optional(),
 
-            motivation: z.string().optional(),
+            motivation: z.string().max(applicationMotivationMaxLength, `Max. ${applicationMotivationMaxLength} Zeichen`).optional(),
             participantCount: z.number().optional(),
             hasMarginalizedParticipants: z.boolean(),
             flintaParticipantsCount: z.number().min(0),
@@ -77,9 +178,15 @@ export const createApplicationSchema = (chosenType: Type) =>
             professionalParticipantsCount: z.number().optional(),
             participantZipcodes: z.array(zipcodeSchema).optional(),
 
-            diversityNotes: z.string().optional(),
+            diversityNotes: z
+                .string()
+                .max(applicationDiversityNotesMaxLength, `Max. ${applicationDiversityNotesMaxLength} Zeichen`)
+                .optional(),
             allergies: z.string().optional(),
-            additionalInfo: z.string().optional(),
+            additionalInfo: z
+                .string()
+                .max(applicationAdditionalInfoMaxLength, `Max. ${applicationAdditionalInfoMaxLength} Zeichen`)
+                .optional(),
 
             contactName: z.string().min(1, 'Ansprechperson ist erforderlich'),
             contactMail: z.email('Ungültige E-Mail-Adresse'),

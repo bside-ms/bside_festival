@@ -20,7 +20,7 @@ interface Props {
     isLoggedIn: boolean;
 }
 
-const ParticipantImage = ({ participant: { id, name, updatedName, status, imageFileName }, isLoggedIn }: Props): ReactElement => {
+const ParticipantImage = ({ participant: { id, name, status, imageFileName }, isLoggedIn }: Props): ReactElement => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
@@ -89,7 +89,7 @@ const ParticipantImage = ({ participant: { id, name, updatedName, status, imageF
             {isNotEmptyString(imageUrl) ? (
                 <>
                     <NextLink href={imageUrl} className="md:cursor-pointer" target="_blank">
-                        <Image src={imageUrl} alt={updatedName ?? name} fill={true} priority={true} className="object-cover" />
+                        <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />
                     </NextLink>
 
                     {isLoggedIn && (

@@ -153,6 +153,7 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 - Call `revalidatePath()` for every route that shows the mutated data
 - Client components import and call actions directly — no `fetch`
 - Wrap action calls in `try/catch` in client components; throw = error state
+- Admin application detail edits use focused server actions in `applicationActions.ts` plus Zod schemas from `applicationSchema.ts`
 
 ---
 

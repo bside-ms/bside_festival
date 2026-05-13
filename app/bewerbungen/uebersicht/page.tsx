@@ -22,6 +22,8 @@ export default async (): Promise<ReactElement> => {
 
     const allLinks = await prismaClient.link.findMany();
 
+    const allZipcodes = await prismaClient.zipcode.findMany();
+
     const allGenres = await prismaClient.genre.findMany();
 
     return (
@@ -30,6 +32,7 @@ export default async (): Promise<ReactElement> => {
                 applications={applications}
                 participantGenres={participantGenres}
                 allLinks={allLinks}
+                allZipcodes={allZipcodes}
                 allGenres={allGenres}
             >
                 <ApplicationsOverview />

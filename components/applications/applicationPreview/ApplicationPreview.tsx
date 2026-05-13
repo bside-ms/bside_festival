@@ -19,7 +19,7 @@ interface Props {
 }
 
 const ApplicationPreview = ({ application, genres, onClick }: Props): ReactElement => {
-    const { name, updatedName, imageFileName, type, curationScore, status, description, updatedDescription } = application;
+    const { name, imageFileName, type, curationScore, status, description } = application;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -34,9 +34,7 @@ const ApplicationPreview = ({ application, genres, onClick }: Props): ReactEleme
                     isEmptyString(imageUrl) && 'h-auto',
                 )}
             >
-                {isNotEmptyString(imageUrl) && (
-                    <Image src={imageUrl} alt={updatedName ?? name} fill={true} priority={true} className="object-cover" />
-                )}
+                {isNotEmptyString(imageUrl) && <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />}
             </div>
 
             <div className="p-2">
@@ -52,9 +50,9 @@ const ApplicationPreview = ({ application, genres, onClick }: Props): ReactEleme
                     <Badge label={statusLabels[status]} backgroundColor="lightgray" />
                 </div>
 
-                <div className="line-clamp-3 font-display text-2xl">{updatedName ?? name}</div>
+                <div className="line-clamp-3 font-display text-2xl">{name}</div>
 
-                {isNotEmptyString(description) && <div className="mt-4 line-clamp-6">{updatedDescription ?? description}</div>}
+                {isNotEmptyString(description) && <div className="mt-4 line-clamp-6">{description}</div>}
             </div>
         </div>
     );
