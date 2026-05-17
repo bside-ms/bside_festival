@@ -8,9 +8,11 @@ export const applicationBacklineSharingMaxLength = 1000;
 export const applicationDescriptionMaxLength = 1500;
 export const applicationDiversityNotesMaxLength = 1500;
 export const applicationMotivationMaxLength = 1500;
+export const applicationParticipantCountMax = 100;
 export const applicationTechnicalRiderMaxLength = 4000;
+const applicationParticipantCountMaxMessage = `Max. ${applicationParticipantCountMax} Personen`;
 
-export const phoneSchema = z.string().transform((arg, ctx) => {
+const phoneSchema = z.string().transform((arg, ctx) => {
     const cleaned = arg.trim();
     const phone = parsePhoneNumberFromString(cleaned, 'DE');
 
@@ -61,7 +63,12 @@ export const createUpdateApplicationBookingInfoSchema = (participantCount: numbe
     z
         .object({
             isProfessionalBooking: z.boolean().optional(),
-            professionalParticipantsCount: z.number().min(0, 'Die Anzahl darf nicht negativ sein').optional(),
+            professionalParticipantsCount: z
+                .number()
+                .int('Bitte gib eine ganze Zahl ein')
+                .min(0, 'Die Anzahl darf nicht negativ sein')
+                .max(applicationParticipantCountMax, applicationParticipantCountMaxMessage)
+                .optional(),
         })
         .superRefine(({ isProfessionalBooking, professionalParticipantsCount }, ctx) => {
             if (isProfessionalBooking) {
@@ -82,7 +89,11 @@ export const createUpdateApplicationBookingInfoSchema = (participantCount: numbe
 export const createUpdateApplicationDiversityInfoSchema = (participantCount: number) =>
     z
         .object({
-            flintaParticipantsCount: z.number().min(0, 'Die Anzahl darf nicht negativ sein'),
+            flintaParticipantsCount: z
+                .number()
+                .int('Bitte gib eine ganze Zahl ein')
+                .min(0, 'Die Anzahl darf nicht negativ sein')
+                .max(applicationParticipantCountMax, applicationParticipantCountMaxMessage),
             hasMarginalizedParticipants: z.boolean(),
             diversityNotes: z
                 .string()
@@ -124,6 +135,14 @@ export const updateApplicationMotivationSchema = z.object({
     motivation: z.string().max(applicationMotivationMaxLength, `Max. ${applicationMotivationMaxLength} Zeichen`).optional(),
 });
 
+export const updateApplicationPastParticipationSchema = z.object({
+    hasParticipatedBefore: z.enum(['unknown', 'yes', 'no']),
+});
+
+export const updateApplicationJuryVotesSchema = z.object({
+    juryVotes: z.array(z.number().int().min(0).max(5)),
+});
+
 export const updateApplicationNameSchema = z.object({
     name: z.string().min(1, 'Name ist erforderlich'),
 });
@@ -132,12 +151,14 @@ export const createUpdateApplicationParticipantCountSchema = (minimumParticipant
     z.object({
         participantCount: z
             .number()
+            .int('Bitte gib eine ganze Zahl ein')
             .min(
                 minimumParticipantCount,
                 minimumParticipantCount === 1
                     ? 'Mindestens eine Person muss dabei sein'
                     : 'Die Personenanzahl darf nicht kleiner als bereits erfasste Teilwerte sein',
-            ),
+            )
+            .max(applicationParticipantCountMax, applicationParticipantCountMaxMessage),
     });
 
 export const updateApplicationParticipantCountSchema = createUpdateApplicationParticipantCountSchema();
@@ -170,13 +191,28 @@ export const createApplicationSchema = (chosenType: Type) =>
                 .optional(),
 
             motivation: z.string().max(applicationMotivationMaxLength, `Max. ${applicationMotivationMaxLength} Zeichen`).optional(),
-            participantCount: z.number().optional(),
+            participantCount: z
+                .number()
+                .int('Bitte gib eine ganze Zahl ein')
+                .min(1, 'Mindestens eine Person muss dabei sein')
+                .max(applicationParticipantCountMax, applicationParticipantCountMaxMessage)
+                .optional(),
             hasMarginalizedParticipants: z.boolean(),
-            flintaParticipantsCount: z.number().min(0),
+            flintaParticipantsCount: z
+                .number()
+                .int('Bitte gib eine ganze Zahl ein')
+                .min(0, 'Die Anzahl darf nicht negativ sein')
+                .max(applicationParticipantCountMax, applicationParticipantCountMaxMessage),
             isProfessionalBooking: z.boolean().optional(),
             hasProfessionalParticipants: z.boolean(),
-            professionalParticipantsCount: z.number().optional(),
+            professionalParticipantsCount: z
+                .number()
+                .int('Bitte gib eine ganze Zahl ein')
+                .min(0, 'Die Anzahl darf nicht negativ sein')
+                .max(applicationParticipantCountMax, applicationParticipantCountMaxMessage)
+                .optional(),
             participantZipcodes: z.array(zipcodeSchema).optional(),
+            hasParticipatedBefore: z.boolean().optional(),
 
             diversityNotes: z
                 .string()

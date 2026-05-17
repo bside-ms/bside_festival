@@ -1,7 +1,6 @@
 import Badge from '@/components/participants/details/Badge';
 import cn from '@/lib/common/helper/cn';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
-import isNotEmptyNumber from '@/lib/common/helper/isNotEmptyNumber';
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import statusLabels from '@/lib/participants/status/statusLabels';
 import typeColors from '@/lib/participants/typeColors';
@@ -19,7 +18,7 @@ interface Props {
 }
 
 const ApplicationPreview = ({ application, genres, onClick }: Props): ReactElement => {
-    const { name, imageFileName, type, curationScore, status, description } = application;
+    const { name, imageFileName, type, status, description } = application;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
 
@@ -44,8 +43,6 @@ const ApplicationPreview = ({ application, genres, onClick }: Props): ReactEleme
                     {genres.map(({ id, name: genreName }) => (
                         <Badge key={id} label={genreName} backgroundColor="#fcb8b8" />
                     ))}
-
-                    {isNotEmptyNumber(curationScore) && <Badge label={curationScore.toString()} backgroundColor="lightgray" />}
 
                     <Badge label={statusLabels[status]} backgroundColor="lightgray" />
                 </div>

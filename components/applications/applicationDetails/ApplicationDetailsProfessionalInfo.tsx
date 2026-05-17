@@ -3,7 +3,7 @@ import ApplicationDetailsTitle from '@/components/applications/applicationDetail
 import Checkbox from '@/components/form/Checkbox';
 import TextInput from '@/components/form/TextInput';
 import { updateApplicationBookingInfo } from '@/lib/actions/applicationActions';
-import { createUpdateApplicationBookingInfoSchema } from '@/lib/schemas/applicationSchema';
+import { applicationParticipantCountMax, createUpdateApplicationBookingInfoSchema } from '@/lib/schemas/applicationSchema';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { ReactElement } from 'react';
@@ -66,6 +66,8 @@ const ApplicationDetailsProfessionalInfo = ({
                         label="Anzahl der Profis"
                         info="Anzahl der Profis"
                         type="number"
+                        min={0}
+                        max={participantCount ?? applicationParticipantCountMax}
                         defaultValue={professionalParticipantsCount.toString()}
                         isDisabled={isProfessionalBookingChecked}
                     />

@@ -11,11 +11,11 @@ import ApplicationDetailsLinks from '@/components/applications/applicationDetail
 import ApplicationDetailsMeta from '@/components/applications/applicationDetails/ApplicationDetailsMeta';
 import ApplicationDetailsMotivation from '@/components/applications/applicationDetails/ApplicationDetailsMotivation';
 import ApplicationDetailsParticipantCount from '@/components/applications/applicationDetails/ApplicationDetailsParticipantCount';
+import ApplicationDetailsPastParticipation from '@/components/applications/applicationDetails/ApplicationDetailsPastParticipation';
 import ApplicationDetailsProfessionalInfo from '@/components/applications/applicationDetails/ApplicationDetailsProfessionalInfo';
 import ApplicationDetailsTechnicalRider from '@/components/applications/applicationDetails/ApplicationDetailsTechnicalRider';
 import ApplicationDetailsZipcodes from '@/components/applications/applicationDetails/ApplicationDetailsZipcodes';
 import Badge from '@/components/participants/details/Badge';
-import isNotEmptyNumber from '@/lib/common/helper/isNotEmptyNumber';
 import statusLabels from '@/lib/participants/status/statusLabels';
 import typeColors from '@/lib/participants/typeColors';
 import typeLabels from '@/lib/participants/typeLabels';
@@ -31,10 +31,20 @@ interface Props {
     links: Array<Link>;
     zipcodes: Array<Zipcode>;
     onCloseClick: () => void;
+    showName?: boolean;
+    showBottomClose?: boolean;
 }
 
-const ApplicationDetails = ({ application, genres, links, zipcodes, onCloseClick }: Props): ReactElement => {
-    const { type, curationScore, status } = application;
+const ApplicationDetails = ({
+    application,
+    genres,
+    links,
+    zipcodes,
+    onCloseClick,
+    showName = true,
+    showBottomClose = true,
+}: Props): ReactElement => {
+    const { type, status } = application;
 
     return (
         <div className="rounded-md border border-black bg-white/80">
@@ -49,12 +59,10 @@ const ApplicationDetails = ({ application, genres, links, zipcodes, onCloseClick
                             <Badge key={id} label={genreName} backgroundColor="#fcb8b8" />
                         ))}
 
-                        {isNotEmptyNumber(curationScore) && <Badge label={curationScore.toString()} backgroundColor="lightgray" />}
-
                         <Badge label={statusLabels[status]} backgroundColor="lightgray" />
                     </div>
 
-                    <ApplicationNameAndDescriptionForm application={application} />
+                    <ApplicationNameAndDescriptionForm application={application} showName={showName} />
                 </div>
             </div>
 
@@ -73,6 +81,8 @@ const ApplicationDetails = ({ application, genres, links, zipcodes, onCloseClick
 
                 <ApplicationDetailsAdditionalInfo application={application} />
 
+                <ApplicationDetailsPastParticipation application={application} />
+
                 <ApplicationDetailsLinks links={links} />
 
                 <ApplicationDetailsContacts application={application} />
@@ -90,12 +100,14 @@ const ApplicationDetails = ({ application, genres, links, zipcodes, onCloseClick
                 <ApplicationCurationForm application={application} />
             </div>
 
-            <div
-                className="relative mt-1 flex justify-center border-t border-black p-1 hover:brightness-110 md:hover:cursor-pointer"
-                onClick={onCloseClick}
-            >
-                <FontAwesomeIcon className="w-5" icon={faTimes} />
-            </div>
+            {showBottomClose && (
+                <div
+                    className="relative mt-1 flex justify-center border-t border-black p-1 hover:brightness-110 md:hover:cursor-pointer"
+                    onClick={onCloseClick}
+                >
+                    <FontAwesomeIcon className="w-5" icon={faTimes} />
+                </div>
+            )}
         </div>
     );
 };

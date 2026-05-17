@@ -1,5 +1,4 @@
 import InternalLinks from '@/components/common/InternalLinks';
-import Login from '@/components/common/Login';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
@@ -43,11 +42,7 @@ const Footer = (): ReactElement => {
                     </Link>
                 </div>
 
-                <div className="space-y-1">
-                    <Login />
-
-                    <InternalLinks />
-                </div>
+                <InternalLinks />
             </div>
         </div>
     );

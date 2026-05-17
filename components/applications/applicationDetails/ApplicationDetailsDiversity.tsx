@@ -5,7 +5,11 @@ import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
 import { updateApplicationDiversityInfo } from '@/lib/actions/applicationActions';
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
-import { applicationDiversityNotesMaxLength, createUpdateApplicationDiversityInfoSchema } from '@/lib/schemas/applicationSchema';
+import {
+    applicationDiversityNotesMaxLength,
+    applicationParticipantCountMax,
+    createUpdateApplicationDiversityInfoSchema,
+} from '@/lib/schemas/applicationSchema';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { ReactElement } from 'react';
@@ -58,6 +62,8 @@ const ApplicationDetailsDiversity = ({
                         info="FLINTA* Personen"
                         type="number"
                         required={true}
+                        min={0}
+                        max={participantCount ?? applicationParticipantCountMax}
                         defaultValue={flintaParticipantsCount.toString()}
                     />
 

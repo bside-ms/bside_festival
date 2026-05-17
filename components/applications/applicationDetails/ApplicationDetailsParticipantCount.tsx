@@ -2,7 +2,7 @@ import ApplicationDetailsFormControls from '@/components/applications/applicatio
 import ApplicationDetailsTitle from '@/components/applications/applicationDetails/ApplicationDetailsTitle';
 import TextInput from '@/components/form/TextInput';
 import { updateApplicationParticipantCount } from '@/lib/actions/applicationActions';
-import { updateApplicationParticipantCountSchema } from '@/lib/schemas/applicationSchema';
+import { applicationParticipantCountMax, updateApplicationParticipantCountSchema } from '@/lib/schemas/applicationSchema';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { ReactElement } from 'react';
@@ -52,6 +52,8 @@ const ApplicationDetailsParticipantCount = ({ application: { id, participantCoun
                         info="Personenanzahl"
                         type="number"
                         required={true}
+                        min={1}
+                        max={applicationParticipantCountMax}
                         defaultValue={participantCount.toString()}
                     />
 

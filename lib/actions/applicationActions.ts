@@ -11,16 +11,18 @@ import {
     updateApplicationContactInfoSchema,
     updateApplicationDescriptionSchema,
     updateApplicationDurationPreferenceSchema,
+    updateApplicationJuryVotesSchema,
     updateApplicationMotivationSchema,
     updateApplicationNameSchema,
     updateApplicationParticipantCountSchema,
+    updateApplicationPastParticipationSchema,
 } from '@/lib/schemas/applicationSchema';
 import allowedImageContentTypes from '@/lib/upload/allowedImageContentTypes';
 import allowedImageMaxFileSize from '@/lib/upload/allowedImageMaxFileSize';
 import allowedTechnicRiderContentType from '@/lib/upload/allowedTechnicRiderContentType';
 import allowedTechnicalRiderMaxFileSize from '@/lib/upload/allowedTechnicalRiderMaxFileSize';
 import uploadFileToIonos from '@/lib/upload/uploadFileToIonos';
-import { Type, type ApplicationStatus } from '@prisma/client';
+import { Prisma, Type, type ApplicationStatus } from '@prisma/client';
 import { max } from 'lodash';
 import { revalidatePath } from 'next/cache';
 import type { z } from 'zod';
@@ -67,6 +69,7 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
                 professionalParticipantsCount,
                 diversityNotes: values.diversityNotes,
                 allergies: values.allergies,
+                hasParticipatedBefore: values.hasParticipatedBefore ?? false,
 
                 genres: {
                     create: [
@@ -108,15 +111,6 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
         };
     }
 }
-
-export const updateApplicationDetails = async (id: number, name: string, description: string): Promise<void> => {
-    const parsedName = updateApplicationNameSchema.parse({ name }).name;
-    const parsedDescription = updateApplicationDescriptionSchema.parse({ description }).description;
-
-    await prismaClient.participant.update({ data: { description: parsedDescription, name: parsedName }, where: { id } });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/programm');
-};
 
 export const updateApplicationName = async (id: number, values: z.infer<typeof updateApplicationNameSchema>): Promise<void> => {
     const { name } = updateApplicationNameSchema.parse(values);
@@ -167,6 +161,27 @@ export const updateApplicationDurationPreference = async (
     const { durationPreference } = updateApplicationDurationPreferenceSchema.parse(values);
 
     await prismaClient.participant.update({ data: { durationPreference }, where: { id } });
+    revalidatePath('/bewerbungen/uebersicht');
+};
+
+export const updateApplicationPastParticipation = async (
+    id: number,
+    values: z.infer<typeof updateApplicationPastParticipationSchema>,
+): Promise<void> => {
+    const { hasParticipatedBefore } = updateApplicationPastParticipationSchema.parse(values);
+
+    await prismaClient.participant.update({
+        data: { hasParticipatedBefore: hasParticipatedBefore === 'unknown' ? null : hasParticipatedBefore === 'yes' },
+        where: { id },
+    });
+    revalidatePath('/bewerbungen/uebersicht');
+};
+
+export const updateApplicationJuryVotes = async (id: number, values: z.infer<typeof updateApplicationJuryVotesSchema>): Promise<void> => {
+    const { juryVotes } = updateApplicationJuryVotesSchema.parse(values);
+
+    await prismaClient.participant.update({ data: { juryVotes: juryVotes.length === 0 ? Prisma.DbNull : juryVotes }, where: { id } });
+    revalidatePath('/bewerbungen/kuration');
     revalidatePath('/bewerbungen/uebersicht');
 };
 

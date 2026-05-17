@@ -1,7 +1,8 @@
 import type { Participant } from '@prisma/client';
 
-export type SerializableParticipant = Omit<Participant, 'appliedAt' | 'emailVerified' | 'updatedAt'> & {
+export type SerializableParticipant = Omit<Participant, 'appliedAt' | 'emailVerified' | 'juryVotes' | 'updatedAt'> & {
     appliedAt: string | null;
     emailVerified: string | null;
+    juryVotes: Array<number> | null;
     updatedAt: string;
 };
