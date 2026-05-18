@@ -18,7 +18,8 @@ RUN adduser --system --uid 1001 nextjs
 
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
-RUN npm run prisma:client:generate
+# Prisma 7 loads prisma.config.ts during generation and requires a valid URL string, but does not connect.
+RUN DATABASE_URL="mysql://prisma-generate-only:not-used@localhost:3306/prisma_generate_only" npm run prisma:client:generate
 RUN npm run build
 
 USER nextjs

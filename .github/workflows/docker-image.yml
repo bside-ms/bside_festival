@@ -15,6 +15,9 @@ jobs:
             - name: Generate Prisma Client
               id: prisma_client
               if: ${{ always() && steps.install.outcome == 'success' }}
+              env:
+                  # Prisma 7 loads prisma.config.ts during generation and requires a valid URL string, but does not connect.
+                  DATABASE_URL: mysql://prisma-generate-only:not-used@localhost:3306/prisma_generate_only
               run: npm run prisma:client:generate
             - name: Type check
               if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}

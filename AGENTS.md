@@ -68,6 +68,7 @@ When in doubt: if a future agent reading this file would be surprised or misled 
 - Schema at `prisma/schema.prisma`; CLI datasource URL lives in root `prisma.config.ts`
 - Never use raw SQL — always use Prisma client
 - Prisma Client is generated during CI/build via `npm run prisma:client:generate`; do not commit generated files from `node_modules/.prisma`
+- Prisma 7 loads `prisma.config.ts` for `prisma generate`, so CI/Docker generation provides a clearly dummy `DATABASE_URL`; generation only needs a valid URL string, not a live database connection
 
 ### Authentication
 
