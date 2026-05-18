@@ -5,7 +5,6 @@ generator client {
 
 datasource db {
     provider = "mysql"
-    url      = env("DATABASE_URL")
 }
 
 model Participant {
@@ -20,8 +19,7 @@ model Participant {
     description                 String?            @db.Text
     updatedDescription          String?            @db.Text
     motivation                  String?            @db.Text
-    curationScore               Int?
-    curationInfo                String?            @db.Text
+    juryVotes                   Json?
     address                     String?            @db.Text
     imageFileName               String?            @db.Text
     technicalRider              String?            @db.Text
@@ -30,6 +28,7 @@ model Participant {
     additionalInfo              String?            @db.Text
     participantCount            Int                @default(1)
     allergies                   String?            @db.Text
+    hasParticipatedBefore       Boolean?
     isProfessionalBooking       Boolean            @default(false)
     flintaParticipantsCount     Int                @default(0)
     professionalParticipantsCount Int              @default(0)
@@ -47,6 +46,49 @@ model Participant {
     status                      ApplicationStatus  @default(Applied)
     Slot                        Slot[]
     Venue                       Venue[]
+}
+
+model ChangeLogEntry {
+    id           Int                 @id @default(autoincrement())
+    createdAt    DateTime            @default(now())
+    actorName    String?             @db.Text
+    actorEmail   String?             @db.Text
+    targetType   ChangeLogTargetType
+    targetId     Int
+    targetName   String              @db.Text
+    action       ChangeLogAction
+    message      String              @db.Text
+    changes      Json
+
+    @@index([createdAt])
+    @@index([targetType, targetId])
+    @@index([action])
+}
+
+enum ChangeLogTargetType {
+    Application
+    ProgramEntry
+}
+
+enum ChangeLogAction {
+    ApplicationNameUpdated
+    ApplicationDescriptionUpdated
+    ApplicationMotivationUpdated
+    ApplicationParticipantCountUpdated
+    ApplicationDurationPreferenceUpdated
+    ApplicationPastParticipationUpdated
+    ApplicationJuryVotesUpdated
+    ApplicationBookingInfoUpdated
+    ApplicationDiversityInfoUpdated
+    ApplicationAdditionalInfoUpdated
+    ApplicationContactInfoUpdated
+    ApplicationImageDeleted
+    ApplicationImageReplaced
+    ApplicationStatusUpdated
+    ProgramSlotUpdated
+    ProgramSlotDeleted
+    ProgramVenueUpdated
+    ProgramVenueDeleted
 }
 
 model EmailVerificationToken {

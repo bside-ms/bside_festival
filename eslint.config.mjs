@@ -50,6 +50,7 @@ export default ts.config(
     {
         rules: {
             curly: ERROR,
+            eqeqeq: ERROR,
         },
     },
     ...ts.configs.recommended,

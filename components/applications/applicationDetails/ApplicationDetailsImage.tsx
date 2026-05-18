@@ -78,7 +78,7 @@ const ApplicationDetailsImage = ({ application: { id, name, imageFileName } }: P
     return (
         <div
             className={cn(
-                'relative h-[300px] shrink-0 overflow-auto rounded-md rounded-b-none border-b border-black md:w-1/3 md:rounded-tl-none md:rounded-bl-md md:border-l',
+                'relative h-[300px] shrink-0 overflow-auto border-b border-black md:w-1/3 md:border-l',
                 isEmptyString(imageUrl) && 'h-[50px]',
             )}
         >
@@ -88,7 +88,7 @@ const ApplicationDetailsImage = ({ application: { id, name, imageFileName } }: P
                         <Image src={imageUrl} alt={name} fill={true} priority={true} className="object-cover" />
                     </NextLink>
 
-                    <div className="absolute top-2 right-2 z-50 flex gap-2">
+                    <div className="absolute top-2 right-2 z-0 flex gap-2">
                         <label
                             className="cursor-pointer rounded bg-white/50 p-1 text-gray-700 hover:bg-white/70"
                             htmlFor={`file-upload-${id}`}
@@ -117,7 +117,7 @@ const ApplicationDetailsImage = ({ application: { id, name, imageFileName } }: P
             ) : (
                 <>
                     <label
-                        className="absolute top-2 left-2 cursor-pointer rounded bg-white/50 px-2 py-1 text-gray-700 hover:bg-white/70"
+                        className="absolute top-2 left-2 cursor-pointer bg-white/50 px-2 py-1 text-gray-700 hover:bg-white/70"
                         htmlFor={`file-upload-${id}`}
                     >
                         Bild hinzufügen

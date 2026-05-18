@@ -1,7 +1,20 @@
 'use server';
 
 import { ApplicationFormValues } from '@/components/applications/applicationForm/ApplicationForm';
+import { requireDataPrivacyUser, requireLoggedInUser, type ActionUser } from '@/lib/actions/actionAuth';
 import { createVerification } from '@/lib/actions/emailConfirmationActions';
+import { parseJuryVotes } from '@/lib/applications/curationScoring';
+import {
+    formatApplicationStatus,
+    formatBoolean,
+    formatJuryVotes,
+    formatNullableNumber,
+    formatNullableText,
+    formatPastParticipation,
+} from '@/lib/changeLog/changeLogLabels';
+import type { ChangeLogChange } from '@/lib/changeLog/changeLogTypes';
+import { createChange } from '@/lib/changeLog/createChange';
+import { recordChangeLogEntry } from '@/lib/changeLog/recordChangeLogEntry';
 import prismaClient from '@/lib/common/prismaClient';
 import {
     createUpdateApplicationBookingInfoSchema,
@@ -11,16 +24,18 @@ import {
     updateApplicationContactInfoSchema,
     updateApplicationDescriptionSchema,
     updateApplicationDurationPreferenceSchema,
+    updateApplicationJuryVotesSchema,
     updateApplicationMotivationSchema,
     updateApplicationNameSchema,
     updateApplicationParticipantCountSchema,
+    updateApplicationPastParticipationSchema,
 } from '@/lib/schemas/applicationSchema';
 import allowedImageContentTypes from '@/lib/upload/allowedImageContentTypes';
 import allowedImageMaxFileSize from '@/lib/upload/allowedImageMaxFileSize';
 import allowedTechnicRiderContentType from '@/lib/upload/allowedTechnicRiderContentType';
 import allowedTechnicalRiderMaxFileSize from '@/lib/upload/allowedTechnicalRiderMaxFileSize';
 import uploadFileToIonos from '@/lib/upload/uploadFileToIonos';
-import { Type, type ApplicationStatus } from '@prisma/client';
+import { ChangeLogAction, ChangeLogTargetType, Prisma, Type, type ApplicationStatus } from '@prisma/client';
 import { max } from 'lodash';
 import { revalidatePath } from 'next/cache';
 import type { z } from 'zod';
@@ -31,6 +46,29 @@ const normalizeOptionalText = (value: string | undefined): string | null => {
     }
 
     return value;
+};
+
+const filterChanges = (changes: Array<ChangeLogChange | null>): Array<ChangeLogChange> =>
+    changes.filter((change): change is ChangeLogChange => change !== null);
+
+const revalidateApplicationPaths = (): void => {
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/programm');
+    revalidatePath('/aenderungslog');
+};
+
+const recordApplicationChange = async (
+    tx: Prisma.TransactionClient,
+    actor: ActionUser,
+    action: ChangeLogAction,
+    application: { id: number; name: string },
+    changes: Array<ChangeLogChange>,
+): Promise<void> => {
+    await recordChangeLogEntry(tx, actor, {
+        action,
+        target: { type: ChangeLogTargetType.Application, id: application.id, name: application.name },
+        changes,
+    });
 };
 
 export async function addApplication(values: ApplicationFormValues, chosenType: Type) {
@@ -67,6 +105,7 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
                 professionalParticipantsCount,
                 diversityNotes: values.diversityNotes,
                 allergies: values.allergies,
+                hasParticipatedBefore: values.hasParticipatedBefore ?? false,
 
                 genres: {
                     create: [
@@ -109,142 +148,408 @@ export async function addApplication(values: ApplicationFormValues, chosenType: 
     }
 }
 
-export const updateApplicationDetails = async (id: number, name: string, description: string): Promise<void> => {
-    const parsedName = updateApplicationNameSchema.parse({ name }).name;
-    const parsedDescription = updateApplicationDescriptionSchema.parse({ description }).description;
-
-    await prismaClient.participant.update({ data: { description: parsedDescription, name: parsedName }, where: { id } });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/programm');
-};
-
 export const updateApplicationName = async (id: number, values: z.infer<typeof updateApplicationNameSchema>): Promise<void> => {
+    const actor = await requireLoggedInUser();
     const { name } = updateApplicationNameSchema.parse(values);
 
-    await prismaClient.participant.update({ data: { name }, where: { id } });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/programm');
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({ select: { id: true, name: true }, where: { id } });
+        const changes = filterChanges([createChange('name', 'Name', application.name, name, formatNullableText)]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({ data: { name }, where: { id } });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationNameUpdated, { ...application, name }, changes);
+    });
+    revalidateApplicationPaths();
 };
 
 export const updateApplicationDescription = async (
     id: number,
     values: z.infer<typeof updateApplicationDescriptionSchema>,
 ): Promise<void> => {
+    const actor = await requireLoggedInUser();
     const { description } = updateApplicationDescriptionSchema.parse(values);
 
-    await prismaClient.participant.update({ data: { description }, where: { id } });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/programm');
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({ select: { description: true, id: true, name: true }, where: { id } });
+        const changes = filterChanges([
+            createChange('description', 'Beschreibung', application.description, description, formatNullableText),
+        ]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({ data: { description }, where: { id } });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationDescriptionUpdated, application, changes);
+    });
+    revalidateApplicationPaths();
 };
 
 export const updateApplicationMotivation = async (id: number, values: z.infer<typeof updateApplicationMotivationSchema>): Promise<void> => {
+    const actor = await requireLoggedInUser();
     const { motivation } = updateApplicationMotivationSchema.parse(values);
+    const normalizedMotivation = normalizeOptionalText(motivation);
 
-    await prismaClient.participant.update({ data: { motivation: normalizeOptionalText(motivation) }, where: { id } });
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({ select: { id: true, motivation: true, name: true }, where: { id } });
+        const changes = filterChanges([
+            createChange('motivation', 'Motivation', application.motivation, normalizedMotivation, formatNullableText),
+        ]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({ data: { motivation: normalizedMotivation }, where: { id } });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationMotivationUpdated, application, changes);
+    });
     revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/aenderungslog');
 };
 
 export const updateApplicationParticipantCount = async (
     id: number,
     values: z.infer<typeof updateApplicationParticipantCountSchema>,
 ): Promise<void> => {
-    const currentApplication = await prismaClient.participant.findUniqueOrThrow({
+    const actor = await requireLoggedInUser();
+    const participantCounts = await prismaClient.participant.findUniqueOrThrow({
         select: { flintaParticipantsCount: true, professionalParticipantsCount: true },
         where: { id },
     });
     const minimumParticipantCount =
-        max([1, currentApplication.flintaParticipantsCount, currentApplication.professionalParticipantsCount]) ?? 1;
+        max([1, participantCounts.flintaParticipantsCount, participantCounts.professionalParticipantsCount]) ?? 1;
     const { participantCount } = createUpdateApplicationParticipantCountSchema(minimumParticipantCount).parse(values);
 
-    await prismaClient.participant.update({ data: { participantCount }, where: { id } });
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({
+            select: { id: true, name: true, participantCount: true },
+            where: { id },
+        });
+        const changes = filterChanges([
+            createChange('participantCount', 'Personenzahl', application.participantCount, participantCount, formatNullableNumber),
+        ]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({ data: { participantCount }, where: { id } });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationParticipantCountUpdated, application, changes);
+    });
     revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/aenderungslog');
 };
 
 export const updateApplicationDurationPreference = async (
     id: number,
     values: z.infer<typeof updateApplicationDurationPreferenceSchema>,
 ): Promise<void> => {
+    const actor = await requireLoggedInUser();
     const { durationPreference } = updateApplicationDurationPreferenceSchema.parse(values);
 
-    await prismaClient.participant.update({ data: { durationPreference }, where: { id } });
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({
+            select: { durationPreference: true, id: true, name: true },
+            where: { id },
+        });
+        const changes = filterChanges([
+            createChange('durationPreference', 'Dauerwunsch', application.durationPreference, durationPreference, formatNullableText),
+        ]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({ data: { durationPreference }, where: { id } });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationDurationPreferenceUpdated, application, changes);
+    });
     revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/aenderungslog');
+};
+
+export const updateApplicationPastParticipation = async (
+    id: number,
+    values: z.infer<typeof updateApplicationPastParticipationSchema>,
+): Promise<void> => {
+    const actor = await requireLoggedInUser();
+    const { hasParticipatedBefore } = updateApplicationPastParticipationSchema.parse(values);
+    const nextHasParticipatedBefore = hasParticipatedBefore === 'unknown' ? null : hasParticipatedBefore === 'yes';
+
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({
+            select: { hasParticipatedBefore: true, id: true, name: true },
+            where: { id },
+        });
+        const changes = filterChanges([
+            createChange(
+                'hasParticipatedBefore',
+                'Frühere Teilnahme',
+                application.hasParticipatedBefore,
+                nextHasParticipatedBefore,
+                formatPastParticipation,
+            ),
+        ]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({
+            data: { hasParticipatedBefore: nextHasParticipatedBefore },
+            where: { id },
+        });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationPastParticipationUpdated, application, changes);
+    });
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/aenderungslog');
+};
+
+export const updateApplicationJuryVotes = async (id: number, values: z.infer<typeof updateApplicationJuryVotesSchema>): Promise<void> => {
+    const actor = await requireLoggedInUser();
+    const { juryVotes } = updateApplicationJuryVotesSchema.parse(values);
+    const nextJuryVotes = juryVotes.length === 0 ? null : juryVotes;
+
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({ select: { id: true, juryVotes: true, name: true }, where: { id } });
+        const previousJuryVotes = parseJuryVotes(application.juryVotes);
+        const changes = filterChanges([createChange('juryVotes', 'Jury Votes', previousJuryVotes, nextJuryVotes, formatJuryVotes)]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({ data: { juryVotes: nextJuryVotes === null ? Prisma.DbNull : nextJuryVotes }, where: { id } });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationJuryVotesUpdated, application, changes);
+    });
+    revalidatePath('/bewerbungen/kuration');
+    revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/aenderungslog');
 };
 
 export const updateApplicationBookingInfo = async (
     id: number,
     values: z.infer<ReturnType<typeof createUpdateApplicationBookingInfoSchema>>,
 ): Promise<void> => {
+    const actor = await requireLoggedInUser();
     const { participantCount } = await prismaClient.participant.findUniqueOrThrow({ select: { participantCount: true }, where: { id } });
     const { isProfessionalBooking, professionalParticipantsCount } =
         createUpdateApplicationBookingInfoSchema(participantCount).parse(values);
+    const nextIsProfessionalBooking = isProfessionalBooking ?? false;
+    const nextProfessionalParticipantsCount = nextIsProfessionalBooking ? participantCount : (professionalParticipantsCount ?? 0);
 
-    await prismaClient.participant.update({
-        data: {
-            isProfessionalBooking: isProfessionalBooking ?? false,
-            professionalParticipantsCount: isProfessionalBooking ? participantCount : (professionalParticipantsCount ?? 0),
-        },
-        where: { id },
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({
+            select: { id: true, isProfessionalBooking: true, name: true, professionalParticipantsCount: true },
+            where: { id },
+        });
+        const changes = filterChanges([
+            createChange(
+                'isProfessionalBooking',
+                'Professionelles Booking',
+                application.isProfessionalBooking,
+                nextIsProfessionalBooking,
+                formatBoolean,
+            ),
+            createChange(
+                'professionalParticipantsCount',
+                'Anzahl professioneller Personen',
+                application.professionalParticipantsCount,
+                nextProfessionalParticipantsCount,
+                formatNullableNumber,
+            ),
+        ]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({
+            data: {
+                isProfessionalBooking: nextIsProfessionalBooking,
+                professionalParticipantsCount: nextProfessionalParticipantsCount,
+            },
+            where: { id },
+        });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationBookingInfoUpdated, application, changes);
     });
     revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/aenderungslog');
 };
 
 export const updateApplicationDiversityInfo = async (
     id: number,
     values: z.infer<ReturnType<typeof createUpdateApplicationDiversityInfoSchema>>,
 ): Promise<void> => {
+    const actor = await requireLoggedInUser();
     const { participantCount } = await prismaClient.participant.findUniqueOrThrow({ select: { participantCount: true }, where: { id } });
     const { flintaParticipantsCount, hasMarginalizedParticipants, diversityNotes } =
         createUpdateApplicationDiversityInfoSchema(participantCount).parse(values);
+    const normalizedDiversityNotes = normalizeOptionalText(diversityNotes);
 
-    await prismaClient.participant.update({
-        data: {
-            flintaParticipantsCount,
-            hasMarginalizedParticipants,
-            diversityNotes: normalizeOptionalText(diversityNotes),
-        },
-        where: { id },
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({
+            select: { diversityNotes: true, flintaParticipantsCount: true, hasMarginalizedParticipants: true, id: true, name: true },
+            where: { id },
+        });
+        const changes = filterChanges([
+            createChange(
+                'flintaParticipantsCount',
+                'FLINTA*-Personen',
+                application.flintaParticipantsCount,
+                flintaParticipantsCount,
+                formatNullableNumber,
+            ),
+            createChange(
+                'hasMarginalizedParticipants',
+                'Marginalisierte Personen',
+                application.hasMarginalizedParticipants,
+                hasMarginalizedParticipants,
+                formatBoolean,
+            ),
+            createChange('diversityNotes', 'Diversitätsnotizen', application.diversityNotes, normalizedDiversityNotes, formatNullableText),
+        ]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({
+            data: {
+                flintaParticipantsCount,
+                hasMarginalizedParticipants,
+                diversityNotes: normalizedDiversityNotes,
+            },
+            where: { id },
+        });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationDiversityInfoUpdated, application, changes);
     });
     revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/aenderungslog');
 };
 
 export const updateApplicationAdditionalInfo = async (
     id: number,
     values: z.infer<typeof updateApplicationAdditionalInfoSchema>,
 ): Promise<void> => {
+    const actor = await requireLoggedInUser();
     const { additionalInfo } = updateApplicationAdditionalInfoSchema.parse(values);
+    const normalizedAdditionalInfo = normalizeOptionalText(additionalInfo);
 
-    await prismaClient.participant.update({ data: { additionalInfo: normalizeOptionalText(additionalInfo) }, where: { id } });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/programm');
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({
+            select: { additionalInfo: true, id: true, name: true },
+            where: { id },
+        });
+        const changes = filterChanges([
+            createChange(
+                'additionalInfo',
+                'Weitere Informationen',
+                application.additionalInfo,
+                normalizedAdditionalInfo,
+                formatNullableText,
+            ),
+        ]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({ data: { additionalInfo: normalizedAdditionalInfo }, where: { id } });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationAdditionalInfoUpdated, application, changes);
+    });
+    revalidateApplicationPaths();
 };
 
 export const updateApplicationContactInfo = async (
     id: number,
     values: z.infer<typeof updateApplicationContactInfoSchema>,
 ): Promise<void> => {
+    const actor = await requireDataPrivacyUser();
     const { contactName, contactMail, contactPhone } = updateApplicationContactInfoSchema.parse(values);
 
-    await prismaClient.participant.update({ data: { contactName, contactMail, contactPhone }, where: { id } });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/programm');
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({
+            select: { contactMail: true, contactName: true, contactPhone: true, id: true, name: true },
+            where: { id },
+        });
+        const changes = filterChanges([
+            createChange('contactName', 'Ansprechperson', application.contactName, contactName, formatNullableText),
+            createChange('contactMail', 'E-Mail-Adresse', application.contactMail, contactMail, formatNullableText),
+            createChange('contactPhone', 'Telefonnummer', application.contactPhone, contactPhone, formatNullableText),
+        ]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({ data: { contactName, contactMail, contactPhone }, where: { id } });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationContactInfoUpdated, application, changes);
+    });
+    revalidateApplicationPaths();
 };
 
 export const deleteApplicationImage = async (id: number): Promise<void> => {
-    await prismaClient.participant.update({ data: { imageFileName: null }, where: { id } });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/programm');
+    const actor = await requireLoggedInUser();
+
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({
+            select: { id: true, imageFileName: true, name: true },
+            where: { id },
+        });
+        const changes = filterChanges([createChange('imageFileName', 'Bild', application.imageFileName, null, formatNullableText)]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({ data: { imageFileName: null }, where: { id } });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationImageDeleted, application, changes);
+    });
+    revalidateApplicationPaths();
 };
 
 export const replaceApplicationImage = async (id: number, encodedImage: string): Promise<void> => {
+    const actor = await requireLoggedInUser();
     const imageFileName = await uploadFileToIonos(encodedImage, allowedImageContentTypes, allowedImageMaxFileSize);
-    await prismaClient.participant.update({ data: { imageFileName }, where: { id } });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/programm');
+
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({
+            select: { id: true, imageFileName: true, name: true },
+            where: { id },
+        });
+        const changes = filterChanges([
+            createChange('imageFileName', 'Bild', application.imageFileName, imageFileName, formatNullableText),
+        ]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({ data: { imageFileName }, where: { id } });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationImageReplaced, application, changes);
+    });
+    revalidateApplicationPaths();
 };
 
 export const setCuration = async (id: number, applicationStatus: ApplicationStatus): Promise<void> => {
-    await prismaClient.participantLabel.deleteMany({ where: { participantId: id } });
-    await prismaClient.participant.update({ data: { status: applicationStatus }, where: { id } });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/programm');
+    const actor = await requireLoggedInUser();
+
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({ select: { id: true, name: true, status: true }, where: { id } });
+        const changes = filterChanges([createChange('status', 'Status', application.status, applicationStatus, formatApplicationStatus)]);
+
+        await tx.participantLabel.deleteMany({ where: { participantId: id } });
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({ data: { status: applicationStatus }, where: { id } });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationStatusUpdated, application, changes);
+    });
+    revalidateApplicationPaths();
 };

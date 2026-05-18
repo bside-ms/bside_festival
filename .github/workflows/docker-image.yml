@@ -10,13 +10,33 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2
             - name: Install dependencies
+              id: install
               run: npm ci
-            - name: Lint
-              run: npm run lint
-            - name: Code style check
-              run: npm run prettier
+            - name: Generate Prisma Client
+              id: prisma_client
+              if: ${{ always() && steps.install.outcome == 'success' }}
+              env:
+                  # Prisma 7 loads prisma.config.ts during generation and requires a valid URL string, but does not connect.
+                  DATABASE_URL: mysql://prisma-generate-only:not-used@localhost:3306/prisma_generate_only
+              run: npm run prisma:client:generate
             - name: Type check
+              if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
               run: npm run tsc
+            - name: Lint
+              if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
+              run: npm run lint
+            - name: Test
+              if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
+              run: npm run test
+            - name: Find unused code
+              if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
+              run: npm run find-unused
+            - name: Audit dependencies
+              if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
+              run: npm run audit
+            - name: Code style check
+              if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
+              run: npm run prettier
 
     build:
         runs-on: ubuntu-latest

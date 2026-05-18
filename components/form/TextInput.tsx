@@ -18,6 +18,8 @@ interface Props<T extends FieldValues> {
     additionalInfo?: string;
     required?: boolean;
     maxLength?: number;
+    max?: number;
+    min?: number;
     validate?: (value: string) => string | undefined;
     isDisabled?: boolean;
     type?: string;
@@ -34,6 +36,8 @@ const TextInput = <T extends FieldValues>({
     validate,
     required = false,
     maxLength,
+    max,
+    min,
     isDisabled,
     placeholder,
 }: Props<T>): ReactElement => {
@@ -64,6 +68,8 @@ const TextInput = <T extends FieldValues>({
                     typeof errorMessage === 'string' && 'bg-rose-400',
                 )}
                 required={required}
+                max={max}
+                min={min}
                 placeholder={placeholder ?? (required ? `${label} *` : label)}
                 disabled={isSubmitting || isDisabled}
                 {...register(name, {

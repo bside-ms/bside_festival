@@ -1,7 +1,7 @@
 import Checkbox from '@/components/form/Checkbox';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
-import { applicationDiversityNotesMaxLength } from '@/lib/schemas/applicationSchema';
+import { applicationDiversityNotesMaxLength, applicationParticipantCountMax } from '@/lib/schemas/applicationSchema';
 import { useFormContext } from 'react-hook-form';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import { ApplicationFormValues } from './ApplicationForm';
@@ -11,6 +11,7 @@ const ApplicationParticipantInfo = () => {
 
     const hasProfessionalParticipants = watch('hasProfessionalParticipants');
     const isProfessionalBooking = watch('isProfessionalBooking');
+    const participantCount = watch('participantCount');
 
     return (
         <section className="flex flex-col gap-6 py-2">
@@ -22,6 +23,8 @@ const ApplicationParticipantInfo = () => {
                 info="Wie viel Menschen sind an eurem Beitrag beteiligt?"
                 type="number"
                 required={true}
+                min={1}
+                max={applicationParticipantCountMax}
             />
 
             <div>
@@ -51,6 +54,8 @@ const ApplicationParticipantInfo = () => {
                 label="Anzahl"
                 type="number"
                 required={true}
+                min={0}
+                max={participantCount ?? applicationParticipantCountMax}
             />
 
             <div className="flex items-center gap-2">
@@ -86,7 +91,13 @@ const ApplicationParticipantInfo = () => {
                     {hasProfessionalParticipants && (
                         <div className="ml-8 animate-in fade-in slide-in-from-left-2">
                             <div>Wie viele von euch sind professionelle Künstler*innen?</div>
-                            <TextInput name="professionalParticipantsCount" label="Anzahl der Profis" type="number" />
+                            <TextInput
+                                name="professionalParticipantsCount"
+                                label="Anzahl der Profis"
+                                type="number"
+                                min={0}
+                                max={participantCount ?? applicationParticipantCountMax}
+                            />
                         </div>
                     )}
                 </div>

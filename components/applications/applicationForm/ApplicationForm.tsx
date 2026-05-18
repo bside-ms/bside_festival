@@ -58,6 +58,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
             professionalParticipantsCount: 0,
             hasProfessionalParticipants: false,
             hasMarginalizedParticipants: false,
+            hasParticipatedBefore: false,
         },
     });
     const {
@@ -249,6 +250,11 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         rows={3}
                     />
 
+                    <Checkbox<ApplicationFormValues>
+                        name="hasParticipatedBefore"
+                        label="Ich habe/wir haben in der Vergangenheit schon einmal am B-Side Festival teilgenommen."
+                    />
+
                     <TextInput<ApplicationFormValues> name="contactName" label="Ansprechperson" required={true} />
 
                     <TextInput<ApplicationFormValues> name="contactMail" label="E-Mail-Adresse" required={true} />
@@ -263,7 +269,7 @@ const ApplicationForm = ({ chosenType, allConcertGenres, allDiskJockeyGenres }: 
                         label="Ich habe die Datenschutzerklärung gelesen und erkläre mich mit der vertraulichen Verarbeitung meiner Daten einverstanden."
                     />
                     <div className="-mt-6 pl-8">
-                        Hier gehts zur{' '}
+                        Hier geht's zur{' '}
                         <Link href="https://b-side.ms/kv/datenschutz/" className="underline hover:text-red-600">
                             Datenschutzerklärung
                         </Link>

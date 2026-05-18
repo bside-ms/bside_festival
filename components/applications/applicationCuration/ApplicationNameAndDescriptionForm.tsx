@@ -21,9 +21,10 @@ type NameFormValues = z.infer<typeof updateApplicationNameSchema>;
 
 interface Props {
     application: SerializableParticipant;
+    showName?: boolean;
 }
 
-const ApplicationNameForm = ({ application: { id, name } }: Props): ReactElement => {
+export const ApplicationNameForm = ({ application: { id, name } }: Props): ReactElement => {
     const [showForm, setShowForm] = useState(false);
     const toggleShowForm = useCallback(() => setShowForm((prevState) => !prevState), []);
 
@@ -130,9 +131,9 @@ const ApplicationDescriptionForm = ({ application: { description, id } }: Props)
     );
 };
 
-const ApplicationNameAndDescriptionForm = ({ application }: Props): ReactElement => (
+const ApplicationNameAndDescriptionForm = ({ application, showName = true }: Props): ReactElement => (
     <>
-        <ApplicationNameForm application={application} />
+        {showName && <ApplicationNameForm application={application} />}
         <ApplicationDescriptionForm application={application} />
     </>
 );

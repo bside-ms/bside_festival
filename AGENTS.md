@@ -33,19 +33,21 @@ When in doubt: if a future agent reading this file would be surprised or misled 
 
 ## Available Scripts
 
-| Script                             | Purpose                                           |
-| ---------------------------------- | ------------------------------------------------- |
-| `npm run dev`                      | Start dev server                                  |
-| `npm run tsc`                      | Type-check — run after every non-trivial change   |
-| `npm run lint`                     | ESLint — run after every change                   |
-| `npm run prettier:fix`             | Auto-format everything — run at end of every task |
-| `npm run lint:fix`                 | ESLint with auto-fix                              |
-| `npm run find-unused`              | Find unused files, dependencies, and exports      |
-| `npm run prisma:migrations:dev`    | Create a new migration during development         |
-| `npm run prisma:migrations:deploy` | Apply pending migrations in production            |
-| `npm run prisma:client:generate`   | Regenerate Prisma client after schema changes     |
+| Script                             | Purpose                                                   |
+| ---------------------------------- | --------------------------------------------------------- |
+| `npm run dev`                      | Start dev server                                          |
+| `npm run check`                    | Run all checkers: tsc, lint, tests, Knip, audit, Prettier |
+| `npm run audit`                    | Security audit; fails on high/critical vulnerabilities    |
+| `npm run tsc`                      | Type-check — run after every non-trivial change           |
+| `npm run lint`                     | ESLint — run after every change                           |
+| `npm run prettier:fix`             | Auto-format everything — run at end of every task         |
+| `npm run lint:fix`                 | ESLint with auto-fix                                      |
+| `npm run find-unused`              | Find unused files, dependencies, and exports              |
+| `npm run prisma:migrations:dev`    | Create a new migration during development                 |
+| `npm run prisma:migrations:deploy` | Apply pending migrations in production                    |
+| `npm run prisma:client:generate`   | Regenerate Prisma client after schema changes             |
 
-**Verification order after any change:** `npm run tsc` → `npm run lint` → `npm run prettier:fix`
+**Verification after any change:** `npm run check`, then `npm run prettier:fix` if formatting fails or files need normalization.
 
 ---
 
@@ -61,10 +63,12 @@ When in doubt: if a future agent reading this file would be surprised or misled 
 
 ### Database
 
-- **Prisma 6** with **MariaDB** (MySQL dialect)
-- Singleton client at `lib/common/prismaClient.ts`
-- Schema at `prisma/schema.prisma`
+- **Prisma 7** with **MariaDB** (MySQL dialect)
+- Singleton client at `lib/common/prismaClient.ts`, constructed with `@prisma/adapter-mariadb`
+- Schema at `prisma/schema.prisma`; CLI datasource URL lives in root `prisma.config.ts`
 - Never use raw SQL — always use Prisma client
+- Prisma Client is generated during CI/build via `npm run prisma:client:generate`; do not commit generated files from `node_modules/.prisma`
+- Prisma 7 loads `prisma.config.ts` for `prisma generate`, so CI/Docker generation provides a clearly dummy `DATABASE_URL`; generation only needs a valid URL string, not a live database connection
 
 ### Authentication
 
@@ -104,9 +108,10 @@ app/
     health/               ← Keep — external health probe
     applications/         ← Empty (all routes deleted, replaced by server actions)
     volunteers/           ← Empty (all routes deleted, replaced by server actions)
-  bewerbungen/            ← Application forms (public)
+  bewerbungen/            ← Application forms (public), admin overview, and curation table
   mithelfen/              ← Volunteer forms (public)
   programm/               ← Program overview (public)
+  aenderungslog/          ← Data-privacy-only Change Log for Applications and Program Entries
   error.tsx               ← Root error boundary
   layout.tsx              ← Root layout
 
@@ -116,6 +121,7 @@ lib/
     slotActions.ts
     venueActions.ts
     volunteerActions.ts
+  changeLog/              ← Change Log formatting, change detection, and persistence helpers
   common/                 ← Shared helpers, Prisma client, hooks
   mail/                   ← Email sending
   next-auth/              ← Auth utilities
@@ -132,6 +138,7 @@ components/
 prisma/
   schema.prisma
   migrations/
+prisma.config.ts            ← Prisma CLI datasource and migration config
 ```
 
 ---
@@ -154,6 +161,8 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 - Client components import and call actions directly — no `fetch`
 - Wrap action calls in `try/catch` in client components; throw = error state
 - Admin application detail edits use focused server actions in `applicationActions.ts` plus Zod schemas from `applicationSchema.ts`
+- `/bewerbungen/kuration` is the dedicated curation table. It stores only anonymous `juryVotes` and calculates jury score, bonus score, and final score at read time.
+- `/aenderungslog` is the global Change Log. It is visible only to data-privacy users and records successful logged-in user save actions for Applications and Program Entries.
 
 ---
 
@@ -176,6 +185,9 @@ Two main contexts, both using **props directly** (no `useState` for server data)
 - `SerializableSlot` — same for slots
 - `AllAttendees` — `{ slotId: number, attendees: Array<...> }`
 - Prisma types (`Participant`, `Slot`, `Venue`, `Location`, etc.) — server-only
+- `Participant.hasParticipatedBefore` is nullable: `true`/`false` for new or manually adjusted applications, `null` for legacy applications without an answer. Keep `null` visually distinct from explicit `false`.
+- `Participant.juryVotes` stores anonymous whole-number votes from 0 to 5 as JSON. Derived curation scores are calculated via `lib/applications/curationScoring.ts`, not persisted.
+- `ChangeLogEntry` stores one successful logged-in user save action. It snapshots actor name/email and target name, stores structured previous/new values in `changes`, and is shown only to data-privacy users.
 
 ---
 
@@ -192,12 +204,11 @@ These map to Prisma `Type` enum values. The `/bewerbungen/[type]` route uses `ge
 
 These packages are intentionally NOT on the latest version:
 
-| Package                     | Current | Cannot upgrade because                                            |
-| --------------------------- | ------- | ----------------------------------------------------------------- |
-| `eslint` / `@eslint/js`     | v9      | `typescript-eslint@8` only supports ESLint 9; ESLint 10 breaks it |
-| `nodemailer`                | v7      | `next-auth@4` peer dependency requires `^7.0.7`                   |
-| `prisma` / `@prisma/client` | v6      | Stay on stable v6; v7+ is a major rewrite                         |
-| `typescript`                | v5      | `typescript-eslint@8` only supports TypeScript 5                  |
+| Package                 | Current | Cannot upgrade because                                            |
+| ----------------------- | ------- | ----------------------------------------------------------------- |
+| `eslint` / `@eslint/js` | v9      | `typescript-eslint@8` only supports ESLint 9; ESLint 10 breaks it |
+| `nodemailer`            | v7      | `next-auth@4` peer dependency requires `^7.0.7`                   |
+| `typescript`            | v5      | `typescript-eslint@8` only supports TypeScript 5                  |
 
 ---
 
@@ -234,3 +245,9 @@ MAIL_FROM
 - **`prisma:client:generate` must be run after any schema change** before TypeScript will see the new types.
 - **`'use client'` is not required in every client component file** — components imported into a `'use client'` file inherit client context. Only add it at the boundary.
 - **`revalidatePath` only refreshes the server component tree** — client components receive fresh props through re-render. This only works if context providers use props directly, not `useState`.
+
+---
+
+## Future Ideas
+
+- Curation summaries: consider a later feature that generates a one-sentence internal summary from application text fields and type-specific details. Keep it out of the first curation view unless there is a clear persistence, refresh, privacy, and failure-handling plan.
