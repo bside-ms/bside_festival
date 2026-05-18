@@ -1,5 +1,6 @@
 import LogoutLink from '@/components/common/LogoutLink';
 import getUserSession from '@/lib/next-auth/getUserSession';
+import { dataPrivacyGroup } from '@/lib/next-auth/KeycloakGroups';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 
@@ -11,12 +12,14 @@ const InternalLinks = async (): Promise<ReactElement | null> => {
     }
 
     const userIdentifier = userSession.name ?? userSession.email ?? 'unbekannt';
+    const isInDataPrivacyGroup = userSession.keycloakGroups?.includes(dataPrivacyGroup) ?? false;
     const links = [
         { href: '/bewerbungen/kuration', label: 'Kuration' },
         { href: '/bewerbungen/uebersicht', label: 'Bewerbungsübersicht' },
         { href: '/bewerbungen', label: 'Bewerbungsformular' },
         { href: '/programm/', label: 'Programmübersicht' },
         { href: '/mithelfen/uebersicht', label: 'Helfer:innenübersicht' },
+        ...(isInDataPrivacyGroup ? [{ href: '/aenderungslog', label: 'Änderungslog' }] : []),
     ];
 
     return (

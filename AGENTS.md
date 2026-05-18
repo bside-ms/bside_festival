@@ -109,6 +109,7 @@ app/
   bewerbungen/            ← Application forms (public), admin overview, and curation table
   mithelfen/              ← Volunteer forms (public)
   programm/               ← Program overview (public)
+  aenderungslog/          ← Data-privacy-only Change Log for Applications and Program Entries
   error.tsx               ← Root error boundary
   layout.tsx              ← Root layout
 
@@ -118,6 +119,7 @@ lib/
     slotActions.ts
     venueActions.ts
     volunteerActions.ts
+  changeLog/              ← Change Log formatting, change detection, and persistence helpers
   common/                 ← Shared helpers, Prisma client, hooks
   mail/                   ← Email sending
   next-auth/              ← Auth utilities
@@ -158,6 +160,7 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 - Wrap action calls in `try/catch` in client components; throw = error state
 - Admin application detail edits use focused server actions in `applicationActions.ts` plus Zod schemas from `applicationSchema.ts`
 - `/bewerbungen/kuration` is the dedicated curation table. It stores only anonymous `juryVotes` and calculates jury score, bonus score, and final score at read time.
+- `/aenderungslog` is the global Change Log. It is visible only to data-privacy users and records successful logged-in user save actions for Applications and Program Entries.
 
 ---
 
@@ -182,6 +185,7 @@ Two main contexts, both using **props directly** (no `useState` for server data)
 - Prisma types (`Participant`, `Slot`, `Venue`, `Location`, etc.) — server-only
 - `Participant.hasParticipatedBefore` is nullable: `true`/`false` for new or manually adjusted applications, `null` for legacy applications without an answer. Keep `null` visually distinct from explicit `false`.
 - `Participant.juryVotes` stores anonymous whole-number votes from 0 to 5 as JSON. Derived curation scores are calculated via `lib/applications/curationScoring.ts`, not persisted.
+- `ChangeLogEntry` stores one successful logged-in user save action. It snapshots actor name/email and target name, stores structured previous/new values in `changes`, and is shown only to data-privacy users.
 
 ---
 
