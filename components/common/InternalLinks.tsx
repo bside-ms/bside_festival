@@ -1,3 +1,4 @@
+import LoginButton from '@/components/common/LoginButton';
 import LogoutLink from '@/components/common/LogoutLink';
 import getUserSession from '@/lib/next-auth/getUserSession';
 import { dataPrivacyGroup } from '@/lib/next-auth/KeycloakGroups';
@@ -8,7 +9,16 @@ const InternalLinks = async (): Promise<ReactElement | null> => {
     const userSession = await getUserSession();
 
     if (userSession === null) {
-        return null;
+        return (
+            <div className="mx-auto mt-4 max-w-4xl rounded border border-white/25 bg-white/5 p-3 text-left">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-xs text-white/70">
+                    <span className="font-bold text-white">Intern</span>
+                    <span aria-hidden={true}>·</span>
+                    <span>Für interne Bereiche bitte anmelden.</span>
+                    <LoginButton />
+                </div>
+            </div>
+        );
     }
 
     const userIdentifier = userSession.name ?? userSession.email ?? 'unbekannt';
