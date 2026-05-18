@@ -6,9 +6,6 @@
 .pnp.js
 pnpm-lock.yaml
 
-# Prisma types
-!/node_modules/.prisma
-
 # testing
 /coverage
 /.playwright-mcp/

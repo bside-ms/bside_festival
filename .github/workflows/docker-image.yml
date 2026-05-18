@@ -12,23 +12,27 @@ jobs:
             - name: Install dependencies
               id: install
               run: npm ci
-            - name: Type check
+            - name: Generate Prisma Client
+              id: prisma_client
               if: ${{ always() && steps.install.outcome == 'success' }}
+              run: npm run prisma:client:generate
+            - name: Type check
+              if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
               run: npm run tsc
             - name: Lint
-              if: ${{ always() && steps.install.outcome == 'success' }}
+              if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
               run: npm run lint
             - name: Test
-              if: ${{ always() && steps.install.outcome == 'success' }}
+              if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
               run: npm run test
             - name: Find unused code
-              if: ${{ always() && steps.install.outcome == 'success' }}
+              if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
               run: npm run find-unused
             - name: Audit dependencies
-              if: ${{ always() && steps.install.outcome == 'success' }}
+              if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
               run: npm run audit
             - name: Code style check
-              if: ${{ always() && steps.install.outcome == 'success' }}
+              if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
               run: npm run prettier
 
     build:
