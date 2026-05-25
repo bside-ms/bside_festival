@@ -1,5 +1,5 @@
 import ApplicationTypeSelection from '@/components/applications/applicationForm/ApplicationTypeSelection';
-import isWithinApplicationPhase from '@/lib/common/helper/withinApplicationPhase';
+import { isWithinApplicationPhase } from '@/lib/common/helper/withinApplicationPhase';
 import isLoggedIn from '@/lib/next-auth/isLoggedIn';
 import { redirect } from 'next/navigation';
 import type { ReactElement } from 'react';

@@ -39,8 +39,8 @@ export default async (): Promise<ReactElement> => {
                             <div className="text-base font-black">Wie geht es weiter?</div>
                             <div className="mt-2">
                                 Wir gehen gerade durch eure Bewerbungen, lesen, hören, schauen, sortieren und sind ziemlich sprachlos, wie
-                                viel Liebe, Herz und gute Ideen bei uns gelandet sind. Danke für all die Zeit, Gedanken und Energie, die
-                                ihr da reingegeben habt.
+                                viel Liebe, Herz und gute Ideen bei uns gelandet sind. Danke für all die Zeit, Gedanken und Energie, die ihr
+                                da reingegeben habt.
                             </div>
                             <div className="mt-2">
                                 Bitte schickt uns keine weiteren Bewerbungen per Mail, Instagram oder auf anderen Wegen. Wir können

@@ -1,5 +1,5 @@
 import ApplicationForm from '@/components/applications/applicationForm/ApplicationForm';
-import isWithinApplicationPhase from '@/lib/common/helper/withinApplicationPhase';
+import { isWithinApplicationPhase } from '@/lib/common/helper/withinApplicationPhase';
 import prismaClient from '@/lib/common/prismaClient';
 import isLoggedIn from '@/lib/next-auth/isLoggedIn';
 import urlPathTypes from '@/lib/participants/urlPathTypes';

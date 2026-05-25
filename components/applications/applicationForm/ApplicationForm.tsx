@@ -14,7 +14,7 @@ import MultiSelectInput from '@/components/form/MultiSelectInput';
 import TextArea from '@/components/form/TextArea';
 import TextInput from '@/components/form/TextInput';
 import { addApplication } from '@/lib/actions/applicationActions';
-import isWithinApplicationPhase from '@/lib/common/helper/withinApplicationPhase';
+import { isWithinApplicationPhase } from '@/lib/common/helper/withinApplicationPhase';
 import typeLabels from '@/lib/participants/typeLabels';
 import {
     applicationAdditionalInfoMaxLength,
