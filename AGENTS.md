@@ -108,7 +108,8 @@ app/
     health/               ← Keep — external health probe
     applications/         ← Empty (all routes deleted, replaced by server actions)
     volunteers/           ← Empty (all routes deleted, replaced by server actions)
-  bewerbungen/            ← Application forms (public), admin overview, and curation table
+  bewerbungen/            ← Application forms (public) plus redirects for legacy internal routes
+  intern/                 ← Unified internal workspace for Programmbeiträge and curation
   mithelfen/              ← Volunteer forms (public)
   programm/               ← Program overview (public)
   aenderungslog/          ← Data-privacy-only Change Log for Applications and Program Entries
@@ -161,7 +162,8 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 - Client components import and call actions directly — no `fetch`
 - Wrap action calls in `try/catch` in client components; throw = error state
 - Admin application detail edits use focused server actions in `applicationActions.ts` plus Zod schemas from `applicationSchema.ts`
-- `/bewerbungen/kuration` is the dedicated curation table. It stores only anonymous `juryVotes` and calculates jury score, bonus score, and final score at read time.
+- `/intern` is the unified internal workspace for applications/program entries. `/bewerbungen/uebersicht` redirects there.
+- `/intern/kuration` is the dedicated curation table. It stores only anonymous `juryVotes`, calculates jury score, bonus score, and final score at read time. `/bewerbungen/kuration` redirects there.
 - `/aenderungslog` is the global Change Log. It is visible only to data-privacy users and records successful logged-in user save actions for Applications and Program Entries.
 
 ---
@@ -172,7 +174,7 @@ Two main contexts, both using **props directly** (no `useState` for server data)
 
 | Context                       | Used in                            | Contains                                                      |
 | ----------------------------- | ---------------------------------- | ------------------------------------------------------------- |
-| `ApplicationsOverviewContext` | `/bewerbungen/uebersicht`          | Filter state (search text, type filter), expanded card IDs    |
+| `InternWorkspaceContext`      | `/intern`                          | Filter state, expanded card IDs, collapsed status groups      |
 | `ParticipantsOverviewContext` | `/programm`, `/programm/timetable` | Filter state (text, types, locations, date range), pinned IDs |
 
 **Do not add `useState` for server-provided data** (participants, slots, venues, attendees, labels) — the server page passes fresh props after each action and revalidation.
@@ -187,6 +189,8 @@ Two main contexts, both using **props directly** (no `useState` for server data)
 - Prisma types (`Participant`, `Slot`, `Venue`, `Location`, etc.) — server-only
 - `Participant.hasParticipatedBefore` is nullable: `true`/`false` for new or manually adjusted applications, `null` for legacy applications without an answer. Keep `null` visually distinct from explicit `false`.
 - `Participant.juryVotes` stores anonymous whole-number votes from 0 to 5 as JSON. Derived curation scores are calculated via `lib/applications/curationScoring.ts`, not persisted.
+- `Participant.organizers` is an n:m assignment through `ParticipantOrganizer`. It stores the Keycloak user ID and cached display name at assignment time.
+- `Comment` entries are immutable activity timeline items. They store `authorUserId`, `authorName`, `createdAt`, text, and optionally `statusTransition` for status-change comments.
 - `ChangeLogEntry` stores one successful logged-in user save action. It snapshots actor name/email and target name, stores structured previous/new values in `changes`, and is shown only to data-privacy users.
 
 ---
@@ -222,7 +226,8 @@ NEXTAUTH_URL                  # Full URL of the app
 NEXTAUTH_SECRET               # Random secret
 KEYCLOAK_CLIENT_ID
 KEYCLOAK_CLIENT_SECRET
-KEYCLOAK_ISSUER               # Keycloak realm URL
+KEYCLOAK_ISSUER_URL           # Keycloak realm URL used by NextAuth and admin user lookup
+KEYCLOAK_ISSUER               # Legacy fallback for Keycloak realm URL
 NEXT_PUBLIC_IONOS_HOST_NAME   # IONOS S3 hostname for image URLs
 IONOS_ACCESS_KEY_ID
 IONOS_SECRET_ACCESS_KEY

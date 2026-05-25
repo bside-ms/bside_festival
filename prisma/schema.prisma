@@ -40,6 +40,7 @@ model Participant {
     zipcodes                    Zipcode[]
     links                       Link[]
     comments                    Comment[]
+    organizers                  ParticipantOrganizer[]
     labels                      ParticipantLabel[]
     genres                      ParticipantGenre[]
     type                        Type
@@ -116,12 +117,23 @@ model Link {
 }
 
 model Comment {
-    id            Int         @id @default(autoincrement())
-    participant   Participant @relation(fields: [participantId], references: [id])
-    participantId Int
-    comment       String      @db.Text
-    commentator   String      @db.Text
-    updatedAt     DateTime    @updatedAt
+    id               Int                @id @default(autoincrement())
+    participant      Participant        @relation(fields: [participantId], references: [id])
+    participantId    Int
+    text             String             @db.Text
+    authorUserId     String             @db.Text
+    authorName       String             @db.Text
+    createdAt        DateTime           @default(now())
+    statusTransition ApplicationStatus?
+}
+
+model ParticipantOrganizer {
+    participant     Participant @relation(fields: [participantId], references: [id])
+    participantId   Int
+    organizerUserId String      @db.VarChar(191)
+    organizerName   String      @db.Text
+
+    @@id([participantId, organizerUserId])
 }
 
 model Label {
@@ -172,10 +184,11 @@ enum Type {
 
 enum ApplicationStatus {
     Applied
-    Rejected
-    InProgress
+    InConsideration
+    Contacted
     WaitingForConfirmation
     Confirmed
+    Rejected
     Canceled
 }
 

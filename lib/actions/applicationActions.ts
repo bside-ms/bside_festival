@@ -52,10 +52,17 @@ const filterChanges = (changes: Array<ChangeLogChange | null>): Array<ChangeLogC
     changes.filter((change): change is ChangeLogChange => change !== null);
 
 const revalidateApplicationPaths = (): void => {
+    revalidatePath('/intern');
+    revalidatePath('/intern/kuration');
     revalidatePath('/bewerbungen/uebersicht');
+    revalidatePath('/bewerbungen/kuration');
     revalidatePath('/programm');
     revalidatePath('/aenderungslog');
 };
+
+const getActionUserId = (actor: ActionUser): string => actor.email ?? actor.name ?? 'unknown-user';
+
+const getActionUserName = (actor: ActionUser): string => actor.name ?? actor.email ?? 'Unbekannt';
 
 const recordApplicationChange = async (
     tx: Prisma.TransactionClient,
@@ -207,8 +214,7 @@ export const updateApplicationMotivation = async (id: number, values: z.infer<ty
         await tx.participant.update({ data: { motivation: normalizedMotivation }, where: { id } });
         await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationMotivationUpdated, application, changes);
     });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/aenderungslog');
+    revalidateApplicationPaths();
 };
 
 export const updateApplicationParticipantCount = async (
@@ -240,8 +246,7 @@ export const updateApplicationParticipantCount = async (
         await tx.participant.update({ data: { participantCount }, where: { id } });
         await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationParticipantCountUpdated, application, changes);
     });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/aenderungslog');
+    revalidateApplicationPaths();
 };
 
 export const updateApplicationDurationPreference = async (
@@ -267,8 +272,7 @@ export const updateApplicationDurationPreference = async (
         await tx.participant.update({ data: { durationPreference }, where: { id } });
         await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationDurationPreferenceUpdated, application, changes);
     });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/aenderungslog');
+    revalidateApplicationPaths();
 };
 
 export const updateApplicationPastParticipation = async (
@@ -304,8 +308,7 @@ export const updateApplicationPastParticipation = async (
         });
         await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationPastParticipationUpdated, application, changes);
     });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/aenderungslog');
+    revalidateApplicationPaths();
 };
 
 export const updateApplicationJuryVotes = async (id: number, values: z.infer<typeof updateApplicationJuryVotesSchema>): Promise<void> => {
@@ -325,9 +328,7 @@ export const updateApplicationJuryVotes = async (id: number, values: z.infer<typ
         await tx.participant.update({ data: { juryVotes: nextJuryVotes === null ? Prisma.DbNull : nextJuryVotes }, where: { id } });
         await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationJuryVotesUpdated, application, changes);
     });
-    revalidatePath('/bewerbungen/kuration');
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/aenderungslog');
+    revalidateApplicationPaths();
 };
 
 export const updateApplicationBookingInfo = async (
@@ -376,8 +377,7 @@ export const updateApplicationBookingInfo = async (
         });
         await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationBookingInfoUpdated, application, changes);
     });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/aenderungslog');
+    revalidateApplicationPaths();
 };
 
 export const updateApplicationDiversityInfo = async (
@@ -427,8 +427,7 @@ export const updateApplicationDiversityInfo = async (
         });
         await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationDiversityInfoUpdated, application, changes);
     });
-    revalidatePath('/bewerbungen/uebersicht');
-    revalidatePath('/aenderungslog');
+    revalidateApplicationPaths();
 };
 
 export const updateApplicationAdditionalInfo = async (
@@ -535,21 +534,77 @@ export const replaceApplicationImage = async (id: number, encodedImage: string):
     revalidateApplicationPaths();
 };
 
-export const setCuration = async (id: number, applicationStatus: ApplicationStatus): Promise<void> => {
+export const setApplicationStatus = async (id: number, applicationStatus: ApplicationStatus, commentText?: string): Promise<void> => {
     const actor = await requireLoggedInUser();
+    const normalizedComment = normalizeOptionalText(commentText);
 
     await prismaClient.$transaction(async (tx) => {
         const application = await tx.participant.findUniqueOrThrow({ select: { id: true, name: true, status: true }, where: { id } });
         const changes = filterChanges([createChange('status', 'Status', application.status, applicationStatus, formatApplicationStatus)]);
 
-        await tx.participantLabel.deleteMany({ where: { participantId: id } });
-
         if (changes.length === 0) {
             return;
         }
 
+        await tx.participantLabel.deleteMany({ where: { participantId: id } });
         await tx.participant.update({ data: { status: applicationStatus }, where: { id } });
+
+        if (normalizedComment !== null) {
+            await tx.comment.create({
+                data: {
+                    authorName: getActionUserName(actor),
+                    authorUserId: getActionUserId(actor),
+                    participantId: id,
+                    statusTransition: applicationStatus,
+                    text: normalizedComment,
+                },
+            });
+        }
+
         await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationStatusUpdated, application, changes);
+    });
+    revalidateApplicationPaths();
+};
+
+export const setCuration = async (id: number, applicationStatus: ApplicationStatus): Promise<void> => {
+    await setApplicationStatus(id, applicationStatus);
+};
+
+export const addComment = async (id: number, text: string): Promise<void> => {
+    const actor = await requireLoggedInUser();
+    const normalizedText = normalizeOptionalText(text);
+
+    if (normalizedText === null) {
+        return;
+    }
+
+    await prismaClient.comment.create({
+        data: {
+            authorName: getActionUserName(actor),
+            authorUserId: getActionUserId(actor),
+            participantId: id,
+            text: normalizedText,
+        },
+    });
+    revalidateApplicationPaths();
+};
+
+export const assignOrganizer = async (participantId: number, organizerUserId: string, organizerName: string): Promise<void> => {
+    await requireLoggedInUser();
+
+    await prismaClient.participantOrganizer.upsert({
+        create: { organizerName, organizerUserId, participantId },
+        update: { organizerName },
+        where: { participantId_organizerUserId: { organizerUserId, participantId } },
+    });
+    revalidateApplicationPaths();
+};
+
+export const removeOrganizer = async (participantId: number, organizerUserId: string): Promise<void> => {
+    await requireLoggedInUser();
+
+    await prismaClient.participantOrganizer.delete({
+        where: { participantId_organizerUserId: { organizerUserId, participantId } },
     });
     revalidateApplicationPaths();
 };

@@ -33,6 +33,7 @@ interface Props {
     onCloseClick: () => void;
     showName?: boolean;
     showBottomClose?: boolean;
+    showCuration?: boolean;
 }
 
 const ApplicationDetails = ({
@@ -43,6 +44,7 @@ const ApplicationDetails = ({
     onCloseClick,
     showName = true,
     showBottomClose = true,
+    showCuration = true,
 }: Props): ReactElement => {
     const { type, status } = application;
 
@@ -96,9 +98,11 @@ const ApplicationDetails = ({
                 <ApplicationDetailsMeta application={application} />
             </div>
 
-            <div className="relative mt-1 p-2">
-                <ApplicationCurationForm application={application} />
-            </div>
+            {showCuration && (
+                <div className="relative mt-1 p-2">
+                    <ApplicationCurationForm application={application} />
+                </div>
+            )}
 
             {showBottomClose && (
                 <div

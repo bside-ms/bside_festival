@@ -2,8 +2,9 @@ import type { ApplicationStatus } from '@prisma/client';
 
 const statusLabels: Record<ApplicationStatus, string> = {
     Applied: 'Beworben',
+    InConsideration: 'In Prüfung',
+    Contacted: 'Kontaktiert',
     Rejected: 'Abgelehnt',
-    InProgress: 'In Bearbeitung',
     WaitingForConfirmation: 'Warten auf Bestätigung',
     Confirmed: 'Bestätigt',
     Canceled: 'Abgesagt',

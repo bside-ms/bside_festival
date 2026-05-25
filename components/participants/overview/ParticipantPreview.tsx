@@ -17,15 +17,18 @@ import createPublicObjectUrl from '@/lib/upload/createPublicObjectUrl';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { Genre } from '@prisma/client';
 import Image from 'next/image';
-import { ReactElement } from 'react';
+import NextLink from 'next/link';
+import type { MouseEvent, ReactElement } from 'react';
+import { useCallback } from 'react';
 
 interface Props {
     participant: SerializableParticipant;
     genres: Array<Genre>;
+    isLoggedIn: boolean;
     onClick: () => void;
 }
 
-const ParticipantPreview = ({ participant, genres, onClick }: Props): ReactElement | null => {
+const ParticipantPreview = ({ participant, genres, isLoggedIn, onClick }: Props): ReactElement | null => {
     const { areLocationOrDateRangeFiltersSet } = useParticipantsOverviewContext();
 
     const participantSlots = useParticipantSlots(participant.id);
@@ -34,6 +37,7 @@ const ParticipantPreview = ({ participant, genres, onClick }: Props): ReactEleme
     const { id, name, imageFileName, description, type } = participant;
 
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
+    const handleInternLinkClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => event.stopPropagation(), []);
 
     if (
         areLocationOrDateRangeFiltersSet &&
@@ -95,6 +99,16 @@ const ParticipantPreview = ({ participant, genres, onClick }: Props): ReactEleme
                             </div>
                         ))}
                     </div>
+
+                    {isLoggedIn && (
+                        <NextLink
+                            href={`/intern?expand=${id}`}
+                            className="mb-2 inline-flex rounded-full border border-black bg-white px-3 py-1 text-xs font-bold no-underline hover:bg-yellow-50"
+                            onClick={handleInternLinkClick}
+                        >
+                            Intern ↗
+                        </NextLink>
+                    )}
 
                     <ParticipantVenues participantId={id} isInPreview={true} />
 

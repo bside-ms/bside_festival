@@ -18,6 +18,8 @@ const filterChanges = (changes: Array<ChangeLogChange | null>): Array<ChangeLogC
     changes.filter((change): change is ChangeLogChange => change !== null);
 
 const revalidateSlotPaths = (): void => {
+    revalidatePath('/intern');
+    revalidatePath('/intern/kuration');
     revalidatePath('/bewerbungen/uebersicht');
     revalidatePath('/programm');
     revalidatePath('/programm/timetable');

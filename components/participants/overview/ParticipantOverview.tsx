@@ -34,7 +34,7 @@ const ParticipantOverview = ({ participant, isLoggedIn }: Props): ReactElement =
         );
     }
 
-    return <ParticipantPreview participant={participant} genres={genres} onClick={handleEnhancedToggle} />;
+    return <ParticipantPreview participant={participant} genres={genres} isLoggedIn={isLoggedIn} onClick={handleEnhancedToggle} />;
 };
 
 export default ParticipantOverview;
