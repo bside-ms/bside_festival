@@ -1,8 +1,8 @@
 'use client';
 
 import { ApplicationNameForm } from '@/components/applications/applicationCuration/ApplicationNameAndDescriptionForm';
-import { useInternWorkspaceContext } from '@/components/intern/InternWorkspaceContext';
 import ContributionDetails from '@/components/intern/ContributionDetails';
+import { useInternWorkspaceContext } from '@/components/intern/InternWorkspaceContext';
 import StatusTransitionPanel from '@/components/intern/StatusTransitionPanel';
 import Badge from '@/components/participants/details/Badge';
 import cn from '@/lib/common/helper/cn';

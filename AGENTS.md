@@ -172,10 +172,10 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 
 Two main contexts, both using **props directly** (no `useState` for server data) so `revalidatePath` re-renders flow through automatically:
 
-| Context                       | Used in                            | Contains                                                      |
-| ----------------------------- | ---------------------------------- | ------------------------------------------------------------- |
+| Context                       | Used in                            | Contains                                                                                        |
+| ----------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------- |
 | `InternWorkspaceContext`      | `/intern`                          | Filter state (type, status, search, mir zugewiesen), expanded card IDs, collapsed status groups |
-| `ParticipantsOverviewContext` | `/programm`, `/programm/timetable` | Filter state (text, types, locations, date range), pinned IDs |
+| `ParticipantsOverviewContext` | `/programm`, `/programm/timetable` | Filter state (text, types, locations, date range), pinned IDs                                   |
 
 **Do not add `useState` for server-provided data** (participants, slots, venues, attendees, labels) — the server page passes fresh props after each action and revalidation.
 

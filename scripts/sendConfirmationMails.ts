@@ -13,7 +13,9 @@ const CONFIRMATION_COMMENT = 'Bestätigungsmail versendet.';
 
 const createPrisma = () => {
     const databaseUrl = process.env.DATABASE_URL;
-    if (!databaseUrl) throw new Error('DATABASE_URL is not set');
+    if (!databaseUrl) {
+        throw new Error('DATABASE_URL is not set');
+    }
     return new PrismaClient({ adapter: new PrismaMariaDb(databaseUrl) });
 };
 
@@ -163,9 +165,7 @@ const main = async () => {
             continue;
         }
 
-        const alreadySent = participant.comments.some(
-            (c) => c.authorUserId === SYSTEM_AUTHOR_USER_ID && c.text === CONFIRMATION_COMMENT,
-        );
+        const alreadySent = participant.comments.some((c) => c.authorUserId === SYSTEM_AUTHOR_USER_ID && c.text === CONFIRMATION_COMMENT);
 
         if (alreadySent) {
             console.log(`[SKIPPED]    ${participant.name} (ID ${id}) — confirmation mail already sent`);
