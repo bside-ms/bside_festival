@@ -10,7 +10,9 @@ import {
     formatJuryVotes,
     formatNullableNumber,
     formatNullableText,
+    formatOrganizers,
     formatPastParticipation,
+    type OrganizerChangeLogSnapshot,
 } from '@/lib/changeLog/changeLogLabels';
 import type { ChangeLogChange } from '@/lib/changeLog/changeLogTypes';
 import { createChange } from '@/lib/changeLog/createChange';
@@ -589,22 +591,49 @@ export const addComment = async (id: number, text: string): Promise<void> => {
     revalidateApplicationPaths();
 };
 
-export const assignOrganizer = async (participantId: number, organizerUserId: string, organizerName: string): Promise<void> => {
-    await requireLoggedInUser();
+const normalizeOrganizerSnapshots = (
+    organizers: Array<{ organizerName: string; organizerUserId: string }>,
+): Array<OrganizerChangeLogSnapshot> =>
+    organizers
+        .map(({ organizerName, organizerUserId }) => ({ organizerName, organizerUserId }))
+        .sort((left, right) => left.organizerUserId.localeCompare(right.organizerUserId));
 
-    await prismaClient.participantOrganizer.upsert({
-        create: { organizerName, organizerUserId, participantId },
-        update: { organizerName },
-        where: { participantId_organizerUserId: { organizerUserId, participantId } },
-    });
-    revalidateApplicationPaths();
-};
+export const setApplicationOrganizers = async (
+    participantId: number,
+    organizers: Array<{ organizerName: string; organizerUserId: string }>,
+): Promise<void> => {
+    const actor = await requireLoggedInUser();
+    const nextOrganizers = normalizeOrganizerSnapshots(organizers);
 
-export const removeOrganizer = async (participantId: number, organizerUserId: string): Promise<void> => {
-    await requireLoggedInUser();
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({
+            select: {
+                id: true,
+                name: true,
+                organizers: { orderBy: { organizerName: 'asc' }, select: { organizerName: true, organizerUserId: true } },
+            },
+            where: { id: participantId },
+        });
+        const previousOrganizers = normalizeOrganizerSnapshots(application.organizers);
+        const changes = filterChanges([createChange('organizers', 'Zuständigkeit', previousOrganizers, nextOrganizers, formatOrganizers)]);
 
-    await prismaClient.participantOrganizer.delete({
-        where: { participantId_organizerUserId: { organizerUserId, participantId } },
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participantOrganizer.deleteMany({ where: { participantId } });
+
+        if (nextOrganizers.length > 0) {
+            await tx.participantOrganizer.createMany({
+                data: nextOrganizers.map(({ organizerName, organizerUserId }) => ({
+                    organizerName,
+                    organizerUserId,
+                    participantId,
+                })),
+            });
+        }
+
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationOrganizersUpdated, application, changes);
     });
     revalidateApplicationPaths();
 };

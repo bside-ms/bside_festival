@@ -21,6 +21,7 @@ export const changeLogActionLabels: Record<ChangeLogAction, string> = {
     [ChangeLogAction.ApplicationImageDeleted]: 'Bild gelöscht',
     [ChangeLogAction.ApplicationImageReplaced]: 'Bild ersetzt',
     [ChangeLogAction.ApplicationStatusUpdated]: 'Status geändert',
+    [ChangeLogAction.ApplicationOrganizersUpdated]: 'Zuständigkeit geändert',
     [ChangeLogAction.ProgramSlotUpdated]: 'Slot geändert',
     [ChangeLogAction.ProgramSlotDeleted]: 'Slot gelöscht',
     [ChangeLogAction.ProgramVenueUpdated]: 'Venue geändert',
@@ -53,6 +54,19 @@ export const formatPastParticipation = (value: boolean | null): string => {
     }
 
     return value ? 'ja' : 'nein';
+};
+
+export type OrganizerChangeLogSnapshot = { organizerName: string; organizerUserId: string };
+
+export const formatOrganizers = (organizers: Array<OrganizerChangeLogSnapshot>): string => {
+    if (organizers.length === 0) {
+        return 'niemand zugewiesen';
+    }
+
+    return organizers
+        .map(({ organizerName }) => organizerName)
+        .sort((left, right) => left.localeCompare(right, 'de-DE'))
+        .join(', ');
 };
 
 export const formatJuryVotes = (juryVotes: Array<number> | null): string => {

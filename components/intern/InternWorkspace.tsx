@@ -1,7 +1,7 @@
 'use client';
 
-import StatusGroup from '@/components/intern/StatusGroup';
 import { statusOrder, useInternWorkspaceContext } from '@/components/intern/InternWorkspaceContext';
+import StatusGroup from '@/components/intern/StatusGroup';
 import cn from '@/lib/common/helper/cn';
 import statusLabels from '@/lib/participants/status/statusLabels';
 import typeLabels from '@/lib/participants/typeLabels';
@@ -43,12 +43,15 @@ const InternWorkspace = (): ReactElement => {
     const {
         allApplications,
         filteredApplications,
+        currentOrganizerUserId,
         filteredStatuses,
         filteredTypes,
+        onlyMyOrganizerAssignments,
         searchText,
         setSearchText,
         toggleFilteredStatus,
         toggleFilteredType,
+        toggleOnlyMyOrganizerAssignments,
     } = useInternWorkspaceContext();
 
     const groupedApplications = useMemo(() => groupBy(filteredApplications, ({ status }) => status), [filteredApplications]);
@@ -61,12 +64,16 @@ const InternWorkspace = (): ReactElement => {
         (event: ChangeEvent<HTMLInputElement>) => setSearchText(event.target.value),
         [setSearchText],
     );
+    const handleOnlyMyOrganizerAssignmentsToggle = useCallback(
+        () => toggleOnlyMyOrganizerAssignments(),
+        [toggleOnlyMyOrganizerAssignments],
+    );
 
     return (
         <div className="space-y-5">
             <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                 <div>
-                    <h1 className="font-display text-5xl uppercase leading-none">Programmbeiträge</h1>
+                    <h1 className="font-display text-5xl leading-none uppercase">Programmbeiträge</h1>
                     <div className="mt-1 text-sm text-black/60">{applicationAmount} Beiträge</div>
                 </div>
             </div>
@@ -81,6 +88,23 @@ const InternWorkspace = (): ReactElement => {
                         onChange={handleSearchTextChange}
                     />
                 </label>
+
+                <div className="mt-4">
+                    <div className="mb-2 text-sm font-bold">Zuständigkeit</div>
+                    <button
+                        type="button"
+                        disabled={currentOrganizerUserId === null}
+                        className={cn(
+                            'cursor-pointer rounded-full border px-3 py-1 text-xs font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-50',
+                            onlyMyOrganizerAssignments
+                                ? 'border-black bg-black text-white'
+                                : 'border-black/20 bg-white text-black hover:border-black',
+                        )}
+                        onClick={handleOnlyMyOrganizerAssignmentsToggle}
+                    >
+                        Mir zugewiesen
+                    </button>
+                </div>
 
                 <div className="mt-4 grid gap-4 lg:grid-cols-2">
                     <div>
@@ -116,11 +140,19 @@ const InternWorkspace = (): ReactElement => {
             </div>
 
             {filteredApplications.length === 0 ? (
-                <div className="rounded-md border border-black bg-white/80 p-5 font-bold shadow-lg">Keine passenden Programmbeiträge gefunden.</div>
+                <div className="rounded-md border border-black bg-white/80 p-5 font-bold shadow-lg">
+                    Keine passenden Programmbeiträge gefunden.
+                </div>
             ) : (
                 statusOrder
-                    .filter((status) => groupedApplications[status]?.length > 0)
-                    .map((status) => <StatusGroup key={status} applications={groupedApplications[status]} status={status} />)
+                    .filter((status) => {
+                        const applications = groupedApplications[status];
+                        return applications !== undefined && applications.length > 0;
+                    })
+                    .map((status) => {
+                        const applications = groupedApplications[status]!;
+                        return <StatusGroup key={status} applications={applications} status={status} />;
+                    })
             )}
         </div>
     );

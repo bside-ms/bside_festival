@@ -5,7 +5,7 @@ const statusLabels: Record<ApplicationStatus, string> = {
     InConsideration: 'In Prüfung',
     Contacted: 'Kontaktiert',
     Rejected: 'Abgelehnt',
-    WaitingForConfirmation: 'Warten auf Bestätigung',
+    WaitingForConfirmation: 'Zusage offen',
     Confirmed: 'Bestätigt',
     Canceled: 'Abgesagt',
 };

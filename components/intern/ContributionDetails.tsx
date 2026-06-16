@@ -1,11 +1,11 @@
 'use client';
 
+import ApplicationDetails from '@/components/applications/applicationDetails/ApplicationDetails';
 import ActivityTimeline from '@/components/intern/ActivityTimeline';
 import AddCommentForm from '@/components/intern/AddCommentForm';
 import { useInternWorkspaceContext } from '@/components/intern/InternWorkspaceContext';
 import OrganizerAssignment from '@/components/intern/OrganizerAssignment';
 import StatusTransitionPanel from '@/components/intern/StatusTransitionPanel';
-import ApplicationDetails from '@/components/applications/applicationDetails/ApplicationDetails';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { ReactElement } from 'react';
 
@@ -14,7 +14,7 @@ interface Props {
     onCloseClick: () => void;
 }
 
-const ProgrammbeitragDetails = ({ application, onCloseClick }: Props): ReactElement => {
+const ContributionDetails = ({ application, onCloseClick }: Props): ReactElement => {
     const { getGenres, getLinks, getZipcodes } = useInternWorkspaceContext();
 
     return (
@@ -26,6 +26,8 @@ const ProgrammbeitragDetails = ({ application, onCloseClick }: Props): ReactElem
                     links={getLinks(application.id)}
                     zipcodes={getZipcodes(application.id)}
                     onCloseClick={onCloseClick}
+                    showName={false}
+                    showHeaderBadges={false}
                     showBottomClose={false}
                     showCuration={false}
                 />
@@ -34,7 +36,7 @@ const ProgrammbeitragDetails = ({ application, onCloseClick }: Props): ReactElem
             <aside className="space-y-5 self-start rounded-md border border-black bg-gray-50 p-3 lg:sticky lg:top-3">
                 <div className="space-y-2">
                     <div className="font-display text-xl">Status</div>
-                    <StatusTransitionPanel currentStatus={application.status} participantId={application.id} />
+                    <StatusTransitionPanel currentStatus={application.status} participantId={application.id} size="full" />
                 </div>
 
                 <OrganizerAssignment application={application} />
@@ -47,4 +49,4 @@ const ProgrammbeitragDetails = ({ application, onCloseClick }: Props): ReactElem
     );
 };
 
-export default ProgrammbeitragDetails;
+export default ContributionDetails;

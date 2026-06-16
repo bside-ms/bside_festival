@@ -2,8 +2,8 @@
 
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import useEffectOnMount from '@/lib/common/hooks/useEffectOnMount';
-import isValidType from '@/lib/participants/isValidType';
 import type { KeycloakUser } from '@/lib/keycloak/getKeycloakUsers';
+import isValidType from '@/lib/participants/isValidType';
 import statusOrder from '@/lib/participants/status/statusOrder';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { ApplicationStatus, Genre, Link, ParticipantGenre, Type, Zipcode } from '@prisma/client';
@@ -21,6 +21,8 @@ interface InternWorkspaceContextData {
     filteredApplications: Array<SerializableParticipant>;
     filteredStatuses: Array<ApplicationStatus>;
     filteredTypes: Array<Type>;
+    currentOrganizerUserId: string | null;
+    onlyMyOrganizerAssignments: boolean;
     getGenres: (id: number) => Array<Genre>;
     getLinks: (id: number) => Array<Link>;
     getZipcodes: (id: number) => Array<Zipcode>;
@@ -29,6 +31,7 @@ interface InternWorkspaceContextData {
     toggleExpanded: (id: number) => void;
     toggleFilteredStatus: (status: ApplicationStatus) => void;
     toggleFilteredType: (type: Type) => void;
+    toggleOnlyMyOrganizerAssignments: () => void;
     toggleStatusGroup: (status: ApplicationStatus) => void;
 }
 
@@ -40,6 +43,7 @@ interface Props extends PropsWithChildren {
     allZipcodes: Array<Zipcode>;
     applications: Array<SerializableParticipant>;
     availableOrganizers: Array<KeycloakUser>;
+    currentOrganizerUserId: string | null;
     participantGenres: Array<ParticipantGenre>;
 }
 
@@ -52,11 +56,13 @@ const InternWorkspaceContextProvider = ({
     applications,
     availableOrganizers,
     children,
+    currentOrganizerUserId,
     participantGenres,
 }: Props): ReactElement => {
     const [searchText, setSearchText] = useState<string | null>(null);
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
     const [filteredStatuses, setFilteredStatuses] = useState<Array<ApplicationStatus>>([]);
+    const [onlyMyOrganizerAssignments, setOnlyMyOrganizerAssignments] = useState(false);
     const [expandedIds, setExpandedIds] = useState<Array<number>>([]);
     const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<Array<ApplicationStatus>>(initialCollapsedStatuses);
 
@@ -77,7 +83,10 @@ const InternWorkspaceContextProvider = ({
         const filteredByChips = applications.filter(
             (application) =>
                 (filteredTypes.length === 0 || filteredTypes.includes(application.type)) &&
-                (filteredStatuses.length === 0 || filteredStatuses.includes(application.status)),
+                (filteredStatuses.length === 0 || filteredStatuses.includes(application.status)) &&
+                (!onlyMyOrganizerAssignments ||
+                    (currentOrganizerUserId !== null &&
+                        application.organizers.some(({ organizerUserId }) => organizerUserId === currentOrganizerUserId))),
         );
 
         if (isEmptyString(searchText)) {
@@ -94,7 +103,7 @@ const InternWorkspaceContextProvider = ({
         });
 
         return fuse.search(searchText).map((result) => result.item);
-    }, [applications, filteredStatuses, filteredTypes, searchText]);
+    }, [applications, currentOrganizerUserId, filteredStatuses, filteredTypes, onlyMyOrganizerAssignments, searchText]);
 
     const getGenres = useCallback(
         (id: number) => {
@@ -110,6 +119,7 @@ const InternWorkspaceContextProvider = ({
     const toggleExpanded = useCallback((id: number) => setExpandedIds((ids) => xor(ids, [id])), []);
     const toggleFilteredType = useCallback((type: Type) => setFilteredTypes((types) => xor(types, [type])), []);
     const toggleFilteredStatus = useCallback((status: ApplicationStatus) => setFilteredStatuses((statuses) => xor(statuses, [status])), []);
+    const toggleOnlyMyOrganizerAssignments = useCallback(() => setOnlyMyOrganizerAssignments((isActive) => !isActive), []);
     const toggleStatusGroup = useCallback(
         (status: ApplicationStatus) => setCollapsedStatusGroups((statuses) => xor(statuses, [status])),
         [],
@@ -122,10 +132,12 @@ const InternWorkspaceContextProvider = ({
                 allGenres,
                 availableOrganizers,
                 collapsedStatusGroups,
+                currentOrganizerUserId,
                 expandedIds,
                 filteredApplications,
                 filteredStatuses,
                 filteredTypes,
+                onlyMyOrganizerAssignments,
                 getGenres,
                 getLinks,
                 getZipcodes,
@@ -134,6 +146,7 @@ const InternWorkspaceContextProvider = ({
                 toggleExpanded,
                 toggleFilteredStatus,
                 toggleFilteredType,
+                toggleOnlyMyOrganizerAssignments,
                 toggleStatusGroup,
             }}
         >

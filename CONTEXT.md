@@ -9,13 +9,14 @@ A submitted proposal while it is being reviewed, curated, or edited before becom
 ### Application Status
 
 The stage of an application in the festival coordination pipeline. The valid statuses are:
-* **Applied (Beworben):** The initial, default state for incoming proposals.
-* **In Consideration (Engere Auswahl):** The jury has shortlisted the application.
-* **Contacted (Kontaktiert):** The team is in active booking/technical negotiations with the artist.
-* **Waiting for Confirmation (Warten auf Bestätigung):** An offer has been sent, awaiting artist confirmation.
-* **Confirmed (Bestätigt):** The artist has confirmed; the act is officially part of the festival program.
-* **Rejected (Abgelehnt):** The application was declined by the curation team.
-* **Canceled (Abgesagt):** The act was canceled by the artist or team after confirmation/negotiations.
+
+- **Applied (Beworben):** The initial, default state for incoming proposals.
+- **In Consideration (Engere Auswahl):** The jury has shortlisted the application.
+- **Contacted (Kontaktiert):** The team is in active booking/technical negotiations with the artist.
+- **Waiting for Confirmation (Zusage offen):** An offer has been sent, awaiting artist confirmation.
+- **Confirmed (Bestätigt):** The artist has confirmed; the act is officially part of the festival program.
+- **Rejected (Abgelehnt):** The application was declined by the curation team.
+- **Canceled (Abgesagt):** The act was canceled by the artist or team after confirmation/negotiations.
 
 ### Bonus Score
 

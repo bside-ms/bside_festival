@@ -95,9 +95,19 @@ const getKeycloakUsers = async (): Promise<Array<KeycloakUser>> => {
         const users = (await usersResponse.json()) as Array<KeycloakAdminUser>;
 
         return users
-            .map((user) => ({ id: user.id, name: getFirstName(user), enabled: user.enabled }))
-            .filter((user): user is { enabled?: boolean; id: string; name: string } => user.enabled !== false && user.name !== null)
-            .map(({ id, name }) => ({ id, name }))
+            .flatMap((user) => {
+                if (user.enabled === false) {
+                    return [];
+                }
+
+                const name = getFirstName(user);
+
+                if (name === null) {
+                    return [];
+                }
+
+                return [{ id: user.id, name }];
+            })
             .sort((a, b) => a.name.localeCompare(b.name, 'de-DE'));
     } catch (error) {
         console.warn('Keycloak user lookup failed unexpectedly.', error);

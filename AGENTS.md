@@ -174,7 +174,7 @@ Two main contexts, both using **props directly** (no `useState` for server data)
 
 | Context                       | Used in                            | Contains                                                      |
 | ----------------------------- | ---------------------------------- | ------------------------------------------------------------- |
-| `InternWorkspaceContext`      | `/intern`                          | Filter state, expanded card IDs, collapsed status groups      |
+| `InternWorkspaceContext`      | `/intern`                          | Filter state (type, status, search, mir zugewiesen), expanded card IDs, collapsed status groups |
 | `ParticipantsOverviewContext` | `/programm`, `/programm/timetable` | Filter state (text, types, locations, date range), pinned IDs |
 
 **Do not add `useState` for server-provided data** (participants, slots, venues, attendees, labels) — the server page passes fresh props after each action and revalidation.
@@ -191,7 +191,7 @@ Two main contexts, both using **props directly** (no `useState` for server data)
 - `Participant.juryVotes` stores anonymous whole-number votes from 0 to 5 as JSON. Derived curation scores are calculated via `lib/applications/curationScoring.ts`, not persisted.
 - `Participant.organizers` is an n:m assignment through `ParticipantOrganizer`. It stores the Keycloak user ID and cached display name at assignment time.
 - `Comment` entries are immutable activity timeline items. They store `authorUserId`, `authorName`, `createdAt`, text, and optionally `statusTransition` for status-change comments.
-- `ChangeLogEntry` stores one successful logged-in user save action. It snapshots actor name/email and target name, stores structured previous/new values in `changes`, and is shown only to data-privacy users.
+- `ChangeLogEntry` stores one successful logged-in user save action. It snapshots actor name/email and target name, stores structured previous/new values in `changes`, and is shown only to data-privacy users. Organizer assignment uses `setApplicationOrganizers` and logs `ApplicationOrganizersUpdated` with the full previous/next assignee list.
 
 ---
 

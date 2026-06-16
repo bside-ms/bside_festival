@@ -86,6 +86,7 @@ enum ChangeLogAction {
     ApplicationImageDeleted
     ApplicationImageReplaced
     ApplicationStatusUpdated
+    ApplicationOrganizersUpdated
     ProgramSlotUpdated
     ProgramSlotDeleted
     ProgramVenueUpdated

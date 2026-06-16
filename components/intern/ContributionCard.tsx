@@ -1,9 +1,9 @@
 'use client';
 
-import ProgrammbeitragDetails from '@/components/intern/ProgrammbeitragDetails';
-import StatusBadge from '@/components/intern/StatusBadge';
-import StatusTransitionPanel from '@/components/intern/StatusTransitionPanel';
+import { ApplicationNameForm } from '@/components/applications/applicationCuration/ApplicationNameAndDescriptionForm';
 import { useInternWorkspaceContext } from '@/components/intern/InternWorkspaceContext';
+import ContributionDetails from '@/components/intern/ContributionDetails';
+import StatusTransitionPanel from '@/components/intern/StatusTransitionPanel';
 import Badge from '@/components/participants/details/Badge';
 import cn from '@/lib/common/helper/cn';
 import typeColors from '@/lib/participants/typeColors';
@@ -35,14 +35,14 @@ const OrganizerInitials = ({ name }: { name: string }): ReactElement => (
     </span>
 );
 
-const ProgrammbeitragCard = ({ application }: Props): ReactElement => {
+const ContributionCard = ({ application }: Props): ReactElement => {
     const { expandedIds, getGenres, toggleExpanded } = useInternWorkspaceContext();
     const isExpanded = expandedIds.includes(application.id);
     const genres = getGenres(application.id);
     const visibleOrganizers = application.organizers.slice(0, 3);
     const hiddenOrganizerCount = application.organizers.length - visibleOrganizers.length;
     const handleToggle = useCallback(() => toggleExpanded(application.id), [application.id, toggleExpanded]);
-    const handleStatusPanelClick = useCallback((event: MouseEvent<HTMLDivElement>) => event.stopPropagation(), []);
+    const handleInteractiveClick = useCallback((event: MouseEvent<HTMLDivElement>) => event.stopPropagation(), []);
 
     return (
         <article id={`intern-application-${application.id}`} className="overflow-hidden rounded-md border border-black bg-white shadow-sm">
@@ -53,10 +53,9 @@ const ProgrammbeitragCard = ({ application }: Props): ReactElement => {
                         {genres.map(({ id, name }) => (
                             <Badge key={id} label={name} backgroundColor="#fcb8b8" />
                         ))}
-                        <StatusBadge status={application.status} />
                     </div>
 
-                    <div className="font-display text-2xl leading-tight">{application.name}</div>
+                    <ApplicationNameForm application={application} />
 
                     <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600">
                         <span>Beworben am {formatAppliedAt(application.appliedAt)}</span>
@@ -76,17 +75,17 @@ const ProgrammbeitragCard = ({ application }: Props): ReactElement => {
                         )}
                     </div>
 
-                    <div onClick={handleStatusPanelClick}>
-                        <StatusTransitionPanel currentStatus={application.status} participantId={application.id} size="compact" />
+                    <div onClick={handleInteractiveClick}>
+                        <StatusTransitionPanel currentStatus={application.status} participantId={application.id} />
                     </div>
 
                     <span className={cn('text-xl transition-transform', isExpanded && 'rotate-180')}>⌄</span>
                 </div>
             </div>
 
-            {isExpanded && <ProgrammbeitragDetails application={application} onCloseClick={handleToggle} />}
+            {isExpanded && <ContributionDetails application={application} onCloseClick={handleToggle} />}
         </article>
     );
 };
 
-export default ProgrammbeitragCard;
+export default ContributionCard;

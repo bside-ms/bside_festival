@@ -1,7 +1,7 @@
 'use client';
 
 import { useInternWorkspaceContext } from '@/components/intern/InternWorkspaceContext';
-import { assignOrganizer, removeOrganizer } from '@/lib/actions/applicationActions';
+import { setApplicationOrganizers } from '@/lib/actions/applicationActions';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { ReactElement } from 'react';
 import { useCallback, useMemo, useTransition } from 'react';
@@ -47,10 +47,6 @@ const organizerSelectComponents = {
 const OrganizerAssignment = ({ application }: Props): ReactElement => {
     const { allApplications, availableOrganizers } = useInternWorkspaceContext();
     const [isPending, startTransition] = useTransition();
-    const assignedOrganizerIds = useMemo(
-        () => application.organizers.map(({ organizerUserId }) => organizerUserId),
-        [application.organizers],
-    );
     const responsibleOrganizerIds = useMemo(
         () => new Set(allApplications.flatMap(({ organizers }) => organizers.map(({ organizerUserId }) => organizerUserId))),
         [allApplications],
@@ -76,24 +72,14 @@ const OrganizerAssignment = ({ application }: Props): ReactElement => {
 
     const handleAssignmentChange = useCallback(
         (nextOptions: MultiValue<OrganizerOption>) => {
-            const nextOrganizerIds = nextOptions.map(({ value }) => value);
-            const organizerIdsToAdd = nextOrganizerIds.filter((organizerId) => !assignedOrganizerIds.includes(organizerId));
-            const organizerIdsToRemove = assignedOrganizerIds.filter((organizerId) => !nextOrganizerIds.includes(organizerId));
-
             startTransition(async () => {
-                await Promise.all([
-                    ...organizerIdsToAdd.map(async (organizerId) => {
-                        const organizer = availableOrganizers.find(({ id }) => id === organizerId);
-
-                        if (organizer !== undefined) {
-                            await assignOrganizer(application.id, organizer.id, organizer.name);
-                        }
-                    }),
-                    ...organizerIdsToRemove.map(async (organizerId) => removeOrganizer(application.id, organizerId)),
-                ]);
+                await setApplicationOrganizers(
+                    application.id,
+                    nextOptions.map(({ label, value }) => ({ organizerName: label, organizerUserId: value })),
+                );
             });
         },
-        [application.id, assignedOrganizerIds, availableOrganizers],
+        [application.id],
     );
 
     return (

@@ -200,6 +200,7 @@ const ApplicationCurationRow = ({
     row: ApplicationRow;
 }): ReactElement => {
     const { application, genres, links, scores, zipcodes } = row;
+    const typeLabel = typeLabels[application.type];
     const privateLinks = links.filter(({ isConfidential }) => isConfidential);
     const publicLinks = links.filter(({ isConfidential }) => !isConfidential);
     const localZipcodeCount = zipcodes.filter(isLocalZipcode).length;
@@ -242,9 +243,13 @@ const ApplicationCurationRow = ({
                         <span className="cursor-pointer font-display text-lg leading-tight group-hover:underline">{application.name}</span>
                     </button>
                 </td>
-                <td className="w-24 p-2 align-middle text-xs leading-tight text-gray-600">{typeLabels[application.type]}</td>
+                <td className="w-24 max-w-24 p-2 align-middle text-xs text-gray-600">
+                    <span className="block truncate" title={typeLabel}>
+                        {typeLabel}
+                    </span>
+                </td>
                 <td className="w-56 p-2 align-middle" onClick={handleStatusCellClick}>
-                    <StatusTransitionPanel currentStatus={application.status} participantId={application.id} size="compact" />
+                    <StatusTransitionPanel currentStatus={application.status} participantId={application.id} />
                 </td>
                 <td className={scoreCellClassName}>
                     <ScoreCell value={scores.bonusParts.flinta} />

@@ -1,8 +1,8 @@
 'use client';
 
-import ProgrammbeitragCard from '@/components/intern/ProgrammbeitragCard';
-import StatusBadge from '@/components/intern/StatusBadge';
 import { useInternWorkspaceContext } from '@/components/intern/InternWorkspaceContext';
+import ContributionCard from '@/components/intern/ContributionCard';
+import StatusBadge from '@/components/intern/StatusBadge';
 import cn from '@/lib/common/helper/cn';
 import statusColors from '@/lib/participants/status/statusColors';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
@@ -25,7 +25,10 @@ const StatusGroup = ({ applications, status }: Props): ReactElement => {
         <section className="overflow-hidden rounded-md border border-black bg-white/70 shadow-lg backdrop-blur-2xl">
             <button
                 type="button"
-                className={cn('flex w-full cursor-pointer items-center justify-between gap-3 border-b border-black p-3 text-left', colors.header)}
+                className={cn(
+                    'flex w-full cursor-pointer items-center justify-between gap-3 border-b border-black p-3 text-left',
+                    colors.header,
+                )}
                 onClick={handleToggle}
             >
                 <div className="flex items-center gap-2">
@@ -38,7 +41,7 @@ const StatusGroup = ({ applications, status }: Props): ReactElement => {
             {!isCollapsed && (
                 <div className="space-y-3 p-3">
                     {applications.map((application) => (
-                        <ProgrammbeitragCard key={application.id} application={application} />
+                        <ContributionCard key={application.id} application={application} />
                     ))}
                 </div>
             )}

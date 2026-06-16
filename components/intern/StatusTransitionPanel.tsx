@@ -3,8 +3,8 @@
 import StatusBadge from '@/components/intern/StatusBadge';
 import { setApplicationStatus } from '@/lib/actions/applicationActions';
 import cn from '@/lib/common/helper/cn';
-import { prominentStatusTransitions, secondaryStatusTransitions } from '@/lib/participants/status/statusTransitionVisibility';
 import statusLabels from '@/lib/participants/status/statusLabels';
+import { prominentStatusTransitions, secondaryStatusTransitions } from '@/lib/participants/status/statusTransitionVisibility';
 import type { ApplicationStatus } from '@prisma/client';
 import type { ChangeEvent, MouseEvent, ReactElement } from 'react';
 import { useCallback, useMemo, useState, useTransition } from 'react';
@@ -42,28 +42,29 @@ const StatusTransitionButton = ({
     );
 };
 
-const StatusTransitionPanel = ({ currentStatus, participantId, size = 'full' }: Props): ReactElement => {
+const StatusTransitionPanel = ({ currentStatus, participantId, size = 'compact' }: Props): ReactElement => {
     const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus | null>(null);
     const [commentText, setCommentText] = useState('');
     const [isPending, startTransition] = useTransition();
 
-    const visibleProminentStatuses = useMemo(
-        () => prominentStatusTransitions.filter((status) => status !== currentStatus),
-        [currentStatus],
-    );
-    const visibleSecondaryStatuses = useMemo(
-        () => secondaryStatusTransitions.filter((status) => status !== currentStatus),
-        [currentStatus],
-    );
+    const allStatuses = useMemo(() => [...prominentStatusTransitions, ...secondaryStatusTransitions], []);
+    const visibleTransitionStatuses = useMemo(() => allStatuses.filter((status) => status !== currentStatus), [allStatuses, currentStatus]);
+    const selectValue = selectedStatus ?? currentStatus;
 
     const handleCommentChange = useCallback((event: ChangeEvent<HTMLTextAreaElement>) => setCommentText(event.target.value), []);
-    const handleSecondaryChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
-        const value = event.target.value as ApplicationStatus;
+    const handleStatusSelectChange = useCallback(
+        (event: ChangeEvent<HTMLSelectElement>) => {
+            const value = event.target.value as ApplicationStatus;
 
-        if (value.length > 0) {
+            if (value === currentStatus) {
+                setSelectedStatus(null);
+                return;
+            }
+
             setSelectedStatus(value);
-        }
-    }, []);
+        },
+        [currentStatus],
+    );
     const handleCancel = useCallback(() => {
         setCommentText('');
         setSelectedStatus(null);
@@ -82,12 +83,64 @@ const StatusTransitionPanel = ({ currentStatus, participantId, size = 'full' }: 
         });
     }, [commentText, participantId, selectedStatus]);
 
-    return (
-        <div className={cn('space-y-3', size === 'compact' && 'text-sm')}>
-            <div className="flex flex-wrap items-center gap-2">
-                {size === 'full' && <StatusBadge status={currentStatus} />}
+    const statusChangeForm =
+        selectedStatus !== null ? (
+            <div className="space-y-2 rounded border border-black/20 bg-white p-2" onClick={handlePanelClick}>
+                <div className="text-xs font-bold">Status ändern zu {statusLabels[selectedStatus]}</div>
+                <textarea
+                    value={commentText}
+                    className="min-h-20 w-full rounded border border-black p-2 text-sm outline-0"
+                    placeholder="Optionaler Kommentar"
+                    onChange={handleCommentChange}
+                />
+                <div className="flex flex-wrap gap-2">
+                    <button
+                        type="button"
+                        disabled={isPending}
+                        className="cursor-pointer rounded border border-black bg-black px-3 py-1 text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-60"
+                        onClick={handleSubmit}
+                    >
+                        Speichern
+                    </button>
+                    <button
+                        type="button"
+                        className="cursor-pointer rounded border border-black bg-white px-3 py-1 text-xs font-bold"
+                        onClick={handleCancel}
+                    >
+                        Abbrechen
+                    </button>
+                </div>
+            </div>
+        ) : null;
 
-                {visibleProminentStatuses.map((status) => (
+    if (size === 'compact') {
+        return (
+            <div className="space-y-3 text-sm" onClick={handlePanelClick}>
+                <select
+                    value={selectValue}
+                    disabled={isPending}
+                    className="w-auto max-w-full cursor-pointer rounded border border-black bg-white px-3 py-1 text-xs font-bold"
+                    aria-label="Status"
+                    onChange={handleStatusSelectChange}
+                >
+                    {allStatuses.map((status) => (
+                        <option key={status} value={status}>
+                            {statusLabels[status]}
+                        </option>
+                    ))}
+                </select>
+
+                {statusChangeForm}
+            </div>
+        );
+    }
+
+    return (
+        <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-2">
+                <StatusBadge status={currentStatus} />
+
+                {visibleTransitionStatuses.map((status) => (
                     <StatusTransitionButton
                         key={status}
                         isSelected={selectedStatus === status}
@@ -96,52 +149,9 @@ const StatusTransitionPanel = ({ currentStatus, participantId, size = 'full' }: 
                         status={status}
                     />
                 ))}
-
-                {visibleSecondaryStatuses.length > 0 && (
-                    <select
-                        value=""
-                        className="cursor-pointer rounded-full border border-black bg-white px-2 py-1 text-xs font-bold"
-                        aria-label="Weitere Statuswechsel"
-                        onChange={handleSecondaryChange}
-                    >
-                        <option value="">⋯</option>
-                        {visibleSecondaryStatuses.map((status) => (
-                            <option key={status} value={status}>
-                                {statusLabels[status]}
-                            </option>
-                        ))}
-                    </select>
-                )}
             </div>
 
-            {selectedStatus !== null && (
-                <div className="space-y-2 rounded border border-black/20 bg-white p-2" onClick={handlePanelClick}>
-                    <div className="text-xs font-bold">Status ändern zu {statusLabels[selectedStatus]}</div>
-                    <textarea
-                        value={commentText}
-                        className="min-h-20 w-full rounded border border-black p-2 text-sm outline-0"
-                        placeholder="Optionaler Kommentar"
-                        onChange={handleCommentChange}
-                    />
-                    <div className="flex flex-wrap gap-2">
-                        <button
-                            type="button"
-                            disabled={isPending}
-                            className="cursor-pointer rounded border border-black bg-black px-3 py-1 text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-60"
-                            onClick={handleSubmit}
-                        >
-                            Speichern
-                        </button>
-                        <button
-                            type="button"
-                            className="cursor-pointer rounded border border-black bg-white px-3 py-1 text-xs font-bold"
-                            onClick={handleCancel}
-                        >
-                            Abbrechen
-                        </button>
-                    </div>
-                </div>
-            )}
+            {statusChangeForm}
         </div>
     );
 };
