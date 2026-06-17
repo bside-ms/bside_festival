@@ -10,4 +10,5 @@ node_modules
 package-lock.json
 .playwright-mcp
 .claude
+next-env.d.ts
 }
