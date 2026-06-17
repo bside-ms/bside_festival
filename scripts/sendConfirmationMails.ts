@@ -1,7 +1,7 @@
 // Send confirmation mails to applicants by participant ID.
 //
 // Local:      npx tsx scripts/sendConfirmationMails.ts 1,2,3
-// Production: docker exec -it <container> node --experimental-strip-types scripts/sendConfirmationMails.ts 1,2,3
+// Production: docker exec -it <container> npx tsx scripts/sendConfirmationMails.ts 1,2,3
 
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '@prisma/client';
@@ -44,8 +44,7 @@ const buildHtml = (name: string): string => `<!DOCTYPE html>
           <!-- Header -->
           <tr>
             <td style="background:linear-gradient(160deg,#d682b5 0%,#e8c8e0 60%,#f5eef5 100%);padding:32px 40px 28px;">
-              <p style="margin:0 0 4px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(0,0,0,0.45);font-weight:700;">B-Side Festival</p>
-              <p style="margin:0;font-size:28px;font-weight:800;color:#000000;line-height:1.1;letter-spacing:-0.01em;">2026</p>
+              <p style="margin:0;font-size:26px;font-weight:800;color:#2a2a2a;line-height:1.1;letter-spacing:-0.01em;">B-Side Festival 2026</p>
             </td>
           </tr>
 
