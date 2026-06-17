@@ -36,6 +36,10 @@ const authOptions: AuthOptions = {
                 const extendedSession = session as ExtendedSession;
 
                 if (extendedSession.user !== undefined) {
+                    if (typeof token.sub === 'string') {
+                        extendedSession.user.id = token.sub;
+                    }
+
                     extendedSession.user.keycloakGroups = token.keycloakGroups;
                 }
 

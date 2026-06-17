@@ -11,7 +11,7 @@ import {
 } from '@/lib/schemas/applicationSchema';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { ReactElement } from 'react';
+import type { MouseEvent, ReactElement } from 'react';
 import { useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { z } from 'zod';
@@ -50,10 +50,17 @@ export const ApplicationNameForm = ({ application: { id, name } }: Props): React
         [clearErrors, id, setError, toggleShowForm],
     );
 
+    const handleFormClick = useCallback((event: MouseEvent<HTMLFormElement>) => event.stopPropagation(), []);
+
     if (showForm) {
         return (
             <FormProvider {...methods}>
-                <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex max-w-3xl flex-col gap-4">
+                <form
+                    onSubmit={handleSubmit(handleFormSubmit)}
+                    noValidate={true}
+                    className="flex max-w-3xl flex-col gap-4"
+                    onClick={handleFormClick}
+                >
                     <TextInput<NameFormValues> name="name" label="Name" info="Name" required={true} defaultValue={name} />
 
                     <ApplicationDetailsFormControls

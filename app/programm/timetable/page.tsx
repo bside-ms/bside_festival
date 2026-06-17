@@ -45,9 +45,7 @@ interface Props {
 async function getData(): Promise<Props> {
     const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
 
-    const participants = (await getAllParticipants(isInDataPrivacyGroup)).filter(({ status }) =>
-        ['Confirmed', 'Canceled'].includes(status),
-    );
+    const participants = await getAllParticipants(isInDataPrivacyGroup, false, ['Confirmed', 'Canceled']);
 
     const slots = await getAllSlots();
 

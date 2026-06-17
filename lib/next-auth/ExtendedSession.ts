@@ -7,6 +7,7 @@ export default interface ExtendedSession extends Session {
         image?: string | null;
 
         // Extended part
+        id?: string;
         keycloakGroups?: Array<string>;
     };
 }

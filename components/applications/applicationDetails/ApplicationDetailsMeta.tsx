@@ -9,9 +9,11 @@ interface Props {
 
 const dateFormat = 'dd.MM.yyyy HH:mm';
 
-const ApplicationDetailsMeta = ({ application: { appliedAt, updatedAt, emailVerified } }: Props): ReactElement => (
+const ApplicationDetailsMeta = ({ application: { id, appliedAt, updatedAt, emailVerified } }: Props): ReactElement => (
     <div>
         <div className="font-display">Metadaten</div>
+
+        <div>ID: {id}</div>
 
         {isNotEmptyString(appliedAt) && <div>Eingegangen: {formatDate(appliedAt, dateFormat)}</div>}
 

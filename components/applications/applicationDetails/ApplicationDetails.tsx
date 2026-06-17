@@ -32,7 +32,9 @@ interface Props {
     zipcodes: Array<Zipcode>;
     onCloseClick: () => void;
     showName?: boolean;
+    showHeaderBadges?: boolean;
     showBottomClose?: boolean;
+    showCuration?: boolean;
 }
 
 const ApplicationDetails = ({
@@ -42,7 +44,9 @@ const ApplicationDetails = ({
     zipcodes,
     onCloseClick,
     showName = true,
+    showHeaderBadges = true,
     showBottomClose = true,
+    showCuration = true,
 }: Props): ReactElement => {
     const { type, status } = application;
 
@@ -52,15 +56,17 @@ const ApplicationDetails = ({
                 <ApplicationDetailsImage application={application} />
 
                 <div className="shrink grow-0 p-2">
-                    <div className="mb-2 flex flex-wrap gap-2">
-                        <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
+                    {showHeaderBadges && (
+                        <div className="mb-2 flex flex-wrap gap-2">
+                            <Badge label={typeLabels[type]} backgroundColor={typeColors[type]} />
 
-                        {genres.map(({ id, name: genreName }) => (
-                            <Badge key={id} label={genreName} backgroundColor="#fcb8b8" />
-                        ))}
+                            {genres.map(({ id, name: genreName }) => (
+                                <Badge key={id} label={genreName} backgroundColor="#fcb8b8" />
+                            ))}
 
-                        <Badge label={statusLabels[status]} backgroundColor="lightgray" />
-                    </div>
+                            <Badge label={statusLabels[status]} backgroundColor="lightgray" />
+                        </div>
+                    )}
 
                     <ApplicationNameAndDescriptionForm application={application} showName={showName} />
                 </div>
@@ -96,9 +102,11 @@ const ApplicationDetails = ({
                 <ApplicationDetailsMeta application={application} />
             </div>
 
-            <div className="relative mt-1 p-2">
-                <ApplicationCurationForm application={application} />
-            </div>
+            {showCuration && (
+                <div className="relative mt-1 p-2">
+                    <ApplicationCurationForm application={application} />
+                </div>
+            )}
 
             {showBottomClose && (
                 <div
