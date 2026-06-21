@@ -9,7 +9,6 @@ services:
 
     db:
         image: mariadb:10.5.8
-        restart: always
         environment:
             MYSQL_DATABASE: 'test_festival'
             MYSQL_USER: 'festival'

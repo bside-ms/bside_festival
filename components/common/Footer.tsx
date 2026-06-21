@@ -34,6 +34,9 @@ const Footer = (): ReactElement => {
                 </div>
 
                 <div className="flex justify-center gap-3">
+                    <Link href="/spenden" className="underline hover:text-red-600">
+                        Spenden
+                    </Link>
                     <Link href="https://b-side.ms/kv/impressum/" className="underline hover:text-red-600">
                         Impressum
                     </Link>
