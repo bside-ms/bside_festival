@@ -3,12 +3,14 @@ import { clamp, sumBy } from 'lodash';
 
 const curationMinimumJuryVote = 0;
 const curationMaximumJuryVote = 5;
+export const curationJuryWeight = 1.5;
+const localBonusThreshold = 0.5;
+const localBonusPoints = 0.5;
 export const localZipcodePrefixes = ['481', '482', '483'] as const;
 
 interface CurationBonusScoreParts {
     flinta: number;
     marginalized: number;
-    firstTime: number;
     local: number;
 }
 
@@ -16,7 +18,6 @@ export interface CurationScoreInput {
     participantCount: number;
     flintaParticipantsCount: number;
     hasMarginalizedParticipants: boolean;
-    hasParticipatedBefore: boolean | null | undefined;
     zipcodes: Array<Pick<Zipcode, 'code' | 'isInternational'>>;
     juryVotes: Array<number> | null;
 }
@@ -64,32 +65,37 @@ export const isLocalZipcode = ({ code, isInternational }: Pick<Zipcode, 'code' |
     return !isInternational && localZipcodePrefixes.some((prefix) => code.startsWith(prefix));
 };
 
+const calculateLocalBonus = (zipcodes: Array<Pick<Zipcode, 'code' | 'isInternational'>>): number => {
+    if (zipcodes.length === 0) {
+        return 0;
+    }
+
+    const localShare = sumBy(zipcodes, (zipcode) => (isLocalZipcode(zipcode) ? 1 : 0)) / zipcodes.length;
+
+    return localShare >= localBonusThreshold ? localBonusPoints : 0;
+};
+
 const calculateBonusParts = ({
     participantCount,
     flintaParticipantsCount,
     hasMarginalizedParticipants,
-    hasParticipatedBefore,
     zipcodes,
 }: Omit<CurationScoreInput, 'juryVotes'>): CurationBonusScoreParts => ({
     flinta: calculateProportionalBonus(flintaParticipantsCount, participantCount),
     marginalized: hasMarginalizedParticipants ? 1 : 0,
-    firstTime: hasParticipatedBefore === false ? 1 : 0,
-    local: calculateProportionalBonus(
-        sumBy(zipcodes, (zipcode) => (isLocalZipcode(zipcode) ? 1 : 0)),
-        zipcodes.length,
-    ),
+    local: calculateLocalBonus(zipcodes),
 });
 
 export const calculateCurationScores = (input: CurationScoreInput): CurationScoreResult => {
     const juryScore = calculateAverage(input.juryVotes ?? []);
     const bonusParts = calculateBonusParts(input);
-    const bonusScore = bonusParts.flinta + bonusParts.marginalized + bonusParts.firstTime + bonusParts.local;
+    const bonusScore = bonusParts.flinta + bonusParts.marginalized + bonusParts.local;
 
     return {
         juryScore,
         bonusScore,
         bonusParts,
-        finalScore: juryScore === null ? null : juryScore + bonusScore,
+        finalScore: juryScore === null ? null : juryScore * curationJuryWeight + bonusScore,
     };
 };
 

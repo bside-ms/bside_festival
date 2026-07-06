@@ -1,53 +1,50 @@
 # AGENTS.md — B-Side Festival Project Guide
 
-Instructions and context for AI coding agents working on this repository.
-
----
-
 ## Keeping This File in Sync
 
-**This file is a living document. Every agent that makes changes to the codebase is responsible for updating it.**
-
-Update this file whenever you:
-
-- Add, rename, or delete a route, server action, context, or major component
-- Change the architecture or data flow (e.g. adding a new mutation pattern, new context)
-- Add, remove, or intentionally hold back a dependency — document the reason
-- Add or remove environment variables
-- Discover a new gotcha, constraint, or non-obvious behaviour
-- Change any code style rule or tooling convention
-
-When in doubt: if a future agent reading this file would be surprised or misled by the current content, update it.
+Update this file whenever you discover something a future agent would miss without help: routes, actions, data flow changes, gotchas, dependency holds, env var changes, or style conventions.
 
 ---
 
 ## Code Style
 
-- **Do not add obvious comments** — comments must explain _why_, not _what_. Never add comments that restate what the code already clearly expresses (e.g. `// Nested Genre Creation` above a genres block, `// Stable handler` above a `useCallback`). Only comment when the reasoning is non-obvious or there's a gotcha that can't be inferred from reading the code.
-- **Always use arrow functions** — never named function declarations. `const Foo = () => ...` not `function Foo() {}`. This applies to components, helpers, callbacks, server actions — everything.
-- **Prefer lodash** when a utility function exists for the task (`xor`, `range`, `uniq`, `first`, `last`, `filter`, `map`, etc.) over hand-rolled equivalents.
-- **Imports are sorted alphabetically** by prettier-plugin-tailwindcss config. Run `npm run prettier:fix` after every change.
-- All files use single quotes, 4-space indentation, 140-char print width (see `.prettierrc.json`).
+- **Do not add obvious comments** — only explain _why_, not _what_.
+- **Always use arrow functions** — `const Foo = () => ...`, never `function Foo()`. Everywhere.
+- **Prefer lodash** (`xor`, `range`, `uniq`, `first`, `last`, `filter`, `map`, etc.) over hand-rolled equivalents.
+- **Imports are sorted alphabetically** by `prettier-plugin-organize-imports`. Run `npm run prettier:fix` after every change.
+- **`no-array-index-key` is enforced.** Never use array index as React key. Use lodash `range(n)` or map over meaningful IDs.
+- All files use single quotes, 4-space indentation, 140-char print width.
 
 ---
 
 ## Available Scripts
 
-| Script                             | Purpose                                                   |
-| ---------------------------------- | --------------------------------------------------------- |
-| `npm run dev`                      | Start dev server                                          |
-| `npm run check`                    | Run all checkers: tsc, lint, tests, Knip, audit, Prettier |
-| `npm run audit`                    | Security audit; fails on high/critical vulnerabilities    |
-| `npm run tsc`                      | Type-check — run after every non-trivial change           |
-| `npm run lint`                     | ESLint — run after every change                           |
-| `npm run prettier:fix`             | Auto-format everything — run at end of every task         |
-| `npm run lint:fix`                 | ESLint with auto-fix                                      |
-| `npm run find-unused`              | Find unused files, dependencies, and exports              |
-| `npm run prisma:migrations:dev`    | Create a new migration during development                 |
-| `npm run prisma:migrations:deploy` | Apply pending migrations in production                    |
-| `npm run prisma:client:generate`   | Regenerate Prisma client after schema changes             |
+| Script                             | Purpose                                                              |
+| ---------------------------------- | -------------------------------------------------------------------- |
+| `npm run dev`                      | Start dev server                                                     |
+| `npm run check`                    | Run ALL: tsc, lint, test, knip, audit, prettier                      |
+| `npm run tsc`                      | Type-check — run after every change                                  |
+| `npm run lint`                     | ESLint — run after every change                                      |
+| `npm run test`                     | Vitest (2 test files, no config found — uses defaults)               |
+| `npm run find-unused`              | Knip — find unused files, deps, exports                              |
+| `npm run audit`                    | Security audit; fails on high/critical                               |
+| `npm run prettier:fix`             | Auto-format everything — run at end of every task                    |
+| `npm run lint:fix`                 | ESLint with auto-fix                                                 |
+| `npm run prisma:migrations:dev`    | Create a new migration during development                            |
+| `npm run prisma:migrations:deploy` | Apply pending migrations in production                               |
+| `npm run prisma:client:generate`   | Regenerate Prisma client after schema changes                        |
+| `npm run send-confirmation-mails`  | Batch script: `tsx --env-file .env scripts/sendConfirmationMails.ts` |
 
-**Verification after any change:** `npm run check`, then `npm run prettier:fix` if formatting fails or files need normalization.
+**Verification order:** `npm run check` (tsc → lint → test → knip → audit → prettier). Run `npm run prettier:fix` alone if only formatting fails.
+
+---
+
+## CI
+
+Single workflow in `.github/workflows/docker-image.yml`:
+
+- On push: `npm ci` → `prisma:client:generate` (with dummy DATABASE_URL) → tsc → lint → test → knip → audit → prettier
+- On main branch push (after check passes): Docker build+push with SHA tag, requires `DOCKER_REPOSITORY`, `DOCKER_REPO_NAME`, `GITLAB_USERNAME`, `GITLAB_PASSWORD` secrets
 
 ---
 
@@ -56,45 +53,44 @@ When in doubt: if a future agent reading this file would be surprised or misled 
 ### Framework & Rendering
 
 - **Next.js 16 App Router** with React 19 and TypeScript 5
-- All pages are **async Server Components** — they query the database directly via Prisma
-- Mutations go through **Server Actions** in `lib/actions/` — never through REST API routes
-- `revalidatePath()` is called in every action to trigger server re-renders with fresh data
+- All pages are **async Server Components** — they query Prisma directly
+- Mutations go through **Server Actions** in `lib/actions/` — never REST
+- `revalidatePath()` called in every action to trigger server re-renders
 - Client components use `'use client'` directive; they call server actions directly (no `fetch`)
 
 ### Database
 
-- **Prisma 7** with **MariaDB** (MySQL dialect)
-- Singleton client at `lib/common/prismaClient.ts`, constructed with `@prisma/adapter-mariadb`
-- Schema at `prisma/schema.prisma`; CLI datasource URL lives in root `prisma.config.ts`
-- Never use raw SQL — always use Prisma client
-- Prisma Client is generated during CI/build via `npm run prisma:client:generate`; do not commit generated files from `node_modules/.prisma`
-- Prisma 7 loads `prisma.config.ts` for `prisma generate`, and Next build may import server modules that construct Prisma Client. CI/Docker generation/build provide a clearly dummy `DATABASE_URL`; these steps need a valid URL string, not a live database connection
+- **Prisma 7** with **MariaDB** (MySQL dialect). Singleton at `lib/common/prismaClient.ts`
+- Schema: `prisma/schema.prisma`; CLI datasource URL in root `prisma.config.ts`
+- Never use raw SQL — always Prisma client
+- `prisma:client:generate` must run after any schema change before TS sees new types
+- Prisma 7 loads `prisma.config.ts` for `prisma generate`; build steps need a valid dummy `DATABASE_URL` string (value not used, but must be parseable) — see CI and Dockerfile
 
 ### Authentication
 
 - **NextAuth v4** with Keycloak provider (`lib/next-auth/`)
-- `getUserSession()`, `isLoggedIn()`, `isGroupMember()` — use these in server components
-- The `app/api/auth/[...nextauth]/route.ts` route must never be deleted
+- `getUserSession()`, `isLoggedIn()`, `isGroupMember()` — use in server components
+- `app/api/auth/[...nextauth]/route.ts` must never be deleted
+- `requireLoggedInUser()`, `requireDataPrivacyUser()` at `lib/actions/actionAuth.ts`
 
 ### File Storage
 
 - **IONOS S3** (AWS SDK v3) via `lib/upload/uploadFileToIonos.ts`
-- Public URL helper: `lib/upload/createPublicObjectUrl.ts`
-- Image constraints: `allowedImageContentTypes`, `allowedImageMaxFileSize`
-- PDF constraints: `allowedTechnicRiderContentType`, `allowedTechnicalRiderMaxFileSize`
-- Server actions body size limit is 50 MB (`next.config.js`)
+- Image constraints in `allowedImageContentTypes`, `allowedImageMaxFileSize`
+- PDF constraints in `allowedTechnicRiderContentType`, `allowedTechnicalRiderMaxFileSize`
+- Server actions body size limit: 50 MB (`next.config.js`)
 
 ### Email
 
-- **Nodemailer v7** via `lib/mail/`
+- **Nodemailer v9** (overridden in package.json via `overrides` for next-auth compatibility) via `lib/mail/`
 - `sendApplicationConfirmationMail` — sent on new application
 - `sendSlotAttendConfirmationMail` — sent when someone registers for a slot
 
 ### UI
 
-- **Tailwind CSS v4** for layout and styling
+- **Tailwind CSS v4** via `@tailwindcss/postcss` plugin
 - **React Hook Form** with `FormProvider` pattern in all forms
-- **Fuse.js** for fuzzy search in both overview contexts
+- **Fuse.js** for fuzzy search in overview contexts
 - Font Awesome + React Icons for icons
 
 ---
@@ -103,50 +99,53 @@ When in doubt: if a future agent reading this file would be surprised or misled 
 
 ```
 app/
-  api/
-    auth/[...nextauth]/   ← Keep — externally called by Keycloak
-    health/               ← Keep — external health probe
-    applications/         ← Empty (all routes deleted, replaced by server actions)
-    volunteers/           ← Empty (all routes deleted, replaced by server actions)
-  bewerbungen/            ← Application forms (public) plus redirects for legacy internal routes
-  intern/                 ← Unified internal workspace for Programmbeiträge and curation
-  mithelfen/              ← Volunteer forms (public)
-  programm/               ← Program overview (public)
-  aenderungslog/          ← Data-privacy-only Change Log for Applications and Program Entries
-  error.tsx               ← Root error boundary
-  layout.tsx              ← Root layout
+  api/auth/[...nextauth]/  ← Keep — externally called by Keycloak
+  api/health/              ← Keep — external health probe
+  bewerbungen/             ← Application forms (public) + redirects to /intern
+  intern/                  ← Unified internal workspace (Programmbeiträge + curation)
+  programm/                ← Program overview (public)
+  mithelfen/               ← Volunteer forms (public)
+  aenderungslog/           ← Change Log (data-privacy users only)
+  awareness/               ← Awareness info pages (public)
+  spenden/                 ← Donation page (public)
 
 lib/
-  actions/                ← Server actions (mutations live here)
-    applicationActions.ts
-    slotActions.ts
-    venueActions.ts
-    volunteerActions.ts
-  changeLog/              ← Change Log formatting, change detection, and persistence helpers
-  common/                 ← Shared helpers, Prisma client, hooks
-  mail/                   ← Email sending
-  next-auth/              ← Auth utilities
-  participants/           ← Participant-specific helpers
-  upload/                 ← IONOS S3 upload
+  actions/                 ← Server actions
+    actionAuth.ts, applicationActions.ts, emailConfirmationActions.ts,
+    slotActions.ts, venueActions.ts, volunteerActions.ts
+  applications/            ← Curation scoring, cookies, filter query names
+  changeLog/               ← Change Log formatting, detection, persistence
+  common/                  ← Prisma client, helper fns (cn, formatDate, etc.), hooks
+  crypto/                  ← Hashing helpers
+  keycloak/                ← Keycloak user lookup
+  mail/                    ← Email sending (Nodemailer)
+  next-auth/               ← Auth utilities and types
+  participants/            ← Participant helpers, type/status/venue/slot services
+  schemas/                 ← Zod schemas (applicationSchema.ts)
+  upload/                  ← IONOS S3 upload
+  volunteers/              ← Volunteer preference types
+  utils.ts                 ← cn() helper (clsx + tailwind-merge)
 
 components/
-  applications/           ← Admin bewerbungen overview components
-  participants/           ← Public programm overview components
-  volunteers/             ← Volunteer form
-  form/                   ← Reusable form inputs
-  common/                 ← Layout, navigation, shared UI
+  applications/            ← Admin bewerbungen overview
+  participants/            ← Public programm overview
+  volunteers/              ← Volunteer form
+  form/                    ← Reusable form inputs
+  common/                  ← Layout, navigation, shared UI
+  intern/                  ← Internal workspace components
+  ui/                      ← Base UI primitives
+  awareness/               ← Awareness page components
 
 prisma/
-  schema.prisma
-  migrations/
-prisma.config.ts            ← Prisma CLI datasource and migration config
+  schema.prisma, migrations/
+prisma.config.ts           ← Prisma CLI datasource + migration config
 ```
 
 ---
 
 ## Server Actions Pattern
 
-All mutations are in `lib/actions/`. Pattern:
+All mutations in `lib/actions/`. Pattern:
 
 ```typescript
 'use server';
@@ -157,102 +156,83 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 };
 ```
 
-- Always `'use server'` at top of file
-- Call `revalidatePath()` for every route that shows the mutated data
+- Always `'use server'` at top
+- Call `revalidatePath()` for every route showing mutated data
 - Client components import and call actions directly — no `fetch`
-- Wrap action calls in `try/catch` in client components; throw = error state
-- Admin application detail edits use focused server actions in `applicationActions.ts` plus Zod schemas from `applicationSchema.ts`
-- `/intern` is the unified internal workspace for applications/program entries. `/bewerbungen/uebersicht` redirects there.
-- `/intern/kuration` is the dedicated curation table. It stores only anonymous `juryVotes`, calculates jury score, bonus score, and final score at read time. `/bewerbungen/kuration` redirects there.
-- `/aenderungslog` is the global Change Log. It is visible only to data-privacy users and records successful logged-in user save actions for Applications and Program Entries.
+- Wrap action calls in `try/catch` in client components
+- Admin application edits use focused actions in `applicationActions.ts` + Zod schemas from `applicationSchema.ts`
+- `/intern` is the unified internal workspace. `/bewerbungen/uebersicht` and `/bewerbungen/kuration` redirect there.
+- `/intern/kuration` stores anonymous `juryVotes`, calculates jury/bonus/final score at read time via `lib/applications/curationScoring.ts`
+- `/aenderungslog` records successful user save actions with previous/next values; visible only to data-privacy users
 
 ---
 
 ## Context Providers
 
-Two main contexts, both using **props directly** (no `useState` for server data) so `revalidatePath` re-renders flow through automatically:
+Two contexts using **props directly** (no `useState` for server data):
 
 | Context                       | Used in                            | Contains                                                                                        |
 | ----------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `InternWorkspaceContext`      | `/intern`                          | Filter state (type, status, search, mir zugewiesen), expanded card IDs, collapsed status groups |
+| `InternWorkspaceContext`      | `/intern`                          | Filter state (type, status, search, assigned to me), expanded card IDs, collapsed status groups |
 | `ParticipantsOverviewContext` | `/programm`, `/programm/timetable` | Filter state (text, types, locations, date range), pinned IDs                                   |
 
-**Do not add `useState` for server-provided data** (participants, slots, venues, attendees, labels) — the server page passes fresh props after each action and revalidation.
+**Do not add `useState` for server-provided data** — the server page passes fresh props after each action and revalidation.
 
 ---
 
 ## Data Types
 
-- `SerializableParticipant` — JSON-serializable participant (dates as strings); used across client/server boundary
-- `SerializableSlot` — same for slots
+- `SerializableParticipant`, `SerializableSlot` — JSON-safe (dates as strings), used across client/server boundary
 - `AllAttendees` — `{ slotId: number, attendees: Array<...> }`
 - Prisma types (`Participant`, `Slot`, `Venue`, `Location`, etc.) — server-only
-- `Participant.hasParticipatedBefore` is nullable: `true`/`false` for new or manually adjusted applications, `null` for legacy applications without an answer. Keep `null` visually distinct from explicit `false`.
-- `Participant.juryVotes` stores anonymous whole-number votes from 0 to 5 as JSON. Derived curation scores are calculated via `lib/applications/curationScoring.ts`, not persisted.
-- `Participant.organizers` is an n:m assignment through `ParticipantOrganizer`. It stores the Keycloak user ID and cached display name at assignment time.
-- `Comment` entries are immutable activity timeline items. They store `authorUserId`, `authorName`, `createdAt`, text, and optionally `statusTransition` for status-change comments.
-- `ChangeLogEntry` stores one successful logged-in user save action. It snapshots actor name/email and target name, stores structured previous/new values in `changes`, and is shown only to data-privacy users. Organizer assignment uses `setApplicationOrganizers` and logs `ApplicationOrganizersUpdated` with the full previous/next assignee list.
+- `Participant.hasParticipatedBefore`: `true`/`false` for explicit answers, `null` for legacy — keep visually distinct
+- `Participant.juryVotes`: anonymous whole-number votes 0–5 as JSON; scores calculated at read time, not persisted
+- `Comment` entries are immutable; store `authorUserId`, `authorName`, `createdAt`, optional `statusTransition`
+- `ChangeLogEntry`: one entry per user save action; snapshots actor + target name, `changes` with previous/next values
 
 ---
 
 ## Participant Types
 
-12 types defined in `lib/participants/urlPathTypes.ts`:
+12 types in `lib/participants/urlPathTypes.ts`:
 `konzert`, `dj`, `workshop`, `lesung`, `performance`, `familienprogramm`, `ausstellung`, `essensstand`, `nachbarschaft`, `infostand`, `catering`, `sonstiges`
 
-These map to Prisma `Type` enum values. The `/bewerbungen/[type]` route uses `generateStaticParams` to pre-render all 12 at build time.
+Map to Prisma `Type` enum. `/bewerbungen/[type]` uses `generateStaticParams` to pre-render all 12 at build time.
 
 ---
 
 ## Dependency Holds
 
-These packages are intentionally NOT on the latest version:
-
-| Package                 | Current | Cannot upgrade because                                            |
+| Package                 | Current | Reason                                                            |
 | ----------------------- | ------- | ----------------------------------------------------------------- |
 | `eslint` / `@eslint/js` | v9      | `typescript-eslint@8` only supports ESLint 9; ESLint 10 breaks it |
-| `nodemailer`            | v7      | `next-auth@4` peer dependency requires `^7.0.7`                   |
 | `typescript`            | v5      | `typescript-eslint@8` only supports TypeScript 5                  |
 
 ---
 
 ## Environment Variables
 
-Required in `.env` / Docker:
-
-```
-DATABASE_URL                  # MariaDB connection string
-NEXTAUTH_URL                  # Full URL of the app
-NEXTAUTH_SECRET               # Random secret
-KEYCLOAK_CLIENT_ID
-KEYCLOAK_CLIENT_SECRET
-KEYCLOAK_ISSUER_URL           # Keycloak realm URL used by NextAuth and admin user lookup
-KEYCLOAK_ISSUER               # Legacy fallback for Keycloak realm URL
-NEXT_PUBLIC_IONOS_HOST_NAME   # IONOS S3 hostname for image URLs
-IONOS_ACCESS_KEY_ID
-IONOS_SECRET_ACCESS_KEY
-IONOS_BUCKET_NAME
-IONOS_ENDPOINT
-MAIL_HOST
-MAIL_PORT
-MAIL_USER
-MAIL_PASSWORD
-MAIL_FROM
-```
+| Variable                                                                                | Notes                                                              |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `DATABASE_URL`                                                                          | MariaDB connection string                                          |
+| `NEXTAUTH_URL`, `NEXTAUTH_SECRET`                                                       | NextAuth required                                                  |
+| `KEYCLOAK_CLIENT_ID`, `KEYCLOAK_CLIENT_SECRET`                                          |                                                                    |
+| `KEYCLOAK_ISSUER_URL`                                                                   | Keycloak realm URL (primary); `KEYCLOAK_ISSUER` is legacy fallback |
+| `CRYPTO_SECRET`                                                                         | Used for hashing                                                   |
+| `NEXT_PUBLIC_IONOS_HOST_NAME`                                                           | S3 hostname for image URLs                                         |
+| `IONOS_ACCESS_KEY_ID`, `IONOS_SECRET_ACCESS_KEY`, `IONOS_BUCKET_NAME`, `IONOS_ENDPOINT` | S3 credentials                                                     |
+| `MAIL_HOST`, `MAIL_PORT`, `MAIL_USER`, `MAIL_PASSWORD`, `MAIL_FROM`, `MAIL_INSECURE`    | SMTP                                                               |
+| `APP_URL`                                                                               | Used in email templates                                            |
 
 ---
 
 ## Common Gotchas
 
-- **`.next/` cache can hold stale type references** after deleting API routes. If `tsc` reports missing modules in `.next/types/validator.ts`, delete `.next/` and re-run.
-- **`no-array-index-key` lint rule is enforced.** Never use array index as React key. Use lodash `range(n)` (values are unique keys) or map over meaningful IDs.
-- **Server Actions have a 50 MB body limit** configured in `next.config.js` — relevant for image uploads.
-- **`prisma:client:generate` must be run after any schema change** before TypeScript will see the new types.
-- **`'use client'` is not required in every client component file** — components imported into a `'use client'` file inherit client context. Only add it at the boundary.
-- **`revalidatePath` only refreshes the server component tree** — client components receive fresh props through re-render. This only works if context providers use props directly, not `useState`.
-
----
-
-## Future Ideas
-
-- Curation summaries: consider a later feature that generates a one-sentence internal summary from application text fields and type-specific details. Keep it out of the first curation view unless there is a clear persistence, refresh, privacy, and failure-handling plan.
+- **`.next/` cache can hold stale type references** after deleting routes. If `tsc` reports missing modules in `.next/types/validator.ts`, delete `.next/` and re-run.
+- **`'use client'` is not required in every client component** — components imported into a `'use client'` file inherit client context. Only add at the boundary.
+- **`revalidatePath` only refreshes the server component tree** — client components receive fresh props through re-render, but only if context providers use props directly, not `useState`.
+- **Dummy DATABASE_URL needed for build** — Prisma 7's `prisma generate` and Next build need a parseable URL (won't connect). See CI and Dockerfile for pattern.
+- **Server Actions have a 50 MB body limit** — relevant for image uploads.
+- **`next.config.js` has `allowedDevOrigins: ['*']`** — allows external device testing but is permissive.
+- **Node version**: Docker uses `node:20-bullseye`; `.nvmrc` says `v16.14.0` (stale — ignore in favor of Docker image).
+- **No vitest config file** — works from defaults. Only 2 test files exist.

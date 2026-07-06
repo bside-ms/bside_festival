@@ -5,7 +5,6 @@ import { ApplicationNameForm } from '@/components/applications/applicationCurati
 import ApplicationDetails from '@/components/applications/applicationDetails/ApplicationDetails';
 import StatusTransitionPanel from '@/components/intern/StatusTransitionPanel';
 import Badge from '@/components/participants/details/Badge';
-import { updateApplicationPastParticipation } from '@/lib/actions/applicationActions';
 import { calculateCurationScores, formatCurationScore, isLocalZipcode, localZipcodePrefixes } from '@/lib/applications/curationScoring';
 import cn from '@/lib/common/helper/cn';
 import typeLabels from '@/lib/participants/typeLabels';
@@ -14,7 +13,7 @@ import type { Genre, Link, ParticipantGenre, Type, Zipcode } from '@prisma/clien
 import { orderBy, xor } from 'lodash';
 import NextLink from 'next/link';
 import type { ChangeEvent, MouseEvent, ReactElement } from 'react';
-import { Fragment, useCallback, useEffect, useMemo, useState, useTransition } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 
 type CurationStateFilter = 'all' | 'curated' | 'open';
 type SortOption =
@@ -205,28 +204,9 @@ const ApplicationCurationRow = ({
     const publicLinks = links.filter(({ isConfidential }) => !isConfidential);
     const localZipcodeCount = zipcodes.filter(isLocalZipcode).length;
 
-    const [isPending, startTransition] = useTransition();
-
     const handleToggleExpanded = useCallback(() => onToggleExpanded(application.id), [application.id, onToggleExpanded]);
     const handleShowDetails = useCallback(() => onShowDetails(application.id), [application.id, onShowDetails]);
     const handleStatusCellClick = useCallback((event: MouseEvent<HTMLTableCellElement>) => event.stopPropagation(), []);
-
-    const handlePastParticipationChange = useCallback(
-        (value: 'unknown' | 'yes' | 'no') => {
-            startTransition(async () => {
-                try {
-                    await updateApplicationPastParticipation(application.id, { hasParticipatedBefore: value });
-                } catch (error) {
-                    console.error('Failed to update past participation', error);
-                }
-            });
-        },
-        [application.id],
-    );
-
-    const handlePastParticipationUnknown = useCallback(() => handlePastParticipationChange('unknown'), [handlePastParticipationChange]);
-    const handlePastParticipationNo = useCallback(() => handlePastParticipationChange('no'), [handlePastParticipationChange]);
-    const handlePastParticipationYes = useCallback(() => handlePastParticipationChange('yes'), [handlePastParticipationChange]);
 
     return (
         <Fragment>
@@ -258,9 +238,6 @@ const ApplicationCurationRow = ({
                     <ScoreCell value={scores.bonusParts.marginalized} />
                 </td>
                 <td className={scoreCellClassName}>
-                    <ScoreCell value={scores.bonusParts.firstTime} />
-                </td>
-                <td className={scoreCellClassName}>
                     <ScoreCell value={scores.bonusParts.local} />
                 </td>
                 <td className={cn(scoreCellClassName, 'font-bold')}>
@@ -276,7 +253,7 @@ const ApplicationCurationRow = ({
 
             {isExpanded && (
                 <tr className="border-t border-black/20 bg-white">
-                    <td colSpan={10} className="p-4">
+                    <td colSpan={9} className="p-4">
                         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
                             <div className="space-y-4">
                                 <div className="text-sm text-gray-600">Beworben am {formatAppliedAt(application.appliedAt)}</div>
@@ -349,51 +326,6 @@ const ApplicationCurationRow = ({
                                         <div>
                                             Marginalisierte Personen: {application.hasMarginalizedParticipants ? 'ja' : 'nein'} ={' '}
                                             {formatCurationScore(scores.bonusParts.marginalized)}
-                                        </div>
-                                        <div className="flex flex-wrap items-center gap-1.5 py-0.5">
-                                            <span>Noch nicht teilgenommen:</span>
-                                            <div className="inline-flex gap-1 rounded border border-black/10 bg-gray-200/60 p-0.5">
-                                                <button
-                                                    type="button"
-                                                    disabled={isPending}
-                                                    onClick={handlePastParticipationUnknown}
-                                                    className={cn(
-                                                        'cursor-pointer rounded px-2 py-0.5 text-[10px] font-bold transition-all disabled:cursor-not-allowed',
-                                                        application.hasParticipatedBefore === null
-                                                            ? 'bg-black text-white'
-                                                            : 'text-gray-600 hover:bg-black/5',
-                                                    )}
-                                                >
-                                                    unbekannt
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    disabled={isPending}
-                                                    onClick={handlePastParticipationNo}
-                                                    className={cn(
-                                                        'cursor-pointer rounded px-2 py-0.5 text-[10px] font-bold transition-all disabled:cursor-not-allowed',
-                                                        application.hasParticipatedBefore === false
-                                                            ? 'bg-black text-white'
-                                                            : 'text-gray-600 hover:bg-black/5',
-                                                    )}
-                                                >
-                                                    ja (+1)
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    disabled={isPending}
-                                                    onClick={handlePastParticipationYes}
-                                                    className={cn(
-                                                        'cursor-pointer rounded px-2 py-0.5 text-[10px] font-bold transition-all disabled:cursor-not-allowed',
-                                                        application.hasParticipatedBefore === true
-                                                            ? 'bg-black text-white'
-                                                            : 'text-gray-600 hover:bg-black/5',
-                                                    )}
-                                                >
-                                                    nein
-                                                </button>
-                                            </div>
-                                            <span className="tabular-nums">= {formatCurationScore(scores.bonusParts.firstTime)}</span>
                                         </div>
                                         <div>
                                             Lokal: {localZipcodeCount} von {zipcodes.length} PLZ ={' '}
@@ -602,7 +534,6 @@ const ApplicationCurationOverview = ({ applications, participantGenres, allLinks
                             <th className="w-56 p-2">Status</th>
                             <th className={scoreCellClassName}>FLINTA*</th>
                             <th className={scoreCellClassName}>Marg.</th>
-                            <th className={scoreCellClassName}>Erstmals</th>
                             <th className={scoreCellClassName}>Lokal</th>
                             <th className={scoreCellClassName}>Bonus</th>
                             <th className={scoreCellClassName}>Jury</th>

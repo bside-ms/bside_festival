@@ -1,7 +1,7 @@
 'use client';
 
 import { updateApplicationJuryVotes } from '@/lib/actions/applicationActions';
-import { calculateAverage, formatCurationScore } from '@/lib/applications/curationScoring';
+import { calculateAverage, curationJuryWeight, formatCurationScore } from '@/lib/applications/curationScoring';
 import cn from '@/lib/common/helper/cn';
 import { uniqueId } from 'lodash';
 import type { ChangeEvent, FocusEvent, KeyboardEvent, ReactElement, RefObject } from 'react';
@@ -92,7 +92,7 @@ const ApplicationJuryVotesEditor = ({ applicationId, bonusScore, juryVotes }: Pr
     const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
     const parsedVotes = getParsedVotes(fields);
     const liveJuryScore = calculateAverage(parsedVotes);
-    const liveFinalScore = liveJuryScore === null ? null : liveJuryScore + bonusScore;
+    const liveFinalScore = liveJuryScore === null ? null : liveJuryScore * curationJuryWeight + bonusScore;
 
     useEffect(() => {
         setFields(createVoteFields(juryVotes));
