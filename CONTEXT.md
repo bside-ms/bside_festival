@@ -20,7 +20,7 @@ The stage of an application in the festival coordination pipeline. The valid sta
 
 ### Bonus Score
 
-Additional points awarded from selection criteria such as FLINTA\* participation, marginalized participation, first-time participation, and localness.
+Additional points awarded from selection criteria: FLINTA\* participation, marginalized participation, and localness. First-time participation is still recorded on applications but no longer contributes to the score.
 
 ### Change Log
 
@@ -36,11 +36,11 @@ A logged-in user who may access personal or sensitive submitted data such as con
 
 ### Final Curation Score
 
-The total score used during curation, calculated from the jury score and the bonus score. It is calculated with full precision and rounded only when displayed. With the current bonus criteria, the score ranges from 0 to 9.
+The total score used during curation, calculated as the jury score weighted by 1.5 plus the bonus score. It is calculated with full precision and rounded only when displayed. With the current criteria, the score ranges from 0 to 10 (jury 0–7.5 after weighting, plus bonus 0–2.5).
 
 ### First-Time Participation
 
-Whether an application comes from people who have not participated in a previous B-Side Festival. Unknown past participation does not receive the first-time participation bonus.
+Whether an application comes from people who have not participated in a previous B-Side Festival. It is collected on the public application form and editable in the application details view, but no longer affects the curation score.
 
 ### Jury Score
 
@@ -52,7 +52,7 @@ A score from 0 to 5 from one internal curator during the shared curation session
 
 ### Localness
 
-How local an application is based on the submitted participant postcodes. German postcodes starting with 481, 482, or 483 count as nearby to Muenster; other German postcodes and international entries do not. Localness is proportional to the submitted postcode entries.
+How local an application is based on the submitted participant postcodes. German postcodes starting with 481, 482, or 483 count as nearby to Muenster; other German postcodes and international entries do not. Localness awards a flat 0.5 bonus when at least half of the submitted postcodes are local, and 0 otherwise (an application with no postcodes scores 0).
 
 ### Program Entry
 

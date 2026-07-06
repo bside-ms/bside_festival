@@ -12,22 +12,19 @@ describe('curationScoring', () => {
             participantCount: 1,
             flintaParticipantsCount: 0,
             hasMarginalizedParticipants: false,
-            hasParticipatedBefore: false,
             zipcodes: [],
             juryVotes: null,
         });
 
         expect(scores.juryScore).toBeNull();
         expect(scores.finalScore).toBeNull();
-        expect(scores.bonusParts.firstTime).toBe(1);
     });
 
-    it('calculates proportional FLINTA and localness bonuses', () => {
+    it('calculates the proportional FLINTA bonus and weights the jury score in the final', () => {
         const scores = calculateCurationScores({
             participantCount: 4,
             flintaParticipantsCount: 2,
             hasMarginalizedParticipants: false,
-            hasParticipatedBefore: true,
             zipcodes: [
                 { code: '48143', isInternational: false },
                 { code: '48282', isInternational: false },
@@ -38,29 +35,53 @@ describe('curationScoring', () => {
         });
 
         expect(scores.bonusParts.flinta).toBe(0.5);
+        // 2 of 4 postcodes local = exactly 50% -> flat 0.5
         expect(scores.bonusParts.local).toBe(0.5);
         expect(scores.bonusScore).toBe(1);
-        expect(scores.finalScore).toBe(5);
+        // jury 4 x 1.5 + bonus 1
+        expect(scores.finalScore).toBe(7);
     });
 
-    it('adds marginalized and first-time bonuses only when explicitly eligible', () => {
+    it('awards the flat local bonus only when at least half of the postcodes are local', () => {
+        const belowThreshold = calculateCurationScores({
+            participantCount: 1,
+            flintaParticipantsCount: 0,
+            hasMarginalizedParticipants: false,
+            zipcodes: [
+                { code: '48143', isInternational: false },
+                { code: '50667', isInternational: false },
+                { code: '10115', isInternational: false },
+            ],
+            juryVotes: [0],
+        });
+        expect(belowThreshold.bonusParts.local).toBe(0);
+
+        const noPostcodes = calculateCurationScores({
+            participantCount: 1,
+            flintaParticipantsCount: 0,
+            hasMarginalizedParticipants: false,
+            zipcodes: [],
+            juryVotes: [0],
+        });
+        expect(noPostcodes.bonusParts.local).toBe(0);
+    });
+
+    it('adds the marginalized bonus only when explicitly eligible', () => {
         expect(
             calculateCurationScores({
                 participantCount: 1,
                 flintaParticipantsCount: 0,
                 hasMarginalizedParticipants: true,
-                hasParticipatedBefore: false,
                 zipcodes: [],
                 juryVotes: [0],
             }).bonusScore,
-        ).toBe(2);
+        ).toBe(1);
 
         expect(
             calculateCurationScores({
                 participantCount: 1,
                 flintaParticipantsCount: 0,
                 hasMarginalizedParticipants: false,
-                hasParticipatedBefore: null,
                 zipcodes: [],
                 juryVotes: [0],
             }).bonusScore,
