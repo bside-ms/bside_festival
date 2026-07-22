@@ -1,7 +1,23 @@
-## Install Dependencies
-FROM node:20-bullseye AS dependencies
+FROM node:20-bullseye AS base
 WORKDIR /app
+ENV RUNNING_IN_DOCKER=1
+ENV NEXT_TELEMETRY_DISABLED=1
 COPY package.json package-lock.json ./
+
+## Development
+FROM base AS development
+ENV NODE_ENV=development
+RUN npm ci --force
+COPY . .
+RUN DATABASE_URL="mysql://prisma-generate-only:not-used@localhost:3306/prisma_generate_only" npm run prisma:client:generate
+
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]
+
+
+## Install Dependencies
+FROM base AS dependencies
 RUN npm ci --force
 
 
@@ -9,6 +25,7 @@ RUN npm ci --force
 FROM node:20-bullseye AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+ENV RUNNING_IN_DOCKER=1
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NEXT_PUBLIC_IONOS_HOST_NAME=s3-eu-central-1.ionoscloud.com
 ENV NEXT_PUBLIC_IONOS_BUCKET_NAME=festival

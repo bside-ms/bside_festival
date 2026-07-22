@@ -19,6 +19,14 @@ export default async (): Promise<ReactElement> => {
     const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
     const applications = (await getAllParticipants(isInDataPrivacyGroup, true)).map(serializeParticipant);
     const participantGenres = await prismaClient.participantGenre.findMany();
+    const scheduledParticipantIds = (
+        await prismaClient.scheduleEntry.findMany({
+            select: { participantId: true },
+            where: { participantId: { not: null } },
+        })
+    )
+        .map(({ participantId }) => participantId)
+        .filter((participantId): participantId is number => participantId !== null);
     const allLinks = await prismaClient.link.findMany();
     const allZipcodes = await prismaClient.zipcode.findMany();
     const allGenres = await prismaClient.genre.findMany();
@@ -40,6 +48,7 @@ export default async (): Promise<ReactElement> => {
                 allGenres={allGenres}
                 availableOrganizers={availableOrganizers}
                 currentOrganizerUserId={currentOrganizerUserId}
+                scheduledParticipantIds={scheduledParticipantIds}
             >
                 <InternWorkspace />
             </InternWorkspaceContextProvider>

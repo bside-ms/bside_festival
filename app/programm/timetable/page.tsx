@@ -1,22 +1,17 @@
-import Badge from '@/components/participants/details/Badge';
 import formatDate from '@/lib/common/helper/formatDate';
-import prismaClient from '@/lib/common/prismaClient';
-import isGroupMember from '@/lib/next-auth/isGroupMember';
 import isLoggedIn from '@/lib/next-auth/isLoggedIn';
-import { dataPrivacyGroup } from '@/lib/next-auth/KeycloakGroups';
-import getAllAttendees from '@/lib/participants/getAllAttendees';
 import getAllParticipants from '@/lib/participants/getAllParticipants';
-import getAllSlots from '@/lib/participants/getAllSlots';
-import getAllVenues from '@/lib/participants/getAllVenues';
 import serializeParticipant from '@/lib/participants/serializeParticipant';
 import typeColors from '@/lib/participants/typeColors';
 import typeLabels from '@/lib/participants/typeLabels';
+import getAllProgramLocations from '@/lib/schedule/getAllProgramLocations';
+import getAllScheduleEntries from '@/lib/schedule/getAllScheduleEntries';
 import { cn } from '@/lib/utils';
-import type AllAttendees from '@/typings/AllAttendees';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
-import type { SerializableSlot } from '@/typings/SerializableSlot';
-import type { Location, ParticipantLabel, Link as PrismaLink, Type, Venue } from '@prisma/client';
-import { addHours, addMinutes, differenceInMinutes, isAfter, isBefore, isEqual, startOfHour, subHours } from 'date-fns';
+import type { SerializableProgramLocation } from '@/typings/SerializableProgramLocation';
+import type { SerializableScheduleEntry } from '@/typings/SerializableScheduleEntry';
+import { ScheduleEntryKind, ScheduleEntryTimeMode, type Type } from '@prisma/client';
+import { addHours, addMinutes, differenceInMinutes, isAfter, isBefore, startOfHour, subHours } from 'date-fns';
 import { clone } from 'lodash';
 import { redirect } from 'next/navigation';
 import { ReactElement } from 'react';
@@ -24,75 +19,28 @@ import { ReactElement } from 'react';
 export interface TimetableEvent {
     id: number;
     name: string;
-    location: Location;
+    location: SerializableProgramLocation;
     startTime: Date;
     endTime: Date;
     durationInMinutes: number;
-    type: Type;
-    genres: Array<string>;
+    type: Type | null;
 }
 
 interface Props {
     participants: Array<SerializableParticipant>;
-    slots: Array<SerializableSlot>;
-    venues: Array<Venue>;
-    participantLabels: Array<ParticipantLabel>;
-    allLinks: Array<PrismaLink>;
-    allLocations: Array<Location>;
-    allAttendees: Array<AllAttendees>;
+    scheduleEntries: Array<SerializableScheduleEntry>;
+    programLocations: Array<SerializableProgramLocation>;
 }
 
 async function getData(): Promise<Props> {
-    const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
-
-    const participants = await getAllParticipants(isInDataPrivacyGroup, false, ['Confirmed', 'Canceled']);
-
-    const slots = await getAllSlots();
-
-    const venues = await getAllVenues();
-
-    const sortedParticipant = participants.sort((participantA, participantB) => {
-        const firstSlotA = slots.find(({ participantId }) => participantId === participantA.id);
-        const firstSlotB = slots.find(({ participantId }) => participantId === participantB.id);
-
-        if (firstSlotA === undefined && firstSlotB === undefined) {
-            return 0;
-        }
-
-        if (firstSlotA === undefined) {
-            return 1;
-        }
-
-        if (firstSlotB === undefined) {
-            return -1;
-        }
-
-        const firstSlotABegin = new Date(firstSlotA.begin);
-        const firstSlotBBegin = new Date(firstSlotB.begin);
-
-        if (isEqual(firstSlotABegin, firstSlotBBegin)) {
-            return 0;
-        }
-
-        return isAfter(firstSlotABegin, firstSlotBBegin) ? 1 : -1;
-    });
-
-    const participantLabels = await prismaClient.participantLabel.findMany();
-
-    const allLinks = await prismaClient.link.findMany();
-
-    const allLocations = await prismaClient.location.findMany({ orderBy: { name: 'asc' } });
-
-    const allAttendees = await getAllAttendees();
+    const participants = await getAllParticipants(true, false, ['Confirmed', 'Canceled']);
+    const scheduleEntries = await getAllScheduleEntries({ publicOnly: true });
+    const programLocations = await getAllProgramLocations(false);
 
     return {
-        participants: sortedParticipant.map(serializeParticipant),
-        slots,
-        venues,
-        participantLabels,
-        allLinks,
-        allLocations,
-        allAttendees,
+        participants: participants.map(serializeParticipant),
+        scheduleEntries,
+        programLocations,
     };
 }
 
@@ -103,48 +51,50 @@ export default async (): Promise<ReactElement> => {
         redirect('/');
     }
 
-    const { participants, slots, allLocations } = await getData();
-
-    const participantGenres = await prismaClient.participantGenre.findMany();
-
-    const allGenres = await prismaClient.genre.findMany();
-
-    const myLocationsMap = new Map<number, Location>();
+    const { participants, scheduleEntries, programLocations } = await getData();
+    const myLocationsMap = new Map<number, SerializableProgramLocation>();
 
     let earliestStart = new Date('2025-12-31');
     let latestEnd = new Date('2025-01-01');
 
-    const events = slots.map<TimetableEvent>((slot) => {
-        const startTime = new Date(slot.begin);
-        const endTime = addMinutes(startTime, slot.duration);
+    const events = scheduleEntries
+        .filter((entry) => entry.timeMode === ScheduleEntryTimeMode.Timed && entry.startsAt !== null && entry.endsAt !== null)
+        .map<TimetableEvent | null>((entry) => {
+            const startTime = new Date(entry.startsAt!);
+            const endTime = new Date(entry.endsAt!);
+            const participant = entry.participantId === null ? null : (participants.find((p) => p.id === entry.participantId) ?? null);
+            const location = programLocations.find((programLocation) => programLocation.id === entry.programLocationId);
 
-        const participant = participants.find((p) => p.id === slot.participantId)!;
+            if (location === undefined || (entry.kind === ScheduleEntryKind.Participant && participant === null)) {
+                return null;
+            }
 
-        const slotLocation = allLocations.find((lo) => lo.id === slot.locationId)!;
+            myLocationsMap.set(entry.programLocationId, location);
 
-        myLocationsMap.set(slot.locationId, slotLocation);
+            if (isBefore(startTime, earliestStart)) {
+                earliestStart = startTime;
+            }
 
-        if (isBefore(startTime, earliestStart)) {
-            earliestStart = startTime;
-        }
+            if (isAfter(endTime, latestEnd)) {
+                latestEnd = endTime;
+            }
 
-        if (isAfter(endTime, latestEnd)) {
-            latestEnd = endTime;
-        }
+            return {
+                id: entry.id,
+                name: participant?.name ?? entry.title ?? 'Hinweis',
+                type: participant?.type ?? null,
+                startTime,
+                endTime,
+                durationInMinutes: differenceInMinutes(endTime, startTime),
+                location,
+            };
+        })
+        .filter((event): event is TimetableEvent => event !== null);
 
-        return {
-            id: slot.id,
-            name: participant.name,
-            type: participant.type,
-            genres: participantGenres
-                .filter((dd) => dd.participantId === participant.id)
-                .map((pg) => allGenres.find((g) => g.id === pg.genreId)!.name),
-            startTime,
-            endTime: addMinutes(startTime, slot.duration),
-            durationInMinutes: slot.duration,
-            location: slotLocation,
-        };
-    });
+    if (events.length === 0) {
+        earliestStart = new Date('2025-09-19T12:00:00+02:00');
+        latestEnd = new Date('2025-09-19T14:00:00+02:00');
+    }
 
     earliestStart = startOfHour(subHours(earliestStart, 1));
     latestEnd = startOfHour(addHours(latestEnd, 2));
@@ -217,18 +167,17 @@ export default async (): Promise<ReactElement> => {
                             <div
                                 key={event.id}
                                 className="relative rounded-xl border border-black p-3 font-display text-[12px]"
-                                style={{ gridColumnStart, gridRowStart, gridRowEnd, backgroundColor: typeColors[event.type] }}
+                                style={{
+                                    gridColumnStart,
+                                    gridRowStart,
+                                    gridRowEnd,
+                                    backgroundColor: event.type === null ? '#e5e7eb' : typeColors[event.type],
+                                }}
                             >
                                 <div className="sticky top-10 space-y-2 text-sm">
                                     <div className="text-base font-bold">{event.name}</div>
 
-                                    <div>{typeLabels[event.type]}</div>
-
-                                    <div>
-                                        {event.genres.map((genreName) => (
-                                            <Badge key={genreName} label={genreName} backgroundColor="#fcb8b8" />
-                                        ))}
-                                    </div>
+                                    {event.type !== null && <div>{typeLabels[event.type]}</div>}
 
                                     <div>
                                         {formatDate(event.startTime, 'HH:mm')} - {formatDate(event.endTime, 'HH:mm')} Uhr

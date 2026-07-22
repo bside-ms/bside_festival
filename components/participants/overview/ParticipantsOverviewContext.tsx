@@ -8,8 +8,17 @@ import useEffectOnMount from '@/lib/common/hooks/useEffectOnMount';
 import isValidType from '@/lib/participants/isValidType';
 import AllAttendees from '@/typings/AllAttendees';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
-import type { SerializableSlot } from '@/typings/SerializableSlot';
-import type { Attendee, Genre, Link, Location, ParticipantGenre, ParticipantLabel, Type, Venue } from '@prisma/client';
+import type { SerializableProgramLocation } from '@/typings/SerializableProgramLocation';
+import type { SerializableScheduleEntry } from '@/typings/SerializableScheduleEntry';
+import {
+    ScheduleEntryTimeMode,
+    type Attendee,
+    type Genre,
+    type Link,
+    type ParticipantGenre,
+    type ParticipantLabel,
+    type Type,
+} from '@prisma/client';
 import { addHours, endOfHour, isAfter, isBefore, isSameMinute, startOfHour, subHours } from 'date-fns';
 import Fuse from 'fuse.js';
 import { first, last, uniq, xor } from 'lodash';
@@ -17,9 +26,8 @@ import { createContext, PropsWithChildren, ReactElement, useCallback, useContext
 
 interface ParticipantsOverviewContextData {
     allParticipants: Array<SerializableParticipant>;
-    slots: Array<SerializableSlot>;
-    venues: Array<Venue>;
-    allLocations: Array<Location>;
+    scheduleEntries: Array<SerializableScheduleEntry>;
+    programLocations: Array<SerializableProgramLocation>;
     filteredParticipants: Array<SerializableParticipant>;
     participantLabels: Array<ParticipantLabel>;
     pinnedParticipantIds: Array<number>;
@@ -35,8 +43,7 @@ interface ParticipantsOverviewContextData {
     filteredDateRange: [number, number] | null;
     setFilteredDateRange: (dateRange: [number, number] | null) => void;
     allAttendees: Array<AllAttendees>;
-    slotsDateRange: [Date, Date] | null;
-    venuesDateRange: [Date, Date] | null;
+    scheduleEntriesDateRange: [Date, Date] | null;
     areLocationOrDateRangeFiltersSet: boolean;
     areFiltersSet: boolean;
     isInDataPrivacyGroup: boolean;
@@ -48,12 +55,11 @@ const ParticipantsOverviewContext = createContext<ParticipantsOverviewContextDat
 
 interface Props extends PropsWithChildren {
     participants: Array<SerializableParticipant>;
-    slots: Array<SerializableSlot>;
-    venues: Array<Venue>;
+    scheduleEntries: Array<SerializableScheduleEntry>;
     allAttendees: Array<AllAttendees>;
     participantLabels: Array<ParticipantLabel>;
     allLinks: Array<Link>;
-    allLocations: Array<Location>;
+    programLocations: Array<SerializableProgramLocation>;
     isInDataPrivacyGroup: boolean;
     initialDateRangeDateRangeFilter: string | undefined;
     initialTypesFilter: string | undefined;
@@ -67,10 +73,9 @@ export const ParticipantsOverviewContextProvider = ({
     participants,
     participantLabels,
     allLinks,
-    slots,
-    venues,
+    scheduleEntries,
     allAttendees,
-    allLocations,
+    programLocations,
     isInDataPrivacyGroup,
     initialDateRangeDateRangeFilter,
     initialTypesFilter,
@@ -86,12 +91,18 @@ export const ParticipantsOverviewContextProvider = ({
 
     const [filteredLocationIds, setFilteredLocationIds] = useState<Array<number>>((initialLocationsFilter?.split(',') ?? []).map(Number));
 
-    const earliestSlot = first(slots);
-    const latestSlot = last(slots);
+    const timedEntries = scheduleEntries.filter(
+        (entry) => entry.timeMode === ScheduleEntryTimeMode.Timed && entry.startsAt !== null && entry.endsAt !== null,
+    );
+    const earliestTimedEntry = first(timedEntries);
+    const latestTimedEntry = last(timedEntries);
     const timeBufferInHours = 2;
-    const earliestBegin = earliestSlot === undefined ? null : startOfHour(subHours(new Date(earliestSlot.begin), timeBufferInHours));
+    const earliestBegin =
+        earliestTimedEntry === undefined ? null : startOfHour(subHours(new Date(earliestTimedEntry.startsAt!), timeBufferInHours));
     const latestBegin =
-        latestSlot === undefined ? null : startOfHour(addHours(endOfHour(addHours(new Date(latestSlot.begin), timeBufferInHours)), 1));
+        latestTimedEntry === undefined
+            ? null
+            : startOfHour(addHours(endOfHour(addHours(new Date(latestTimedEntry.endsAt!), timeBufferInHours)), 1));
 
     const initialDateRange = initialDateRangeDateRangeFilter?.split(',') ?? [];
     let initialDateRangeValue: [number, number] | null = null;
@@ -166,8 +177,8 @@ export const ParticipantsOverviewContextProvider = ({
                 toggleFilteredLocationId,
                 filteredDateRange,
                 setFilteredDateRange,
-                slots: slots.filter((slot) => {
-                    if (filteredLocationIds.length > 0 && !filteredLocationIds.includes(slot.locationId)) {
+                scheduleEntries: scheduleEntries.filter((entry) => {
+                    if (filteredLocationIds.length > 0 && !filteredLocationIds.includes(entry.programLocationId)) {
                         return false;
                     }
 
@@ -175,24 +186,23 @@ export const ParticipantsOverviewContextProvider = ({
                         return true;
                     }
 
-                    const slotBegin = new Date(slot.begin);
+                    if (entry.timeMode !== ScheduleEntryTimeMode.Timed || entry.startsAt === null) {
+                        return false;
+                    }
+
+                    const entryBegin = new Date(entry.startsAt);
 
                     const filteredBegin = new Date(filteredDateRange[0]);
                     const filteredEnd = new Date(filteredDateRange[1]);
 
                     return (
-                        (isSameMinute(slotBegin, filteredBegin) || isAfter(slotBegin, filteredBegin)) &&
-                        (isSameMinute(slotBegin, filteredEnd) || isBefore(slotBegin, filteredEnd))
+                        (isSameMinute(entryBegin, filteredBegin) || isAfter(entryBegin, filteredBegin)) &&
+                        (isSameMinute(entryBegin, filteredEnd) || isBefore(entryBegin, filteredEnd))
                     );
                 }),
-                venues: venues.filter(
-                    (venue) =>
-                        filteredDateRange === null && (filteredLocationIds.length === 0 || filteredLocationIds.includes(venue.locationId)),
-                ),
-                allLocations,
+                programLocations,
                 allAttendees,
-                slotsDateRange: earliestBegin === null || latestBegin === null ? null : [earliestBegin, latestBegin],
-                venuesDateRange: [new Date(`2025-09-19T12:00:00+02:00`), new Date(`2025-09-20T12:00:00+02:00`)],
+                scheduleEntriesDateRange: earliestBegin === null || latestBegin === null ? null : [earliestBegin, latestBegin],
                 areLocationOrDateRangeFiltersSet: filteredLocationIds.length > 0 || filteredDateRange !== null,
                 pinnedParticipantIds,
                 togglePinnedParticipantId,
@@ -220,63 +230,61 @@ export const useParticipantsOverviewContext = (): ParticipantsOverviewContextDat
 };
 
 export interface ParticipantSlot {
-    slot: SerializableSlot;
-    location: Location;
+    scheduleEntry: SerializableScheduleEntry;
+    programLocation: SerializableProgramLocation;
 }
 
-interface ParticipantVenue {
-    venue: Venue;
-    location: Location;
+interface ParticipantAllDayEntry {
+    scheduleEntry: SerializableScheduleEntry;
+    programLocation: SerializableProgramLocation;
     dates: Array<Date>;
 }
 
-export const useSlotAttendees = (slotId: number): Array<Omit<Attendee, 'attendedAt'>> => {
+export const useScheduleEntryAttendees = (scheduleEntryId: number): Array<Omit<Attendee, 'attendedAt'>> => {
     const { allAttendees } = useParticipantsOverviewContext();
 
-    return allAttendees.find((slot) => slot.slotId === slotId)?.attendees ?? [];
+    return allAttendees.find((scheduleEntry) => scheduleEntry.scheduleEntryId === scheduleEntryId)?.attendees ?? [];
 };
 
 export const useParticipantSlots = (participantId: number): Array<ParticipantSlot> => {
-    const { allLocations, slots } = useParticipantsOverviewContext();
+    const { programLocations, scheduleEntries } = useParticipantsOverviewContext();
 
-    return slots
-        .filter((slotItem) => slotItem.participantId === participantId)
+    return scheduleEntries
+        .filter((entry) => entry.participantId === participantId && entry.timeMode === ScheduleEntryTimeMode.Timed)
         .map<ParticipantSlot | null>((slotItem) => {
-            const location = allLocations.find((locationItem) => locationItem.id === slotItem.locationId);
+            const programLocation = programLocations.find((locationItem) => locationItem.id === slotItem.programLocationId);
 
-            if (location === undefined) {
+            if (programLocation === undefined) {
                 return null;
             }
 
             return {
-                slot: slotItem,
-                location,
+                scheduleEntry: slotItem,
+                programLocation,
             };
         })
         .filter((slotItem): slotItem is ParticipantSlot => slotItem !== null);
 };
 
-export const useParticipantVenues = (participantId: number): Array<ParticipantVenue> => {
-    const { allLocations, venues } = useParticipantsOverviewContext();
+export const useParticipantVenues = (participantId: number): Array<ParticipantAllDayEntry> => {
+    const { programLocations, scheduleEntries } = useParticipantsOverviewContext();
 
-    return venues
-        .filter((venueItem) => venueItem.participantId === participantId)
-        .map<ParticipantVenue | null>((venueItem) => {
-            const location = allLocations.find((locationItem) => locationItem.id === venueItem.locationId);
+    return scheduleEntries
+        .filter((entry) => entry.participantId === participantId && entry.timeMode === ScheduleEntryTimeMode.AllDay)
+        .map<ParticipantAllDayEntry | null>((venueItem) => {
+            const programLocation = programLocations.find((locationItem) => locationItem.id === venueItem.programLocationId);
 
-            if (location === undefined) {
+            if (programLocation === undefined) {
                 return null;
             }
 
             return {
-                venue: venueItem,
-                location,
-                dates:
-                    venueItem.dates
-                        ?.split(',')
-                        .filter((date) => /\d{4}-\d{2}-\d{2}/.test(date))
-                        .map((date) => new Date(`${date}T12:00:00+02:00`)) ?? [],
+                scheduleEntry: venueItem,
+                programLocation,
+                dates: venueItem.allDayDates
+                    .filter((date) => /\d{4}-\d{2}-\d{2}/.test(date))
+                    .map((date) => new Date(`${date}T12:00:00+02:00`)),
             };
         })
-        .filter((venueItem): venueItem is ParticipantVenue => venueItem !== null);
+        .filter((venueItem): venueItem is ParticipantAllDayEntry => venueItem !== null);
 };

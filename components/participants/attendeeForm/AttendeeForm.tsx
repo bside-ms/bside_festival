@@ -1,6 +1,6 @@
 import TextInput from '@/components/form/TextInput';
-import { ParticipantSlot, useSlotAttendees } from '@/components/participants/overview/ParticipantsOverviewContext';
-import { attendSlot } from '@/lib/actions/slotActions';
+import { ParticipantSlot, useScheduleEntryAttendees } from '@/components/participants/overview/ParticipantsOverviewContext';
+import { attendScheduleEntry } from '@/lib/actions/scheduleEntryActions';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import isValidEmail from '@/lib/common/helper/isValidEmail';
 import { ReactElement, useCallback, useState } from 'react';
@@ -17,12 +17,12 @@ interface Props {
 
 const AttendeeForm = ({
     slot: {
-        slot: { id: slotId, maxAttendees },
+        scheduleEntry: { id: scheduleEntryId, maxAttendees },
     },
 }: Props): ReactElement => {
     const [hasSuccessfullyAttended, setHasSuccessfullyAttended] = useState(false);
 
-    const slotAttendees = useSlotAttendees(slotId);
+    const slotAttendees = useScheduleEntryAttendees(scheduleEntryId);
 
     const methods = useForm<AttendeeFormValues>();
     const {
@@ -38,7 +38,7 @@ const AttendeeForm = ({
             clearErrors('root');
 
             try {
-                const result = await attendSlot(slotId, fullName, mailAddress);
+                const result = await attendScheduleEntry(scheduleEntryId, fullName, mailAddress);
 
                 if (result !== null) {
                     if (result.errorCode === 1721561870451) {
@@ -55,7 +55,7 @@ const AttendeeForm = ({
                 setError('root', { message: 'Technischer Fehler beim Submit!' });
             }
         },
-        [clearErrors, reset, setError, slotId],
+        [clearErrors, reset, setError, scheduleEntryId],
     );
 
     const validateEmail = useCallback((email: string): string | undefined => {

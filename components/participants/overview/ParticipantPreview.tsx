@@ -10,7 +10,6 @@ import formatDate from '@/lib/common/helper/formatDate';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import isNotEmptyNumber from '@/lib/common/helper/isNotEmptyNumber';
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
-import hasSlotOrVenue from '@/lib/participants/hasSlotOrVenue';
 import typeColors from '@/lib/participants/typeColors';
 import typeLabels from '@/lib/participants/typeLabels';
 import createPublicObjectUrl from '@/lib/upload/createPublicObjectUrl';
@@ -39,11 +38,7 @@ const ParticipantPreview = ({ participant, genres, isLoggedIn, onClick }: Props)
     const imageUrl = isEmptyString(imageFileName) ? null : createPublicObjectUrl(imageFileName);
     const handleInternLinkClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => event.stopPropagation(), []);
 
-    if (
-        areLocationOrDateRangeFiltersSet &&
-        ((hasSlotOrVenue(participant.type) === 'slot' && participantSlots.length === 0) ||
-            (hasSlotOrVenue(participant.type) === 'venue' && participantVenues.length === 0))
-    ) {
+    if (areLocationOrDateRangeFiltersSet && participantSlots.length === 0 && participantVenues.length === 0) {
         return null;
     }
 
@@ -80,15 +75,15 @@ const ParticipantPreview = ({ participant, genres, isLoggedIn, onClick }: Props)
                             <Badge key={id} label={genreName} backgroundColor="#fcb8b8" />
                         ))}
 
-                        {participantSlots.map(({ slot: { id, begin, maxAttendees }, location: { name } }) => (
+                        {participantSlots.map(({ scheduleEntry: { id, startsAt, maxAttendees }, programLocation: { name } }) => (
                             <div key={id} className="inline-flex gap-2 rounded-2xl bg-[#b1c32c]/30">
-                                <Badge label={formatDate(new Date(begin), 'EEEEEE HH:mm')} backgroundColor="#b1c32c" />
+                                <Badge label={formatDate(new Date(startsAt!), 'EEEEEE HH:mm')} backgroundColor="#b1c32c" />
                                 <Badge label={name} backgroundColor="#ebc9de" />
                                 {isNotEmptyNumber(maxAttendees) && <Badge label="Anmeldung erforderlich" backgroundColor="#b0e4cc" />}
                             </div>
                         ))}
 
-                        {participantVenues.map(({ dates, venue: { id }, location: { name } }) => (
+                        {participantVenues.map(({ dates, scheduleEntry: { id }, programLocation: { name } }) => (
                             <div key={id} className="inline-flex gap-2 rounded-2xl bg-[#b1c32c]/30">
                                 {dates.map((date) => {
                                     const formattedDate = formatDate(new Date(date), 'EEEEEE HH:mm');

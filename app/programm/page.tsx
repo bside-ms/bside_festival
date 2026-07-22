@@ -12,23 +12,23 @@ import isLoggedIn from '@/lib/next-auth/isLoggedIn';
 import { dataPrivacyGroup } from '@/lib/next-auth/KeycloakGroups';
 import getAllAttendees from '@/lib/participants/getAllAttendees';
 import getAllParticipants from '@/lib/participants/getAllParticipants';
-import getAllSlots from '@/lib/participants/getAllSlots';
-import getAllVenues from '@/lib/participants/getAllVenues';
 import serializeParticipant from '@/lib/participants/serializeParticipant';
+import getAllProgramLocations from '@/lib/schedule/getAllProgramLocations';
+import getAllScheduleEntries from '@/lib/schedule/getAllScheduleEntries';
 import type AllAttendees from '@/typings/AllAttendees';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
-import type { SerializableSlot } from '@/typings/SerializableSlot';
-import type { Location, ParticipantLabel, Link as PrismaLink, Venue } from '@prisma/client';
+import type { SerializableProgramLocation } from '@/typings/SerializableProgramLocation';
+import type { SerializableScheduleEntry } from '@/typings/SerializableScheduleEntry';
+import type { ParticipantLabel, Link as PrismaLink } from '@prisma/client';
 import { isAfter, isEqual } from 'date-fns';
 import { ReactElement } from 'react';
 
 interface Props {
     participants: Array<SerializableParticipant>;
-    slots: Array<SerializableSlot>;
-    venues: Array<Venue>;
+    scheduleEntries: Array<SerializableScheduleEntry>;
     participantLabels: Array<ParticipantLabel>;
     allLinks: Array<PrismaLink>;
-    allLocations: Array<Location>;
+    programLocations: Array<SerializableProgramLocation>;
     allAttendees: Array<AllAttendees>;
 }
 
@@ -37,13 +37,11 @@ async function getData(): Promise<Props> {
 
     const participants = await getAllParticipants(isInDataPrivacyGroup, false, ['Confirmed', 'Canceled']);
 
-    const slots = await getAllSlots();
-
-    const venues = await getAllVenues();
+    const scheduleEntries = await getAllScheduleEntries({ publicOnly: true });
 
     const sortedParticipant = participants.sort((participantA, participantB) => {
-        const firstSlotA = slots.find(({ participantId }) => participantId === participantA.id);
-        const firstSlotB = slots.find(({ participantId }) => participantId === participantB.id);
+        const firstSlotA = scheduleEntries.find(({ participantId, startsAt }) => participantId === participantA.id && startsAt !== null);
+        const firstSlotB = scheduleEntries.find(({ participantId, startsAt }) => participantId === participantB.id && startsAt !== null);
 
         if (firstSlotA === undefined && firstSlotB === undefined) {
             return 0;
@@ -57,8 +55,8 @@ async function getData(): Promise<Props> {
             return -1;
         }
 
-        const firstSlotABegin = new Date(firstSlotA.begin);
-        const firstSlotBBegin = new Date(firstSlotB.begin);
+        const firstSlotABegin = new Date(firstSlotA.startsAt!);
+        const firstSlotBBegin = new Date(firstSlotB.startsAt!);
 
         if (isEqual(firstSlotABegin, firstSlotBBegin)) {
             return 0;
@@ -71,17 +69,16 @@ async function getData(): Promise<Props> {
 
     const allLinks = await prismaClient.link.findMany();
 
-    const allLocations = await prismaClient.location.findMany({ orderBy: { name: 'asc' } });
+    const programLocations = await getAllProgramLocations(false);
 
     const allAttendees = await getAllAttendees();
 
     return {
         participants: sortedParticipant.map(serializeParticipant),
-        slots,
-        venues,
+        scheduleEntries,
         participantLabels,
         allLinks,
-        allLocations,
+        programLocations,
         allAttendees,
     };
 }
@@ -95,7 +92,7 @@ export default async (props: { searchParams: Promise<Record<string, string | str
     const initialLocationsFilter = searchParams[locationsFilterQueryName];
     const initialTextFilter = searchParams[textFilterQueryName];
 
-    const { participants, slots, venues, participantLabels, allLinks, allLocations, allAttendees } = await getData();
+    const { participants, scheduleEntries, participantLabels, allLinks, programLocations, allAttendees } = await getData();
 
     const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
 
@@ -109,11 +106,10 @@ export default async (props: { searchParams: Promise<Record<string, string | str
 
             <ParticipantsOverviewContextProvider
                 participants={participants}
-                slots={slots}
-                venues={venues}
+                scheduleEntries={scheduleEntries}
                 participantLabels={participantLabels}
                 allLinks={allLinks}
-                allLocations={allLocations}
+                programLocations={programLocations}
                 allAttendees={allAttendees}
                 isInDataPrivacyGroup={isInDataPrivacyGroup}
                 initialDateRangeDateRangeFilter={typeof initialDateRangeFilter === 'string' ? initialDateRangeFilter : undefined}

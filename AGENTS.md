@@ -11,31 +11,34 @@ Update this file whenever you discover something a future agent would miss witho
 - **Do not add obvious comments** — only explain _why_, not _what_.
 - **Always use arrow functions** — `const Foo = () => ...`, never `function Foo()`. Everywhere.
 - **Prefer lodash** (`xor`, `range`, `uniq`, `first`, `last`, `filter`, `map`, etc.) over hand-rolled equivalents.
-- **Imports are sorted alphabetically** by `prettier-plugin-organize-imports`. Run `npm run prettier:fix` after every change.
+- **Imports are sorted alphabetically** by `prettier-plugin-organize-imports`. Run `task prettier-fix` after every change.
 - **`no-array-index-key` is enforced.** Never use array index as React key. Use lodash `range(n)` or map over meaningful IDs.
 - All files use single quotes, 4-space indentation, 140-char print width.
 
 ---
 
-## Available Scripts
+## Available Tasks
 
-| Script                             | Purpose                                                              |
-| ---------------------------------- | -------------------------------------------------------------------- |
-| `npm run dev`                      | Start dev server                                                     |
-| `npm run check`                    | Run ALL: tsc, lint, test, knip, audit, prettier                      |
-| `npm run tsc`                      | Type-check — run after every change                                  |
-| `npm run lint`                     | ESLint — run after every change                                      |
-| `npm run test`                     | Vitest (2 test files, no config found — uses defaults)               |
-| `npm run find-unused`              | Knip — find unused files, deps, exports                              |
-| `npm run audit`                    | Security audit; fails on high/critical                               |
-| `npm run prettier:fix`             | Auto-format everything — run at end of every task                    |
-| `npm run lint:fix`                 | ESLint with auto-fix                                                 |
-| `npm run prisma:migrations:dev`    | Create a new migration during development                            |
-| `npm run prisma:migrations:deploy` | Apply pending migrations in production                               |
-| `npm run prisma:client:generate`   | Regenerate Prisma client after schema changes                        |
-| `npm run send-confirmation-mails`  | Batch script: `tsx --env-file .env scripts/sendConfirmationMails.ts` |
+All project Node/Prisma/npm **runtime** commands must run inside Docker via `task ...` from `Taskfile.yml`. Host `npm ci` / `prisma generate` are the exception — required so the IDE sees the same deps/types (see Common Gotchas).
 
-**Verification order:** `npm run check` (tsc → lint → test → knip → audit → prettier). Run `npm run prettier:fix` alone if only formatting fails.
+| Task                            | Purpose                                                              |
+| ------------------------------- | -------------------------------------------------------------------- |
+| `task dev`                      | Start dev server                                                     |
+| `task check`                    | Run ALL: tsc, lint, test, knip, audit, prettier                      |
+| `task tsc`                      | Type-check — run after every change                                  |
+| `task lint`                     | ESLint — run after every change                                      |
+| `task test`                     | Vitest (2 test files, no config found — uses defaults)               |
+| `task find-unused`              | Knip — find unused files, deps, exports                              |
+| `task audit`                    | Security audit; fails on high/critical                               |
+| `task prettier-fix`             | Auto-format everything — run at end of every task                    |
+| `task lint-fix`                 | ESLint with auto-fix                                                 |
+| `task prisma-migrations-dev`    | Create a new migration during development                            |
+| `task prisma-migrations-deploy` | Apply pending migrations in production                               |
+| `task prisma-generate`          | Regenerate Prisma client after schema changes                        |
+| `task send-confirmation-mails`  | Batch script: `tsx --env-file .env scripts/sendConfirmationMails.ts` |
+| `task npm -- run <script>`      | Run any less common npm script inside Docker                         |
+
+**Verification order:** `task check` (tsc → lint → test → knip → audit → prettier). Run `task prettier-fix` alone if only formatting fails.
 
 ---
 
@@ -215,6 +218,7 @@ Map to Prisma `Type` enum. `/bewerbungen/[type]` uses `generateStaticParams` to 
 | Variable                                                                                | Notes                                                              |
 | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | `DATABASE_URL`                                                                          | MariaDB connection string                                          |
+| `SHADOW_DATABASE_URL`                                                                   | Optional Prisma Migrate shadow database; Docker dev task sets this |
 | `NEXTAUTH_URL`, `NEXTAUTH_SECRET`                                                       | NextAuth required                                                  |
 | `KEYCLOAK_CLIENT_ID`, `KEYCLOAK_CLIENT_SECRET`                                          |                                                                    |
 | `KEYCLOAK_ISSUER_URL`                                                                   | Keycloak realm URL (primary); `KEYCLOAK_ISSUER` is legacy fallback |
@@ -228,6 +232,7 @@ Map to Prisma `Type` enum. `/bewerbungen/[type]` uses `generateStaticParams` to 
 
 ## Common Gotchas
 
+- **Docker and host use different `node_modules`.** Local Compose mounts named volume `app_node_modules` over `/app/node_modules`, so `task`/container installs and `prisma generate` do not update host `./node_modules` (what Cursor/TS uses). After lockfile or Prisma schema changes, sync the host for the IDE: `npm ci` then `npm run prisma:client:generate` (dummy `DATABASE_URL` is fine). Do not remove the named volume — native deps like `sharp` need Linux builds in the container. Production is unaffected (Dockerfile generates the client in the image).
 - **`.next/` cache can hold stale type references** after deleting routes. If `tsc` reports missing modules in `.next/types/validator.ts`, delete `.next/` and re-run.
 - **`'use client'` is not required in every client component** — components imported into a `'use client'` file inherit client context. Only add at the boundary.
 - **`revalidatePath` only refreshes the server component tree** — client components receive fresh props through re-render, but only if context providers use props directly, not `useState`.
@@ -236,3 +241,4 @@ Map to Prisma `Type` enum. `/bewerbungen/[type]` uses `generateStaticParams` to 
 - **`next.config.js` has `allowedDevOrigins: ['*']`** — allows external device testing but is permissive.
 - **Node version**: Docker uses `node:20-bullseye`; `.nvmrc` says `v16.14.0` (stale — ignore in favor of Docker image).
 - **No vitest config file** — works from defaults. Only 2 test files exist.
+- **`SHADOW_DATABASE_URL` is local `migrate dev` only** — not needed on live; production uses `migrate deploy`.

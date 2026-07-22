@@ -1,0 +1,98 @@
+version: '3'
+
+tasks:
+    dev:
+        desc: Start the Next.js dev server in Docker
+        cmds:
+            - docker compose up app
+
+    down:
+        desc: Stop the Docker Compose stack
+        cmds:
+            - docker compose down
+
+    shell:
+        desc: Open a shell in the app container
+        cmds:
+            - docker compose run --rm app bash
+
+    npm:
+        desc: Run an npm command in the app container
+        cmds:
+            - docker compose run --rm app npm {{.CLI_ARGS}}
+
+    build:
+        desc: Build the Next.js app in Docker
+        cmds:
+            - docker compose run --rm app npm run build
+
+    check:
+        desc: Run the full project check in Docker
+        cmds:
+            - docker compose run --rm app npm run check
+
+    audit:
+        desc: Run npm audit in Docker
+        cmds:
+            - docker compose run --rm app npm run audit
+
+    lint:
+        desc: Run ESLint in Docker
+        cmds:
+            - docker compose run --rm app npm run lint
+
+    lint-fix:
+        desc: Run ESLint auto-fix in Docker
+        cmds:
+            - docker compose run --rm app npm run lint:fix
+
+    test:
+        desc: Run Vitest in Docker
+        cmds:
+            - docker compose run --rm app npm run test
+
+    tsc:
+        desc: Run TypeScript checks in Docker
+        cmds:
+            - docker compose run --rm app npm run tsc
+
+    tsc-watch:
+        desc: Run TypeScript watch mode in Docker
+        cmds:
+            - docker compose run --rm app npm run tsc:watch
+
+    find-unused:
+        desc: Run Knip in Docker
+        cmds:
+            - docker compose run --rm app npm run find-unused
+
+    prettier:
+        desc: Check formatting in Docker
+        cmds:
+            - docker compose run --rm app npm run prettier
+
+    prettier-fix:
+        desc: Format files in Docker
+        cmds:
+            - docker compose run --rm app npm run prettier:fix
+
+    prisma-generate:
+        desc: Regenerate Prisma client in Docker
+        cmds:
+            - docker compose run --rm app npm run prisma:client:generate
+
+    prisma-migrations-dev:
+        desc: Create or apply a development Prisma migration in Docker
+        cmds:
+            - docker compose exec -T db sh -c 'mariadb -uroot -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS test_festival_shadow; GRANT ALL PRIVILEGES ON test_festival_shadow.* TO '\''festival'\''@'\''%'\''; FLUSH PRIVILEGES;"'
+            - docker compose run --rm app npm run prisma:migrations:dev
+
+    prisma-migrations-deploy:
+        desc: Apply production Prisma migrations in Docker
+        cmds:
+            - docker compose run --rm app npm run prisma:migrations:deploy
+
+    send-confirmation-mails:
+        desc: Send confirmation mails from Docker
+        cmds:
+            - docker compose run --rm app npm run send-confirmation-mails
