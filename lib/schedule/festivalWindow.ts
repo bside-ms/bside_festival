@@ -1,7 +1,7 @@
 import { addDays, isSameDay, startOfDay } from 'date-fns';
 
-export const festivalStartsAt = new Date('2025-09-19T12:00:00+02:00');
-export const festivalEndsAt = new Date('2025-09-21T03:00:00+02:00');
+export const festivalStartsAt = new Date('2026-09-18T12:00:00+02:00');
+export const festivalEndsAt = new Date('2026-09-20T06:00:00+02:00');
 export const scheduleStepMinutes = 15;
 
 export interface FestivalDayView {
@@ -13,12 +13,12 @@ export interface FestivalDayView {
 export const festivalDayViews: Array<FestivalDayView> = [
     {
         label: 'Freitag',
-        startsAt: new Date('2025-09-19T12:00:00+02:00'),
-        endsAt: new Date('2025-09-20T03:00:00+02:00'),
+        startsAt: new Date('2026-09-18T12:00:00+02:00'),
+        endsAt: new Date('2026-09-19T03:00:00+02:00'),
     },
     {
         label: 'Samstag',
-        startsAt: new Date('2025-09-20T12:00:00+02:00'),
+        startsAt: new Date('2026-09-19T12:00:00+02:00'),
         endsAt: festivalEndsAt,
     },
 ];

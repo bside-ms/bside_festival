@@ -861,6 +861,7 @@ const SlotplanWorkspace = ({
     const suppressNextClickRef = useRef(false);
     const activeDayView = festivalDayViews.find(({ label }) => label === activeDayLabel) ?? festivalDayViews[0]!;
     const activeLocations = programLocations.filter(({ isActive }) => isActive);
+    const hasUnassignedLocations = activeLocations.some(({ programLocationAreaId }) => programLocationAreaId === null);
     const visibleLocations = activeLocations.filter(({ programLocationAreaId }) => {
         if (activeAreaFilter === 'all') {
             return true;
@@ -1106,18 +1107,20 @@ const SlotplanWorkspace = ({
                                     {area.name}
                                 </button>
                             ))}
-                            <button
-                                type="button"
-                                className={cn(
-                                    'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold md:px-3 md:py-1 md:text-sm',
-                                    activeAreaFilter === 'unassigned'
-                                        ? 'bg-black text-white hover:bg-gray-800'
-                                        : 'bg-white text-black hover:bg-black/5',
-                                )}
-                                onClick={() => setActiveAreaFilter('unassigned')}
-                            >
-                                Im Viertel
-                            </button>
+                            {hasUnassignedLocations && (
+                                <button
+                                    type="button"
+                                    className={cn(
+                                        'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold md:px-3 md:py-1 md:text-sm',
+                                        activeAreaFilter === 'unassigned'
+                                            ? 'bg-black text-white hover:bg-gray-800'
+                                            : 'bg-white text-black hover:bg-black/5',
+                                    )}
+                                    onClick={() => setActiveAreaFilter('unassigned')}
+                                >
+                                    Ohne Bereich
+                                </button>
+                            )}
                             <button
                                 type="button"
                                 className={cn(

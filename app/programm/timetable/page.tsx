@@ -92,8 +92,8 @@ export default async (): Promise<ReactElement> => {
         .filter((event): event is TimetableEvent => event !== null);
 
     if (events.length === 0) {
-        earliestStart = new Date('2025-09-19T12:00:00+02:00');
-        latestEnd = new Date('2025-09-19T14:00:00+02:00');
+        earliestStart = new Date('2026-09-18T12:00:00+02:00');
+        latestEnd = new Date('2026-09-18T14:00:00+02:00');
     }
 
     earliestStart = startOfHour(subHours(earliestStart, 1));
