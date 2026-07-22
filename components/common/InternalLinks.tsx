@@ -25,6 +25,8 @@ const InternalLinks = async (): Promise<ReactElement | null> => {
     const isInDataPrivacyGroup = userSession.keycloakGroups?.includes(dataPrivacyGroup) ?? false;
     const links = [
         { href: '/intern', label: 'Programmbeiträge' },
+        { href: '/intern/slotplan', label: 'Slotplan' },
+        { href: '/intern/slotplan?tab=locations', label: 'Programmorte' },
         { href: '/intern/kuration', label: 'Kuration' },
         { href: '/bewerbungen', label: 'Bewerbungsformular' },
         { href: '/programm/', label: 'Programmübersicht' },

@@ -205,7 +205,7 @@ const ApplicationJuryVotesEditor = ({ applicationId, bonusScore, juryVotes }: Pr
                         ✓
                     </button>
                 </div>
-
+                {/* TODO: Add info regarding 1.5 multiplier */}
                 <div className="mt-2 text-sm">
                     <span className="text-gray-500">Jury: </span>
                     <span className="font-bold tabular-nums">{formatLiveScore(liveJuryScore)}</span>

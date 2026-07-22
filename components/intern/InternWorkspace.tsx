@@ -47,11 +47,13 @@ const InternWorkspace = (): ReactElement => {
         filteredStatuses,
         filteredTypes,
         onlyMyOrganizerAssignments,
+        onlyWithoutScheduleEntry,
         searchText,
         setSearchText,
         toggleFilteredStatus,
         toggleFilteredType,
         toggleOnlyMyOrganizerAssignments,
+        toggleOnlyWithoutScheduleEntry,
     } = useInternWorkspaceContext();
 
     const groupedApplications = useMemo(() => groupBy(filteredApplications, ({ status }) => status), [filteredApplications]);
@@ -68,6 +70,7 @@ const InternWorkspace = (): ReactElement => {
         () => toggleOnlyMyOrganizerAssignments(),
         [toggleOnlyMyOrganizerAssignments],
     );
+    const handleOnlyWithoutScheduleEntryToggle = useCallback(() => toggleOnlyWithoutScheduleEntry(), [toggleOnlyWithoutScheduleEntry]);
 
     return (
         <div className="space-y-5">
@@ -90,20 +93,34 @@ const InternWorkspace = (): ReactElement => {
                 </label>
 
                 <div className="mt-4">
-                    <div className="mb-2 text-sm font-bold">Zuständigkeit</div>
-                    <button
-                        type="button"
-                        disabled={currentOrganizerUserId === null}
-                        className={cn(
-                            'cursor-pointer rounded-full border px-3 py-1 text-xs font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-50',
-                            onlyMyOrganizerAssignments
-                                ? 'border-black bg-black text-white'
-                                : 'border-black/20 bg-white text-black hover:border-black',
-                        )}
-                        onClick={handleOnlyMyOrganizerAssignmentsToggle}
-                    >
-                        Mir zugewiesen
-                    </button>
+                    <div className="mb-2 text-sm font-bold">Planung</div>
+                    <div className="flex flex-wrap gap-2">
+                        <button
+                            type="button"
+                            disabled={currentOrganizerUserId === null}
+                            className={cn(
+                                'cursor-pointer rounded-full border px-3 py-1 text-xs font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-50',
+                                onlyMyOrganizerAssignments
+                                    ? 'border-black bg-black text-white'
+                                    : 'border-black/20 bg-white text-black hover:border-black',
+                            )}
+                            onClick={handleOnlyMyOrganizerAssignmentsToggle}
+                        >
+                            Mir zugewiesen
+                        </button>
+                        <button
+                            type="button"
+                            className={cn(
+                                'cursor-pointer rounded-full border px-3 py-1 text-xs font-bold transition-colors',
+                                onlyWithoutScheduleEntry
+                                    ? 'border-black bg-black text-white'
+                                    : 'border-black/20 bg-white text-black hover:border-black',
+                            )}
+                            onClick={handleOnlyWithoutScheduleEntryToggle}
+                        >
+                            Nicht im Slotplan
+                        </button>
+                    </div>
                 </div>
 
                 <div className="mt-4 grid gap-4 lg:grid-cols-2">

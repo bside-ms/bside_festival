@@ -1,6 +1,6 @@
 import type { Attendee } from '@prisma/client';
 
 export default interface AllAttendees {
-    slotId: number;
+    scheduleEntryId: number;
     attendees: Array<Omit<Attendee, 'attendedAt'>>;
 }

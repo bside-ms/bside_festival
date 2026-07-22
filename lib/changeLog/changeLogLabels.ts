@@ -4,6 +4,8 @@ import statusLabels from '../participants/status/statusLabels';
 export const changeLogTargetTypeLabels: Record<ChangeLogTargetType, string> = {
     [ChangeLogTargetType.Application]: 'Bewerbung',
     [ChangeLogTargetType.ProgramEntry]: 'Programmeintrag',
+    [ChangeLogTargetType.ScheduleEntry]: 'Slotplan-Eintrag',
+    [ChangeLogTargetType.ProgramLocation]: 'Programmort',
 };
 
 export const changeLogActionLabels: Record<ChangeLogAction, string> = {
@@ -22,10 +24,17 @@ export const changeLogActionLabels: Record<ChangeLogAction, string> = {
     [ChangeLogAction.ApplicationImageReplaced]: 'Bild ersetzt',
     [ChangeLogAction.ApplicationStatusUpdated]: 'Status geändert',
     [ChangeLogAction.ApplicationOrganizersUpdated]: 'Zuständigkeit geändert',
-    [ChangeLogAction.ProgramSlotUpdated]: 'Slot geändert',
-    [ChangeLogAction.ProgramSlotDeleted]: 'Slot gelöscht',
-    [ChangeLogAction.ProgramVenueUpdated]: 'Venue geändert',
-    [ChangeLogAction.ProgramVenueDeleted]: 'Venue gelöscht',
+    [ChangeLogAction.ProgramSlotUpdated]: 'Slot geändert (alt)',
+    [ChangeLogAction.ProgramSlotDeleted]: 'Slot gelöscht (alt)',
+    [ChangeLogAction.ProgramVenueUpdated]: 'Venue geändert (alt)',
+    [ChangeLogAction.ProgramVenueDeleted]: 'Venue gelöscht (alt)',
+    [ChangeLogAction.ScheduleEntryCreated]: 'Slotplan-Eintrag erstellt',
+    [ChangeLogAction.ScheduleEntryUpdated]: 'Slotplan-Eintrag geändert',
+    [ChangeLogAction.ScheduleEntryDeleted]: 'Slotplan-Eintrag gelöscht',
+    [ChangeLogAction.ProgramLocationCreated]: 'Programmort erstellt',
+    [ChangeLogAction.ProgramLocationUpdated]: 'Programmort geändert',
+    [ChangeLogAction.ProgramLocationDeactivated]: 'Programmort deaktiviert',
+    [ChangeLogAction.ProgramLocationDeleted]: 'Programmort gelöscht',
 };
 
 export const formatBoolean = (value: boolean): string => (value ? 'ja' : 'nein');

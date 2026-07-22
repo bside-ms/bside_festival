@@ -11,7 +11,7 @@ import { useCallback, useEffect } from 'react';
 const halfHourInMilliseconds = 1000 * 60 * 30;
 
 const ParticipantsOverviewDateRangeFilter = (): ReactElement | null => {
-    const { slotsDateRange, filteredDateRange, setFilteredDateRange } = useParticipantsOverviewContext();
+    const { scheduleEntriesDateRange, filteredDateRange, setFilteredDateRange } = useParticipantsOverviewContext();
 
     const isMounted = useIsMounted();
 
@@ -37,32 +37,32 @@ const ParticipantsOverviewDateRangeFilter = (): ReactElement | null => {
             if (begin === end) {
                 setFilteredDateRange([begin, end + halfHourInMilliseconds * 2]);
             } else if (
-                slotsDateRange !== null &&
-                isSameMinute(new Date(begin), slotsDateRange[0]) &&
-                isSameMinute(new Date(end), slotsDateRange[1])
+                scheduleEntriesDateRange !== null &&
+                isSameMinute(new Date(begin), scheduleEntriesDateRange[0]) &&
+                isSameMinute(new Date(end), scheduleEntriesDateRange[1])
             ) {
                 setFilteredDateRange(null);
             } else {
                 setFilteredDateRange([begin, end]);
             }
         },
-        [setFilteredDateRange, slotsDateRange],
+        [setFilteredDateRange, scheduleEntriesDateRange],
     );
 
-    if (slotsDateRange === null) {
+    if (scheduleEntriesDateRange === null) {
         return null;
     }
 
-    const earliestTimestamp = Number(formatDate(slotsDateRange[0], 'T'));
-    const latestTimestamp = Number(formatDate(slotsDateRange[1], 'T'));
+    const earliestTimestamp = Number(formatDate(scheduleEntriesDateRange[0], 'T'));
+    const latestTimestamp = Number(formatDate(scheduleEntriesDateRange[1], 'T'));
 
     const dateOptions = new Array<Date>();
-    let currentDate = slotsDateRange[0];
+    let currentDate = scheduleEntriesDateRange[0];
 
     do {
         dateOptions.push(clone(currentDate));
         currentDate = addHours(currentDate, 1);
-    } while (isBefore(currentDate, slotsDateRange[1]));
+    } while (isBefore(currentDate, scheduleEntriesDateRange[1]));
 
     return (
         <div className="mb-4 rounded-2xl border border-black bg-[#b1c32c]">

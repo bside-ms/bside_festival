@@ -1,16 +1,16 @@
-import { useParticipantsOverviewContext, useSlotAttendees } from '@/components/participants/overview/ParticipantsOverviewContext';
+import { useParticipantsOverviewContext, useScheduleEntryAttendees } from '@/components/participants/overview/ParticipantsOverviewContext';
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
-import { SerializableSlot } from '@/typings/SerializableSlot';
+import { SerializableScheduleEntry } from '@/typings/SerializableScheduleEntry';
 import { ReactElement } from 'react';
 
 interface Props {
-    slot: SerializableSlot;
+    scheduleEntry: SerializableScheduleEntry;
 }
 
-const SlotAttendeeData = ({ slot: { id: slotId, maxAttendees } }: Props): ReactElement => {
+const SlotAttendeeData = ({ scheduleEntry: { id: scheduleEntryId, maxAttendees } }: Props): ReactElement => {
     const { isInDataPrivacyGroup } = useParticipantsOverviewContext();
 
-    const slotAttendees = useSlotAttendees(slotId);
+    const slotAttendees = useScheduleEntryAttendees(scheduleEntryId);
 
     return (
         <div>

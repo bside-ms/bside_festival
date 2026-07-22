@@ -9,6 +9,7 @@ declare namespace NodeJS {
         DB_USER?: string;
         DB_PASSWORD?: string;
         DATABASE_URL?: string;
+        SHADOW_DATABASE_URL?: string;
 
         NEXTAUTH_URL?: string;
         NEXTAUTH_SECRET?: string;

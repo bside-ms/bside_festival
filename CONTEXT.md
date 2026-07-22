@@ -58,6 +58,16 @@ How local an application is based on the submitted participant postcodes. German
 
 An accepted application as it appears in program planning or the public program, especially when scheduling, venue, or attendance-related information is being changed.
 
+### Program Location
+
+A schedulable place in the slot plan, such as a stage, room, area, or external venue. Program locations may be grouped for display, but each one can be scheduled directly.
+_Avoid_: Venue, location
+
+### Programmort
+
+The German UI term for a Program Location.
+_Avoid_: Location, Venue
+
 ### Programmbeiträge
 
 The canonical internal name for the unified internal workspace at `/intern`. It covers every festival contribution — concerts, workshops, food stands, exhibitions, and all other types — across all lifecycle stages from initial application to confirmed act. This is the operational hub for organizers managing artists and program entries.
@@ -65,3 +75,26 @@ The canonical internal name for the unified internal workspace at `/intern`. It 
 ### Responsible Organizer
 
 An internal team member assigned to coordinate a specific artist or program entry. Multiple organizers can share responsibility for one artist, and one organizer can be responsible for multiple artists (n:m). Each organizer is identified by their Keycloak user ID and name, which are cached at assignment time to avoid runtime API calls.
+
+### Schedule Entry
+
+Anything placed in the slot plan. A schedule entry is either linked to one application or is a schedule note.
+_Avoid_: Slot, venue
+
+### Schedule Note
+
+A schedule entry that is not linked to an application, such as setup, changeover, teardown, a pause, or a temporary planning reservation.
+_Avoid_: Info block, program entry
+
+### Slotplan
+
+The internal canonical schedule for the festival. It contains placed participant entries and schedule notes, including timed entries and all-day placements.
+
+### Slotplan-Eintrag
+
+The German UI term for a Schedule Entry.
+_Avoid_: Programmpunkt when referring to setup, teardown, or other schedule notes
+
+### Blocking Occupancy
+
+Whether a schedule entry reserves its program location so no other blocking entry may overlap it. Timed entries usually block; all-day placements usually do not.

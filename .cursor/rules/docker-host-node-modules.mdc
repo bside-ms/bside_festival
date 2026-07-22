@@ -1,0 +1,28 @@
+---
+description: Keep host node_modules in sync with Docker for IDE/Prisma types
+alwaysApply: true
+---
+
+# Docker vs host `node_modules`
+
+Local Compose mounts a named volume `app_node_modules` over `/app/node_modules`. Docker runtime and host IDE therefore use **different** trees.
+
+| Tree | Used by | Updated by |
+| --- | --- | --- |
+| Docker volume | `task …`, Next dev, real runtime | `npm ci` / install / `prisma generate` **in Docker** |
+| Host `./node_modules` | Cursor / TS language server | `npm ci` + `prisma generate` **on the host** |
+
+## Rules
+
+- Run app checks and installs via `task` / Docker as usual.
+- After `package.json` / `package-lock.json` changes, also sync the host for the IDE:
+  - `npm ci`
+  - `npm run prisma:client:generate` (dummy `DATABASE_URL` is fine)
+- After Prisma schema changes / `task prisma-generate` / migrate-dev, always regenerate on the host too — Docker generate does **not** update host types.
+- Do **not** remove the named `node_modules` volume (native deps like `sharp` need Linux builds in the container).
+- Production is unaffected: the image runs `prisma generate` in the Dockerfile; live compose only pulls the image.
+
+## Symptoms of drift
+
+- IDE / host TS missing Prisma models (e.g. `ProgramLocationArea`) while `task tsc` passes
+- Missing or outdated package types in the editor after dependency bumps

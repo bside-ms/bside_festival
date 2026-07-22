@@ -1,16 +1,20 @@
 import formatDate from '@/lib/common/helper/formatDate';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
-import type { Location } from '@prisma/client';
+import type { SerializableProgramLocation } from '@/typings/SerializableProgramLocation';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 
 interface Props {
-    location: Location;
+    programLocation: SerializableProgramLocation;
     dates: Array<Date>;
     showAccessibleInfo: boolean;
 }
 
-const ParticipantVenue = ({ location: { name: location, awarenessInfo }, dates, showAccessibleInfo }: Props): ReactElement | null => {
+const ParticipantVenue = ({
+    programLocation: { name: location, awarenessInfo },
+    dates,
+    showAccessibleInfo,
+}: Props): ReactElement | null => {
     if (!showAccessibleInfo) {
         return <div>{[location, dates.map((date) => formatDate(date, 'EEE dd.MM.')).join(' & ')].join(' / ')}</div>;
     }

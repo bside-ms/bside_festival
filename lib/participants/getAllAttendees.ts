@@ -11,19 +11,19 @@ const getAllAttendees = async (): Promise<Array<AllAttendees>> => {
         id: attendee.id,
         fullName: attendee.fullName,
         mailAddress: isInDataPrivacyGroup ? attendee.mailAddress : '',
-        slotId: attendee.slotId,
+        scheduleEntryId: attendee.scheduleEntryId,
     });
 
     return (await prismaClient.attendee.findMany()).reduce((currentAttendees, attendee) => {
-        const slotData = currentAttendees.find(({ slotId }) => slotId === attendee.slotId);
+        const scheduleEntryData = currentAttendees.find(({ scheduleEntryId }) => scheduleEntryId === attendee.scheduleEntryId);
 
-        if (slotData === undefined) {
+        if (scheduleEntryData === undefined) {
             currentAttendees.push({
-                slotId: attendee.slotId,
+                scheduleEntryId: attendee.scheduleEntryId,
                 attendees: [createSanitizedAttendee(attendee)],
             });
         } else {
-            slotData.attendees.push(createSanitizedAttendee(attendee));
+            scheduleEntryData.attendees.push(createSanitizedAttendee(attendee));
         }
 
         return currentAttendees;

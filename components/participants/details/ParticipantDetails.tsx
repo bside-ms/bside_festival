@@ -13,11 +13,8 @@ import {
     useParticipantsOverviewContext,
     useParticipantVenues,
 } from '@/components/participants/overview/ParticipantsOverviewContext';
-import SlotForm from '@/components/participants/slotsForm/SlotForm';
-import VenueForm from '@/components/participants/venueForm/VenueForm';
 import formatDate from '@/lib/common/helper/formatDate';
 import isNotEmptyNumber from '@/lib/common/helper/isNotEmptyNumber';
-import hasSlotOrVenue from '@/lib/participants/hasSlotOrVenue';
 import typeColors from '@/lib/participants/typeColors';
 import typeLabels from '@/lib/participants/typeLabels';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
@@ -37,16 +34,12 @@ interface Props {
 const ParticipantDetails = ({ participant, genres, links, onCloseClick, isLoggedIn }: Props): ReactElement | null => {
     const { areLocationOrDateRangeFiltersSet } = useParticipantsOverviewContext();
 
-    const { id, name, type } = participant;
+    const { name, type } = participant;
 
     const participantSlots = useParticipantSlots(participant.id);
     const participantVenues = useParticipantVenues(participant.id);
 
-    if (
-        areLocationOrDateRangeFiltersSet &&
-        ((hasSlotOrVenue(participant.type) === 'slot' && participantSlots.length === 0) ||
-            (hasSlotOrVenue(participant.type) === 'venue' && participantVenues.length === 0))
-    ) {
+    if (areLocationOrDateRangeFiltersSet && participantSlots.length === 0 && participantVenues.length === 0) {
         return null;
     }
 
@@ -66,15 +59,15 @@ const ParticipantDetails = ({ participant, genres, links, onCloseClick, isLogged
                                 <Badge key={id} label={genreName} backgroundColor="#fcb8b8" />
                             ))}
 
-                            {participantSlots.map(({ slot: { id, begin, maxAttendees }, location: { name } }) => (
+                            {participantSlots.map(({ scheduleEntry: { id, startsAt, maxAttendees }, programLocation: { name } }) => (
                                 <div key={id} className="inline-flex gap-2 rounded-2xl bg-[#b1c32c]/30">
-                                    <Badge label={formatDate(new Date(begin), 'EEEEEE HH:mm')} backgroundColor="#b1c32c" />
+                                    <Badge label={formatDate(new Date(startsAt!), 'EEEEEE HH:mm')} backgroundColor="#b1c32c" />
                                     <Badge label={name} backgroundColor="#ebc9de" />
                                     {isNotEmptyNumber(maxAttendees) && <Badge label="Anmeldung erforderlich" backgroundColor="#b0e4cc" />}
                                 </div>
                             ))}
 
-                            {participantVenues.map(({ dates, venue: { id }, location: { name } }) => (
+                            {participantVenues.map(({ dates, scheduleEntry: { id }, programLocation: { name } }) => (
                                 <div key={id} className="inline-flex gap-2 rounded-2xl bg-[#b1c32c]/30">
                                     {dates.map((date) => {
                                         const formattedDate = formatDate(new Date(date), 'EEEEEE HH:mm');
@@ -98,33 +91,20 @@ const ParticipantDetails = ({ participant, genres, links, onCloseClick, isLogged
 
                 {participantSlots.length === 1 &&
                     participantSlots[0] !== undefined &&
-                    isNotEmptyNumber(participantSlots[0].slot.maxAttendees) && (
+                    isNotEmptyNumber(participantSlots[0].scheduleEntry.maxAttendees) && (
                         <div className="relative mt-1 rounded-md p-2">
                             <AttendeeForm slot={participantSlots[0]} />
                         </div>
                     )}
 
                 {isLoggedIn &&
-                    hasSlotOrVenue(type) === 'slot' &&
                     participantSlots.length === 1 &&
                     participantSlots[0] !== undefined &&
-                    isNotEmptyNumber(participantSlots[0].slot.maxAttendees) && (
+                    isNotEmptyNumber(participantSlots[0].scheduleEntry.maxAttendees) && (
                         <div className="relative mt-1 rounded-md p-2">
-                            <SlotAttendeeData slot={participantSlots[0].slot} />
+                            <SlotAttendeeData scheduleEntry={participantSlots[0].scheduleEntry} />
                         </div>
                     )}
-
-                {isLoggedIn && hasSlotOrVenue(type) === 'slot' && (
-                    <div className="relative mt-1 rounded-md p-2">
-                        <SlotForm participantId={id} />
-                    </div>
-                )}
-
-                {isLoggedIn && hasSlotOrVenue(type) === 'venue' && (
-                    <div className="relative mt-1 rounded-md p-2">
-                        <VenueForm participantId={id} />
-                    </div>
-                )}
 
                 {isLoggedIn && (
                     <div className="relative rounded-md p-2">

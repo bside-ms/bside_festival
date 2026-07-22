@@ -45,8 +45,7 @@ model Participant {
     genres                      ParticipantGenre[]
     type                        Type
     status                      ApplicationStatus  @default(Applied)
-    Slot                        Slot[]
-    Venue                       Venue[]
+    scheduleEntries             ScheduleEntry[]
 }
 
 model ChangeLogEntry {
@@ -69,6 +68,8 @@ model ChangeLogEntry {
 enum ChangeLogTargetType {
     Application
     ProgramEntry
+    ScheduleEntry
+    ProgramLocation
 }
 
 enum ChangeLogAction {
@@ -91,6 +92,13 @@ enum ChangeLogAction {
     ProgramSlotDeleted
     ProgramVenueUpdated
     ProgramVenueDeleted
+    ScheduleEntryCreated
+    ScheduleEntryUpdated
+    ScheduleEntryDeleted
+    ProgramLocationCreated
+    ProgramLocationUpdated
+    ProgramLocationDeactivated
+    ProgramLocationDeleted
 }
 
 model EmailVerificationToken {
@@ -193,38 +201,72 @@ enum ApplicationStatus {
     Canceled
 }
 
-model Location {
-    id            Int     @id @default(autoincrement())
-    name          String  @db.Text
-    address       String? @db.Text
-    latitude      Float?  @db.Float
-    longitude     Float?  @db.Float
-    awarenessInfo String? @db.Text
-    Slot          Slot[]
-    Venue         Venue[]
+model ProgramLocationArea {
+    id               Int               @id @default(autoincrement())
+    name             String            @db.VarChar(255)
+    sortOrder        Int               @default(0)
+    createdAt        DateTime          @default(now())
+    updatedAt        DateTime          @updatedAt
+    programLocations ProgramLocation[]
+
+    @@index([sortOrder])
 }
 
-// Slot is for program that starts at a specific time at the location
-model Slot {
-    id            Int         @id @default(autoincrement())
-    begin         DateTime
-    duration      Int
-    participantId Int
-    participant   Participant @relation(fields: [participantId], references: [id])
-    locationId    Int
-    location      Location    @relation(fields: [locationId], references: [id])
-    maxAttendees  Int?
-    Attendee      Attendee[]
+model ProgramLocation {
+    id                    Int                  @id @default(autoincrement())
+    name                  String               @db.Text
+    programLocationAreaId Int?
+    programLocationArea   ProgramLocationArea? @relation(fields: [programLocationAreaId], references: [id])
+    sortOrder             Int                  @default(0)
+    address               String?              @db.Text
+    latitude              Float?
+    longitude             Float?
+    awarenessInfo         String?              @db.Text
+    isActive              Boolean              @default(true)
+    createdAt             DateTime             @default(now())
+    updatedAt             DateTime             @updatedAt
+    scheduleEntries       ScheduleEntry[]
+
+    @@index([isActive])
+    @@index([sortOrder])
+    @@index([programLocationAreaId])
 }
 
-// Venue is for program that is at the location during the entire festival
-model Venue {
-    id            Int         @id @default(autoincrement())
-    participantId Int
-    participant   Participant @relation(fields: [participantId], references: [id])
-    locationId    Int
-    location      Location    @relation(fields: [locationId], references: [id])
-    dates         String?     @db.Text
+model ScheduleEntry {
+    id                Int                   @id @default(autoincrement())
+    kind              ScheduleEntryKind
+    timeMode          ScheduleEntryTimeMode
+    startsAt          DateTime?
+    endsAt            DateTime?
+    allDayDates       Json?
+    title             String?               @db.Text
+    isBlocking        Boolean               @default(true)
+    isPublic          Boolean               @default(false)
+    maxAttendees      Int?
+    createdAt         DateTime              @default(now())
+    updatedAt         DateTime              @updatedAt
+    participantId     Int?
+    participant       Participant?          @relation(fields: [participantId], references: [id])
+    programLocationId Int
+    programLocation   ProgramLocation       @relation(fields: [programLocationId], references: [id])
+    attendees         Attendee[]
+
+    @@index([participantId])
+    @@index([programLocationId])
+    @@index([startsAt])
+    @@index([endsAt])
+    @@index([kind])
+    @@index([timeMode])
+}
+
+enum ScheduleEntryKind {
+    Participant
+    ScheduleNote
+}
+
+enum ScheduleEntryTimeMode {
+    Timed
+    AllDay
 }
 
 model Volunteer {
@@ -249,10 +291,12 @@ model Volunteer {
 }
 
 model Attendee {
-    id          Int      @id @default(autoincrement())
-    fullName    String   @db.Text
-    mailAddress String   @db.Text
-    attendedAt  DateTime
-    slotId      Int
-    slot        Slot     @relation(fields: [slotId], references: [id])
+    id              Int           @id @default(autoincrement())
+    fullName        String        @db.Text
+    mailAddress     String        @db.Text
+    attendedAt      DateTime
+    scheduleEntryId Int
+    scheduleEntry   ScheduleEntry @relation(fields: [scheduleEntryId], references: [id], onDelete: Cascade)
+
+    @@index([scheduleEntryId])
 }

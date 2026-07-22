@@ -2,16 +2,13 @@ import { useParticipantsOverviewContext } from '@/components/participants/overvi
 import { locationsFilterQueryName } from '@/lib/applications/filterQueryNames';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import useIsMounted from '@/lib/common/hooks/useIsMounted';
-import type { Location } from '@prisma/client';
+import type { SerializableProgramLocation } from '@/typings/SerializableProgramLocation';
 import type { ReactElement } from 'react';
 import { useCallback, useEffect } from 'react';
 
-/**
- * Strips appendices in parens from location names.
- */
-const simplifyLocationName = (locationName: string): string => locationName.replace(/\s\(.+\)$/, '');
+const getLocationGroupName = (location: SerializableProgramLocation): string => location.areaName ?? location.name;
 
-const LocationGroupToggle = ({ locations }: { locations: Array<Location> }): ReactElement | null => {
+const LocationGroupToggle = ({ locations }: { locations: Array<SerializableProgramLocation> }): ReactElement | null => {
     const { filteredLocationIds, toggleFilteredLocationId } = useParticipantsOverviewContext();
 
     const handleClick = useCallback(
@@ -37,19 +34,19 @@ const LocationGroupToggle = ({ locations }: { locations: Array<Location> }): Rea
             }
             onClick={handleClick}
         >
-            {simplifyLocationName(locations[0]!.name)}
+            {getLocationGroupName(locations[0]!)}
         </div>
     );
 };
 
 const LocationIdToggle = ({ locationId }: { locationId: number }): ReactElement | null => {
-    const { filteredLocationIds, toggleFilteredLocationId, allLocations } = useParticipantsOverviewContext();
+    const { filteredLocationIds, toggleFilteredLocationId, programLocations } = useParticipantsOverviewContext();
 
     const handleClick = useCallback(() => toggleFilteredLocationId(locationId), [locationId, toggleFilteredLocationId]);
 
     const isActive = filteredLocationIds.includes(locationId);
 
-    const locationName = allLocations.find(({ id }) => id === locationId)?.name ?? `Ort #${locationId}`;
+    const locationName = programLocations.find(({ id }) => id === locationId)?.name ?? `Ort #${locationId}`;
 
     return (
         <div
@@ -72,12 +69,12 @@ const LocationIdToggle = ({ locationId }: { locationId: number }): ReactElement 
     );
 };
 
-const useLocationGroups = (): Array<Array<Location>> => {
-    const { allLocations } = useParticipantsOverviewContext();
+const useLocationGroups = (): Array<Array<SerializableProgramLocation>> => {
+    const { programLocations } = useParticipantsOverviewContext();
 
-    return allLocations.reduce((locationGroups, location) => {
+    return programLocations.reduce((locationGroups, location) => {
         const foundGroup = locationGroups.find((group) =>
-            group.some(({ name }) => simplifyLocationName(name) === simplifyLocationName(location.name)),
+            group.some((locationItem) => getLocationGroupName(locationItem) === getLocationGroupName(location)),
         );
 
         if (foundGroup === undefined) {
@@ -87,7 +84,7 @@ const useLocationGroups = (): Array<Array<Location>> => {
         }
 
         return locationGroups;
-    }, new Array<Array<Location>>());
+    }, new Array<Array<SerializableProgramLocation>>());
 };
 
 const ParticipantsOverviewLocationFilter = (): ReactElement => {

@@ -23,6 +23,7 @@ interface InternWorkspaceContextData {
     filteredTypes: Array<Type>;
     currentOrganizerUserId: string | null;
     onlyMyOrganizerAssignments: boolean;
+    onlyWithoutScheduleEntry: boolean;
     getGenres: (id: number) => Array<Genre>;
     getLinks: (id: number) => Array<Link>;
     getZipcodes: (id: number) => Array<Zipcode>;
@@ -32,6 +33,7 @@ interface InternWorkspaceContextData {
     toggleFilteredStatus: (status: ApplicationStatus) => void;
     toggleFilteredType: (type: Type) => void;
     toggleOnlyMyOrganizerAssignments: () => void;
+    toggleOnlyWithoutScheduleEntry: () => void;
     toggleStatusGroup: (status: ApplicationStatus) => void;
 }
 
@@ -45,6 +47,7 @@ interface Props extends PropsWithChildren {
     availableOrganizers: Array<KeycloakUser>;
     currentOrganizerUserId: string | null;
     participantGenres: Array<ParticipantGenre>;
+    scheduledParticipantIds: Array<number>;
 }
 
 const initialCollapsedStatuses = new Array<ApplicationStatus>('Confirmed', 'Rejected', 'Canceled');
@@ -58,11 +61,13 @@ const InternWorkspaceContextProvider = ({
     children,
     currentOrganizerUserId,
     participantGenres,
+    scheduledParticipantIds,
 }: Props): ReactElement => {
     const [searchText, setSearchText] = useState<string | null>(null);
     const [filteredTypes, setFilteredTypes] = useState<Array<Type>>([]);
     const [filteredStatuses, setFilteredStatuses] = useState<Array<ApplicationStatus>>([]);
     const [onlyMyOrganizerAssignments, setOnlyMyOrganizerAssignments] = useState(false);
+    const [onlyWithoutScheduleEntry, setOnlyWithoutScheduleEntry] = useState(false);
     const [expandedIds, setExpandedIds] = useState<Array<number>>([]);
     const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<Array<ApplicationStatus>>(initialCollapsedStatuses);
 
@@ -84,6 +89,7 @@ const InternWorkspaceContextProvider = ({
             (application) =>
                 (filteredTypes.length === 0 || filteredTypes.includes(application.type)) &&
                 (filteredStatuses.length === 0 || filteredStatuses.includes(application.status)) &&
+                (!onlyWithoutScheduleEntry || !scheduledParticipantIds.includes(application.id)) &&
                 (!onlyMyOrganizerAssignments ||
                     (currentOrganizerUserId !== null &&
                         application.organizers.some(({ organizerUserId }) => organizerUserId === currentOrganizerUserId))),
@@ -103,7 +109,16 @@ const InternWorkspaceContextProvider = ({
         });
 
         return fuse.search(searchText).map((result) => result.item);
-    }, [applications, currentOrganizerUserId, filteredStatuses, filteredTypes, onlyMyOrganizerAssignments, searchText]);
+    }, [
+        applications,
+        currentOrganizerUserId,
+        filteredStatuses,
+        filteredTypes,
+        onlyMyOrganizerAssignments,
+        onlyWithoutScheduleEntry,
+        scheduledParticipantIds,
+        searchText,
+    ]);
 
     const getGenres = useCallback(
         (id: number) => {
@@ -120,6 +135,7 @@ const InternWorkspaceContextProvider = ({
     const toggleFilteredType = useCallback((type: Type) => setFilteredTypes((types) => xor(types, [type])), []);
     const toggleFilteredStatus = useCallback((status: ApplicationStatus) => setFilteredStatuses((statuses) => xor(statuses, [status])), []);
     const toggleOnlyMyOrganizerAssignments = useCallback(() => setOnlyMyOrganizerAssignments((isActive) => !isActive), []);
+    const toggleOnlyWithoutScheduleEntry = useCallback(() => setOnlyWithoutScheduleEntry((isActive) => !isActive), []);
     const toggleStatusGroup = useCallback(
         (status: ApplicationStatus) => setCollapsedStatusGroups((statuses) => xor(statuses, [status])),
         [],
@@ -138,6 +154,7 @@ const InternWorkspaceContextProvider = ({
                 filteredStatuses,
                 filteredTypes,
                 onlyMyOrganizerAssignments,
+                onlyWithoutScheduleEntry,
                 getGenres,
                 getLinks,
                 getZipcodes,
@@ -147,6 +164,7 @@ const InternWorkspaceContextProvider = ({
                 toggleFilteredStatus,
                 toggleFilteredType,
                 toggleOnlyMyOrganizerAssignments,
+                toggleOnlyWithoutScheduleEntry,
                 toggleStatusGroup,
             }}
         >
