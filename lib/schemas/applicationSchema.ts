@@ -163,6 +163,12 @@ export const createUpdateApplicationParticipantCountSchema = (minimumParticipant
 
 export const updateApplicationParticipantCountSchema = createUpdateApplicationParticipantCountSchema();
 
+export const updateApplicationFeeEurosSchema = z.object({
+    feeEuros: z
+        .union([z.number().int('Bitte gib eine ganze Zahl ein').min(0, 'Gage darf nicht negativ sein'), z.nan(), z.null()])
+        .transform((value) => (typeof value === 'number' && !Number.isNaN(value) ? value : null)),
+});
+
 export const createApplicationSchema = (chosenType: Type) =>
     z
         .object({

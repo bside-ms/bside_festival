@@ -24,6 +24,7 @@ export const changeLogActionLabels: Record<ChangeLogAction, string> = {
     [ChangeLogAction.ApplicationImageReplaced]: 'Bild ersetzt',
     [ChangeLogAction.ApplicationStatusUpdated]: 'Status geändert',
     [ChangeLogAction.ApplicationOrganizersUpdated]: 'Zuständigkeit geändert',
+    [ChangeLogAction.ApplicationFeeUpdated]: 'Gage geändert',
     [ChangeLogAction.ProgramSlotUpdated]: 'Slot geändert (alt)',
     [ChangeLogAction.ProgramSlotDeleted]: 'Slot gelöscht (alt)',
     [ChangeLogAction.ProgramVenueUpdated]: 'Venue geändert (alt)',
@@ -53,6 +54,21 @@ export const formatNullableNumber = (value: number | null | undefined): string =
     }
 
     return value.toString();
+};
+
+const feeEurosFormatter = new Intl.NumberFormat('de-DE', {
+    currency: 'EUR',
+    maximumFractionDigits: 0,
+    minimumFractionDigits: 0,
+    style: 'currency',
+});
+
+export const formatFeeEuros = (value: number | null | undefined): string => {
+    if (value === null || value === undefined) {
+        return 'keine Angabe';
+    }
+
+    return feeEurosFormatter.format(value);
 };
 
 export const formatApplicationStatus = (status: ApplicationStatus): string => statusLabels[status];

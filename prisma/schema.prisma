@@ -35,6 +35,7 @@ model Participant {
     hasMarginalizedParticipants Boolean            @default(false)
     durationPreference          String?            @db.Text
     diversityNotes              String?            @db.Text
+    feeEuros                    Int?
     emailVerified               DateTime?
     verificationTokens          EmailVerificationToken[]
     zipcodes                    Zipcode[]
@@ -88,6 +89,7 @@ enum ChangeLogAction {
     ApplicationImageReplaced
     ApplicationStatusUpdated
     ApplicationOrganizersUpdated
+    ApplicationFeeUpdated
     ProgramSlotUpdated
     ProgramSlotDeleted
     ProgramVenueUpdated

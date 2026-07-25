@@ -38,6 +38,11 @@ A logged-in user who may access personal or sensitive submitted data such as con
 
 The total score used during curation, calculated as the jury score weighted by 1.5 plus the bonus score. It is calculated with full precision and rounded only when displayed. With the current criteria, the score ranges from 0 to 10 (jury 0–7.5 after weighting, plus bonus 0–2.5).
 
+### Gage
+
+The agreed fee in whole euros for one Programmbeitrag (application). It is optional until set and is one value for the act, not per schedule entry — Friday and Saturday placements of the same act share the same Gage.
+_Avoid_: Fee, payment, honorarium (as domain/UI terms)
+
 ### First-Time Participation
 
 Whether an application comes from people who have not participated in a previous B-Side Festival. It is collected on the public application form and editable in the application details view, but no longer affects the curation score.

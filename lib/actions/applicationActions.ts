@@ -7,6 +7,7 @@ import { parseJuryVotes } from '@/lib/applications/curationScoring';
 import {
     formatApplicationStatus,
     formatBoolean,
+    formatFeeEuros,
     formatJuryVotes,
     formatNullableNumber,
     formatNullableText,
@@ -26,6 +27,7 @@ import {
     updateApplicationContactInfoSchema,
     updateApplicationDescriptionSchema,
     updateApplicationDurationPreferenceSchema,
+    updateApplicationFeeEurosSchema,
     updateApplicationJuryVotesSchema,
     updateApplicationMotivationSchema,
     updateApplicationNameSchema,
@@ -597,6 +599,27 @@ const normalizeOrganizerSnapshots = (
     organizers
         .map(({ organizerName, organizerUserId }) => ({ organizerName, organizerUserId }))
         .sort((left, right) => left.organizerUserId.localeCompare(right.organizerUserId));
+
+export const updateApplicationFeeEuros = async (id: number, values: z.infer<typeof updateApplicationFeeEurosSchema>): Promise<void> => {
+    const actor = await requireLoggedInUser();
+    const { feeEuros } = updateApplicationFeeEurosSchema.parse(values);
+
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({
+            select: { feeEuros: true, id: true, name: true },
+            where: { id },
+        });
+        const changes = filterChanges([createChange('feeEuros', 'Gage', application.feeEuros, feeEuros, formatFeeEuros)]);
+
+        if (changes.length === 0) {
+            return;
+        }
+
+        await tx.participant.update({ data: { feeEuros }, where: { id } });
+        await recordApplicationChange(tx, actor, ChangeLogAction.ApplicationFeeUpdated, application, changes);
+    });
+    revalidateApplicationPaths();
+};
 
 export const setApplicationOrganizers = async (
     participantId: number,

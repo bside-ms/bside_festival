@@ -3,6 +3,7 @@
 import ApplicationDetails from '@/components/applications/applicationDetails/ApplicationDetails';
 import ActivityTimeline from '@/components/intern/ActivityTimeline';
 import AddCommentForm from '@/components/intern/AddCommentForm';
+import ContributionFeeEditor from '@/components/intern/ContributionFeeEditor';
 import { useInternWorkspaceContext } from '@/components/intern/InternWorkspaceContext';
 import OrganizerAssignment from '@/components/intern/OrganizerAssignment';
 import StatusTransitionPanel from '@/components/intern/StatusTransitionPanel';
@@ -40,6 +41,8 @@ const ContributionDetails = ({ application, onCloseClick }: Props): ReactElement
                 </div>
 
                 <OrganizerAssignment application={application} />
+
+                <ContributionFeeEditor application={application} />
 
                 <ActivityTimeline comments={application.comments} />
 

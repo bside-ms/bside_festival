@@ -189,6 +189,7 @@ Two contexts using **props directly** (no `useState` for server data):
 - `AllAttendees` — `{ slotId: number, attendees: Array<...> }`
 - Prisma types (`Participant`, `Slot`, `Venue`, `Location`, etc.) — server-only
 - `Participant.hasParticipatedBefore`: `true`/`false` for explicit answers, `null` for legacy — keep visually distinct
+- `Participant.feeEuros`: optional whole-euro Gage on the Beitrag; edited in `/intern` ContributionDetails aside; changelog’d
 - `Participant.juryVotes`: anonymous whole-number votes 0–5 as JSON; scores calculated at read time, not persisted
 - `Comment` entries are immutable; store `authorUserId`, `authorName`, `createdAt`, optional `statusTransition`
 - `ChangeLogEntry`: one entry per user save action; snapshots actor + target name, `changes` with previous/next values
