@@ -5,17 +5,21 @@
 //   - at least one ScheduleEntry (kind Participant) with location + timed start
 //   - feeEuros set
 //
-// Local / Docker:
-//   npm run send-acceptance-mails -- --list
-//   npm run send-acceptance-mails -- --dry-run 683,725
-//   npm run send-acceptance-mails -- 683
+// Live (no Taskfile; service festival-node):
+//   docker compose run --rm --entrypoint npm festival-node run send-acceptance-mails -- --list
+//   docker compose run --rm --entrypoint npm festival-node run send-acceptance-mails -- --dry-run 683,725
+//   docker compose run --rm --entrypoint npm festival-node run send-acceptance-mails -- 683
+//
+// Local (Taskfile / service app):
 //   task send-acceptance-mails -- --list
+//   task send-acceptance-mails -- --dry-run 683,725
 //   task send-acceptance-mails -- 683
 
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient, type ApplicationStatus, type ScheduleEntryTimeMode } from '@prisma/client';
 import { formatInTimeZone } from 'date-fns-tz';
 import { de } from 'date-fns/locale';
+import 'dotenv/config';
 import { createTransport } from 'nodemailer';
 
 const SYSTEM_AUTHOR_NAME = 'System';

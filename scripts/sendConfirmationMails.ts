@@ -1,10 +1,11 @@
 // Send confirmation mails to applicants by participant ID.
 //
-// Local:      npx tsx scripts/sendConfirmationMails.ts 1,2,3
-// Production: docker exec -it <container> npx tsx scripts/sendConfirmationMails.ts 1,2,3
+// Live:  docker compose run --rm --entrypoint npm festival-node run send-confirmation-mails -- 1,2,3
+// Local: task send-confirmation-mails -- 1,2,3
 
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '@prisma/client';
+import 'dotenv/config';
 import { createTransport } from 'nodemailer';
 
 const SYSTEM_AUTHOR_NAME = 'System';
