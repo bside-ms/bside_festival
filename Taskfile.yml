@@ -95,4 +95,9 @@ tasks:
     send-confirmation-mails:
         desc: Send confirmation mails from Docker
         cmds:
-            - docker compose run --rm app npm run send-confirmation-mails
+            - docker compose run --rm app npm run send-confirmation-mails -- {{.CLI_ARGS}}
+
+    send-acceptance-mails:
+        desc: Send acceptance (Zusage) mails from Docker
+        cmds:
+            - docker compose run --rm app npm run send-acceptance-mails -- {{.CLI_ARGS}}

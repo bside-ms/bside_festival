@@ -18,7 +18,8 @@
         "prisma:client:generate": "prisma generate",
         "prettier": "prettier . --check",
         "prettier:fix": "prettier . --write",
-        "send-confirmation-mails": "tsx --env-file .env scripts/sendConfirmationMails.ts"
+        "send-confirmation-mails": "tsx --env-file .env scripts/sendConfirmationMails.ts",
+        "send-acceptance-mails": "tsx --env-file .env scripts/sendAcceptanceMails.ts"
     },
     "dependencies": {
         "@aws-sdk/client-s3": "^3.1014.0",
