@@ -403,7 +403,8 @@ const processParticipant = async (
 
     try {
         const info = await mailer.sendMail({
-            from: '"B-Side Festival" <festival@b-side.ms>',
+            // MAIL_USER is no-reply@; Mailcow rejects From addresses not owned by that user
+            from: '"B-Side Festival" <no-reply@b-side.ms>',
             replyTo: 'festival@b-side.ms',
             to: participant.contactMail,
             subject,
