@@ -101,3 +101,8 @@ tasks:
         desc: Send acceptance (Zusage) mails from Docker
         cmds:
             - docker compose run --rm app npm run send-acceptance-mails -- {{.CLI_ARGS}}
+
+    send-exhibition-acceptance-mails:
+        desc: Send exhibition acceptance (Zusage) mails from Docker
+        cmds:
+            - docker compose run --rm app npm run send-exhibition-acceptance-mails -- {{.CLI_ARGS}}

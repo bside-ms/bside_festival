@@ -21,22 +21,23 @@ Update this file whenever you discover something a future agent would miss witho
 
 All project Node/Prisma/npm **runtime** commands must run inside Docker via `task ...` from `Taskfile.yml`. Host `npm ci` / `prisma generate` are the exception — required so the IDE sees the same deps/types (see Common Gotchas).
 
-| Task                            | Purpose                                                                  |
-| ------------------------------- | ------------------------------------------------------------------------ |
-| `task dev`                      | Start dev server                                                         |
-| `task check`                    | Run ALL: tsc, lint, test, knip, audit, prettier                          |
-| `task tsc`                      | Type-check — run after every change                                      |
-| `task lint`                     | ESLint — run after every change                                          |
-| `task test`                     | Vitest (2 test files, no config found — uses defaults)                   |
-| `task find-unused`              | Knip — find unused files, deps, exports                                  |
-| `task audit`                    | Security audit; fails on high/critical                                   |
-| `task prettier-fix`             | Auto-format everything — run at end of every task                        |
-| `task lint-fix`                 | ESLint with auto-fix                                                     |
-| `task prisma-migrations-dev`    | Create a new migration during development                                |
-| `task prisma-migrations-deploy` | Apply pending migrations in production                                   |
-| `task prisma-generate`          | Regenerate Prisma client after schema changes                            |
-| `task send-confirmation-mails`  | Batch script: status/confirmation mails by participant IDs               |
-| `task send-acceptance-mails`    | Local only: Zusagemails (`--list` / `--dry-run` / send). Live: see below |
+| Task                                    | Purpose                                                                              |
+| --------------------------------------- | ------------------------------------------------------------------------------------ |
+| `task dev`                              | Start dev server                                                                     |
+| `task check`                            | Run ALL: tsc, lint, test, knip, audit, prettier                                      |
+| `task tsc`                              | Type-check — run after every change                                                  |
+| `task lint`                             | ESLint — run after every change                                                      |
+| `task test`                             | Vitest (2 test files, no config found — uses defaults)                               |
+| `task find-unused`                      | Knip — find unused files, deps, exports                                              |
+| `task audit`                            | Security audit; fails on high/critical                                               |
+| `task prettier-fix`                     | Auto-format everything — run at end of every task                                    |
+| `task lint-fix`                         | ESLint with auto-fix                                                                 |
+| `task prisma-migrations-dev`            | Create a new migration during development                                            |
+| `task prisma-migrations-deploy`         | Apply pending migrations in production                                               |
+| `task prisma-generate`                  | Regenerate Prisma client after schema changes                                        |
+| `task send-confirmation-mails`          | Batch script: status/confirmation mails by participant IDs                           |
+| `task send-acceptance-mails`            | Local only: Act-Zusagemails (`--list` / `--dry-run` / send). Live: see below         |
+| `task send-exhibition-acceptance-mails` | Local only: Ausstellung-Zusagemails (`--list` / `--dry-run` / send). Live: see below |
 
 **Live deploy host** (no Taskfile; Compose service `festival-node`). Env comes from Compose — scripts use `dotenv/config` only as optional fallback, not `tsx --env-file`:
 
@@ -44,6 +45,9 @@ All project Node/Prisma/npm **runtime** commands must run inside Docker via `tas
 docker compose run --rm --entrypoint npm festival-node run send-acceptance-mails -- --list
 docker compose run --rm --entrypoint npm festival-node run send-acceptance-mails -- --dry-run 683
 docker compose run --rm --entrypoint npm festival-node run send-acceptance-mails -- 683
+docker compose run --rm --entrypoint npm festival-node run send-exhibition-acceptance-mails -- --list
+docker compose run --rm --entrypoint npm festival-node run send-exhibition-acceptance-mails -- --dry-run 595,624
+docker compose run --rm --entrypoint npm festival-node run send-exhibition-acceptance-mails -- 595,624,655,751,760,651
 ```
 
 | `task npm -- run <script>` | Run any less common npm script inside Docker |
@@ -99,6 +103,7 @@ Single workflow in `.github/workflows/docker-image.yml`:
 - `sendApplicationConfirmationMail` — sent on new application
 - `sendSlotAttendConfirmationMail` — sent when someone registers for a slot
 - `scripts/sendAcceptanceMails.ts` — batch Zusagemails for slotted acts with Gage; sets status to `WaitingForConfirmation` + status comment
+- `scripts/sendExhibitionAcceptanceMails.ts` — same for Ausstellungen (exhibition wording, Rückmeldefrist 10.08.2026); skip already-notified RICH (762)
 
 ### UI
 

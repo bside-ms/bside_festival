@@ -19,7 +19,8 @@
         "prettier": "prettier . --check",
         "prettier:fix": "prettier . --write",
         "send-confirmation-mails": "tsx scripts/sendConfirmationMails.ts",
-        "send-acceptance-mails": "tsx scripts/sendAcceptanceMails.ts"
+        "send-acceptance-mails": "tsx scripts/sendAcceptanceMails.ts",
+        "send-exhibition-acceptance-mails": "tsx scripts/sendExhibitionAcceptanceMails.ts"
     },
     "dependencies": {
         "@aws-sdk/client-s3": "^3.1014.0",
