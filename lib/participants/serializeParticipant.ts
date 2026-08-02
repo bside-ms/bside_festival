@@ -13,4 +13,19 @@ const serializeParticipant = (application: ParticipantWithInternRelations): Seri
     updatedAt: application.updatedAt.toString(),
 });
 
+/** Slim payload for the Programmbeiträge list — only fields the list UI/search needs. */
+export const serializeListParticipant = (application: ParticipantWithInternRelations): SerializableParticipant =>
+    ({
+        id: application.id,
+        name: application.name,
+        type: application.type,
+        status: application.status,
+        appliedAt: application.appliedAt?.toString() ?? null,
+        updatedAt: application.updatedAt.toString(),
+        description: application.description,
+        contactName: application.contactName,
+        organizers: application.organizers.map(({ organizerName, organizerUserId }) => ({ organizerName, organizerUserId })),
+        comments: [],
+    }) as unknown as SerializableParticipant;
+
 export default serializeParticipant;

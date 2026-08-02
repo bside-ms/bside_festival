@@ -8,6 +8,7 @@ import { createChange } from '@/lib/changeLog/createChange';
 import { recordChangeLogEntry } from '@/lib/changeLog/recordChangeLogEntry';
 import isNotEmptyNumber from '@/lib/common/helper/isNotEmptyNumber';
 import prismaClient from '@/lib/common/prismaClient';
+import { loggedAction } from '@/lib/errorLog/loggedAction';
 import sendSlotAttendConfirmationMail from '@/lib/mail/sendSlotAttendConfirmationMail';
 import { festivalAllDayDates, festivalEndsAt, festivalStartsAt, scheduleStepMinutes } from '@/lib/schedule/festivalWindow';
 import {
@@ -284,146 +285,165 @@ const recordScheduleEntryChange = async (
     });
 };
 
-export const createScheduleEntry = async (input: ScheduleEntryInput): Promise<void> => {
-    const actor = await requireLoggedInUser();
-    const data = validateScheduleEntryInput(input);
+export const createScheduleEntry = loggedAction(
+    'createScheduleEntry',
+    async (input: ScheduleEntryInput): Promise<void> => {
+        const actor = await requireLoggedInUser();
+        const data = validateScheduleEntryInput(input);
 
-    await prismaClient.$transaction(async (tx) => {
-        const programLocation = await tx.programLocation.findUniqueOrThrow({ where: { id: data.programLocationId } });
-        const participant =
-            data.participantId === null
-                ? null
-                : await tx.participant.findUniqueOrThrow({ select: { name: true }, where: { id: data.participantId } });
+        await prismaClient.$transaction(async (tx) => {
+            const programLocation = await tx.programLocation.findUniqueOrThrow({ where: { id: data.programLocationId } });
+            const participant =
+                data.participantId === null
+                    ? null
+                    : await tx.participant.findUniqueOrThrow({ select: { name: true }, where: { id: data.participantId } });
 
-        await assertNoBlockingOverlap(tx, data);
+            await assertNoBlockingOverlap(tx, data);
 
-        const scheduleEntry = await tx.scheduleEntry.create({
-            data: {
-                ...data,
-                allDayDates: data.allDayDates,
-            },
-            include: { participant: { select: { name: true } } },
+            const scheduleEntry = await tx.scheduleEntry.create({
+                data: {
+                    ...data,
+                    allDayDates: data.allDayDates,
+                },
+                include: { participant: { select: { name: true } } },
+            });
+            await recordScheduleEntryChange(
+                tx,
+                actor,
+                ChangeLogAction.ScheduleEntryCreated,
+                scheduleEntry,
+                createScheduleEntryChanges(null, data, null, participant?.name ?? null, null, programLocation.name),
+            );
         });
-        await recordScheduleEntryChange(
-            tx,
-            actor,
-            ChangeLogAction.ScheduleEntryCreated,
-            scheduleEntry,
-            createScheduleEntryChanges(null, data, null, participant?.name ?? null, null, programLocation.name),
-        );
-    });
-    revalidateProgramPaths();
-};
+        revalidateProgramPaths();
+    },
+    (input) => ({
+        targetType: 'ScheduleEntry',
+        context: { kind: input.kind, participantId: input.participantId ?? null, programLocationId: input.programLocationId },
+    }),
+);
 
-export const updateScheduleEntry = async (id: number, input: ScheduleEntryInput): Promise<void> => {
-    const actor = await requireLoggedInUser();
-    const data = validateScheduleEntryInput(input);
+export const updateScheduleEntry = loggedAction(
+    'updateScheduleEntry',
+    async (id: number, input: ScheduleEntryInput): Promise<void> => {
+        const actor = await requireLoggedInUser();
+        const data = validateScheduleEntryInput(input);
 
-    await prismaClient.$transaction(async (tx) => {
-        const previousEntry = await tx.scheduleEntry.findUniqueOrThrow({
-            include: { participant: { select: { name: true } } },
-            where: { id },
+        await prismaClient.$transaction(async (tx) => {
+            const previousEntry = await tx.scheduleEntry.findUniqueOrThrow({
+                include: { participant: { select: { name: true } } },
+                where: { id },
+            });
+            const programLocation = await tx.programLocation.findUniqueOrThrow({ where: { id: data.programLocationId } });
+            const previousProgramLocation = await tx.programLocation.findUniqueOrThrow({ where: { id: previousEntry.programLocationId } });
+            const participant =
+                data.participantId === null
+                    ? null
+                    : await tx.participant.findUniqueOrThrow({ select: { name: true }, where: { id: data.participantId } });
+
+            await assertNoBlockingOverlap(tx, data, id);
+
+            const changes = createScheduleEntryChanges(
+                previousEntry,
+                data,
+                previousEntry.participant?.name ?? null,
+                participant?.name ?? null,
+                previousProgramLocation.name,
+                programLocation.name,
+            );
+
+            if (changes.length === 0) {
+                return;
+            }
+
+            const scheduleEntry = await tx.scheduleEntry.update({
+                data: {
+                    ...data,
+                    allDayDates: data.allDayDates,
+                },
+                include: { participant: { select: { name: true } } },
+                where: { id },
+            });
+            await recordScheduleEntryChange(tx, actor, ChangeLogAction.ScheduleEntryUpdated, scheduleEntry, changes);
         });
-        const programLocation = await tx.programLocation.findUniqueOrThrow({ where: { id: data.programLocationId } });
-        const previousProgramLocation = await tx.programLocation.findUniqueOrThrow({ where: { id: previousEntry.programLocationId } });
-        const participant =
-            data.participantId === null
-                ? null
-                : await tx.participant.findUniqueOrThrow({ select: { name: true }, where: { id: data.participantId } });
+        revalidateProgramPaths();
+    },
+    (id, input) => ({
+        targetType: 'ScheduleEntry',
+        targetId: id,
+        context: { kind: input.kind, programLocationId: input.programLocationId },
+    }),
+);
 
-        await assertNoBlockingOverlap(tx, data, id);
+export const deleteScheduleEntry = loggedAction(
+    'deleteScheduleEntry',
+    async (id: number): Promise<void> => {
+        const actor = await requireLoggedInUser();
 
-        const changes = createScheduleEntryChanges(
-            previousEntry,
-            data,
-            previousEntry.participant?.name ?? null,
-            participant?.name ?? null,
-            previousProgramLocation.name,
-            programLocation.name,
-        );
+        await prismaClient.$transaction(async (tx) => {
+            const previousEntry = await tx.scheduleEntry.findUniqueOrThrow({
+                include: { participant: { select: { name: true } } },
+                where: { id },
+            });
+            const previousProgramLocation = await tx.programLocation.findUniqueOrThrow({ where: { id: previousEntry.programLocationId } });
 
-        if (changes.length === 0) {
-            return;
+            await tx.scheduleEntry.delete({ where: { id } });
+            await recordScheduleEntryChange(
+                tx,
+                actor,
+                ChangeLogAction.ScheduleEntryDeleted,
+                previousEntry,
+                createScheduleEntryChanges(
+                    previousEntry,
+                    null,
+                    previousEntry.participant?.name ?? null,
+                    null,
+                    previousProgramLocation.name,
+                    null,
+                ),
+            );
+        });
+        revalidateProgramPaths();
+    },
+    (id) => ({ targetType: 'ScheduleEntry', targetId: id }),
+);
+
+export const attendScheduleEntry = loggedAction(
+    'attendScheduleEntry',
+    async (scheduleEntryId: number, fullName: string, mailAddress: string): Promise<AttendScheduleEntryError | null> => {
+        const scheduleEntry = await prismaClient.scheduleEntry.findUnique({
+            include: { participant: true, programLocation: true, attendees: true },
+            where: { id: scheduleEntryId },
+        });
+
+        if (
+            scheduleEntry === null ||
+            scheduleEntry.kind !== ScheduleEntryKind.Participant ||
+            scheduleEntry.timeMode !== ScheduleEntryTimeMode.Timed ||
+            scheduleEntry.maxAttendees === null ||
+            scheduleEntry.participant === null ||
+            !['Confirmed', 'Canceled'].includes(scheduleEntry.participant.status)
+        ) {
+            return { errorCode: unavailableRegistrationErrorCode };
         }
 
-        const scheduleEntry = await tx.scheduleEntry.update({
-            data: {
-                ...data,
-                allDayDates: data.allDayDates,
-            },
-            include: { participant: { select: { name: true } } },
-            where: { id },
-        });
-        await recordScheduleEntryChange(tx, actor, ChangeLogAction.ScheduleEntryUpdated, scheduleEntry, changes);
-    });
-    revalidateProgramPaths();
-};
+        if (scheduleEntry.attendees.some((attendee) => attendee.fullName === fullName && attendee.mailAddress === mailAddress)) {
+            return { errorCode: duplicateRegistrationErrorCode };
+        }
 
-export const deleteScheduleEntry = async (id: number): Promise<void> => {
-    const actor = await requireLoggedInUser();
+        if (scheduleEntry.attendees.length >= scheduleEntry.maxAttendees) {
+            return { errorCode: fullRegistrationErrorCode };
+        }
 
-    await prismaClient.$transaction(async (tx) => {
-        const previousEntry = await tx.scheduleEntry.findUniqueOrThrow({
-            include: { participant: { select: { name: true } } },
-            where: { id },
-        });
-        const previousProgramLocation = await tx.programLocation.findUniqueOrThrow({ where: { id: previousEntry.programLocationId } });
+        await prismaClient.attendee.create({ data: { scheduleEntryId, fullName, mailAddress, attendedAt: new Date() } });
 
-        await tx.scheduleEntry.delete({ where: { id } });
-        await recordScheduleEntryChange(
-            tx,
-            actor,
-            ChangeLogAction.ScheduleEntryDeleted,
-            previousEntry,
-            createScheduleEntryChanges(
-                previousEntry,
-                null,
-                previousEntry.participant?.name ?? null,
-                null,
-                previousProgramLocation.name,
-                null,
-            ),
-        );
-    });
-    revalidateProgramPaths();
-};
+        if (isNotEmptyNumber(scheduleEntry.maxAttendees)) {
+            sendSlotAttendConfirmationMail(scheduleEntry.participant, scheduleEntry, scheduleEntry.programLocation, fullName, mailAddress);
+        }
 
-export const attendScheduleEntry = async (
-    scheduleEntryId: number,
-    fullName: string,
-    mailAddress: string,
-): Promise<AttendScheduleEntryError | null> => {
-    const scheduleEntry = await prismaClient.scheduleEntry.findUnique({
-        include: { participant: true, programLocation: true, attendees: true },
-        where: { id: scheduleEntryId },
-    });
+        revalidateProgramPaths();
 
-    if (
-        scheduleEntry === null ||
-        scheduleEntry.kind !== ScheduleEntryKind.Participant ||
-        scheduleEntry.timeMode !== ScheduleEntryTimeMode.Timed ||
-        scheduleEntry.maxAttendees === null ||
-        scheduleEntry.participant === null ||
-        !['Confirmed', 'Canceled'].includes(scheduleEntry.participant.status)
-    ) {
-        return { errorCode: unavailableRegistrationErrorCode };
-    }
-
-    if (scheduleEntry.attendees.some((attendee) => attendee.fullName === fullName && attendee.mailAddress === mailAddress)) {
-        return { errorCode: duplicateRegistrationErrorCode };
-    }
-
-    if (scheduleEntry.attendees.length >= scheduleEntry.maxAttendees) {
-        return { errorCode: fullRegistrationErrorCode };
-    }
-
-    await prismaClient.attendee.create({ data: { scheduleEntryId, fullName, mailAddress, attendedAt: new Date() } });
-
-    if (isNotEmptyNumber(scheduleEntry.maxAttendees)) {
-        sendSlotAttendConfirmationMail(scheduleEntry.participant, scheduleEntry, scheduleEntry.programLocation, fullName, mailAddress);
-    }
-
-    revalidateProgramPaths();
-
-    return null;
-};
+        return null;
+    },
+    (scheduleEntryId) => ({ targetType: 'ScheduleEntry', targetId: scheduleEntryId }),
+);

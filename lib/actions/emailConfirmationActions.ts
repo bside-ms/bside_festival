@@ -1,6 +1,7 @@
 'use server';
 
 import prismaClient from '@/lib/common/prismaClient';
+import { recordActionError } from '@/lib/errorLog/recordActionError';
 import sendApplicationConfirmationMail from '@/lib/mail/sendApplicationConfirmationMail';
 import { Participant } from '@prisma/client';
 
@@ -23,8 +24,12 @@ export async function createVerification(participant: Participant) {
             token: newVerification.token,
         };
     } catch (error) {
-        console.error('Verification Error:', error);
-        // We throw or return an error object to be caught by the Client Component
+        await recordActionError({
+            source: 'createVerification',
+            error,
+            targetType: 'Application',
+            targetId: participant.id,
+        });
         return {
             message: error instanceof Error ? error.message : 'An unexpected error occurred.',
         };
@@ -60,8 +65,11 @@ export async function checkVerification(token: string) {
 
         return { success: true };
     } catch (error) {
-        console.error('Verification Error:', error);
-        // We throw or return an error object to be caught by the Client Component
+        await recordActionError({
+            source: 'checkVerification',
+            error,
+            context: { hasToken: Boolean(token) },
+        });
         return {
             success: false,
             message: error instanceof Error ? error.message : 'An unexpected error occurred.',

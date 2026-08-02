@@ -7,6 +7,7 @@ import type { ChangeLogChange } from '@/lib/changeLog/changeLogTypes';
 import { createChange } from '@/lib/changeLog/createChange';
 import { recordChangeLogEntry } from '@/lib/changeLog/recordChangeLogEntry';
 import prismaClient from '@/lib/common/prismaClient';
+import { loggedAction } from '@/lib/errorLog/loggedAction';
 import { ChangeLogAction, ChangeLogTargetType, type Prisma, type ProgramLocation } from '@prisma/client';
 
 export interface ProgramLocationInput {
@@ -91,68 +92,80 @@ const recordProgramLocationChange = async (
     });
 };
 
-export const createProgramLocation = async (input: ProgramLocationInput): Promise<void> => {
-    const actor = await requireLoggedInUser();
-    const data = validateProgramLocationInput(input);
+export const createProgramLocation = loggedAction(
+    'createProgramLocation',
+    async (input: ProgramLocationInput): Promise<void> => {
+        const actor = await requireLoggedInUser();
+        const data = validateProgramLocationInput(input);
 
-    await prismaClient.$transaction(async (tx) => {
-        const programLocation = await tx.programLocation.create({ data });
-        await recordProgramLocationChange(
-            tx,
-            actor,
-            ChangeLogAction.ProgramLocationCreated,
-            programLocation,
-            createProgramLocationChanges(null, data),
-        );
-    });
-    revalidateProgramPaths();
-};
-
-export const updateProgramLocation = async (id: number, input: ProgramLocationInput): Promise<void> => {
-    const actor = await requireLoggedInUser();
-    const data = validateProgramLocationInput(input);
-
-    await prismaClient.$transaction(async (tx) => {
-        const previousLocation = await tx.programLocation.findUniqueOrThrow({ where: { id } });
-        const changes = createProgramLocationChanges(previousLocation, data);
-
-        if (changes.length === 0) {
-            return;
-        }
-
-        const programLocation = await tx.programLocation.update({ data, where: { id } });
-        await recordProgramLocationChange(tx, actor, ChangeLogAction.ProgramLocationUpdated, programLocation, changes);
-    });
-    revalidateProgramPaths();
-};
-
-export const deleteUnusedProgramLocation = async (id: number): Promise<void> => {
-    const actor = await requireLoggedInUser();
-
-    await prismaClient.$transaction(async (tx) => {
-        const previousLocation = await tx.programLocation.findUniqueOrThrow({ where: { id } });
-        const scheduleEntryCount = await tx.scheduleEntry.count({ where: { programLocationId: id } });
-
-        if (scheduleEntryCount > 0) {
-            const programLocation = await tx.programLocation.update({ data: { isActive: false }, where: { id } });
+        await prismaClient.$transaction(async (tx) => {
+            const programLocation = await tx.programLocation.create({ data });
             await recordProgramLocationChange(
                 tx,
                 actor,
-                ChangeLogAction.ProgramLocationDeactivated,
+                ChangeLogAction.ProgramLocationCreated,
                 programLocation,
-                filterChanges([createChange('isActive', 'Aktiv', previousLocation.isActive, false, formatBoolean)]),
+                createProgramLocationChanges(null, data),
             );
-            return;
-        }
+        });
+        revalidateProgramPaths();
+    },
+    (input) => ({ targetType: 'ProgramLocation', context: { name: input.name } }),
+);
 
-        await tx.programLocation.delete({ where: { id } });
-        await recordProgramLocationChange(
-            tx,
-            actor,
-            ChangeLogAction.ProgramLocationDeleted,
-            previousLocation,
-            createProgramLocationChanges(previousLocation, null),
-        );
-    });
-    revalidateProgramPaths();
-};
+export const updateProgramLocation = loggedAction(
+    'updateProgramLocation',
+    async (id: number, input: ProgramLocationInput): Promise<void> => {
+        const actor = await requireLoggedInUser();
+        const data = validateProgramLocationInput(input);
+
+        await prismaClient.$transaction(async (tx) => {
+            const previousLocation = await tx.programLocation.findUniqueOrThrow({ where: { id } });
+            const changes = createProgramLocationChanges(previousLocation, data);
+
+            if (changes.length === 0) {
+                return;
+            }
+
+            const programLocation = await tx.programLocation.update({ data, where: { id } });
+            await recordProgramLocationChange(tx, actor, ChangeLogAction.ProgramLocationUpdated, programLocation, changes);
+        });
+        revalidateProgramPaths();
+    },
+    (id, input) => ({ targetType: 'ProgramLocation', targetId: id, context: { name: input.name } }),
+);
+
+export const deleteUnusedProgramLocation = loggedAction(
+    'deleteUnusedProgramLocation',
+    async (id: number): Promise<void> => {
+        const actor = await requireLoggedInUser();
+
+        await prismaClient.$transaction(async (tx) => {
+            const previousLocation = await tx.programLocation.findUniqueOrThrow({ where: { id } });
+            const scheduleEntryCount = await tx.scheduleEntry.count({ where: { programLocationId: id } });
+
+            if (scheduleEntryCount > 0) {
+                const programLocation = await tx.programLocation.update({ data: { isActive: false }, where: { id } });
+                await recordProgramLocationChange(
+                    tx,
+                    actor,
+                    ChangeLogAction.ProgramLocationDeactivated,
+                    programLocation,
+                    filterChanges([createChange('isActive', 'Aktiv', previousLocation.isActive, false, formatBoolean)]),
+                );
+                return;
+            }
+
+            await tx.programLocation.delete({ where: { id } });
+            await recordProgramLocationChange(
+                tx,
+                actor,
+                ChangeLogAction.ProgramLocationDeleted,
+                previousLocation,
+                createProgramLocationChanges(previousLocation, null),
+            );
+        });
+        revalidateProgramPaths();
+    },
+    (id) => ({ targetType: 'ProgramLocation', targetId: id }),
+);

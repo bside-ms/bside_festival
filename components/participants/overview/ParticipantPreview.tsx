@@ -97,7 +97,7 @@ const ParticipantPreview = ({ participant, genres, isLoggedIn, onClick }: Props)
 
                     {isLoggedIn && (
                         <NextLink
-                            href={`/intern?expand=${id}`}
+                            href={`/intern/${id}`}
                             className="mb-2 inline-flex rounded-full border border-black bg-white px-3 py-1 text-xs font-bold no-underline hover:bg-yellow-50"
                             onClick={handleInternLinkClick}
                         >

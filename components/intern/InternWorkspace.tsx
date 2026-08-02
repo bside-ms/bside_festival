@@ -85,7 +85,7 @@ const InternWorkspace = (): ReactElement => {
                 <label className="block">
                     <span className="text-sm font-bold">Suche</span>
                     <input
-                        value={searchText ?? ''}
+                        value={searchText}
                         className="mt-1 w-full rounded border border-black bg-white p-3 outline-0"
                         placeholder="Name, Beschreibung, Kontakt"
                         onChange={handleSearchTextChange}

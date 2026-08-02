@@ -1,14 +1,15 @@
 'use client';
 
-import { ApplicationNameForm } from '@/components/applications/applicationCuration/ApplicationNameAndDescriptionForm';
-import ContributionDetails from '@/components/intern/ContributionDetails';
 import { useInternWorkspaceContext } from '@/components/intern/InternWorkspaceContext';
 import StatusTransitionPanel from '@/components/intern/StatusTransitionPanel';
 import Badge from '@/components/participants/details/Badge';
-import cn from '@/lib/common/helper/cn';
+import formatDate from '@/lib/common/helper/formatDate';
+import { withSearchParams } from '@/lib/intern/internFilterSearchParams';
 import typeColors from '@/lib/participants/typeColors';
 import typeLabels from '@/lib/participants/typeLabels';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import type { MouseEvent, ReactElement } from 'react';
 import { useCallback } from 'react';
 
@@ -21,7 +22,7 @@ const formatAppliedAt = (appliedAt: string | null): string => {
         return 'ohne Datum';
     }
 
-    return new Date(appliedAt).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit' });
+    return formatDate(appliedAt, 'dd.MM.yy');
 };
 
 const OrganizerInitials = ({ name }: { name: string }): ReactElement => (
@@ -36,18 +37,18 @@ const OrganizerInitials = ({ name }: { name: string }): ReactElement => (
 );
 
 const ContributionCard = ({ application }: Props): ReactElement => {
-    const { expandedIds, getGenres, toggleExpanded } = useInternWorkspaceContext();
-    const isExpanded = expandedIds.includes(application.id);
+    const searchParams = useSearchParams();
+    const { getGenres } = useInternWorkspaceContext();
     const genres = getGenres(application.id);
     const visibleOrganizers = application.organizers.slice(0, 3);
     const hiddenOrganizerCount = application.organizers.length - visibleOrganizers.length;
-    const handleToggle = useCallback(() => toggleExpanded(application.id), [application.id, toggleExpanded]);
+    const detailHref = withSearchParams(`/intern/${application.id}`, searchParams);
     const handleInteractiveClick = useCallback((event: MouseEvent<HTMLDivElement>) => event.stopPropagation(), []);
 
     return (
-        <article id={`intern-application-${application.id}`} className="overflow-hidden rounded-md border border-black bg-white shadow-sm">
-            <div className="grid cursor-pointer gap-3 p-3 lg:grid-cols-[minmax(0,1fr)_auto]" onClick={handleToggle}>
-                <div className="min-w-0 space-y-2">
+        <article className="overflow-hidden rounded-md border border-black bg-white shadow-sm">
+            <div className="grid gap-3 p-3 lg:grid-cols-[minmax(0,1fr)_auto]">
+                <Link href={detailHref} className="min-w-0 space-y-2 text-inherit no-underline">
                     <div className="flex flex-wrap items-center gap-2">
                         <Badge label={typeLabels[application.type]} backgroundColor={typeColors[application.type]} />
                         {genres.map(({ id, name }) => (
@@ -55,13 +56,12 @@ const ContributionCard = ({ application }: Props): ReactElement => {
                         ))}
                     </div>
 
-                    <ApplicationNameForm application={application} />
+                    <div className="font-display text-2xl leading-tight uppercase">{application.name}</div>
 
                     <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600">
                         <span>Beworben am {formatAppliedAt(application.appliedAt)}</span>
-                        <span>{application.comments.length} Kommentare</span>
                     </div>
-                </div>
+                </Link>
 
                 <div className="flex flex-wrap items-center gap-3 lg:justify-end">
                     <div className="flex -space-x-2">
@@ -79,11 +79,11 @@ const ContributionCard = ({ application }: Props): ReactElement => {
                         <StatusTransitionPanel currentStatus={application.status} participantId={application.id} />
                     </div>
 
-                    <span className={cn('text-xl transition-transform', isExpanded && 'rotate-180')}>⌄</span>
+                    <Link href={detailHref} className="text-xl text-inherit no-underline" aria-label={`Details zu ${application.name}`}>
+                        ›
+                    </Link>
                 </div>
             </div>
-
-            {isExpanded && <ContributionDetails application={application} onCloseClick={handleToggle} />}
         </article>
     );
 };

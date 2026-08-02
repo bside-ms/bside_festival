@@ -1,10 +1,11 @@
 'use client';
 
-import { useInternWorkspaceContext } from '@/components/intern/InternWorkspaceContext';
 import { setApplicationOrganizers } from '@/lib/actions/applicationActions';
+import { getOrganizerAssignmentOptions } from '@/lib/actions/organizerActions';
+import type { KeycloakUser } from '@/lib/keycloak/getKeycloakUsers';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { ReactElement } from 'react';
-import { useCallback, useMemo, useTransition } from 'react';
+import { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import Select, { components, type GroupBase, type GroupHeadingProps, type MultiValue } from 'react-select';
 
 interface Props {
@@ -45,22 +46,49 @@ const organizerSelectComponents = {
 };
 
 const OrganizerAssignment = ({ application }: Props): ReactElement => {
-    const { allApplications, availableOrganizers } = useInternWorkspaceContext();
     const [isPending, startTransition] = useTransition();
-    const responsibleOrganizerIds = useMemo(
-        () => new Set(allApplications.flatMap(({ organizers }) => organizers.map(({ organizerUserId }) => organizerUserId))),
-        [allApplications],
-    );
+    const [availableOrganizers, setAvailableOrganizers] = useState<Array<KeycloakUser> | null>(null);
+    const [responsibleOrganizerIds, setResponsibleOrganizerIds] = useState<Array<string>>([]);
+    const [hasLoadError, setHasLoadError] = useState(false);
+
+    useEffect(() => {
+        let isCancelled = false;
+
+        void getOrganizerAssignmentOptions()
+            .then(({ availableOrganizers: organizers, responsibleOrganizerIds: assignedIds }) => {
+                if (isCancelled) {
+                    return;
+                }
+
+                setAvailableOrganizers(organizers);
+                setResponsibleOrganizerIds(assignedIds);
+            })
+            .catch(() => {
+                if (!isCancelled) {
+                    setHasLoadError(true);
+                }
+            });
+
+        return () => {
+            isCancelled = true;
+        };
+    }, []);
+
+    const responsibleOrganizerIdSet = useMemo(() => new Set(responsibleOrganizerIds), [responsibleOrganizerIds]);
     const organizerOptions = useMemo<Array<OrganizerOptionGroup>>(() => {
+        if (availableOrganizers === null) {
+            return [];
+        }
+
         const allOptions = availableOrganizers.map(({ id, name }) => ({ label: name, value: id }));
-        const responsibleOptions = allOptions.filter(({ value }) => responsibleOrganizerIds.has(value));
-        const otherOptions = allOptions.filter(({ value }) => !responsibleOrganizerIds.has(value));
+        const responsibleOptions = allOptions.filter(({ value }) => responsibleOrganizerIdSet.has(value));
+        const otherOptions = allOptions.filter(({ value }) => !responsibleOrganizerIdSet.has(value));
 
         return [
             ...(responsibleOptions.length > 0 ? [{ label: '', options: responsibleOptions }] : []),
             ...(otherOptions.length > 0 ? [{ label: responsibleOptions.length > 0 ? 'separator' : '', options: otherOptions }] : []),
         ];
-    }, [availableOrganizers, responsibleOrganizerIds]);
+    }, [availableOrganizers, responsibleOrganizerIdSet]);
     const selectedOptions = useMemo<Array<OrganizerOption>>(
         () =>
             application.organizers.map(({ organizerName, organizerUserId }) => ({
@@ -82,11 +110,32 @@ const OrganizerAssignment = ({ application }: Props): ReactElement => {
         [application.id],
     );
 
+    if (hasLoadError) {
+        return (
+            <div className="space-y-2">
+                <div className="font-display text-xl">Zuständigkeit</div>
+                <div className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+                    Personen konnten nicht geladen werden.
+                </div>
+            </div>
+        );
+    }
+
+    if (availableOrganizers === null) {
+        return (
+            <div className="space-y-2">
+                <div className="font-display text-xl">Zuständigkeit</div>
+                <div className="rounded border border-black/20 bg-white px-3 py-2 text-sm text-black/50">Personen werden geladen…</div>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-2">
             <div className="font-display text-xl">Zuständigkeit</div>
 
             <Select<OrganizerOption, true, OrganizerOptionGroup>
+                instanceId="contribution-organizer-assignment"
                 value={selectedOptions}
                 isDisabled={isPending || organizerOptions.length === 0}
                 isMulti={true}

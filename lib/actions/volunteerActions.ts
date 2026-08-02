@@ -1,6 +1,7 @@
 'use server';
 
 import prismaClient from '@/lib/common/prismaClient';
+import { loggedAction } from '@/lib/errorLog/loggedAction';
 import { revalidatePath } from 'next/cache';
 
 export interface AddVolunteerData {
@@ -22,7 +23,11 @@ export interface AddVolunteerData {
     additionalInfo: string;
 }
 
-export const addVolunteer = async (data: AddVolunteerData): Promise<void> => {
-    await prismaClient.volunteer.create({ data });
-    revalidatePath('/mithelfen/uebersicht');
-};
+export const addVolunteer = loggedAction(
+    'addVolunteer',
+    async (data: AddVolunteerData): Promise<void> => {
+        await prismaClient.volunteer.create({ data });
+        revalidatePath('/mithelfen/uebersicht');
+    },
+    (data) => ({ targetType: 'Volunteer' as const, context: { mailAddress: data.mailAddress } }),
+);

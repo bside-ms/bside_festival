@@ -1222,7 +1222,7 @@ const SlotplanWorkspace = ({
                                                     <div
                                                         key={entry.id}
                                                         className={cn(
-                                                            'group cursor-inherit relative w-full rounded border border-black px-2 py-1 text-left text-xs',
+                                                            'group cursor-inherit relative z-10 w-full rounded border border-black px-2 py-1 text-left text-xs hover:z-30',
                                                             isExpanded && 'z-30',
                                                         )}
                                                         style={{ backgroundColor: getEntryColor(entry, participants) }}
@@ -1374,7 +1374,7 @@ const SlotplanWorkspace = ({
                                             <div
                                                 key={entry.id}
                                                 className={cn(
-                                                    'group cursor-inherit relative z-10 rounded border border-black text-xs shadow',
+                                                    'group cursor-inherit relative z-10 rounded border border-black text-xs shadow hover:z-30',
                                                     isExpanded && 'z-30',
                                                 )}
                                                 style={{

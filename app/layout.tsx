@@ -1,6 +1,7 @@
 import Footer from '@/components/common/Footer';
 import PageHeader from '@/components/common/PageHeader';
 import type { Metadata } from 'next';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -28,12 +29,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="de">
             <head />
             <body className="flex min-h-screen flex-col font-sans">
-                <PageHeader />
+                <NuqsAdapter>
+                    <PageHeader />
 
-                <div className="gradient-background f26-background">{children}</div>
+                    <div className="gradient-background f26-background">{children}</div>
 
-                <div className="grow" />
-                <Footer />
+                    <div className="grow" />
+                    <Footer />
+                </NuqsAdapter>
             </body>
         </html>
     );

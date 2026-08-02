@@ -121,7 +121,7 @@ app/
   api/auth/[...nextauth]/  ← Keep — externally called by Keycloak
   api/health/              ← Keep — external health probe
   bewerbungen/             ← Application forms (public) + redirects to /intern
-  intern/                  ← Unified internal workspace (Programmbeiträge + curation)
+  intern/                  ← Programmbeiträge list; `[id]` detail; kuration/; slotplan/
   programm/                ← Program overview (gated by `isProgramPublished`; logged-in preview + notice until then)
   mithelfen/               ← Volunteer forms (public)
   aenderungslog/           ← Change Log (data-privacy users only)
@@ -134,6 +134,7 @@ lib/
     slotActions.ts, venueActions.ts, volunteerActions.ts
   applications/            ← Curation scoring, cookies, filter query names
   changeLog/               ← Change Log formatting, detection, persistence
+  errorLog/                ← Persist failed server-action errors (`ActionErrorLogEntry`)
   common/                  ← Prisma client, helper fns (cn, formatDate, etc.), hooks
   crypto/                  ← Hashing helpers
   keycloak/                ← Keycloak user lookup
@@ -176,13 +177,16 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 ```
 
 - Always `'use server'` at top
+- Wrap mutations with `loggedAction` / `recordActionError` so failures land in `ActionErrorLogEntry` (+ `console.error`); no admin UI yet — query DB/`docker logs`
 - Call `revalidatePath()` for every route showing mutated data
 - Client components import and call actions directly — no `fetch`
 - Wrap action calls in `try/catch` in client components
 - Admin application edits use focused actions in `applicationActions.ts` + Zod schemas from `applicationSchema.ts`
 - `/intern` is the unified internal workspace. `/bewerbungen/uebersicht` and `/bewerbungen/kuration` redirect there.
+- `/intern/[id]` is the shareable Programmbeitrag detail (full edit: status, organizers, fee, comments). List filters stay in the URL and are carried to/from detail. Keycloak users load client-side after paint (cached ~5 min server-side).
 - `/intern/kuration` stores anonymous `juryVotes`, calculates jury/bonus/final score at read time via `lib/applications/curationScoring.ts`
 - `/aenderungslog` records successful user save actions with previous/next values; visible only to data-privacy users
+- Failed mutations are persisted to `ActionErrorLogEntry` (source, message, stack, optional actor/target/context); no Intern UI yet
 
 ---
 
@@ -190,10 +194,10 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 
 Two contexts using **props directly** (no `useState` for server data):
 
-| Context                       | Used in                            | Contains                                                                                        |
-| ----------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `InternWorkspaceContext`      | `/intern`                          | Filter state (type, status, search, assigned to me), expanded card IDs, collapsed status groups |
-| `ParticipantsOverviewContext` | `/programm`, `/programm/timetable` | Filter state (text, types, locations, date range), pinned IDs                                   |
+| Context                       | Used in                            | Contains                                                                                    |
+| ----------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------- |
+| `InternWorkspaceContext`      | `/intern`                          | Filter state in URL via `nuqs`; genres for list badges; no Keycloak/links/zipcodes/comments |
+| `ParticipantsOverviewContext` | `/programm`, `/programm/timetable` | Filter state (text, types, locations, date range), pinned IDs                               |
 
 **Do not add `useState` for server-provided data** — the server page passes fresh props after each action and revalidation.
 
@@ -205,7 +209,7 @@ Two contexts using **props directly** (no `useState` for server data):
 - `AllAttendees` — `{ slotId: number, attendees: Array<...> }`
 - Prisma types (`Participant`, `Slot`, `Venue`, `Location`, etc.) — server-only
 - `Participant.hasParticipatedBefore`: `true`/`false` for explicit answers, `null` for legacy — keep visually distinct
-- `Participant.feeEuros`: optional whole-euro Gage on the Beitrag; edited in `/intern` ContributionDetails aside; changelog’d
+- `Participant.feeEuros`: optional whole-euro Gage on the Beitrag; edited in `/intern/[id]` ContributionDetails aside; changelog’d
 - `Participant.juryVotes`: anonymous whole-number votes 0–5 as JSON; scores calculated at read time, not persisted
 - `Comment` entries are immutable; store `authorUserId`, `authorName`, `createdAt`, optional `statusTransition`
 - `ChangeLogEntry`: one entry per user save action; snapshots actor + target name, `changes` with previous/next values

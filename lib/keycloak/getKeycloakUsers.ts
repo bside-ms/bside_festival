@@ -1,5 +1,6 @@
 import prismaClient from '@/lib/common/prismaClient';
 import { uniqBy } from 'lodash';
+import { unstable_cache } from 'next/cache';
 
 export interface KeycloakUser {
     id: string;
@@ -48,7 +49,7 @@ const getFirstName = ({ firstName }: KeycloakAdminUser): string | null => {
     return name.length > 0 ? name : null;
 };
 
-const getKeycloakUsers = async (): Promise<Array<KeycloakUser>> => {
+const fetchKeycloakUsers = async (): Promise<Array<KeycloakUser>> => {
     const issuerUrl = getIssuerUrl();
     const clientId = process.env.KEYCLOAK_CLIENT_ID;
     const clientSecret = process.env.KEYCLOAK_CLIENT_SECRET;
@@ -114,5 +115,7 @@ const getKeycloakUsers = async (): Promise<Array<KeycloakUser>> => {
         return getFallbackUsers();
     }
 };
+
+const getKeycloakUsers = unstable_cache(fetchKeycloakUsers, ['keycloak-users'], { revalidate: 300 });
 
 export default getKeycloakUsers;

@@ -1,7 +1,7 @@
 import { revalidatePath } from 'next/cache';
 
 export const revalidateProgramPaths = (): void => {
-    revalidatePath('/intern');
+    revalidatePath('/intern', 'layout');
     revalidatePath('/intern/kuration');
     revalidatePath('/intern/slotplan');
     revalidatePath('/bewerbungen/uebersicht');
