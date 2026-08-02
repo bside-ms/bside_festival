@@ -122,7 +122,7 @@ app/
   api/health/              ← Keep — external health probe
   bewerbungen/             ← Application forms (public) + redirects to /intern
   intern/                  ← Unified internal workspace (Programmbeiträge + curation)
-  programm/                ← Program overview (public)
+  programm/                ← Program overview (gated by `isProgramPublished`; logged-in preview + notice until then)
   mithelfen/               ← Volunteer forms (public)
   aenderungslog/           ← Change Log (data-privacy users only)
   awareness/               ← Awareness info pages (public)
@@ -249,6 +249,7 @@ Map to Prisma `Type` enum. `/bewerbungen/[type]` uses `generateStaticParams` to 
 
 ## Common Gotchas
 
+- **Program publish gate** — `lib/participants/isProgramPublished.ts` is `false` until go-live. Guests hitting `/programm` redirect to `/`; logged-in users see a yellow internal-only notice. Flip the constant to `true` to open the public program. `/programm/timetable` stays login-only regardless.
 - **Docker and host use different `node_modules`.** Local Compose mounts named volume `app_node_modules` over `/app/node_modules`, so `task`/container installs and `prisma generate` do not update host `./node_modules` (what Cursor/TS uses). After lockfile or Prisma schema changes, sync the host for the IDE: `npm ci` then `npm run prisma:client:generate` (dummy `DATABASE_URL` is fine). Do not remove the named volume — native deps like `sharp` need Linux builds in the container. Production is unaffected (Dockerfile generates the client in the image).
 - **`.next/` cache can hold stale type references** after deleting routes. If `tsc` reports missing modules in `.next/types/validator.ts`, delete `.next/` and re-run.
 - **`'use client'` is not required in every client component** — components imported into a `'use client'` file inherit client context. Only add at the boundary.

@@ -12,6 +12,7 @@ import isLoggedIn from '@/lib/next-auth/isLoggedIn';
 import { dataPrivacyGroup } from '@/lib/next-auth/KeycloakGroups';
 import getAllAttendees from '@/lib/participants/getAllAttendees';
 import getAllParticipants from '@/lib/participants/getAllParticipants';
+import isProgramPublished from '@/lib/participants/isProgramPublished';
 import serializeParticipant from '@/lib/participants/serializeParticipant';
 import getAllProgramLocations from '@/lib/schedule/getAllProgramLocations';
 import getAllScheduleEntries from '@/lib/schedule/getAllScheduleEntries';
@@ -21,6 +22,7 @@ import type { SerializableProgramLocation } from '@/typings/SerializableProgramL
 import type { SerializableScheduleEntry } from '@/typings/SerializableScheduleEntry';
 import type { ParticipantLabel, Link as PrismaLink } from '@prisma/client';
 import { isAfter, isEqual } from 'date-fns';
+import { redirect } from 'next/navigation';
 import { ReactElement } from 'react';
 
 interface Props {
@@ -86,6 +88,10 @@ async function getData(): Promise<Props> {
 export default async (props: { searchParams: Promise<Record<string, string | string[]>> }): Promise<ReactElement> => {
     const loggedIn = await isLoggedIn();
 
+    if (!isProgramPublished && !loggedIn) {
+        redirect('/');
+    }
+
     const searchParams = await props.searchParams;
     const initialDateRangeFilter = searchParams[dateRangeFilterQueryName];
     const initialTypesFilter = searchParams[typesFilterQueryName];
@@ -103,6 +109,15 @@ export default async (props: { searchParams: Promise<Record<string, string | str
     return (
         <div className="relative mx-auto min-h-screen w-full max-w-7xl pt-5 pb-3">
             <div className="text-center font-display text-6xl uppercase">Programm</div>
+
+            {!isProgramPublished && (
+                <div className="mx-auto mt-4 max-w-xl rounded-xl border-2 border-black bg-[#f0ee0a] p-4 text-center text-sm text-balance">
+                    <div className="font-black">Nur intern sichtbar</div>
+                    <div className="mt-1">
+                        Das Programm ist noch nicht veröffentlicht und aktuell nur für eingeloggte Team-Mitglieder einsehbar.
+                    </div>
+                </div>
+            )}
 
             <ParticipantsOverviewContextProvider
                 participants={participants}
