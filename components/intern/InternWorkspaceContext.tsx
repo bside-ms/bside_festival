@@ -2,10 +2,10 @@
 
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import { internFilterParsers, internFilterUrlOptions } from '@/lib/intern/internFilterSearchParams';
+import matchesParticipantSearch from '@/lib/participants/matchesParticipantSearch';
 import statusOrder from '@/lib/participants/status/statusOrder';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { ApplicationStatus, Genre, ParticipantGenre, Type } from '@prisma/client';
-import Fuse from 'fuse.js';
 import { xor } from 'lodash';
 import { useQueryStates } from 'nuqs';
 import type { Dispatch, PropsWithChildren, ReactElement, SetStateAction } from 'react';
@@ -74,16 +74,7 @@ const InternWorkspaceContextProvider = ({
             return filteredByChips;
         }
 
-        const fuse = new Fuse(filteredByChips, {
-            findAllMatches: true,
-            includeMatches: true,
-            includeScore: true,
-            isCaseSensitive: false,
-            keys: ['name', 'description', 'contactName'],
-            shouldSort: true,
-        });
-
-        return fuse.search(searchText).map((result) => result.item);
+        return filteredByChips.filter((application) => matchesParticipantSearch(application, searchText));
     }, [
         applications,
         currentOrganizerUserId,

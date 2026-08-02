@@ -6,6 +6,7 @@ import formatDate from '@/lib/common/helper/formatDate';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import useEffectOnMount from '@/lib/common/hooks/useEffectOnMount';
 import isValidType from '@/lib/participants/isValidType';
+import matchesParticipantSearch from '@/lib/participants/matchesParticipantSearch';
 import AllAttendees from '@/typings/AllAttendees';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { SerializableProgramLocation } from '@/typings/SerializableProgramLocation';
@@ -20,7 +21,6 @@ import {
     type Type,
 } from '@prisma/client';
 import { addHours, endOfHour, isAfter, isBefore, isSameMinute, startOfHour, subHours } from 'date-fns';
-import Fuse from 'fuse.js';
 import { first, last, uniq, xor } from 'lodash';
 import { createContext, PropsWithChildren, ReactElement, useCallback, useContext, useMemo, useState } from 'react';
 
@@ -137,16 +137,7 @@ export const ParticipantsOverviewContextProvider = ({
             return participantsFilteredByType;
         }
 
-        const fuse = new Fuse(participantsFilteredByType, {
-            keys: ['name'],
-            shouldSort: true,
-            includeScore: true,
-            includeMatches: true,
-            isCaseSensitive: false,
-            findAllMatches: true,
-        });
-
-        return fuse.search(filteredText).map((result) => result.item);
+        return participantsFilteredByType.filter((participant) => matchesParticipantSearch(participant, filteredText));
     }, [filteredText, participants, filteredTypes.length]);
 
     const toggleFilteredType = useCallback((type: Type) => {

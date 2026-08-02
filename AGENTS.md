@@ -109,7 +109,7 @@ Single workflow in `.github/workflows/docker-image.yml`:
 
 - **Tailwind CSS v4** via `@tailwindcss/postcss` plugin
 - **React Hook Form** with `FormProvider` pattern in all forms
-- **Fuse.js** for fuzzy search in overview contexts
+- Case-insensitive substring search on name + contactName in `/intern` and `/programm`, with light fuzzy (1–2 edits) only when a name/contact token shares a strong prefix
 - Font Awesome + React Icons for icons
 
 ---
