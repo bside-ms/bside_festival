@@ -12,7 +12,13 @@ const StatusBadge = ({ status }: Props): ReactElement => {
     const colors = statusColors[status];
 
     return (
-        <span className={cn('inline-flex rounded-full border px-2 py-0.5 text-xs font-bold', colors.badge, colors.border, colors.text)}>
+        <span
+            className={cn(
+                'inline-block max-w-full truncate rounded border border-black/20 px-1.5 py-0.5 text-xs font-bold',
+                colors.badge,
+                colors.text,
+            )}
+        >
             {statusLabels[status]}
         </span>
     );

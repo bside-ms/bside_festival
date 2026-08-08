@@ -5,6 +5,8 @@ import isLoggedIn from '@/lib/next-auth/isLoggedIn';
 import { dataPrivacyGroup } from '@/lib/next-auth/KeycloakGroups';
 import getParticipantById from '@/lib/participants/getParticipantById';
 import serializeParticipant from '@/lib/participants/serializeParticipant';
+import getAllProgramLocations from '@/lib/schedule/getAllProgramLocations';
+import getScheduleEntriesByParticipantId from '@/lib/schedule/getScheduleEntriesByParticipantId';
 import { notFound, redirect } from 'next/navigation';
 import type { ReactElement } from 'react';
 
@@ -24,11 +26,13 @@ export default async ({ params }: Props): Promise<ReactElement> => {
     }
 
     const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
-    const [participant, participantGenreRows, links, zipcodes] = await Promise.all([
+    const [participant, participantGenreRows, links, zipcodes, scheduleEntries, programLocations] = await Promise.all([
         getParticipantById(participantId, isInDataPrivacyGroup),
         prismaClient.participantGenre.findMany({ where: { participantId } }),
         prismaClient.link.findMany({ where: { participantId } }),
         prismaClient.zipcode.findMany({ where: { participantId } }),
+        getScheduleEntriesByParticipantId(participantId),
+        getAllProgramLocations(),
     ]);
 
     if (participant === null) {
@@ -46,7 +50,14 @@ export default async ({ params }: Props): Promise<ReactElement> => {
 
     return (
         <div className="relative mx-auto min-h-screen w-full max-w-7xl px-2 pt-5 pb-3">
-            <ContributionDetailPage application={application} genres={genres} links={links} zipcodes={zipcodes} />
+            <ContributionDetailPage
+                application={application}
+                genres={genres}
+                links={links}
+                programLocations={programLocations}
+                scheduleEntries={scheduleEntries}
+                zipcodes={zipcodes}
+            />
         </div>
     );
 };

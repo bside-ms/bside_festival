@@ -1,26 +1,38 @@
 'use client';
 
+import ContributionTable from '@/components/intern/ContributionTable';
 import { statusOrder, useInternWorkspaceContext } from '@/components/intern/InternWorkspaceContext';
-import StatusGroup from '@/components/intern/StatusGroup';
 import cn from '@/lib/common/helper/cn';
+import statusColors from '@/lib/participants/status/statusColors';
 import statusLabels from '@/lib/participants/status/statusLabels';
+import typeColors from '@/lib/participants/typeColors';
 import typeLabels from '@/lib/participants/typeLabels';
 import type { ApplicationStatus, Type } from '@prisma/client';
-import { groupBy } from 'lodash';
-import type { ChangeEvent, ReactElement } from 'react';
-import { useCallback, useMemo } from 'react';
+import type { ChangeEvent, CSSProperties, ReactElement, ReactNode } from 'react';
+import { useCallback } from 'react';
 
 const allTypes = Object.keys(typeLabels) as Array<Type>;
 
+const baseChipClassName = (isActive: boolean, disabled = false): string =>
+    cn(
+        'cursor-pointer rounded border px-2 py-0.5 text-[11px] leading-tight font-bold transition-colors',
+        disabled && 'cursor-not-allowed opacity-50',
+        isActive ? 'ring-1 ring-black' : 'opacity-70 hover:opacity-100',
+    );
+
 const FilterToggle = <T extends string>({
+    className,
     isActive,
     label,
     onToggle,
+    style,
     value,
 }: {
+    className?: string;
     isActive: boolean;
     label: string;
     onToggle: (value: T) => void;
+    style?: CSSProperties;
     value: T;
 }): ReactElement => {
     const handleClick = useCallback(() => onToggle(value), [onToggle, value]);
@@ -28,16 +40,21 @@ const FilterToggle = <T extends string>({
     return (
         <button
             type="button"
-            className={cn(
-                'cursor-pointer rounded-full border px-3 py-1 text-xs font-bold transition-colors',
-                isActive ? 'border-black bg-black text-white' : 'border-black/20 bg-white text-black hover:border-black',
-            )}
+            className={cn(baseChipClassName(isActive), className, isActive ? 'border-black' : 'border-black/25 hover:border-black')}
+            style={style}
             onClick={handleClick}
         >
             {label}
         </button>
     );
 };
+
+const FilterRow = ({ label, children }: { children: ReactNode; label: string }): ReactElement => (
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <span className="w-14 shrink-0 text-[11px] font-bold tracking-wide text-black/50 uppercase">{label}</span>
+        <div className="flex min-w-0 flex-1 flex-wrap gap-1">{children}</div>
+    </div>
+);
 
 const InternWorkspace = (): ReactElement => {
     const {
@@ -56,7 +73,6 @@ const InternWorkspace = (): ReactElement => {
         toggleOnlyWithoutScheduleEntry,
     } = useInternWorkspaceContext();
 
-    const groupedApplications = useMemo(() => groupBy(filteredApplications, ({ status }) => status), [filteredApplications]);
     const applicationAmount =
         filteredApplications.length === allApplications.length
             ? allApplications.length.toString()
@@ -73,87 +89,77 @@ const InternWorkspace = (): ReactElement => {
     const handleOnlyWithoutScheduleEntryToggle = useCallback(() => toggleOnlyWithoutScheduleEntry(), [toggleOnlyWithoutScheduleEntry]);
 
     return (
-        <div className="space-y-5">
-            <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+        <div className="space-y-4">
+            <div className="flex flex-wrap items-end justify-between gap-2">
                 <div>
-                    <h1 className="font-display text-5xl leading-none uppercase">Programmbeiträge</h1>
+                    <h1 className="font-display text-4xl leading-none uppercase md:text-5xl">Programmbeiträge</h1>
                     <div className="mt-1 text-sm text-black/60">{applicationAmount} Beiträge</div>
                 </div>
             </div>
 
-            <div className="rounded-md border border-black bg-white/80 p-4 shadow-lg backdrop-blur-2xl">
-                <label className="block">
-                    <span className="text-sm font-bold">Suche</span>
+            <div className="space-y-2 rounded-md border border-black bg-white/80 p-3 shadow-lg backdrop-blur-2xl">
+                <div className="flex flex-wrap items-center gap-1.5">
                     <input
                         value={searchText}
-                        className="mt-1 w-full rounded border border-black bg-white p-3 outline-0"
-                        placeholder="Name, Beschreibung, Kontakt"
+                        className="w-44 max-w-full rounded border border-black bg-white px-2 py-0.5 text-[11px] outline-0"
+                        placeholder="Suche…"
+                        aria-label="Suche"
                         onChange={handleSearchTextChange}
                     />
-                </label>
-
-                <div className="mt-4">
-                    <div className="mb-2 text-sm font-bold">Planung</div>
-                    <div className="flex flex-wrap gap-2">
-                        <button
-                            type="button"
-                            disabled={currentOrganizerUserId === null}
-                            className={cn(
-                                'cursor-pointer rounded-full border px-3 py-1 text-xs font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-50',
-                                onlyMyOrganizerAssignments
-                                    ? 'border-black bg-black text-white'
-                                    : 'border-black/20 bg-white text-black hover:border-black',
-                            )}
-                            onClick={handleOnlyMyOrganizerAssignmentsToggle}
-                        >
-                            Mir zugewiesen
-                        </button>
-                        <button
-                            type="button"
-                            className={cn(
-                                'cursor-pointer rounded-full border px-3 py-1 text-xs font-bold transition-colors',
-                                onlyWithoutScheduleEntry
-                                    ? 'border-black bg-black text-white'
-                                    : 'border-black/20 bg-white text-black hover:border-black',
-                            )}
-                            onClick={handleOnlyWithoutScheduleEntryToggle}
-                        >
-                            Nicht im Slotplan
-                        </button>
-                    </div>
+                    <button
+                        type="button"
+                        disabled={currentOrganizerUserId === null}
+                        className={cn(
+                            baseChipClassName(onlyMyOrganizerAssignments, currentOrganizerUserId === null),
+                            'bg-violet-100',
+                            onlyMyOrganizerAssignments ? 'border-black' : 'border-black/25 hover:border-black',
+                        )}
+                        onClick={handleOnlyMyOrganizerAssignmentsToggle}
+                    >
+                        Mir zugewiesen
+                    </button>
+                    <button
+                        type="button"
+                        className={cn(
+                            baseChipClassName(onlyWithoutScheduleEntry),
+                            'bg-amber-100',
+                            onlyWithoutScheduleEntry ? 'border-black' : 'border-black/25 hover:border-black',
+                        )}
+                        onClick={handleOnlyWithoutScheduleEntryToggle}
+                    >
+                        Nicht im Slotplan
+                    </button>
                 </div>
 
-                <div className="mt-4 grid gap-4 lg:grid-cols-2">
-                    <div>
-                        <div className="mb-2 text-sm font-bold">Typ</div>
-                        <div className="flex flex-wrap gap-2">
-                            {allTypes.map((type) => (
-                                <FilterToggle
-                                    key={type}
-                                    isActive={filteredTypes.includes(type)}
-                                    label={typeLabels[type]}
-                                    onToggle={toggleFilteredType}
-                                    value={type}
-                                />
-                            ))}
-                        </div>
-                    </div>
+                <FilterRow label="Typ">
+                    {allTypes.map((type) => (
+                        <FilterToggle
+                            key={type}
+                            isActive={filteredTypes.includes(type)}
+                            label={typeLabels[type]}
+                            style={{ backgroundColor: typeColors[type] }}
+                            onToggle={toggleFilteredType}
+                            value={type}
+                        />
+                    ))}
+                </FilterRow>
 
-                    <div>
-                        <div className="mb-2 text-sm font-bold">Status</div>
-                        <div className="flex flex-wrap gap-2">
-                            {statusOrder.map((status) => (
-                                <FilterToggle<ApplicationStatus>
-                                    key={status}
-                                    isActive={filteredStatuses.includes(status)}
-                                    label={statusLabels[status]}
-                                    onToggle={toggleFilteredStatus}
-                                    value={status}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                </div>
+                <FilterRow label="Status">
+                    {statusOrder.map((status) => {
+                        const colors = statusColors[status];
+
+                        return (
+                            <FilterToggle<ApplicationStatus>
+                                key={status}
+                                className={cn(colors.badge, colors.border, colors.text)}
+                                isActive={filteredStatuses.includes(status)}
+                                label={statusLabels[status]}
+                                onToggle={toggleFilteredStatus}
+                                value={status}
+                            />
+                        );
+                    })}
+                </FilterRow>
             </div>
 
             {filteredApplications.length === 0 ? (
@@ -161,15 +167,7 @@ const InternWorkspace = (): ReactElement => {
                     Keine passenden Programmbeiträge gefunden.
                 </div>
             ) : (
-                statusOrder
-                    .filter((status) => {
-                        const applications = groupedApplications[status];
-                        return applications !== undefined && applications.length > 0;
-                    })
-                    .map((status) => {
-                        const applications = groupedApplications[status]!;
-                        return <StatusGroup key={status} applications={applications} status={status} />;
-                    })
+                <ContributionTable />
             )}
         </div>
     );

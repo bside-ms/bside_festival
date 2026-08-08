@@ -4,9 +4,12 @@ import ApplicationDetails from '@/components/applications/applicationDetails/App
 import ActivityTimeline from '@/components/intern/ActivityTimeline';
 import AddCommentForm from '@/components/intern/AddCommentForm';
 import ContributionFeeEditor from '@/components/intern/ContributionFeeEditor';
+import ContributionScheduleSection from '@/components/intern/ContributionScheduleSection';
 import OrganizerAssignment from '@/components/intern/OrganizerAssignment';
 import StatusTransitionPanel from '@/components/intern/StatusTransitionPanel';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
+import type { SerializableProgramLocation } from '@/typings/SerializableProgramLocation';
+import type { SerializableScheduleEntry } from '@/typings/SerializableScheduleEntry';
 import type { Genre, Link, Zipcode } from '@prisma/client';
 import type { ReactElement } from 'react';
 
@@ -14,12 +17,14 @@ interface Props {
     application: SerializableParticipant;
     genres: Array<Genre>;
     links: Array<Link>;
+    programLocations: Array<SerializableProgramLocation>;
+    scheduleEntries: Array<SerializableScheduleEntry>;
     zipcodes: Array<Zipcode>;
 }
 
 const noopClose = (): void => undefined;
 
-const ContributionDetails = ({ application, genres, links, zipcodes }: Props): ReactElement => (
+const ContributionDetails = ({ application, genres, links, programLocations, scheduleEntries, zipcodes }: Props): ReactElement => (
     <div className="grid gap-4 bg-white p-3 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="min-w-0">
             <ApplicationDetails
@@ -44,6 +49,12 @@ const ContributionDetails = ({ application, genres, links, zipcodes }: Props): R
             <OrganizerAssignment application={application} />
 
             <ContributionFeeEditor application={application} />
+
+            <ContributionScheduleSection
+                participantId={application.id}
+                programLocations={programLocations}
+                scheduleEntries={scheduleEntries}
+            />
 
             <ActivityTimeline comments={application.comments} />
 

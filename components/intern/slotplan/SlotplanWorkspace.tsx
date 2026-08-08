@@ -6,6 +6,14 @@ import { createProgramLocation, deleteUnusedProgramLocation, updateProgramLocati
 import { createScheduleEntry, deleteScheduleEntry, updateScheduleEntry } from '@/lib/actions/scheduleEntryActions';
 import cn from '@/lib/common/helper/cn';
 import formatDate from '@/lib/common/helper/formatDate';
+import {
+    buildSlotplanDetailHref,
+    parseSlotplanAreaFilter,
+    serializeSlotplanAreaFilter,
+    slotplanFilterParsers,
+    slotplanFilterUrlOptions,
+    type SlotplanAreaFilter,
+} from '@/lib/intern/slotplanSearchParams';
 import statusLabels from '@/lib/participants/status/statusLabels';
 import typeColors from '@/lib/participants/typeColors';
 import typeLabels from '@/lib/participants/typeLabels';
@@ -15,9 +23,13 @@ import type { SerializableProgramLocation } from '@/typings/SerializableProgramL
 import type { SerializableProgramLocationArea } from '@/typings/SerializableProgramLocationArea';
 import type { SerializableScheduleEntry } from '@/typings/SerializableScheduleEntry';
 import { autoUpdate, flip, offset, shift, size, useDismiss, useFloating, useInteractions } from '@floating-ui/react';
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ScheduleEntryKind, ScheduleEntryTimeMode, type Genre, type ParticipantGenre } from '@prisma/client';
 import { addMinutes, differenceInMinutes, isAfter, isBefore } from 'date-fns';
 import { range, sortBy } from 'lodash';
+import Link from 'next/link';
+import { useQueryStates } from 'nuqs';
 import type { ChangeEvent, ReactElement } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { createPortal } from 'react-dom';
@@ -254,7 +266,7 @@ const ScheduleEntryForm = ({
                 </div>
                 <button
                     type="button"
-                    className="cursor-pointer rounded border border-black px-3 py-1 text-sm font-bold hover:bg-black/5"
+                    className="cursor-pointer rounded border border-black px-3 py-1 text-sm font-bold hover:bg-gray-100"
                     onClick={onClose}
                 >
                     Schließen
@@ -411,7 +423,7 @@ const ScheduleEntryForm = ({
                             <button
                                 type="button"
                                 disabled={isPending}
-                                className="cursor-pointer rounded border border-red-800 px-4 py-2 font-bold text-red-800 hover:bg-red-800/5 disabled:cursor-not-allowed disabled:opacity-50"
+                                className="cursor-pointer rounded border border-red-800 px-4 py-2 font-bold text-red-800 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
                                 onClick={handleDeleteClick}
                             >
                                 Löschen
@@ -486,7 +498,7 @@ const MoveEntryForm = ({
                 <div className="font-display text-2xl">Eintrag verschieben</div>
                 <button
                     type="button"
-                    className="cursor-pointer rounded border border-black px-3 py-1 text-sm font-bold hover:bg-black/5"
+                    className="cursor-pointer rounded border border-black px-3 py-1 text-sm font-bold hover:bg-gray-100"
                     onClick={onClose}
                 >
                     Schließen
@@ -749,7 +761,7 @@ const ProgramLocationForm = ({
                 <div className="font-display text-2xl">{location === null ? 'Programmort hinzufügen' : 'Programmort bearbeiten'}</div>
                 <button
                     type="button"
-                    className="cursor-pointer rounded border border-black px-3 py-1 text-sm font-bold hover:bg-black/5"
+                    className="cursor-pointer rounded border border-black px-3 py-1 text-sm font-bold hover:bg-gray-100"
                     onClick={onClose}
                 >
                     Schließen
@@ -841,8 +853,26 @@ const SlotplanWorkspace = ({
     scheduleEntries,
 }: Props): ReactElement => {
     const [activeTab, setActiveTab] = useState<'locations' | 'planner'>('planner');
-    const [activeAreaFilter, setActiveAreaFilter] = useState<number | 'unassigned' | 'all'>(
-        () => programLocationAreas.find(({ name }) => name === 'B-Side')?.id ?? 'all',
+    const [slotplanFilters, setSlotplanFilters] = useQueryStates(slotplanFilterParsers, slotplanFilterUrlOptions);
+    const activeDayLabel = slotplanFilters.day;
+    const parsedAreaFilter = parseSlotplanAreaFilter(slotplanFilters.area);
+    const activeAreaFilter: SlotplanAreaFilter =
+        parsedAreaFilter === 'all' || parsedAreaFilter === 'unassigned' || programLocationAreas.some(({ id }) => id === parsedAreaFilter)
+            ? parsedAreaFilter
+            : 'all';
+
+    const setActiveDayLabel = useCallback(
+        (day: string) => {
+            void setSlotplanFilters({ day });
+        },
+        [setSlotplanFilters],
+    );
+
+    const setActiveAreaFilter = useCallback(
+        (area: SlotplanAreaFilter) => {
+            void setSlotplanFilters({ area: serializeSlotplanAreaFilter(area) });
+        },
+        [setSlotplanFilters],
     );
 
     useEffect(() => {
@@ -850,7 +880,6 @@ const SlotplanWorkspace = ({
             setActiveTab('locations');
         }
     }, []);
-    const [activeDayLabel, setActiveDayLabel] = useState(festivalDayViews[0]!.label);
     const [draftEntry, setDraftEntry] = useState<DraftEntry | null>(null);
     const [editedLocation, setEditedLocation] = useState<SerializableProgramLocation | null | undefined>(undefined);
     const [expandedEntryId, setExpandedEntryId] = useState<number | null>(null);
@@ -994,7 +1023,7 @@ const SlotplanWorkspace = ({
     );
 
     const handleEntryClick = useCallback(
-        (entry: SerializableScheduleEntry, event: React.MouseEvent, mode: 'edit' | 'move') => {
+        (entry: SerializableScheduleEntry, event: React.MouseEvent) => {
             const startsAt = entry.startsAt === null ? activeDayView.startsAt : new Date(entry.startsAt);
             setDraftEntry({
                 entry,
@@ -1002,7 +1031,7 @@ const SlotplanWorkspace = ({
                 startsAt,
                 anchorRect: event.currentTarget.getBoundingClientRect(),
                 contextTimeMode: entry.timeMode,
-                mode,
+                mode: 'move',
             });
         },
         [activeDayView.startsAt],
@@ -1052,7 +1081,7 @@ const SlotplanWorkspace = ({
                         type="button"
                         className={cn(
                             'cursor-pointer rounded border border-black px-2 py-1 text-sm font-bold md:px-3 md:py-2 md:text-base',
-                            activeTab === 'planner' ? 'bg-black text-white hover:bg-gray-800' : 'bg-white hover:bg-black/5',
+                            activeTab === 'planner' ? 'bg-black text-white hover:bg-gray-800' : 'bg-white hover:bg-gray-100',
                         )}
                         onClick={() => setActiveTab('planner')}
                     >
@@ -1062,7 +1091,7 @@ const SlotplanWorkspace = ({
                         type="button"
                         className={cn(
                             'cursor-pointer rounded border border-black px-2 py-1 text-sm font-bold md:px-3 md:py-2 md:text-base',
-                            activeTab === 'locations' ? 'bg-black text-white hover:bg-gray-800' : 'bg-white hover:bg-black/5',
+                            activeTab === 'locations' ? 'bg-black text-white hover:bg-gray-800' : 'bg-white hover:bg-gray-100',
                         )}
                         onClick={() => setActiveTab('locations')}
                     >
@@ -1083,7 +1112,7 @@ const SlotplanWorkspace = ({
                                         'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold md:px-3 md:py-1 md:text-sm',
                                         activeDayLabel === dayView.label
                                             ? 'bg-black text-white hover:bg-gray-800'
-                                            : 'bg-white text-black hover:bg-black/5',
+                                            : 'bg-white text-black hover:bg-gray-100',
                                     )}
                                     onClick={() => setActiveDayLabel(dayView.label)}
                                 >
@@ -1100,7 +1129,7 @@ const SlotplanWorkspace = ({
                                         'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold md:px-3 md:py-1 md:text-sm',
                                         activeAreaFilter === area.id
                                             ? 'bg-black text-white hover:bg-gray-800'
-                                            : 'bg-white text-black hover:bg-black/5',
+                                            : 'bg-white text-black hover:bg-gray-100',
                                     )}
                                     onClick={() => setActiveAreaFilter(area.id)}
                                 >
@@ -1114,7 +1143,7 @@ const SlotplanWorkspace = ({
                                         'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold md:px-3 md:py-1 md:text-sm',
                                         activeAreaFilter === 'unassigned'
                                             ? 'bg-black text-white hover:bg-gray-800'
-                                            : 'bg-white text-black hover:bg-black/5',
+                                            : 'bg-white text-black hover:bg-gray-100',
                                     )}
                                     onClick={() => setActiveAreaFilter('unassigned')}
                                 >
@@ -1127,7 +1156,7 @@ const SlotplanWorkspace = ({
                                     'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold md:px-3 md:py-1 md:text-sm',
                                     activeAreaFilter === 'all'
                                         ? 'bg-black text-white hover:bg-gray-800'
-                                        : 'bg-white text-black hover:bg-black/5',
+                                        : 'bg-white text-black hover:bg-gray-100',
                                 )}
                                 onClick={() => setActiveAreaFilter('all')}
                             >
@@ -1248,7 +1277,35 @@ const SlotplanWorkspace = ({
                                                             )}
                                                             style={{ backgroundColor: getEntryColor(entry, participants) }}
                                                         >
-                                                            <div className="font-bold">{getEntryLabel(entry, participants)}</div>
+                                                            {entry.kind === ScheduleEntryKind.Participant &&
+                                                                entry.participantId !== null && (
+                                                                    <Link
+                                                                        href={buildSlotplanDetailHref(
+                                                                            entry.participantId,
+                                                                            activeDayLabel,
+                                                                            activeAreaFilter,
+                                                                        )}
+                                                                        data-slotplan-pan-ignore
+                                                                        title="Details öffnen"
+                                                                        className="absolute top-1 right-1 z-10 flex h-5 w-5 items-center justify-center rounded text-black/70 hover:bg-black/10 hover:text-black"
+                                                                        onClick={(e) => e.stopPropagation()}
+                                                                    >
+                                                                        <FontAwesomeIcon
+                                                                            icon={faArrowUpRightFromSquare}
+                                                                            className="h-3 w-3"
+                                                                        />
+                                                                    </Link>
+                                                                )}
+                                                            <div
+                                                                className={cn(
+                                                                    'font-bold',
+                                                                    entry.kind === ScheduleEntryKind.Participant &&
+                                                                        entry.participantId !== null &&
+                                                                        'pr-6',
+                                                                )}
+                                                            >
+                                                                {getEntryLabel(entry, participants)}
+                                                            </div>
                                                             {participant !== undefined && <div>{typeLabels[participant.type]}</div>}
                                                             {statusLabel !== null && (
                                                                 <div className="mt-0.5 inline-flex rounded bg-white/80 px-1 font-bold">
@@ -1263,7 +1320,7 @@ const SlotplanWorkspace = ({
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
                                                                         setExpandedEntryId(null);
-                                                                        handleEntryClick(entry, e, 'edit');
+                                                                        handleEntryClick(entry, e);
                                                                     }}
                                                                 >
                                                                     Bearbeiten
@@ -1271,19 +1328,7 @@ const SlotplanWorkspace = ({
                                                                 <button
                                                                     type="button"
                                                                     data-slotplan-pan-ignore
-                                                                    className="cursor-pointer rounded border border-black bg-white px-2 py-0.5 font-bold hover:bg-gray-100"
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        setExpandedEntryId(null);
-                                                                        handleEntryClick(entry, e, 'move');
-                                                                    }}
-                                                                >
-                                                                    Verschieben
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    data-slotplan-pan-ignore
-                                                                    className="cursor-pointer rounded border border-red-800 px-2 py-0.5 font-bold text-red-800 hover:bg-red-800/5"
+                                                                    className="cursor-pointer rounded border border-red-800 bg-white px-2 py-0.5 font-bold text-red-800 hover:bg-red-50"
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
                                                                         handleQuickDeleteEntry(entry);
@@ -1408,7 +1453,31 @@ const SlotplanWorkspace = ({
                                                     )}
                                                     style={{ backgroundColor: getEntryColor(entry, participants) }}
                                                 >
-                                                    <div className="font-bold">{getEntryLabel(entry, participants)}</div>
+                                                    {entry.kind === ScheduleEntryKind.Participant && entry.participantId !== null && (
+                                                        <Link
+                                                            href={buildSlotplanDetailHref(
+                                                                entry.participantId,
+                                                                activeDayLabel,
+                                                                activeAreaFilter,
+                                                            )}
+                                                            data-slotplan-pan-ignore
+                                                            title="Details öffnen"
+                                                            className="absolute top-1 right-1 z-10 flex h-5 w-5 items-center justify-center rounded text-black/70 hover:bg-black/10 hover:text-black"
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        >
+                                                            <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="h-3 w-3" />
+                                                        </Link>
+                                                    )}
+                                                    <div
+                                                        className={cn(
+                                                            'font-bold',
+                                                            entry.kind === ScheduleEntryKind.Participant &&
+                                                                entry.participantId !== null &&
+                                                                'pr-6',
+                                                        )}
+                                                    >
+                                                        {getEntryLabel(entry, participants)}
+                                                    </div>
                                                     <div>
                                                         {formatDate(startsAt, 'HH:mm')} – {formatDate(endsAt, 'HH:mm')}
                                                     </div>
@@ -1428,7 +1497,7 @@ const SlotplanWorkspace = ({
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 setExpandedEntryId(null);
-                                                                handleEntryClick(entry, e, 'edit');
+                                                                handleEntryClick(entry, e);
                                                             }}
                                                         >
                                                             Bearbeiten
@@ -1436,19 +1505,7 @@ const SlotplanWorkspace = ({
                                                         <button
                                                             type="button"
                                                             data-slotplan-pan-ignore
-                                                            className="cursor-pointer rounded border border-black bg-white px-2 py-0.5 font-bold hover:bg-gray-100"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setExpandedEntryId(null);
-                                                                handleEntryClick(entry, e, 'move');
-                                                            }}
-                                                        >
-                                                            Verschieben
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            data-slotplan-pan-ignore
-                                                            className="cursor-pointer rounded border border-red-800 px-2 py-0.5 font-bold text-red-800 hover:bg-red-800/5"
+                                                            className="cursor-pointer rounded border border-red-800 bg-white px-2 py-0.5 font-bold text-red-800 hover:bg-red-50"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 handleQuickDeleteEntry(entry);
@@ -1505,7 +1562,7 @@ const SlotplanWorkspace = ({
                                     <div className="flex flex-wrap gap-2">
                                         <button
                                             type="button"
-                                            className="cursor-pointer rounded border border-black px-3 py-1 text-sm font-bold hover:bg-black/5"
+                                            className="cursor-pointer rounded border border-black px-3 py-1 text-sm font-bold hover:bg-gray-100"
                                             onClick={() => setEditedLocation(location)}
                                         >
                                             Bearbeiten
@@ -1513,7 +1570,7 @@ const SlotplanWorkspace = ({
                                         <button
                                             type="button"
                                             disabled={isPending}
-                                            className="cursor-pointer rounded border border-red-800 px-3 py-1 text-sm font-bold text-red-800 hover:bg-red-800/5 disabled:cursor-not-allowed disabled:opacity-50"
+                                            className="cursor-pointer rounded border border-red-800 px-3 py-1 text-sm font-bold text-red-800 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
                                             onClick={() => handleDeleteLocationClick(location)}
                                         >
                                             Löschen / deaktivieren
