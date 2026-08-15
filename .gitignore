@@ -42,3 +42,8 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# local ops and dumps (never commit)
+/local/
+/tmp/
+/festival_backup_*.sql
