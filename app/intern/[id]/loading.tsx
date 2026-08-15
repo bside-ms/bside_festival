@@ -2,7 +2,7 @@ import { range } from 'lodash';
 import type { ReactElement } from 'react';
 
 const Loading = (): ReactElement => (
-    <div className="relative mx-auto min-h-screen w-full max-w-7xl animate-pulse px-2 pt-5 pb-3">
+    <div className="relative mx-auto min-h-full w-full max-w-7xl animate-pulse px-2 pt-5 pb-3">
         <div className="space-y-4">
             <div className="flex flex-col gap-3">
                 <div className="h-4 w-40 rounded bg-gray-200" />

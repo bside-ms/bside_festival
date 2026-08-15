@@ -90,7 +90,11 @@ export default async ({ searchParams }: Props): Promise<ReactElement> => {
                 Erfolgreiche Änderungen an Bewerbungen und Programmeinträgen. Sichtbar nur für Datenschutz-Berechtigte.
             </p>
 
-            <form className="mt-6 grid gap-3 rounded border border-black/10 bg-white/70 p-4 md:grid-cols-4">
+            <form
+                action="/aenderungslog"
+                className="mt-6 grid gap-3 rounded border border-black/10 bg-white/70 p-4 md:grid-cols-4"
+                method="get"
+            >
                 <label className="text-sm">
                     Suche
                     <input

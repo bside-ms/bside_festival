@@ -22,9 +22,18 @@ interface Props {
     programLocations: Array<SerializableProgramLocation>;
     scheduleEntries: Array<SerializableScheduleEntry>;
     zipcodes: Array<Zipcode>;
+    changeLogHref?: string;
 }
 
-const ContributionDetailPage = ({ application, genres, links, programLocations, scheduleEntries, zipcodes }: Props): ReactElement => {
+const ContributionDetailPage = ({
+    application,
+    genres,
+    links,
+    programLocations,
+    scheduleEntries,
+    zipcodes,
+    changeLogHref,
+}: Props): ReactElement => {
     const searchParams = useSearchParams();
     const { href: backHref, label: backLabel } = buildContributionBackHref(searchParams);
 
@@ -49,6 +58,7 @@ const ContributionDetailPage = ({ application, genres, links, programLocations, 
             <div className="overflow-hidden rounded-md border border-black bg-white shadow-sm">
                 <ContributionDetails
                     application={application}
+                    changeLogHref={changeLogHref}
                     genres={genres}
                     links={links}
                     programLocations={programLocations}

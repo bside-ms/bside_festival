@@ -21,7 +21,7 @@ export default async (): Promise<ReactElement> => {
     const allGenres = await prismaClient.genre.findMany();
 
     return (
-        <div className="relative mx-auto min-h-screen w-full max-w-7xl px-2 pt-5 pb-3">
+        <div className="relative mx-auto min-h-full w-full max-w-7xl px-2 pt-5 pb-3">
             <ApplicationCurationOverview
                 applications={applications}
                 participantGenres={participantGenres}

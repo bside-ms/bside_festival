@@ -36,7 +36,7 @@ const TableRowSkeleton = (): ReactElement => (
 );
 
 const Loading = (): ReactElement => (
-    <div className="relative mx-auto min-h-screen w-full max-w-[90rem] animate-pulse px-2 pt-5 pb-3">
+    <div className="relative mx-auto min-h-full w-full max-w-[90rem] animate-pulse px-2 pt-5 pb-3">
         <div className="space-y-4">
             <div>
                 <div className="h-10 w-72 max-w-full rounded bg-gray-300" />

@@ -183,9 +183,10 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 - Wrap action calls in `try/catch` in client components
 - Admin application edits use focused actions in `applicationActions.ts` + Zod schemas from `applicationSchema.ts`
 - `/intern` is the unified internal workspace. `/bewerbungen/uebersicht` and `/bewerbungen/kuration` redirect there.
-- `/intern` routes hide the marketing footer and swap the public header for intern links (Programmbeiträge, Slotplan, Programmorte, Kuration, plus Mehr). Intern chrome is a `h-dvh` shell via `AppChrome`; list/detail/kuration scroll inside it. The public footer only has one Intern entry (`/intern`); full intern nav is header-only.
-- `/intern/[id]` is the shareable Programmbeitrag detail (full edit: status, organizers, fee, comments). List filters stay in the URL and are carried to/from detail. Keycloak users load client-side after paint (cached ~5 min server-side).
-- `/intern/slotplan` is a viewport-owned workspace: compact day/area toolbar, grid fills the remaining height, document does not scroll. `day` + `area` + `tab` (`planner` | `locations`) persist in the URL (nuqs); default area is `all`. Overlaps show side by side: a connected chain of size N splits each entry to 1/N for its full duration; that location column grows by 48px per extra entry (190 + 48×(N−1)). Hover or click uses the full column width. Every Schedule Entry is timed (no Ganztägig create UI). Save no longer rejects overlaps; `isBlocking` / AllDay stay in the schema unused. Hover: Bearbeiten opens move (place/time only); arrow icon opens act details; notes have no detail link.
+- `/intern` Programmbeiträge is a flat sortable table (Name, Typ, Status, Ort, Zeit, Gage, letzter Kommentar) — no status groups, read-only rows; edits on `/intern/[id]`. Default sort is earliest slot time (`sort`/`sortDir` in URL); multi-slot acts show the earliest only (+N). Without slot sorts last.
+- `/intern/[id]` is the shareable Programmbeitrag detail (full edit: status, organizers, fee, schedule slots, comments). List filters stay in the URL and are carried to/from detail. From slotplan (`?from=slotplan&day=&area=`), back returns to `/intern/slotplan` with that day/area. Keycloak users load client-side after paint (cached ~5 min server-side).
+- `/intern` routes hide the marketing footer and swap the public header nav for intern links (Programmbeiträge, Slotplan, Programmorte, Kuration, plus Mehr). Intern shell is a `h-dvh` `AppShell`; list/detail/kuration scroll inside it. The public footer only has one Intern entry (`/intern`); full intern nav is header-only.
+- `/intern/slotplan` is a viewport-owned workspace: compact day/area toolbar, grid fills the remaining height, document does not scroll. `day` + `area` + `tab` (`planner` | `locations`) persist in the URL (nuqs); default area is `all`. When area is `all`, columns are ordered by area `sortOrder` then location `sortOrder` (no visual group headers). Every Schedule Entry is timed (no Ganztägig row). Overlaps at the same Program Location are allowed and shown side by side: a connected chain of size N splits each entry to 1/N for its full duration; that location column grows by 48px per extra entry in the largest chain (190 + 48×(N−1)). Hover or click uses the full column width. Hover: Bearbeiten opens move (place/time only); arrow icon opens act details; notes have no detail link. Save no longer rejects overlaps; `isBlocking` / AllDay stay in the schema unused.
 - `/intern/kuration` stores anonymous `juryVotes`, calculates jury/bonus/final score at read time via `lib/applications/curationScoring.ts`
 - `/aenderungslog` records successful user save actions with previous/next values; visible only to data-privacy users
 - Failed mutations are persisted to `ActionErrorLogEntry` (source, message, stack, optional actor/target/context); no Intern UI yet
@@ -196,10 +197,10 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 
 Two contexts using **props directly** (no `useState` for server data):
 
-| Context                       | Used in                            | Contains                                                                                    |
-| ----------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------- |
-| `InternWorkspaceContext`      | `/intern`                          | Filter state in URL via `nuqs`; genres for list badges; no Keycloak/links/zipcodes/comments |
-| `ParticipantsOverviewContext` | `/programm`, `/programm/timetable` | Filter state (text, types, locations, date range), pinned IDs                               |
+| Context                       | Used in                            | Contains                                                                                                                 |
+| ----------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `InternWorkspaceContext`      | `/intern`                          | Filter + table sort state in URL via `nuqs`; slim list participants (slot/gage/last comment); no Keycloak/links/zipcodes |
+| `ParticipantsOverviewContext` | `/programm`, `/programm/timetable` | Filter state (text, types, locations, date range), pinned IDs                                                            |
 
 **Do not add `useState` for server-provided data** — the server page passes fresh props after each action and revalidation.
 
@@ -208,12 +209,13 @@ Two contexts using **props directly** (no `useState` for server data):
 ## Data Types
 
 - `SerializableParticipant`, `SerializableSlot` — JSON-safe (dates as strings), used across client/server boundary
+- `SerializableListParticipant` — slim `/intern` table row (earliest slot, fee, last comment, organizers); not the full detail payload
 - `AllAttendees` — `{ slotId: number, attendees: Array<...> }`
 - Prisma types (`Participant`, `Slot`, `Venue`, `Location`, etc.) — server-only
 - `Participant.hasParticipatedBefore`: `true`/`false` for explicit answers, `null` for legacy — keep visually distinct
 - `Participant.feeEuros`: optional whole-euro Gage on the Beitrag; edited in `/intern/[id]` ContributionDetails aside; changelog’d
 - `Participant.juryVotes`: anonymous whole-number votes 0–5 as JSON; scores calculated at read time, not persisted
-- `Comment` entries are immutable; store `authorUserId`, `authorName`, `createdAt`, optional `statusTransition`
+- `Comment` entries are immutable; store `authorUserId`, `authorName`, `createdAt`, optional `statusTransition`. Booking comments: only what ChangeLog/UI don’t already show (mail context, team todos)
 - `ChangeLogEntry`: one entry per user save action; snapshots actor + target name, `changes` with previous/next values
 
 ---

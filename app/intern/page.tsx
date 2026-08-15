@@ -65,7 +65,7 @@ export default async (): Promise<ReactElement> => {
     const currentOrganizerUserId = user?.id ?? null;
 
     return (
-        <div className="relative mx-auto min-h-screen w-full max-w-[90rem] px-2 pt-5 pb-3">
+        <div className="relative mx-auto min-h-full w-full max-w-[90rem] px-2 pt-5 pb-3">
             <InternWorkspaceContextProvider
                 applications={applications}
                 currentOrganizerUserId={currentOrganizerUserId}

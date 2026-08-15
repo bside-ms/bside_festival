@@ -20,15 +20,25 @@ interface Props {
     programLocations: Array<SerializableProgramLocation>;
     scheduleEntries: Array<SerializableScheduleEntry>;
     zipcodes: Array<Zipcode>;
+    changeLogHref?: string;
 }
 
 const noopClose = (): void => undefined;
 
-const ContributionDetails = ({ application, genres, links, programLocations, scheduleEntries, zipcodes }: Props): ReactElement => (
+const ContributionDetails = ({
+    application,
+    genres,
+    links,
+    programLocations,
+    scheduleEntries,
+    zipcodes,
+    changeLogHref,
+}: Props): ReactElement => (
     <div className="grid gap-4 bg-white p-3 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="min-w-0">
             <ApplicationDetails
                 application={application}
+                changeLogHref={changeLogHref}
                 genres={genres}
                 links={links}
                 zipcodes={zipcodes}

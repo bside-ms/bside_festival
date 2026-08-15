@@ -31,6 +31,7 @@ interface Props {
     links: Array<Link>;
     zipcodes: Array<Zipcode>;
     onCloseClick: () => void;
+    changeLogHref?: string;
     showName?: boolean;
     showHeaderBadges?: boolean;
     showBottomClose?: boolean;
@@ -43,6 +44,7 @@ const ApplicationDetails = ({
     links,
     zipcodes,
     onCloseClick,
+    changeLogHref,
     showName = true,
     showHeaderBadges = true,
     showBottomClose = true,
@@ -99,7 +101,7 @@ const ApplicationDetails = ({
 
                 <ApplicationDetailsAllergies application={application} />
 
-                <ApplicationDetailsMeta application={application} />
+                <ApplicationDetailsMeta application={application} changeLogHref={changeLogHref} />
             </div>
 
             {showCuration && (

@@ -1,4 +1,5 @@
 import ContributionDetailPage from '@/components/intern/ContributionDetailPage';
+import { buildApplicationChangeLogHref } from '@/lib/changeLog/buildApplicationChangeLogHref';
 import prismaClient from '@/lib/common/prismaClient';
 import isGroupMember from '@/lib/next-auth/isGroupMember';
 import isLoggedIn from '@/lib/next-auth/isLoggedIn';
@@ -49,9 +50,10 @@ export default async ({ params }: Props): Promise<ReactElement> => {
               });
 
     return (
-        <div className="relative mx-auto min-h-screen w-full max-w-7xl px-2 pt-5 pb-3">
+        <div className="relative mx-auto min-h-full w-full max-w-7xl px-2 pt-5 pb-3">
             <ContributionDetailPage
                 application={application}
+                changeLogHref={isInDataPrivacyGroup ? buildApplicationChangeLogHref(application.id) : undefined}
                 genres={genres}
                 links={links}
                 programLocations={programLocations}

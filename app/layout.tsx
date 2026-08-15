@@ -1,4 +1,4 @@
-import AppChrome from '@/components/common/AppChrome';
+import AppShell from '@/components/common/AppShell';
 import Footer from '@/components/common/Footer';
 import InternHeaderNav from '@/components/common/InternHeaderNav';
 import type { Metadata } from 'next';
@@ -31,9 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <head />
             <body className="flex min-h-screen flex-col font-sans">
                 <NuqsAdapter>
-                    <AppChrome internNav={<InternHeaderNav />} footer={<Footer />}>
+                    <AppShell internNav={<InternHeaderNav />} footer={<Footer />}>
                         {children}
-                    </AppChrome>
+                    </AppShell>
                 </NuqsAdapter>
             </body>
         </html>
