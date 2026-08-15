@@ -22,7 +22,7 @@ export default async (): Promise<ReactElement> => {
     const allGenres = await prismaClient.genre.findMany();
 
     return (
-        <div className="relative min-h-screen w-full px-2 pt-2 pb-3 md:px-4 md:pt-5 xl:px-6">
+        <div className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden px-2 py-2 md:px-3">
             <SlotplanWorkspace
                 allGenres={allGenres}
                 participantGenres={participantGenres}

@@ -5,10 +5,12 @@ import { parseAsString, parseAsStringLiteral } from 'nuqs';
 const dayLabels = festivalDayViews.map(({ label }) => label) as [string, ...Array<string>];
 
 const slotplanFromValue = 'slotplan';
+const slotplanTabValues = ['planner', 'locations'] as const;
 
 export const slotplanFilterParsers = {
     day: parseAsStringLiteral(dayLabels).withDefault(festivalDayViews[0]!.label),
     area: parseAsString.withDefault('all'),
+    tab: parseAsStringLiteral(slotplanTabValues).withDefault('planner'),
 };
 
 export const slotplanFilterUrlOptions = {

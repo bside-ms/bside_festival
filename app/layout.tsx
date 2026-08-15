@@ -1,5 +1,6 @@
+import AppChrome from '@/components/common/AppChrome';
 import Footer from '@/components/common/Footer';
-import PageHeader from '@/components/common/PageHeader';
+import InternHeaderNav from '@/components/common/InternHeaderNav';
 import type { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import './globals.css';
@@ -30,12 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <head />
             <body className="flex min-h-screen flex-col font-sans">
                 <NuqsAdapter>
-                    <PageHeader />
-
-                    <div className="gradient-background f26-background">{children}</div>
-
-                    <div className="grow" />
-                    <Footer />
+                    <AppChrome internNav={<InternHeaderNav />} footer={<Footer />}>
+                        {children}
+                    </AppChrome>
                 </NuqsAdapter>
             </body>
         </html>

@@ -19,7 +19,7 @@ import {
     type Prisma,
     type ScheduleEntry,
 } from '@prisma/client';
-import { addDays, isAfter, isBefore, parseISO, startOfDay } from 'date-fns';
+import { isAfter, isBefore } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import { sortBy } from 'lodash';
 
@@ -53,11 +53,6 @@ interface ScheduleEntryData {
     isBlocking: boolean;
     isPublic: boolean;
     maxAttendees: number | null;
-}
-
-interface Interval {
-    startsAt: Date;
-    endsAt: Date;
 }
 
 const duplicateRegistrationErrorCode = 1721561870451;
@@ -98,36 +93,8 @@ const assertFifteenMinuteIncrement = (date: Date): void => {
     }
 };
 
-const getAllDayInterval = (date: string): Interval => {
-    const startsAt = startOfDay(parseISO(date));
-
-    return { startsAt, endsAt: addDays(startsAt, 1) };
-};
-
-const getEntryIntervals = (entry: Pick<ScheduleEntryData, 'allDayDates' | 'endsAt' | 'startsAt' | 'timeMode'>): Array<Interval> => {
-    if (entry.timeMode === ScheduleEntryTimeMode.Timed && entry.startsAt !== null && entry.endsAt !== null) {
-        return [{ startsAt: entry.startsAt, endsAt: entry.endsAt }];
-    }
-
-    return entry.allDayDates.map(getAllDayInterval);
-};
-
-const getPersistedEntryIntervals = (entry: Pick<ScheduleEntry, 'allDayDates' | 'endsAt' | 'startsAt' | 'timeMode'>): Array<Interval> => {
-    const allDayDates = getPersistedAllDayDates(entry);
-
-    return getEntryIntervals({
-        timeMode: entry.timeMode,
-        startsAt: entry.startsAt,
-        endsAt: entry.endsAt,
-        allDayDates,
-    });
-};
-
 const getPersistedAllDayDates = (entry: Pick<ScheduleEntry, 'allDayDates'>): Array<string> =>
     Array.isArray(entry.allDayDates) ? entry.allDayDates.filter((date): date is string => typeof date === 'string') : [];
-
-const intervalsOverlap = (left: Interval, right: Interval): boolean =>
-    isBefore(left.startsAt, right.endsAt) && isAfter(left.endsAt, right.startsAt);
 
 const validateScheduleEntryInput = (input: ScheduleEntryInput): ScheduleEntryData => {
     const participantId = input.kind === ScheduleEntryKind.Participant ? (input.participantId ?? null) : null;
@@ -191,33 +158,6 @@ const validateScheduleEntryInput = (input: ScheduleEntryInput): ScheduleEntryDat
         isPublic: input.kind === ScheduleEntryKind.ScheduleNote ? input.isPublic : false,
         maxAttendees,
     };
-};
-
-const assertNoBlockingOverlap = async (tx: Prisma.TransactionClient, data: ScheduleEntryData, scheduleEntryId?: number): Promise<void> => {
-    if (!data.isBlocking) {
-        return;
-    }
-
-    const nextIntervals = getEntryIntervals(data);
-    const blockingEntries = await tx.scheduleEntry.findMany({
-        where: {
-            id: scheduleEntryId === undefined ? undefined : { not: scheduleEntryId },
-            isBlocking: true,
-            programLocationId: data.programLocationId,
-        },
-    });
-
-    const conflictingEntry = blockingEntries.find((entry) => {
-        const previousIntervals = getPersistedEntryIntervals(entry);
-
-        return previousIntervals.some((previousInterval) =>
-            nextIntervals.some((nextInterval) => intervalsOverlap(previousInterval, nextInterval)),
-        );
-    });
-
-    if (conflictingEntry !== undefined) {
-        throw new Error(`Dieser Eintrag überschneidet sich mit Slotplan-Eintrag #${conflictingEntry.id}.`);
-    }
 };
 
 const formatAllDayDates = (dates: Array<string> | null): string => {
@@ -298,8 +238,6 @@ export const createScheduleEntry = loggedAction(
                     ? null
                     : await tx.participant.findUniqueOrThrow({ select: { name: true }, where: { id: data.participantId } });
 
-            await assertNoBlockingOverlap(tx, data);
-
             const scheduleEntry = await tx.scheduleEntry.create({
                 data: {
                     ...data,
@@ -340,8 +278,6 @@ export const updateScheduleEntry = loggedAction(
                 data.participantId === null
                     ? null
                     : await tx.participant.findUniqueOrThrow({ select: { name: true }, where: { id: data.participantId } });
-
-            await assertNoBlockingOverlap(tx, data, id);
 
             const changes = createScheduleEntryChanges(
                 previousEntry,

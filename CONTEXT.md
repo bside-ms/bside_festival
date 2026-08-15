@@ -93,13 +93,14 @@ _Avoid_: Info block, program entry
 
 ### Slotplan
 
-The internal canonical schedule for the festival. It contains placed participant entries and schedule notes, including timed entries and all-day placements.
+The internal canonical schedule for the festival. It contains placed participant entries and schedule notes. Every Schedule Entry has a start and an end. The Slotplan page is a viewport-owned intern workspace: intern chrome fills the screen (`h-dvh`), the marketing footer is hidden, and the grid uses the remaining height.
 
 ### Slotplan-Eintrag
 
 The German UI term for a Schedule Entry.
 _Avoid_: Programmpunkt when referring to setup, teardown, or other schedule notes
 
-### Blocking Occupancy
+### Overlap
 
-Whether a schedule entry reserves its program location so no other blocking entry may overlap it. Timed entries usually block; all-day placements usually do not.
+Two or more Schedule Entries at the same Program Location that share any time, even a few minutes. The Slotplan shows them side by side for their full duration so the clash can be found and cleaned up. Overlap is allowed so it is visible; it is not a lasting way to share a Program Location.
+_Avoid_: Collision, conflict, Blocking Occupancy, shared stage (as an intended format)

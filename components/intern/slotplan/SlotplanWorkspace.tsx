@@ -7,6 +7,11 @@ import { createScheduleEntry, deleteScheduleEntry, updateScheduleEntry } from '@
 import cn from '@/lib/common/helper/cn';
 import formatDate from '@/lib/common/helper/formatDate';
 import {
+    buildSlotplanOverlapLayout,
+    getSlotplanEntryInterval,
+    getSlotplanLocationColumnWidthsPx,
+} from '@/lib/intern/slotplanOverlapLayout';
+import {
     buildSlotplanDetailHref,
     parseSlotplanAreaFilter,
     serializeSlotplanAreaFilter,
@@ -17,7 +22,7 @@ import {
 import statusLabels from '@/lib/participants/status/statusLabels';
 import typeColors from '@/lib/participants/typeColors';
 import typeLabels from '@/lib/participants/typeLabels';
-import { festivalAllDayDates, festivalDayViews, scheduleStepMinutes } from '@/lib/schedule/festivalWindow';
+import { festivalDayViews, scheduleStepMinutes } from '@/lib/schedule/festivalWindow';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import type { SerializableProgramLocation } from '@/typings/SerializableProgramLocation';
 import type { SerializableProgramLocationArea } from '@/typings/SerializableProgramLocationArea';
@@ -30,7 +35,7 @@ import { addMinutes, differenceInMinutes, isAfter, isBefore } from 'date-fns';
 import { range, sortBy } from 'lodash';
 import Link from 'next/link';
 import { useQueryStates } from 'nuqs';
-import type { ChangeEvent, ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { createPortal } from 'react-dom';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -170,9 +175,6 @@ const ScheduleEntryForm = ({
 }): ReactElement => {
     const [isPending, startTransition] = useTransition();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [allDayDates, setAllDayDates] = useState<Array<string>>(
-        draftEntry.entry?.allDayDates ?? [formatDate(draftEntry.startsAt, 'yyyy-MM-dd')],
-    );
     const entry = draftEntry.entry;
     const defaultStartsAt = entry?.startsAt === null || entry?.startsAt === undefined ? draftEntry.startsAt : new Date(entry.startsAt);
     const defaultEndsAt =
@@ -182,30 +184,24 @@ const ScheduleEntryForm = ({
     const methods = useForm<ScheduleEntryFormValues>({
         defaultValues: {
             kind: entry?.kind ?? ScheduleEntryKind.Participant,
-            timeMode: entry?.timeMode ?? draftEntry.contextTimeMode,
+            timeMode: ScheduleEntryTimeMode.Timed,
             programLocationId: (entry?.programLocationId ?? draftEntry.programLocationId).toString(),
             participantId: entry?.participantId?.toString() ?? '',
             title: entry?.title ?? '',
             startsAt: toDateTimeLocalValue(defaultStartsAt),
             endsAt: toDateTimeLocalValue(defaultEndsAt),
-            isBlocking: entry?.isBlocking ?? true,
+            isBlocking: false,
             isPublic: entry?.isPublic ?? false,
             maxAttendees: entry?.maxAttendees?.toString() ?? '',
         },
     });
     const { control, handleSubmit, register, watch } = methods;
     const kind = watch('kind');
-    const timeMode = watch('timeMode');
 
     const participantOptions = useMemo(
         () => participants.map((p) => ({ value: p.id.toString(), label: `${p.name} (${typeLabels[p.type]} · ${statusLabels[p.status]})` })),
         [participants],
     );
-
-    const handleAllDayDateChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        const { checked, value } = event.target;
-        setAllDayDates((dates) => (checked ? sortBy([...dates, value]) : dates.filter((date) => date !== value)));
-    }, []);
 
     const handleFormSubmit = useCallback(
         (values: ScheduleEntryFormValues) => {
@@ -214,14 +210,14 @@ const ScheduleEntryForm = ({
                 try {
                     const input = {
                         kind: values.kind,
-                        timeMode: values.timeMode,
+                        timeMode: ScheduleEntryTimeMode.Timed,
                         programLocationId: Number(values.programLocationId),
                         participantId: values.participantId.length === 0 ? null : Number(values.participantId),
                         title: values.title,
                         startsAt: values.startsAt,
                         endsAt: values.endsAt,
-                        allDayDates,
-                        isBlocking: values.isBlocking,
+                        allDayDates: [],
+                        isBlocking: false,
                         isPublic: values.isPublic,
                         maxAttendees: parseNullableNumber(values.maxAttendees),
                     };
@@ -238,7 +234,7 @@ const ScheduleEntryForm = ({
                 }
             });
         },
-        [allDayDates, entry, onClose],
+        [entry, onClose],
     );
 
     const handleDeleteClick = useCallback(() => {
@@ -342,53 +338,27 @@ const ScheduleEntryForm = ({
                         </label>
                     )}
 
-                    {entry === null &&
-                        (timeMode === ScheduleEntryTimeMode.Timed ? (
-                            <>
-                                <label className="block">
-                                    <span className="text-sm font-bold">Start</span>
-                                    <input
-                                        type="datetime-local"
-                                        className="mt-1 w-full rounded border border-black p-2"
-                                        {...register('startsAt')}
-                                    />
-                                </label>
+                    {entry === null && (
+                        <>
+                            <label className="block">
+                                <span className="text-sm font-bold">Start</span>
+                                <input
+                                    type="datetime-local"
+                                    className="mt-1 w-full rounded border border-black p-2"
+                                    {...register('startsAt')}
+                                />
+                            </label>
 
-                                <label className="block">
-                                    <span className="text-sm font-bold">Ende</span>
-                                    <input
-                                        type="datetime-local"
-                                        className="mt-1 w-full rounded border border-black p-2"
-                                        {...register('endsAt')}
-                                    />
-                                </label>
-                            </>
-                        ) : (
-                            <div className="md:col-span-2">
-                                <div className="text-sm font-bold">Tage</div>
-                                <div className="mt-1 flex flex-wrap gap-3">
-                                    {festivalAllDayDates().map((date) => (
-                                        <label
-                                            key={date}
-                                            className="inline-flex items-center gap-2 rounded border border-black/20 bg-white px-2 py-1"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                value={date}
-                                                checked={allDayDates.includes(date)}
-                                                onChange={handleAllDayDateChange}
-                                            />
-                                            <span>{formatDate(new Date(`${date}T12:00:00+02:00`), 'EEE dd.MM.')}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-
-                    <label className="inline-flex items-center gap-2">
-                        <input type="checkbox" {...register('isBlocking')} />
-                        <span className="text-sm font-bold">Blockiert den Programmort</span>
-                    </label>
+                            <label className="block">
+                                <span className="text-sm font-bold">Ende</span>
+                                <input
+                                    type="datetime-local"
+                                    className="mt-1 w-full rounded border border-black p-2"
+                                    {...register('endsAt')}
+                                />
+                            </label>
+                        </>
+                    )}
 
                     {kind === ScheduleEntryKind.ScheduleNote && (
                         <label className="inline-flex items-center gap-2">
@@ -397,7 +367,7 @@ const ScheduleEntryForm = ({
                         </label>
                     )}
 
-                    {kind === ScheduleEntryKind.Participant && timeMode === ScheduleEntryTimeMode.Timed && (
+                    {kind === ScheduleEntryKind.Participant && (
                         <label className="block">
                             <span className="text-sm font-bold">Maximale Anmeldungen</span>
                             <input
@@ -448,7 +418,6 @@ const MoveEntryForm = ({
     const entry = draftEntry.entry!;
     const [isPending, startTransition] = useTransition();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [allDayDates, setAllDayDates] = useState<Array<string>>(entry.allDayDates);
     const defaultStartsAt = entry.startsAt === null ? draftEntry.startsAt : new Date(entry.startsAt);
     const defaultEndsAt = entry.endsAt === null ? addMinutes(draftEntry.startsAt, scheduleStepMinutes) : new Date(entry.endsAt);
     const methods = useForm<MoveEntryFormValues>({
@@ -460,11 +429,6 @@ const MoveEntryForm = ({
     });
     const { handleSubmit, register } = methods;
 
-    const handleAllDayDateChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        const { checked, value } = event.target;
-        setAllDayDates((dates) => (checked ? sortBy([...dates, value]) : dates.filter((date) => date !== value)));
-    }, []);
-
     const handleFormSubmit = useCallback(
         (values: MoveEntryFormValues) => {
             setErrorMessage(null);
@@ -472,14 +436,14 @@ const MoveEntryForm = ({
                 try {
                     await updateScheduleEntry(entry.id, {
                         kind: entry.kind,
-                        timeMode: entry.timeMode,
+                        timeMode: ScheduleEntryTimeMode.Timed,
                         programLocationId: Number(values.programLocationId),
                         participantId: entry.participantId,
                         title: entry.title,
                         startsAt: values.startsAt,
                         endsAt: values.endsAt,
-                        allDayDates,
-                        isBlocking: entry.isBlocking,
+                        allDayDates: [],
+                        isBlocking: false,
                         isPublic: entry.isPublic,
                         maxAttendees: entry.maxAttendees,
                     });
@@ -489,7 +453,7 @@ const MoveEntryForm = ({
                 }
             });
         },
-        [allDayDates, entry, onClose],
+        [entry, onClose],
     );
 
     return (
@@ -518,46 +482,14 @@ const MoveEntryForm = ({
                         </select>
                     </label>
 
-                    {draftEntry.contextTimeMode === ScheduleEntryTimeMode.Timed ? (
-                        <>
-                            <label className="block">
-                                <span className="text-sm font-bold">Start</span>
-                                <input
-                                    type="datetime-local"
-                                    className="mt-1 w-full rounded border border-black p-2"
-                                    {...register('startsAt')}
-                                />
-                            </label>
-                            <label className="block">
-                                <span className="text-sm font-bold">Ende</span>
-                                <input
-                                    type="datetime-local"
-                                    className="mt-1 w-full rounded border border-black p-2"
-                                    {...register('endsAt')}
-                                />
-                            </label>
-                        </>
-                    ) : (
-                        <div className="md:col-span-2">
-                            <div className="text-sm font-bold">Tage</div>
-                            <div className="mt-1 flex flex-wrap gap-3">
-                                {festivalAllDayDates().map((date) => (
-                                    <label
-                                        key={date}
-                                        className="inline-flex items-center gap-2 rounded border border-black/20 bg-white px-2 py-1"
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            value={date}
-                                            checked={allDayDates.includes(date)}
-                                            onChange={handleAllDayDateChange}
-                                        />
-                                        <span>{formatDate(new Date(`${date}T12:00:00+02:00`), 'EEE dd.MM.')}</span>
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                    <label className="block">
+                        <span className="text-sm font-bold">Start</span>
+                        <input type="datetime-local" className="mt-1 w-full rounded border border-black p-2" {...register('startsAt')} />
+                    </label>
+                    <label className="block">
+                        <span className="text-sm font-bold">Ende</span>
+                        <input type="datetime-local" className="mt-1 w-full rounded border border-black p-2" {...register('endsAt')} />
+                    </label>
 
                     {errorMessage !== null && <div className="text-sm font-bold text-red-700 md:col-span-2">{errorMessage}</div>}
 
@@ -852,8 +784,8 @@ const SlotplanWorkspace = ({
     programLocationAreas,
     scheduleEntries,
 }: Props): ReactElement => {
-    const [activeTab, setActiveTab] = useState<'locations' | 'planner'>('planner');
     const [slotplanFilters, setSlotplanFilters] = useQueryStates(slotplanFilterParsers, slotplanFilterUrlOptions);
+    const activeTab = slotplanFilters.tab;
     const activeDayLabel = slotplanFilters.day;
     const parsedAreaFilter = parseSlotplanAreaFilter(slotplanFilters.area);
     const activeAreaFilter: SlotplanAreaFilter =
@@ -875,11 +807,6 @@ const SlotplanWorkspace = ({
         [setSlotplanFilters],
     );
 
-    useEffect(() => {
-        if (new URL(window.location.href).searchParams.get('tab') === 'locations') {
-            setActiveTab('locations');
-        }
-    }, []);
     const [draftEntry, setDraftEntry] = useState<DraftEntry | null>(null);
     const [editedLocation, setEditedLocation] = useState<SerializableProgramLocation | null | undefined>(undefined);
     const [expandedEntryId, setExpandedEntryId] = useState<number | null>(null);
@@ -891,18 +818,37 @@ const SlotplanWorkspace = ({
     const activeDayView = festivalDayViews.find(({ label }) => label === activeDayLabel) ?? festivalDayViews[0]!;
     const activeLocations = programLocations.filter(({ isActive }) => isActive);
     const hasUnassignedLocations = activeLocations.some(({ programLocationAreaId }) => programLocationAreaId === null);
-    const visibleLocations = activeLocations.filter(({ programLocationAreaId }) => {
-        if (activeAreaFilter === 'all') {
-            return true;
-        }
+    const visibleLocations = sortBy(
+        activeLocations.filter(({ programLocationAreaId }) => {
+            if (activeAreaFilter === 'all') {
+                return true;
+            }
 
-        if (activeAreaFilter === 'unassigned') {
-            return programLocationAreaId === null;
-        }
+            if (activeAreaFilter === 'unassigned') {
+                return programLocationAreaId === null;
+            }
 
-        return programLocationAreaId === activeAreaFilter;
-    });
+            return programLocationAreaId === activeAreaFilter;
+        }),
+        [
+            ({ programLocationArea }) => programLocationArea?.sortOrder ?? Number.MAX_SAFE_INTEGER,
+            ({ programLocationArea }) => programLocationArea?.name ?? '',
+            ({ sortOrder }) => sortOrder,
+            ({ name }) => name,
+            ({ id }) => id,
+        ],
+    );
     const activeEntries = scheduleEntries.filter((entry) => isEntryInDayView(entry, activeDayView));
+    const overlapLayout = useMemo(() => buildSlotplanOverlapLayout(activeEntries, activeDayView), [activeDayView, activeEntries]);
+    const locationColumnWidths = useMemo(
+        () =>
+            getSlotplanLocationColumnWidthsPx(
+                visibleLocations.map(({ id }) => id),
+                activeEntries,
+                overlapLayout,
+            ),
+        [activeEntries, overlapLayout, visibleLocations],
+    );
     const minuteRows = useMemo(
         () => range(0, differenceInMinutes(activeDayView.endsAt, activeDayView.startsAt), scheduleStepMinutes),
         [activeDayView.endsAt, activeDayView.startsAt],
@@ -1008,19 +954,16 @@ const SlotplanWorkspace = ({
         event.stopPropagation();
     }, []);
 
-    const handleCellClick = useCallback(
-        (programLocationId: number, startsAt: Date, event: React.MouseEvent, contextTimeMode: ScheduleEntryTimeMode) => {
-            setDraftEntry({
-                entry: null,
-                programLocationId,
-                startsAt,
-                anchorRect: event.currentTarget.getBoundingClientRect(),
-                contextTimeMode,
-                mode: 'edit',
-            });
-        },
-        [],
-    );
+    const handleCellClick = useCallback((programLocationId: number, startsAt: Date, event: React.MouseEvent) => {
+        setDraftEntry({
+            entry: null,
+            programLocationId,
+            startsAt,
+            anchorRect: event.currentTarget.getBoundingClientRect(),
+            contextTimeMode: ScheduleEntryTimeMode.Timed,
+            mode: 'edit',
+        });
+    }, []);
 
     const handleEntryClick = useCallback(
         (entry: SerializableScheduleEntry, event: React.MouseEvent) => {
@@ -1068,48 +1011,17 @@ const SlotplanWorkspace = ({
     );
 
     return (
-        <div className="space-y-3 md:space-y-5">
-            <div className="flex items-center justify-between gap-2 md:items-end">
-                <div>
-                    <h1 className="font-display text-3xl leading-none uppercase md:text-5xl">Slotplan</h1>
-                    <div className="mt-1 hidden text-sm text-black/60 md:block">
-                        Kanonische interne Planung für Programmorte und Zeiten.
-                    </div>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                    <button
-                        type="button"
-                        className={cn(
-                            'cursor-pointer rounded border border-black px-2 py-1 text-sm font-bold md:px-3 md:py-2 md:text-base',
-                            activeTab === 'planner' ? 'bg-black text-white hover:bg-gray-800' : 'bg-white hover:bg-gray-100',
-                        )}
-                        onClick={() => setActiveTab('planner')}
-                    >
-                        Planer
-                    </button>
-                    <button
-                        type="button"
-                        className={cn(
-                            'cursor-pointer rounded border border-black px-2 py-1 text-sm font-bold md:px-3 md:py-2 md:text-base',
-                            activeTab === 'locations' ? 'bg-black text-white hover:bg-gray-800' : 'bg-white hover:bg-gray-100',
-                        )}
-                        onClick={() => setActiveTab('locations')}
-                    >
-                        Programmorte
-                    </button>
-                </div>
-            </div>
-
+        <div className="flex min-h-0 flex-1 flex-col gap-2">
             {activeTab === 'planner' ? (
-                <div className="space-y-2 md:space-y-4">
-                    <div className="flex gap-2 overflow-x-auto pb-1 md:block md:space-y-4 md:overflow-visible md:pb-0">
-                        <div className="flex shrink-0 gap-2">
+                <div className="flex min-h-0 flex-1 flex-col gap-2">
+                    <div className="flex gap-2 overflow-x-auto" aria-label="Slotplan-Filter">
+                        <div className="flex shrink-0 gap-1">
                             {festivalDayViews.map((dayView) => (
                                 <button
                                     key={dayView.label}
                                     type="button"
                                     className={cn(
-                                        'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold md:px-3 md:py-1 md:text-sm',
+                                        'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold',
                                         activeDayLabel === dayView.label
                                             ? 'bg-black text-white hover:bg-gray-800'
                                             : 'bg-white text-black hover:bg-gray-100',
@@ -1120,13 +1032,13 @@ const SlotplanWorkspace = ({
                                 </button>
                             ))}
                         </div>
-                        <div className="flex shrink-0 gap-2 border-l border-black/20 pl-2 md:flex-wrap md:border-l-0 md:pl-0">
+                        <div className="flex shrink-0 gap-1 border-l border-black/20 pl-2">
                             {programLocationAreas.map((area) => (
                                 <button
                                     key={area.id}
                                     type="button"
                                     className={cn(
-                                        'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold md:px-3 md:py-1 md:text-sm',
+                                        'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold',
                                         activeAreaFilter === area.id
                                             ? 'bg-black text-white hover:bg-gray-800'
                                             : 'bg-white text-black hover:bg-gray-100',
@@ -1140,7 +1052,7 @@ const SlotplanWorkspace = ({
                                 <button
                                     type="button"
                                     className={cn(
-                                        'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold md:px-3 md:py-1 md:text-sm',
+                                        'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold',
                                         activeAreaFilter === 'unassigned'
                                             ? 'bg-black text-white hover:bg-gray-800'
                                             : 'bg-white text-black hover:bg-gray-100',
@@ -1153,7 +1065,7 @@ const SlotplanWorkspace = ({
                             <button
                                 type="button"
                                 className={cn(
-                                    'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold md:px-3 md:py-1 md:text-sm',
+                                    'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold',
                                     activeAreaFilter === 'all'
                                         ? 'bg-black text-white hover:bg-gray-800'
                                         : 'bg-white text-black hover:bg-gray-100',
@@ -1181,14 +1093,14 @@ const SlotplanWorkspace = ({
                     )}
 
                     {visibleLocations.length === 0 ? (
-                        <div className="rounded-md border border-black bg-white p-5 font-bold">
+                        <div className="min-h-0 flex-1 rounded-md border border-black bg-white p-5 font-bold">
                             Keine aktiven Programmorte in diesem Bereich.
                         </div>
                     ) : (
                         <div
                             ref={plannerViewportRef}
                             className={cn(
-                                'h-[max(24rem,calc(100dvh-11rem))] overflow-auto rounded-md border border-black bg-white',
+                                'min-h-0 flex-1 overflow-auto rounded-md border border-black bg-white',
                                 isPanning ? 'cursor-grabbing select-none' : 'cursor-grab',
                             )}
                             onClick={() => setExpandedEntryId(null)}
@@ -1201,152 +1113,31 @@ const SlotplanWorkspace = ({
                             <div
                                 className="grid min-w-max"
                                 style={{
-                                    gridTemplateColumns: `80px repeat(${visibleLocations.length}, 190px)`,
-                                    gridTemplateRows: `64px 56px repeat(${minuteRows.length}, ${rowHeight}px)`,
+                                    gridTemplateColumns: `80px ${locationColumnWidths.map((width) => `${width}px`).join(' ')}`,
+                                    gridTemplateRows: `40px repeat(${minuteRows.length}, ${rowHeight}px)`,
                                 }}
                             >
-                                <div className="sticky top-0 left-0 z-50 border-r border-b border-black bg-gray-100 p-2 font-bold">
+                                <div className="sticky top-0 left-0 z-50 border-r border-b border-black bg-gray-100 px-1.5 py-1 text-xs font-bold">
                                     Zeit
                                 </div>
                                 {visibleLocations.map((location) => (
                                     <div
                                         key={location.id}
-                                        className="sticky top-0 z-40 border-r border-b border-black bg-[#ebc9de] p-2 font-bold"
+                                        className="sticky top-0 z-40 border-r border-b border-black bg-[#ebc9de] px-1.5 py-1 text-xs leading-tight font-bold"
                                     >
-                                        {location.name}
-                                        {location.areaName !== null && <div className="text-xs font-normal">{location.areaName}</div>}
+                                        <div className="truncate" title={location.name}>
+                                            {location.name}
+                                        </div>
+                                        {location.areaName !== null && (
+                                            <div className="truncate text-[10px] font-normal" title={location.areaName}>
+                                                {location.areaName}
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
-                                <div className="sticky left-0 z-20 row-start-2 border-r border-b border-black bg-gray-50 p-2 text-xs font-bold">
-                                    Ganztägig
-                                </div>
-                                {visibleLocations.map((location, locationIndex) => {
-                                    const allDayEntries = activeEntries.filter(
-                                        (entry) =>
-                                            entry.programLocationId === location.id && entry.timeMode === ScheduleEntryTimeMode.AllDay,
-                                    );
-
-                                    return (
-                                        <div
-                                            key={`all-day-${location.id}`}
-                                            className="group/cell cursor-inherit relative row-start-2 space-y-1 overflow-visible border-r border-b border-black/30 bg-gray-50 p-1 hover:bg-yellow-50/60"
-                                            style={{ gridColumnStart: locationIndex + 2 }}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleCellClick(location.id, activeDayView.startsAt, e, ScheduleEntryTimeMode.AllDay);
-                                            }}
-                                        >
-                                            <span className="pointer-events-none absolute right-1 bottom-1 flex h-4 w-4 items-center justify-center rounded-full bg-black/10 text-xs font-bold text-black/40 opacity-0 group-hover/cell:opacity-100">
-                                                +
-                                            </span>
-                                            {allDayEntries.map((entry) => {
-                                                const isExpanded = expandedEntryId === entry.id;
-                                                const participant =
-                                                    entry.participantId === null
-                                                        ? undefined
-                                                        : participants.find(({ id }) => id === entry.participantId);
-                                                const statusLabel = getEntryStatusLabel(entry, participants);
-
-                                                return (
-                                                    <div
-                                                        key={entry.id}
-                                                        className={cn(
-                                                            'group cursor-inherit relative z-10 w-full rounded border border-black px-2 py-1 text-left text-xs hover:z-30',
-                                                            isExpanded && 'z-30',
-                                                        )}
-                                                        style={{ backgroundColor: getEntryColor(entry, participants) }}
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setExpandedEntryId(isExpanded ? null : entry.id);
-                                                        }}
-                                                    >
-                                                        <span
-                                                            className={cn(
-                                                                'transition-opacity duration-150',
-                                                                isExpanded ? 'opacity-0' : 'group-hover:opacity-0',
-                                                            )}
-                                                        >
-                                                            {getEntryLabel(entry, participants)}
-                                                        </span>
-                                                        <div
-                                                            className={cn(
-                                                                'absolute -top-px -right-px -left-px z-50 flex origin-top flex-col gap-1 rounded border border-black p-2 shadow-lg transition-[opacity,transform] duration-150',
-                                                                isExpanded
-                                                                    ? 'pointer-events-auto scale-105 opacity-100'
-                                                                    : 'pointer-events-none scale-100 opacity-0 group-hover:pointer-events-auto group-hover:scale-105 group-hover:opacity-100',
-                                                            )}
-                                                            style={{ backgroundColor: getEntryColor(entry, participants) }}
-                                                        >
-                                                            {entry.kind === ScheduleEntryKind.Participant &&
-                                                                entry.participantId !== null && (
-                                                                    <Link
-                                                                        href={buildSlotplanDetailHref(
-                                                                            entry.participantId,
-                                                                            activeDayLabel,
-                                                                            activeAreaFilter,
-                                                                        )}
-                                                                        data-slotplan-pan-ignore
-                                                                        title="Details öffnen"
-                                                                        className="absolute top-1 right-1 z-10 flex h-5 w-5 items-center justify-center rounded text-black/70 hover:bg-black/10 hover:text-black"
-                                                                        onClick={(e) => e.stopPropagation()}
-                                                                    >
-                                                                        <FontAwesomeIcon
-                                                                            icon={faArrowUpRightFromSquare}
-                                                                            className="h-3 w-3"
-                                                                        />
-                                                                    </Link>
-                                                                )}
-                                                            <div
-                                                                className={cn(
-                                                                    'font-bold',
-                                                                    entry.kind === ScheduleEntryKind.Participant &&
-                                                                        entry.participantId !== null &&
-                                                                        'pr-6',
-                                                                )}
-                                                            >
-                                                                {getEntryLabel(entry, participants)}
-                                                            </div>
-                                                            {participant !== undefined && <div>{typeLabels[participant.type]}</div>}
-                                                            {statusLabel !== null && (
-                                                                <div className="mt-0.5 inline-flex rounded bg-white/80 px-1 font-bold">
-                                                                    {statusLabel}
-                                                                </div>
-                                                            )}
-                                                            <div className="flex flex-wrap gap-1">
-                                                                <button
-                                                                    type="button"
-                                                                    data-slotplan-pan-ignore
-                                                                    className="cursor-pointer rounded border border-black bg-white px-2 py-0.5 font-bold hover:bg-gray-100"
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        setExpandedEntryId(null);
-                                                                        handleEntryClick(entry, e);
-                                                                    }}
-                                                                >
-                                                                    Bearbeiten
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    data-slotplan-pan-ignore
-                                                                    className="cursor-pointer rounded border border-red-800 bg-white px-2 py-0.5 font-bold text-red-800 hover:bg-red-50"
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        handleQuickDeleteEntry(entry);
-                                                                    }}
-                                                                >
-                                                                    Löschen
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    );
-                                })}
                                 {minuteRows.map((minutesFromStart) => {
                                     const startsAt = addMinutes(activeDayView.startsAt, minutesFromStart);
-                                    const rowStart = minutesFromStart / scheduleStepMinutes + 3;
+                                    const rowStart = minutesFromStart / scheduleStepMinutes + 2;
                                     const showTime = startsAt.getMinutes() === 0 || startsAt.getMinutes() === 30;
 
                                     return (
@@ -1362,7 +1153,7 @@ const SlotplanWorkspace = ({
                                 {visibleLocations.map((location, locationIndex) =>
                                     minuteRows.map((minutesFromStart) => {
                                         const startsAt = addMinutes(activeDayView.startsAt, minutesFromStart);
-                                        const rowStart = minutesFromStart / scheduleStepMinutes + 3;
+                                        const rowStart = minutesFromStart / scheduleStepMinutes + 2;
 
                                         return (
                                             <button
@@ -1370,7 +1161,7 @@ const SlotplanWorkspace = ({
                                                 type="button"
                                                 className="group cursor-inherit relative border-r border-b border-black/10 hover:bg-yellow-50"
                                                 style={{ gridColumnStart: locationIndex + 2, gridRowStart: rowStart }}
-                                                onClick={(e) => handleCellClick(location.id, startsAt, e, ScheduleEntryTimeMode.Timed)}
+                                                onClick={(e) => handleCellClick(location.id, startsAt, e)}
                                                 title={`${location.name} ${formatDate(startsAt, 'HH:mm')}`}
                                             >
                                                 <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-xs font-bold text-black/25 opacity-0 group-hover:opacity-100">
@@ -1380,157 +1171,151 @@ const SlotplanWorkspace = ({
                                         );
                                     }),
                                 )}
-                                {activeEntries
-                                    .filter(
-                                        (entry) =>
-                                            entry.timeMode === ScheduleEntryTimeMode.Timed &&
-                                            entry.startsAt !== null &&
-                                            entry.endsAt !== null,
-                                    )
-                                    .map((entry) => {
-                                        const locationIndex = visibleLocations.findIndex(({ id }) => id === entry.programLocationId);
+                                {activeEntries.map((entry) => {
+                                    const interval = getSlotplanEntryInterval(entry, activeDayView);
+                                    const locationIndex = visibleLocations.findIndex(({ id }) => id === entry.programLocationId);
 
-                                        if (locationIndex < 0 || entry.startsAt === null || entry.endsAt === null) {
-                                            return null;
-                                        }
+                                    if (locationIndex < 0 || interval === null) {
+                                        return null;
+                                    }
 
-                                        const startsAt = new Date(entry.startsAt);
-                                        const endsAt = new Date(entry.endsAt);
-                                        const clippedStartsAt = isBefore(startsAt, activeDayView.startsAt)
-                                            ? activeDayView.startsAt
-                                            : startsAt;
-                                        const clippedEndsAt = isAfter(endsAt, activeDayView.endsAt) ? activeDayView.endsAt : endsAt;
-                                        const rowStart =
-                                            differenceInMinutes(clippedStartsAt, activeDayView.startsAt) / scheduleStepMinutes + 3;
-                                        const rowSpan = Math.max(
-                                            1,
-                                            differenceInMinutes(clippedEndsAt, clippedStartsAt) / scheduleStepMinutes,
-                                        );
-                                        const participant =
-                                            entry.participantId === null
-                                                ? undefined
-                                                : participants.find(({ id }) => id === entry.participantId);
-                                        const genres = participant === undefined ? [] : getParticipantGenres(participant.id);
+                                    const startsAt = interval.startsAt;
+                                    const endsAt = interval.endsAt;
+                                    const clippedStartsAt = isBefore(startsAt, activeDayView.startsAt) ? activeDayView.startsAt : startsAt;
+                                    const clippedEndsAt = isAfter(endsAt, activeDayView.endsAt) ? activeDayView.endsAt : endsAt;
+                                    const rowStart = differenceInMinutes(clippedStartsAt, activeDayView.startsAt) / scheduleStepMinutes + 2;
+                                    const rowSpan = Math.max(1, differenceInMinutes(clippedEndsAt, clippedStartsAt) / scheduleStepMinutes);
+                                    const participant =
+                                        entry.participantId === null
+                                            ? undefined
+                                            : participants.find(({ id }) => id === entry.participantId);
+                                    const genres = participant === undefined ? [] : getParticipantGenres(participant.id);
+                                    const placement = overlapLayout.get(entry.id) ?? { chainSize: 1, index: 0 };
+                                    const isExpanded = expandedEntryId === entry.id;
+                                    const statusLabel = getEntryStatusLabel(entry, participants);
 
-                                        const isExpanded = expandedEntryId === entry.id;
-                                        const statusLabel = getEntryStatusLabel(entry, participants);
-
-                                        return (
+                                    return (
+                                        <div
+                                            key={entry.id}
+                                            className={cn(
+                                                'group cursor-inherit relative z-10 min-w-0 justify-self-start overflow-visible rounded border border-black text-xs shadow',
+                                                isExpanded
+                                                    ? 'z-40 ml-0 w-full'
+                                                    : 'ml-[var(--overlap-offset)] w-[var(--overlap-width)] hover:z-40 hover:ml-0 hover:w-full',
+                                            )}
+                                            style={{
+                                                gridColumnStart: locationIndex + 2,
+                                                gridRowStart: rowStart,
+                                                gridRowEnd: `span ${rowSpan}`,
+                                                backgroundColor: getEntryColor(entry, participants),
+                                                ['--overlap-width' as string]: `${100 / placement.chainSize}%`,
+                                                ['--overlap-offset' as string]: `${(100 * placement.index) / placement.chainSize}%`,
+                                            }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setExpandedEntryId(isExpanded ? null : entry.id);
+                                            }}
+                                        >
                                             <div
-                                                key={entry.id}
                                                 className={cn(
-                                                    'group cursor-inherit relative z-10 rounded border border-black text-xs shadow hover:z-30',
-                                                    isExpanded && 'z-30',
+                                                    'overflow-hidden p-2 transition-opacity duration-150',
+                                                    isExpanded ? 'opacity-0' : 'group-hover:opacity-0',
                                                 )}
-                                                style={{
-                                                    gridColumnStart: locationIndex + 2,
-                                                    gridRowStart: rowStart,
-                                                    gridRowEnd: `span ${rowSpan}`,
-                                                    backgroundColor: getEntryColor(entry, participants),
-                                                }}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setExpandedEntryId(isExpanded ? null : entry.id);
-                                                }}
                                             >
-                                                <div
-                                                    className={cn(
-                                                        'overflow-hidden p-2 transition-opacity duration-150',
-                                                        isExpanded ? 'opacity-0' : 'group-hover:opacity-0',
-                                                    )}
-                                                >
-                                                    <div className="truncate font-bold">{getEntryLabel(entry, participants)}</div>
-                                                    <div>
-                                                        {formatDate(startsAt, 'HH:mm')} – {formatDate(endsAt, 'HH:mm')}
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    className={cn(
-                                                        'absolute -top-px -right-px -left-px z-50 flex origin-top flex-col gap-1 rounded border border-black p-2 shadow-lg transition-[opacity,transform] duration-150',
-                                                        isExpanded
-                                                            ? 'pointer-events-auto scale-105 opacity-100'
-                                                            : 'pointer-events-none scale-100 opacity-0 group-hover:pointer-events-auto group-hover:scale-105 group-hover:opacity-100',
-                                                    )}
-                                                    style={{ backgroundColor: getEntryColor(entry, participants) }}
-                                                >
-                                                    {entry.kind === ScheduleEntryKind.Participant && entry.participantId !== null && (
-                                                        <Link
-                                                            href={buildSlotplanDetailHref(
-                                                                entry.participantId,
-                                                                activeDayLabel,
-                                                                activeAreaFilter,
-                                                            )}
-                                                            data-slotplan-pan-ignore
-                                                            title="Details öffnen"
-                                                            className="absolute top-1 right-1 z-10 flex h-5 w-5 items-center justify-center rounded text-black/70 hover:bg-black/10 hover:text-black"
-                                                            onClick={(e) => e.stopPropagation()}
-                                                        >
-                                                            <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="h-3 w-3" />
-                                                        </Link>
-                                                    )}
-                                                    <div
-                                                        className={cn(
-                                                            'font-bold',
-                                                            entry.kind === ScheduleEntryKind.Participant &&
-                                                                entry.participantId !== null &&
-                                                                'pr-6',
-                                                        )}
-                                                    >
-                                                        {getEntryLabel(entry, participants)}
-                                                    </div>
-                                                    <div>
-                                                        {formatDate(startsAt, 'HH:mm')} – {formatDate(endsAt, 'HH:mm')}
-                                                    </div>
-                                                    {participant !== undefined && <div>{typeLabels[participant.type]}</div>}
-                                                    {statusLabel !== null && (
-                                                        <div className="mt-0.5 inline-flex rounded bg-white/80 px-1 font-bold">
-                                                            {statusLabel}
-                                                        </div>
-                                                    )}
-                                                    {genres.length > 0 && <div className="truncate">{genres.join(', ')}</div>}
-                                                    {!entry.isBlocking && <div className="text-[10px]">nicht blockierend</div>}
-                                                    <div className="mt-1 flex flex-wrap gap-1">
-                                                        <button
-                                                            type="button"
-                                                            data-slotplan-pan-ignore
-                                                            className="cursor-pointer rounded border border-black bg-white px-2 py-0.5 font-bold hover:bg-gray-100"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setExpandedEntryId(null);
-                                                                handleEntryClick(entry, e);
-                                                            }}
-                                                        >
-                                                            Bearbeiten
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            data-slotplan-pan-ignore
-                                                            className="cursor-pointer rounded border border-red-800 bg-white px-2 py-0.5 font-bold text-red-800 hover:bg-red-50"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                handleQuickDeleteEntry(entry);
-                                                            }}
-                                                        >
-                                                            Löschen
-                                                        </button>
-                                                    </div>
+                                                <div className="truncate font-bold">{getEntryLabel(entry, participants)}</div>
+                                                <div>
+                                                    {formatDate(startsAt, 'HH:mm')} – {formatDate(endsAt, 'HH:mm')}
                                                 </div>
                                             </div>
-                                        );
-                                    })}
+                                            <div
+                                                className={cn(
+                                                    'absolute -top-px -right-px -left-px z-50 flex min-h-[calc(100%+2px)] flex-col gap-1 rounded border border-black p-2 shadow-lg transition-opacity duration-150',
+                                                    isExpanded
+                                                        ? 'pointer-events-auto opacity-100'
+                                                        : 'pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100',
+                                                )}
+                                                style={{ backgroundColor: getEntryColor(entry, participants) }}
+                                            >
+                                                {entry.kind === ScheduleEntryKind.Participant && entry.participantId !== null && (
+                                                    <Link
+                                                        href={buildSlotplanDetailHref(
+                                                            entry.participantId,
+                                                            activeDayLabel,
+                                                            activeAreaFilter,
+                                                        )}
+                                                        data-slotplan-pan-ignore
+                                                        title="Details öffnen"
+                                                        className="absolute top-1 right-1 z-10 flex h-5 w-5 items-center justify-center rounded text-black/70 hover:bg-black/10 hover:text-black"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="h-3 w-3" />
+                                                    </Link>
+                                                )}
+                                                <div
+                                                    className={cn(
+                                                        'font-bold',
+                                                        entry.kind === ScheduleEntryKind.Participant &&
+                                                            entry.participantId !== null &&
+                                                            'pr-6',
+                                                    )}
+                                                >
+                                                    {getEntryLabel(entry, participants)}
+                                                </div>
+                                                <div>
+                                                    {formatDate(startsAt, 'HH:mm')} – {formatDate(endsAt, 'HH:mm')}
+                                                </div>
+                                                {participant !== undefined && <div>{typeLabels[participant.type]}</div>}
+                                                {statusLabel !== null && (
+                                                    <div className="mt-0.5 inline-flex rounded bg-white/80 px-1 font-bold">
+                                                        {statusLabel}
+                                                    </div>
+                                                )}
+                                                {genres.length > 0 && <div className="truncate">{genres.join(', ')}</div>}
+                                                <div className="mt-1 flex flex-wrap gap-1">
+                                                    <button
+                                                        type="button"
+                                                        data-slotplan-pan-ignore
+                                                        className="cursor-pointer rounded border border-black bg-white px-2 py-0.5 font-bold hover:bg-gray-100"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setExpandedEntryId(null);
+                                                            handleEntryClick(entry, e);
+                                                        }}
+                                                    >
+                                                        Bearbeiten
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        data-slotplan-pan-ignore
+                                                        className="cursor-pointer rounded border border-red-800 bg-white px-2 py-0.5 font-bold text-red-800 hover:bg-red-50"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleQuickDeleteEntry(entry);
+                                                        }}
+                                                    >
+                                                        Löschen
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     )}
                 </div>
             ) : (
-                <div className="space-y-4">
-                    <button
-                        type="button"
-                        className="cursor-pointer rounded border border-black bg-black px-4 py-2 font-bold text-white hover:bg-gray-800"
-                        onClick={() => setEditedLocation(null)}
-                    >
-                        Programmort hinzufügen
-                    </button>
+                <div className="min-h-0 flex-1 space-y-4 overflow-y-auto">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                        <h1 className="font-display text-2xl leading-none uppercase">Programmorte</h1>
+                        <button
+                            type="button"
+                            className="cursor-pointer rounded border border-black bg-black px-4 py-2 font-bold text-white hover:bg-gray-800"
+                            onClick={() => setEditedLocation(null)}
+                        >
+                            Programmort hinzufügen
+                        </button>
+                    </div>
 
                     {editedLocation !== undefined && (
                         <ProgramLocationForm
