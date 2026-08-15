@@ -1,0 +1,38 @@
+---
+description: Always finish code changes with green task check
+alwaysApply: true
+---
+
+# Verification before done
+
+After any code change in this repo, do **not** declare the task finished until checks are green.
+
+## Required gate
+
+Run via Taskfile / Docker (never host `npm run check` as the source of truth):
+
+```bash
+task check
+```
+
+That runs: tsc → lint → test → knip → audit → prettier.
+
+## During iteration
+
+- After meaningful edits: at least `task tsc` and `task lint`
+- Before calling work done / handing back: **`task check` must pass**
+- If only formatting fails: `task prettier-fix`, then re-run `task check`
+
+## Failures
+
+- Fix issues yourself; do not leave failing checks for the user
+- Re-run `task check` after fixes until exit code 0
+- Host IDE types can drift from Docker — see `docker-host-node-modules` rule; `task check` still decides green
+
+## Dev server / Turbopack
+
+After adding **new files** that the running Next/Turbopack process should import: if you see `Module not found` for a path that exists on disk and in Docker (`ls` inside `app`), **restart** the long-running `task dev` / Compose `app` service (`docker compose restart app`). Stale Turbopack resolution is common; `task check` can still be green while the hot server is stuck.
+
+## Out of scope
+
+Skip only for pure docs/rules with no app impact, or when the user explicitly says not to run checks.
