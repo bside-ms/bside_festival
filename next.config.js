@@ -13,6 +13,14 @@ module.exports = {
                 protocol: 'https',
                 hostname: process.env.NEXT_PUBLIC_IONOS_HOST_NAME ?? 'localhost',
             },
+            {
+                protocol: 'https',
+                hostname: 'picsum.photos',
+            },
+            {
+                protocol: 'https',
+                hostname: 'fastly.picsum.photos',
+            },
         ],
     },
 };

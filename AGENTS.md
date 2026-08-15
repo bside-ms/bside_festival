@@ -69,6 +69,12 @@ Single workflow in `.github/workflows/docker-image.yml`:
 
 ## Architecture
 
+### 2026 public redesign
+
+- Phased checklist: `docs/2026-public-redesign-checklist.md`
+- Related ADRs: `docs/adr/0006`–`0009` (Leichte Sprache plain pages, feedback-over-Figma copy, Framer motion phases, Helfi double opt-in)
+- Public vocabulary: `CONTEXT.md` (B-Side Festival, Wo & Wann, Ort, Helfi, Mitwirken, Leichte Sprache)
+
 ### Framework & Rendering
 
 - **Next.js 16 App Router** with React 19 and TypeScript 5

@@ -1,6 +1,7 @@
 'use client';
 
 import PageHeader from '@/components/common/PageHeader';
+import PublicNav from '@/components/common/PublicNav';
 import cn from '@/lib/common/helper/cn';
 import { internShellScrollId } from '@/lib/intern/internShellScroll';
 import { usePathname } from 'next/navigation';
@@ -17,7 +18,7 @@ const AppShell = ({ children, footer, internNav }: Props): ReactElement => {
 
     return (
         <div className={cn('flex flex-col', isIntern ? 'h-dvh overflow-hidden' : 'min-h-screen')}>
-            <PageHeader fullWidth={isIntern} nav={isIntern ? internNav : undefined} />
+            <PageHeader fullWidth={isIntern} nav={isIntern ? internNav : <PublicNav />} />
             <div
                 className={cn('gradient-background', isIntern ? 'flex min-h-0 flex-1 flex-col overflow-y-auto' : 'f26-background')}
                 id={isIntern ? internShellScrollId : undefined}

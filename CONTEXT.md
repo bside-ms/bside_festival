@@ -2,6 +2,36 @@
 
 ## Glossary
 
+### B-Side
+
+The venue and cultural space in Münster (Am Mittelhafen 42), and the short name used when referring to that place rather than the festival.
+_Avoid_: B Side, BSide (as venue name)
+
+### B-Side Festival
+
+The canonical public name of the festival. Written with a hyphen in “B-Side” and a space before “Festival”.
+_Avoid_: B-Side-Festival, B Side Festival, BSide Festival
+
+### B-Side Kultur e.V.
+
+The non-profit association that organizes the B-Side Festival and year-round cultural programming.
+_Avoid_: B Side Kultur, the festival (when the legal organizer is meant)
+
+### Awareness
+
+The festival’s public safety and anti-discrimination offering: a short homepage teaser plus a full dedicated page, with English and Leichte Sprache alternates of the full page.
+_Avoid_: Safer Space (as the page name), Awareness & Safety (as the only label when a shorter German label is used)
+
+### Helfi
+
+A person who signs up publicly to help run the festival (crew). Public UI may also say Helfer\*in; the casual festival term is Helfi. Signup collects name, email, phone, and optional free-text notes; day availability is not collected up front. Email must be confirmed before the signup counts as complete. The confirmation mail leads with the confirm action, then Judith-style onboarding (pool, later Schichtpläne, Treffen, Telegram during festival, festival mail for questions). Shift assignment happens later in a separate Schichtsystem, not named publicly as Engelsystem.
+_Avoid_: Volunteer (in public German UI), Engelsystem user (as the public label)
+
+### Mitwirken
+
+The public “get involved” area: homepage section and nav group covering Helfis, workshops, and related calls to action. Open Call for program contributions is closed for 2026. The Helfi signup page includes short prose on possible tasks and on next steps after signup (confirm email, later Schichtpläne, Treffen, Telegram during the festival).
+_Avoid_: Get Involved, Explore (as nav labels)
+
 ### Application
 
 A submitted proposal while it is being reviewed, curated, or edited before becoming part of the published program.
@@ -56,6 +86,21 @@ The average of all jury votes for one application. Applications without jury vot
 ### Jury Vote
 
 A score from 0 to 5 from one internal curator during the shared curation session. Votes are anonymous and entered together by one person after the group has reviewed an application.
+
+### Leichte Sprache
+
+A plain, simplified German alternate of selected public pages for easier reading. It is a separate content version, not a visual redesign of the marketing site. On this site it covers Start and Awareness only.
+_Avoid_: Easy language homepage mirror, simplified design variant
+
+### Wo & Wann
+
+The public homepage section that presents festival dates, times, and places to visit. Individual places in this section are called **Orte**. Marketing counts (days, places, program items) are approximate and may be updated without a design change.
+_Avoid_: Stages, Locations (as section title or public place noun)
+
+### Ort
+
+A visitor-facing place in the public Wo & Wann section (a room, stage, bar, partner venue, etc.). Distinct from the internal scheduling term Program Location / Programmort. B-Side rooms formerly labeled Gruppenraum 1–3 are shown publicly as Raum 1–3.
+_Avoid_: Location, Stage (as the general public noun), Gruppenraum (as the public label for Raum 1–3)
 
 ### Localness
 
