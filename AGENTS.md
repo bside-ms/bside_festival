@@ -27,7 +27,7 @@ All project Node/Prisma/npm **runtime** commands must run inside Docker via `tas
 | `task check`                            | Run ALL: tsc, lint, test, knip, audit, prettier                                      |
 | `task tsc`                              | Type-check — run after every change                                                  |
 | `task lint`                             | ESLint — run after every change                                                      |
-| `task test`                             | Vitest (2 test files, no config found — uses defaults)                               |
+| `task test`                             | Vitest (3 test files, no config found — uses defaults)                               |
 | `task find-unused`                      | Knip — find unused files, deps, exports                                              |
 | `task audit`                            | Security audit; fails on high/critical                                               |
 | `task prettier-fix`                     | Auto-format everything — run at end of every task                                    |
@@ -184,6 +184,7 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 - Admin application edits use focused actions in `applicationActions.ts` + Zod schemas from `applicationSchema.ts`
 - `/intern` is the unified internal workspace. `/bewerbungen/uebersicht` and `/bewerbungen/kuration` redirect there.
 - `/intern/[id]` is the shareable Programmbeitrag detail (full edit: status, organizers, fee, comments). List filters stay in the URL and are carried to/from detail. Keycloak users load client-side after paint (cached ~5 min server-side).
+- `/intern/slotplan` shows overlaps side by side: a connected chain of size N splits each entry to 1/N for its full duration; that location column grows by 48px per extra entry (190 + 48×(N−1)). Hover or click uses the full column width. Every Schedule Entry is timed (no Ganztägig create UI). Save no longer rejects overlaps; `isBlocking` / AllDay stay in the schema unused. Hover: Bearbeiten opens move (place/time only); arrow icon opens act details; notes have no detail link.
 - `/intern/kuration` stores anonymous `juryVotes`, calculates jury/bonus/final score at read time via `lib/applications/curationScoring.ts`
 - `/aenderungslog` records successful user save actions with previous/next values; visible only to data-privacy users
 - Failed mutations are persisted to `ActionErrorLogEntry` (source, message, stack, optional actor/target/context); no Intern UI yet
@@ -262,5 +263,5 @@ Map to Prisma `Type` enum. `/bewerbungen/[type]` uses `generateStaticParams` to 
 - **Server Actions have a 50 MB body limit** — relevant for image uploads.
 - **`next.config.js` has `allowedDevOrigins: ['*']`** — allows external device testing but is permissive.
 - **Node version**: Docker uses `node:20-bullseye`; `.nvmrc` says `v16.14.0` (stale — ignore in favor of Docker image).
-- **No vitest config file** — works from defaults. Only 2 test files exist.
+- **No vitest config file** — works from defaults. Only 3 test files exist.
 - **`SHADOW_DATABASE_URL` is local `migrate dev` only** — not needed on live; production uses `migrate deploy`.

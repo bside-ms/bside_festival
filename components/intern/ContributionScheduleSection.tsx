@@ -6,13 +6,12 @@ import ApplicationDetailsFormControls from '@/components/applications/applicatio
 import ApplicationDetailsTitle from '@/components/applications/applicationDetails/ApplicationDetailsTitle';
 import { createScheduleEntry, deleteScheduleEntry, updateScheduleEntry } from '@/lib/actions/scheduleEntryActions';
 import formatDate from '@/lib/common/helper/formatDate';
-import { festivalAllDayDates, festivalDayViews, scheduleStepMinutes } from '@/lib/schedule/festivalWindow';
+import { festivalDayViews, scheduleStepMinutes } from '@/lib/schedule/festivalWindow';
 import type { SerializableProgramLocation } from '@/typings/SerializableProgramLocation';
 import type { SerializableScheduleEntry } from '@/typings/SerializableScheduleEntry';
 import { ScheduleEntryKind, ScheduleEntryTimeMode } from '@prisma/client';
 import { addMinutes } from 'date-fns';
-import { sortBy } from 'lodash';
-import type { ChangeEvent, ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { useCallback, useState, useTransition } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -24,10 +23,8 @@ interface Props {
 
 interface ScheduleFormValues {
     programLocationId: string;
-    timeMode: ScheduleEntryTimeMode;
     startsAt: string;
     endsAt: string;
-    isBlocking: boolean;
     maxAttendees: string;
 }
 
@@ -91,24 +88,15 @@ const ContributionScheduleForm = ({
         entry?.endsAt === null || entry?.endsAt === undefined
             ? addMinutes(defaultStartsAt, scheduleStepMinutes * 4)
             : new Date(entry.endsAt);
-    const [allDayDates, setAllDayDates] = useState<Array<string>>(entry?.allDayDates ?? [formatDate(defaultStartsAt, 'yyyy-MM-dd')]);
     const methods = useForm<ScheduleFormValues>({
         defaultValues: {
             programLocationId: (entry?.programLocationId ?? locationOptions[0]?.id ?? '').toString(),
-            timeMode: entry?.timeMode ?? ScheduleEntryTimeMode.Timed,
             startsAt: toDateTimeLocalValue(defaultStartsAt),
             endsAt: toDateTimeLocalValue(defaultEndsAt),
-            isBlocking: entry?.isBlocking ?? true,
             maxAttendees: entry?.maxAttendees?.toString() ?? '',
         },
     });
-    const { handleSubmit, register, watch } = methods;
-    const timeMode = watch('timeMode');
-
-    const handleAllDayDateChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        const { checked, value } = event.target;
-        setAllDayDates((dates) => (checked ? sortBy([...dates, value]) : dates.filter((date) => date !== value)));
-    }, []);
+    const { handleSubmit, register } = methods;
 
     const handleFormSubmit = useCallback(
         (values: ScheduleFormValues) => {
@@ -117,14 +105,14 @@ const ContributionScheduleForm = ({
                 try {
                     const input = {
                         kind: ScheduleEntryKind.Participant,
-                        timeMode: values.timeMode,
+                        timeMode: ScheduleEntryTimeMode.Timed,
                         programLocationId: Number(values.programLocationId),
                         participantId,
                         title: null,
                         startsAt: values.startsAt,
                         endsAt: values.endsAt,
-                        allDayDates,
-                        isBlocking: values.isBlocking,
+                        allDayDates: [],
+                        isBlocking: false,
                         isPublic: false,
                         maxAttendees: parseNullableNumber(values.maxAttendees),
                     };
@@ -141,7 +129,7 @@ const ContributionScheduleForm = ({
                 }
             });
         },
-        [allDayDates, entry, onClose, participantId],
+        [entry, onClose, participantId],
     );
 
     const handleDeleteClick = useCallback(() => {
@@ -174,71 +162,34 @@ const ContributionScheduleForm = ({
                     </select>
                 </label>
 
-                <label className="block">
-                    <span className="text-sm font-bold">Zeitmodus</span>
-                    <select className="mt-1 w-full rounded border border-black p-2 text-sm" {...register('timeMode')}>
-                        <option value={ScheduleEntryTimeMode.Timed}>Uhrzeit</option>
-                        <option value={ScheduleEntryTimeMode.AllDay}>Ganztägig</option>
-                    </select>
-                </label>
-
-                {timeMode === ScheduleEntryTimeMode.Timed ? (
-                    <div className="grid gap-3 sm:grid-cols-2">
-                        <label className="block">
-                            <span className="text-sm font-bold">Start</span>
-                            <input
-                                type="datetime-local"
-                                className="mt-1 w-full rounded border border-black p-2 text-sm"
-                                {...register('startsAt')}
-                            />
-                        </label>
-                        <label className="block">
-                            <span className="text-sm font-bold">Ende</span>
-                            <input
-                                type="datetime-local"
-                                className="mt-1 w-full rounded border border-black p-2 text-sm"
-                                {...register('endsAt')}
-                            />
-                        </label>
-                    </div>
-                ) : (
-                    <div>
-                        <div className="text-sm font-bold">Tage</div>
-                        <div className="mt-1 flex flex-wrap gap-2">
-                            {festivalAllDayDates().map((date) => (
-                                <label
-                                    key={date}
-                                    className="inline-flex items-center gap-2 rounded border border-black/20 bg-white px-2 py-1 text-sm"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        value={date}
-                                        checked={allDayDates.includes(date)}
-                                        onChange={handleAllDayDateChange}
-                                    />
-                                    <span>{formatDate(new Date(`${date}T12:00:00+02:00`), 'EEE dd.MM.')}</span>
-                                </label>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                <label className="inline-flex items-center gap-2">
-                    <input type="checkbox" {...register('isBlocking')} />
-                    <span className="text-sm font-bold">Blockiert den Programmort</span>
-                </label>
-
-                {timeMode === ScheduleEntryTimeMode.Timed && (
+                <div className="grid gap-3 sm:grid-cols-2">
                     <label className="block">
-                        <span className="text-sm font-bold">Maximale Anmeldungen</span>
+                        <span className="text-sm font-bold">Start</span>
                         <input
-                            type="number"
-                            min="1"
+                            type="datetime-local"
                             className="mt-1 w-full rounded border border-black p-2 text-sm"
-                            {...register('maxAttendees')}
+                            {...register('startsAt')}
                         />
                     </label>
-                )}
+                    <label className="block">
+                        <span className="text-sm font-bold">Ende</span>
+                        <input
+                            type="datetime-local"
+                            className="mt-1 w-full rounded border border-black p-2 text-sm"
+                            {...register('endsAt')}
+                        />
+                    </label>
+                </div>
+
+                <label className="block">
+                    <span className="text-sm font-bold">Maximale Anmeldungen</span>
+                    <input
+                        type="number"
+                        min="1"
+                        className="mt-1 w-full rounded border border-black p-2 text-sm"
+                        {...register('maxAttendees')}
+                    />
+                </label>
 
                 {errorMessage !== null && <div className="text-sm font-bold text-red-700">{errorMessage}</div>}
 
@@ -300,10 +251,9 @@ const ContributionScheduleSection = ({ participantId, programLocations, schedule
                     {scheduleEntries.map((entry) => (
                         <div key={entry.id} className="rounded border border-black/20 bg-white p-2">
                             <div className="text-sm font-bold">{formatEntrySummary(entry, programLocations)}</div>
-                            <div className="mt-1 flex flex-wrap gap-2 text-xs text-black/60">
-                                {!entry.isBlocking && <span>nicht blockierend</span>}
-                                {entry.maxAttendees !== null && <span>max. {entry.maxAttendees} Anmeldungen</span>}
-                            </div>
+                            {entry.maxAttendees !== null && (
+                                <div className="mt-1 text-xs text-black/60">max. {entry.maxAttendees} Anmeldungen</div>
+                            )}
                             <div className="mt-2 flex flex-wrap gap-1">
                                 <button
                                     type="button"
