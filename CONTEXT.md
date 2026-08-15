@@ -43,6 +43,8 @@ The total score used during curation, calculated as the jury score weighted by 1
 The agreed fee in whole euros for one Programmbeitrag (application). It is optional until set and is one value for the act, not per schedule entry — Friday and Saturday placements of the same act share the same Gage.
 _Avoid_: Fee, payment, honorarium (as domain/UI terms)
 
+For concerts/bands, Gage is set from **artist count** (`participantCount`) and whether professionals are involved (`professionalParticipantsCount` / `isProfessionalBooking`), not by copying the predecessor on a vacated slot. Observed 2026 hobby band bands (no professionals): **100 / 150 / 200 / 250 €** for **n = 1 / 2 / 3 / 4+** (typical bands cap at 250; larger special formats like a choir may sit higher). Mixed acts usually add about **+55 € per professional** on that base (e.g. n=4 +1 professional → 305 €). Fully professional or special cases can deviate — check peers before locking. Solo DJs are typically **100 €**; B2B/duo DJ sets often **150 €**. See `docs/adr/0005-gage-from-artist-count-and-professionals.md`.
+
 ### First-Time Participation
 
 Whether an application comes from people who have not participated in a previous B-Side Festival. It is collected on the public application form and editable in the application details view, but no longer affects the curation score.
@@ -65,8 +67,23 @@ An accepted application as it appears in program planning or the public program,
 
 ### Program Location
 
-A schedulable place in the slot plan, such as a stage, room, area, or external venue. Program locations may be grouped for display, but each one can be scheduled directly.
+A schedulable place in the slot plan, such as a stage, room, area, or external venue. Program locations may be grouped for display, but each one can be scheduled directly. Each has an implicit character (for example dancefloor, rock bar, intimate room, workshop room) that comes from the real place and from what the festival actually programs there.
 _Avoid_: Venue, location
+
+### Program Location Area
+
+A display and planning group of Program Locations: **B-Side** (in the house), **Im Viertel** (partner places in the neighborhood), and **Sputnikhalle** (aftershow).
+_Avoid_: District, zone, venue group
+
+### Ortspassung
+
+Whether a Programmbeitrag’s format belongs at a given Program Location. A free time window is not enough; booking only places an act where the location character fits (for example spoken word in an intimate listening room, not in a club or loud concert bar). Character comes from the real place and from what the festival actually programs there.
+_Avoid_: Just “free slot”, calendar gap
+
+### Location Character
+
+The typical use of a Program Location in festival planning — for example listening/spoken word, dancefloor, concert bar, workshop room, exhibition room, or aftershow. Used to judge Ortspassung before moving acts.
+_Avoid_: Vibe (as a planning term), venue type
 
 ### Programmort
 
