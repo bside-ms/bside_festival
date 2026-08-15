@@ -21,6 +21,7 @@
         "send-confirmation-mails": "tsx scripts/sendConfirmationMails.ts",
         "send-acceptance-mails": "tsx scripts/sendAcceptanceMails.ts",
         "send-exhibition-acceptance-mails": "tsx scripts/sendExhibitionAcceptanceMails.ts",
+        "send-festival-mail": "tsx scripts/sendFestivalMail.ts",
         "imap-mail": "tsx scripts/imapMail.ts"
     },
     "dependencies": {

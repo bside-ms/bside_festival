@@ -38,6 +38,8 @@ All project Node/Prisma/npm **runtime** commands must run inside Docker via `tas
 | `task send-confirmation-mails`          | Batch script: status/confirmation mails by participant IDs                           |
 | `task send-acceptance-mails`            | Local only: Act-Zusagemails (`--list` / `--dry-run` / send). Live: see below         |
 | `task send-exhibition-acceptance-mails` | Local only: Ausstellung-Zusagemails (`--list` / `--dry-run` / send). Live: see below |
+| `npm run send-festival-mail`            | Local: free-form `festival@` mail + IMAP Sent                                        |
+| `npm run imap-mail`                     | Local: IMAP CLI for the no-reply mailbox                                             |
 
 **Live deploy host** (no Taskfile; Compose service `festival-node`). Env comes from Compose — scripts use `dotenv/config` only as optional fallback, not `tsx --env-file`:
 
@@ -104,6 +106,8 @@ Single workflow in `.github/workflows/docker-image.yml`:
 - `sendSlotAttendConfirmationMail` — sent when someone registers for a slot
 - `scripts/sendAcceptanceMails.ts` — batch Zusagemails for slotted acts with Gage; sets status to `WaitingForConfirmation` + status comment
 - `scripts/sendExhibitionAcceptanceMails.ts` — same for Ausstellungen (exhibition wording, Rückmeldefrist 10.08.2026); skip already-notified RICH (762)
+- `scripts/sendFestivalMail.ts` — free-form mails from `festival@` (multipart HTML, IMAP Sent, no DB)
+- `scripts/imapMail.ts` — IMAP CLI for the no-reply mailbox
 
 ### UI
 
