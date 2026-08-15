@@ -1190,7 +1190,7 @@ const SlotplanWorkspace = ({
                                             ? undefined
                                             : participants.find(({ id }) => id === entry.participantId);
                                     const genres = participant === undefined ? [] : getParticipantGenres(participant.id);
-                                    const placement = overlapLayout.get(entry.id) ?? { chainSize: 1, index: 0 };
+                                    const placement = overlapLayout.get(entry.id) ?? { laneCount: 1, laneIndex: 0 };
                                     const isExpanded = expandedEntryId === entry.id;
                                     const statusLabel = getEntryStatusLabel(entry, participants);
 
@@ -1208,8 +1208,8 @@ const SlotplanWorkspace = ({
                                                 gridRowStart: rowStart,
                                                 gridRowEnd: `span ${rowSpan}`,
                                                 backgroundColor: getEntryColor(entry, participants),
-                                                ['--overlap-width' as string]: `${100 / placement.chainSize}%`,
-                                                ['--overlap-offset' as string]: `${(100 * placement.index) / placement.chainSize}%`,
+                                                ['--overlap-width' as string]: `${100 / placement.laneCount}%`,
+                                                ['--overlap-offset' as string]: `${(100 * placement.laneIndex) / placement.laneCount}%`,
                                             }}
                                             onClick={(e) => {
                                                 e.stopPropagation();

@@ -1,6 +1,6 @@
 import { ScheduleEntryTimeMode } from '@prisma/client';
 import { isAfter, isBefore } from 'date-fns';
-import { groupBy, max, sortBy } from 'lodash';
+import { findIndex, groupBy, max, sortBy } from 'lodash';
 import type { SerializableScheduleEntry } from '../../typings/SerializableScheduleEntry';
 import formatDate from '../common/helper/formatDate';
 import type { FestivalDayView } from '../schedule/festivalWindow';
@@ -9,8 +9,8 @@ const slotplanLocationColumnBaseWidthPx = 190;
 const slotplanOverlapColumnExtraPx = 48;
 
 export interface SlotplanOverlapPlacement {
-    chainSize: number;
-    index: number;
+    laneCount: number;
+    laneIndex: number;
 }
 
 interface TimedInterval {
@@ -20,8 +20,8 @@ interface TimedInterval {
     startsAt: Date;
 }
 
-export const getSlotplanLocationColumnWidthPx = (maxChainSize: number): number =>
-    slotplanLocationColumnBaseWidthPx + slotplanOverlapColumnExtraPx * Math.max(0, maxChainSize - 1);
+export const getSlotplanLocationColumnWidthPx = (maxLaneCount: number): number =>
+    slotplanLocationColumnBaseWidthPx + slotplanOverlapColumnExtraPx * Math.max(0, maxLaneCount - 1);
 
 export const getSlotplanEntryInterval = (
     entry: SerializableScheduleEntry,
@@ -66,11 +66,9 @@ export const buildSlotplanOverlapLayout = (
     const layout = new Map<number, SlotplanOverlapPlacement>();
 
     Object.values(groupBy(intervals, 'programLocationId')).forEach((locationIntervals) => {
-        getOverlapChains(locationIntervals).forEach((chain) => {
-            const orderedChain = sortBy(chain, ['startsAt', 'id']);
-
-            orderedChain.forEach((interval, index) => {
-                layout.set(interval.id, { chainSize: orderedChain.length, index });
+        getOverlapGroups(locationIntervals).forEach((group) => {
+            assignLanes(group).forEach((placement, id) => {
+                layout.set(id, placement);
             });
         });
     });
@@ -84,29 +82,29 @@ export const getSlotplanLocationColumnWidthsPx = (
     layout: Map<number, SlotplanOverlapPlacement>,
 ): Array<number> =>
     locationIds.map((locationId) => {
-        const chainSizes = entries
+        const laneCounts = entries
             .filter((entry) => entry.programLocationId === locationId)
-            .map((entry) => layout.get(entry.id)?.chainSize ?? 1);
+            .map((entry) => layout.get(entry.id)?.laneCount ?? 1);
 
-        return getSlotplanLocationColumnWidthPx(max(chainSizes) ?? 1);
+        return getSlotplanLocationColumnWidthPx(max(laneCounts) ?? 1);
     });
 
 const intervalsOverlap = (left: TimedInterval, right: TimedInterval): boolean =>
     isBefore(left.startsAt, right.endsAt) && isAfter(left.endsAt, right.startsAt);
 
-const getOverlapChains = (intervals: Array<TimedInterval>): Array<Array<TimedInterval>> => {
+const getOverlapGroups = (intervals: Array<TimedInterval>): Array<Array<TimedInterval>> => {
     const remaining = [...intervals];
-    const chains: Array<Array<TimedInterval>> = [];
+    const groups: Array<Array<TimedInterval>> = [];
 
     while (remaining.length > 0) {
-        const chain = [remaining.shift()!];
+        const group = [remaining.shift()!];
 
         for (let index = 0; index < remaining.length; ) {
             const candidate = remaining[index]!;
-            const touchesChain = chain.some((interval) => intervalsOverlap(interval, candidate));
+            const touchesGroup = group.some((interval) => intervalsOverlap(interval, candidate));
 
-            if (touchesChain) {
-                chain.push(candidate);
+            if (touchesGroup) {
+                group.push(candidate);
                 remaining.splice(index, 1);
                 index = 0;
                 continue;
@@ -115,8 +113,40 @@ const getOverlapChains = (intervals: Array<TimedInterval>): Array<Array<TimedInt
             index += 1;
         }
 
-        chains.push(chain);
+        groups.push(group);
     }
 
-    return chains;
+    return groups;
+};
+
+const assignLanes = (group: Array<TimedInterval>): Map<number, SlotplanOverlapPlacement> => {
+    const orderedGroup = sortBy(group, [
+        (interval) => interval.startsAt.getTime(),
+        (interval) => interval.startsAt.getTime() - interval.endsAt.getTime(),
+        'id',
+    ]);
+    const laneEndsAt: Array<Date> = [];
+    const laneById = new Map<number, number>();
+
+    orderedGroup.forEach((interval) => {
+        const laneIndex = findIndex(laneEndsAt, (endsAt) => !isAfter(endsAt, interval.startsAt));
+
+        if (laneIndex === -1) {
+            laneById.set(interval.id, laneEndsAt.length);
+            laneEndsAt.push(interval.endsAt);
+            return;
+        }
+
+        laneEndsAt[laneIndex] = interval.endsAt;
+        laneById.set(interval.id, laneIndex);
+    });
+
+    const laneCount = laneEndsAt.length;
+    const layout = new Map<number, SlotplanOverlapPlacement>();
+
+    laneById.forEach((laneIndex, id) => {
+        layout.set(id, { laneCount, laneIndex });
+    });
+
+    return layout;
 };

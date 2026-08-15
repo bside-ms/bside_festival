@@ -119,5 +119,15 @@ _Avoid_: Programmpunkt when referring to setup, teardown, or other schedule note
 
 ### Overlap
 
-Two or more Schedule Entries at the same Program Location that share any time, even a few minutes. The Slotplan shows them side by side for their full duration so the clash can be found and cleaned up. Overlap is allowed so it is visible; it is not a lasting way to share a Program Location.
+Two or more Schedule Entries at the same Program Location that share any time, even a few minutes. The Slotplan places them in different Lanes so the clash can be found and cleaned up. Overlap is allowed so it is visible; it is not a lasting way to share a Program Location.
 _Avoid_: Collision, conflict, Blocking Occupancy, shared stage (as an intended format)
+
+### Overlap Group
+
+Schedule Entries at one Program Location that are linked through Overlaps. If A overlaps B and B overlaps C, all three are one group even when A and C do not overlap. Each group has its own Lanes.
+_Avoid_: chain, cluster, pile
+
+### Lane
+
+A vertical strip inside one Program Location on the Slotplan. A Schedule Entry stays in one Lane for its whole time. Overlapping entries take different Lanes. How many Lanes an Overlap Group uses equals how many of its entries occupy the place at the same time; another group at the same place can use a different count.
+_Avoid_: chain, overlap column, column (when meaning a strip inside a Program Location)
