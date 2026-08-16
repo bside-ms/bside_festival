@@ -6,6 +6,7 @@ import { createProgramLocation, deleteUnusedProgramLocation, updateProgramLocati
 import { createScheduleEntry, deleteScheduleEntry, updateScheduleEntry } from '@/lib/actions/scheduleEntryActions';
 import cn from '@/lib/common/helper/cn';
 import formatDate from '@/lib/common/helper/formatDate';
+import { getSlotplanDisplayWindow } from '@/lib/intern/slotplanDisplayWindow';
 import { splitSlotplanPlannerLocations } from '@/lib/intern/slotplanEmptyLocations';
 import {
     buildSlotplanOverlapLayout,
@@ -881,7 +882,10 @@ const SlotplanWorkspace = ({
         filledLocationIds,
         showEmptyLocations,
     );
-    const overlapLayout = useMemo(() => buildSlotplanOverlapLayout(visibleEntries, activeDayView), [activeDayView, visibleEntries]);
+    const visibleLocationIds = new Set(visibleLocations.map(({ id }) => id));
+    const shownEntries = visibleEntries.filter((entry) => visibleLocationIds.has(entry.programLocationId));
+    const displayDayView = getSlotplanDisplayWindow(shownEntries, activeDayView);
+    const overlapLayout = useMemo(() => buildSlotplanOverlapLayout(visibleEntries, displayDayView), [displayDayView, visibleEntries]);
     const locationColumnWidths = useMemo(
         () =>
             getSlotplanLocationColumnWidthsPx(
@@ -892,8 +896,8 @@ const SlotplanWorkspace = ({
         [overlapLayout, visibleEntries, visibleLocations],
     );
     const minuteRows = useMemo(
-        () => range(0, differenceInMinutes(activeDayView.endsAt, activeDayView.startsAt), scheduleStepMinutes),
-        [activeDayView.endsAt, activeDayView.startsAt],
+        () => range(0, differenceInMinutes(displayDayView.endsAt, displayDayView.startsAt), scheduleStepMinutes),
+        [displayDayView.endsAt, displayDayView.startsAt],
     );
     const rowHeight = 28;
 
@@ -1009,7 +1013,7 @@ const SlotplanWorkspace = ({
 
     const handleEntryClick = useCallback(
         (entry: SerializableScheduleEntry, event: React.MouseEvent) => {
-            const startsAt = entry.startsAt === null ? activeDayView.startsAt : new Date(entry.startsAt);
+            const startsAt = entry.startsAt === null ? displayDayView.startsAt : new Date(entry.startsAt);
             setDraftEntry({
                 entry,
                 programLocationId: entry.programLocationId,
@@ -1019,7 +1023,7 @@ const SlotplanWorkspace = ({
                 mode: 'move',
             });
         },
-        [activeDayView.startsAt],
+        [displayDayView.startsAt],
     );
 
     const handleDeleteLocationClick = useCallback((location: SerializableProgramLocation) => {
@@ -1225,7 +1229,7 @@ const SlotplanWorkspace = ({
                                     </div>
                                 )}
                                 {minuteRows.map((minutesFromStart) => {
-                                    const startsAt = addMinutes(activeDayView.startsAt, minutesFromStart);
+                                    const startsAt = addMinutes(displayDayView.startsAt, minutesFromStart);
                                     const rowStart = minutesFromStart / scheduleStepMinutes + 2;
                                     const showTime = startsAt.getMinutes() === 0 || startsAt.getMinutes() === 30;
 
@@ -1241,7 +1245,7 @@ const SlotplanWorkspace = ({
                                 })}
                                 {visibleLocations.map((location, locationIndex) =>
                                     minuteRows.map((minutesFromStart) => {
-                                        const startsAt = addMinutes(activeDayView.startsAt, minutesFromStart);
+                                        const startsAt = addMinutes(displayDayView.startsAt, minutesFromStart);
                                         const rowStart = minutesFromStart / scheduleStepMinutes + 2;
 
                                         return (
@@ -1275,7 +1279,7 @@ const SlotplanWorkspace = ({
                                     </div>
                                 )}
                                 {visibleEntries.map((entry) => {
-                                    const interval = getSlotplanEntryInterval(entry, activeDayView);
+                                    const interval = getSlotplanEntryInterval(entry, displayDayView);
                                     const locationIndex = visibleLocations.findIndex(({ id }) => id === entry.programLocationId);
 
                                     if (locationIndex < 0 || interval === null) {
@@ -1284,9 +1288,12 @@ const SlotplanWorkspace = ({
 
                                     const startsAt = interval.startsAt;
                                     const endsAt = interval.endsAt;
-                                    const clippedStartsAt = isBefore(startsAt, activeDayView.startsAt) ? activeDayView.startsAt : startsAt;
-                                    const clippedEndsAt = isAfter(endsAt, activeDayView.endsAt) ? activeDayView.endsAt : endsAt;
-                                    const rowStart = differenceInMinutes(clippedStartsAt, activeDayView.startsAt) / scheduleStepMinutes + 2;
+                                    const clippedStartsAt = isBefore(startsAt, displayDayView.startsAt)
+                                        ? displayDayView.startsAt
+                                        : startsAt;
+                                    const clippedEndsAt = isAfter(endsAt, displayDayView.endsAt) ? displayDayView.endsAt : endsAt;
+                                    const rowStart =
+                                        differenceInMinutes(clippedStartsAt, displayDayView.startsAt) / scheduleStepMinutes + 2;
                                     const rowSpan = Math.max(1, differenceInMinutes(clippedEndsAt, clippedStartsAt) / scheduleStepMinutes);
                                     const participant =
                                         entry.participantId === null

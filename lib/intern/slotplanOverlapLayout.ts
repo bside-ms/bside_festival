@@ -3,7 +3,7 @@ import { isAfter, isBefore } from 'date-fns';
 import { findIndex, groupBy, max, sortBy } from 'lodash';
 import type { SerializableScheduleEntry } from '../../typings/SerializableScheduleEntry';
 import formatDate from '../common/helper/formatDate';
-import type { FestivalDayView } from '../schedule/festivalWindow';
+import { festivalDayViews, type FestivalDayView } from '../schedule/festivalWindow';
 
 const slotplanLocationColumnBaseWidthPx = 190;
 const slotplanOverlapColumnExtraPx = 48;
@@ -28,7 +28,12 @@ export const getSlotplanEntryInterval = (
     dayView: FestivalDayView,
 ): Pick<TimedInterval, 'endsAt' | 'startsAt'> | null => {
     if (entry.timeMode === ScheduleEntryTimeMode.AllDay) {
-        if (!entry.allDayDates.includes(formatDate(dayView.startsAt, 'yyyy-MM-dd'))) {
+        const dayDate = formatDate(
+            festivalDayViews.find(({ label }) => label === dayView.label)?.startsAt ?? dayView.startsAt,
+            'yyyy-MM-dd',
+        );
+
+        if (!entry.allDayDates.includes(dayDate)) {
             return null;
         }
 
