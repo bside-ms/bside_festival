@@ -1,6 +1,6 @@
 import { withSearchParams } from '@/lib/intern/internFilterSearchParams';
 import { festivalDayViews } from '@/lib/schedule/festivalWindow';
-import { parseAsString, parseAsStringLiteral } from 'nuqs';
+import { parseAsBoolean, parseAsString, parseAsStringLiteral } from 'nuqs';
 
 const dayLabels = festivalDayViews.map(({ label }) => label) as [string, ...Array<string>];
 
@@ -8,8 +8,11 @@ const slotplanFromValue = 'slotplan';
 const slotplanTabValues = ['planner', 'locations'] as const;
 
 export const slotplanFilterParsers = {
+    confirmedOnly: parseAsBoolean.withDefault(false),
     day: parseAsStringLiteral(dayLabels).withDefault(festivalDayViews[0]!.label),
     area: parseAsString.withDefault('all'),
+    hideNotes: parseAsBoolean.withDefault(false),
+    showEmpty: parseAsBoolean.withDefault(false),
     tab: parseAsStringLiteral(slotplanTabValues).withDefault('planner'),
 };
 
@@ -19,6 +22,14 @@ export const slotplanFilterUrlOptions = {
 };
 
 export type SlotplanAreaFilter = number | 'all' | 'unassigned';
+
+export type SlotplanViewFilters = {
+    area: SlotplanAreaFilter;
+    confirmedOnly?: boolean;
+    day: string;
+    hideNotes?: boolean;
+    showEmpty?: boolean;
+};
 
 export const parseSlotplanAreaFilter = (area: string): SlotplanAreaFilter => {
     if (area === 'all' || area === 'unassigned') {
@@ -33,19 +44,34 @@ export const parseSlotplanAreaFilter = (area: string): SlotplanAreaFilter => {
 export const serializeSlotplanAreaFilter = (area: SlotplanAreaFilter): string =>
     area === 'all' || area === 'unassigned' ? area : area.toString();
 
-const buildSlotplanHref = (day: string, area: SlotplanAreaFilter): string => {
+const appendSlotplanViewParams = (params: URLSearchParams, filters: SlotplanViewFilters): void => {
+    params.set('day', filters.day);
+    params.set('area', serializeSlotplanAreaFilter(filters.area));
+
+    if (filters.showEmpty) {
+        params.set('showEmpty', 'true');
+    }
+
+    if (filters.confirmedOnly) {
+        params.set('confirmedOnly', 'true');
+    }
+
+    if (filters.hideNotes) {
+        params.set('hideNotes', 'true');
+    }
+};
+
+const buildSlotplanHref = (filters: SlotplanViewFilters): string => {
     const params = new URLSearchParams();
-    params.set('day', day);
-    params.set('area', serializeSlotplanAreaFilter(area));
+    appendSlotplanViewParams(params, filters);
 
     return `/intern/slotplan?${params.toString()}`;
 };
 
-export const buildSlotplanDetailHref = (participantId: number, day: string, area: SlotplanAreaFilter): string => {
+export const buildSlotplanDetailHref = (participantId: number, filters: SlotplanViewFilters): string => {
     const params = new URLSearchParams();
     params.set('from', slotplanFromValue);
-    params.set('day', day);
-    params.set('area', serializeSlotplanAreaFilter(area));
+    appendSlotplanViewParams(params, filters);
 
     return `/intern/${participantId}?${params.toString()}`;
 };
@@ -55,11 +81,14 @@ export const buildContributionBackHref = (searchParams: {
     toString: () => string;
 }): { href: string; label: string } => {
     if (searchParams.get('from') === slotplanFromValue) {
-        const day = searchParams.get('day') ?? festivalDayViews[0]!.label;
-        const area = parseSlotplanAreaFilter(searchParams.get('area') ?? 'all');
-
         return {
-            href: buildSlotplanHref(day, area),
+            href: buildSlotplanHref({
+                area: parseSlotplanAreaFilter(searchParams.get('area') ?? 'all'),
+                confirmedOnly: searchParams.get('confirmedOnly') === 'true',
+                day: searchParams.get('day') ?? festivalDayViews[0]!.label,
+                hideNotes: searchParams.get('hideNotes') === 'true',
+                showEmpty: searchParams.get('showEmpty') === 'true',
+            }),
             label: '← Zurück zum Slotplan',
         };
     }

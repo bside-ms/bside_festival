@@ -110,7 +110,7 @@ _Avoid_: Info block, program entry
 
 ### Slotplan
 
-The internal canonical schedule for the festival. It contains placed participant entries and schedule notes. Every Schedule Entry has a start and an end. The Slotplan page is a viewport-owned intern workspace: the intern `AppShell` fills the screen (`h-dvh`), the marketing footer is hidden, and the grid uses the remaining height.
+The internal canonical schedule for the festival. It contains placed participant entries and schedule notes. Every Schedule Entry has a start and an end. The Slotplan page is a viewport-owned intern workspace: the intern `AppShell` fills the screen (`h-dvh`), the marketing footer is hidden, and the grid uses the remaining height. Program Locations with no visible Schedule Entry on the selected day are hidden until shown again.
 
 ### Slotplan-Eintrag
 

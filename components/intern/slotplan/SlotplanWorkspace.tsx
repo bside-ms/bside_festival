@@ -6,11 +6,13 @@ import { createProgramLocation, deleteUnusedProgramLocation, updateProgramLocati
 import { createScheduleEntry, deleteScheduleEntry, updateScheduleEntry } from '@/lib/actions/scheduleEntryActions';
 import cn from '@/lib/common/helper/cn';
 import formatDate from '@/lib/common/helper/formatDate';
+import { splitSlotplanPlannerLocations } from '@/lib/intern/slotplanEmptyLocations';
 import {
     buildSlotplanOverlapLayout,
     getSlotplanEntryInterval,
     getSlotplanLocationColumnWidthsPx,
 } from '@/lib/intern/slotplanOverlapLayout';
+import { filterSlotplanPlannerEntries } from '@/lib/intern/slotplanPlannerEntries';
 import {
     buildSlotplanDetailHref,
     parseSlotplanAreaFilter,
@@ -98,7 +100,24 @@ interface PanState {
     hasMoved: boolean;
 }
 
+const hiddenEmptyLocationsColumnWidthPx = 240;
 const panThreshold = 5;
+
+const HiddenEmptyLocationsHint = ({ count, onShow }: { count: number; onShow: () => void }): ReactElement => (
+    <div className="space-y-2">
+        <p className="font-bold">
+            {count === 1 ? '1 leerer Programmort ist ausgeblendet.' : `${count} leere Programmorte sind ausgeblendet.`}
+        </p>
+        <button
+            type="button"
+            data-slotplan-pan-ignore
+            className="cursor-pointer rounded-full border border-black bg-white px-2 py-0.5 text-xs font-bold hover:bg-gray-100"
+            onClick={onShow}
+        >
+            Trotzdem anzeigen
+        </button>
+    </div>
+);
 
 const toDateTimeLocalValue = (date: Date): string => formatDate(date, "yyyy-MM-dd'T'HH:mm");
 
@@ -806,6 +825,22 @@ const SlotplanWorkspace = ({
         },
         [setSlotplanFilters],
     );
+    const showEmptyLocations = slotplanFilters.showEmpty;
+    const confirmedOnly = slotplanFilters.confirmedOnly;
+    const hideNotes = slotplanFilters.hideNotes;
+    const setShowEmptyLocations = useCallback(
+        (showEmpty: boolean) => {
+            void setSlotplanFilters({ showEmpty });
+        },
+        [setSlotplanFilters],
+    );
+    const slotplanViewFilters = {
+        area: activeAreaFilter,
+        confirmedOnly,
+        day: activeDayLabel,
+        hideNotes,
+        showEmpty: showEmptyLocations,
+    };
 
     const [draftEntry, setDraftEntry] = useState<DraftEntry | null>(null);
     const [editedLocation, setEditedLocation] = useState<SerializableProgramLocation | null | undefined>(undefined);
@@ -818,7 +853,7 @@ const SlotplanWorkspace = ({
     const activeDayView = festivalDayViews.find(({ label }) => label === activeDayLabel) ?? festivalDayViews[0]!;
     const activeLocations = programLocations.filter(({ isActive }) => isActive);
     const hasUnassignedLocations = activeLocations.some(({ programLocationAreaId }) => programLocationAreaId === null);
-    const visibleLocations = sortBy(
+    const areaLocations = sortBy(
         activeLocations.filter(({ programLocationAreaId }) => {
             if (activeAreaFilter === 'all') {
                 return true;
@@ -838,16 +873,23 @@ const SlotplanWorkspace = ({
             ({ id }) => id,
         ],
     );
-    const activeEntries = scheduleEntries.filter((entry) => isEntryInDayView(entry, activeDayView));
-    const overlapLayout = useMemo(() => buildSlotplanOverlapLayout(activeEntries, activeDayView), [activeDayView, activeEntries]);
+    const dayEntries = scheduleEntries.filter((entry) => isEntryInDayView(entry, activeDayView));
+    const visibleEntries = filterSlotplanPlannerEntries(dayEntries, participants, confirmedOnly, hideNotes);
+    const filledLocationIds = useMemo(() => new Set(visibleEntries.map((entry) => entry.programLocationId)), [visibleEntries]);
+    const { emptyCount, hiddenEmptyCount, visibleLocations } = splitSlotplanPlannerLocations(
+        areaLocations,
+        filledLocationIds,
+        showEmptyLocations,
+    );
+    const overlapLayout = useMemo(() => buildSlotplanOverlapLayout(visibleEntries, activeDayView), [activeDayView, visibleEntries]);
     const locationColumnWidths = useMemo(
         () =>
             getSlotplanLocationColumnWidthsPx(
                 visibleLocations.map(({ id }) => id),
-                activeEntries,
+                visibleEntries,
                 overlapLayout,
             ),
-        [activeEntries, overlapLayout, visibleLocations],
+        [overlapLayout, visibleEntries, visibleLocations],
     );
     const minuteRows = useMemo(
         () => range(0, differenceInMinutes(activeDayView.endsAt, activeDayView.startsAt), scheduleStepMinutes),
@@ -1075,6 +1117,42 @@ const SlotplanWorkspace = ({
                                 Alle Bereiche
                             </button>
                         </div>
+                        <div className="flex shrink-0 gap-1 border-l border-black/20 pl-2">
+                            {(emptyCount > 0 || showEmptyLocations) && (
+                                <button
+                                    type="button"
+                                    className={cn(
+                                        'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold',
+                                        showEmptyLocations
+                                            ? 'bg-black text-white hover:bg-gray-800'
+                                            : 'bg-white text-black hover:bg-gray-100',
+                                    )}
+                                    onClick={() => setShowEmptyLocations(!showEmptyLocations)}
+                                >
+                                    Leere Orte
+                                </button>
+                            )}
+                            <button
+                                type="button"
+                                className={cn(
+                                    'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold',
+                                    confirmedOnly ? 'bg-black text-white hover:bg-gray-800' : 'bg-white text-black hover:bg-gray-100',
+                                )}
+                                onClick={() => void setSlotplanFilters({ confirmedOnly: !confirmedOnly })}
+                            >
+                                Nur Bestätigte
+                            </button>
+                            <button
+                                type="button"
+                                className={cn(
+                                    'cursor-pointer rounded-full border border-black px-2 py-0.5 text-xs font-bold',
+                                    hideNotes ? 'bg-black text-white hover:bg-gray-800' : 'bg-white text-black hover:bg-gray-100',
+                                )}
+                                onClick={() => void setSlotplanFilters({ hideNotes: !hideNotes })}
+                            >
+                                Ohne Hinweise
+                            </button>
+                        </div>
                     </div>
 
                     {draftEntry !== null && (
@@ -1092,9 +1170,13 @@ const SlotplanWorkspace = ({
                         />
                     )}
 
-                    {visibleLocations.length === 0 ? (
+                    {areaLocations.length === 0 ? (
                         <div className="min-h-0 flex-1 rounded-md border border-black bg-white p-5 font-bold">
                             Keine aktiven Programmorte in diesem Bereich.
+                        </div>
+                    ) : visibleLocations.length === 0 ? (
+                        <div className="min-h-0 flex-1 rounded-md border border-black bg-white p-5">
+                            <HiddenEmptyLocationsHint count={hiddenEmptyCount} onShow={() => setShowEmptyLocations(true)} />
                         </div>
                     ) : (
                         <div
@@ -1113,7 +1195,9 @@ const SlotplanWorkspace = ({
                             <div
                                 className="grid min-w-max"
                                 style={{
-                                    gridTemplateColumns: `80px ${locationColumnWidths.map((width) => `${width}px`).join(' ')}`,
+                                    gridTemplateColumns: `80px ${locationColumnWidths.map((width) => `${width}px`).join(' ')}${
+                                        hiddenEmptyCount > 0 ? ` ${hiddenEmptyLocationsColumnWidthPx}px` : ''
+                                    }`,
                                     gridTemplateRows: `40px repeat(${minuteRows.length}, ${rowHeight}px)`,
                                 }}
                             >
@@ -1135,6 +1219,11 @@ const SlotplanWorkspace = ({
                                         )}
                                     </div>
                                 ))}
+                                {hiddenEmptyCount > 0 && (
+                                    <div className="sticky top-0 z-40 border-r border-b border-black bg-amber-50 px-1.5 py-1 text-xs leading-tight font-bold">
+                                        Leere Orte
+                                    </div>
+                                )}
                                 {minuteRows.map((minutesFromStart) => {
                                     const startsAt = addMinutes(activeDayView.startsAt, minutesFromStart);
                                     const rowStart = minutesFromStart / scheduleStepMinutes + 2;
@@ -1171,7 +1260,21 @@ const SlotplanWorkspace = ({
                                         );
                                     }),
                                 )}
-                                {activeEntries.map((entry) => {
+                                {hiddenEmptyCount > 0 && (
+                                    <div
+                                        className="border-r border-black bg-amber-50/50 px-3 py-3 text-xs"
+                                        style={{
+                                            gridColumnStart: visibleLocations.length + 2,
+                                            gridRowStart: 2,
+                                            gridRowEnd: `span ${minuteRows.length}`,
+                                        }}
+                                    >
+                                        <div className="sticky top-12">
+                                            <HiddenEmptyLocationsHint count={hiddenEmptyCount} onShow={() => setShowEmptyLocations(true)} />
+                                        </div>
+                                    </div>
+                                )}
+                                {visibleEntries.map((entry) => {
                                     const interval = getSlotplanEntryInterval(entry, activeDayView);
                                     const locationIndex = visibleLocations.findIndex(({ id }) => id === entry.programLocationId);
 
@@ -1238,11 +1341,7 @@ const SlotplanWorkspace = ({
                                             >
                                                 {entry.kind === ScheduleEntryKind.Participant && entry.participantId !== null && (
                                                     <Link
-                                                        href={buildSlotplanDetailHref(
-                                                            entry.participantId,
-                                                            activeDayLabel,
-                                                            activeAreaFilter,
-                                                        )}
+                                                        href={buildSlotplanDetailHref(entry.participantId, slotplanViewFilters)}
                                                         data-slotplan-pan-ignore
                                                         title="Details öffnen"
                                                         className="absolute top-1 right-1 z-10 flex h-5 w-5 items-center justify-center rounded text-black/70 hover:bg-black/10 hover:text-black"
