@@ -36,11 +36,10 @@ import {
     updateApplicationParticipantCountSchema,
     updateApplicationPastParticipationSchema,
 } from '@/lib/schemas/applicationSchema';
-import allowedImageContentTypes from '@/lib/upload/allowedImageContentTypes';
-import allowedImageMaxFileSize from '@/lib/upload/allowedImageMaxFileSize';
 import allowedTechnicRiderContentType from '@/lib/upload/allowedTechnicRiderContentType';
 import allowedTechnicalRiderMaxFileSize from '@/lib/upload/allowedTechnicalRiderMaxFileSize';
 import uploadFileToIonos from '@/lib/upload/uploadFileToIonos';
+import uploadImageToIonos from '@/lib/upload/uploadImageToIonos';
 import { ChangeLogAction, ChangeLogTargetType, Prisma, Type, type ApplicationStatus } from '@prisma/client';
 import { max } from 'lodash';
 import { revalidatePath } from 'next/cache';
@@ -86,7 +85,7 @@ const recordApplicationChange = async (
 
 export async function addApplication(values: ApplicationFormValues, chosenType: Type) {
     try {
-        const imageFileName = await uploadFileToIonos(values.encodedImage, allowedImageContentTypes, allowedImageMaxFileSize);
+        const imageFileName = await uploadImageToIonos(values.encodedImage);
 
         const technicalRiderFileName = values.encodedTechnicalRiderPdf
             ? await uploadFileToIonos(values.encodedTechnicalRiderPdf, [allowedTechnicRiderContentType], allowedTechnicalRiderMaxFileSize)
@@ -570,7 +569,7 @@ export const replaceApplicationImage = loggedAction(
     'replaceApplicationImage',
     async (id: number, encodedImage: string): Promise<void> => {
         const actor = await requireLoggedInUser();
-        const imageFileName = await uploadFileToIonos(encodedImage, allowedImageContentTypes, allowedImageMaxFileSize);
+        const imageFileName = await uploadImageToIonos(encodedImage);
 
         await prismaClient.$transaction(async (tx) => {
             const application = await tx.participant.findUniqueOrThrow({

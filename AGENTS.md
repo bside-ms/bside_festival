@@ -94,7 +94,8 @@ Single workflow in `.github/workflows/docker-image.yml`:
 
 ### File Storage
 
-- **IONOS S3** (AWS SDK v3) via `lib/upload/uploadFileToIonos.ts`
+- **IONOS S3** (AWS SDK v3) via `lib/upload/uploadFileToIonos.ts` (PDFs) and `uploadImageToIonos.ts` (participant photos)
+- Images are canvas-resized in the browser (`prepareSelectedImageFile`, max 2400px JPEG) then Sharp-normalized on the server (`rotate` + resize + jpeg, EXIF stripped). Do not send raw camera JPEGs through Server Actions — iPhone Portrait files can 500 the RSC payload (`Maximum array nesting exceeded`) and poison `next/image` (`LRUCache: calculateSize returned 0`)
 - Image constraints in `allowedImageContentTypes`, `allowedImageMaxFileSize`
 - PDF constraints in `allowedTechnicRiderContentType`, `allowedTechnicalRiderMaxFileSize`
 - Server actions body size limit: 50 MB (`next.config.js`)

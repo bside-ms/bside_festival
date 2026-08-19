@@ -1,19 +1,26 @@
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import hashData from '@/lib/crypto/hashData';
-import createPutObjectCommand from '@/lib/upload/createPutObjectCommand';
-import createS3Client from '@/lib/upload/createS3Client';
+import parseEncodedFile from '@/lib/upload/parseEncodedFile';
+import putObjectToIonos from '@/lib/upload/putObjectToIonos';
 import { extension } from 'mime-types';
 
-const generateFileName = (base64Data: string, contentType: string): string => {
+const generateFileName = (hashInput: string | Buffer, contentType: string): string => {
     const fileExtension = extension(contentType);
-
-    const fileName = hashData(base64Data).slice(0, 35);
+    const fileName = hashData(hashInput).slice(0, 35);
 
     if (fileExtension === false) {
         return fileName;
     }
 
     return `${fileName}.${fileExtension}`;
+};
+
+export const uploadBufferToIonos = async (buffer: Buffer, contentType: string, hashInput: string | Buffer): Promise<string> => {
+    const fileName = generateFileName(hashInput, contentType);
+
+    await putObjectToIonos(fileName, contentType, buffer);
+
+    return fileName;
 };
 
 const uploadFileToIonos = async (
@@ -25,39 +32,17 @@ const uploadFileToIonos = async (
         return null;
     }
 
-    const fileEncodingMatch = /^data:([\w/]+);base64,/.exec(encodedFile);
-
-    if (fileEncodingMatch === null || fileEncodingMatch[1] === undefined) {
-        throw new Error(`Malformed file encoding, ${encodedFile.slice(0, 50)}...`);
-    }
-
-    const [match, contentType] = fileEncodingMatch;
+    const { base64Data, buffer, contentType } = parseEncodedFile(encodedFile);
 
     if (!allowedContentTypes.includes(contentType)) {
         throw new Error(`Unexpected content type ${contentType}, allowed types: ${allowedContentTypes.join(', ')}`);
     }
 
-    const base64Data = encodedFile.replace(match, '');
-
-    const fileName = generateFileName(base64Data, contentType);
-
-    const buffer = Buffer.from(base64Data, 'base64');
-
     if (buffer.length > allowedMaxFileSize) {
         throw new Error(`File size ${buffer.length} is too big, max. ${allowedMaxFileSize} allowed`);
     }
 
-    const s3Client = createS3Client();
-
-    const putObjectCommand = createPutObjectCommand(fileName, contentType, buffer);
-
-    const output = await s3Client.send(putObjectCommand);
-
-    if (output.$metadata.httpStatusCode !== 200) {
-        throw new Error(`Error while uploading file, ${JSON.stringify(output)}`);
-    }
-
-    return fileName;
+    return uploadBufferToIonos(buffer, contentType, base64Data);
 };
 
 export default uploadFileToIonos;

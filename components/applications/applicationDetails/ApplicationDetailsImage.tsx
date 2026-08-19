@@ -1,14 +1,11 @@
 import { deleteApplicationImage, replaceApplicationImage } from '@/lib/actions/applicationActions';
-import blobToDataUrl from '@/lib/common/helper/blobToDataUrl';
 import cn from '@/lib/common/helper/cn';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import allowedImageContentTypes from '@/lib/upload/allowedImageContentTypes';
-import allowedImageMaxFileSize from '@/lib/upload/allowedImageMaxFileSize';
 import createPublicObjectUrl from '@/lib/upload/createPublicObjectUrl';
+import prepareSelectedImageFile from '@/lib/upload/prepareSelectedImageFile';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
-import bytes from 'bytes';
-import { extension } from 'mime-types';
 import Image from 'next/image';
 import { default as NextLink } from 'next/link';
 import { type ChangeEvent, ReactElement, SyntheticEvent, useCallback, useState } from 'react';
@@ -41,36 +38,24 @@ const ApplicationDetailsImage = ({ application: { id, name, imageFileName } }: P
         async ({ target }: ChangeEvent<HTMLInputElement>) => {
             setIsSubmitting(true);
 
-            if (target.files === null || target.files[0] === undefined) {
+            try {
+                if (target.files === null || target.files[0] === undefined) {
+                    return;
+                }
+
+                const prepared = await prepareSelectedImageFile(target.files[0]);
+
+                if (!prepared.ok) {
+                    alert(prepared.message);
+                    return;
+                }
+
+                await replaceApplicationImage(id, prepared.dataUrl);
+            } catch {
+                alert('Es ist ein technischer Fehler aufgetreten');
+            } finally {
                 setIsSubmitting(false);
-                return;
             }
-
-            const file = target.files[0];
-
-            if (!allowedImageContentTypes.includes(file.type)) {
-                alert(`Dateityp nicht zulässig, erlaubt sind ${allowedImageContentTypes.map((type) => `.${extension(type)}`).join(', ')}`);
-                setIsSubmitting(false);
-                return;
-            }
-
-            if (file.size > allowedImageMaxFileSize) {
-                alert(`Max. ${bytes.format(allowedImageMaxFileSize, { unitSeparator: '', unit: 'MB' })} zulässig`);
-                setIsSubmitting(false);
-                return;
-            }
-
-            const imageDataUrl = await blobToDataUrl(file);
-
-            if (typeof imageDataUrl !== 'string') {
-                alert(`Es ist ein technischer Fehler aufgetreten`);
-                setIsSubmitting(false);
-                return;
-            }
-
-            await replaceApplicationImage(id, imageDataUrl);
-
-            setIsSubmitting(false);
         },
         [id],
     );

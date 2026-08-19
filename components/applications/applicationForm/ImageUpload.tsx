@@ -1,17 +1,14 @@
 'use client';
 
 import type { ApplicationFormValues } from '@/components/applications/applicationForm/ApplicationForm';
-import blobToDataUrl from '@/lib/common/helper/blobToDataUrl';
 import cn from '@/lib/common/helper/cn';
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import allowedImageContentTypes from '@/lib/upload/allowedImageContentTypes';
-import allowedImageMaxFileSize from '@/lib/upload/allowedImageMaxFileSize';
+import prepareSelectedImageFile from '@/lib/upload/prepareSelectedImageFile';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Type } from '@prisma/client';
-import bytes from 'bytes';
 import { uniqueId } from 'lodash';
-import { extension } from 'mime-types';
 import Image from 'next/image';
 import type { ChangeEvent, ReactElement } from 'react';
 import { useCallback, useRef } from 'react';
@@ -56,32 +53,15 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
                 return;
             }
 
-            const file = target.files[0];
+            const prepared = await prepareSelectedImageFile(target.files[0]);
 
-            if (!allowedImageContentTypes.includes(file.type)) {
+            if (!prepared.ok) {
                 setValue(fieldName, '');
-                setError(fieldName, {
-                    message: `Dateityp nicht zulässig, erlaubt sind ${allowedImageContentTypes
-
-                        .map((type) => `.${extension(type)}`)
-                        .join(', ')}`,
-                });
+                setError(fieldName, { message: prepared.message });
                 return;
             }
 
-            if (file.size > allowedImageMaxFileSize) {
-                setValue(fieldName, '');
-                setError(fieldName, {
-                    message: `Max. ${bytes.format(allowedImageMaxFileSize, { unitSeparator: '', unit: 'MB' })} zulässig`,
-                });
-                return;
-            }
-
-            const imageDataUrl = await blobToDataUrl(file);
-
-            if (typeof imageDataUrl === 'string') {
-                setValue(fieldName, imageDataUrl);
-            }
+            setValue(fieldName, prepared.dataUrl);
         },
         [clearErrors, setError, setValue],
     );
@@ -129,7 +109,7 @@ const ImageUpload = ({ chosenType }: Props): ReactElement => {
             <label htmlFor={fileInputId.current} className="cursor-pointer">
                 {isNotEmptyString(currentImageDataUrl) ? (
                     <div className="relative h-24 w-full overflow-hidden">
-                        <Image src={currentImageDataUrl} alt="Upload-Vorschau" fill={true} style={{ objectFit: 'contain' }} />
+                        <Image src={currentImageDataUrl} alt="Upload-Vorschau" fill={true} unoptimized style={{ objectFit: 'contain' }} />
                     </div>
                 ) : (
                     <div

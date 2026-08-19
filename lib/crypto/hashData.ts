@@ -2,10 +2,10 @@ import hashAlgorithm from '@/lib/crypto/hashAlgorithm';
 import { Buffer } from 'buffer';
 import crypto from 'crypto';
 
-const hashData = (data: string): string => {
+const hashData = (data: string | Buffer): string => {
     return crypto
         .createHmac(hashAlgorithm, Buffer.from(process.env.CRYPTO_SECRET ?? ''))
-        .update(Buffer.from(data))
+        .update(data)
         .digest()
         .toString('hex');
 };
