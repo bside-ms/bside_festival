@@ -10,7 +10,7 @@ Copy rule: colleague feedback overrides Figma text; layout stays Figma. Canonica
 
 - [ ] Export/assets from Figma (logos, building, waves, photos, Förderer marks)
 - [x] Add Framer Motion dependency (Docker + host `npm ci` per project rules)
-- [x] AStA: labeled placeholder until real logo arrives
+- [x] Förderer logos from 2026 print poster (Kulturamt, MKW, Soziokultur NRW, Romero, KI, stupa.ms, Hansa Floß)
 - [x] Fix known bad copy baselines (festival dates 18.–19.09.; Sputnikhalle spelling)
 
 ## Phase 1 — Public shell
@@ -60,7 +60,7 @@ Copy rule: colleague feedback overrides Figma text; layout stays Figma. Canonica
 
 ## Phase 6 — Later / out of redesign gate
 
-- [ ] Drop in real AStA logo
+- [x] Förderer row matches 2026 poster (AStA not on poster; StuPa / stupa.ms is)
 - [ ] Finalize Ort count / Freihaus / stats line
 - [ ] Workshop registration link target when ready
 - [ ] Engelsystem setup (Kennet / orga); not named on the public site yet

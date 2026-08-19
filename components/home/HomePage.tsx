@@ -67,7 +67,7 @@ const HomePage = (): ReactElement => {
                 </div>
             </section>
 
-            <section id="wo-und-wann" className="relative scroll-mt-20 overflow-hidden bg-[#3aa0e8] text-black">
+            <section id="wo-und-wann" className="relative scroll-mt-32 overflow-hidden bg-[#3aa0e8] text-black">
                 <div className="pointer-events-none absolute top-16 right-0 h-40 w-56 rounded-[48%] bg-white/50 blur-sm" />
                 <div className={sectionPad}>
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -119,7 +119,7 @@ const HomePage = (): ReactElement => {
                 </div>
             </section>
 
-            <section id="mitwirken" className="relative scroll-mt-20 overflow-hidden bg-[#e23b3b] text-white">
+            <section id="mitwirken" className="relative scroll-mt-32 overflow-hidden bg-[#e23b3b] text-white">
                 <div className="pointer-events-none absolute -right-10 -bottom-16 h-56 w-72 rounded-[45%] bg-[#1d2a6b]/25" />
                 <div className={sectionPad}>
                     <div className="max-w-3xl">
@@ -156,7 +156,7 @@ const HomePage = (): ReactElement => {
                 </div>
             </section>
 
-            <section id="ueber-uns" className="scroll-mt-20 bg-[#5b3d8f] text-white">
+            <section id="ueber-uns" className="scroll-mt-32 bg-[#5b3d8f] text-white">
                 <div className={sectionPad}>
                     <div className="text-xs font-bold tracking-[0.2em] uppercase opacity-80">Über uns</div>
                     <h2 className="mt-2 text-4xl font-black sm:text-5xl md:text-6xl">Info</h2>
@@ -220,7 +220,7 @@ const HomePage = (): ReactElement => {
                 </div>
             </section>
 
-            <section id="eindruecke" className="scroll-mt-20 bg-[#f08c28]">
+            <section id="eindruecke" className="scroll-mt-32 bg-[#f08c28]">
                 <div className={sectionPad}>
                     <div className="text-xs font-bold tracking-[0.2em] uppercase">Eindrücke</div>
                     <h2 className="mt-2 text-4xl font-black sm:text-5xl md:text-6xl">Galerie</h2>

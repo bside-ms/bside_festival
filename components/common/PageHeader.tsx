@@ -12,7 +12,7 @@ interface Props {
 
 const PageHeader = ({ fullWidth = false, nav }: Props): ReactElement => {
     return (
-        <header className="relative z-40 shrink-0 bg-black">
+        <header className={cn('z-40 shrink-0 bg-black', fullWidth ? 'relative' : 'sticky top-0')}>
             <div className={cn('mx-auto flex h-15 items-center gap-4 px-4 py-2 md:px-8', fullWidth ? 'max-w-none' : 'max-w-7xl')}>
                 <Link href="/" className="shrink-0">
                     <Image src={logo} alt="B-Side Festival" height={46} className="h-10 w-auto md:h-11" />

@@ -122,6 +122,9 @@ Single workflow in `.github/workflows/docker-image.yml`:
 - **React Hook Form** with `FormProvider` pattern in all forms
 - Case-insensitive substring search on name + contactName in `/intern` and `/programm`, with light fuzzy (1–2 edits) only when a name/contact token shares a strong prefix
 - Font Awesome + React Icons for icons
+- Public footer Förderer match the 2026 print poster: Stadt Münster Kulturamt, MKW NRW, Soziokultur NRW, Romero Initiative, KI Münster, stupa.ms, Hansa Floß. AStA is not on the poster.
+- Public header is sticky. Festival 2026 hash links (`/#wo-und-wann`, `/#ueber-uns`) smooth-scroll when the section is already on the page (`lib/public/scrollToPageHash.ts`); `scroll-mt-32` keeps the block below the header.
+- Hero date (`18.–19.` / `September`) sits upright on the black dock face at every breakpoint (`HomeHero`). The full-color mark sits top-right under the header below `md`, and over the harbor illustration from `md` up.
 
 ---
 

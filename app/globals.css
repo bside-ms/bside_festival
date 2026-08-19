@@ -232,6 +232,12 @@
     }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+
 @layer utilities {
     .empty-placeholder:empty::after {
         padding: 5px 12px 0;

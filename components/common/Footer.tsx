@@ -1,10 +1,79 @@
 import InternalLinks from '@/components/common/InternalLinks';
-import AKKW from '@/images/logos/ak_kultur_und_wissenschaft.svg';
-import SZNRW from '@/images/logos/sozio_kultur_nrw.svg';
-import Image from 'next/image';
+import hansaFloss from '@/images/logos/hansa-floss.png';
+import mkwNrw from '@/images/logos/mkw-nrw.svg';
+import romeroInitiative from '@/images/logos/romero-initiative.png';
+import soziokulturNrw from '@/images/logos/sozio_kultur_nrw.svg';
+import stadtMuensterKi from '@/images/logos/stadt-muenster-ki.png';
+import stadtMuensterKulturamt from '@/images/logos/stadt-muenster-kulturamt.png';
+import stupaMs from '@/images/logos/stupa-ms.png';
+import cn from '@/lib/common/helper/cn';
+import Image, { type StaticImageData } from 'next/image';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 import { FaFacebookSquare, FaInstagram, FaMastodon } from 'react-icons/fa';
+
+type Funder = {
+    id: string;
+    src: StaticImageData;
+    alt: string;
+    href: string;
+    height: number;
+    invert?: boolean;
+};
+
+const funders: Funder[] = [
+    {
+        id: 'kulturamt',
+        src: stadtMuensterKulturamt,
+        alt: 'Stadt Münster Kulturamt',
+        href: 'https://www.stadt-muenster.de/kulturamt',
+        height: 40,
+        invert: true,
+    },
+    {
+        id: 'mkw',
+        src: mkwNrw,
+        alt: 'Ministerium für Kultur und Wissenschaft des Landes Nordrhein-Westfalen',
+        href: 'https://www.mkw.nrw/',
+        height: 36,
+    },
+    {
+        id: 'soziokultur',
+        src: soziokulturNrw,
+        alt: 'Soziokultur NRW',
+        href: 'https://www.soziokultur-nrw.de/',
+        height: 40,
+    },
+    {
+        id: 'romero',
+        src: romeroInitiative,
+        alt: 'Romero Initiative — Stimme für Gerechtigkeit',
+        href: 'https://www.ci-romero.de/',
+        height: 36,
+    },
+    {
+        id: 'ki',
+        src: stadtMuensterKi,
+        alt: 'KI Kommunales Integrationszentrum Münster',
+        href: 'https://www.stadt-muenster.de/zuwanderung/ueber-das-ki',
+        height: 44,
+        invert: true,
+    },
+    {
+        id: 'stupa',
+        src: stupaMs,
+        alt: 'Studierendenparlament der Universität Münster',
+        href: 'https://stupa.ms/',
+        height: 36,
+    },
+    {
+        id: 'hansafloss',
+        src: hansaFloss,
+        alt: 'Hansa Floß',
+        href: 'https://www.hansafloss-muenster.de/',
+        height: 36,
+    },
+];
 
 const Footer = (): ReactElement => {
     return (
@@ -44,15 +113,23 @@ const Footer = (): ReactElement => {
 
                 <div>
                     Das B-Side Festival wird gefördert von:
-                    <div className="flex flex-wrap items-center justify-center gap-6 p-5 pt-2 md:gap-8">
-                        <Image src={AKKW} height="35" alt="AK Kultur und Wissenschaft" />
-                        <Image src={SZNRW} height="35" alt="Sozio Kultur NRW" className="-mt-2" />
-                        <div
-                            className="flex h-9 min-w-20 items-center justify-center rounded border border-dashed border-white/40 px-3 text-xs text-white/70"
-                            title="Logo folgt"
-                        >
-                            AStA
-                        </div>
+                    <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-5 p-5 pt-3 md:gap-x-8">
+                        {funders.map((funder) => (
+                            <Link
+                                key={funder.id}
+                                href={funder.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center"
+                            >
+                                <Image
+                                    src={funder.src}
+                                    height={funder.height}
+                                    alt={funder.alt}
+                                    className={cn('h-9 w-auto md:h-10', funder.invert && 'invert')}
+                                />
+                            </Link>
+                        ))}
                     </div>
                 </div>
 

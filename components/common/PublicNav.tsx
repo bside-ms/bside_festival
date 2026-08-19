@@ -1,6 +1,7 @@
 'use client';
 
 import { getProgrammNavLink, getPublicNavGroups, type PublicNavGroup, type PublicNavLink } from '@/lib/public/publicNav';
+import { getPageHash, scrollToPageHash } from '@/lib/public/scrollToPageHash';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -16,8 +17,34 @@ const NavLinkItem = ({
     className?: string;
     onNavigate?: MouseEventHandler<HTMLAnchorElement>;
 }): ReactElement => {
+    const hash = getPageHash(link.href);
+
+    const handleClick = useCallback<MouseEventHandler<HTMLAnchorElement>>(
+        (event) => {
+            onNavigate?.(event);
+            if (hash === undefined || event.defaultPrevented) {
+                return;
+            }
+
+            if (!scrollToPageHash(hash)) {
+                return;
+            }
+
+            event.preventDefault();
+            if (window.location.hash !== `#${hash}`) {
+                window.history.pushState(null, '', `/#${hash}`);
+            }
+        },
+        [hash, onNavigate],
+    );
+
     return (
-        <Link href={link.href} className={cn('text-white no-underline hover:text-rose-300', className)} onClick={onNavigate}>
+        <Link
+            href={link.href}
+            scroll={hash === undefined}
+            className={cn('text-white no-underline hover:text-rose-300', className)}
+            onClick={handleClick}
+        >
             {link.label}
         </Link>
     );
@@ -54,7 +81,7 @@ const DesktopNavGroup = ({
                     <ul className="space-y-1">
                         {group.links.map((link) => (
                             <li key={link.id}>
-                                <NavLinkItem link={link} className="block rounded-lg px-2 py-1.5 text-sm" />
+                                <NavLinkItem link={link} className="block rounded-lg px-2 py-1.5 text-sm" onNavigate={onClose} />
                             </li>
                         ))}
                     </ul>
@@ -96,6 +123,18 @@ const PublicNav = (): ReactElement => {
     useEffect(() => {
         setMobileOpen(false);
         setOpenGroupId(null);
+    }, [pathname]);
+
+    useEffect(() => {
+        const hash = window.location.hash.slice(1);
+        if (hash === '') {
+            return;
+        }
+
+        const frame = window.requestAnimationFrame(() => {
+            scrollToPageHash(hash);
+        });
+        return () => window.cancelAnimationFrame(frame);
     }, [pathname]);
 
     useEffect(() => {
