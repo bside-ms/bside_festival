@@ -15,8 +15,8 @@ The stage of an application in the festival coordination pipeline. The valid sta
 - **Contacted (Kontaktiert):** The team is in active booking/technical negotiations with the artist.
 - **Waiting for Confirmation (Zusage offen):** An offer has been sent, awaiting artist confirmation.
 - **Confirmed (Bestätigt):** The artist has confirmed; the act is officially part of the festival program.
-- **Rejected (Abgelehnt):** The application was declined by the curation team.
-- **Canceled (Abgesagt):** The act was canceled by the artist or team after confirmation/negotiations.
+- **Rejected (Abgelehnt):** The application is out of the program. This covers a festival decline and an applicant withdrawal before the act was confirmed. Who said no, and why, lives in the comment.
+- **Canceled (Abgesagt):** The act left the program after it was confirmed. It can still appear in the public program with a cancellation notice.
 
 ### Bonus Score
 
