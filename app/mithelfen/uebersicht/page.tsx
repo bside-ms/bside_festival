@@ -11,7 +11,7 @@ export default async (): Promise<ReactElement> => {
         redirect('/');
     }
 
-    const volunteers = await prismaClient.volunteer.findMany();
+    const volunteers = await prismaClient.volunteer.findMany({ orderBy: { createdAt: 'desc' } });
 
     const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
 

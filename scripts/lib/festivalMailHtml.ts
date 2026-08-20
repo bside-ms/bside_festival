@@ -1,5 +1,5 @@
-const escapeHtml = (value: string): string =>
-    value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+import createMailHtml from '@/lib/mail/createMailHtml';
+import { escapeHtml } from '@/lib/mail/escapeHtml';
 
 type Block = { kind: 'p' | 'slot' | 'quote'; text: string };
 
@@ -88,45 +88,5 @@ const renderBlock = (block: Block): string => {
 export const festivalMailHtml = (rawBody: string): string => {
     const bodyHtml = parseMarkedBlocks(rawBody).map(renderBlock).join('\n');
 
-    return `<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <title>B-Side Festival 2026</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body style="margin:0;padding:0;background-color:#f0e8f0;font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0e8f0;">
-    <tr>
-      <td align="center" style="padding:32px 16px;">
-        <table cellpadding="0" cellspacing="0" style="width:100%;max-width:580px;border-radius:10px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
-          <tr>
-            <td style="background:linear-gradient(160deg,#d682b5 0%,#e8c8e0 60%,#f5eef5 100%);padding:32px 40px 28px;">
-              <p style="margin:0;font-size:26px;font-weight:800;color:#2a2a2a;line-height:1.1;letter-spacing:-0.01em;">B-Side Festival 2026</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="background-color:#3fa9f5;padding:0;height:5px;font-size:0;line-height:0;">&nbsp;</td>
-          </tr>
-          <tr>
-            <td style="background-color:#ffffff;padding:36px 40px 8px;">
-              ${bodyHtml}
-            </td>
-          </tr>
-          <tr>
-            <td style="background-color:#f5eef5;border-top:1px solid #e8dce8;padding:20px 40px;">
-              <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#6b7280;line-height:1.4;">B-Side Festival 2026</p>
-              <p style="margin:0 0 4px;font-size:12px;color:#9ca3af;line-height:1.5;">18.–20. September · Münster · B-Side &amp; Hansaviertel</p>
-              <p style="margin:0;font-size:12px;color:#9ca3af;line-height:1.5;">
-                <a href="https://festival.b-side.ms" style="color:#d682b5;text-decoration:none;">festival.b-side.ms</a>
-                · B-Side Kultur e.V.
-              </p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`;
+    return createMailHtml(bodyHtml, { autoReplyNotice: false });
 };

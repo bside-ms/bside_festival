@@ -5,7 +5,7 @@ import isEmptyNumber from '@/lib/common/helper/isEmptyNumber';
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
 import useIsMounted from '@/lib/common/hooks/useIsMounted';
 import { uniqueId } from 'lodash';
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import { useMemo } from 'react';
 import type { FieldPath, FieldValues } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
@@ -16,8 +16,10 @@ interface Props<T extends FieldValues> {
     defaultValue?: string;
     info?: string;
     additionalInfo?: string;
+    description?: ReactNode;
     required?: boolean;
     maxLength?: number;
+    placeholder?: string;
     rows?: number;
 }
 
@@ -27,8 +29,10 @@ const TextArea = <T extends FieldValues>({
     defaultValue,
     info,
     additionalInfo,
+    description,
     required = false,
     maxLength,
+    placeholder,
     rows = 5,
 }: Props<T>): ReactElement => {
     const {
@@ -46,17 +50,23 @@ const TextArea = <T extends FieldValues>({
             {isNotEmptyString(info) && (
                 <label htmlFor={id} className="px-1 text-base">
                     {info}
+                    {required ? <span aria-hidden="true"> *</span> : null}
                 </label>
             )}
+
+            {description}
 
             <textarea
                 id={id}
                 className={cn(
-                    'rounded border border-black p-2 outline-0 placeholder:opacity-55',
+                    'rounded border border-black bg-white p-2 outline-0 placeholder:opacity-55',
                     typeof errorMessage === 'string' && 'bg-rose-400',
                 )}
                 rows={rows}
-                placeholder={required ? `${label} *` : label}
+                maxLength={isEmptyNumber(maxLength) ? undefined : maxLength}
+                placeholder={
+                    placeholder ?? (isNotEmptyString(info) ? (info === label ? undefined : label) : required ? `${label} *` : label)
+                }
                 required={required}
                 disabled={isSubmitting}
                 defaultValue={defaultValue}

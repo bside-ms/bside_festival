@@ -17,14 +17,19 @@ _Avoid_: B-Side-Festival, B Side Festival, BSide Festival
 The non-profit association that organizes the B-Side Festival and year-round cultural programming.
 _Avoid_: B Side Kultur, the festival (when the legal organizer is meant)
 
+### Galerie
+
+The public homepage recap of a past B-Side Festival edition. Each image names its photographer directly: Gideon Rothmann for files credited to him and Laura Windheuser for the remaining 2025 images.
+_Avoid_: uncredited photo grid, placeholder gallery
+
 ### Awareness
 
-The festival’s public safety and anti-discrimination offering: a short homepage teaser plus a full dedicated page, with English and Leichte Sprache alternates of the full page.
-_Avoid_: Safer Space (as the page name), Awareness & Safety (as the only label when a shorter German label is used)
+The festival’s public safety and anti-discrimination offering: a short homepage teaser plus a full dedicated page, with English, Leichte Sprache, and Easy Language alternates of the full page. The German page eyebrow may say Awareness & Safety; the page name stays Awareness.
+_Avoid_: Safer Space (as the page name)
 
 ### Helfi
 
-A person who signs up publicly to help run the festival (crew). Public UI may also say Helfer\*in; the casual festival term is Helfi. Signup collects name, email, phone, and optional free-text notes; day availability is not collected up front. Email must be confirmed before the signup counts as complete. The confirmation mail leads with the confirm action, then Judith-style onboarding (pool, later Schichtpläne, Treffen, Telegram during festival, festival mail for questions). Shift assignment happens later in a separate Schichtsystem, not named publicly as Engelsystem.
+A person who signs up publicly to help run the festival (crew). Public UI may also say Helfer\*in; the casual festival term is Helfi. Signup collects name, email, phone, and an optional free-text note (rough availability or car; empty is fine). Copy should not imply special skills or experience. Day checkboxes are not collected up front. Email must be confirmed before the signup counts as complete. The first mail only asks to confirm the address; after the click, a second mail covers onboarding (later Schichtpläne, Treffen, Telegram during the festival, festival mail for questions). Shift assignment happens later in a separate Schichtsystem, not named publicly as Engelsystem. Organizers read the notes on `/mithelfen/uebersicht`.
 _Avoid_: Volunteer (in public German UI), Engelsystem user (as the public label)
 
 ### Mitwirken

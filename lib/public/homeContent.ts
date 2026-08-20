@@ -1,6 +1,7 @@
 export const homeAddress = 'Am Mittelhafen 42, 48155 Münster';
 export const homeDateDays = '18.–19.';
 export const homeDateMonth = 'September';
+export const homeMotto = 'Kultur. Hafen. Kante!';
 export const bsideOrte = ['B-Side Saal', 'Open Air Bühne', 'Wohnzimmer', 'Bewegungsraum', 'Raum 1', 'Raum 2', 'Raum 3'] as const;
 
 export const hansaviertelOrte = [

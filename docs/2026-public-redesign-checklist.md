@@ -15,7 +15,7 @@ Copy rule: colleague feedback overrides Figma text; layout stays Figma. Canonica
 
 ## Phase 1 — Public shell
 
-- [x] Redesign header/footer for **all public pages**
+- [x] Redesign header/footer for **all public pages** (footer: sky-blue, Festival 2026 / Mitwirken / Socials, motto + harbor waves)
 - [x] Nav groups: **Festival 2026** | **Mitwirken** (+ utility: Socials, Spenden, Leichte Sprache entry)
 - [x] Festival 2026 links: Wo & Wann, Über uns, Awareness; Programm only when `isProgramPublished`
 - [x] Mitwirken links: Helfis → `/mithelfen` (Workshops omitted until a real target exists)
@@ -36,20 +36,20 @@ Copy rule: colleague feedback overrides Figma text; layout stays Figma. Canonica
 
 ## Phase 3 — Awareness + Leichte Sprache
 
-- [ ] Restyle `/awareness` to match new shell; keep DE full concept
-- [ ] Keep `/awareness/english` and `/awareness/leichte-sprache`; restyle lightly
+- [x] Restyle `/awareness` to match new shell; keep DE full concept
+- [x] Keep `/awareness/english` and `/awareness/leichte-sprache`; restyle lightly; add `/awareness/easy-language`
 - [ ] Plain **Start** Leichte Sprache page (light draft from jubilee copy; not Figma LS mirror)
 - [ ] Discreet LS entry from header/footer or Start
 
 ## Phase 4 — Helfi signup (Insta-ready)
 
-- [ ] Mitwirken CTA + nav land on `/mithelfen`
-- [ ] Page prose above form: (A) task examples (B) next steps
-- [ ] Form: name, email, phone, optional free text; remove day prefs from UI
-- [ ] Confirmation mail: confirm action **first**, then Judith onboarding; say Schichtsystem not Engelsystem
-- [ ] Confirm route + persisted confirmed state (reuse Bewerbung token pattern where sensible)
-- [ ] `/mithelfen/uebersicht`: show all; tiny unconfirmed mark; no filter
-- [ ] No per-signup mail to festival@
+- [x] Mitwirken CTA + nav land on `/mithelfen`
+- [x] Page prose above form: (A) task examples (B) next steps
+- [x] Form: name, email, phone, optional free text; remove day prefs from UI
+- [x] Confirmation mail: confirm action first; welcome/onboarding mail after confirm; say Schichtsystem not Engelsystem
+- [x] Confirm route + persisted confirmed state (reuse Bewerbung token pattern where sensible)
+- [x] `/mithelfen/uebersicht`: show all; tiny unconfirmed mark; no filter
+- [x] No per-signup mail to festival@
 
 ## Phase 5 — Motion polish (post-launch OK)
 

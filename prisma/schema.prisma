@@ -1,6 +1,6 @@
 generator client {
     provider      = "prisma-client-js"
-    binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+    binaryTargets = ["native"]
 }
 
 datasource db {
@@ -290,23 +290,24 @@ enum ScheduleEntryTimeMode {
 
 model Volunteer {
     // Primary key is called int instead of id by accident >_<
-    int                   Int     @id @default(autoincrement())
-    fullName              String  @db.Text
-    mailAddress           String  @db.Text
-    phoneNumber           String  @db.Text
-    canCook               Boolean @default(false)
-    hasCar                Boolean @default(false)
-    canCarryHeavyStuff    Boolean @default(false)
-    isSocial              Boolean @default(false)
-    canSupportTechnician  Boolean @default(false)
-    canSupportArtist      Boolean @default(false)
-    hasMultipleTalents    Boolean @default(false)
-    canWorkWithChildren   Boolean @default(false)
-    isAvailableOnFriday   Boolean @default(false)
-    isAvailableOnSaturday Boolean @default(false)
-    isAvailableOnSunday   Boolean @default(false)
-    isAvailableBefore     Boolean @default(false)
-    additionalInfo        String? @db.Text
+    int                Int                               @id @default(autoincrement())
+    fullName           String                            @db.Text
+    mailAddress        String                            @db.Text
+    phoneNumber        String                            @db.Text
+    additionalInfo     String?                           @db.Text
+    emailVerified      DateTime?
+    createdAt          DateTime                          @default(now())
+    verificationTokens VolunteerEmailVerificationToken[]
+}
+
+model VolunteerEmailVerificationToken {
+    id          Int       @id @default(autoincrement())
+    volunteer   Volunteer @relation(fields: [volunteerId], references: [int], onDelete: Cascade)
+    volunteerId Int
+    token       String    @unique
+    expires     DateTime
+
+    @@index([volunteerId])
 }
 
 model Attendee {

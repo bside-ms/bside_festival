@@ -1,24 +1,29 @@
-'use client';
-
 import { HeroDockDesktop, HeroDockMobile } from '@/components/home/hero/HeroDock';
+import { HeroMottoDesktop } from '@/components/home/hero/HeroMottoDesktop';
+import { HeroMottoMobile } from '@/components/home/hero/HeroMottoMobile';
 import { HeroWaterDesktop, HeroWaterMobile } from '@/components/home/hero/HeroWater';
+import zehnJahreBadge from '@/images/2026/home/zehn-jahre-badge.svg';
 import logoMark from '@/images/2026/logo_transparent.svg';
-import { homeDateDays, homeDateMonth } from '@/lib/public/homeContent';
+import { homeDateDays, homeDateMonth, homeMotto } from '@/lib/public/homeContent';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 
-type DateStampProps = {
+type HarborStampProps = {
     className: string;
-    daySize: number;
-    monthDy: number;
-    monthSize: number;
     preserveAspectRatio: string;
     viewBox: string;
-    x: number;
-    y: number;
 };
 
-const HeroDateStamp = ({ className, daySize, monthDy, monthSize, preserveAspectRatio, viewBox, x, y }: DateStampProps): ReactElement => (
+const HeroDateStamp = ({
+    className,
+    daySize,
+    monthDy,
+    monthSize,
+    preserveAspectRatio,
+    viewBox,
+    x,
+    y,
+}: HarborStampProps & { daySize: number; monthDy: number; monthSize: number; x: number; y: number }): ReactElement => (
     <svg viewBox={viewBox} className={className} preserveAspectRatio={preserveAspectRatio} aria-hidden={true}>
         <text x={x} y={y} fill="#f2c48d" fontFamily="BricolageGrotesque, sans-serif" fontWeight="800" fontSize={daySize}>
             <tspan x={x} dy="0">
@@ -31,47 +36,95 @@ const HeroDateStamp = ({ className, daySize, monthDy, monthSize, preserveAspectR
     </svg>
 );
 
-const HomeHero = (): ReactElement => {
-    return (
-        <section className="relative h-[calc(100dvh-3.75rem)] max-h-[56rem] overflow-hidden bg-gradient-to-br from-[#f4b6d6] via-[#f7cfe2] to-white">
-            {/* 3.75rem = public header h-15, so header + hero fill the viewport until max-h */}
-            {/* slice + yMax: cover the viewport box, keep dock/waves on the bottom edge, crop leftover sky */}
-            <HeroWaterMobile
-                className="pointer-events-none absolute inset-0 h-full w-full md:hidden"
-                preserveAspectRatio="xMidYMax slice"
-            />
-            <HeroDockMobile className="pointer-events-none absolute inset-0 h-full w-full md:hidden" preserveAspectRatio="xMidYMax slice" />
+const HeroBadgeStamp = ({
+    className,
+    height,
+    preserveAspectRatio,
+    viewBox,
+    width,
+    x,
+    y,
+}: HarborStampProps & { height: number; width: number; x: number; y: number }): ReactElement => (
+    <svg viewBox={viewBox} className={className} preserveAspectRatio={preserveAspectRatio} aria-hidden={true}>
+        <image href={zehnJahreBadge.src} x={x} y={y} width={width} height={height} />
+    </svg>
+);
+
+const HomeHero = (): ReactElement => (
+    <section className="relative h-[calc(100dvh-3.75rem)] max-h-224 overflow-hidden bg-linear-to-br from-[#f4b6d6] via-[#f7cfe2] to-white">
+        <div className="pointer-events-none absolute inset-x-0 top-0 bottom-[-8%] md:hidden">
+            <HeroWaterMobile className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMax slice" />
+            <HeroDockMobile className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMax slice" />
+
             <HeroDateStamp
-                className="pointer-events-none absolute inset-0 h-full w-full md:hidden"
+                className="absolute inset-0 h-full w-full min-[410px]:hidden"
                 preserveAspectRatio="xMidYMax slice"
                 viewBox="0 0 393 634"
-                x={140}
-                y={548}
-                daySize={36}
+                x={130}
+                y={498}
+                daySize={25}
+                monthSize={23}
+                monthDy={22}
+            />
+            <HeroDateStamp
+                className="absolute inset-0 hidden h-full w-full min-[410px]:block"
+                preserveAspectRatio="xMidYMax slice"
+                viewBox="0 0 393 634"
+                x={130}
+                y={498}
+                daySize={30}
                 monthSize={28}
                 monthDy={28}
             />
 
-            {/* Desktop: slice keeps dock flush to the viewport edge */}
-            <HeroWaterDesktop
-                className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
-                preserveAspectRatio="xMaxYMax slice"
+            <HeroBadgeStamp
+                className="absolute inset-0 hidden h-full w-full min-[410px]:block min-[510px]:hidden"
+                preserveAspectRatio="xMidYMax slice"
+                viewBox="0 0 393 634"
+                x={303}
+                y={458}
+                width={48}
+                height={176}
             />
-            <HeroDockDesktop
-                className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
-                preserveAspectRatio="xMaxYMax slice"
+            <HeroBadgeStamp
+                className="absolute inset-0 hidden h-full w-full min-[510px]:block"
+                preserveAspectRatio="xMidYMax slice"
+                viewBox="0 0 393 634"
+                x={313}
+                y={458}
+                width={58}
+                height={176}
             />
-            <HeroDateStamp
-                className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
-                preserveAspectRatio="xMaxYMax slice"
-                viewBox="0 0 1440 800"
-                x={1008}
-                y={658}
-                daySize={76}
-                monthSize={62}
-                monthDy={58}
-            />
+        </div>
+        <HeroWaterDesktop
+            className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
+            preserveAspectRatio="xMaxYMax slice"
+        />
+        <HeroDockDesktop
+            className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
+            preserveAspectRatio="xMaxYMax slice"
+        />
+        <HeroDateStamp
+            className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
+            preserveAspectRatio="xMaxYMax slice"
+            viewBox="0 0 1440 800"
+            x={958}
+            y={628}
+            daySize={56}
+            monthSize={52}
+            monthDy={48}
+        />
+        <HeroBadgeStamp
+            className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
+            preserveAspectRatio="xMaxYMax slice"
+            viewBox="0 0 1440 800"
+            x={1298}
+            y={624}
+            width={108}
+            height={186}
+        />
 
+        <div className="absolute inset-0 z-10 mx-auto w-full max-w-300">
             <Image
                 src={logoMark}
                 alt=""
@@ -79,14 +132,24 @@ const HomeHero = (): ReactElement => {
                 height={439}
                 aria-hidden={true}
                 priority
-                className="pointer-events-none absolute top-2 right-0 z-10 h-auto w-48 md:top-auto md:right-[12%] md:bottom-[42%] md:w-64"
+                className="pointer-events-none absolute top-8 right-4 z-20 h-auto w-32 sm:right-5 sm:w-40 md:top-10 md:right-6 md:w-48 lg:w-60 xl:w-72"
             />
 
-            <p className="sr-only">
-                {homeDateDays} {homeDateMonth}
-            </p>
-        </section>
-    );
-};
+            <div className="flex h-full items-center justify-center">
+                <div className="min-h-0 w-full -translate-y-20 overflow-hidden min-[630px]:-translate-y-30 md:hidden">
+                    <HeroMottoMobile className="max-h-125" />
+                </div>
+
+                <div className="mr-auto hidden min-h-0 w-4/5 -translate-y-20 overflow-hidden min-[960px]:w-3/4 min-[960px]:-translate-y-30 min-[1000px]:w-2/3 min-[1120px]:-translate-y-20 min-[1400px]:w-[70%] min-[1600px]:w-[72%] md:block">
+                    <HeroMottoDesktop className="h-full w-full" />
+                </div>
+            </div>
+        </div>
+
+        <p className="sr-only">
+            {homeMotto} {homeDateDays} {homeDateMonth} 10 Jahre B-Side Festival
+        </p>
+    </section>
+);
 
 export default HomeHero;

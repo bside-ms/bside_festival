@@ -1,4 +1,7 @@
+import FooterWaves from '@/components/common/FooterWaves';
 import InternalLinks from '@/components/common/InternalLinks';
+import PublicHashLink from '@/components/common/PublicHashLink';
+import logoKulturEv from '@/images/2026/logo_kultur_ev.svg';
 import hansaFloss from '@/images/logos/hansa-floss.png';
 import mkwNrw from '@/images/logos/mkw-nrw.svg';
 import romeroInitiative from '@/images/logos/romero-initiative.png';
@@ -7,10 +10,11 @@ import stadtMuensterKi from '@/images/logos/stadt-muenster-ki.png';
 import stadtMuensterKulturamt from '@/images/logos/stadt-muenster-kulturamt.png';
 import stupaMs from '@/images/logos/stupa-ms.png';
 import cn from '@/lib/common/helper/cn';
+import { getProgrammNavLink } from '@/lib/public/publicNav';
+import { compact } from 'lodash';
 import Image, { type StaticImageData } from 'next/image';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
-import { FaFacebookSquare, FaInstagram, FaMastodon } from 'react-icons/fa';
 
 type Funder = {
     id: string;
@@ -19,6 +23,19 @@ type Funder = {
     href: string;
     height: number;
     invert?: boolean;
+};
+
+type FooterLink = {
+    href: string;
+    id: string;
+    label: string;
+    external?: boolean;
+};
+
+type FooterColumn = {
+    id: string;
+    label: string;
+    links: FooterLink[];
 };
 
 const funders: Funder[] = [
@@ -75,45 +92,100 @@ const funders: Funder[] = [
     },
 ];
 
-const Footer = (): ReactElement => {
-    return (
-        <footer>
-            <div className="space-y-1 bg-black p-4 pb-6 text-center text-sm text-white">
-                <div>Veranstaltet vom B-Side Kultur e.V.</div>
+const legalLinks: FooterLink[] = [
+    { id: 'impressum', label: 'Impressum', href: 'https://b-side.ms/kv/impressum/', external: true },
+    { id: 'datenschutz', label: 'Datenschutz', href: 'https://b-side.ms/kv/datenschutz/', external: true },
+    { id: 'kontakt', label: 'Kontakt', href: 'mailto:festival@b-side.ms' },
+];
 
-                <div className="flex justify-center gap-3 py-1">
-                    <Link
-                        href="https://www.instagram.com/bsidemuenster/"
-                        target="_blank"
-                        rel="me"
-                        className="text-2xl hover:text-rose-400"
-                        aria-label="Instagram"
-                    >
-                        <FaInstagram />
-                    </Link>
-                    <Link
-                        href="https://www.facebook.com/bsidemuenster"
-                        target="_blank"
-                        rel="me"
-                        className="text-2xl hover:text-rose-400"
-                        aria-label="Facebook"
-                    >
-                        <FaFacebookSquare />
-                    </Link>
-                    <Link
-                        href="https://muenster.im/@bside"
-                        target="_blank"
-                        rel="me"
-                        className="text-2xl hover:text-rose-400"
-                        aria-label="Mastodon"
-                    >
-                        <FaMastodon />
-                    </Link>
+const linkClass = 'text-white no-underline hover:underline';
+const legalClass = 'text-white/80 no-underline hover:text-white hover:underline';
+
+const getFooterColumns = (): FooterColumn[] => [
+    {
+        id: 'festival-2026',
+        label: 'Festival 2026',
+        links: compact([
+            getProgrammNavLink(),
+            // { id: 'orte', label: 'Orte', href: '/#wo-und-wann' },
+            { id: 'info', label: 'Info', href: '/#ueber-uns' },
+            { id: 'awareness', label: 'Awareness', href: '/awareness' },
+        ]),
+    },
+    {
+        id: 'mitwirken',
+        label: 'Mitwirken',
+        links: [
+            { id: 'helfis', label: 'Helfis', href: '/mithelfen' },
+            { id: 'spenden', label: 'Spenden', href: '/spenden' },
+        ],
+    },
+    {
+        id: 'socials',
+        label: 'Socials',
+        links: [
+            { id: 'instagram', label: 'Instagram', href: 'https://www.instagram.com/bside.festival.ms/', external: true },
+            { id: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/bsidemuenster', external: true },
+            { id: 'mastodon', label: 'Mastodon', href: 'https://muenster.im/@bside', external: true },
+        ],
+    },
+];
+
+const FooterNavLink = ({ href, label, external }: Omit<FooterLink, 'id'>): ReactElement => {
+    if (external === true) {
+        return (
+            <Link href={href} target="_blank" rel="me noopener noreferrer" className={linkClass}>
+                {label}
+            </Link>
+        );
+    }
+
+    return (
+        <PublicHashLink href={href} className={linkClass}>
+            {label}
+        </PublicHashLink>
+    );
+};
+
+const Footer = (): ReactElement => {
+    const columns = getFooterColumns();
+
+    return (
+        <footer className="overflow-hidden bg-[#40a8f5] font-display text-white">
+            <div className="mx-auto w-full max-w-7xl px-6 pt-16 pb-10 md:px-8 md:pt-20">
+                <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="max-w-sm">
+                        <Image src={logoKulturEv} alt="B-Side Kultur e.V." width={149} height={149} className="h-auto w-36 md:w-40" />
+                        <p className="mt-5 text-sm leading-relaxed text-white/95">
+                            Veranstaltet vom B-Side Kultur e.V.
+                            <br />
+                            Eine zeitgenössische, unabhängige und von der Community organisierte Musik- und Kulturveranstaltung in Münster.
+                        </p>
+                    </div>
+
+                    <nav aria-label="Fußzeile" className="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-12">
+                        {columns.map((column) => (
+                            <div key={column.id}>
+                                <div className="text-xs font-bold tracking-[0.2em] text-[#f2c48d] uppercase">{column.label}</div>
+                                <ul className="mt-3 space-y-2">
+                                    {column.links.map((link) => (
+                                        <li key={link.id}>
+                                            <FooterNavLink {...link} />
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </nav>
                 </div>
 
-                <div>
+                <p className="mt-14 text-5xl leading-none font-black text-black sm:text-6xl md:mt-16 md:text-7xl lg:text-8xl">
+                    Kultur. Hafen. Kante!
+                </p>
+
+                <div className="mt-12 text-sm">
                     Das B-Side Festival wird gefördert von:
-                    <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-5 p-5 pt-3 md:gap-x-8">
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-5 pt-4 md:gap-x-8">
                         {funders.map((funder) => (
                             <Link
                                 key={funder.id}
@@ -133,29 +205,26 @@ const Footer = (): ReactElement => {
                     </div>
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-x-3 gap-y-1">
-                    <Link href="/spenden" className="underline hover:text-rose-400">
-                        Spenden
-                    </Link>
-                    <Link href="/mithelfen" className="underline hover:text-rose-400">
-                        Helfis
-                    </Link>
-                    <Link href="/awareness" className="underline hover:text-rose-400">
-                        Awareness
-                    </Link>
-                    <Link href="/awareness/leichte-sprache" className="underline hover:text-rose-400">
-                        Leichte Sprache
-                    </Link>
-                    <Link href="https://b-side.ms/kv/impressum/" className="underline hover:text-rose-400">
-                        Impressum
-                    </Link>
-                    <Link href="https://b-side.ms/kv/datenschutz/" className="underline hover:text-rose-400">
-                        Datenschutz
-                    </Link>
+                <div className="mt-10 flex flex-col gap-3 text-xs sm:flex-row sm:items-center sm:justify-between">
+                    <div className="text-white/80">B-Side Festival © 2026. Aus Münster.</div>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                        {legalLinks.map((link) =>
+                            link.external === true ? (
+                                <Link key={link.id} href={link.href} target="_blank" rel="noopener noreferrer" className={legalClass}>
+                                    {link.label}
+                                </Link>
+                            ) : (
+                                <Link key={link.id} href={link.href} className={legalClass}>
+                                    {link.label}
+                                </Link>
+                            ),
+                        )}
+                        <InternalLinks />
+                    </div>
                 </div>
-
-                <InternalLinks />
             </div>
+
+            <FooterWaves />
         </footer>
     );
 };

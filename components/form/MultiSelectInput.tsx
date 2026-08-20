@@ -64,7 +64,7 @@ const MultiSelectInput = <T extends FieldValues>({ name, label, info, options, d
                         placeholder={label}
                         noOptionsMessage={() => 'Keine weiteren Optionen, tippt neue ein'}
                         classNames={{
-                            control: () => '!bg-transparent !border-black',
+                            control: () => '!border-black !bg-white',
                         }}
                     />
                 )}

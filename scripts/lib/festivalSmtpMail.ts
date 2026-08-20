@@ -48,20 +48,20 @@ const requireEnv = (name: string): string => {
     return value;
 };
 
-const mailAuth = () => ({ user: requireEnv('MAIL_USER'), pass: requireEnv('MAIL_PASSWORD') });
+const mailAuth = () => ({ user: requireEnv('SMTP_USER'), pass: requireEnv('SMTP_PASSWORD') });
 
 export const createFestivalSmtpTransport = (): Transporter =>
     createTransport({
-        host: requireEnv('MAIL_HOST'),
-        port: Number(requireEnv('MAIL_PORT')),
-        secure: !['true', 'True', '1'].includes(process.env.MAIL_INSECURE ?? ''),
+        host: requireEnv('SMTP_HOST'),
+        port: Number(requireEnv('SMTP_PORT')),
+        secure: !['true', 'True', '1'].includes(process.env.SMTP_INSECURE ?? ''),
         auth: mailAuth(),
     });
 
 const createImap = (): ImapFlow =>
     new ImapFlow({
-        host: requireEnv('MAIL_HOST'),
-        port: Number(process.env.IMAP_PORT ?? 993),
+        host: requireEnv('SMTP_HOST'),
+        port: Number(process.env.SMTP_IMAP_PORT ?? 993),
         secure: true,
         auth: mailAuth(),
         logger: false,

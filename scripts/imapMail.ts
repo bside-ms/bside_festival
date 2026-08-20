@@ -1,6 +1,6 @@
-// IMAP CLI for the live no-reply mailbox (MAIL_* from .env).
+// IMAP CLI for the festival mailbox (SMTP_* from .env).
 //
-// MAIL_PORT in .env is SMTP (465). IMAP always uses IMAP_PORT or 993.
+// SMTP_PORT is for SMTP (465). IMAP always uses SMTP_IMAP_PORT or 993.
 //
 // What each command does:
 //   folders         — list mailboxes (INBOX, Sent, …)
@@ -61,10 +61,10 @@ const requireEnv = (name: string): string => {
 
 const createClient = (): ImapFlow =>
     new ImapFlow({
-        host: requireEnv('MAIL_HOST'),
-        port: Number(process.env.IMAP_PORT ?? 993),
+        host: requireEnv('SMTP_HOST'),
+        port: Number(process.env.SMTP_IMAP_PORT ?? 993),
         secure: true,
-        auth: { user: requireEnv('MAIL_USER'), pass: requireEnv('MAIL_PASSWORD') },
+        auth: { user: requireEnv('SMTP_USER'), pass: requireEnv('SMTP_PASSWORD') },
         logger: false,
     });
 

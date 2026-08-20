@@ -1,6 +1,4 @@
-import cn from '@/lib/common/helper/cn';
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
-import type { VolunteerDayPreferenceKey } from '@/lib/volunteers/VolunteerPreference';
 import type { Volunteer } from '@prisma/client';
 import type { ReactElement } from 'react';
 
@@ -9,19 +7,20 @@ interface Props {
     showSensitiveData: boolean;
 }
 
-const dayPreferences = new Array<[VolunteerDayPreferenceKey, string]>(
-    ['isAvailableBefore', 'Vorher'],
-    ['isAvailableOnFriday', 'Freitag'],
-    ['isAvailableOnSaturday', 'Samstag'],
-);
-
 const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement => {
     return (
-        <div className="rounded-md bg-gray-50 px-4 pt-2 pb-3 drop-shadow-sm">
-            <div className="mb-2 text-xl">{volunteer.fullName}</div>
+        <div className="rounded-md bg-white px-4 pt-2 pb-3 drop-shadow-sm">
+            <div className="mb-2 flex flex-wrap items-center gap-2">
+                <div className="text-xl">{volunteer.fullName}</div>
+                {volunteer.emailVerified === null && (
+                    <span className="rounded-full border border-amber-700 bg-amber-50 px-2 py-0.5 text-xs text-amber-800">
+                        E-Mail unbestätigt
+                    </span>
+                )}
+            </div>
 
             {showSensitiveData && (
-                <div className="mb-3 text-base text-gray-600">
+                <div className="mb-1 text-base text-gray-600">
                     <div>
                         <a href={`tel:${volunteer.phoneNumber}`} className="md:cursor-pointer md:hover:text-gray-900">
                             {volunteer.phoneNumber}
@@ -35,19 +34,14 @@ const VolunteerDetails = ({ volunteer, showSensitiveData }: Props): ReactElement
                 </div>
             )}
 
-            <div className="flex items-center gap-2">
-                {dayPreferences.map(([dayPreference, label]) => (
-                    <div key={dayPreference} className={cn('text-base leading-4', !volunteer[dayPreference] && 'text-gray-300')}>
-                        {label}
-                    </div>
-                ))}
+            <div className="mt-3">
+                <div className="text-sm font-bold">Weitere Infos</div>
+                {isNotEmptyString(volunteer.additionalInfo) ? (
+                    <div className="mt-1 whitespace-pre-wrap">{volunteer.additionalInfo}</div>
+                ) : (
+                    <div className="mt-1 text-sm text-gray-500">Keine Angabe</div>
+                )}
             </div>
-
-            {isNotEmptyString(volunteer.additionalInfo) && (
-                <pre className="mt-4 border-l-2 border-gray-400 pl-3 font-display whitespace-pre-wrap text-gray-600 italic">
-                    {volunteer.additionalInfo}
-                </pre>
-            )}
         </div>
     );
 };

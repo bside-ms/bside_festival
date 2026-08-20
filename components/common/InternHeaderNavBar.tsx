@@ -15,10 +15,12 @@ interface Props {
 }
 
 const InternNavLinkItem = ({
+    className,
     isActive,
     link,
     onNavigate,
 }: {
+    className?: string;
     isActive: boolean;
     link: InternNavLink;
     onNavigate?: () => void;
@@ -26,8 +28,9 @@ const InternNavLinkItem = ({
     <Link
         href={link.href}
         className={cn(
-            'rounded-full px-2.5 py-1 text-xs no-underline',
+            'rounded-full px-2.5 py-1 text-xs whitespace-nowrap no-underline',
             isActive ? 'bg-white text-black' : 'text-white/80 hover:bg-white/10 hover:text-white',
+            className,
         )}
         onClick={onNavigate}
     >
@@ -42,6 +45,7 @@ const InternHeaderNavBar = ({ links, userIdentifier }: Props): ReactElement => {
     const menuId = useId();
     const primaryLinks = links.filter((link) => internPrimaryNavIds.includes(link.id));
     const moreLinks = links.filter((link) => !internPrimaryNavIds.includes(link.id));
+    const isMoreActive = moreLinks.some((link) => isInternNavLinkActive(link, pathname, searchParams));
 
     useEffect(() => {
         setMobileOpen(false);
@@ -71,13 +75,26 @@ const InternHeaderNavBar = ({ links, userIdentifier }: Props): ReactElement => {
 
     return (
         <>
-            <nav className="hidden min-w-0 items-center gap-1 lg:flex" aria-label="Interne Navigation">
+            <nav className="hidden min-w-0 items-center gap-1 md:flex" aria-label="Interne Navigation">
                 {primaryLinks.map((link) => (
                     <InternNavLinkItem key={link.id} link={link} isActive={isInternNavLinkActive(link, pathname, searchParams)} />
                 ))}
+                {moreLinks.map((link) => (
+                    <InternNavLinkItem
+                        key={link.id}
+                        className="hidden lg:inline"
+                        link={link}
+                        isActive={isInternNavLinkActive(link, pathname, searchParams)}
+                    />
+                ))}
                 {moreLinks.length > 0 && (
-                    <details className="relative">
-                        <summary className="cursor-pointer list-none rounded-full px-2.5 py-1 text-xs text-white/80 hover:bg-white/10 hover:text-white [&::-webkit-details-marker]:hidden">
+                    <details className="relative lg:hidden">
+                        <summary
+                            className={cn(
+                                'cursor-pointer list-none rounded-full px-2.5 py-1 text-xs [&::-webkit-details-marker]:hidden',
+                                isMoreActive ? 'bg-white text-black' : 'text-white/80 hover:bg-white/10 hover:text-white',
+                            )}
+                        >
                             Mehr
                         </summary>
                         <div className="absolute top-full right-0 z-50 mt-1 min-w-52 rounded-xl border border-white/20 bg-black p-2 shadow-lg">
@@ -99,7 +116,7 @@ const InternHeaderNavBar = ({ links, userIdentifier }: Props): ReactElement => {
                 <LogoutLink className="text-xs text-white/70 hover:text-white" />
             </nav>
 
-            <div className="flex items-center gap-3 lg:hidden">
+            <div className="flex items-center gap-3 md:hidden">
                 <button
                     type="button"
                     className="rounded-md border border-white/40 px-3 py-1.5 text-sm text-white"
@@ -112,7 +129,7 @@ const InternHeaderNavBar = ({ links, userIdentifier }: Props): ReactElement => {
             </div>
 
             {mobileOpen ? (
-                <div id={menuId} className="absolute top-15 right-0 left-0 z-50 border-t border-white/15 bg-black px-4 py-4 lg:hidden">
+                <div id={menuId} className="absolute top-15 right-0 left-0 z-50 border-t border-white/15 bg-black px-4 py-4 md:hidden">
                     <div className="mx-auto flex max-w-2xl flex-col gap-3">
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-white/70">
                             <span>Angemeldet als {userIdentifier}</span>

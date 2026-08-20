@@ -2,19 +2,20 @@ import type { ReactElement } from 'react';
 
 const VolunteerInfo = (): ReactElement => {
     return (
-        <>
-            <div className="text-justify">
-                In diesem Jahr findet das B-Side Festival nicht nur in unserem Zuhause am Hafen statt, sondern auch im Hansaviertel! Und
-                hierfür brauchen wir extra viel Unterstützung! Am 18. und 19.09. suchen wir tatkräftige Helfer*innen. Dabei gibt es
-                verschiedene Aufgaben, bei denen ihr euch einbringen könnt: Die Betreuung von Konzerten, Ausstellungen und Lesungen, die
-                Verpflegung des Helfer*innen- und B-Side-Teams, Hilfe beim Auf- und Abbau und der Technik des Festivals, Unterstützung der
-                Awareness-Crew auf dem gesamten Festival sowie beim Spendensammeln.
-            </div>
-            <div className="text-justify">
-                Mit allen Stärken und Interessen seid ihr herzlich willkommen uns zu unterstützen! Denn nur mit euch kann das Festival so
-                toll wie die letzten Jahre werden!
-            </div>
-        </>
+        <div className="flex flex-col gap-4 text-sm leading-relaxed md:text-base">
+            <p>
+                Am 18. und 19. September brauchen wir euch als Helfer*innen am Hafen und im Hansaviertel. Nur mit euch wird das Festival
+                wieder so schön wie in den letzten Jahren.
+            </p>
+            <p>
+                Helfen kann jede*r. Es geht um ganz normale Schichten: Auf- und Abbau, Bühnen, Essen, Awareness, Spenden. Vorerfahrung
+                braucht ihr nicht.
+            </p>
+            <p>
+                Nach der Anmeldung bestätigt ihr einmalig eure E-Mail. Sobald die Schichtpläne stehen, könnt ihr euch eintragen. Ungefähr
+                zwei Wochen vor dem Festival gibt es ein Treffen, während des Festivals eine Telegram-Gruppe.
+            </p>
+        </div>
     );
 };
 

@@ -27,7 +27,7 @@ export const getPublicNavGroups = (): PublicNavGroup[] => [
         label: 'Festival 2026',
         links: compact([
             getProgrammNavLink(),
-            { id: 'wo-und-wann', label: 'Wo & Wann', href: '/#wo-und-wann' },
+            // { id: 'wo-und-wann', label: 'Wo & Wann', href: '/#wo-und-wann' },
             { id: 'ueber-uns', label: 'Über uns', href: '/#ueber-uns' },
             { id: 'awareness', label: 'Awareness', href: '/awareness' },
         ]),
