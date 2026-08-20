@@ -1,4 +1,4 @@
-// Send arbitrary mails via SMTP (MAIL_* from .env), then copy into IMAP Sent.
+// Send arbitrary mails via SMTP (SMTP_* from .env), then copy into IMAP Sent.
 // Body stays plain text (optional [[slot]] / [[quote]] markers); HTML shell matches Zusagemail vibe.
 // Does NOT touch the DB.
 //

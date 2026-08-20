@@ -1,5 +1,6 @@
 import formatDate from '@/lib/common/helper/formatDate';
-import createMailHtml from '@/lib/mail/createMailHtml';
+import createMailHtml, { mailLinkStyle, mailParagraphStyle } from '@/lib/mail/createMailHtml';
+import { escapeHtml } from '@/lib/mail/escapeHtml';
 import sendMail from '@/lib/mail/sendMail';
 import type { Participant, ProgramLocation, ScheduleEntry } from '@prisma/client';
 
@@ -8,25 +9,19 @@ const generateAttendContent = (
     scheduleEntry: ScheduleEntry,
     programLocation: ProgramLocation,
     fullName: string,
-) => {
+): string => {
     return `
-        <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">
-            Schön, dass du dich für den Programmpunkt ${participant.name} angemeldet hast.
-        </p>
-        
-        <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 0 20px;">
-            Du hast dich als ${fullName} angemeldet. ${participant.name} findet am
-            ${formatDate(scheduleEntry.startsAt!, "EEEE, dd.MM. 'um' HH:mm 'Uhr'")} am Ort <i>${programLocation.name}</i> statt.
+        <p style="${mailParagraphStyle}">Schön, dass du dich für den Programmpunkt ${escapeHtml(participant.name)} angemeldet hast.</p>
+        <p style="${mailParagraphStyle}">
+            Du hast dich als ${escapeHtml(fullName)} angemeldet. ${escapeHtml(participant.name)} findet am
+            ${formatDate(scheduleEntry.startsAt!, "EEEE, dd.MM. 'um' HH:mm 'Uhr'")} am Ort <i>${escapeHtml(programLocation.name)}</i> statt.
             Komm bitte pünktlich!
         </p>
-        
-        <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 0 20px;">
-            Solltest du nicht mehr teilnehmen können, informiere uns bitte über festival@b-side.ms.
+        <p style="${mailParagraphStyle}">
+            Solltest du nicht mehr teilnehmen können, informiere uns bitte über
+            <a href="mailto:festival@b-side.ms" style="${mailLinkStyle}">festival@b-side.ms</a>.
         </p>
-        
-        <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 0 20px;">
-            Wir freuen uns auf dich!
-        </p>
+        <p style="${mailParagraphStyle}">Wir freuen uns auf dich!</p>
   `;
 };
 

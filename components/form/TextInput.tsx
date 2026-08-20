@@ -56,6 +56,7 @@ const TextInput = <T extends FieldValues>({
             {isNotEmptyString(info) && (
                 <label htmlFor={id} className="px-1 text-base">
                     {info}
+                    {required ? <span aria-hidden="true"> *</span> : null}
                 </label>
             )}
 
@@ -64,13 +65,15 @@ const TextInput = <T extends FieldValues>({
                 type={type}
                 defaultValue={defaultValue}
                 className={cn(
-                    'rounded border border-black p-2 outline-0 placeholder:opacity-55',
+                    'rounded border border-black bg-white p-2 outline-0 placeholder:opacity-55',
                     typeof errorMessage === 'string' && 'bg-rose-400',
                 )}
                 required={required}
                 max={max}
                 min={min}
-                placeholder={placeholder ?? (required ? `${label} *` : label)}
+                placeholder={
+                    placeholder ?? (isNotEmptyString(info) ? (info === label ? undefined : label) : required ? `${label} *` : label)
+                }
                 disabled={isSubmitting || isDisabled}
                 {...register(name, {
                     required: {

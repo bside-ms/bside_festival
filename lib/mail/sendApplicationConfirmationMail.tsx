@@ -1,5 +1,6 @@
 import isNotEmptyString from '@/lib/common/helper/isNotEmptyString';
-import createMailHtml from '@/lib/mail/createMailHtml';
+import createMailHtml, { mailButtonStyle, mailLinkStyle, mailParagraphStyle } from '@/lib/mail/createMailHtml';
+import { escapeHtml } from '@/lib/mail/escapeHtml';
 import sendMail from '@/lib/mail/sendMail';
 import typeLabels from '@/lib/participants/typeLabels';
 import type { Participant } from '@prisma/client';
@@ -35,8 +36,8 @@ const generateApplicationContent = async (application: Participant, token: strin
     const privateLinks = links.filter((l) => l.isConfidential).map((l) => l.link);
 
     const sections = [
-        `<strong>Typ:</strong><br>${typeLabels[type]}`,
-        `<strong>Name:</strong><br>${name}`,
+        `<strong>Typ:</strong><br>${escapeHtml(typeLabels[type])}`,
+        `<strong>Name:</strong><br>${escapeHtml(name)}`,
         isNotEmptyString(description) && `<strong>Beschreibung:</strong><br>${description}`,
         `<strong>Personenanzahl:</strong><br>${participantCount}`,
         hasMarginalizedParticipants && `<strong>Personen marginalisierter Gruppen:</strong><br>ja`,
@@ -56,20 +57,15 @@ const generateApplicationContent = async (application: Participant, token: strin
     ].filter(Boolean);
 
     return `
-    <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">Vielen Dank für eure Bewerbung und euer Interesse, Teil des diesjährigen B-Side Festivals zu sein.</p>
-    <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">Bitte bestätige deine E-Mail Adresse unter folgendem Link: <a href="${process.env.APP_URL}/bewerbungen/confirm/${token}" style="color: #000; text-decoration: underline;">Bestätigen</a></p>
-    <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 20px;">Bei Fragen zur Bewerbung könnt ihr euch per Mail an uns wenden unter festival@b-side.ms mit eurem Projektnamen im Betreff. Bitte habt Verständnis, dass das Festival von ehrenamtlichen Mitarbeiter*innen organisiert wird und wir daher ggf. ein paar Tage für eine Antwort brauchen.</p>
-</p>
-
-    <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 0 20px;">
-      Hier eine kurze Zusammenfassung eurer Bewerbung:
-      <br><br>
-      ${sections.map((section) => `<p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 0 20px;">${section}</p>`).join('<br/>')}
+    <p style="${mailParagraphStyle}">Vielen Dank für eure Bewerbung und euer Interesse, Teil des diesjährigen B-Side Festivals zu sein.</p>
+    <p style="${mailParagraphStyle}">Bitte bestätige deine E-Mail-Adresse:</p>
+    <p style="${mailParagraphStyle}">
+      <a href="${process.env.APP_URL}/bewerbungen/confirm/${token}" style="${mailButtonStyle}">E-Mail bestätigen</a>
     </p>
-
-    <p style="margin: 0; font-family: sans-serif; font-size: 16px; color: #000; padding: 0 20px;">
-      Zusammen mit den vielen anderen Bewerbungen werden wir diese bald sichten und uns im Anschluss bei euch melden!
-    </p>
+    <p style="${mailParagraphStyle}">Bei Fragen zur Bewerbung könnt ihr euch per Mail an uns wenden unter <a href="mailto:festival@b-side.ms" style="${mailLinkStyle}">festival@b-side.ms</a> mit eurem Projektnamen im Betreff. Bitte habt Verständnis, dass das Festival von ehrenamtlichen Mitarbeiter*innen organisiert wird und wir daher ggf. ein paar Tage für eine Antwort brauchen.</p>
+    <p style="${mailParagraphStyle}">Hier eine kurze Zusammenfassung eurer Bewerbung:</p>
+    ${sections.map((section) => `<p style="${mailParagraphStyle}">${section}</p>`).join('')}
+    <p style="${mailParagraphStyle}">Zusammen mit den vielen anderen Bewerbungen werden wir diese bald sichten und uns im Anschluss bei euch melden!</p>
   `;
 };
 

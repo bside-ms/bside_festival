@@ -1,12 +1,20 @@
 import AwarenessEasyGerman from '@/components/awareness/AwarenessEasyGerman';
+import AwarenessPageLayout from '@/components/awareness/AwarenessPageLayout';
 import type { ReactElement } from 'react';
 
-export default function AwarenessLeichteSprachePage(): ReactElement {
+const AwarenessLeichteSprachePage = (): ReactElement => {
     return (
-        <div className="relative mx-auto min-h-screen w-full max-w-7xl pt-5 pb-3">
-            <div className="text-center font-display text-6xl uppercase">Awareness</div>
-
+        <AwarenessPageLayout
+            eyebrow="Awareness"
+            title="Awareness – HILFE – auf dem B-Side Festival"
+            toggles={[
+                { href: '/awareness', label: 'Awareness-Konzept' },
+                { href: '/awareness/english', label: 'English' },
+            ]}
+        >
             <AwarenessEasyGerman />
-        </div>
+        </AwarenessPageLayout>
     );
-}
+};
+
+export default AwarenessLeichteSprachePage;

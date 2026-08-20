@@ -1,5 +1,5 @@
+import PublicNav from '@/components/common/PublicNav';
 import logo from '@/images/2026/logo_white.svg';
-import instagramIcon from '@/images/icons/instagram.svg';
 import cn from '@/lib/common/helper/cn';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,17 +12,13 @@ interface Props {
 
 const PageHeader = ({ fullWidth = false, nav }: Props): ReactElement => {
     return (
-        <header className="relative z-40 shrink-0 bg-black">
-            <div className={cn('flex h-15 gap-4 px-4 py-2', fullWidth && 'items-center')}>
-                <Link href="/" className={fullWidth ? 'shrink-0' : 'md:mt-3 md:ml-12 md:translate-1/2'}>
-                    <Image src={logo} alt="" height={46} />
+        <header className={cn('z-40 shrink-0 bg-black', fullWidth ? 'relative' : 'sticky top-0')}>
+            <div className={cn('mx-auto flex h-15 items-center gap-4 px-4 py-2 md:px-8', fullWidth ? 'max-w-none' : 'max-w-7xl')}>
+                <Link href="/" className="shrink-0">
+                    <Image src={logo} alt="B-Side Festival" height={46} className="h-10 w-auto md:h-11" />
                 </Link>
                 <div className="grow" />
-                {nav ?? (
-                    <Link href="https://www.instagram.com/bside.festival.ms/" className="mt-2" target="_blank">
-                        <Image src={instagramIcon} alt="" height={30} />
-                    </Link>
-                )}
+                {nav ?? <PublicNav />}
             </div>
         </header>
     );

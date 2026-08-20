@@ -12,37 +12,6 @@
         rgba(214, 130, 181, 0) var(--gradient-h)
     );
 }
-@media (min-width: 640px) {
-    .f26-background {
-        min-height: 960px;
-
-        /* 1. Define the stack */
-        background-image:
-            linear-gradient(
-                to bottom,
-                rgba(214, 130, 181, 1) 0%,
-                rgba(214, 130, 181, 0.76) calc(var(--gradient-h) * 0.22),
-                rgba(214, 130, 181, 0.36) calc(var(--gradient-h) * 0.6),
-                rgba(214, 130, 181, 0.1) calc(var(--gradient-h) * 0.87),
-                rgba(214, 130, 181, 0) var(--gradient-h)
-            ),
-            url('/assets/images/2026/wavy_background.svg');
-
-        /* 2. Map the attachment to the layers */
-        /* scroll = Gradient (Top layer) moves with the page */
-        /* fixed  = Wavy SVG (Bottom layer) stays stuck to the viewport */
-        background-attachment: scroll, fixed;
-
-        /* 3. Standard positioning */
-        background-position:
-            top center,
-            top center;
-        background-repeat: no-repeat, no-repeat;
-        background-size:
-            100% var(--gradient-h),
-            auto;
-    }
-}
 @custom-variant dark (&:is(.dark *));
 
 @theme {
@@ -54,16 +23,58 @@
 
 @font-face {
     font-family: 'BricolageGrotesque';
-    src: url('/fonts/BricolageGrotesque-Regular.ttf');
-    font-weight: 400;
+    src: url('/fonts/BricolageGrotesque-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'BricolageGrotesque';
-    src: url('/fonts/BricolageGrotesque-Medium.ttf');
-    font-weight: 500 900;
+    src: url('/fonts/BricolageGrotesque-Light.ttf') format('truetype');
+    font-weight: 300;
     font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BricolageGrotesque';
+    src: url('/fonts/BricolageGrotesque-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BricolageGrotesque';
+    src: url('/fonts/BricolageGrotesque-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BricolageGrotesque';
+    src: url('/fonts/BricolageGrotesque-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BricolageGrotesque';
+    src: url('/fonts/BricolageGrotesque-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BricolageGrotesque';
+    src: url('/fonts/BricolageGrotesque-ExtraBold.ttf') format('truetype');
+    font-weight: 800 900;
+    font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -71,6 +82,7 @@
     src: url('/fonts/Steps-Mono.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
 @theme inline {
@@ -186,6 +198,12 @@
     }
     body {
         @apply bg-background text-foreground;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
     }
 }
 

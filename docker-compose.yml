@@ -4,6 +4,8 @@ services:
             context: .
             target: development
         command: npm run dev
+        restart: on-failure
+        init: true
         depends_on:
             - db
             - mailcatcher
