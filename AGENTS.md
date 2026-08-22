@@ -123,10 +123,11 @@ Single workflow in `.github/workflows/docker-image.yml`:
 
 - **Tailwind CSS v4** via `@tailwindcss/postcss` plugin
 - **React Hook Form** with `FormProvider` pattern in all forms
-- Case-insensitive substring search on name + contactName in `/intern` and `/programm`, with light fuzzy (1–2 edits) only when a name/contact token shares a strong prefix
+- `/programm` has a public, case-insensitive name search only; it never searches contact names. The search writes `?text=` with `router.replace` only when the URL actually changes (`scroll: false`). `/intern` keeps its name + contact-name search with light fuzzy matching (1–2 edits) only when a token shares a strong prefix.
+- Public Program Entry details use `/programm/[id]`. `ProgramScrollRestoration` (same idea as intern) jumps the detail page to the top and restores the catalog offset when returning. `← Zum Programm` calls `router.back()` after a list visit in this tab; a shared detail URL still links to `/programm` at the top. List loading lives in `app/programm/(catalog)/` so it does not wrap the detail route.
 - Font Awesome + React Icons for icons
 - Public footer is sky-blue (`#40a8f5`) with Bricolage motto „Kultur. Hafen. Kante!“, harbor wave strip (same animated paths as `HomeHero`), and columns Festival 2026 / Mitwirken / Socials. Labels stay German (Orte not Locations). Footer Orte (`/#wo-und-wann`) is omitted while Die Orte is hidden. Workshops omitted until a real target exists. Förderer match the 2026 print poster: Stadt Münster Kulturamt, MKW NRW, Soziokultur NRW, Romero Initiative, KI Münster, stupa.ms, Hansa Floß. AStA is not on the poster. No „Gemeinnützig seit 2016“. Discreet Intern login/link sits in the legal row.
-- Public header is sticky (`h-15`). `html` has `scroll-smooth scroll-pt-15` so in-page hashes and Next.js `scrollIntoView` on route change land below the header — do not add `data-scroll-behavior="smooth"` (that would snap page navigations). Festival 2026 hash links (`/#ueber-uns`; `/#wo-und-wann` when Die Orte is shown) use `lib/public/scrollToPageHash.ts`; sections add `scroll-mt-16` on top of the html padding. Homepage currently hides Die Orte, Werde Teil, and Galerie (`showDraftHomeSections` in `HomePage`); header Wo & Wann and footer Orte stay hidden with them.
+- Public header is sticky (`h-15`). `html` has `scroll-smooth scroll-pt-15` so in-page hashes land below the header, plus `data-scroll-behavior="smooth"` so Next.js keeps route changes instant (without that attribute, CSS smooth-scroll animates list↔detail). Festival 2026 hash links (`/#ueber-uns`; `/#wo-und-wann` when Die Orte is shown) use `lib/public/scrollToPageHash.ts`; sections add `scroll-mt-16` on top of the html padding. Homepage currently hides Die Orte, Werde Teil, and Galerie (`showDraftHomeSections` in `HomePage`); header Wo & Wann and footer Orte stay hidden with them.
 - App chrome is a pink-to-white top gradient (`.gradient-background`); no wavy SVG page background. Form inputs use a white fill so they stay readable on that gradient.
 - Hero date (`18.–19.` / `September`) and the 10-Jahre badge are painted on the dock SVG (`xMaxYMax` / `xMidYMax slice`) so they stay on the black harbor face. Motto and logo live in a centered `max-w-[1200px]` corridor; water and dock stay full-bleed. The stacked motto (Kultur / Hafen / Kante plus navy strokes and red line, no yellow arrow) is inline SVG (`HeroMottoMobile` / `HeroMottoDesktop`). Below `lg` the motto sits under the logo; from `lg` it sits to the left. Below `md` the harbor block sits lower (`top-[18%] -bottom-[32%]`) so the dock runs out the bottom. Source extracts live in `images/2026/home/hero-motto-*.svg`. The full-color mark sits inset in the upper-right of the corridor.
 
@@ -140,7 +141,7 @@ app/
   api/health/              ← Keep — external health probe
   bewerbungen/             ← Application forms (public) + redirects to /intern
   intern/                  ← Programmbeiträge list; `[id]` detail; kuration/; slotplan/
-  programm/                ← Program overview (gated by `isProgramPublished`; logged-in preview + notice until then)
+  programm/                ← Public program: `(catalog)` list, `[id]` details, timetable/; list loading must not wrap details
   mithelfen/               ← Helfi signup (public); confirm/[token]; uebersicht (logged-in)
   aenderungslog/           ← Change Log (data-privacy users only)
   awareness/               ← Awareness (DE); leichte-sprache; english; easy-language
@@ -214,12 +215,11 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 
 ## Context Providers
 
-Two contexts using **props directly** (no `useState` for server data):
+The internal workspace context uses **props directly** (no `useState` for server data):
 
-| Context                       | Used in                            | Contains                                                                                                                 |
-| ----------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `InternWorkspaceContext`      | `/intern`                          | Filter + table sort state in URL via `nuqs`; slim list participants (slot/gage/last comment); no Keycloak/links/zipcodes |
-| `ParticipantsOverviewContext` | `/programm`, `/programm/timetable` | Filter state (text, types, locations, date range), pinned IDs                                                            |
+| Context                  | Used in   | Contains                                                                                                                 |
+| ------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `InternWorkspaceContext` | `/intern` | Filter + table sort state in URL via `nuqs`; slim list participants (slot/gage/last comment); no Keycloak/links/zipcodes |
 
 **Do not add `useState` for server-provided data** — the server page passes fresh props after each action and revalidation.
 
@@ -229,13 +229,12 @@ Two contexts using **props directly** (no `useState` for server data):
 
 - `SerializableParticipant`, `SerializableSlot` — JSON-safe (dates as strings), used across client/server boundary
 - `SerializableListParticipant` — slim `/intern` table row (earliest slot, fee, last comment, organizers); not the full detail payload
-- `AllAttendees` — `{ slotId: number, attendees: Array<...> }`
 - Prisma types (`Participant`, `Slot`, `Venue`, `Location`, etc.) — server-only
 - `Participant.hasParticipatedBefore`: `true`/`false` for explicit answers, `null` for legacy — keep visually distinct
 - `Participant.feeEuros`: optional whole-euro Gage on the Beitrag; edited in `/intern/[id]` ContributionDetails aside; changelog’d
 - `Participant.juryVotes`: anonymous whole-number votes 0–5 as JSON; scores calculated at read time, not persisted
 - `Comment` entries are immutable; store `authorUserId`, `authorName`, `createdAt`, optional `statusTransition`. Booking comments: only what ChangeLog/UI don’t already show (mail context, team todos)
-- `ChangeLogEntry`: one entry per user save action; snapshots actor + target name, `changes` with previous/next values
+- `ChangeLogEntry`: one entry per user save action; snapshots actor + target name, `changes` with previous/next values. Application link URL edits use `ApplicationLinkUpdated` (field `link`).
 
 ---
 
@@ -280,7 +279,7 @@ Map to Prisma `Type` enum. `/bewerbungen/[type]` uses `generateStaticParams` to 
 - **Dev `app` container restarts on crash, not on boot.** `task dev` is `docker compose up -d app` plus log follow. Ctrl+C only stops the log stream, not the server (`task down` / `docker compose stop app` to stop it). Compose uses `restart: on-failure`, so Next/Turbopack dying comes back during a session, but OrbStack start after a Mac boot does not bring `app` up. Do not run attached `docker compose up app`: when that terminal dies, Compose SIGTERMs the container and it stays down. `docker compose run --rm app` one-offs (tsc/lint/check) do not replace the long-running `app` service.
 - **Use `task build` for production builds.** It overrides the development Compose image's `NODE_ENV=development` with `NODE_ENV=production`; `task npm -- run build` does not and can make Next load incompatible React build variants while prerendering.
 - **Separate app and festival-mail credentials.** `MAIL_*` is for the Next app and existing confirmation/acceptance scripts (local: Mailcatcher at `http://localhost:1081`). `SMTP_*` is only for `send-festival-mail` and `imap-mail`; both use the normal `dotenv/config` import. Recreate `app` after `.env` mail changes (`docker compose up -d app`). Confirmation-mail failures are logged (`ActionErrorLogEntry`) but the signup still succeeds.
-- **Program publish gate** — `lib/participants/isProgramPublished.ts` is `false` until go-live. Guests hitting `/programm` redirect to `/`; logged-in users see a yellow internal-only notice. Flip the constant to `true` to open the public program. `/programm/timetable` stays login-only regardless.
+- **Program publish gate** — `lib/participants/isProgramPublished.ts` is `true`; `/programm` and `/programm/[id]` are public. The catalogue groups confirmed and canceled entries in fixed, color-coded public Program Sections, keeps one name search, and exposes only non-confidential links. `/programm/timetable` stays login-only regardless.
 - **Docker and host use different `node_modules`.** Local Compose mounts named volume `app_node_modules` over `/app/node_modules`, so `task`/container installs and `prisma generate` do not update host `./node_modules` (what Cursor/TS uses). After lockfile or Prisma schema changes, sync the host for the IDE: `npm ci` then `npm run prisma:client:generate` (dummy `DATABASE_URL` is fine). Do not remove the named volume — native deps like `sharp` need Linux builds in the container. Production is unaffected (Dockerfile generates the client in the image).
 - **`.next/` cache can hold stale type references** after deleting routes. If `tsc` reports missing modules in `.next/types/validator.ts`, delete `.next/` and re-run.
 - **`'use client'` is not required in every client component** — components imported into a `'use client'` file inherit client context. Only add at the boundary.

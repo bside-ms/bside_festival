@@ -20,6 +20,7 @@ export const changeLogActionLabels: Record<ChangeLogAction, string> = {
     [ChangeLogAction.ApplicationDiversityInfoUpdated]: 'Diversitätsinformationen geändert',
     [ChangeLogAction.ApplicationAdditionalInfoUpdated]: 'Weitere Informationen geändert',
     [ChangeLogAction.ApplicationContactInfoUpdated]: 'Kontaktdaten geändert',
+    [ChangeLogAction.ApplicationLinkUpdated]: 'Link geändert',
     [ChangeLogAction.ApplicationImageDeleted]: 'Bild gelöscht',
     [ChangeLogAction.ApplicationImageReplaced]: 'Bild ersetzt',
     [ChangeLogAction.ApplicationStatusUpdated]: 'Status geändert',

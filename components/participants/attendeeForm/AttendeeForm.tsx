@@ -1,5 +1,6 @@
+'use client';
+
 import TextInput from '@/components/form/TextInput';
-import { ParticipantSlot, useScheduleEntryAttendees } from '@/components/participants/overview/ParticipantsOverviewContext';
 import { attendScheduleEntry } from '@/lib/actions/scheduleEntryActions';
 import isEmptyString from '@/lib/common/helper/isEmptyString';
 import isValidEmail from '@/lib/common/helper/isValidEmail';
@@ -12,17 +13,11 @@ interface AttendeeFormValues {
 }
 
 interface Props {
-    slot: ParticipantSlot;
+    scheduleEntryId: number;
 }
 
-const AttendeeForm = ({
-    slot: {
-        scheduleEntry: { id: scheduleEntryId, maxAttendees },
-    },
-}: Props): ReactElement => {
+const AttendeeForm = ({ scheduleEntryId }: Props): ReactElement => {
     const [hasSuccessfullyAttended, setHasSuccessfullyAttended] = useState(false);
-
-    const slotAttendees = useScheduleEntryAttendees(scheduleEntryId);
 
     const methods = useForm<AttendeeFormValues>();
     const {
@@ -46,7 +41,12 @@ const AttendeeForm = ({
                         return;
                     }
 
-                    setError('root', { message: 'Unbekannter Fehler beim Submit!' });
+                    if (result.errorCode === 1721561870452) {
+                        setError('root', { message: 'Leider sind keine freien Plätze mehr verfügbar.' });
+                        return;
+                    }
+
+                    setError('root', { message: 'Die Anmeldung ist für diesen Programmpunkt nicht verfügbar.' });
                 } else {
                     setHasSuccessfullyAttended(true);
                     reset();
@@ -68,60 +68,39 @@ const AttendeeForm = ({
         }
     }, []);
 
-    const hasOpenSeats = slotAttendees.length < (maxAttendees ?? 0);
-
     const handleBackClick = useCallback(() => setHasSuccessfullyAttended(false), []);
 
     return (
         <div>
-            <div className="font-display">Melde dich hier für den Programmpunkt an!</div>
+            <div className="font-display text-xl font-black">Anmeldung</div>
 
             {hasSuccessfullyAttended ? (
-                <div className="mt-2 max-w-[350px] rounded bg-white/70 p-3 text-green-800">
+                <div className="mt-3 bg-[#F2C48D] p-4 text-[#2C2E83]">
                     <div>
                         Du hast dich erfolgreich für die Veranstaltung angemeldet. In einer E-Mail schicken wir dir nochmal alle Details zu!
                     </div>
 
                     <div>
-                        <span role="button" className="cursor-pointer text-blue-500 underline" onClick={handleBackClick}>
+                        <button type="button" className="mt-3 font-bold underline" onClick={handleBackClick}>
                             zurück
-                        </span>
+                        </button>
                     </div>
                 </div>
             ) : (
-                <div className="mt-2">
+                <div className="mt-3">
                     <FormProvider {...methods}>
                         <form onSubmit={handleSubmit(handleFormSubmit)} noValidate={true} className="flex max-w-[350px] flex-col gap-4">
-                            <TextInput<AttendeeFormValues>
-                                name="fullName"
-                                label="Vor- und Nachname"
-                                required={true}
-                                isDisabled={!hasOpenSeats}
-                            />
+                            <TextInput<AttendeeFormValues> name="fullName" label="Vor- und Nachname" required={true} />
 
-                            <TextInput<AttendeeFormValues>
-                                name="mailAddress"
-                                label="E-Mail"
-                                required={true}
-                                validate={validateEmail}
-                                isDisabled={!hasOpenSeats}
-                            />
+                            <TextInput<AttendeeFormValues> name="mailAddress" label="E-Mail" required={true} validate={validateEmail} />
 
-                            {hasOpenSeats ? (
-                                <label className="block max-w-[300px] cursor-pointer bg-black p-1">
-                                    <button
-                                        type="submit"
-                                        disabled={isSubmitting}
-                                        className="w-full rounded border border-white bg-black p-3 font-display text-sm leading-3 text-white disabled:bg-gray-600"
-                                    >
-                                        Teilnehmen
-                                    </button>
-                                </label>
-                            ) : (
-                                <div className="rounded bg-white/70 p-3 text-red-500">
-                                    Leider sind momentan keine freien Plätze mehr für die Veranstaltung frei!
-                                </div>
-                            )}
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="w-full bg-[#2C2E83] p-3 font-display text-sm font-black text-white disabled:bg-[#2C2E83]/60"
+                            >
+                                Teilnehmen
+                            </button>
 
                             {errors.root && <div className="text-red-600">{errors.root.message}</div>}
                         </form>

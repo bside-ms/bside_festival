@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="de" className="scroll-pt-15 scroll-smooth">
+        <html lang="de" className="scroll-pt-15 scroll-smooth" data-scroll-behavior="smooth">
             <head />
             <body className="flex min-h-screen flex-col font-sans">
                 <NuqsAdapter>

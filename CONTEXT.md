@@ -113,7 +113,14 @@ How local an application is based on the submitted participant postcodes. German
 
 ### Program Entry
 
-An accepted application as it appears in program planning or the public program, especially when scheduling, venue, or attendance-related information is being changed.
+An accepted application as it appears in program planning or the public program, especially when scheduling, venue, or attendance-related information is being changed. The public program includes Confirmed entries and Canceled entries, which remain visible with a cancellation notice.
+
+### Program Section
+
+A visitor-facing, color-coded grouping of Program Entries in the public catalog. A Program Section can combine stored types; the Musik section contains both concerts and DJs and shares one color. A detail page retains its stored type label, such as DJs, in that section color.
+_Avoid_: Type (when referring to a public catalog grouping)
+
+The sections appear in this order: Musik; Workshops; Lesungen, Vorträge & Poesie; Performance, Theater & Kabarett; Familienprogramm; Ausstellungen; Essensstände; Nachbarschaft; Infostände; Catering; Sonstiges.
 
 ### Program Location
 

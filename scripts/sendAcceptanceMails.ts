@@ -40,7 +40,6 @@ type ScheduleSlot = {
 type EligibleParticipant = {
     id: number;
     name: string;
-    updatedName: string | null;
     contactName: string | null;
     contactMail: string;
     participantCount: number;
@@ -71,10 +70,9 @@ const escapeHtml = (value: string): string =>
 
 const formatBerlin = (date: Date, pattern: string): string => formatInTimeZone(date, 'Europe/Berlin', pattern, { locale: de });
 
-const displayActName = (participant: Pick<EligibleParticipant, 'name' | 'updatedName'>): string =>
-    (participant.updatedName?.trim() || participant.name).trim();
+const displayActName = (participant: Pick<EligibleParticipant, 'name'>): string => participant.name.trim();
 
-const displayContactName = (participant: Pick<EligibleParticipant, 'contactName' | 'name' | 'updatedName'>): string =>
+const displayContactName = (participant: Pick<EligibleParticipant, 'contactName' | 'name'>): string =>
     participant.contactName?.trim() || displayActName(participant);
 
 const chooseForm = (participantCount: number): FormKind => (participantCount > 1 ? 'plural' : 'singular');
@@ -263,7 +261,6 @@ const buildHtml = (participant: EligibleParticipant): { form: FormKind; html: st
 const participantSelect = {
     id: true,
     name: true,
-    updatedName: true,
     contactName: true,
     contactMail: true,
     participantCount: true,

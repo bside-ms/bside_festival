@@ -51,7 +51,7 @@ const HeroBadgeStamp = ({
 );
 
 const HomeHero = (): ReactElement => (
-    <section className="relative h-[calc(100dvh-3.75rem)] max-h-224 overflow-hidden bg-linear-to-br from-[#f4b6d6] via-[#f7cfe2] to-white">
+    <section className="relative h-[calc(100dvh-3.75rem)] max-h-224 min-h-200 overflow-hidden bg-linear-to-br from-[#f4b6d6] via-[#f7cfe2] to-white">
         <div className="pointer-events-none absolute inset-x-0 top-0 bottom-[-8%] md:hidden">
             <HeroWaterMobile className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMax slice" />
             <HeroDockMobile className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMax slice" />

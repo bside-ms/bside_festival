@@ -107,8 +107,6 @@ const getAllParticipants = async (
             technicalRiderFileName: null,
             type: row.type,
             updatedAt: row.updatedAt,
-            updatedDescription: null,
-            updatedName: null,
             comments: row.comments as Array<Comment>,
             organizers: row.organizers as Array<ParticipantOrganizer>,
         }),
