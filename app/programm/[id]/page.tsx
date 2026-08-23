@@ -10,6 +10,7 @@ import typeLabels from '@/lib/participants/typeLabels';
 import createPublicObjectUrl from '@/lib/upload/createPublicObjectUrl';
 import { ApplicationStatus, ScheduleEntryTimeMode } from '@prisma/client';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import type { ReactElement } from 'react';
 
@@ -55,7 +56,17 @@ const ProgramEntryPage = async ({ params }: Props): Promise<ReactElement> => {
     return (
         <article className="min-h-screen font-display" style={{ backgroundColor: section.color, color: section.foregroundColor }}>
             <div className="mx-auto w-full max-w-6xl px-6 py-10 md:px-10 md:py-16">
-                <ProgramBackLink />
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                    <ProgramBackLink />
+                    {loggedIn && (
+                        <Link
+                            href={`/intern/${participant.id}`}
+                            className="inline-flex bg-[#2C2E83] px-4 py-2 font-bold text-white no-underline transition hover:bg-black focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-current"
+                        >
+                            intern bearbeiten →
+                        </Link>
+                    )}
+                </div>
 
                 {participant.status === ApplicationStatus.Canceled && (
                     <div className="mt-8 bg-[#2C2E83] px-5 py-4 text-lg font-black text-white">Fällt leider aus</div>

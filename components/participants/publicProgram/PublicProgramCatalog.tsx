@@ -7,7 +7,7 @@ import type PublicProgramEntry from '@/typings/PublicProgramEntry';
 import { deburr } from 'lodash';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { ChangeEvent, ReactElement } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 interface SectionWithParticipants {
     participants: Array<PublicProgramEntry>;
@@ -20,12 +20,23 @@ interface Props {
 }
 
 const normalize = (value: string): string => deburr(value).toLocaleLowerCase('de-DE');
+const sectionIdPrefix = 'program-section-';
+
+const scrollToSectionTarget = (target: HTMLElement): void => {
+    const html = document.documentElement;
+    const previousBehavior = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
+    target.scrollIntoView({ block: 'start', behavior: 'auto' });
+    html.style.scrollBehavior = previousBehavior;
+};
 
 const PublicProgramCatalog = ({ initialSearchText, participants }: Props): ReactElement => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [searchText, setSearchText] = useState(initialSearchText);
     const [sectionColor, setSectionColor] = useState(publicProgramSections[0]?.color ?? '#D681B4');
+    const scrolledSectionIdRef = useRef<string | null>(null);
+    const sectionId = searchParams.get('section');
 
     const sections = useMemo<Array<SectionWithParticipants>>(() => {
         const query = normalize(searchText.trim());
@@ -41,6 +52,20 @@ const PublicProgramCatalog = ({ initialSearchText, participants }: Props): React
             }))
             .filter(({ participants: sectionParticipants }) => sectionParticipants.length > 0);
     }, [participants, searchText]);
+
+    useLayoutEffect(() => {
+        if (sectionId === null || sectionId === scrolledSectionIdRef.current) {
+            return;
+        }
+
+        const target = document.getElementById(`${sectionIdPrefix}${sectionId}`);
+        if (target === null) {
+            return;
+        }
+
+        scrollToSectionTarget(target);
+        scrolledSectionIdRef.current = sectionId;
+    }, [sectionId, sections]);
 
     const updateActiveSection = useCallback(() => {
         const threshold = 72;
@@ -102,6 +127,13 @@ const PublicProgramCatalog = ({ initialSearchText, participants }: Props): React
                 <div className="max-w-3xl">
                     <div className="text-xs font-bold tracking-[0.2em] text-[#EA504C] uppercase">B-Side Festival 2026</div>
                     <h1 className="mt-2 text-4xl leading-[0.9] font-black text-white sm:text-5xl md:text-6xl">Programm</h1>
+                    <a
+                        href="/assets/B-Side_Festival_2026_Programmheft_web.pdf"
+                        download
+                        className="mt-5 inline-flex rounded-sm bg-white px-5 py-3 text-base font-black text-[#2C2E83] outline-offset-4 hover:bg-[#EA504C] hover:text-white focus-visible:outline-4 focus-visible:outline-[#2C2E83]"
+                    >
+                        Programmheft als PDF herunterladen
+                    </a>
                 </div>
 
                 <div className="relative mt-5 max-w-xl">

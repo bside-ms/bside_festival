@@ -18,7 +18,7 @@ export const hansaviertelOrte = [
 
 export const sputnikOrt = 'Sputnikhalle: Aftershow';
 
-export const homeStatsLine = '2 Tage · 11 Orte · ~85 Programmpunkte';
+export const homeStatsLine = '2 Tage · 11 Orte · über 85 Programmpunkte';
 
 export const betterplaceUrl =
     'https://www.betterplace.org/de/projects/181615-b-side-festival-2026-unterstuetze-die-10-jahre-jubilaeumsausgabe';

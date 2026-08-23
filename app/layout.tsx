@@ -1,6 +1,7 @@
 import AppShell from '@/components/common/AppShell';
 import Footer from '@/components/common/Footer';
 import InternHeaderNav from '@/components/common/InternHeaderNav';
+import HomeScrollRestoration from '@/components/home/HomeScrollRestoration';
 import type { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import './globals.css';
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <head />
             <body className="flex min-h-screen flex-col font-sans">
                 <NuqsAdapter>
+                    <HomeScrollRestoration />
                     <AppShell internNav={<InternHeaderNav />} footer={<Footer />}>
                         {children}
                     </AppShell>

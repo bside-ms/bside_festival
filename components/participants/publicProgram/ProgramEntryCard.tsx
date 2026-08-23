@@ -34,7 +34,7 @@ const ProgramEntryCard = ({ participant }: Props): ReactElement => {
 
             <div className="absolute inset-x-0 top-0 h-2/3 bg-linear-to-b from-black/90 via-black/45 to-transparent" />
             <div className="absolute inset-x-0 top-0 p-4 sm:p-5">
-                <div className="line-clamp-2 text-2xl leading-[0.94] font-black text-white drop-shadow-sm sm:text-3xl">
+                <div className="line-clamp-2 break-words text-2xl leading-[0.94] font-black text-white drop-shadow-sm sm:text-3xl xl:text-2xl">
                     {participant.name}
                 </div>
             </div>

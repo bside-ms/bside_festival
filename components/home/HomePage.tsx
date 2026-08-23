@@ -1,17 +1,17 @@
 import Gallery from '@/components/home/Gallery';
-import HomeBuilding from '@/components/home/HomeBuilding';
+import HomeHansaviertel from '@/components/home/HomeHansaviertel';
 import HomeHero from '@/components/home/HomeHero';
+import HomeLocations from '@/components/home/HomeLocations';
 import VolunteersCtaMarks from '@/components/home/VolunteersCtaMarks';
 import introNeonHeart from '@/images/2026/home/intro-neon-heart.jpg';
-import { betterplaceUrl, bsideOrte, hansaviertelOrte, homeAddress, homeStatsLine, sputnikOrt } from '@/lib/public/homeContent';
+import { betterplaceUrl, homeAddress } from '@/lib/public/homeContent';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
 
 const sectionPad = 'relative mx-auto w-full max-w-6xl px-6 py-16 md:px-10 md:py-24';
 
-// Die Orte und Mitwirken — still in progress; set true when they are ready to show.
-const showDraftHomeSections = false;
+const showParticipationHomeSection = true;
 
 const HomePage = (): ReactElement => {
     return (
@@ -56,7 +56,7 @@ const HomePage = (): ReactElement => {
                 </div>
             </section>
 
-            <section className="relative z-10 bg-[#e23b3b] text-white">
+            <section className="relative bg-[#e23b3b] text-white">
                 <VolunteersCtaMarks />
                 <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 items-center px-6 py-20 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:px-10 md:py-24">
                     <div className="pointer-events-none hidden md:block" />
@@ -78,93 +78,61 @@ const HomePage = (): ReactElement => {
                 </div>
             </section>
 
-            {showDraftHomeSections && (
-                <section id="wo-und-wann" className="relative scroll-mt-16 overflow-hidden bg-[#3aa0e8] text-black">
-                    <div className="pointer-events-none absolute top-16 right-0 h-40 w-56 rounded-[48%] bg-white/50 blur-sm" />
-                    <div className={sectionPad}>
-                        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                            <div>
-                                <div className="text-xs font-bold tracking-[0.2em] uppercase">Wo &amp; Wann 2026</div>
-                                <h2 className="mt-2 text-4xl font-black sm:text-5xl md:text-6xl">Die Orte</h2>
-                            </div>
-                            <div className="text-sm font-bold md:text-base">{homeStatsLine}</div>
-                        </div>
+            <HomeLocations />
+            <HomeHansaviertel />
 
-                        <div className="mt-12 grid gap-10 md:grid-cols-2 md:items-center">
-                            <HomeBuilding />
-                            <div className="relative rounded-3xl bg-white/55 p-6 backdrop-blur-sm md:p-8">
-                                <h3 className="text-2xl font-black md:text-3xl">B-Side (Freitag &amp; Samstag)</h3>
-                                <p className="mt-2 text-sm">{homeAddress}</p>
-                                <ul className="mt-5 grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
-                                    {bsideOrte.map((ort) => (
-                                        <li key={ort} className="font-bold">
-                                            {ort}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div className="mt-16 grid gap-8 md:grid-cols-2 md:items-start">
-                            <div>
-                                <h3 className="text-2xl font-black md:text-3xl">Hansaviertel (Samstag)</h3>
-                                <ul className="mt-5 grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
-                                    {hansaviertelOrte.map((ort) => (
-                                        <li key={ort} className="font-bold">
-                                            {ort}
-                                        </li>
-                                    ))}
-                                </ul>
-                                <p className="mt-5 text-sm font-bold">{sputnikOrt}</p>
-                            </div>
-                            <div className="relative flex min-h-56 items-center justify-center overflow-hidden rounded-sm bg-[#1d2a6b]/10">
-                                <Image
-                                    src="https://picsum.photos/seed/bside-map/900/600"
-                                    alt=""
-                                    fill
-                                    className="object-cover opacity-35"
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                />
-                                <div className="relative z-10 rounded-full bg-white/90 px-5 py-2 text-sm font-black">Karte folgt</div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {showDraftHomeSections && (
+            {showParticipationHomeSection && (
                 <section id="mitwirken" className="relative scroll-mt-16 overflow-hidden bg-[#e23b3b] text-white">
                     <div className="pointer-events-none absolute -right-10 -bottom-16 h-56 w-72 rounded-[45%] bg-[#1d2a6b]/25" />
                     <div className={sectionPad}>
                         <div className="max-w-3xl">
-                            <div className="text-xs font-bold tracking-[0.2em] uppercase opacity-80">Mitwirken</div>
+                            <div className="text-xs font-bold tracking-[0.2em] text-[#2C2E83] uppercase">Mitwirken</div>
                             <h2 className="mt-2 text-3xl font-black sm:text-4xl md:text-5xl">Werde Teil des B-Side Festivals</h2>
-                            <p className="mt-4 text-sm leading-relaxed text-balance opacity-95 md:text-base">
-                                Das B-Side Festival lebt durch seine Community! Möchtest du die Jubiläumsausgabe unterstützen? Dann werde
-                                Teil unserer Crew. Jede*r ist willkommen! Der Open Call für Programmbeiträge ist abgeschlossen. Für
-                                Workshops kannst du dich später hier anmelden.
+                            <p className="mt-4 text-sm leading-relaxed text-balance text-[#2C2E83] md:text-base">
+                                Das B-Side Festival lebt durch seine Community. Werde Teil unserer Crew – jede*r ist willkommen!
                             </p>
                         </div>
 
-                        <div className="mt-10 grid gap-6 md:grid-cols-2">
-                            <div className="rounded-sm bg-white p-6 text-black md:p-8">
+                        <div className="mt-10 grid gap-6 md:grid-cols-3">
+                            <div className="rounded-sm bg-white p-6 text-[#2C2E83] md:p-8">
                                 <h3 className="text-xl font-black">Unsere Helfis</h3>
                                 <p className="mt-3 text-sm leading-relaxed">
                                     Werde Teil unserer Crew und gestalte das B-Side Festival mit! Wir suchen Helfer*innen in vielen
                                     Bereichen, z.B. Bühnen und Locations, Technik, Logistik, Awareness-Arbeit, Deko, Fundraising. Freier
                                     Eintritt zur Aftershow, Crew-Raum, neue Freundschaften und jede Menge good Vibes inklusive.
                                 </p>
-                                <Link href="/mithelfen" className="mt-6 inline-block text-sm font-bold underline hover:text-[#e23b3b]">
+                                <Link
+                                    href="/mithelfen"
+                                    className="mt-6 inline-block text-sm font-bold text-[#FF5B37] no-underline hover:opacity-80"
+                                >
                                     Jetzt anmelden →
                                 </Link>
                             </div>
-                            <div className="rounded-sm bg-white p-6 text-black md:p-8">
+                            <div className="rounded-sm bg-white p-6 text-[#2C2E83] md:p-8">
                                 <h3 className="text-xl font-black">Musik, Kunst &amp; Kultur</h3>
                                 <p className="mt-3 text-sm leading-relaxed">
-                                    Der Open Call ist abgeschlossen, das Programm 2026 wird in Kürze bekannt gegeben – und wir freuen uns
-                                    auf alle, die das Festival bereichern werden mit: Musik, Kunst, Performance, Theater, Lesung, Poesie,
-                                    Vortrag, Workshop, Ausstellung, Familienprogramm, Infostand uvm.
+                                    Entdecke das B-Side-Programm 2026: Musik, Kunst, Performance, Theater, Lesungen, Poesie, Vorträge,
+                                    Workshops, Ausstellungen, Familienprogramm, Infostände und vieles mehr.
                                 </p>
+                                <Link
+                                    href="/programm"
+                                    className="mt-6 inline-block text-sm font-bold text-[#FF5B37] no-underline hover:opacity-80"
+                                >
+                                    Zum Programm →
+                                </Link>
+                            </div>
+                            <div className="rounded-sm bg-white p-6 text-[#2C2E83] md:p-8">
+                                <h3 className="text-xl font-black">Workshops entdecken</h3>
+                                <p className="mt-3 text-sm leading-relaxed">
+                                    Kreativ, praktisch und zum Mitmachen: Entdecke die Workshops im B-Side-Programm.
+                                </p>
+                                <Link
+                                    href="/programm?section=workshops"
+                                    scroll={false}
+                                    className="mt-6 inline-block text-sm font-bold text-[#FF5B37] no-underline hover:opacity-80"
+                                >
+                                    Zu den Workshops →
+                                </Link>
                             </div>
                         </div>
                     </div>
