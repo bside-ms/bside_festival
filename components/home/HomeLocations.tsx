@@ -20,12 +20,12 @@ const LocationLegend = (): ReactElement => (
 const HomeLocations = (): ReactElement => (
     <section id="wo-und-wann" className="relative z-10 scroll-mt-16 overflow-visible bg-[#40A8F5] text-white">
         <Image src={locationsDrip} alt="" className="pointer-events-none absolute top-0 left-1/2 z-0 h-auto w-44 md:w-60" sizes="240px" />
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-6 py-16 md:px-10 md:py-24">
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-6 py-12 md:px-10 md:py-16">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                     <div className="text-xs font-bold tracking-[0.2em] uppercase">Wo &amp; Wann</div>
                     <h2 className="mt-2 text-4xl leading-none font-black text-[#FABF74] sm:text-5xl md:text-6xl">Die Locations</h2>
-                    <p className="mt-8 text-2xl leading-tight font-black sm:text-3xl">
+                    <p className="mt-6 text-2xl leading-tight font-black sm:text-3xl">
                         B-Side
                         <span className="block text-lg sm:text-xl">Freitag &amp; Samstag</span>
                     </p>
@@ -33,7 +33,7 @@ const HomeLocations = (): ReactElement => (
                 <p className="pt-1 text-sm font-bold whitespace-nowrap sm:text-right md:text-base">{homeStatsLine}</p>
             </div>
 
-            <div className="mt-10 grid gap-8 lg:mt-14 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)] lg:items-center lg:gap-12">
+            <div className="mt-8 grid gap-8 lg:mt-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)] lg:items-center lg:gap-12">
                 <HomeBuilding />
                 <LocationLegend />
             </div>
