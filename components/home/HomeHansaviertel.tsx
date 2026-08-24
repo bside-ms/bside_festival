@@ -13,7 +13,7 @@ const HomeHansaviertel = (): ReactElement => (
             <Image
                 src={hansaviertel}
                 alt="Illustration der Orte im Hansaviertel"
-                className="mt-8 h-auto w-full md:mt-10"
+                className="-mx-6 mt-8 h-auto w-[calc(100%+3rem)] max-w-none md:mx-0 md:mt-10 md:w-full"
                 sizes="(max-width: 1280px) 100vw, 72rem"
             />
         </div>

@@ -4,7 +4,7 @@ import type { ReactElement } from 'react';
 
 const HomeBuilding = (): ReactElement => {
     return (
-        <div className="relative mx-auto w-full max-w-md">
+        <div className="relative mx-auto w-full max-w-lg max-sm:-mx-4 max-sm:w-[calc(100%+2rem)] max-sm:max-w-none">
             <div className="relative aspect-square overflow-hidden">
                 <Image src={buildingPhoto} alt="" fill className="object-contain drop-shadow-xl" sizes="(max-width: 1024px) 100vw, 36rem" />
             </div>
