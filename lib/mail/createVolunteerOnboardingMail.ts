@@ -83,11 +83,8 @@ export const createVolunteerOnboardingMail = (volunteer: Volunteer, now: Date = 
 
 schön, dass du als Helfer*in beim B-Side Festival dabei bist!
 
-Damit du dir deine gewünschten Schichten aussuchen kannst, registriere dich jetzt einmalig im Engelsystem:
+Für die Schichtplanung auf dem Festival nutzen wir das Engelsystem. Damit du dort deine gewünschten Schichten aussuchen kannst, registriere dich dort bitte einmalig:
 ${engelsystemRegistrationUrl}
-
-Danach findest du alle Schichten im Engelsystem und kannst dich eintragen:
-${engelsystemUrl}
 
 Bitte setze unter „E-Mail Einstellungen“ beide Haken. Sie sind nicht verpflichtend, aber sehr wichtig: Nur so können wir dich bei Schichtänderungen, privaten Nachrichten und Festivalinfos zuverlässig erreichen.
 
