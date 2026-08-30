@@ -1,0 +1,9 @@
+# Workshop capacity uses per-term double opt-in reservations
+
+Workshop registration belongs to a timed `ScheduleEntry`, not to the Workshop contribution as a whole. A public registration is available only when the contribution is a confirmed Workshop and the entry has `maxAttendees`. Each entry therefore has its own capacity and participant list.
+
+Submitting the form immediately reserves a seat. The reservation stores name, normalized email address, and an optional internal message of at most 500 characters, but remains unconfirmed until its mail link is opened. The link is a route handler, so it can mutate and revalidate outside React rendering before redirecting to the result page. Pending reservations count against capacity and expire after 24 hours; reads ignore expired reservations and registration transactions remove them. The capacity check runs in a retried serializable transaction, so concurrent signups cannot overbook a term.
+
+Legacy `Attendee` rows predate the double opt-in and are migrated as confirmed. Confirmation keeps a timestamp so revisiting the link reports success. It creates a cancellation token whose link remains usable only until the workshop starts; cancellation deletes the attendance and frees the seat. The used token remains with a cancellation timestamp so the subsequent route refresh can still show the successful cancellation instead of an invalid-link error. Internal removals follow the same deletion path and notify confirmed attendees by mail.
+
+Public pages show only capacity and the form to anonymous visitors. Logged-in visitors can see confirmed names. E-mail addresses, copy-all, and BCC mail actions are limited to the data-privacy group; the optional message is internal only. `/intern/[id]` also shows active pending reservations, their confirmation state and message. A dedicated print page produces a per-term list containing workshop details and confirmed names only.

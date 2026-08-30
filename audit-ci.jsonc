@@ -1,0 +1,14 @@
+{
+    "$schema": "https://github.com/IBM/audit-ci/raw/main/docs/schema.json",
+    "high": true,
+    "package-manager": "npm",
+    "show-not-found": false,
+    "allowlist": [
+        {
+            "GHSA-cqhc-2h57-wpxf|@prisma/adapter-mariadb>mariadb": {
+                "notes": "No fixed mariadb version is available through @prisma/adapter-mariadb as of 2026-08-30. Revisit when Prisma ships an updated adapter.",
+                "active": true,
+            },
+        },
+    ],
+}

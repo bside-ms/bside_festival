@@ -5,6 +5,7 @@ import ActivityTimeline from '@/components/intern/ActivityTimeline';
 import AddCommentForm from '@/components/intern/AddCommentForm';
 import ContributionFeeEditor from '@/components/intern/ContributionFeeEditor';
 import ContributionScheduleSection from '@/components/intern/ContributionScheduleSection';
+import ContributionWorkshopAttendees, { type ContributionWorkshopAttendee } from '@/components/intern/ContributionWorkshopAttendees';
 import OrganizerAssignment from '@/components/intern/OrganizerAssignment';
 import StatusTransitionPanel from '@/components/intern/StatusTransitionPanel';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
@@ -21,6 +22,8 @@ interface Props {
     scheduleEntries: Array<SerializableScheduleEntry>;
     zipcodes: Array<Zipcode>;
     changeLogHref?: string;
+    workshopAttendees?: Array<ContributionWorkshopAttendee>;
+    isInDataPrivacyGroup: boolean;
 }
 
 const noopClose = (): void => undefined;
@@ -33,6 +36,8 @@ const ContributionDetails = ({
     scheduleEntries,
     zipcodes,
     changeLogHref,
+    workshopAttendees = [],
+    isInDataPrivacyGroup,
 }: Props): ReactElement => (
     <div className="grid gap-4 bg-white p-3 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="min-w-0">
@@ -63,6 +68,13 @@ const ContributionDetails = ({
             <ContributionScheduleSection
                 participantId={application.id}
                 programLocations={programLocations}
+                scheduleEntries={scheduleEntries}
+            />
+
+            <ContributionWorkshopAttendees
+                attendees={workshopAttendees}
+                isInDataPrivacyGroup={isInDataPrivacyGroup}
+                participantId={application.id}
                 scheduleEntries={scheduleEntries}
             />
 

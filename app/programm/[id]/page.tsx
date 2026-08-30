@@ -1,14 +1,18 @@
 import AttendeeForm from '@/components/participants/attendeeForm/AttendeeForm';
+import WorkshopAttendeeList from '@/components/participants/attendeeForm/WorkshopAttendeeList';
 import ProgramBackLink from '@/components/participants/publicProgram/ProgramBackLink';
 import PublicProgramLinks from '@/components/participants/publicProgram/PublicProgramLinks';
 import formatDate from '@/lib/common/helper/formatDate';
 import prismaClient from '@/lib/common/prismaClient';
+import isGroupMember from '@/lib/next-auth/isGroupMember';
 import isLoggedIn from '@/lib/next-auth/isLoggedIn';
+import { dataPrivacyGroup } from '@/lib/next-auth/KeycloakGroups';
 import isProgramPublished from '@/lib/participants/isProgramPublished';
 import { getPublicProgramSection } from '@/lib/participants/publicProgramSections';
 import typeLabels from '@/lib/participants/typeLabels';
 import createPublicObjectUrl from '@/lib/upload/createPublicObjectUrl';
-import { ApplicationStatus, ScheduleEntryTimeMode } from '@prisma/client';
+import { activeWorkshopReservationWhere } from '@/lib/workshops/workshopAttendeeReservations';
+import { ApplicationStatus, ScheduleEntryTimeMode, Type } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
@@ -22,6 +26,7 @@ const formatAllDayDate = (date: string): string => formatDate(new Date(`${date}T
 
 const ProgramEntryPage = async ({ params }: Props): Promise<ReactElement> => {
     const loggedIn = await isLoggedIn();
+    const isInDataPrivacyGroup = loggedIn && (await isGroupMember(dataPrivacyGroup));
 
     if (!isProgramPublished && !loggedIn) {
         redirect('/');
@@ -39,7 +44,14 @@ const ProgramEntryPage = async ({ params }: Props): Promise<ReactElement> => {
             genres: { include: { genre: true }, orderBy: { genre: { name: 'asc' } } },
             links: { where: { isConfidential: false }, orderBy: { id: 'asc' } },
             scheduleEntries: {
-                include: { programLocation: true },
+                include: {
+                    attendees: {
+                        orderBy: { attendedAt: 'asc' },
+                        select: { confirmedAt: true, fullName: true, id: true, mailAddress: true },
+                        where: activeWorkshopReservationWhere(),
+                    },
+                    programLocation: true,
+                },
                 orderBy: [{ startsAt: 'asc' }, { id: 'asc' }],
             },
         },
@@ -133,10 +145,32 @@ const ProgramEntryPage = async ({ params }: Props): Promise<ReactElement> => {
                                         <li key={entry.id} className="border-l-4 border-[#EA504C] pl-4">
                                             <div className="font-black">{entry.programLocation.name}</div>
                                             <div className="mt-1 font-medium">{dates.join(' · ')}</div>
-                                            {entry.timeMode === ScheduleEntryTimeMode.Timed && entry.maxAttendees !== null && (
-                                                <div className="mt-5">
-                                                    <AttendeeForm scheduleEntryId={entry.id} />
-                                                </div>
+                                            {participant.type === Type.Workshop &&
+                                                participant.status === ApplicationStatus.Confirmed &&
+                                                entry.timeMode === ScheduleEntryTimeMode.Timed &&
+                                                entry.maxAttendees !== null && (
+                                                    <div className="mt-5">
+                                                        <AttendeeForm
+                                                            scheduleEntryId={entry.id}
+                                                            maxAttendees={entry.maxAttendees}
+                                                            availableAttendees={Math.max(entry.maxAttendees - entry.attendees.length, 0)}
+                                                        />
+                                                    </div>
+                                                )}
+                                            {loggedIn && participant.type === Type.Workshop && entry.maxAttendees !== null && (
+                                                <WorkshopAttendeeList
+                                                    attendees={entry.attendees
+                                                        .filter((attendee) => attendee.confirmedAt !== null)
+                                                        .map((attendee) => ({
+                                                            confirmedAt: attendee.confirmedAt?.toISOString() ?? null,
+                                                            fullName: attendee.fullName,
+                                                            id: attendee.id,
+                                                            ...(isInDataPrivacyGroup ? { mailAddress: attendee.mailAddress } : {}),
+                                                        }))}
+                                                    isInDataPrivacyGroup={isInDataPrivacyGroup}
+                                                    participantId={participant.id}
+                                                    scheduleEntryId={entry.id}
+                                                />
                                             )}
                                         </li>
                                     );

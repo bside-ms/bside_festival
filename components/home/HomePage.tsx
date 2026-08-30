@@ -13,7 +13,11 @@ const sectionPad = 'relative mx-auto w-full max-w-6xl px-6 py-16 md:px-10 md:py-
 
 const showParticipationHomeSection = true;
 
-const HomePage = (): ReactElement => {
+type Props = {
+    showVolunteerSignup: boolean;
+};
+
+const HomePage = ({ showVolunteerSignup }: Props): ReactElement => {
     return (
         <div className="overflow-x-hidden font-display text-black">
             <HomeHero />
@@ -56,27 +60,29 @@ const HomePage = (): ReactElement => {
                 </div>
             </section>
 
-            <section className="relative bg-[#e23b3b] text-white">
-                <VolunteersCtaMarks />
-                <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 items-center px-6 py-20 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:px-10 md:py-24">
-                    <div className="pointer-events-none hidden md:block" />
-                    <div className="mx-auto max-w-[16.5rem] text-center sm:max-w-sm md:max-w-none">
-                        <div className="text-sm font-bold tracking-wide uppercase opacity-80">
-                            Mach das B-Side Festival zu deinem Festival
+            {showVolunteerSignup && (
+                <section className="relative bg-[#e23b3b] text-white">
+                    <VolunteersCtaMarks />
+                    <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 items-center px-6 py-20 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:px-10 md:py-24">
+                        <div className="pointer-events-none hidden md:block" />
+                        <div className="mx-auto max-w-[16.5rem] text-center sm:max-w-sm md:max-w-none">
+                            <div className="text-sm font-bold tracking-wide uppercase opacity-80">
+                                Mach das B-Side Festival zu deinem Festival
+                            </div>
+                            <h2 className="mt-3 text-5xl leading-[0.95] font-black text-[#2C2E83] sm:text-6xl md:text-7xl">
+                                <span className="block md:inline">Werde</span> <span className="block md:inline">Helfer*in</span>
+                            </h2>
+                            <Link
+                                href="/mithelfen"
+                                className="mt-8 inline-block rounded-full bg-[#2C2E83] px-8 py-3 text-lg font-bold text-white no-underline hover:bg-black sm:px-10 sm:text-xl"
+                            >
+                                Jetzt mitmachen
+                            </Link>
                         </div>
-                        <h2 className="mt-3 text-5xl leading-[0.95] font-black text-[#2C2E83] sm:text-6xl md:text-7xl">
-                            <span className="block md:inline">Werde</span> <span className="block md:inline">Helfer*in</span>
-                        </h2>
-                        <Link
-                            href="/mithelfen"
-                            className="mt-8 inline-block rounded-full bg-[#2C2E83] px-8 py-3 text-lg font-bold text-white no-underline hover:bg-black sm:px-10 sm:text-xl"
-                        >
-                            Jetzt mitmachen
-                        </Link>
+                        <div className="pointer-events-none hidden md:block" />
                     </div>
-                    <div className="pointer-events-none hidden md:block" />
-                </div>
-            </section>
+                </section>
+            )}
 
             <HomeLocations />
             <HomeHansaviertel />
@@ -95,18 +101,30 @@ const HomePage = (): ReactElement => {
 
                         <div className="mt-10 grid gap-6 md:grid-cols-3">
                             <div className="rounded-sm bg-white p-6 text-[#2C2E83] md:p-8">
-                                <h3 className="text-xl font-black">Unsere Helfis</h3>
-                                <p className="mt-3 text-sm leading-relaxed">
-                                    Werde Teil unserer Crew und gestalte das B-Side Festival mit! Wir suchen Helfer*innen in vielen
-                                    Bereichen, z.B. Bühnen und Locations, Technik, Logistik, Awareness-Arbeit, Deko, Fundraising. Freier
-                                    Eintritt zur Aftershow, Crew-Raum, neue Freundschaften und jede Menge good Vibes inklusive.
-                                </p>
-                                <Link
-                                    href="/mithelfen"
-                                    className="mt-6 inline-block text-sm font-bold text-[#FF5B37] no-underline hover:opacity-80"
-                                >
-                                    Jetzt anmelden →
-                                </Link>
+                                <h3 className="text-xl font-black">
+                                    {showVolunteerSignup ? 'Unsere Helfis' : 'Helfi-Anmeldung geschlossen'}
+                                </h3>
+                                {showVolunteerSignup ? (
+                                    <>
+                                        <p className="mt-3 text-sm leading-relaxed">
+                                            Werde Teil unserer Crew und gestalte das B-Side Festival mit! Wir suchen Helfer*innen in vielen
+                                            Bereichen, z.B. Bühnen und Locations, Technik, Logistik, Awareness-Arbeit, Deko, Fundraising.
+                                            Freier Eintritt zur Aftershow, Crew-Raum, neue Freundschaften und jede Menge good Vibes
+                                            inklusive.
+                                        </p>
+                                        <Link
+                                            href="/mithelfen"
+                                            className="mt-6 inline-block text-sm font-bold text-[#FF5B37] no-underline hover:opacity-80"
+                                        >
+                                            Jetzt anmelden →
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <p className="mt-3 text-sm leading-relaxed">
+                                        Das Festival steht kurz bevor: Kommt einfach vorbei, habt eine gute Zeit und helft gern nächstes
+                                        Jahr mit!
+                                    </p>
+                                )}
                             </div>
                             <div className="rounded-sm bg-white p-6 text-[#2C2E83] md:p-8">
                                 <h3 className="text-xl font-black">Musik, Kunst &amp; Kultur</h3>

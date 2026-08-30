@@ -12,6 +12,18 @@
         rgba(214, 130, 181, 0) var(--gradient-h)
     );
 }
+
+@media print {
+    body:has(.workshop-attendee-print) > div > header,
+    body:has(.workshop-attendee-print) > div > footer {
+        display: none !important;
+    }
+
+    body:has(.workshop-attendee-print) > div {
+        height: auto !important;
+        overflow: visible !important;
+    }
+}
 @custom-variant dark (&:is(.dark *));
 
 @theme {

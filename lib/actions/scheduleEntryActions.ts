@@ -6,11 +6,10 @@ import { formatBoolean, formatDateTime, formatNullableNumber, formatNullableText
 import type { ChangeLogChange } from '@/lib/changeLog/changeLogTypes';
 import { createChange } from '@/lib/changeLog/createChange';
 import { recordChangeLogEntry } from '@/lib/changeLog/recordChangeLogEntry';
-import isNotEmptyNumber from '@/lib/common/helper/isNotEmptyNumber';
 import prismaClient from '@/lib/common/prismaClient';
 import { loggedAction } from '@/lib/errorLog/loggedAction';
-import sendSlotAttendConfirmationMail from '@/lib/mail/sendSlotAttendConfirmationMail';
 import { festivalAllDayDates, festivalEndsAt, festivalStartsAt, scheduleStepMinutes } from '@/lib/schedule/festivalWindow';
+import { activeWorkshopReservationWhere } from '@/lib/workshops/workshopAttendeeReservations';
 import {
     ChangeLogAction,
     ChangeLogTargetType,
@@ -22,10 +21,6 @@ import {
 import { isAfter, isBefore } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import { sortBy } from 'lodash';
-
-export interface AttendScheduleEntryError {
-    errorCode: number;
-}
 
 export interface ScheduleEntryInput {
     kind: ScheduleEntryKind;
@@ -54,10 +49,6 @@ interface ScheduleEntryData {
     isPublic: boolean;
     maxAttendees: number | null;
 }
-
-const duplicateRegistrationErrorCode = 1721561870451;
-const fullRegistrationErrorCode = 1721561870452;
-const unavailableRegistrationErrorCode = 1721561870453;
 
 const normalizeText = (value: string | null | undefined): string | null => {
     const trimmedValue = value?.trim() ?? '';
@@ -279,6 +270,16 @@ export const updateScheduleEntry = loggedAction(
                     ? null
                     : await tx.participant.findUniqueOrThrow({ select: { name: true }, where: { id: data.participantId } });
 
+            if (data.maxAttendees !== null) {
+                const activeAttendees = await tx.attendee.count({
+                    where: { scheduleEntryId: id, ...activeWorkshopReservationWhere() },
+                });
+
+                if (data.maxAttendees < activeAttendees) {
+                    throw new Error('Die maximale Anmeldung kann nicht unter die Zahl aktiver Anmeldungen gesenkt werden.');
+                }
+            }
+
             const changes = createScheduleEntryChanges(
                 previousEntry,
                 data,
@@ -342,44 +343,4 @@ export const deleteScheduleEntry = loggedAction(
         revalidateProgramPaths();
     },
     (id) => ({ targetType: 'ScheduleEntry', targetId: id }),
-);
-
-export const attendScheduleEntry = loggedAction(
-    'attendScheduleEntry',
-    async (scheduleEntryId: number, fullName: string, mailAddress: string): Promise<AttendScheduleEntryError | null> => {
-        const scheduleEntry = await prismaClient.scheduleEntry.findUnique({
-            include: { participant: true, programLocation: true, attendees: true },
-            where: { id: scheduleEntryId },
-        });
-
-        if (
-            scheduleEntry === null ||
-            scheduleEntry.kind !== ScheduleEntryKind.Participant ||
-            scheduleEntry.timeMode !== ScheduleEntryTimeMode.Timed ||
-            scheduleEntry.maxAttendees === null ||
-            scheduleEntry.participant === null ||
-            !['Confirmed', 'Canceled'].includes(scheduleEntry.participant.status)
-        ) {
-            return { errorCode: unavailableRegistrationErrorCode };
-        }
-
-        if (scheduleEntry.attendees.some((attendee) => attendee.fullName === fullName && attendee.mailAddress === mailAddress)) {
-            return { errorCode: duplicateRegistrationErrorCode };
-        }
-
-        if (scheduleEntry.attendees.length >= scheduleEntry.maxAttendees) {
-            return { errorCode: fullRegistrationErrorCode };
-        }
-
-        await prismaClient.attendee.create({ data: { scheduleEntryId, fullName, mailAddress, attendedAt: new Date() } });
-
-        if (isNotEmptyNumber(scheduleEntry.maxAttendees)) {
-            sendSlotAttendConfirmationMail(scheduleEntry.participant, scheduleEntry, scheduleEntry.programLocation, fullName, mailAddress);
-        }
-
-        revalidateProgramPaths();
-
-        return null;
-    },
-    (scheduleEntryId) => ({ targetType: 'ScheduleEntry', targetId: scheduleEntryId }),
 );

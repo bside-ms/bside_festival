@@ -12,8 +12,9 @@ export default async ({ params }: { params: Promise<{ token: string }> }): Promi
                 <div className="flex w-full flex-col gap-6">
                     <div className="font-display text-4xl font-bold">Anmeldung bestätigt</div>
                     <p className="leading-relaxed">
-                        Super, deine E-Mail-Adresse ist bestätigt. Du bist jetzt als Helfer*in für das B-Side Festival registriert. In Kürze
-                        solltest du eine weitere Mail mit den nächsten Schritten bekommen.
+                        Super, deine E-Mail-Adresse ist bestätigt. Du bist jetzt als Helfer*in für das B-Side Festival registriert. Die
+                        Infos zum Engelsystem und zu den Treffen wurden dir gerade per E-Mail geschickt. Schau gegebenenfalls auch im
+                        Spam-Ordner nach.
                     </p>
                 </div>
             ) : (

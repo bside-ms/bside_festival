@@ -6,6 +6,7 @@ import { recordActionError } from '@/lib/errorLog/recordActionError';
 import sendVolunteerConfirmationMail from '@/lib/mail/sendVolunteerConfirmationMail';
 import sendVolunteerWelcomeMail from '@/lib/mail/sendVolunteerWelcomeMail';
 import { volunteerSignupSchema, type VolunteerSignupValues } from '@/lib/schemas/volunteerSchema';
+import { isVolunteerSignupOpen } from '@/lib/volunteers/volunteerSchedule';
 import { revalidatePath } from 'next/cache';
 import { after } from 'next/server';
 
@@ -23,6 +24,9 @@ export const addVolunteer = loggedAction(
     'addVolunteer',
     async (data: VolunteerSignupValues): Promise<void> => {
         const values = volunteerSignupSchema.parse(data);
+        if (!isVolunteerSignupOpen()) {
+            throw new Error('Die Helfi-Anmeldung für das B-Side Festival 2026 ist geschlossen.');
+        }
 
         const volunteer = await prismaClient.volunteer.create({
             data: {

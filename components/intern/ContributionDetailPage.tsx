@@ -2,6 +2,7 @@
 
 import { ApplicationNameForm } from '@/components/applications/applicationCuration/ApplicationNameAndDescriptionForm';
 import ContributionDetails from '@/components/intern/ContributionDetails';
+import type { ContributionWorkshopAttendee } from '@/components/intern/ContributionWorkshopAttendees';
 import Badge from '@/components/participants/details/Badge';
 import { buildContributionBackHref } from '@/lib/intern/slotplanSearchParams';
 import statusLabels from '@/lib/participants/status/statusLabels';
@@ -23,6 +24,8 @@ interface Props {
     scheduleEntries: Array<SerializableScheduleEntry>;
     zipcodes: Array<Zipcode>;
     changeLogHref?: string;
+    workshopAttendees: Array<ContributionWorkshopAttendee>;
+    isInDataPrivacyGroup: boolean;
 }
 
 const ContributionDetailPage = ({
@@ -33,6 +36,8 @@ const ContributionDetailPage = ({
     scheduleEntries,
     zipcodes,
     changeLogHref,
+    workshopAttendees,
+    isInDataPrivacyGroup,
 }: Props): ReactElement => {
     const searchParams = useSearchParams();
     const { href: backHref, label: backLabel } = buildContributionBackHref(searchParams);
@@ -63,6 +68,8 @@ const ContributionDetailPage = ({
                     links={links}
                     programLocations={programLocations}
                     scheduleEntries={scheduleEntries}
+                    workshopAttendees={workshopAttendees}
+                    isInDataPrivacyGroup={isInDataPrivacyGroup}
                     zipcodes={zipcodes}
                 />
             </div>

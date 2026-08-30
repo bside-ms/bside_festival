@@ -310,12 +310,38 @@ model VolunteerEmailVerificationToken {
 }
 
 model Attendee {
-    id              Int           @id @default(autoincrement())
-    fullName        String        @db.Text
-    mailAddress     String        @db.Text
-    attendedAt      DateTime
-    scheduleEntryId Int
-    scheduleEntry   ScheduleEntry @relation(fields: [scheduleEntryId], references: [id], onDelete: Cascade)
+    id                       Int                              @id @default(autoincrement())
+    fullName                 String                           @db.Text
+    mailAddress              String                           @db.Text
+    message                  String?                          @db.Text
+    attendedAt               DateTime
+    confirmedAt              DateTime?
+    scheduleEntryId          Int
+    scheduleEntry            ScheduleEntry                    @relation(fields: [scheduleEntryId], references: [id], onDelete: Cascade)
+    emailVerificationToken   AttendeeEmailVerificationToken?
+    cancellationToken        AttendeeCancellationToken?
 
     @@index([scheduleEntryId])
+    @@index([confirmedAt])
+}
+
+model AttendeeEmailVerificationToken {
+    id          Int      @id @default(autoincrement())
+    attendee    Attendee @relation(fields: [attendeeId], references: [id], onDelete: Cascade)
+    attendeeId  Int      @unique
+    confirmedAt DateTime?
+    token       String   @unique
+    expires     DateTime
+
+    @@index([expires])
+}
+
+model AttendeeCancellationToken {
+    id         Int       @id @default(autoincrement())
+    attendee   Attendee? @relation(fields: [attendeeId], references: [id], onDelete: SetNull)
+    attendeeId Int?      @unique
+    canceledAt DateTime?
+    token      String    @unique
+
+    @@index([token])
 }

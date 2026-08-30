@@ -6,6 +6,9 @@ export const revalidateProgramPaths = (): void => {
     revalidatePath('/intern/slotplan');
     revalidatePath('/bewerbungen/uebersicht');
     revalidatePath('/programm');
+    revalidatePath('/programm/[id]', 'page');
     revalidatePath('/programm/timetable');
+    revalidatePath('/intern/[id]', 'page');
+    revalidatePath('/intern/[id]/teilnehmende/[scheduleEntryId]', 'page');
     revalidatePath('/aenderungslog');
 };

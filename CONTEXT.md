@@ -29,8 +29,22 @@ _Avoid_: Safer Space (as the page name)
 
 ### Helfi
 
-A person who signs up publicly to help run the festival (crew). Public UI may also say Helfer\*in; the casual festival term is Helfi. Signup collects name, email, phone, and an optional free-text note (rough availability or car; empty is fine). Copy should not imply special skills or experience. Day checkboxes are not collected up front. Email must be confirmed before the signup counts as complete. The first mail only asks to confirm the address; after the click, a second mail covers onboarding (later Schichtpläne, Treffen, Telegram during the festival, festival mail for questions). Shift assignment happens later in a separate Schichtsystem, not named publicly as Engelsystem. Organizers read the notes on `/mithelfen/uebersicht`.
+A person who signs up publicly to help run the festival (crew). Public UI may also say Helfer\*in; the casual festival term is Helfi. Signup collects name, email, phone, and an optional free-text note (rough availability or car; empty is fine). Copy should not imply special skills or experience. Day checkboxes are not collected up front. Email must be confirmed before the signup counts as complete. The first mail only asks to confirm the address; after the click, a second mail covers onboarding (the Engelsystem, Treffen, Telegram during the festival, festival mail for questions). The 2026 public signup closes on 16 September at 00:00 local festival time, while confirmations for a signup started before the cutoff remain valid. Once closed, the public homepage and signup page invite people to attend the imminent festival and help next year. Organizers read the notes on `/mithelfen/uebersicht`.
 _Avoid_: Volunteer (in public German UI), Engelsystem user (as the public label)
+
+### Engelsystem
+
+The public shift-planning tool for the B-Side Festival. Helfis register there once, choose their desired shifts, and are strongly asked to activate both email settings so that changes and festival information can reach them; the settings are not a prerequisite for taking shifts.
+_Avoid_: Schichtsystem (when referring to the named tool)
+
+### Awareness-Freischaltung
+
+Permission to choose Awareness shifts in the Engelsystem. It is granted after an Awareness workshop, previously acquired comparable knowledge, or equivalent experience; interested Helfis signal this by selecting Awareness during Engelsystem registration.
+
+### Helfi-Treffen
+
+A general introductory meeting for Helfis that explains the B-Side, the festival, and the available tasks. Attending one meeting is sufficient and is especially useful for people new to the B-Side or the festival.
+_Avoid_: Awareness-Workshop (a separate qualification)
 
 ### Mitwirken
 

@@ -21,25 +21,26 @@ Update this file whenever you discover something a future agent would miss witho
 
 All project Node/Prisma/npm **runtime** commands must run inside Docker via `task ...` from `Taskfile.yml`. Host `npm ci` / `prisma generate` are the exception — required so the IDE sees the same deps/types (see Common Gotchas).
 
-| Task                                    | Purpose                                                                              |
-| --------------------------------------- | ------------------------------------------------------------------------------------ |
-| `task dev`                              | Start the Next.js dev server in Docker (detached; follows logs)                      |
-| `task check`                            | Run ALL: tsc, lint, test, knip, audit, prettier                                      |
-| `task tsc`                              | Type-check — run after every change                                                  |
-| `task lint`                             | ESLint — run after every change                                                      |
-| `task test`                             | Vitest (3 test files, no config found — uses defaults)                               |
-| `task find-unused`                      | Knip — find unused files, deps, exports                                              |
-| `task audit`                            | Security audit; fails on high/critical                                               |
-| `task prettier-fix`                     | Auto-format everything — run at end of every task                                    |
-| `task lint-fix`                         | ESLint with auto-fix                                                                 |
-| `task prisma-migrations-dev`            | Create a new migration during development                                            |
-| `task prisma-migrations-deploy`         | Apply pending migrations in production                                               |
-| `task prisma-generate`                  | Regenerate Prisma client after schema changes                                        |
-| `task send-confirmation-mails`          | Batch script: status/confirmation mails by participant IDs                           |
-| `task send-acceptance-mails`            | Local only: Act-Zusagemails (`--list` / `--dry-run` / send). Live: see below         |
-| `task send-exhibition-acceptance-mails` | Local only: Ausstellung-Zusagemails (`--list` / `--dry-run` / send). Live: see below |
-| `npm run send-festival-mail`            | Local: free-form `festival@` mail + IMAP Sent                                        |
-| `npm run imap-mail`                     | Local: IMAP CLI for the no-reply mailbox                                             |
+| Task                                                                    | Purpose                                                                                                  |
+| ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `task dev`                                                              | Start the Next.js dev server in Docker (detached; follows logs)                                          |
+| `task check`                                                            | Run ALL: tsc, lint, test, knip, audit, prettier                                                          |
+| `task tsc`                                                              | Type-check — run after every change                                                                      |
+| `task lint`                                                             | ESLint — run after every change                                                                          |
+| `task test`                                                             | Vitest (3 test files, no config found — uses defaults)                                                   |
+| `task find-unused`                                                      | Knip — find unused files, deps, exports                                                                  |
+| `task audit`                                                            | Security audit; fails on high/critical                                                                   |
+| `task prettier-fix`                                                     | Auto-format everything — run at end of every task                                                        |
+| `task lint-fix`                                                         | ESLint with auto-fix                                                                                     |
+| `task prisma-migrations-dev`                                            | Create a new migration during development                                                                |
+| `task prisma-migrations-deploy`                                         | Apply pending migrations in production                                                                   |
+| `task prisma-generate`                                                  | Regenerate Prisma client after schema changes                                                            |
+| `task send-confirmation-mails`                                          | Batch script: status/confirmation mails by participant IDs                                               |
+| `task send-acceptance-mails`                                            | Local only: Act-Zusagemails (`--list` / `--dry-run` / send). Live: see below                             |
+| `task send-exhibition-acceptance-mails`                                 | Local only: Ausstellung-Zusagemails (`--list` / `--dry-run` / send). Live: see below                     |
+| `task npm -- run send-workshop-registration-inquiry-mails -- --dry-run` | Preview personalized Workshop-Anmeldungsanfragen; omit `--dry-run` to send via festival SMTP + IMAP Sent |
+| `npm run send-festival-mail`                                            | Local: free-form `festival@` mail + IMAP Sent                                                            |
+| `npm run imap-mail`                                                     | Local: IMAP CLI for the no-reply mailbox                                                                 |
 
 **Live deploy host** (no Taskfile; Compose service `festival-node`). Env comes from Compose; all scripts use the standard `dotenv/config` import:
 
@@ -111,7 +112,7 @@ Single workflow in `.github/workflows/docker-image.yml`:
 - **Nodemailer v9** (overridden in package.json via `overrides` for next-auth compatibility) via `lib/mail/`
 - Shared branded HTML shell in `createMailHtml` (pink gradient header, blue bar, white card). Script mails reuse it via `festivalMailHtml`.
 - `sendApplicationConfirmationMail` — sent on new application
-- `sendSlotAttendConfirmationMail` — sent when someone registers for a slot
+- Workshop registrations are per timed Workshop `ScheduleEntry` with `maxAttendees`. `Attendee` reservations use 24-hour email double opt-in; pending reservations count towards capacity and old attendees are migrated as confirmed. The mail link invokes a route handler, which confirms and revalidates outside React rendering before redirecting to its result page; used verification tokens keep `confirmedAt` so revisits show success. Confirmation creates an until-start cancellation link. A successful cancellation deletes the attendance but retains a `canceledAt` token marker so a route refresh can render the success state. `sendWorkshopAttendanceVerificationMail`, `sendWorkshopAttendanceConfirmationMail`, and `sendWorkshopAttendanceCancellationMail` cover the three mails.
 - `sendVolunteerConfirmationMail` — double opt-in link after Helfi signup (`/mithelfen/confirm/[token]`, 3 days)
 - `sendVolunteerWelcomeMail` — onboarding after the Helfi email is confirmed (Schichtpläne later, Treffen, Telegram, festival@)
 - `scripts/sendAcceptanceMails.ts` — batch Zusagemails for slotted acts with Gage; sets status to `WaitingForConfirmation` + status comment
@@ -125,6 +126,7 @@ Single workflow in `.github/workflows/docker-image.yml`:
 - **React Hook Form** with `FormProvider` pattern in all forms
 - `/programm` has a public, case-insensitive name search only; it never searches contact names. The search writes `?text=` with `router.replace` only when the URL actually changes (`scroll: false`). `/intern` keeps its name + contact-name search with light fuzzy matching (1–2 edits) only when a token shares a strong prefix.
 - Public Program Entry details use `/programm/[id]`. `ProgramScrollRestoration` (same idea as intern) jumps the detail page to the top and restores the catalog offset when returning. `← Zum Programm` calls `router.back()` after a list visit in this tab; a shared detail URL still links to `/programm` at the top. List loading lives in `app/programm/(catalog)/` so it does not wrap the detail route.
+- Public Workshop details expose capacity and registration only for confirmed Workshop schedule entries with `maxAttendees`; there is no waitlist. Logged-in users see confirmed names, while e-mail addresses and BCC/copy actions require the data-privacy group. `/intern/[id]` shows active pending/confirmed registrations and messages; `/intern/[id]/teilnehmende/[scheduleEntryId]` is the names-only print view.
 - Font Awesome + React Icons for icons
 - Public footer is sky-blue (`#40a8f5`) with Bricolage motto „Kultur. Hafen. Kante!“, harbor wave strip (same animated paths as `HomeHero`), and columns Festival 2026 / Mitwirken / Socials. Labels stay German (Orte not Locations). Footer Orte (`/#wo-und-wann`) is omitted while Die Orte is hidden. Workshops omitted until a real target exists. Förderer match the 2026 print poster: Stadt Münster Kulturamt, MKW NRW, Soziokultur NRW, Romero Initiative, KI Münster, stupa.ms, Hansa Floß. AStA is not on the poster. No „Gemeinnützig seit 2016“. Discreet Intern login/link sits in the legal row.
 - Public header is sticky (`h-15`). `html` has `scroll-smooth scroll-pt-15` so in-page hashes land below the header, plus `data-scroll-behavior="smooth"` so Next.js keeps route changes instant (without that attribute, CSS smooth-scroll animates list↔detail). Festival 2026 hash links (`/#ueber-uns`; `/#wo-und-wann` when Die Orte is shown) use `lib/public/scrollToPageHash.ts`; sections add `scroll-mt-16` on top of the html padding. `HomeLocations` sits directly below the Werde-Helfer\*in block and uses `HomeBuilding`, `images/2026/home/locations-legend.svg`, `images/2026/home/locations-drip.svg`, and `homeStatsLine`; its drip overflows upward at the red-to-blue transition below all blue content. `HomeHansaviertel` follows it with the full-width `images/2026/home/hansaviertel.svg`. Header Wo & Wann and footer Orte remain hidden until their navigation links are explicitly released.

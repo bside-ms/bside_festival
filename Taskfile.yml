@@ -107,3 +107,8 @@ tasks:
         desc: Send exhibition acceptance (Zusage) mails from Docker
         cmds:
             - docker compose run --rm app npm run send-exhibition-acceptance-mails -- {{.CLI_ARGS}}
+
+    send-volunteer-onboarding-mails:
+        desc: Send Engelsystem onboarding mails to Helfi registrations from Docker
+        cmds:
+            - docker compose run --rm app npm run send-volunteer-onboarding-mails -- {{.CLI_ARGS}}

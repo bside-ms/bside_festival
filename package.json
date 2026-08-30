@@ -6,7 +6,7 @@
         "build": "next build",
         "start": "next start",
         "check": "npm run tsc && npm run lint && npm run test && npm run find-unused && npm run audit && npm run prettier",
-        "audit": "npm audit --audit-level=high",
+        "audit": "audit-ci --config audit-ci.jsonc",
         "lint": "eslint -c eslint.config.mjs .",
         "lint:fix": "eslint --fix -c eslint.config.mjs .",
         "test": "vitest run",
@@ -22,6 +22,8 @@
         "send-acceptance-mails": "tsx scripts/sendAcceptanceMails.ts",
         "send-exhibition-acceptance-mails": "tsx scripts/sendExhibitionAcceptanceMails.ts",
         "send-festival-mail": "tsx scripts/sendFestivalMail.ts",
+        "send-volunteer-onboarding-mails": "tsx scripts/sendVolunteerOnboardingMails.ts",
+        "send-workshop-registration-inquiry-mails": "tsx scripts/sendWorkshopRegistrationInquiryMails.ts",
         "imap-mail": "tsx scripts/imapMail.ts"
     },
     "dependencies": {
@@ -68,6 +70,7 @@
         "@types/nodemailer": "^7.0.11",
         "@types/react": "^19.2.14",
         "@types/react-dom": "^19.2.3",
+        "audit-ci": "^7.1.0",
         "eslint": "^9.39.4",
         "eslint-plugin-react": "^7.37.5",
         "knip": "^6.12.2",
