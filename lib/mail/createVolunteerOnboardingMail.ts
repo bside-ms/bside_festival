@@ -36,7 +36,7 @@ const createAwarenessHtml = (now: Date): string => {
         return `<p style="${mailParagraphStyle}">${registrationHint}Für Awareness-Schichten brauchst du entsprechende Erfahrung. Möglicherweise bieten wir noch einen weiteren Workshop an.</p>`;
     }
 
-    return `<p style="${mailParagraphStyle}">${registrationHint}Freigeschaltet werden Personen, die einen Awareness-Workshop besucht haben oder vergleichbare Erfahrungen mitbringen. Der nächste Awareness-Workshop findet am ${upcomingAwarenessWorkshopText} statt. Nach der Wendeltreppe gehst du durch die Glastür zu den internen Büros und dann den Flur entlang.</p>`;
+    return `<p style="${mailParagraphStyle}">${registrationHint}Freigeschaltet werden Personen, die einen Awareness-Workshop besucht haben oder vergleichbare Erfahrungen mitbringen. Der nächste Awareness-Workshop findet am ${upcomingAwarenessWorkshopText} statt.</p>`;
 };
 
 const createHelfiMeetingsText = (now: Date): string => {
@@ -59,7 +59,7 @@ const createAwarenessText = (now: Date): string => {
         return `${registrationHint}Für Awareness-Schichten brauchst du entsprechende Erfahrung. Möglicherweise bieten wir noch einen weiteren Workshop an.`;
     }
 
-    return `${registrationHint}Freigeschaltet werden Personen, die einen Awareness-Workshop besucht haben oder vergleichbare Erfahrungen mitbringen. Der nächste Awareness-Workshop findet am ${upcomingAwarenessWorkshopText} statt. Nach der Wendeltreppe gehst du durch die Glastür zu den internen Büros und dann den Flur entlang.`;
+    return `${registrationHint}Freigeschaltet werden Personen, die einen Awareness-Workshop besucht haben oder vergleichbare Erfahrungen mitbringen. Der nächste Awareness-Workshop findet am ${upcomingAwarenessWorkshopText} statt.`;
 };
 
 export const createVolunteerOnboardingMail = (volunteer: Volunteer, now: Date = new Date()): VolunteerOnboardingMail => {

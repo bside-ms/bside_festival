@@ -20,7 +20,7 @@ const helfiMeetings: HelfiMeeting[] = [
 
 const awarenessWorkshop = {
     startsAt: new Date('2026-09-07T19:00:00+02:00'),
-    text: 'Montag, 07.09.2026, 19:00 Uhr, KV Gruppen-Raum',
+    text: 'Montag, 07.09.2026, 19:00 Uhr',
 };
 
 export const getUpcomingHelfiMeetings = (now: Date = new Date()): HelfiMeeting[] =>
