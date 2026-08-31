@@ -2,6 +2,7 @@
 
 import { ApplicationNameForm } from '@/components/applications/applicationCuration/ApplicationNameAndDescriptionForm';
 import ContributionDetails from '@/components/intern/ContributionDetails';
+import ContributionSharepicLink from '@/components/intern/ContributionSharepicLink';
 import type { ContributionWorkshopAttendee } from '@/components/intern/ContributionWorkshopAttendees';
 import Badge from '@/components/participants/details/Badge';
 import { buildContributionBackHref } from '@/lib/intern/slotplanSearchParams';
@@ -58,6 +59,7 @@ const ContributionDetailPage = ({
                 </div>
 
                 <ApplicationNameForm application={application} />
+                <ContributionSharepicLink participantId={application.id} status={application.status} />
             </div>
 
             <div className="overflow-hidden rounded-md border border-black bg-white shadow-sm">

@@ -1,0 +1,3 @@
+# Sharepics use homepage visual tokens, not Program Section colors
+
+Sharepics follow the 2026 homepage graphic system (pink gradient, Bricolage, circular B-Side mark, navy/sand/red accents), not the public program’s section colors. They sit in Instagram next to other festival posts, so one campaign look matters more than matching the catalog page. The act photo sits in a rounded-sm card on that pink canvas, like the homepage intro image, not full-bleed. The hero illustration (harbor, waves, giant motto SVG) is not copied into the PNG: those assets are viewport-sliced and animated, and they fight the act name for space.

@@ -129,6 +129,11 @@ How local an application is based on the submitted participant postcodes. German
 
 An accepted application as it appears in program planning or the public program, especially when scheduling, venue, or attendance-related information is being changed. The public program includes Confirmed entries and Canceled entries, which remain visible with a cancellation notice.
 
+### Sharepic
+
+A branded image of one Program Entry for posting on social media, including that entry’s public times and places. It exists as a Feed or Story variant, with or without the Program Entry photo, in German or English (times only; places stay German). Without a photo, the name sits in the image card. Anyone with the URL can download it; the public program does not link to it.
+_Avoid_: Open Graph image, Social Preview, Poster (when meaning this graphic)
+
 ### Program Section
 
 A visitor-facing, color-coded grouping of Program Entries in the public catalog. A Program Section can combine stored types; the Musik section contains both concerts and DJs and shares one color. A detail page retains its stored type label, such as DJs, in that section color.
@@ -164,6 +169,7 @@ _Avoid_: Location, Venue
 ### Programmbeiträge
 
 The canonical internal name for the unified internal workspace at `/intern`. It covers every festival contribution — concerts, workshops, food stands, exhibitions, and all other types — across all lifecycle stages from initial application to confirmed act. This is the operational hub for organizers managing artists and program entries.
+_Avoid_: Intern (as a place name, e.g. “im Intern”)
 
 ### Responsible Organizer
 

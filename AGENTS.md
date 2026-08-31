@@ -126,6 +126,7 @@ Single workflow in `.github/workflows/docker-image.yml`:
 - **React Hook Form** with `FormProvider` pattern in all forms
 - `/programm` has a public, case-insensitive name search only; it never searches contact names. The search writes `?text=` with `router.replace` only when the URL actually changes (`scroll: false`). `/intern` keeps its name + contact-name search with light fuzzy matching (1–2 edits) only when a token shares a strong prefix.
 - Public Program Entry details use `/programm/[id]`. `ProgramScrollRestoration` (same idea as intern) jumps the detail page to the top and restores the catalog offset when returning. `← Zum Programm` calls `router.back()` after a list visit in this tab; a shared detail URL still links to `/programm` at the top. List loading lives in `app/programm/(catalog)/` so it does not wrap the detail route.
+- Sharepics live at `/programm/[id]/sharepic` (unlisted; the public program does not link to them). The page is a small studio (Feed 4:5 / Story 9:16, photo on/off, German/English times) whose preview is the server PNG from `/programm/[id]/sharepic/image`. Visual language follows the 2026 homepage (pink gradient, logo, photo in a rounded-sm card; without a photo the name sits in the navy card). Confirmed and Canceled Program Entries only. Organizers can open/copy the link from `/intern/[id]`. Mail distribution is not built yet.
 - Public Workshop details expose capacity and registration only for confirmed Workshop schedule entries with `maxAttendees`; there is no waitlist. Logged-in users see confirmed names, while e-mail addresses and BCC/copy actions require the data-privacy group. `/intern/[id]` shows active pending/confirmed registrations and messages; `/intern/[id]/teilnehmende/[scheduleEntryId]` is the names-only print view.
 - Font Awesome + React Icons for icons
 - Public footer is sky-blue (`#40a8f5`) with Bricolage motto „Kultur. Hafen. Kante!“, harbor wave strip (same animated paths as `HomeHero`), and columns Festival 2026 / Mitwirken / Socials. Labels stay German (Orte not Locations). Footer Orte (`/#wo-und-wann`) is omitted while Die Orte is hidden. Workshops omitted until a real target exists. Förderer match the 2026 print poster: Stadt Münster Kulturamt, MKW NRW, Soziokultur NRW, Romero Initiative, KI Münster, stupa.ms, Hansa Floß. AStA is not on the poster. No „Gemeinnützig seit 2016“. Discreet Intern login/link sits in the legal row.
@@ -143,7 +144,7 @@ app/
   api/health/              ← Keep — external health probe
   bewerbungen/             ← Application forms (public) + redirects to /intern
   intern/                  ← Programmbeiträge list; `[id]` detail; kuration/; slotplan/
-  programm/                ← Public program: `(catalog)` list, `[id]` details, timetable/; list loading must not wrap details
+  programm/                ← Public program: `(catalog)` list, `[id]` details, `[id]/sharepic`, timetable/; list loading must not wrap details
   mithelfen/               ← Helfi signup (public); confirm/[token]; uebersicht (logged-in)
   aenderungslog/           ← Change Log (data-privacy users only)
   awareness/               ← Awareness (DE); leichte-sprache; english; easy-language
@@ -163,6 +164,7 @@ lib/
   next-auth/               ← Auth utilities and types
   participants/            ← Participant helpers, type/status/venue/slot services
   schemas/                 ← Zod schemas (applicationSchema.ts, volunteerSchema.ts)
+  sharepic/                ← Sharepic PNG render (homepage tokens, Feed/Story, photo on/off)
   upload/                  ← IONOS S3 upload
   utils.ts                 ← cn() helper (clsx + tailwind-merge)
 
@@ -173,6 +175,7 @@ components/
   form/                    ← Reusable form inputs
   common/                  ← Layout, navigation, shared UI
   intern/                  ← Internal workspace components
+  sharepic/                ← Public Sharepic studio (preview, format/photo, download)
   ui/                      ← Base UI primitives
   awareness/               ← Awareness page components
 
