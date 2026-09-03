@@ -5,11 +5,13 @@ import type { CSSProperties, ReactElement } from 'react';
 type SharepicMarkupProps = {
     appearances: Array<SharepicAppearance>;
     canceled: boolean;
+    dripArrowSrc: string;
     format: SharepicFormat;
     lang: SharepicLang;
     logoSrc: string;
     name: string;
     photoSrc: string | null;
+    swooshesSrc: string;
 };
 
 const navy = '#2C2E83';
@@ -45,7 +47,17 @@ const nameFontSize = (name: string, inCard: boolean, isStory: boolean): number =
     return base;
 };
 
-const SharepicMarkup = ({ appearances, canceled, format, lang, logoSrc, name, photoSrc }: SharepicMarkupProps): ReactElement => {
+const SharepicMarkup = ({
+    appearances,
+    canceled,
+    dripArrowSrc,
+    format,
+    lang,
+    logoSrc,
+    name,
+    photoSrc,
+    swooshesSrc,
+}: SharepicMarkupProps): ReactElement => {
     const isStory = format === 'story';
     const { height, width } = sharepicFormats[format];
     const pad = isStory ? 52 : 40;
@@ -56,6 +68,8 @@ const SharepicMarkup = ({ appearances, canceled, format, lang, logoSrc, name, ph
     const festivalDateSize = isStory ? 45 : 42;
     const placeSize = isStory ? 56 : 52;
     const whenSize = isStory ? 52 : 48;
+    const dripArrowSize = isStory ? 240 : 190;
+    const swooshesSize = isStory ? 280 : 250;
     const headerTextMaxWidth = width - pad * 2 - logoSize - 16;
 
     return (
@@ -88,7 +102,7 @@ const SharepicMarkup = ({ appearances, canceled, format, lang, logoSrc, name, ph
                             color: navy,
                             display: 'flex',
                             fontSize: festivalDateSize,
-                            fontWeight: 800,
+                            fontWeight: 700,
                             lineHeight: 1.1,
                             marginTop: 10,
                         }}
@@ -101,38 +115,84 @@ const SharepicMarkup = ({ appearances, canceled, format, lang, logoSrc, name, ph
 
             <div
                 style={columnStyle({
-                    alignItems: 'center',
-                    backgroundColor: navy,
-                    borderRadius: 4,
                     flexGrow: 1,
                     flexShrink: 1,
-                    justifyContent: 'center',
                     marginTop: isStory ? 28 : 18,
                     minHeight: 0,
-                    overflow: 'hidden',
                     position: 'relative',
                     width: '100%',
                 })}
             >
-                {showPhoto ? (
-                    <img alt="" height={900} src={photoSrc} style={{ height: '100%', objectFit: 'cover', width: '100%' }} width={1080} />
-                ) : (
-                    <div
-                        style={{
-                            color: '#ffffff',
-                            display: 'flex',
-                            fontSize: titleSize,
-                            fontWeight: 800,
-                            justifyContent: 'center',
-                            lineHeight: 0.95,
-                            padding: isStory ? 48 : 36,
-                            textAlign: 'center',
-                            width: '100%',
-                        }}
-                    >
-                        {name}
-                    </div>
-                )}
+                <div
+                    style={columnStyle({
+                        alignItems: 'center',
+                        backgroundColor: navy,
+                        borderRadius: 20,
+                        height: '100%',
+                        justifyContent: 'center',
+                        overflow: 'hidden',
+                        width: '100%',
+                    })}
+                >
+                    {showPhoto ? (
+                        <div style={{ display: 'flex', height: '100%', position: 'relative', width: '100%' }}>
+                            <img
+                                alt=""
+                                height={900}
+                                src={photoSrc}
+                                style={{ height: '100%', objectFit: 'cover', width: '100%' }}
+                                width={1080}
+                            />
+                            <div
+                                style={{
+                                    backgroundColor: 'rgba(44, 46, 131, 0.16)',
+                                    display: 'flex',
+                                    height: '100%',
+                                    left: 0,
+                                    position: 'absolute',
+                                    top: 0,
+                                    width: '100%',
+                                }}
+                            />
+                        </div>
+                    ) : (
+                        <div
+                            style={{
+                                color: '#ffffff',
+                                display: 'flex',
+                                fontSize: titleSize,
+                                fontWeight: 800,
+                                justifyContent: 'center',
+                                lineHeight: 0.95,
+                                padding: isStory ? 48 : 36,
+                                textAlign: 'center',
+                                width: '100%',
+                            }}
+                        >
+                            {name}
+                        </div>
+                    )}
+                </div>
+
+                <img
+                    alt=""
+                    height={dripArrowSize}
+                    src={dripArrowSrc}
+                    style={{ left: -18, position: 'absolute', top: -dripArrowSize * 0.14, transform: 'rotate(18deg)' }}
+                    width={Math.round(dripArrowSize * (187 / 303))}
+                />
+                <img
+                    alt=""
+                    height={swooshesSize}
+                    src={swooshesSrc}
+                    style={{
+                        bottom: isStory ? -120 : -100,
+                        position: 'absolute',
+                        right: -swooshesSize * 0.2,
+                        transform: 'rotate(-6deg)',
+                    }}
+                    width={swooshesSize}
+                />
             </div>
 
             {showPhoto && (
@@ -152,7 +212,7 @@ const SharepicMarkup = ({ appearances, canceled, format, lang, logoSrc, name, ph
                 </div>
             )}
 
-            <div style={columnStyle({ flexShrink: 0, marginTop: isStory ? 18 : 12, width: '100%' })}>
+            <div style={columnStyle({ flexShrink: 0, marginTop: isStory ? 24 : 16, width: '100%' })}>
                 {canceled && (
                     <div
                         style={{
@@ -172,7 +232,7 @@ const SharepicMarkup = ({ appearances, canceled, format, lang, logoSrc, name, ph
                 {appearances.map((appearance) => (
                     <div key={appearance.id} style={columnStyle({ marginBottom: 10, width: '100%' })}>
                         {appearance.when !== '' && (
-                            <div style={{ color: navy, display: 'flex', fontSize: whenSize, fontWeight: 800, lineHeight: 1.15 }}>
+                            <div style={{ color: navy, display: 'flex', fontSize: whenSize, fontWeight: 700, lineHeight: 1.15 }}>
                                 {appearance.when}
                             </div>
                         )}

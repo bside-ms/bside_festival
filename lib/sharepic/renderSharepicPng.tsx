@@ -10,10 +10,14 @@ import sharp from 'sharp';
 const extraBoldPath = join(process.cwd(), 'public/fonts/BricolageGrotesque-ExtraBold.ttf');
 const boldPath = join(process.cwd(), 'public/fonts/BricolageGrotesque-Bold.ttf');
 const logoSvgPath = join(process.cwd(), 'images/2026/logo_transparent.svg');
+const dripArrowSvgPath = join(process.cwd(), 'images/2026/home/volunteers-arrow.svg');
+const swooshesSvgPath = join(process.cwd(), 'images/2026/home/volunteers-swooshes.svg');
 
 let extraBoldFont: Buffer | undefined;
 let boldFont: Buffer | undefined;
 let logoSrc: string | undefined;
+let dripArrowSrc: string | undefined;
+let swooshesSrc: string | undefined;
 
 const loadFonts = async (): Promise<{ bold: Buffer; extraBold: Buffer }> => {
     extraBoldFont ??= await readFile(extraBoldPath);
@@ -42,6 +46,30 @@ const loadLogoSrc = async (): Promise<string> => {
     return logoSrc;
 };
 
+const loadDripArrowSrc = async (): Promise<string> => {
+    if (dripArrowSrc !== undefined) {
+        return dripArrowSrc;
+    }
+
+    const svg = await readFile(dripArrowSvgPath, 'utf8');
+    const png = await sharp(Buffer.from(svg)).resize(374).png().toBuffer();
+    dripArrowSrc = `data:image/png;base64,${png.toString('base64')}`;
+
+    return dripArrowSrc;
+};
+
+const loadSwooshesSrc = async (): Promise<string> => {
+    if (swooshesSrc !== undefined) {
+        return swooshesSrc;
+    }
+
+    const svg = await readFile(swooshesSvgPath, 'utf8');
+    const png = await sharp(Buffer.from(svg)).resize(320).png().toBuffer();
+    swooshesSrc = `data:image/png;base64,${png.toString('base64')}`;
+
+    return swooshesSrc;
+};
+
 const loadPhotoSrc = async (photoUrl: string): Promise<string | null> => {
     try {
         const response = await fetch(photoUrl);
@@ -66,18 +94,25 @@ const renderSharepicPng = async (
     lang: SharepicLang,
 ): Promise<ImageResponse> => {
     const { height, width } = sharepicFormats[format];
-    const [{ extraBold, bold }, resolvedLogoSrc] = await Promise.all([loadFonts(), loadLogoSrc()]);
+    const [{ extraBold, bold }, resolvedLogoSrc, resolvedDripArrowSrc, resolvedSwooshesSrc] = await Promise.all([
+        loadFonts(),
+        loadLogoSrc(),
+        loadDripArrowSrc(),
+        loadSwooshesSrc(),
+    ]);
     const photoSrc = showPhoto && entry.photoUrl !== null ? await loadPhotoSrc(entry.photoUrl) : null;
 
     return new ImageResponse(
         <SharepicMarkup
             appearances={formatSharepicAppearances(entry.scheduleEntries, lang)}
             canceled={entry.canceled}
+            dripArrowSrc={resolvedDripArrowSrc}
             format={format}
             lang={lang}
             logoSrc={resolvedLogoSrc}
             name={entry.name}
             photoSrc={photoSrc}
+            swooshesSrc={resolvedSwooshesSrc}
         />,
         {
             fonts: [
