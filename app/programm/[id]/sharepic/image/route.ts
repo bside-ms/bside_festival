@@ -3,7 +3,13 @@ import isProgramPublished from '@/lib/participants/isProgramPublished';
 import getSharepicEntry from '@/lib/sharepic/getSharepicEntry';
 import renderSharepicPng from '@/lib/sharepic/renderSharepicPng';
 import sharepicFileName from '@/lib/sharepic/sharepicFileName';
-import { parseSharepicFormat, parseSharepicLang, parseSharepicShowPhoto } from '@/lib/sharepic/sharepicFormats';
+import {
+    parseSharepicFormat,
+    parseSharepicLang,
+    parseSharepicPosition,
+    parseSharepicShowPhoto,
+    parseSharepicZoom,
+} from '@/lib/sharepic/sharepicFormats';
 import { NextResponse } from 'next/server';
 
 interface Props {
@@ -26,8 +32,13 @@ export const GET = async (request: Request, { params }: Props): Promise<Response
     const format = parseSharepicFormat(searchParams.get('format'));
     const showPhoto = parseSharepicShowPhoto(searchParams.get('photo')) && entry.hasPhoto;
     const lang = parseSharepicLang(searchParams.get('lang'));
+    const crop = {
+        x: parseSharepicPosition(searchParams.get('x')),
+        y: parseSharepicPosition(searchParams.get('y')),
+        zoom: parseSharepicZoom(searchParams.get('zoom')),
+    };
     const download = searchParams.get('download') === '1';
-    const image = await renderSharepicPng(entry, format, showPhoto, lang);
+    const image = await renderSharepicPng(entry, format, showPhoto, lang, crop);
     const body = await image.arrayBuffer();
     const headers = new Headers({
         'Cache-Control': 'public, max-age=0, must-revalidate',

@@ -1,5 +1,11 @@
 import { sharepicFestivalDate, type SharepicAppearance } from '@/lib/sharepic/formatSharepicAppearances';
-import { sharepicFormats, type SharepicFormat, type SharepicLang } from '@/lib/sharepic/sharepicFormats';
+import {
+    sharepicFormats,
+    sharepicNameFontSize,
+    sharepicPhotoBox,
+    type SharepicFormat,
+    type SharepicLang,
+} from '@/lib/sharepic/sharepicFormats';
 import type { CSSProperties, ReactElement } from 'react';
 
 type SharepicMarkupProps = {
@@ -29,24 +35,6 @@ const rowStyle = (extra?: CSSProperties): CSSProperties => ({
     ...extra,
 });
 
-const nameFontSize = (name: string, inCard: boolean, isStory: boolean): number => {
-    const base = inCard ? (isStory ? 110 : 96) : isStory ? 88 : 80;
-
-    if (name.length > 48) {
-        return Math.round(base * 0.55);
-    }
-
-    if (name.length > 32) {
-        return Math.round(base * 0.7);
-    }
-
-    if (name.length > 20) {
-        return Math.round(base * 0.85);
-    }
-
-    return base;
-};
-
 const SharepicMarkup = ({
     appearances,
     canceled,
@@ -63,7 +51,8 @@ const SharepicMarkup = ({
     const pad = isStory ? 52 : 40;
     const logoSize = isStory ? 180 : 132;
     const showPhoto = photoSrc !== null;
-    const titleSize = nameFontSize(name, !showPhoto, isStory);
+    const photoBox = sharepicPhotoBox({ appearances, canceled, format, name, showPhoto });
+    const titleSize = sharepicNameFontSize(name, !showPhoto, isStory);
     const festivalSize = isStory ? 60 : 56;
     const festivalDateSize = isStory ? 45 : 42;
     const placeSize = isStory ? 56 : 52;
@@ -134,14 +123,14 @@ const SharepicMarkup = ({
                         width: '100%',
                     })}
                 >
-                    {showPhoto ? (
-                        <div style={{ display: 'flex', height: '100%', position: 'relative', width: '100%' }}>
+                    {showPhoto && photoSrc !== null ? (
+                        <div style={{ display: 'flex', height: '100%', overflow: 'hidden', position: 'relative', width: '100%' }}>
                             <img
                                 alt=""
-                                height={900}
+                                height={photoBox.height}
                                 src={photoSrc}
-                                style={{ height: '100%', objectFit: 'cover', width: '100%' }}
-                                width={1080}
+                                style={{ height: '100%', width: '100%' }}
+                                width={photoBox.width}
                             />
                             <div
                                 style={{

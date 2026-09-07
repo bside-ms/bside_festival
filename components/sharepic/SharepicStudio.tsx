@@ -1,10 +1,19 @@
 'use client';
 
 import cn from '@/lib/common/helper/cn';
-import useIsMounted from '@/lib/common/hooks/useIsMounted';
-import { sharepicFormats, sharepicImagePath, type SharepicFormat, type SharepicLang } from '@/lib/sharepic/sharepicFormats';
-import { parseAsStringLiteral, useQueryState } from 'nuqs';
-import type { ReactElement } from 'react';
+import {
+    parseSharepicPosition,
+    parseSharepicZoom,
+    type SharepicFormat,
+    sharepicFormats,
+    sharepicImagePath,
+    type SharepicLang,
+    sharepicZoomMax,
+} from '@/lib/sharepic/sharepicFormats';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { parseAsFloat, parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
+import type { ChangeEvent, ReactElement } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 
 interface Props {
@@ -28,26 +37,44 @@ const SharepicStudio = ({ canceled, format, hasPhoto, id, lang, name, showPhoto 
     const [formatState, setFormat] = useQueryState('format', parseAsStringLiteral(formatValues).withDefault(format));
     const [photoState, setPhoto] = useQueryState('photo', parseAsStringLiteral(photoValues).withDefault(showPhoto ? '1' : '0'));
     const [langState, setLang] = useQueryState('lang', parseAsStringLiteral(langValues).withDefault(lang));
+    const [zoomState, setZoom] = useQueryState('zoom', parseAsFloat.withDefault(1));
+    const [xState, setX] = useQueryState('x', parseAsInteger.withDefault(50));
+    const [yState, setY] = useQueryState('y', parseAsInteger.withDefault(50));
     const resolvedFormat = formatState;
     const resolvedShowPhoto = hasPhoto && photoState === '1';
     const resolvedLang = langState;
-    const previewSrc = sharepicImagePath(id, resolvedFormat, resolvedShowPhoto, resolvedLang);
-    const downloadHref = sharepicImagePath(id, resolvedFormat, resolvedShowPhoto, resolvedLang, true);
+    const resolvedCrop = {
+        x: parseSharepicPosition(xState.toString()),
+        y: parseSharepicPosition(yState.toString()),
+        zoom: parseSharepicZoom(zoomState.toString()),
+    };
+    const [previewCrop, setPreviewCrop] = useState(resolvedCrop);
+    const previewSrc = sharepicImagePath(id, resolvedFormat, resolvedShowPhoto, resolvedLang, previewCrop);
+    const downloadHref = sharepicImagePath(id, resolvedFormat, resolvedShowPhoto, resolvedLang, resolvedCrop, true);
     const { height, width } = sharepicFormats[resolvedFormat];
-    const hasMounted = useIsMounted();
-    const [previewReady, setPreviewReady] = useState(false);
+    const [readySrc, setReadySrc] = useState<string | null>(null);
+    const previewReady = readySrc === previewSrc;
 
     useEffect(() => {
-        if (!hasMounted) {
-            return;
-        }
+        const timeout = window.setTimeout(() => {
+            setPreviewCrop(resolvedCrop);
+        }, 250);
 
-        setPreviewReady(false);
-    }, [hasMounted, previewSrc]);
+        return () => window.clearTimeout(timeout);
+    }, [resolvedCrop.x, resolvedCrop.y, resolvedCrop.zoom]);
 
     const markPreviewReady = useCallback(() => {
-        setPreviewReady(true);
-    }, []);
+        setReadySrc(previewSrc);
+    }, [previewSrc]);
+
+    const previewRef = useCallback(
+        (image: HTMLImageElement | null) => {
+            if (image?.complete) {
+                setReadySrc(previewSrc);
+            }
+        },
+        [previewSrc],
+    );
 
     const selectFeed = useCallback(() => {
         void setFormat('feed');
@@ -73,6 +100,27 @@ const SharepicStudio = ({ canceled, format, hasPhoto, id, lang, name, showPhoto 
         void setLang('en');
     }, [setLang]);
 
+    const updateZoom = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            void setZoom(Number(event.target.value));
+        },
+        [setZoom],
+    );
+
+    const updateX = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            void setX(Number(event.target.value));
+        },
+        [setX],
+    );
+
+    const updateY = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            void setY(Number(event.target.value));
+        },
+        [setY],
+    );
+
     return (
         <div className="min-h-screen font-display text-[#2C2E83]">
             <div className="mx-auto w-full max-w-5xl px-6 py-10 md:px-10 md:py-16">
@@ -84,14 +132,20 @@ const SharepicStudio = ({ canceled, format, hasPhoto, id, lang, name, showPhoto 
                 {canceled && <p className="mt-3 font-black">Dieser Beitrag fällt aus — das Sharepic zeigt den Hinweis.</p>}
 
                 <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
-                    <div className="relative flex min-h-80 justify-center bg-[#f4b6d6]/40 p-4 sm:p-6">
-                        {hasMounted && !previewReady && <div className="absolute inset-0 animate-pulse bg-[#f4b6d6]/80" />}
+                    <div
+                        aria-busy={!previewReady}
+                        aria-label={previewReady ? `Sharepic ${name}` : 'Sharepic wird geladen'}
+                        className="relative flex min-h-80 items-center justify-center bg-[#f4b6d6]/40 p-4 sm:p-6"
+                    >
+                        {!previewReady && <FontAwesomeIcon className="size-8 animate-spin text-[#2C2E83]" icon={faSpinner} />}
                         <img
                             alt={`Sharepic ${name}`}
-                            className="max-h-[70vh] w-auto rounded-sm bg-white shadow-md"
+                            className={cn('max-h-[70vh] w-auto rounded-sm bg-white shadow-md', !previewReady && 'hidden')}
                             height={height}
                             key={previewSrc}
+                            onError={markPreviewReady}
                             onLoad={markPreviewReady}
+                            ref={previewRef}
                             src={previewSrc}
                             width={width}
                         />
@@ -135,6 +189,54 @@ const SharepicStudio = ({ canceled, format, hasPhoto, id, lang, name, showPhoto 
                                 </button>
                             </div>
                         </div>
+
+                        {resolvedShowPhoto && (
+                            <div className="space-y-4">
+                                <div className="text-sm font-black">Foto-Ausschnitt</div>
+                                <label className="block text-sm font-bold" htmlFor="sharepic-zoom">
+                                    Zoom <span className="font-normal">{zoomState.toFixed(1)}×</span>
+                                </label>
+                                <input
+                                    aria-label="Zoom"
+                                    className="w-full accent-[#2C2E83]"
+                                    id="sharepic-zoom"
+                                    max={sharepicZoomMax}
+                                    min={1}
+                                    onChange={updateZoom}
+                                    step={0.1}
+                                    type="range"
+                                    value={zoomState}
+                                />
+                                <label className="block text-sm font-bold" htmlFor="sharepic-x">
+                                    Horizontal <span className="font-normal">{xState}%</span>
+                                </label>
+                                <input
+                                    aria-label="Horizontale Position"
+                                    className="w-full accent-[#2C2E83]"
+                                    id="sharepic-x"
+                                    max={100}
+                                    min={0}
+                                    onChange={updateX}
+                                    step={1}
+                                    type="range"
+                                    value={xState}
+                                />
+                                <label className="block text-sm font-bold" htmlFor="sharepic-y">
+                                    Vertikal <span className="font-normal">{yState}%</span>
+                                </label>
+                                <input
+                                    aria-label="Vertikale Position"
+                                    className="w-full accent-[#2C2E83]"
+                                    id="sharepic-y"
+                                    max={100}
+                                    min={0}
+                                    onChange={updateY}
+                                    step={1}
+                                    type="range"
+                                    value={yState}
+                                />
+                            </div>
+                        )}
 
                         <a
                             className="inline-flex bg-[#2C2E83] px-5 py-3 font-black text-white no-underline hover:bg-black"
