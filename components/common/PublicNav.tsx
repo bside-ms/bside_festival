@@ -6,7 +6,29 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { type MouseEventHandler, type ReactElement, useCallback, useEffect, useId, useState } from 'react';
-import { FaInstagram } from 'react-icons/fa';
+import { FaInstagram, FaLock } from 'react-icons/fa';
+
+const InternStaffLink = ({
+    className,
+    onNavigate,
+}: {
+    className?: string;
+    onNavigate?: MouseEventHandler<HTMLAnchorElement>;
+}): ReactElement => (
+    <Link
+        href="/intern"
+        aria-label="Internbereich"
+        className={cn(
+            'inline-flex items-center gap-1.5 rounded-full border border-dashed border-[#f2c48d] bg-[#f2c48d]/15 px-3 py-1 font-display text-xs tracking-wide text-[#f2c48d] no-underline hover:bg-[#f2c48d] hover:text-black',
+            className,
+        )}
+        title="Nur sichtbar, wenn du angemeldet bist"
+        onClick={onNavigate}
+    >
+        <FaLock aria-hidden={true} className="size-3 shrink-0" />
+        Intern
+    </Link>
+);
 
 const NavLinkItem = ({
     link,
@@ -112,7 +134,7 @@ const MobileNavGroup = ({
     );
 };
 
-const PublicNav = (): ReactElement => {
+const PublicNav = ({ isLoggedIn = false }: { isLoggedIn?: boolean }): ReactElement => {
     const pathname = usePathname();
     const [mobileOpen, setMobileOpen] = useState(false);
     const [openGroupId, setOpenGroupId] = useState<string | null>(null);
@@ -183,6 +205,8 @@ const PublicNav = (): ReactElement => {
                     </Link>
                 ) : null}
 
+                {isLoggedIn ? <InternStaffLink className="ml-2" /> : null}
+
                 <Link
                     href="https://www.instagram.com/bside.festival.ms/"
                     target="_blank"
@@ -204,6 +228,7 @@ const PublicNav = (): ReactElement => {
                 >
                     <FaInstagram />
                 </Link>
+                {isLoggedIn ? <InternStaffLink /> : null}
                 <button
                     type="button"
                     className="rounded-md border border-white/40 px-3 py-1.5 font-display text-sm text-white"

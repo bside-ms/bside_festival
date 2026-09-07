@@ -18,7 +18,7 @@ Copy rule: colleague feedback overrides Figma text; layout stays Figma. Canonica
 - [x] Redesign header/footer for **all public pages** (footer: sky-blue, Festival 2026 / Mitwirken / Socials, motto + harbor waves)
 - [x] Nav groups: **Festival 2026** | **Mitwirken** (+ utility: Socials, Spenden, Leichte Sprache entry)
 - [x] Festival 2026 links: Wo & Wann, Über uns, Awareness; Programm only when `isProgramPublished`
-- [x] Mitwirken links: Helfis → `/mithelfen` (Workshops omitted until a real target exists)
+- [x] Mitwirken links: Helfis → `/mithelfen` (Workshops omitted until a real target exists); logged-in users get a gold dashed Intern chip next to Programm
 - [x] No soft „Programm folgt“ placeholders — skip Programm until publish
 
 ## Phase 2 — Startseite

@@ -11,16 +11,17 @@ interface Props {
     children: ReactNode;
     footer: ReactNode;
     internNav: ReactNode;
+    isLoggedIn: boolean;
 }
 
-const AppShell = ({ children, footer, internNav }: Props): ReactElement => {
+const AppShell = ({ children, footer, internNav, isLoggedIn }: Props): ReactElement => {
     const pathname = usePathname();
     const isIntern = pathname.startsWith('/intern');
     const isAwareness = pathname.startsWith('/awareness');
 
     return (
         <div className={cn('flex flex-col', isIntern ? 'h-dvh overflow-hidden' : 'min-h-screen')}>
-            <PageHeader fullWidth={isIntern} nav={isIntern ? internNav : <PublicNav />} />
+            <PageHeader fullWidth={isIntern} nav={isIntern ? internNav : <PublicNav isLoggedIn={isLoggedIn} />} />
             <div
                 className={cn(
                     isIntern && 'gradient-background flex min-h-0 flex-1 flex-col overflow-y-auto',

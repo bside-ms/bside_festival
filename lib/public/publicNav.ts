@@ -2,9 +2,9 @@ import isProgramPublished from '@/lib/participants/isProgramPublished';
 import { compact } from 'lodash';
 
 export type PublicNavLink = {
+    href: string;
     id: string;
     label: string;
-    href: string;
 };
 
 export type PublicNavGroup = {
