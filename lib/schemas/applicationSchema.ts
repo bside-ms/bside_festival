@@ -169,6 +169,35 @@ export const updateApplicationFeeEurosSchema = z.object({
         .transform((value) => (typeof value === 'number' && !Number.isNaN(value) ? value : null)),
 });
 
+export const updateApplicationTypeAndGenresSchema = z.object({
+    type: z.nativeEnum(Type),
+    genreIds: z.array(z.number().int().positive()),
+    newGenres: z.array(z.string().trim().min(1)).max(20),
+});
+
+export const updateApplicationLinksSchema = z.object({
+    publicLinks: z.array(linkSchema).max(20),
+    privateLinks: z.array(linkSchema).max(20),
+});
+
+export const updateApplicationZipcodesSchema = z.object({
+    zipcodes: z.array(zipcodeSchema).max(100),
+});
+
+export const updateApplicationTechnicalRiderSchema = z.object({
+    technicalRider: z.string().max(applicationTechnicalRiderMaxLength).optional(),
+    encodedTechnicalRiderPdf: z.string().optional(),
+    removeTechnicalRiderPdf: z.boolean(),
+});
+
+export const updateApplicationBacklineSharingSchema = z.object({
+    backlineSharing: z.string().max(applicationBacklineSharingMaxLength).optional(),
+});
+
+export const updateApplicationAllergiesSchema = z.object({
+    allergies: z.string().max(1000).optional(),
+});
+
 export const createApplicationSchema = (chosenType: Type) =>
     z
         .object({

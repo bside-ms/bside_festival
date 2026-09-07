@@ -1,8 +1,16 @@
+import ApplicationDetailsFormControls from '@/components/applications/applicationDetails/ApplicationDetailsFormControls';
+import ApplicationDetailsTitle from '@/components/applications/applicationDetails/ApplicationDetailsTitle';
+import ApplicationLinkList from '@/components/applications/applicationForm/ApplicationLinkList';
+import { updateApplicationLinks } from '@/lib/actions/applicationActions';
+import { updateApplicationLinksSchema } from '@/lib/schemas/applicationSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
 import type { Link } from '@prisma/client';
 import { default as NextLink } from 'next/link';
-import type { ReactElement } from 'react';
+import { useCallback, useState, type ReactElement } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { CiGlobe } from 'react-icons/ci';
 import { FaBandcamp, FaFacebook, FaInstagram, FaSoundcloud, FaSpotify, FaYoutube } from 'react-icons/fa';
+import type { z } from 'zod';
 
 const LinkBadge = ({ link }: { link: URL }): ReactElement => {
     if (link.hostname.includes('instagram.')) {
@@ -53,18 +61,64 @@ const ExternalLink = ({ link: { isConfidential, link } }: { link: Link }): React
 
 interface Props {
     links: Array<Link>;
+    participantId: number;
 }
 
-const ApplicationDetailsLinks = ({ links }: Props): ReactElement | null => {
-    if (links.length === 0) {
-        return null;
+type FormValues = z.infer<typeof updateApplicationLinksSchema>;
+
+const ApplicationDetailsLinks = ({ links, participantId }: Props): ReactElement => {
+    const [showForm, setShowForm] = useState(false);
+    const toggleShowForm = useCallback(() => setShowForm((value) => !value), []);
+    const methods = useForm<FormValues>({
+        defaultValues: {
+            privateLinks: links.filter(({ isConfidential }) => isConfidential).map(({ link }) => ({ url: link })),
+            publicLinks: links.filter(({ isConfidential }) => !isConfidential).map(({ link }) => ({ url: link })),
+        },
+        resolver: zodResolver(updateApplicationLinksSchema),
+    });
+    const {
+        formState: { errors, isSubmitting },
+        handleSubmit,
+        setError,
+    } = methods;
+    const onSubmit = useCallback(
+        async (values: FormValues) => {
+            try {
+                await updateApplicationLinks(participantId, values);
+                toggleShowForm();
+            } catch {
+                setError('root', { message: 'Fehler beim Submit!' });
+            }
+        },
+        [participantId, setError, toggleShowForm],
+    );
+
+    if (showForm) {
+        return (
+            <FormProvider {...methods}>
+                <form onSubmit={handleSubmit(onSubmit)} className="flex max-w-3xl flex-col gap-4">
+                    <ApplicationLinkList name="publicLinks" title="Öffentliche Links" />
+                    <ApplicationLinkList name="privateLinks" title="Private Links" />
+                    <ApplicationDetailsFormControls
+                        errorMessage={errors.root?.message}
+                        isSubmitting={isSubmitting}
+                        onCancel={toggleShowForm}
+                    />
+                </form>
+            </FormProvider>
+        );
     }
 
     return (
         <div className="flex flex-wrap gap-2">
-            {links.map((link) => (
-                <ExternalLink key={link.id} link={link} />
-            ))}
+            <div className="basis-full">
+                <ApplicationDetailsTitle onEditClick={toggleShowForm}>Links</ApplicationDetailsTitle>
+            </div>
+            {links.length === 0 ? (
+                <span className="text-gray-500">keine Angabe</span>
+            ) : (
+                links.map((link) => <ExternalLink key={link.id} link={link} />)
+            )}
         </div>
     );
 };

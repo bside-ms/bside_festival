@@ -28,19 +28,21 @@ export default async ({ params }: Props): Promise<ReactElement> => {
     }
 
     const isInDataPrivacyGroup = await isGroupMember(dataPrivacyGroup);
-    const [participant, participantGenreRows, links, zipcodes, scheduleEntries, programLocations, workshopAttendees] = await Promise.all([
-        getParticipantById(participantId, isInDataPrivacyGroup),
-        prismaClient.participantGenre.findMany({ where: { participantId } }),
-        prismaClient.link.findMany({ where: { participantId } }),
-        prismaClient.zipcode.findMany({ where: { participantId } }),
-        getScheduleEntriesByParticipantId(participantId),
-        getAllProgramLocations(),
-        prismaClient.attendee.findMany({
-            orderBy: { attendedAt: 'asc' },
-            select: { confirmedAt: true, fullName: true, id: true, mailAddress: true, message: true, scheduleEntryId: true },
-            where: { scheduleEntry: { participantId }, ...activeWorkshopReservationWhere() },
-        }),
-    ]);
+    const [participant, participantGenreRows, links, zipcodes, allGenres, scheduleEntries, programLocations, workshopAttendees] =
+        await Promise.all([
+            getParticipantById(participantId, isInDataPrivacyGroup),
+            prismaClient.participantGenre.findMany({ where: { participantId } }),
+            prismaClient.link.findMany({ where: { participantId } }),
+            prismaClient.zipcode.findMany({ where: { participantId } }),
+            prismaClient.genre.findMany({ orderBy: { name: 'asc' } }),
+            getScheduleEntriesByParticipantId(participantId),
+            getAllProgramLocations(),
+            prismaClient.attendee.findMany({
+                orderBy: { attendedAt: 'asc' },
+                select: { confirmedAt: true, fullName: true, id: true, mailAddress: true, message: true, scheduleEntryId: true },
+                where: { scheduleEntry: { participantId }, ...activeWorkshopReservationWhere() },
+            }),
+        ]);
 
     if (participant === null) {
         notFound();
@@ -61,6 +63,7 @@ export default async ({ params }: Props): Promise<ReactElement> => {
                 application={application}
                 changeLogHref={isInDataPrivacyGroup ? buildApplicationChangeLogHref(application.id) : undefined}
                 genres={genres}
+                allGenres={allGenres}
                 links={links}
                 programLocations={programLocations}
                 scheduleEntries={scheduleEntries}

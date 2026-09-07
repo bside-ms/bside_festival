@@ -18,7 +18,6 @@ model Participant {
     description                 String?            @db.Text
     motivation                  String?            @db.Text
     juryVotes                   Json?
-    address                     String?            @db.Text
     imageFileName               String?            @db.Text
     technicalRider              String?            @db.Text
     technicalRiderFileName      String?            @db.Text
@@ -40,7 +39,6 @@ model Participant {
     links                       Link[]
     comments                    Comment[]
     organizers                  ParticipantOrganizer[]
-    labels                      ParticipantLabel[]
     genres                      ParticipantGenre[]
     type                        Type
     status                      ApplicationStatus  @default(Applied)
@@ -106,6 +104,12 @@ enum ChangeLogAction {
     ApplicationStatusUpdated
     ApplicationOrganizersUpdated
     ApplicationFeeUpdated
+    ApplicationTypeAndGenresUpdated
+    ApplicationLinksUpdated
+    ApplicationZipcodesUpdated
+    ApplicationTechnicalRiderUpdated
+    ApplicationBacklineSharingUpdated
+    ApplicationAllergiesUpdated
     ProgramSlotUpdated
     ProgramSlotDeleted
     ProgramVenueUpdated
@@ -161,21 +165,6 @@ model ParticipantOrganizer {
     organizerName   String      @db.Text
 
     @@id([participantId, organizerUserId])
-}
-
-model Label {
-    id           Int                @id @default(autoincrement())
-    label        String             @db.Text
-    particapants ParticipantLabel[]
-}
-
-model ParticipantLabel {
-    participant   Participant @relation(fields: [participantId], references: [id])
-    participantId Int
-    label         Label       @relation(fields: [labelId], references: [id])
-    labelId       Int
-
-    @@id([participantId, labelId])
 }
 
 model Genre {
