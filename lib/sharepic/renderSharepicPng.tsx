@@ -1,6 +1,13 @@
 import formatSharepicAppearances from '@/lib/sharepic/formatSharepicAppearances';
 import type { SharepicEntry } from '@/lib/sharepic/getSharepicEntry';
-import { sharepicFormats, type SharepicFormat, type SharepicLang } from '@/lib/sharepic/sharepicFormats';
+import {
+    sharepicCoverCrop,
+    sharepicFormats,
+    sharepicPhotoBox,
+    type SharepicCrop,
+    type SharepicFormat,
+    type SharepicLang,
+} from '@/lib/sharepic/sharepicFormats';
 import SharepicMarkup from '@/lib/sharepic/SharepicMarkup';
 import { ImageResponse } from 'next/og';
 import { readFile } from 'node:fs/promises';
@@ -70,7 +77,7 @@ const loadSwooshesSrc = async (): Promise<string> => {
     return swooshesSrc;
 };
 
-const loadPhotoSrc = async (photoUrl: string): Promise<string | null> => {
+const loadPhoto = async (photoUrl: string, box: { height: number; width: number }, crop: SharepicCrop): Promise<string | null> => {
     try {
         const response = await fetch(photoUrl);
 
@@ -79,7 +86,15 @@ const loadPhotoSrc = async (photoUrl: string): Promise<string | null> => {
         }
 
         const input = Buffer.from(await response.arrayBuffer());
-        const jpeg = await sharp(input).rotate().resize(1080, 1350, { fit: 'cover' }).jpeg({ quality: 82 }).toBuffer();
+        const oriented = await sharp(input).rotate().toBuffer();
+        const { height, width } = await sharp(oriented).metadata();
+
+        if (height === undefined || width === undefined) {
+            return null;
+        }
+
+        const region = sharepicCoverCrop(width, height, box, crop);
+        const jpeg = await sharp(oriented).extract(region).resize(box.width, box.height).jpeg({ quality: 82 }).toBuffer();
 
         return `data:image/jpeg;base64,${jpeg.toString('base64')}`;
     } catch {
@@ -92,6 +107,7 @@ const renderSharepicPng = async (
     format: SharepicFormat,
     showPhoto: boolean,
     lang: SharepicLang,
+    crop: SharepicCrop,
 ): Promise<ImageResponse> => {
     const { height, width } = sharepicFormats[format];
     const [{ extraBold, bold }, resolvedLogoSrc, resolvedDripArrowSrc, resolvedSwooshesSrc] = await Promise.all([
@@ -100,11 +116,13 @@ const renderSharepicPng = async (
         loadDripArrowSrc(),
         loadSwooshesSrc(),
     ]);
-    const photoSrc = showPhoto && entry.photoUrl !== null ? await loadPhotoSrc(entry.photoUrl) : null;
+    const appearances = formatSharepicAppearances(entry.scheduleEntries, lang);
+    const photoBox = sharepicPhotoBox({ appearances, canceled: entry.canceled, format, name: entry.name, showPhoto });
+    const photoSrc = showPhoto && entry.photoUrl !== null ? await loadPhoto(entry.photoUrl, photoBox, crop) : null;
 
     return new ImageResponse(
         <SharepicMarkup
-            appearances={formatSharepicAppearances(entry.scheduleEntries, lang)}
+            appearances={appearances}
             canceled={entry.canceled}
             dripArrowSrc={resolvedDripArrowSrc}
             format={format}

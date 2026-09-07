@@ -83,7 +83,7 @@ const ApplicationDetails = ({
 
                 <ApplicationDetailsProfessionalInfo application={application} />
 
-                <ApplicationDetailsZipcodes zipcodes={zipcodes} />
+                <ApplicationDetailsZipcodes participantId={application.id} zipcodes={zipcodes} />
 
                 <ApplicationDetailsDiversity application={application} />
 
@@ -91,7 +91,7 @@ const ApplicationDetails = ({
 
                 <ApplicationDetailsPastParticipation application={application} />
 
-                <ApplicationDetailsLinks links={links} />
+                <ApplicationDetailsLinks links={links} participantId={application.id} />
 
                 <ApplicationDetailsContacts application={application} />
 

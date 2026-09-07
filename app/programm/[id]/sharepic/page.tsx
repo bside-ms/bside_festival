@@ -9,7 +9,7 @@ import type { ReactElement } from 'react';
 
 interface Props {
     params: Promise<{ id: string }>;
-    searchParams: Promise<{ format?: string; lang?: string; photo?: string }>;
+    searchParams: Promise<{ format?: string; lang?: string; photo?: string; x?: string; y?: string; zoom?: string }>;
 }
 
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {

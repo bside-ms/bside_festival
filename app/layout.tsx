@@ -2,6 +2,7 @@ import AppShell from '@/components/common/AppShell';
 import Footer from '@/components/common/Footer';
 import InternHeaderNav from '@/components/common/InternHeaderNav';
 import HomeScrollRestoration from '@/components/home/HomeScrollRestoration';
+import isLoggedIn from '@/lib/next-auth/isLoggedIn';
 import type { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import './globals.css';
@@ -26,18 +27,22 @@ export const metadata: Metadata = {
     },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+    const loggedIn = await isLoggedIn();
+
     return (
         <html lang="de" className="scroll-pt-15 scroll-smooth" data-scroll-behavior="smooth">
             <head />
             <body className="flex min-h-screen flex-col font-sans">
                 <NuqsAdapter>
                     <HomeScrollRestoration />
-                    <AppShell internNav={<InternHeaderNav />} footer={<Footer />}>
+                    <AppShell internNav={<InternHeaderNav />} footer={<Footer />} isLoggedIn={loggedIn}>
                         {children}
                     </AppShell>
                 </NuqsAdapter>
             </body>
         </html>
     );
-}
+};
+
+export default RootLayout;

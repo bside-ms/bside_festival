@@ -11,7 +11,7 @@ import type { SerializableListParticipant } from '@/typings/SerializableListPart
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import type { ReactElement } from 'react';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 const SortHeaderButton = ({
     column,
@@ -38,12 +38,28 @@ const SortHeaderButton = ({
 
 const ContributionTableRow = ({ application }: { application: SerializableListParticipant }): ReactElement => {
     const searchParams = useSearchParams();
+    const { isMailMergeMode, selectedParticipantIds, toggleSelectedParticipant } = useInternWorkspaceContext();
     const detailHref = withSearchParams(`/intern/${application.id}`, searchParams);
     const typeLabel = typeLabels[application.type];
     const typeColor = typeColors[application.type];
+    const isSelected = selectedParticipantIds.includes(application.id);
+    const handleToggleSelected = useCallback(() => toggleSelectedParticipant(application.id), [application.id, toggleSelectedParticipant]);
 
     return (
-        <tr className="group relative border-t border-black/15 transition-colors duration-150 hover:bg-black/[0.04]">
+        <tr
+            className={`group relative border-t border-black/15 transition-colors duration-150 ${isMailMergeMode ? '' : 'hover:bg-black/[0.04]'} ${isSelected ? 'bg-black/[0.04]' : ''}`}
+        >
+            {isMailMergeMode ? (
+                <td className="w-10 px-2 py-2 align-middle">
+                    <input
+                        type="checkbox"
+                        checked={isSelected}
+                        className="size-4 accent-black"
+                        aria-label={`${application.name} auswählen`}
+                        onChange={handleToggleSelected}
+                    />
+                </td>
+            ) : null}
             <td className="px-2.5 py-2 align-top">
                 <span className="line-clamp-2 text-base leading-snug font-semibold">{application.name}</span>
             </td>
@@ -89,25 +105,61 @@ const ContributionTableRow = ({ application }: { application: SerializableListPa
                 )}
             </td>
             <td className="w-10 px-2 py-2 text-center align-middle">
-                <Link href={detailHref} className="absolute inset-0 z-10" aria-label={`Details zu ${application.name}`} />
-                <span
-                    aria-hidden
-                    className="inline-block text-xl leading-none text-black/30 transition-all duration-150 ease-out group-hover:translate-x-0.5 group-hover:text-black"
-                >
-                    ›
-                </span>
+                {isMailMergeMode ? null : (
+                    <>
+                        <Link href={detailHref} className="absolute inset-0 z-10" aria-label={`Details zu ${application.name}`} />
+                        <span
+                            aria-hidden
+                            className="inline-block text-xl leading-none text-black/30 transition-all duration-150 ease-out group-hover:translate-x-0.5 group-hover:text-black"
+                        >
+                            ›
+                        </span>
+                    </>
+                )}
             </td>
         </tr>
     );
 };
 
+const SelectAllCheckbox = (): ReactElement => {
+    const { areAllFilteredSelected, filteredSelectedCount, selectAllFilteredParticipants, unselectFilteredParticipants } =
+        useInternWorkspaceContext();
+    const checkboxRef = useRef<HTMLInputElement>(null);
+    const handleToggleSelectAll = useCallback(() => {
+        if (areAllFilteredSelected) {
+            unselectFilteredParticipants();
+            return;
+        }
+
+        selectAllFilteredParticipants();
+    }, [areAllFilteredSelected, selectAllFilteredParticipants, unselectFilteredParticipants]);
+
+    useEffect(() => {
+        if (checkboxRef.current !== null) {
+            checkboxRef.current.indeterminate = !areAllFilteredSelected && filteredSelectedCount > 0;
+        }
+    }, [areAllFilteredSelected, filteredSelectedCount]);
+
+    return (
+        <input
+            ref={checkboxRef}
+            type="checkbox"
+            checked={areAllFilteredSelected}
+            className="size-4 accent-black"
+            aria-label="Alle gefilterten auswählen"
+            onChange={handleToggleSelectAll}
+        />
+    );
+};
+
 const ContributionTable = (): ReactElement => {
-    const { filteredApplications } = useInternWorkspaceContext();
+    const { filteredApplications, isMailMergeMode } = useInternWorkspaceContext();
 
     return (
         <div className="overflow-x-auto rounded-md border border-black bg-white/90 shadow-lg backdrop-blur-2xl">
             <table className="min-w-full table-fixed border-collapse text-left">
                 <colgroup>
+                    {isMailMergeMode ? <col className="w-10" /> : null}
                     <col className="w-[16%]" />
                     <col className="w-[9%]" />
                     <col className="w-[11%]" />
@@ -119,6 +171,11 @@ const ContributionTable = (): ReactElement => {
                 </colgroup>
                 <thead className="bg-black/[0.04] text-xs tracking-wide text-black/70">
                     <tr>
+                        {isMailMergeMode ? (
+                            <th className="w-10 px-2 py-2.5">
+                                <SelectAllCheckbox />
+                            </th>
+                        ) : null}
                         <th className="px-2.5 py-2.5">
                             <SortHeaderButton column="name" label="Name" />
                         </th>

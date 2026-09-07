@@ -20,7 +20,7 @@ interface TimedInterval {
     startsAt: Date;
 }
 
-export const getSlotplanLocationColumnWidthPx = (maxLaneCount: number): number =>
+const getSlotplanLocationColumnWidthPx = (maxLaneCount: number): number =>
     slotplanLocationColumnBaseWidthPx + slotplanOverlapColumnExtraPx * Math.max(0, maxLaneCount - 1);
 
 export const getSlotplanEntryInterval = (

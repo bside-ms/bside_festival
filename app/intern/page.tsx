@@ -69,6 +69,7 @@ export default async (): Promise<ReactElement> => {
             <InternWorkspaceContextProvider
                 applications={applications}
                 currentOrganizerUserId={currentOrganizerUserId}
+                isInDataPrivacyGroup={isInDataPrivacyGroup}
                 scheduledParticipantIds={scheduledParticipantIds}
             >
                 <InternWorkspace />

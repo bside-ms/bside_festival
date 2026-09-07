@@ -1,6 +1,5 @@
 {
     "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
-    "project": ["**/*.{css,js,ts,tsx}", "!**/*.{test,spec}.{js,ts,tsx}", "!**/__tests__/**"],
-    "ignore": ["**/*.{test,spec}.{js,ts,tsx}", "**/__tests__/**"],
-    "ignoreDependencies": ["@emnapi/core", "@emnapi/runtime", "imapflow"],
+    "project": ["**/*.{css,js,ts,tsx}"],
+    "ignoreDependencies": ["@emnapi/core", "@emnapi/runtime"],
 }

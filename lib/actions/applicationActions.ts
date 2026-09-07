@@ -26,15 +26,21 @@ import {
     createUpdateApplicationDiversityInfoSchema,
     createUpdateApplicationParticipantCountSchema,
     updateApplicationAdditionalInfoSchema,
+    updateApplicationAllergiesSchema,
+    updateApplicationBacklineSharingSchema,
     updateApplicationContactInfoSchema,
     updateApplicationDescriptionSchema,
     updateApplicationDurationPreferenceSchema,
     updateApplicationFeeEurosSchema,
     updateApplicationJuryVotesSchema,
+    updateApplicationLinksSchema,
     updateApplicationMotivationSchema,
     updateApplicationNameSchema,
     updateApplicationParticipantCountSchema,
     updateApplicationPastParticipationSchema,
+    updateApplicationTechnicalRiderSchema,
+    updateApplicationTypeAndGenresSchema,
+    updateApplicationZipcodesSchema,
 } from '@/lib/schemas/applicationSchema';
 import allowedTechnicRiderContentType from '@/lib/upload/allowedTechnicRiderContentType';
 import allowedTechnicalRiderMaxFileSize from '@/lib/upload/allowedTechnicalRiderMaxFileSize';
@@ -68,6 +74,12 @@ const revalidateApplicationPaths = (): void => {
 const getActionUserId = (actor: ActionUser): string => actor.email ?? actor.name ?? 'unknown-user';
 
 const getActionUserName = (actor: ActionUser): string => actor.name ?? actor.email ?? 'Unbekannt';
+
+const formatStringList = (values: Array<string>): string => values.join(', ');
+const formatLinks = (values: Array<{ link: string; isConfidential: boolean }>): string =>
+    values.map(({ link, isConfidential }) => `${link} (${isConfidential ? 'privat' : 'öffentlich'})`).join(', ');
+const formatZipcodes = (values: Array<{ code: string; isInternational: boolean }>): string =>
+    values.map(({ code, isInternational }) => `${isInternational ? 'Land' : 'PLZ'}: ${code}`).join(', ');
 
 const recordApplicationChange = async (
     tx: Prisma.TransactionClient,
@@ -608,7 +620,6 @@ export const setApplicationStatus = loggedAction(
                 return;
             }
 
-            await tx.participantLabel.deleteMany({ where: { participantId: id } });
             await tx.participant.update({ data: { status: applicationStatus }, where: { id } });
 
             if (normalizedComment !== null) {
@@ -730,4 +741,228 @@ export const setApplicationOrganizers = loggedAction(
         revalidateApplicationPaths();
     },
     (participantId, organizers) => applicationActionMeta(participantId, { organizerCount: organizers.length }),
+);
+
+export const updateApplicationTypeAndGenres = loggedAction(
+    'updateApplicationTypeAndGenres',
+    async (id: number, values: z.infer<typeof updateApplicationTypeAndGenresSchema>): Promise<void> => {
+        const actor = await requireLoggedInUser();
+        const { type, genreIds, newGenres } = updateApplicationTypeAndGenresSchema.parse(values);
+
+        await prismaClient.$transaction(async (tx) => {
+            const application = await tx.participant.findUniqueOrThrow({
+                include: { genres: { include: { genre: true }, orderBy: { genreId: 'asc' } } },
+                where: { id },
+            });
+            const createdGenres =
+                type === Type.Concert || type === Type.DiskJockey
+                    ? await Promise.all(newGenres.map((name) => tx.genre.create({ data: { name, type } })))
+                    : [];
+            const allowedGenreIds = new Set(
+                type === Type.Concert || type === Type.DiskJockey ? [...genreIds, ...createdGenres.map(({ id: genreId }) => genreId)] : [],
+            );
+            const nextGenres = application.genres
+                .filter(({ genre }) => genre.type === type && allowedGenreIds.has(genre.id))
+                .map(({ genre }) => genre);
+            const selectedExistingGenres = await tx.genre.findMany({ where: { id: { in: Array.from(allowedGenreIds) }, type } });
+            const allNextGenres = [
+                ...nextGenres,
+                ...selectedExistingGenres.filter(({ id: genreId }) => !nextGenres.some(({ id }) => id === genreId)),
+            ];
+            const changes = filterChanges([
+                createChange('type', 'Typ', application.type, type, String),
+                createChange(
+                    'genres',
+                    'Genres',
+                    application.genres.map(({ genre }) => genre.name),
+                    allNextGenres.map(({ name }) => name),
+                    formatStringList,
+                ),
+            ]);
+
+            if (changes.length === 0) {
+                return;
+            }
+
+            await tx.participantGenre.deleteMany({ where: { participantId: id } });
+            if (allNextGenres.length > 0) {
+                await tx.participantGenre.createMany({ data: allNextGenres.map(({ id: genreId }) => ({ genreId, participantId: id })) });
+            }
+            await tx.participant.update({ data: { type }, where: { id } });
+            await recordApplicationChange(
+                tx,
+                actor,
+                ChangeLogAction.ApplicationTypeAndGenresUpdated,
+                { id: application.id, name: application.name },
+                changes,
+            );
+        });
+        revalidateApplicationPaths();
+    },
+    (id, values) => applicationActionMeta(id, { values }),
+);
+
+export const updateApplicationLinks = loggedAction(
+    'updateApplicationLinks',
+    async (id: number, values: z.infer<typeof updateApplicationLinksSchema>): Promise<void> => {
+        const actor = await requireLoggedInUser();
+        const { publicLinks, privateLinks } = updateApplicationLinksSchema.parse(values);
+        const nextLinks = [
+            ...publicLinks.filter(({ url }) => url.length > 0).map(({ url: link }) => ({ isConfidential: false, link })),
+            ...privateLinks.filter(({ url }) => url.length > 0).map(({ url: link }) => ({ isConfidential: true, link })),
+        ];
+
+        await prismaClient.$transaction(async (tx) => {
+            const application = await tx.participant.findUniqueOrThrow({
+                include: { links: { orderBy: { id: 'asc' } } },
+                where: { id },
+            });
+            const previousLinks = application.links.map(({ isConfidential, link }) => ({ isConfidential, link }));
+            const changes = filterChanges([createChange('links', 'Links', previousLinks, nextLinks, formatLinks)]);
+            if (changes.length === 0) {
+                return;
+            }
+            await tx.link.deleteMany({ where: { participantId: id } });
+            if (nextLinks.length > 0) {
+                await tx.link.createMany({ data: nextLinks.map((link) => ({ ...link, participantId: id })) });
+            }
+            await recordApplicationChange(
+                tx,
+                actor,
+                ChangeLogAction.ApplicationLinksUpdated,
+                { id: application.id, name: application.name },
+                changes,
+            );
+        });
+        revalidateApplicationPaths();
+    },
+    (id, values) => applicationActionMeta(id, { values }),
+);
+
+export const updateApplicationZipcodes = loggedAction(
+    'updateApplicationZipcodes',
+    async (id: number, values: z.infer<typeof updateApplicationZipcodesSchema>): Promise<void> => {
+        const actor = await requireLoggedInUser();
+        const { zipcodes } = updateApplicationZipcodesSchema.parse(values);
+        await prismaClient.$transaction(async (tx) => {
+            const application = await tx.participant.findUniqueOrThrow({
+                include: { zipcodes: { orderBy: { id: 'asc' } } },
+                where: { id },
+            });
+            const previous = application.zipcodes.map(({ code, isInternational }) => ({ code, isInternational }));
+            const changes = filterChanges([createChange('zipcodes', 'Wohnorte', previous, zipcodes, formatZipcodes)]);
+            if (changes.length === 0) {
+                return;
+            }
+            await tx.zipcode.deleteMany({ where: { participantId: id } });
+            if (zipcodes.length > 0) {
+                await tx.zipcode.createMany({ data: zipcodes.map((zipcode) => ({ ...zipcode, participantId: id })) });
+            }
+            await recordApplicationChange(
+                tx,
+                actor,
+                ChangeLogAction.ApplicationZipcodesUpdated,
+                { id: application.id, name: application.name },
+                changes,
+            );
+        });
+        revalidateApplicationPaths();
+    },
+    (id, values) => applicationActionMeta(id, { values }),
+);
+
+export const updateApplicationTechnicalRider = loggedAction(
+    'updateApplicationTechnicalRider',
+    async (id: number, values: z.infer<typeof updateApplicationTechnicalRiderSchema>): Promise<void> => {
+        const actor = await requireLoggedInUser();
+        const parsed = updateApplicationTechnicalRiderSchema.parse(values);
+        const uploadedFileName = parsed.encodedTechnicalRiderPdf
+            ? await uploadFileToIonos(parsed.encodedTechnicalRiderPdf, [allowedTechnicRiderContentType], allowedTechnicalRiderMaxFileSize)
+            : undefined;
+        await prismaClient.$transaction(async (tx) => {
+            const application = await tx.participant.findUniqueOrThrow({
+                select: { id: true, name: true, technicalRider: true, technicalRiderFileName: true },
+                where: { id },
+            });
+            const nextFileName =
+                uploadedFileName !== undefined
+                    ? uploadedFileName
+                    : parsed.removeTechnicalRiderPdf
+                      ? null
+                      : application.technicalRiderFileName;
+            const nextText = normalizeOptionalText(parsed.technicalRider);
+            const changes = filterChanges([
+                createChange('technicalRider', 'Technical Rider', application.technicalRider, nextText, formatNullableText),
+                createChange(
+                    'technicalRiderFileName',
+                    'Technical Rider PDF',
+                    application.technicalRiderFileName,
+                    nextFileName,
+                    formatNullableText,
+                ),
+            ]);
+            if (changes.length === 0) {
+                return;
+            }
+            await tx.participant.update({ data: { technicalRider: nextText, technicalRiderFileName: nextFileName }, where: { id } });
+            await recordApplicationChange(
+                tx,
+                actor,
+                ChangeLogAction.ApplicationTechnicalRiderUpdated,
+                { id: application.id, name: application.name },
+                changes,
+            );
+        });
+        revalidateApplicationPaths();
+    },
+    (id, values) =>
+        applicationActionMeta(id, { values: { ...values, encodedTechnicalRiderPdf: Boolean(values.encodedTechnicalRiderPdf) } }),
+);
+
+const updateApplicationTextField = async (
+    id: number,
+    value: string | undefined,
+    field: 'backlineSharing' | 'allergies',
+    label: string,
+    action: ChangeLogAction,
+): Promise<void> => {
+    const actor = await requireLoggedInUser();
+    const nextValue = normalizeOptionalText(value);
+    await prismaClient.$transaction(async (tx) => {
+        const application = await tx.participant.findUniqueOrThrow({
+            select: { allergies: true, backlineSharing: true, id: true, name: true },
+            where: { id },
+        });
+        const previousValue = field === 'backlineSharing' ? application.backlineSharing : application.allergies;
+        const changes = filterChanges([createChange(field, label, previousValue, nextValue, formatNullableText)]);
+        if (changes.length === 0) {
+            return;
+        }
+        await tx.participant.update({
+            data: field === 'backlineSharing' ? { backlineSharing: nextValue } : { allergies: nextValue },
+            where: { id },
+        });
+        await recordApplicationChange(tx, actor, action, { id: application.id, name: application.name }, changes);
+    });
+    revalidateApplicationPaths();
+};
+
+export const updateApplicationBacklineSharing = loggedAction(
+    'updateApplicationBacklineSharing',
+    async (id: number, values: z.infer<typeof updateApplicationBacklineSharingSchema>): Promise<void> =>
+        updateApplicationTextField(
+            id,
+            values.backlineSharing,
+            'backlineSharing',
+            'Backline-Sharing',
+            ChangeLogAction.ApplicationBacklineSharingUpdated,
+        ),
+    (id, values) => applicationActionMeta(id, { values }),
+);
+
+export const updateApplicationAllergies = loggedAction(
+    'updateApplicationAllergies',
+    async (id: number, values: z.infer<typeof updateApplicationAllergiesSchema>): Promise<void> =>
+        updateApplicationTextField(id, values.allergies, 'allergies', 'Allergien', ChangeLogAction.ApplicationAllergiesUpdated),
+    (id, values) => applicationActionMeta(id, { values }),
 );

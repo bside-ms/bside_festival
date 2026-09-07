@@ -1,6 +1,7 @@
 'use client';
 
 import { ApplicationNameForm } from '@/components/applications/applicationCuration/ApplicationNameAndDescriptionForm';
+import ApplicationTypeGenreEditor from '@/components/intern/ApplicationTypeGenreEditor';
 import ContributionDetails from '@/components/intern/ContributionDetails';
 import ContributionSharepicLink from '@/components/intern/ContributionSharepicLink';
 import type { ContributionWorkshopAttendee } from '@/components/intern/ContributionWorkshopAttendees';
@@ -20,6 +21,7 @@ import type { ReactElement } from 'react';
 interface Props {
     application: SerializableParticipant;
     genres: Array<Genre>;
+    allGenres: Array<Genre>;
     links: Array<Link>;
     programLocations: Array<SerializableProgramLocation>;
     scheduleEntries: Array<SerializableScheduleEntry>;
@@ -32,6 +34,7 @@ interface Props {
 const ContributionDetailPage = ({
     application,
     genres,
+    allGenres,
     links,
     programLocations,
     scheduleEntries,
@@ -55,6 +58,7 @@ const ContributionDetailPage = ({
                     {genres.map(({ id, name }) => (
                         <Badge key={id} label={name} backgroundColor="#fcb8b8" />
                     ))}
+                    <ApplicationTypeGenreEditor allGenres={allGenres} application={application} genres={genres} />
                     <Badge label={statusLabels[application.status]} backgroundColor="lightgray" />
                 </div>
 

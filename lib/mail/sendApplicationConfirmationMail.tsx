@@ -17,7 +17,6 @@ const generateApplicationContent = async (application: Participant, token: strin
         contactMail,
         contactName,
         contactPhone,
-        address,
         technicalRider,
         technicalRiderFileName,
         backlineSharing,
@@ -53,7 +52,6 @@ const generateApplicationContent = async (application: Participant, token: strin
         isNotEmptyString(contactName) && `<strong>Ansprechperson:</strong><br>${contactName}`,
         isNotEmptyString(contactMail) && `<strong>E-Mail-Adresse:</strong><br>${contactMail}`,
         isNotEmptyString(contactPhone) && `<strong>Telefonnummer:</strong><br>${contactPhone}`,
-        isNotEmptyString(address) && `<strong>Adresse:</strong><br>${address}`,
     ].filter(Boolean);
 
     return `

@@ -73,15 +73,26 @@ Additional points awarded from selection criteria: FLINTA\* participation, margi
 
 ### Change Log
 
-A lightweight history of successful changes made by logged-in users. It is visible only to data-privacy users. Each entry represents one user save action, records who changed what and when, identifies the user by the name and email address captured at the time of the change, and uses human-readable event descriptions with previous and new values when those values are available.
+A lightweight history of successful changes made by logged-in users. It is visible only to data-privacy users. Each entry represents one user save action, records who changed what and when, identifies the user by the name and email address captured at the time of the change, and uses human-readable event descriptions with previous and new values when those values are available. Every intern save of a Programmbeitrag field writes a Change Log entry.
+_Avoid_: activity log, Aktivität, Änderungslog (when meaning this history in English)
+
+### Aktivität
+
+The comment thread on a Programmbeitrag detail page. It shows organizer comments, including optional status-transition comments, not field-edit history.
+_Avoid_: Change Log, activity log, Änderungslog
 
 ### Comment
 
-An immutable internal note posted by an organizer on an application. Comments cannot be edited or deleted after posting. Each comment records the author's Keycloak name and user ID at the time of posting. A comment may optionally be linked to a status transition, in which case it appears in the activity timeline as the reason or context for that status change.
+An immutable internal note posted by an organizer on an application. Comments cannot be edited or deleted after posting. Each comment records the author's Keycloak name and user ID at the time of posting. A comment may optionally be linked to a status transition, in which case it appears in Aktivität as the reason or context for that status change.
+
+### Mails schreiben
+
+An organizer-written mail sent one-to-one to the contact of each selected Programmbeitrag, from one shared text with per-recipient variables. The UI name is Mails schreiben; the code name is mail merge. The text is written for that send; there is no stored Vorlage and no send archive. It is not a mailbox and does not change Application Status.
+_Avoid_: Serienbrief, Mail center, Massenmail, Rundmail (when a mailbox or inbox is meant)
 
 ### Data-Privacy User
 
-A logged-in user who may access personal or sensitive submitted data such as contact details and the Change Log.
+A logged-in user who may access personal or sensitive submitted data such as contact details and the Change Log, and who may send personalized festival@ mails (Mails schreiben).
 
 ### Final Curation Score
 
@@ -121,9 +132,19 @@ _Avoid_: Stages, Locations (as section title or public place noun)
 A visitor-facing place in the public Wo & Wann section (a room, stage, bar, partner venue, etc.). Distinct from the internal scheduling term Program Location / Programmort. B-Side rooms formerly labeled Gruppenraum 1–3 are shown publicly as Raum 1–3.
 _Avoid_: Location, Stage (as the general public noun), Gruppenraum (as the public label for Raum 1–3)
 
+### Wohnorte
+
+The home places of the people on a Programmbeitrag: German postcodes or a country for international members. They determine Localness. They can be edited after submit; Localness and the bonus score follow the current list.
+_Avoid_: zipcodes (in German UI)
+
 ### Localness
 
-How local an application is based on the submitted participant postcodes. German postcodes starting with 481, 482, or 483 count as nearby to Muenster; other German postcodes and international entries do not. Localness awards a flat 0.5 bonus when at least half of the submitted postcodes are local, and 0 otherwise (an application with no postcodes scores 0).
+How local an application is based on its Wohnorte. German postcodes starting with 481, 482, or 483 count as nearby to Muenster; other German postcodes and international entries do not. Localness awards a flat 0.5 bonus when at least half of the Wohnorte are local, and 0 otherwise (an application with no Wohnorte scores 0).
+
+### Link
+
+A URL attached to a Programmbeitrag. A **Public Link** appears on the public Program Entry. A **Private Link** is intern-only booking material (demos, unlisted folders) and is visible and editable by every logged-in organizer, not only Data-Privacy Users.
+_Avoid_: confidential link, Application link
 
 ### Program Entry
 
@@ -133,6 +154,25 @@ An accepted application as it appears in program planning or the public program,
 
 A branded image of one Program Entry for posting on social media, including that entry’s public times and places. It exists as a Feed or Story variant, with or without the Program Entry photo, in German or English (times only; places stay German). Without a photo, the name sits in the image card. Anyone with the URL can download it; the public program does not link to it.
 _Avoid_: Open Graph image, Social Preview, Poster (when meaning this graphic)
+
+### Sharepic Studio
+
+The unlisted public page for one Program Entry where anyone with the URL can choose Feed or Story, photo on or off, and German or English times, then download the Sharepic.
+_Avoid_: Sharepic editor, Sharepic page (when meaning this studio)
+
+### Sharepic Crop
+
+The framing of the Program Entry photo inside a Sharepic card: how tightly it is zoomed and which part of the photo stays visible. Feed and Story share one crop. It belongs to that Sharepic, not to the stored photo.
+_Avoid_: Photo position, object-position, crop (when meaning the stored application image)
+
+### Type
+
+The stored category of a Programmbeitrag, such as concert, DJ, or workshop. Intern lists filter by Type. The public detail page keeps this label even when the catalog groups several Types into one Program Section. Type can change at any Application Status; a change may move the act between Program Sections.
+_Avoid_: Program Section (when meaning the stored category)
+
+### Genre
+
+A musical style tag on a Concert or DJ Programmbeitrag. Other Types do not have Genres. Changing Type away from Concert or DJ clears Genres that no longer belong.
 
 ### Program Section
 

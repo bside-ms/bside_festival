@@ -3,11 +3,16 @@
 import ContributionTable from '@/components/intern/ContributionTable';
 import { statusOrder, useInternWorkspaceContext } from '@/components/intern/InternWorkspaceContext';
 import cn from '@/lib/common/helper/cn';
+import { MAIL_MERGE_COMPOSE_PATH, MAIL_MERGE_SELECTION_HINT, MAIL_MERGE_TITLE } from '@/lib/mailMerge/copy';
+import { patchMailMergeDraft } from '@/lib/mailMerge/draftStorage';
 import statusColors from '@/lib/participants/status/statusColors';
 import statusLabels from '@/lib/participants/status/statusLabels';
 import typeColors from '@/lib/participants/typeColors';
 import typeLabels from '@/lib/participants/typeLabels';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ApplicationStatus, Type } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import type { ChangeEvent, CSSProperties, ReactElement, ReactNode } from 'react';
 import { useCallback } from 'react';
 
@@ -59,19 +64,29 @@ const FilterRow = ({ label, children }: { children: ReactNode; label: string }):
 const InternWorkspace = (): ReactElement => {
     const {
         allApplications,
-        filteredApplications,
+        areAllFilteredSelected,
         currentOrganizerUserId,
+        filteredApplications,
+        filteredSelectedCount,
         filteredStatuses,
         filteredTypes,
+        isInDataPrivacyGroup,
+        isMailMergeMode,
         onlyMyOrganizerAssignments,
         onlyWithoutScheduleEntry,
         searchText,
+        selectedCount,
         setSearchText,
         toggleFilteredStatus,
         toggleFilteredType,
         toggleOnlyMyOrganizerAssignments,
         toggleOnlyWithoutScheduleEntry,
+        cancelMailMerge,
+        selectAllFilteredParticipants,
+        startMailMerge,
+        unselectFilteredParticipants,
     } = useInternWorkspaceContext();
+    const router = useRouter();
 
     const applicationAmount =
         filteredApplications.length === allApplications.length
@@ -87,6 +102,20 @@ const InternWorkspace = (): ReactElement => {
         [toggleOnlyMyOrganizerAssignments],
     );
     const handleOnlyWithoutScheduleEntryToggle = useCallback(() => toggleOnlyWithoutScheduleEntry(), [toggleOnlyWithoutScheduleEntry]);
+    const handleContinueMailMerge = useCallback(() => {
+        patchMailMergeDraft({ listSearch: window.location.search });
+        router.push(MAIL_MERGE_COMPOSE_PATH);
+    }, [router]);
+    const handleToggleSelectAllFiltered = useCallback(() => {
+        if (areAllFilteredSelected) {
+            unselectFilteredParticipants();
+            return;
+        }
+
+        selectAllFilteredParticipants();
+    }, [areAllFilteredSelected, selectAllFilteredParticipants, unselectFilteredParticipants]);
+
+    const hiddenSelectedCount = selectedCount - filteredSelectedCount;
 
     return (
         <div className="space-y-4">
@@ -95,6 +124,16 @@ const InternWorkspace = (): ReactElement => {
                     <h1 className="font-display text-4xl leading-none uppercase md:text-5xl">Programmbeiträge</h1>
                     <div className="mt-1 text-sm text-black/60">{applicationAmount} Beiträge</div>
                 </div>
+                {isInDataPrivacyGroup && !isMailMergeMode ? (
+                    <button
+                        type="button"
+                        className="inline-flex cursor-pointer items-center gap-2 rounded border border-black bg-black px-3 py-2 text-xs font-bold text-white"
+                        onClick={startMailMerge}
+                    >
+                        <FontAwesomeIcon icon={faEnvelope} className="h-3.5 w-3.5" />
+                        {MAIL_MERGE_TITLE}
+                    </button>
+                ) : null}
             </div>
 
             <div className="space-y-2 rounded-md border border-black bg-white/80 p-3 shadow-lg backdrop-blur-2xl">
@@ -161,6 +200,43 @@ const InternWorkspace = (): ReactElement => {
                     })}
                 </FilterRow>
             </div>
+
+            {isMailMergeMode ? (
+                <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-black bg-white p-3 shadow-lg">
+                    <div className="text-sm">
+                        <div className="font-bold">{MAIL_MERGE_TITLE}</div>
+                        <div className="text-black/60">
+                            {selectedCount} ausgewählt
+                            {hiddenSelectedCount > 0 ? ` · ${hiddenSelectedCount} gerade ausgeblendet` : ''}
+                            {` · ${MAIL_MERGE_SELECTION_HINT}`}
+                        </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        <button
+                            type="button"
+                            className="cursor-pointer rounded border border-black bg-white px-3 py-2 text-xs font-bold"
+                            onClick={handleToggleSelectAllFiltered}
+                        >
+                            {areAllFilteredSelected ? 'Gefilterte abwählen' : 'Alle gefilterten auswählen'}
+                        </button>
+                        <button
+                            type="button"
+                            className="cursor-pointer rounded border border-black bg-white px-3 py-2 text-xs font-bold"
+                            onClick={cancelMailMerge}
+                        >
+                            Abbrechen
+                        </button>
+                        <button
+                            type="button"
+                            disabled={selectedCount === 0}
+                            className="cursor-pointer rounded border border-black bg-black px-3 py-2 text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-60"
+                            onClick={handleContinueMailMerge}
+                        >
+                            Weiter zum Text
+                        </button>
+                    </div>
+                </div>
+            ) : null}
 
             {filteredApplications.length === 0 ? (
                 <div className="rounded-md border border-black bg-white/80 p-5 font-bold shadow-lg">

@@ -10,7 +10,6 @@ const maskPrivateFields = (application: ParticipantWithInternRelations, isInData
         ...application,
         contactMail: '*******',
         contactPhone: application.contactPhone !== null ? '*******' : null,
-        address: application.address !== null ? '*******' : null,
     };
 };
 

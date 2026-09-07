@@ -21,41 +21,24 @@ Update this file whenever you discover something a future agent would miss witho
 
 All project Node/Prisma/npm **runtime** commands must run inside Docker via `task ...` from `Taskfile.yml`. Host `npm ci` / `prisma generate` are the exception — required so the IDE sees the same deps/types (see Common Gotchas).
 
-| Task                                                                    | Purpose                                                                                                  |
-| ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `task dev`                                                              | Start the Next.js dev server in Docker (detached; follows logs)                                          |
-| `task check`                                                            | Run ALL: tsc, lint, test, knip, audit, prettier                                                          |
-| `task tsc`                                                              | Type-check — run after every change                                                                      |
-| `task lint`                                                             | ESLint — run after every change                                                                          |
-| `task test`                                                             | Vitest (3 test files, no config found — uses defaults)                                                   |
-| `task find-unused`                                                      | Knip — find unused files, deps, exports                                                                  |
-| `task audit`                                                            | Security audit; fails on high/critical                                                                   |
-| `task prettier-fix`                                                     | Auto-format everything — run at end of every task                                                        |
-| `task lint-fix`                                                         | ESLint with auto-fix                                                                                     |
-| `task prisma-migrations-dev`                                            | Create a new migration during development                                                                |
-| `task prisma-migrations-deploy`                                         | Apply pending migrations in production                                                                   |
-| `task prisma-generate`                                                  | Regenerate Prisma client after schema changes                                                            |
-| `task send-confirmation-mails`                                          | Batch script: status/confirmation mails by participant IDs                                               |
-| `task send-acceptance-mails`                                            | Local only: Act-Zusagemails (`--list` / `--dry-run` / send). Live: see below                             |
-| `task send-exhibition-acceptance-mails`                                 | Local only: Ausstellung-Zusagemails (`--list` / `--dry-run` / send). Live: see below                     |
-| `task npm -- run send-workshop-registration-inquiry-mails -- --dry-run` | Preview personalized Workshop-Anmeldungsanfragen; omit `--dry-run` to send via festival SMTP + IMAP Sent |
-| `npm run send-festival-mail`                                            | Local: free-form `festival@` mail + IMAP Sent                                                            |
-| `npm run imap-mail`                                                     | Local: IMAP CLI for the no-reply mailbox                                                                 |
+| Task                            | Purpose                                                         |
+| ------------------------------- | --------------------------------------------------------------- |
+| `task dev`                      | Start the Next.js dev server in Docker (detached; follows logs) |
+| `task check`                    | Run ALL: tsc, lint, knip, audit, prettier                       |
+| `task tsc`                      | Type-check — run after every change                             |
+| `task lint`                     | ESLint — run after every change                                 |
+| `task find-unused`              | Knip — find unused files, deps, exports                         |
+| `task audit`                    | Security audit; fails on high/critical                          |
+| `task prettier-fix`             | Auto-format everything — run at end of every task               |
+| `task lint-fix`                 | ESLint with auto-fix                                            |
+| `task prisma-migrations-dev`    | Create a new migration during development                       |
+| `task prisma-migrations-deploy` | Apply pending migrations in production                          |
+| `task prisma-generate`          | Regenerate Prisma client after schema changes                   |
+| `task npm -- run <script>`      | Run any less common npm script inside Docker                    |
 
-**Live deploy host** (no Taskfile; Compose service `festival-node`). Env comes from Compose; all scripts use the standard `dotenv/config` import:
+Organizer-initiated `festival@` mail is Intern **Mails schreiben** (`/intern/mails`), not a CLI. Automatic mails (Bewerbung, Workshop opt-in, Helfi) stay in `lib/mail/`.
 
-```bash
-docker compose run --rm --entrypoint npm festival-node run send-acceptance-mails -- --list
-docker compose run --rm --entrypoint npm festival-node run send-acceptance-mails -- --dry-run 683
-docker compose run --rm --entrypoint npm festival-node run send-acceptance-mails -- 683
-docker compose run --rm --entrypoint npm festival-node run send-exhibition-acceptance-mails -- --list
-docker compose run --rm --entrypoint npm festival-node run send-exhibition-acceptance-mails -- --dry-run 595,624
-docker compose run --rm --entrypoint npm festival-node run send-exhibition-acceptance-mails -- 595,624,655,751,760,651
-```
-
-| `task npm -- run <script>` | Run any less common npm script inside Docker |
-
-**Verification order:** `task check` (tsc → lint → test → knip → audit → prettier). Run `task prettier-fix` alone if only formatting fails.
+**Verification order:** `task check` (tsc → lint → knip → audit → prettier). Run `task prettier-fix` alone if only formatting fails.
 
 ---
 
@@ -63,7 +46,7 @@ docker compose run --rm --entrypoint npm festival-node run send-exhibition-accep
 
 Single workflow in `.github/workflows/docker-image.yml`:
 
-- On push: `npm ci` (Actions npm cache) → `prisma:client:generate` (with dummy DATABASE_URL) → tsc → lint → test → knip → audit → prettier
+- On push: `npm ci` (Actions npm cache) → `prisma:client:generate` (with dummy DATABASE_URL) → tsc → lint → knip → audit → prettier
 - On main branch push (after check passes): Docker build+push with SHA + `latest` tags. Uses the local checkout as build context, GitHub Actions layer cache, and no QEMU (linux/amd64 only). Requires `DOCKER_REPOSITORY`, `DOCKER_REPO_NAME`, `GITLAB_USERNAME`, `GITLAB_PASSWORD` secrets
 
 ---
@@ -110,15 +93,12 @@ Single workflow in `.github/workflows/docker-image.yml`:
 ### Email
 
 - **Nodemailer v9** (overridden in package.json via `overrides` for next-auth compatibility) via `lib/mail/`
-- Shared branded HTML shell in `createMailHtml` (pink gradient header, blue bar, white card). Script mails reuse it via `festivalMailHtml`.
+- Shared branded HTML shell in `createMailHtml` (pink gradient header, blue bar, white card) for automatic app mails
 - `sendApplicationConfirmationMail` — sent on new application
 - Workshop registrations are per timed Workshop `ScheduleEntry` with `maxAttendees`. `Attendee` reservations use 24-hour email double opt-in; pending reservations count towards capacity and old attendees are migrated as confirmed. The mail link invokes a route handler, which confirms and revalidates outside React rendering before redirecting to its result page; used verification tokens keep `confirmedAt` so revisits show success. Confirmation creates an until-start cancellation link. A successful cancellation deletes the attendance but retains a `canceledAt` token marker so a route refresh can render the success state. `sendWorkshopAttendanceVerificationMail`, `sendWorkshopAttendanceConfirmationMail`, and `sendWorkshopAttendanceCancellationMail` cover the three mails.
 - `sendVolunteerConfirmationMail` — double opt-in link after Helfi signup (`/mithelfen/confirm/[token]`, 3 days)
 - `sendVolunteerWelcomeMail` — onboarding after the Helfi email is confirmed (Schichtpläne later, Treffen, Telegram, festival@)
-- `scripts/sendAcceptanceMails.ts` — batch Zusagemails for slotted acts with Gage; sets status to `WaitingForConfirmation` + status comment
-- `scripts/sendExhibitionAcceptanceMails.ts` — same for Ausstellungen (exhibition wording, Rückmeldefrist 10.08.2026); skip already-notified RICH (762)
-- `scripts/sendFestivalMail.ts` — free-form mails from `festival@` (multipart HTML, IMAP Sent, no DB). Uses dedicated `SMTP_*` values.
-- `scripts/imapMail.ts` — IMAP CLI for the festival mailbox using `SMTP_*` values.
+- Mails schreiben (`/intern/mails`, code: mail merge) — the only organizer-initiated `festival@` send path. Data-privacy organizers send personalized mails via `sendFestivalSmtpMail` (`lib/mail/festivalSmtpMail.ts`) + IMAP Sent; Comment on each Programmbeitrag. Minimal HTML wrapper, not the pink `createMailHtml` shell. Leaving the send page cancels remaining mails. Status does not change. There are no CLI mail scripts.
 
 ### UI
 
@@ -130,7 +110,7 @@ Single workflow in `.github/workflows/docker-image.yml`:
 - Public Workshop details expose capacity and registration only for confirmed Workshop schedule entries with `maxAttendees`; there is no waitlist. Logged-in users see confirmed names, while e-mail addresses and BCC/copy actions require the data-privacy group. `/intern/[id]` shows active pending/confirmed registrations and messages; `/intern/[id]/teilnehmende/[scheduleEntryId]` is the names-only print view.
 - Font Awesome + React Icons for icons
 - Public footer is sky-blue (`#40a8f5`) with Bricolage motto „Kultur. Hafen. Kante!“, harbor wave strip (same animated paths as `HomeHero`), and columns Festival 2026 / Mitwirken / Socials. Labels stay German (Orte not Locations). Footer Orte (`/#wo-und-wann`) is omitted while Die Orte is hidden. Workshops omitted until a real target exists. Förderer match the 2026 print poster: Stadt Münster Kulturamt, MKW NRW, Soziokultur NRW, Romero Initiative, KI Münster, stupa.ms, Hansa Floß. AStA is not on the poster. No „Gemeinnützig seit 2016“. Discreet Intern login/link sits in the legal row.
-- Public header is sticky (`h-15`). `html` has `scroll-smooth scroll-pt-15` so in-page hashes land below the header, plus `data-scroll-behavior="smooth"` so Next.js keeps route changes instant (without that attribute, CSS smooth-scroll animates list↔detail). Festival 2026 hash links (`/#ueber-uns`; `/#wo-und-wann` when Die Orte is shown) use `lib/public/scrollToPageHash.ts`; sections add `scroll-mt-16` on top of the html padding. `HomeLocations` sits directly below the Werde-Helfer\*in block and uses `HomeBuilding`, `images/2026/home/locations-legend.svg`, `images/2026/home/locations-drip.svg`, and `homeStatsLine`; its drip overflows upward at the red-to-blue transition below all blue content. `HomeHansaviertel` follows it with the full-width `images/2026/home/hansaviertel.svg`. Header Wo & Wann and footer Orte remain hidden until their navigation links are explicitly released.
+- Public header is sticky (`h-15`). `html` has `scroll-smooth scroll-pt-15` so in-page hashes land below the header, plus `data-scroll-behavior="smooth"` so Next.js keeps route changes instant (without that attribute, CSS smooth-scroll animates list↔detail). Mitwirken includes Helfis → `/mithelfen`. Logged-in users also get a gold dashed lock+Intern chip in the public header next to Programm (not under Mitwirken). Festival 2026 hash links (`/#ueber-uns`; `/#wo-und-wann` when Die Orte is shown) use `lib/public/scrollToPageHash.ts`; sections add `scroll-mt-16` on top of the html padding. `HomeLocations` sits directly below the Werde-Helfer\*in block and uses `HomeBuilding`, `images/2026/home/locations-legend.svg`, `images/2026/home/locations-drip.svg`, and `homeStatsLine`; its drip overflows upward at the red-to-blue transition below all blue content. `HomeHansaviertel` follows it with the full-width `images/2026/home/hansaviertel.svg`. Header Wo & Wann and footer Orte remain hidden until their navigation links are explicitly released.
 - App chrome is a pink-to-white top gradient (`.gradient-background`); no wavy SVG page background. Form inputs use a white fill so they stay readable on that gradient.
 - Hero date (`18.–19.` / `September`) and the 10-Jahre badge are painted on the dock SVG (`xMaxYMax` / `xMidYMax slice`) so they stay on the black harbor face. Motto and logo live in a centered `max-w-[1200px]` corridor; water and dock stay full-bleed. The stacked motto (Kultur / Hafen / Kante plus navy strokes and red line, no yellow arrow) is inline SVG (`HeroMottoMobile` / `HeroMottoDesktop`). Below `lg` the motto sits under the logo; from `lg` it sits to the left. Below `md` the harbor block sits lower (`top-[18%] -bottom-[32%]`) so the dock runs out the bottom. Source extracts live in `images/2026/home/hero-motto-*.svg`. The full-color mark sits inset in the upper-right of the corridor.
 
@@ -143,7 +123,7 @@ app/
   api/auth/[...nextauth]/  ← Keep — externally called by Keycloak
   api/health/              ← Keep — external health probe
   bewerbungen/             ← Application forms (public) + redirects to /intern
-  intern/                  ← Programmbeiträge list; `[id]` detail; kuration/; slotplan/
+  intern/                  ← Programmbeiträge list; `[id]` detail; `mails`; kuration/; slotplan/
   programm/                ← Public program: `(catalog)` list, `[id]` details, `[id]/sharepic`, timetable/; list loading must not wrap details
   mithelfen/               ← Helfi signup (public); confirm/[token]; uebersicht (logged-in)
   aenderungslog/           ← Change Log (data-privacy users only)
@@ -153,7 +133,7 @@ app/
 lib/
   actions/                 ← Server actions
     actionAuth.ts, applicationActions.ts, emailConfirmationActions.ts,
-    slotActions.ts, venueActions.ts, volunteerActions.ts
+    mailMergeActions.ts, slotActions.ts, venueActions.ts, volunteerActions.ts
   applications/            ← Curation scoring, cookies, filter query names
   changeLog/               ← Change Log formatting, detection, persistence
   errorLog/                ← Persist failed server-action errors (`ActionErrorLogEntry`)
@@ -164,6 +144,7 @@ lib/
   next-auth/               ← Auth utilities and types
   participants/            ← Participant helpers, type/status/venue/slot services
   schemas/                 ← Zod schemas (applicationSchema.ts, volunteerSchema.ts)
+  mailMerge/               ← Mails schreiben / mail merge (variables, slot lines, simple HTML)
   sharepic/                ← Sharepic PNG render (homepage tokens, Feed/Story, photo on/off)
   upload/                  ← IONOS S3 upload
   utils.ts                 ← cn() helper (clsx + tailwind-merge)
@@ -174,7 +155,7 @@ components/
   volunteers/              ← Helfi signup + overview
   form/                    ← Reusable form inputs
   common/                  ← Layout, navigation, shared UI
-  intern/                  ← Internal workspace components
+  intern/                  ← Internal workspace components (incl. mail merge)
   sharepic/                ← Public Sharepic studio (preview, format/photo, download)
   ui/                      ← Base UI primitives
   awareness/               ← Awareness page components
@@ -206,9 +187,9 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 - Wrap action calls in `try/catch` in client components
 - Admin application edits use focused actions in `applicationActions.ts` + Zod schemas from `applicationSchema.ts`
 - `/intern` is the unified internal workspace. `/bewerbungen/uebersicht` and `/bewerbungen/kuration` redirect there.
-- `/intern` Programmbeiträge is a flat sortable table (Name, Typ, Status, Ort, Zeit, Gage, letzter Kommentar) — no status groups, read-only rows; edits on `/intern/[id]`. Default sort is earliest slot time (`sort`/`sortDir` in URL); multi-slot acts show the earliest only (+N). Without slot sorts last.
+- `/intern` Programmbeiträge is a flat sortable table (Name, Typ, Status, Ort, Zeit, Gage, letzter Kommentar) — no status groups, read-only rows; edits on `/intern/[id]`. Default sort is earliest slot time (`sort`/`sortDir` in URL); multi-slot acts show the earliest only (+N). Without slot sorts last. Data-privacy users can switch the list into **Mails schreiben** mode (`mailMerge` in the URL): filters still apply, select-all targets the filtered rows, then `/intern/mails` composes one text with `{{name}}` `{{ansprechperson}}` `{{typ}}` `{{termin}}` `{{gage}}` (clicking a token inserts it at the caret in the last focused Betreff/Text field), previews per recipient, and sends one `festival@` mail each (SMTP + IMAP Sent). Used variables must be filled; missing `contactMail` always blocks. Send is one-by-one in the browser (progress, warn on leave). A Comment `Mail: »Betreff«` is posted as the sender. Status does not change. Organizer-initiated festival@ mail is Intern-only; there are no CLI mail scripts. No send archive — see `docs/adr/0018-mail-merge-is-not-a-mail-center.md`.
 - `/intern/[id]` is the shareable Programmbeitrag detail (full edit: status, organizers, fee, schedule slots, comments). List filters stay in the URL and are carried to/from detail. From slotplan (`?from=slotplan&day=&area=` plus the planner visibility filters), back returns to `/intern/slotplan` with that view. Keycloak users load client-side after paint (cached ~5 min server-side).
-- `/intern` routes hide the marketing footer and swap the public header nav for intern links. From `lg` all intern links sit in the header; below `lg` only Programmbeiträge, Slotplan, Programmorte, Kuration stay inline plus Mehr; below `md` an Intern overlay. Intern shell is a `h-dvh` `AppShell`; list/detail/kuration scroll inside it. The public footer only has one Intern entry (`/intern`); full intern nav is header-only.
+- `/intern` routes hide the marketing footer and swap the public header nav for intern links. From `lg` all intern links sit in the header; below `lg` only Programmbeiträge, Slotplan, Programmorte, Kuration stay inline plus Mehr; below `md` an Intern overlay. Intern shell is a `h-dvh` `AppShell`; list/detail/kuration scroll inside it. The public footer only has one Intern entry (`/intern`); full intern nav is header-only. Logged-in users also get a gold dashed Intern chip (`/intern`) in the public header next to Programm.
 - `/intern/slotplan` is a viewport-owned workspace: compact day/area toolbar, grid fills the remaining height, document does not scroll. `day` + `area` + `tab` (`planner` | `locations`) + `showEmpty` + `confirmedOnly` + `hideNotes` persist in the URL (nuqs); default area is `all`. The planner hides Program Locations with no visible Schedule Entry on the selected day; `showEmpty` (filter chip and the hint at the right of the grid) shows them again. `confirmedOnly` hides acts that are not Confirmed; `hideNotes` hides Schedule Notes. The two are independent. When area is `all`, columns are ordered by area `sortOrder` then location `sortOrder` (no visual group headers). Every Schedule Entry is timed (no Ganztägig row). The planner time axis starts 1 hour before the first visible timed entry and ends 1 hour after the last; with no timed entries it keeps the festival day window. Overlaps at the same Program Location are allowed and shown side by side. Each Overlap Group packs to the minimum Lanes (max simultaneous occupancy); width is 1/N of that group so separate piles at the same place can be 1/2 and 1/3. Assignment is start time, then longer first, then the leftmost free Lane. The location column grows by 48px per extra Lane in the largest group (190 + 48×(N−1)). Hover or click uses the full column width. Hover: Bearbeiten opens move (place/time only); arrow icon opens act details; notes have no detail link. Save no longer rejects overlaps; `isBlocking` / AllDay stay in the schema unused.
 - `/intern/kuration` stores anonymous `juryVotes`, calculates jury/bonus/final score at read time via `lib/applications/curationScoring.ts`
 - `/aenderungslog` records successful user save actions with previous/next values; visible only to data-privacy users
@@ -222,9 +203,9 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 
 The internal workspace context uses **props directly** (no `useState` for server data):
 
-| Context                  | Used in   | Contains                                                                                                                 |
-| ------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `InternWorkspaceContext` | `/intern` | Filter + table sort state in URL via `nuqs`; slim list participants (slot/gage/last comment); no Keycloak/links/zipcodes |
+| Context                  | Used in   | Contains                                                                                                                |
+| ------------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `InternWorkspaceContext` | `/intern` | Filter + table sort + mail-merge mode in URL via `nuqs`; client selection IDs in sessionStorage; slim list participants |
 
 **Do not add `useState` for server-provided data** — the server page passes fresh props after each action and revalidation.
 
@@ -263,19 +244,19 @@ Map to Prisma `Type` enum. `/bewerbungen/[type]` uses `generateStaticParams` to 
 
 ## Environment Variables
 
-| Variable                                                                                  | Notes                                                              |
-| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| `DATABASE_URL`                                                                            | MariaDB connection string                                          |
-| `SHADOW_DATABASE_URL`                                                                     | Optional Prisma Migrate shadow database; Docker dev task sets this |
-| `NEXTAUTH_URL`, `NEXTAUTH_SECRET`                                                         | NextAuth required                                                  |
-| `KEYCLOAK_CLIENT_ID`, `KEYCLOAK_CLIENT_SECRET`                                            |                                                                    |
-| `KEYCLOAK_ISSUER_URL`                                                                     | Keycloak realm URL (primary); `KEYCLOAK_ISSUER` is legacy fallback |
-| `CRYPTO_SECRET`                                                                           | Used for hashing                                                   |
-| `NEXT_PUBLIC_IONOS_HOST_NAME`                                                             | S3 hostname for image URLs                                         |
-| `IONOS_ACCESS_KEY_ID`, `IONOS_SECRET_ACCESS_KEY`, `IONOS_BUCKET_NAME`, `IONOS_ENDPOINT`   | S3 credentials                                                     |
-| `MAIL_HOST`, `MAIL_PORT`, `MAIL_USER`, `MAIL_PASSWORD`, `MAIL_FROM`, `MAIL_INSECURE`      | App SMTP. Local `.env` is Mailcatcher; live Compose is Mailcow     |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_INSECURE`, `SMTP_IMAP_PORT` | Festival SMTP/IMAP CLI; set in the standard `.env` or live Compose |
-| `APP_URL`                                                                                 | Used in email templates                                            |
+| Variable                                                                                  | Notes                                                                                             |
+| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                                                                            | MariaDB connection string                                                                         |
+| `SHADOW_DATABASE_URL`                                                                     | Optional Prisma Migrate shadow database; Docker dev task sets this                                |
+| `NEXTAUTH_URL`, `NEXTAUTH_SECRET`                                                         | NextAuth required                                                                                 |
+| `KEYCLOAK_CLIENT_ID`, `KEYCLOAK_CLIENT_SECRET`                                            |                                                                                                   |
+| `KEYCLOAK_ISSUER_URL`                                                                     | Keycloak realm URL (primary); `KEYCLOAK_ISSUER` is legacy fallback                                |
+| `CRYPTO_SECRET`                                                                           | Used for hashing                                                                                  |
+| `NEXT_PUBLIC_IONOS_HOST_NAME`                                                             | S3 hostname for image URLs                                                                        |
+| `IONOS_ACCESS_KEY_ID`, `IONOS_SECRET_ACCESS_KEY`, `IONOS_BUCKET_NAME`, `IONOS_ENDPOINT`   | S3 credentials                                                                                    |
+| `MAIL_HOST`, `MAIL_PORT`, `MAIL_USER`, `MAIL_PASSWORD`, `MAIL_FROM`, `MAIL_INSECURE`      | App SMTP. Local `.env` is Mailcatcher; live Compose is Mailcow                                    |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_INSECURE`, `SMTP_IMAP_PORT` | Festival SMTP/IMAP for Intern Mails schreiben (send + copy to Sent). Set in `.env` / live Compose |
+| `APP_URL`                                                                                 | Used in email templates                                                                           |
 
 ---
 
@@ -283,7 +264,7 @@ Map to Prisma `Type` enum. `/bewerbungen/[type]` uses `generateStaticParams` to 
 
 - **Dev `app` container restarts on crash, not on boot.** `task dev` is `docker compose up -d app` plus log follow. Ctrl+C only stops the log stream, not the server (`task down` / `docker compose stop app` to stop it). Compose uses `restart: on-failure`, so Next/Turbopack dying comes back during a session, but OrbStack start after a Mac boot does not bring `app` up. Do not run attached `docker compose up app`: when that terminal dies, Compose SIGTERMs the container and it stays down. `docker compose run --rm app` one-offs (tsc/lint/check) do not replace the long-running `app` service.
 - **Use `task build` for production builds.** It overrides the development Compose image's `NODE_ENV=development` with `NODE_ENV=production`; `task npm -- run build` does not and can make Next load incompatible React build variants while prerendering.
-- **Separate app and festival-mail credentials.** `MAIL_*` is for the Next app and existing confirmation/acceptance scripts (local: Mailcatcher at `http://localhost:1081`). `SMTP_*` is only for `send-festival-mail` and `imap-mail`; both use the normal `dotenv/config` import. Recreate `app` after `.env` mail changes (`docker compose up -d app`). Confirmation-mail failures are logged (`ActionErrorLogEntry`) but the signup still succeeds.
+- **Separate app and festival-mail credentials.** `MAIL_*` is for the Next app’s automatic mails (local: Mailcatcher at `http://localhost:1081`). `SMTP_*` is for Intern Mails schreiben (`festival@` + IMAP Sent). Recreate `app` after `.env` mail changes (`docker compose up -d app`). Confirmation-mail failures are logged (`ActionErrorLogEntry`) but the signup still succeeds.
 - **Program publish gate** — `lib/participants/isProgramPublished.ts` is `true`; `/programm` and `/programm/[id]` are public. The catalogue groups confirmed and canceled entries in fixed, color-coded public Program Sections, keeps one name search, and exposes only non-confidential links. `/programm/timetable` stays login-only regardless.
 - **Docker and host use different `node_modules`.** Local Compose mounts named volume `app_node_modules` over `/app/node_modules`, so `task`/container installs and `prisma generate` do not update host `./node_modules` (what Cursor/TS uses). After lockfile or Prisma schema changes, sync the host for the IDE: `npm ci` then `npm run prisma:client:generate` (dummy `DATABASE_URL` is fine). Do not remove the named volume — native deps like `sharp` need Linux builds in the container. Production is unaffected (Dockerfile generates the client in the image).
 - **`.next/` cache can hold stale type references** after deleting routes. If `tsc` reports missing modules in `.next/types/validator.ts`, delete `.next/` and re-run.
@@ -293,5 +274,4 @@ Map to Prisma `Type` enum. `/bewerbungen/[type]` uses `generateStaticParams` to 
 - **Server Actions have a 50 MB body limit** — relevant for image uploads.
 - **`next.config.js` has `allowedDevOrigins: ['*']`** — allows external device testing but is permissive.
 - **Node version**: Docker uses `node:20-bullseye`; `.nvmrc` says `v16.14.0` (stale — ignore in favor of Docker image).
-- **No vitest config file** — works from defaults. Only 3 test files exist.
 - **`SHADOW_DATABASE_URL` is local `migrate dev` only** — not needed on live; production uses `migrate deploy`.

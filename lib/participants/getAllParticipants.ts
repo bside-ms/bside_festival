@@ -15,7 +15,6 @@ const maskPrivateFields = (application: ParticipantWithInternRelations, isInData
         ...application,
         contactMail: '*******',
         contactPhone: application.contactPhone !== null ? '*******' : null,
-        address: application.address !== null ? '*******' : null,
     };
 };
 
@@ -57,7 +56,6 @@ const getAllParticipants = async (
             contactName: true,
             contactMail: true,
             contactPhone: true,
-            address: true,
             feeEuros: true,
             comments: {
                 orderBy: { createdAt: 'desc' },
@@ -85,7 +83,6 @@ const getAllParticipants = async (
             contactMail: row.contactMail,
             contactName: row.contactName,
             contactPhone: row.contactPhone,
-            address: row.address,
             description: row.description,
             diversityNotes: null,
             durationPreference: null,
