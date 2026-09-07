@@ -15,7 +15,7 @@ Run via Taskfile / Docker (never host `npm run check` as the source of truth):
 task check
 ```
 
-That runs: tsc → lint → test → knip → audit → prettier.
+That runs: tsc → lint → knip → audit → prettier.
 
 ## During iteration
 

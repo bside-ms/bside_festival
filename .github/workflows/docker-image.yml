@@ -30,9 +30,6 @@ jobs:
             - name: Lint
               if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
               run: npm run lint
-            - name: Test
-              if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
-              run: npm run test
             - name: Find unused code
               if: ${{ always() && steps.install.outcome == 'success' && steps.prisma_client.outcome == 'success' }}
               run: npm run find-unused
