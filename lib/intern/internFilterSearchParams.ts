@@ -13,6 +13,7 @@ export type InternListSortDirection = (typeof internListSortDirections)[number];
 
 export const internFilterParsers = {
     mine: parseAsBoolean.withDefault(false),
+    mailMerge: parseAsBoolean.withDefault(false),
     q: parseAsString.withDefault('').withOptions({ limitUrlUpdates: debounce(300) }),
     sort: parseAsStringLiteral(internListSortColumns).withDefault('time'),
     sortDir: parseAsStringLiteral(internListSortDirections).withDefault('asc'),

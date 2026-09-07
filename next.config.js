@@ -2,6 +2,7 @@
 module.exports = {
     allowedDevOrigins: ['*', '192.168.10.93', 'localhost'],
     reactStrictMode: true,
+    serverExternalPackages: ['imapflow'],
     experimental: {
         serverActions: {
             bodySizeLimit: '50mb',
