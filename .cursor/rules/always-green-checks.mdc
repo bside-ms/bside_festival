@@ -31,7 +31,9 @@ That runs: tsc → lint → knip → audit → prettier.
 
 ## Dev server / Turbopack
 
-After adding **new files** that the running Next/Turbopack process should import: if you see `Module not found` for a path that exists on disk and in Docker (`ls` inside `app`), **restart** the long-running `task dev` / Compose `app` service (`docker compose restart app`). Stale Turbopack resolution is common; `task check` can still be green while the hot server is stuck.
+Do not set `watchOptions.pollIntervalMs` on Next 16.2: Turbopack PollWatcher then misses ordinary edits until `app` restarts. `CHOKIDAR_*` is ignored; `WATCHPACK_POLLING` is the route watcher.
+
+If you see `Module not found` for a **new** file that exists on disk and in Docker (`ls` inside `app`), restart `app` once. `task check` can still be green while the hot server is stuck.
 
 ## Out of scope
 
