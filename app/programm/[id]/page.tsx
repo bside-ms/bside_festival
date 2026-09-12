@@ -1,7 +1,8 @@
 import AttendeeForm from '@/components/participants/attendeeForm/AttendeeForm';
 import WorkshopAttendeeList from '@/components/participants/attendeeForm/WorkshopAttendeeList';
 import ProgramBackLink from '@/components/participants/publicProgram/ProgramBackLink';
-import PublicProgramLinks from '@/components/participants/publicProgram/PublicProgramLinks';
+import PublicProgramLinks, { hasShownPublicProgramLinks } from '@/components/participants/publicProgram/PublicProgramLinks';
+import cn from '@/lib/common/helper/cn';
 import formatDate from '@/lib/common/helper/formatDate';
 import prismaClient from '@/lib/common/prismaClient';
 import isGroupMember from '@/lib/next-auth/isGroupMember';
@@ -64,6 +65,7 @@ const ProgramEntryPage = async ({ params }: Props): Promise<ReactElement> => {
     const section = getPublicProgramSection(participant.type);
     const imageUrl =
         participant.imageFileName === null || participant.imageFileName === '' ? null : createPublicObjectUrl(participant.imageFileName);
+    const showLinks = hasShownPublicProgramLinks(participant.links);
 
     return (
         <article className="min-h-screen font-display" style={{ backgroundColor: section.color, color: section.foregroundColor }}>
@@ -122,7 +124,7 @@ const ProgramEntryPage = async ({ params }: Props): Promise<ReactElement> => {
                     </div>
                 </div>
 
-                <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.9fr)]">
+                <div className={cn('mt-10 grid gap-8', showLinks && 'lg:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.9fr)]')}>
                     <section className="bg-white p-6 text-[#2C2E83] md:p-8" aria-labelledby="program-appearances-title">
                         <h2 id="program-appearances-title" className="text-2xl font-black">
                             Wann &amp; Wo
@@ -179,9 +181,7 @@ const ProgramEntryPage = async ({ params }: Props): Promise<ReactElement> => {
                         )}
                     </section>
 
-                    <div className="self-start bg-white p-6 text-[#2C2E83] md:p-8">
-                        <PublicProgramLinks links={participant.links} />
-                    </div>
+                    <PublicProgramLinks links={participant.links} />
                 </div>
             </div>
         </article>

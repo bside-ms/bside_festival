@@ -2,7 +2,14 @@
 
 import { getMailMergeRecipients, sendMailMergeMail, type MailMergeRecipient } from '@/lib/actions/mailMergeActions';
 import { FESTIVAL_MAIL_FROM_LABEL } from '@/lib/mail/festivalMailAddresses';
-import { MAIL_MERGE_TITLE } from '@/lib/mailMerge/copy';
+import {
+    formatMailMergeAttachmentSize,
+    MAIL_MERGE_ATTACHMENT_MAX_COUNT,
+    mailMergeAttachmentAccept,
+    mailMergeAttachmentKey,
+    validateMailMergeAttachments,
+} from '@/lib/mailMerge/attachments';
+import { MAIL_MERGE_ATTACHMENT_HINT, MAIL_MERGE_TITLE } from '@/lib/mailMerge/copy';
 import { clearMailMergeDraft, patchMailMergeDraft, readMailMergeDraft } from '@/lib/mailMerge/draftStorage';
 import { isMailMergeReadyToSend, validateMailMergeTemplates, type MailMergeRecipientIssue } from '@/lib/mailMerge/validate';
 import {
@@ -12,7 +19,7 @@ import {
     mailMergeVariableNames,
     type MailMergeVariableName,
 } from '@/lib/mailMerge/variables';
-import { first } from 'lodash';
+import { first, map, sumBy } from 'lodash';
 import { useRouter } from 'next/navigation';
 import type { ChangeEvent, ReactElement, MouseEvent as ReactMouseEvent } from 'react';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
@@ -56,6 +63,29 @@ const VariableHintRow = ({
                 {token}
             </button>
             <span className="text-black/50"> z. B. {mailMergeVariableExamples[name]}</span>
+        </li>
+    );
+};
+
+const isSameAttachment = (left: File, right: File): boolean =>
+    left.name === right.name && left.size === right.size && left.lastModified === right.lastModified;
+
+const AttachmentRow = ({ file, onRemove }: { file: File; onRemove: (file: File) => void }): ReactElement => {
+    const handleRemove = useCallback(() => onRemove(file), [file, onRemove]);
+
+    return (
+        <li className="flex flex-wrap items-baseline justify-between gap-2 border-t border-black/10 py-2 text-sm first:border-t-0 first:pt-0">
+            <span className="min-w-0 break-all">{file.name}</span>
+            <span className="flex shrink-0 items-baseline gap-2">
+                <span className="text-black/50">{formatMailMergeAttachmentSize(file.size)}</span>
+                <button
+                    type="button"
+                    className="cursor-pointer text-xs font-bold underline decoration-black/30 underline-offset-2 hover:decoration-black"
+                    onClick={handleRemove}
+                >
+                    Entfernen
+                </button>
+            </span>
         </li>
     );
 };
@@ -128,6 +158,8 @@ const MailMergeWorkspace = (): ReactElement => {
     const [recipients, setRecipients] = useState<Array<MailMergeRecipient>>([]);
     const [subject, setSubject] = useState('');
     const [body, setBody] = useState('');
+    const [attachments, setAttachments] = useState<Array<File>>([]);
+    const [attachmentNotice, setAttachmentNotice] = useState<string | null>(null);
     const [previewIndex, setPreviewIndex] = useState(0);
     const [results, setResults] = useState<Array<SendResult>>([]);
     const [sendingIndex, setSendingIndex] = useState(0);
@@ -272,6 +304,27 @@ const MailMergeWorkspace = (): ReactElement => {
         () => setPreviewIndex((current) => Math.min(recipients.length - 1, current + 1)),
         [recipients.length],
     );
+    const handleRemoveAttachment = useCallback((file: File) => {
+        setAttachmentNotice(null);
+        setAttachments((current) => current.filter((candidate) => !isSameAttachment(candidate, file)));
+    }, []);
+    const handleAttachmentsChange = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            const picked = Array.from(event.target.files ?? []);
+            event.target.value = '';
+            const next = [...attachments, ...picked.filter((file) => !attachments.some((candidate) => isSameAttachment(candidate, file)))];
+            const issue = validateMailMergeAttachments(next);
+
+            if (issue !== null) {
+                setAttachmentNotice(issue);
+                return;
+            }
+
+            setAttachmentNotice(null);
+            setAttachments(next);
+        },
+        [attachments],
+    );
 
     const sendToIds = useCallback(
         async (ids: Array<number>) => {
@@ -297,7 +350,7 @@ const MailMergeWorkspace = (): ReactElement => {
                 const name = recipient?.name ?? `#${id}`;
 
                 try {
-                    await sendMailMergeMail(id, subject, body);
+                    await sendMailMergeMail(id, subject, body, attachments);
                     nextResults.push({ id, name, ok: true });
                 } catch (error) {
                     nextResults.push({ error: toErrorMessage(error), id, name, ok: false });
@@ -310,7 +363,7 @@ const MailMergeWorkspace = (): ReactElement => {
             sendingRef.current = false;
             setPhase('result');
         },
-        [body, recipientById, subject],
+        [attachments, body, recipientById, subject],
     );
 
     const handleSend = useCallback(() => {
@@ -461,6 +514,39 @@ const MailMergeWorkspace = (): ReactElement => {
                             onFocus={handleBodyFocus}
                         />
                     </label>
+                    <div className="space-y-2">
+                        <div className="text-xs font-bold tracking-wide uppercase">Anhang</div>
+                        <p className="text-xs font-normal text-black/70">{MAIL_MERGE_ATTACHMENT_HINT}</p>
+                        {attachments.length > 0 ? (
+                            <ul>
+                                {attachments.map((file) => (
+                                    <AttachmentRow key={mailMergeAttachmentKey(file)} file={file} onRemove={handleRemoveAttachment} />
+                                ))}
+                            </ul>
+                        ) : null}
+                        <div className="flex flex-wrap items-center gap-2 text-xs">
+                            <label
+                                className={`cursor-pointer rounded border border-black bg-white px-2 py-1 font-bold ${
+                                    attachments.length >= MAIL_MERGE_ATTACHMENT_MAX_COUNT ? 'pointer-events-none opacity-40' : ''
+                                }`}
+                            >
+                                Dateien wählen
+                                <input
+                                    type="file"
+                                    multiple
+                                    accept={mailMergeAttachmentAccept}
+                                    className="sr-only"
+                                    disabled={attachments.length >= MAIL_MERGE_ATTACHMENT_MAX_COUNT}
+                                    onChange={handleAttachmentsChange}
+                                />
+                            </label>
+                            <span className="text-black/50">
+                                {attachments.length}/{MAIL_MERGE_ATTACHMENT_MAX_COUNT}
+                                {attachments.length > 0 ? ` · ${formatMailMergeAttachmentSize(sumBy(attachments, 'size'))}` : ''}
+                            </span>
+                        </div>
+                        {attachmentNotice !== null ? <p className="text-xs text-red-800">{attachmentNotice}</p> : null}
+                    </div>
                     <div className="space-y-1 text-xs text-black/70">
                         <p>Das sind Variablen, die du in Betreff und Text einsetzen kannst. Klick fügt sie an der Cursor-Position ein.</p>
                         <ul className="space-y-1">
@@ -497,6 +583,11 @@ const MailMergeWorkspace = (): ReactElement => {
                             <div className="min-h-48 rounded border border-black/15 p-3 text-sm whitespace-pre-wrap">
                                 {previewBody || '—'}
                             </div>
+                            {attachments.length > 0 ? (
+                                <div className="text-sm">
+                                    <span className="text-black/50">Anhang</span> {map(attachments, 'name').join(', ')}
+                                </div>
+                            ) : null}
                         </>
                     )}
                 </div>

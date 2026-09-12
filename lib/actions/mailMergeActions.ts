@@ -6,6 +6,7 @@ import { applicationActionMeta, loggedAction } from '@/lib/errorLog/loggedAction
 import { FESTIVAL_MAIL_FROM } from '@/lib/mail/festivalMailAddresses';
 import { sendFestivalSmtpMail } from '@/lib/mail/festivalSmtpMail';
 import { renderMailMergeHtml } from '@/lib/mailMerge/renderHtml';
+import { toFestivalSmtpAttachments } from '@/lib/mailMerge/toFestivalSmtpAttachments';
 import { toMailMergeVariableValues } from '@/lib/mailMerge/toRecipient';
 import { isMailMergeReadyToSend, validateMailMergeTemplates } from '@/lib/mailMerge/validate';
 import { interpolateMailMergeTemplate, type MailMergeVariableValues } from '@/lib/mailMerge/variables';
@@ -135,7 +136,7 @@ export const getMailMergeRecipients = loggedAction(
 
 export const sendMailMergeMail = loggedAction(
     'sendMailMergeMail',
-    async (participantId: number, subjectTemplate: string, bodyTemplate: string): Promise<void> => {
+    async (participantId: number, subjectTemplate: string, bodyTemplate: string, attachments: Array<File> = []): Promise<void> => {
         const actor = await requireDataPrivacyUser();
         const parsed = mailMergeMailSchema.parse({ bodyTemplate, participantId, subjectTemplate });
         const participant = await prismaClient.participant.findUnique({
@@ -154,10 +155,12 @@ export const sendMailMergeMail = loggedAction(
             throw new Error(describeValidationFailure(parsed.subjectTemplate, parsed.bodyTemplate, recipient));
         }
 
+        const festivalAttachments = await toFestivalSmtpAttachments(attachments);
         const subject = interpolateMailMergeTemplate(parsed.subjectTemplate, recipient.values, true);
         const text = interpolateMailMergeTemplate(parsed.bodyTemplate, recipient.values);
 
         await sendFestivalSmtpMail({
+            attachments: festivalAttachments.length > 0 ? festivalAttachments : undefined,
             from: FESTIVAL_MAIL_FROM,
             html: renderMailMergeHtml(text),
             subject,

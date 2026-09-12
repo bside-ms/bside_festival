@@ -87,7 +87,7 @@ An immutable internal note posted by an organizer on an application. Comments ca
 
 ### Mails schreiben
 
-An organizer-written mail sent one-to-one to the contact of each selected Programmbeitrag, from one shared text with per-recipient variables. The UI name is Mails schreiben; the code name is mail merge. The text is written for that send; there is no stored Vorlage and no send archive. It is not a mailbox and does not change Application Status.
+An organizer-written mail sent one-to-one to the contact of each selected Programmbeitrag, from one shared text with per-recipient variables and optional shared attachments chosen for that compose session. The UI name is Mails schreiben; the code name is mail merge. The text and files are for that send; they are not stored as a Vorlage and there is no send archive. It is not a mailbox and does not change Application Status.
 _Avoid_: Serienbrief, Mail center, Massenmail, Rundmail (when a mailbox or inbox is meant)
 
 ### Data-Privacy User

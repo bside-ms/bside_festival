@@ -3,6 +3,12 @@ import { ImapFlow } from 'imapflow';
 import { createTransport, type Transporter } from 'nodemailer';
 import MailComposer from 'nodemailer/lib/mail-composer';
 
+export type FestivalSmtpAttachment = {
+    content: Buffer;
+    contentType: 'application/pdf' | 'image/jpeg' | 'image/png';
+    filename: string;
+};
+
 export type FestivalSmtpMail = {
     to: string;
     subject: string;
@@ -11,7 +17,18 @@ export type FestivalSmtpMail = {
     from?: string;
     replyTo?: string;
     cc?: string;
+    attachments?: Array<FestivalSmtpAttachment>;
 };
+
+const toNodemailerAttachments = (
+    mail: FestivalSmtpMail,
+): Array<{ content: Buffer; contentDisposition: 'attachment'; contentType: string; filename: string }> | undefined =>
+    mail.attachments?.map((attachment) => ({
+        content: attachment.content,
+        contentDisposition: 'attachment',
+        contentType: attachment.contentType,
+        filename: attachment.filename,
+    }));
 
 const requireEnv = (name: string): string => {
     const value = process.env[name];
@@ -51,6 +68,7 @@ const buildFestivalRawMessage = async (mail: FestivalSmtpMail): Promise<Buffer> 
         subject: mail.subject,
         text: mail.text,
         html: mail.html,
+        attachments: toNodemailerAttachments(mail),
         date: new Date(),
     });
     return await new Promise<Buffer>((resolve, reject) => {
@@ -90,6 +108,7 @@ export const sendFestivalSmtpMail = async (mail: FestivalSmtpMail): Promise<void
         subject: mail.subject,
         text: mail.text,
         html: mail.html,
+        attachments: toNodemailerAttachments(mail),
     });
     if (info.accepted.length === 0) {
         throw new Error('Accepted list is empty');

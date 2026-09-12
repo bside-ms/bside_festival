@@ -87,6 +87,9 @@ interface Props {
     links: Array<ParticipantLink>;
 }
 
+export const hasShownPublicProgramLinks = (links: Array<ParticipantLink>): boolean =>
+    links.some((link) => getLinkPresentation(link) !== null);
+
 const PublicProgramLinks = ({ links }: Props): ReactElement | null => {
     const shownLinks = links.map(getLinkPresentation).filter((link): link is LinkPresentation => link !== null);
 
@@ -95,7 +98,7 @@ const PublicProgramLinks = ({ links }: Props): ReactElement | null => {
     }
 
     return (
-        <section aria-labelledby="program-links-title">
+        <section className="self-start bg-white p-6 text-[#2C2E83] md:p-8" aria-labelledby="program-links-title">
             <h2 id="program-links-title" className="text-xl font-black text-[#2C2E83]">
                 Links
             </h2>

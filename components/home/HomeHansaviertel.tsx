@@ -1,4 +1,4 @@
-import hansaviertel from '@/images/2026/home/hansaviertel.svg';
+import hansaviertel from '@/images/2026/home/hansaviertel.png';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 
@@ -12,8 +12,8 @@ const HomeHansaviertel = (): ReactElement => (
 
             <Image
                 src={hansaviertel}
-                alt="Illustration der Orte im Hansaviertel"
-                className="-mx-6 mt-8 h-auto w-[calc(100%+3rem)] max-w-none md:mx-0 md:mt-10 md:w-full"
+                alt="Karte der Festivalorte im Hansaviertel am Samstag"
+                className="mt-8 h-auto w-full rounded-sm md:mt-10"
                 sizes="(max-width: 1280px) 100vw, 72rem"
             />
         </div>
