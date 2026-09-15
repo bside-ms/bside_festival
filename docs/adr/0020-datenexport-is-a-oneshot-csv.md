@@ -1,0 +1,3 @@
+# Datenexport is a one-shot working-list CSV
+
+Data-Privacy Users need a file of selected Programmbeiträge, but extra formats, a download archive, or always exploding the list into Schedule Entries would be a different product. Datenexport reuses the Mails schreiben selection flow, then one page (columns, preview, download). The file is semicolon-separated CSV with a UTF-8 BOM so German Excel splits columns. Including Slot fans the file out to one row per Schedule Entry and errors unless every selected Programmbeitrag has at least one; Genre stays comma-separated on the same row. There is no Aktivität Comment and no Change Log entry.

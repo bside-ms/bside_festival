@@ -3,13 +3,15 @@
 import ContributionTable from '@/components/intern/ContributionTable';
 import { statusOrder, useInternWorkspaceContext } from '@/components/intern/InternWorkspaceContext';
 import cn from '@/lib/common/helper/cn';
+import { DATEN_EXPORT_PATH, DATEN_EXPORT_SELECTION_HINT, DATEN_EXPORT_TITLE } from '@/lib/datenExport/copy';
+import { patchDatenExportDraft } from '@/lib/datenExport/draftStorage';
 import { MAIL_MERGE_COMPOSE_PATH, MAIL_MERGE_SELECTION_HINT, MAIL_MERGE_TITLE } from '@/lib/mailMerge/copy';
 import { patchMailMergeDraft } from '@/lib/mailMerge/draftStorage';
 import statusColors from '@/lib/participants/status/statusColors';
 import statusLabels from '@/lib/participants/status/statusLabels';
 import typeColors from '@/lib/participants/typeColors';
 import typeLabels from '@/lib/participants/typeLabels';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ApplicationStatus, Type } from '@prisma/client';
 import { useRouter } from 'next/navigation';
@@ -25,7 +27,7 @@ const baseChipClassName = (isActive: boolean, disabled = false): string =>
         isActive ? 'ring-1 ring-black' : 'opacity-70 hover:opacity-100',
     );
 
-const FilterToggle = <T extends string>({
+const FilterToggle = <T extends number | string>({
     className,
     isActive,
     label,
@@ -56,7 +58,7 @@ const FilterToggle = <T extends string>({
 
 const FilterRow = ({ label, children }: { children: ReactNode; label: string }): ReactElement => (
     <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-        <span className="w-14 shrink-0 text-[11px] font-bold tracking-wide text-black/50 uppercase">{label}</span>
+        <span className="w-16 shrink-0 text-[11px] font-bold tracking-wide text-black/50 uppercase">{label}</span>
         <div className="flex min-w-0 flex-1 flex-wrap gap-1">{children}</div>
     </div>
 );
@@ -67,22 +69,32 @@ const InternWorkspace = (): ReactElement => {
         areAllFilteredSelected,
         currentOrganizerUserId,
         filteredApplications,
+        filteredAreaIds,
         filteredSelectedCount,
         filteredStatuses,
         filteredTypes,
+        hasUnassignedLocations,
+        isDatenExportMode,
         isInDataPrivacyGroup,
-        isMailMergeMode,
+        isSelectingParticipants,
         onlyMyOrganizerAssignments,
+        onlyUnassignedArea,
         onlyWithoutScheduleEntry,
+        programLocationAreas,
+        orderedSelectedParticipantIds,
         searchText,
         selectedCount,
         setSearchText,
+        toggleFilteredArea,
         toggleFilteredStatus,
         toggleFilteredType,
         toggleOnlyMyOrganizerAssignments,
+        toggleOnlyUnassignedArea,
         toggleOnlyWithoutScheduleEntry,
+        cancelDatenExport,
         cancelMailMerge,
         selectAllFilteredParticipants,
+        startDatenExport,
         startMailMerge,
         unselectFilteredParticipants,
     } = useInternWorkspaceContext();
@@ -102,10 +114,15 @@ const InternWorkspace = (): ReactElement => {
         [toggleOnlyMyOrganizerAssignments],
     );
     const handleOnlyWithoutScheduleEntryToggle = useCallback(() => toggleOnlyWithoutScheduleEntry(), [toggleOnlyWithoutScheduleEntry]);
+    const handleOnlyUnassignedAreaToggle = useCallback(() => toggleOnlyUnassignedArea(), [toggleOnlyUnassignedArea]);
     const handleContinueMailMerge = useCallback(() => {
         patchMailMergeDraft({ listSearch: window.location.search });
         router.push(MAIL_MERGE_COMPOSE_PATH);
     }, [router]);
+    const handleContinueDatenExport = useCallback(() => {
+        patchDatenExportDraft({ listSearch: window.location.search, participantIds: orderedSelectedParticipantIds });
+        router.push(DATEN_EXPORT_PATH);
+    }, [orderedSelectedParticipantIds, router]);
     const handleToggleSelectAllFiltered = useCallback(() => {
         if (areAllFilteredSelected) {
             unselectFilteredParticipants();
@@ -124,15 +141,25 @@ const InternWorkspace = (): ReactElement => {
                     <h1 className="font-display text-4xl leading-none uppercase md:text-5xl">Programmbeiträge</h1>
                     <div className="mt-1 text-sm text-black/60">{applicationAmount} Beiträge</div>
                 </div>
-                {isInDataPrivacyGroup && !isMailMergeMode ? (
-                    <button
-                        type="button"
-                        className="inline-flex cursor-pointer items-center gap-2 rounded border border-black bg-black px-3 py-2 text-xs font-bold text-white"
-                        onClick={startMailMerge}
-                    >
-                        <FontAwesomeIcon icon={faEnvelope} className="h-3.5 w-3.5" />
-                        {MAIL_MERGE_TITLE}
-                    </button>
+                {isInDataPrivacyGroup && !isSelectingParticipants ? (
+                    <div className="flex flex-wrap gap-2">
+                        <button
+                            type="button"
+                            className="inline-flex cursor-pointer items-center gap-2 rounded border border-black bg-black px-3 py-2 text-xs font-bold text-white"
+                            onClick={startMailMerge}
+                        >
+                            <FontAwesomeIcon icon={faEnvelope} className="h-3.5 w-3.5" />
+                            {MAIL_MERGE_TITLE}
+                        </button>
+                        <button
+                            type="button"
+                            className="inline-flex cursor-pointer items-center gap-2 rounded border border-black bg-black px-3 py-2 text-xs font-bold text-white"
+                            onClick={startDatenExport}
+                        >
+                            <FontAwesomeIcon icon={faDownload} className="h-3.5 w-3.5" />
+                            {DATEN_EXPORT_TITLE}
+                        </button>
+                    </div>
                 ) : null}
             </div>
 
@@ -199,16 +226,42 @@ const InternWorkspace = (): ReactElement => {
                         );
                     })}
                 </FilterRow>
+
+                {programLocationAreas.length > 0 || hasUnassignedLocations ? (
+                    <FilterRow label="Bereich">
+                        {programLocationAreas.map((area) => (
+                            <FilterToggle
+                                key={area.id}
+                                isActive={filteredAreaIds.includes(area.id)}
+                                label={area.name}
+                                onToggle={toggleFilteredArea}
+                                value={area.id}
+                            />
+                        ))}
+                        {hasUnassignedLocations ? (
+                            <button
+                                type="button"
+                                className={cn(
+                                    baseChipClassName(onlyUnassignedArea),
+                                    onlyUnassignedArea ? 'border-black' : 'border-black/25 hover:border-black',
+                                )}
+                                onClick={handleOnlyUnassignedAreaToggle}
+                            >
+                                Ohne Bereich
+                            </button>
+                        ) : null}
+                    </FilterRow>
+                ) : null}
             </div>
 
-            {isMailMergeMode ? (
+            {isSelectingParticipants ? (
                 <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-black bg-white p-3 shadow-lg">
                     <div className="text-sm">
-                        <div className="font-bold">{MAIL_MERGE_TITLE}</div>
+                        <div className="font-bold">{isDatenExportMode ? DATEN_EXPORT_TITLE : MAIL_MERGE_TITLE}</div>
                         <div className="text-black/60">
                             {selectedCount} ausgewählt
                             {hiddenSelectedCount > 0 ? ` · ${hiddenSelectedCount} gerade ausgeblendet` : ''}
-                            {` · ${MAIL_MERGE_SELECTION_HINT}`}
+                            {` · ${isDatenExportMode ? DATEN_EXPORT_SELECTION_HINT : MAIL_MERGE_SELECTION_HINT}`}
                         </div>
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -222,7 +275,7 @@ const InternWorkspace = (): ReactElement => {
                         <button
                             type="button"
                             className="cursor-pointer rounded border border-black bg-white px-3 py-2 text-xs font-bold"
-                            onClick={cancelMailMerge}
+                            onClick={isDatenExportMode ? cancelDatenExport : cancelMailMerge}
                         >
                             Abbrechen
                         </button>
@@ -230,9 +283,9 @@ const InternWorkspace = (): ReactElement => {
                             type="button"
                             disabled={selectedCount === 0}
                             className="cursor-pointer rounded border border-black bg-black px-3 py-2 text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-60"
-                            onClick={handleContinueMailMerge}
+                            onClick={isDatenExportMode ? handleContinueDatenExport : handleContinueMailMerge}
                         >
-                            Weiter zum Text
+                            {isDatenExportMode ? 'Weiter zum Export' : 'Weiter zum Text'}
                         </button>
                     </div>
                 </div>

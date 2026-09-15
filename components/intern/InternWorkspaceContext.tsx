@@ -1,16 +1,19 @@
 'use client';
 
 import isEmptyString from '@/lib/common/helper/isEmptyString';
+import { clearDatenExportDraft } from '@/lib/datenExport/draftStorage';
 import {
     internFilterParsers,
     internFilterUrlOptions,
     type InternListSortColumn,
     type InternListSortDirection,
 } from '@/lib/intern/internFilterSearchParams';
+import matchesInternAreaFilter from '@/lib/intern/matchesInternAreaFilter';
 import { clearMailMergeDraft, patchMailMergeDraft, readMailMergeDraft } from '@/lib/mailMerge/draftStorage';
 import matchesParticipantSearch from '@/lib/participants/matchesParticipantSearch';
 import statusOrder from '@/lib/participants/status/statusOrder';
 import type { SerializableListParticipant } from '@/typings/SerializableListParticipant';
+import type { SerializableProgramLocationArea } from '@/typings/SerializableProgramLocationArea';
 import type { ApplicationStatus, Type } from '@prisma/client';
 import { difference, uniq, xor } from 'lodash';
 import { useQueryStates } from 'nuqs';
@@ -22,25 +25,36 @@ interface InternWorkspaceContextData {
     areAllFilteredSelected: boolean;
     currentOrganizerUserId: string | null;
     filteredApplications: Array<SerializableListParticipant>;
+    filteredAreaIds: Array<number>;
     filteredSelectedCount: number;
     filteredStatuses: Array<ApplicationStatus>;
     filteredTypes: Array<Type>;
+    hasUnassignedLocations: boolean;
+    isDatenExportMode: boolean;
     isInDataPrivacyGroup: boolean;
     isMailMergeMode: boolean;
+    isSelectingParticipants: boolean;
     onlyMyOrganizerAssignments: boolean;
+    onlyUnassignedArea: boolean;
     onlyWithoutScheduleEntry: boolean;
+    orderedSelectedParticipantIds: Array<number>;
+    programLocationAreas: Array<SerializableProgramLocationArea>;
     searchText: string;
     selectedCount: number;
     selectedParticipantIds: Array<number>;
     setSearchText: Dispatch<SetStateAction<string>>;
     sortColumn: InternListSortColumn;
     sortDirection: InternListSortDirection;
+    cancelDatenExport: () => void;
     cancelMailMerge: () => void;
     selectAllFilteredParticipants: () => void;
+    startDatenExport: () => void;
     startMailMerge: () => void;
+    toggleFilteredArea: (areaId: number) => void;
     toggleFilteredStatus: (status: ApplicationStatus) => void;
     toggleFilteredType: (type: Type) => void;
     toggleOnlyMyOrganizerAssignments: () => void;
+    toggleOnlyUnassignedArea: () => void;
     toggleOnlyWithoutScheduleEntry: () => void;
     toggleSelectedParticipant: (id: number) => void;
     toggleSort: (column: InternListSortColumn) => void;
@@ -52,7 +66,9 @@ const InternWorkspaceContext = createContext<InternWorkspaceContextData | null>(
 interface Props extends PropsWithChildren {
     applications: Array<SerializableListParticipant>;
     currentOrganizerUserId: string | null;
+    hasUnassignedLocations: boolean;
     isInDataPrivacyGroup: boolean;
+    programLocationAreas: Array<SerializableProgramLocationArea>;
     scheduledParticipantIds: Array<number>;
 }
 
@@ -125,7 +141,9 @@ const InternWorkspaceContextProvider = ({
     applications,
     children,
     currentOrganizerUserId,
+    hasUnassignedLocations,
     isInDataPrivacyGroup,
+    programLocationAreas,
     scheduledParticipantIds,
 }: Props): ReactElement => {
     const [filters, setFilters] = useQueryStates(internFilterParsers, internFilterUrlOptions);
@@ -134,12 +152,16 @@ const InternWorkspaceContextProvider = ({
 
     const filteredTypes = filters.types;
     const filteredStatuses = filters.statuses;
+    const filteredAreaIds = filters.areas;
     const searchText = filters.q;
     const onlyMyOrganizerAssignments = filters.mine;
+    const onlyUnassignedArea = filters.unassigned;
     const onlyWithoutScheduleEntry = filters.unscheduled;
     const sortColumn = filters.sort;
     const sortDirection = filters.sortDir;
     const isMailMergeMode = isInDataPrivacyGroup && filters.mailMerge;
+    const isDatenExportMode = isInDataPrivacyGroup && filters.datenExport && !filters.mailMerge;
+    const isSelectingParticipants = isMailMergeMode || isDatenExportMode;
 
     const filteredApplications = useMemo<Array<SerializableListParticipant>>(() => {
         const filteredByChips = applications.filter(
@@ -147,6 +169,7 @@ const InternWorkspaceContextProvider = ({
                 (filteredTypes.length === 0 || filteredTypes.includes(application.type)) &&
                 (filteredStatuses.length === 0 || filteredStatuses.includes(application.status)) &&
                 (!onlyWithoutScheduleEntry || !scheduledParticipantIds.includes(application.id)) &&
+                matchesInternAreaFilter(application, filteredAreaIds, onlyUnassignedArea) &&
                 (!onlyMyOrganizerAssignments ||
                     (currentOrganizerUserId !== null &&
                         application.organizers.some(({ organizerUserId }) => organizerUserId === currentOrganizerUserId))),
@@ -160,9 +183,11 @@ const InternWorkspaceContextProvider = ({
     }, [
         applications,
         currentOrganizerUserId,
+        filteredAreaIds,
         filteredStatuses,
         filteredTypes,
         onlyMyOrganizerAssignments,
+        onlyUnassignedArea,
         onlyWithoutScheduleEntry,
         scheduledParticipantIds,
         searchText,
@@ -176,6 +201,15 @@ const InternWorkspaceContextProvider = ({
         [filteredApplications, selectedIdSet],
     );
     const areAllFilteredSelected = filteredApplications.length > 0 && filteredSelectedCount === filteredApplications.length;
+    const orderedSelectedParticipantIds = useMemo(
+        () =>
+            sortApplications(
+                applications.filter((application) => selectedIdSet.has(application.id)),
+                sortColumn,
+                sortDirection,
+            ).map((application) => application.id),
+        [applications, selectedIdSet, sortColumn, sortDirection],
+    );
 
     useEffect(() => {
         setSelectedParticipantIds(readMailMergeDraft().participantIds);
@@ -213,6 +247,17 @@ const InternWorkspaceContextProvider = ({
         [setFilters],
     );
 
+    const toggleFilteredArea = useCallback(
+        (areaId: number) => {
+            void setFilters((current) => ({ areas: xor(current.areas, [areaId]) }));
+        },
+        [setFilters],
+    );
+
+    const toggleOnlyUnassignedArea = useCallback(() => {
+        void setFilters((current) => ({ unassigned: !current.unassigned }));
+    }, [setFilters]);
+
     const toggleOnlyMyOrganizerAssignments = useCallback(() => {
         void setFilters((current) => ({ mine: !current.mine }));
     }, [setFilters]);
@@ -235,13 +280,23 @@ const InternWorkspaceContextProvider = ({
     );
 
     const startMailMerge = useCallback(() => {
-        void setFilters({ mailMerge: true });
+        void setFilters({ datenExport: false, mailMerge: true });
+    }, [setFilters]);
+
+    const startDatenExport = useCallback(() => {
+        void setFilters({ datenExport: true, mailMerge: false });
     }, [setFilters]);
 
     const cancelMailMerge = useCallback(() => {
         setSelectedParticipantIds([]);
         clearMailMergeDraft();
         void setFilters({ mailMerge: false });
+    }, [setFilters]);
+
+    const cancelDatenExport = useCallback(() => {
+        setSelectedParticipantIds([]);
+        clearDatenExportDraft();
+        void setFilters({ datenExport: false });
     }, [setFilters]);
 
     const toggleSelectedParticipant = useCallback((id: number) => {
@@ -262,16 +317,24 @@ const InternWorkspaceContextProvider = ({
             value={{
                 allApplications: applications,
                 areAllFilteredSelected,
+                cancelDatenExport,
                 cancelMailMerge,
                 currentOrganizerUserId,
                 filteredApplications,
+                filteredAreaIds,
                 filteredSelectedCount,
                 filteredStatuses,
                 filteredTypes,
+                hasUnassignedLocations,
+                isDatenExportMode,
                 isInDataPrivacyGroup,
                 isMailMergeMode,
+                isSelectingParticipants,
                 onlyMyOrganizerAssignments,
+                onlyUnassignedArea,
                 onlyWithoutScheduleEntry,
+                orderedSelectedParticipantIds,
+                programLocationAreas,
                 searchText,
                 selectAllFilteredParticipants,
                 selectedCount: selectedParticipantIds.length,
@@ -279,10 +342,13 @@ const InternWorkspaceContextProvider = ({
                 setSearchText,
                 sortColumn,
                 sortDirection,
+                startDatenExport,
                 startMailMerge,
+                toggleFilteredArea,
                 toggleFilteredStatus,
                 toggleFilteredType,
                 toggleOnlyMyOrganizerAssignments,
+                toggleOnlyUnassignedArea,
                 toggleOnlyWithoutScheduleEntry,
                 toggleSelectedParticipant,
                 toggleSort,

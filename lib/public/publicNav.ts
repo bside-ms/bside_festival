@@ -2,6 +2,7 @@ import isProgramPublished from '@/lib/participants/isProgramPublished';
 import { compact } from 'lodash';
 
 export type PublicNavLink = {
+    external?: boolean;
     href: string;
     id: string;
     label: string;
@@ -33,8 +34,11 @@ export const getPublicNavGroups = (): PublicNavGroup[] => [
         ]),
     },
     {
-        id: 'mitwirken',
-        label: 'Mitwirken',
-        links: [{ id: 'helfis', label: 'Helfis', href: '/mithelfen' }],
+        id: 'helfis',
+        label: 'Helfis',
+        links: [
+            { id: 'anmelden', label: 'Anmelden', href: '/mithelfen' },
+            { id: 'engelsystem', label: 'Engelsystem', href: 'https://festival26.support.b-side.ms', external: true },
+        ],
     },
 ];

@@ -1,6 +1,10 @@
 import { parseJuryVotes } from '@/lib/applications/curationScoring';
 import type { ParticipantWithInternRelations } from '@/lib/participants/getAllParticipants';
-import type { ListParticipantEarliestSlot, SerializableListParticipant } from '@/typings/SerializableListParticipant';
+import type {
+    ListParticipantEarliestSlot,
+    ListParticipantScheduleAreas,
+    SerializableListParticipant,
+} from '@/typings/SerializableListParticipant';
 import type { SerializableParticipant } from '@/typings/SerializableParticipant';
 import { first } from 'lodash';
 
@@ -19,6 +23,7 @@ const serializeParticipant = (application: ParticipantWithInternRelations): Seri
 export const serializeListParticipant = (
     application: ParticipantWithInternRelations,
     earliestSlot: ListParticipantEarliestSlot | null,
+    scheduleAreas: ListParticipantScheduleAreas,
 ): SerializableListParticipant => {
     const lastComment = first(application.comments);
 
@@ -26,6 +31,7 @@ export const serializeListParticipant = (
         contactName: application.contactName,
         earliestSlot,
         feeEuros: application.feeEuros,
+        hasUnassignedScheduleEntry: scheduleAreas.hasUnassignedScheduleEntry,
         id: application.id,
         lastComment:
             lastComment === undefined
@@ -37,6 +43,7 @@ export const serializeListParticipant = (
                   },
         name: application.name,
         organizers: application.organizers.map(({ organizerName, organizerUserId }) => ({ organizerName, organizerUserId })),
+        programLocationAreaIds: scheduleAreas.programLocationAreaIds,
         status: application.status,
         type: application.type,
         updatedAt: application.updatedAt.toISOString(),

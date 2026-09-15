@@ -9,7 +9,7 @@ export type MailMergeSlotInput = {
     timeMode: ScheduleEntryTimeMode;
 };
 
-const formatMailMergeSlotLine = (slot: MailMergeSlotInput): string | null => {
+export const formatMailMergeSlotLine = (slot: MailMergeSlotInput): string | null => {
     const location = slot.locationName.trim();
 
     if (location.length === 0) {

@@ -38,7 +38,7 @@ const SortHeaderButton = ({
 
 const ContributionTableRow = ({ application }: { application: SerializableListParticipant }): ReactElement => {
     const searchParams = useSearchParams();
-    const { isMailMergeMode, selectedParticipantIds, toggleSelectedParticipant } = useInternWorkspaceContext();
+    const { isSelectingParticipants, selectedParticipantIds, toggleSelectedParticipant } = useInternWorkspaceContext();
     const detailHref = withSearchParams(`/intern/${application.id}`, searchParams);
     const typeLabel = typeLabels[application.type];
     const typeColor = typeColors[application.type];
@@ -47,9 +47,9 @@ const ContributionTableRow = ({ application }: { application: SerializableListPa
 
     return (
         <tr
-            className={`group relative border-t border-black/15 transition-colors duration-150 ${isMailMergeMode ? '' : 'hover:bg-black/[0.04]'} ${isSelected ? 'bg-black/[0.04]' : ''}`}
+            className={`group relative border-t border-black/15 transition-colors duration-150 ${isSelectingParticipants ? '' : 'hover:bg-black/[0.04]'} ${isSelected ? 'bg-black/[0.04]' : ''}`}
         >
-            {isMailMergeMode ? (
+            {isSelectingParticipants ? (
                 <td className="w-10 px-2 py-2 align-middle">
                     <input
                         type="checkbox"
@@ -105,7 +105,7 @@ const ContributionTableRow = ({ application }: { application: SerializableListPa
                 )}
             </td>
             <td className="w-10 px-2 py-2 text-center align-middle">
-                {isMailMergeMode ? null : (
+                {isSelectingParticipants ? null : (
                     <>
                         <Link href={detailHref} className="absolute inset-0 z-10" aria-label={`Details zu ${application.name}`} />
                         <span
@@ -153,13 +153,13 @@ const SelectAllCheckbox = (): ReactElement => {
 };
 
 const ContributionTable = (): ReactElement => {
-    const { filteredApplications, isMailMergeMode } = useInternWorkspaceContext();
+    const { filteredApplications, isSelectingParticipants } = useInternWorkspaceContext();
 
     return (
         <div className="overflow-x-auto rounded-md border border-black bg-white/90 shadow-lg backdrop-blur-2xl">
             <table className="min-w-full table-fixed border-collapse text-left">
                 <colgroup>
-                    {isMailMergeMode ? <col className="w-10" /> : null}
+                    {isSelectingParticipants ? <col className="w-10" /> : null}
                     <col className="w-[16%]" />
                     <col className="w-[9%]" />
                     <col className="w-[11%]" />
@@ -171,7 +171,7 @@ const ContributionTable = (): ReactElement => {
                 </colgroup>
                 <thead className="bg-black/[0.04] text-xs tracking-wide text-black/70">
                     <tr>
-                        {isMailMergeMode ? (
+                        {isSelectingParticipants ? (
                             <th className="w-10 px-2 py-2.5">
                                 <SelectAllCheckbox />
                             </th>

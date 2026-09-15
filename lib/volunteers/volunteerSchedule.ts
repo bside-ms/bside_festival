@@ -1,4 +1,4 @@
-const volunteerSignupClosesAt = new Date('2026-09-16T00:00:00+02:00');
+const volunteerSignupClosesAt = new Date('2026-09-18T09:00:00+02:00');
 
 export const isVolunteerSignupOpen = (now: Date = new Date()): boolean => now < volunteerSignupClosesAt;
 

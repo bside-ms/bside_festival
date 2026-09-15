@@ -57,7 +57,7 @@ Single workflow in `.github/workflows/docker-image.yml`:
 
 - Phased checklist: `docs/2026-public-redesign-checklist.md`
 - Related ADRs: `docs/adr/0006`–`0009` (Leichte Sprache plain pages, feedback-over-Figma copy, Framer motion phases, Helfi double opt-in)
-- Public vocabulary: `CONTEXT.md` (B-Side Festival, Wo & Wann, Ort, Helfi, Mitwirken, Leichte Sprache)
+- Public vocabulary: `CONTEXT.md` (B-Side Festival, Wo & Wann, Ort, Helfi, Engelsystem, Mitwirken, Leichte Sprache)
 
 ### Framework & Rendering
 
@@ -110,7 +110,7 @@ Single workflow in `.github/workflows/docker-image.yml`:
 - Public Workshop details expose capacity and registration only for confirmed Workshop schedule entries with `maxAttendees`; there is no waitlist. Logged-in users see confirmed names, while e-mail addresses and BCC/copy actions require the data-privacy group. `/intern/[id]` shows active pending/confirmed registrations and messages; `/intern/[id]/teilnehmende/[scheduleEntryId]` is the names-only print view.
 - Font Awesome + React Icons for icons
 - Public footer is sky-blue (`#40a8f5`) with Bricolage motto „Kultur. Hafen. Kante!“, harbor wave strip (same animated paths as `HomeHero`), and columns Festival 2026 / Mitwirken / Socials. Labels stay German (Orte not Locations). Footer Orte (`/#wo-und-wann`) is omitted while Die Orte is hidden. Workshops omitted until a real target exists. Förderer match the 2026 print poster: Stadt Münster Kulturamt, MKW NRW, Soziokultur NRW, Romero Initiative, KI Münster, stupa.ms, Hansa Floß. AStA is not on the poster. No „Gemeinnützig seit 2016“. Discreet Intern login/link sits in the legal row.
-- Public header is sticky (`h-15`). `html` has `scroll-smooth scroll-pt-15` so in-page hashes land below the header, plus `data-scroll-behavior="smooth"` so Next.js keeps route changes instant (without that attribute, CSS smooth-scroll animates list↔detail). Mitwirken includes Helfis → `/mithelfen`. Logged-in users also get a gold dashed lock+Intern chip in the public header next to Programm (not under Mitwirken). Festival 2026 hash links (`/#ueber-uns`; `/#wo-und-wann` when Die Orte is shown) use `lib/public/scrollToPageHash.ts`; sections add `scroll-mt-16` on top of the html padding. `HomeLocations` sits directly below the Werde-Helfer\*in block and uses `HomeBuilding`, `images/2026/home/locations-legend.svg`, `images/2026/home/locations-drip.svg`, and `homeStatsLine`; its drip overflows upward at the red-to-blue transition below all blue content. `HomeHansaviertel` follows it with the full-width `images/2026/home/hansaviertel.jpg`. Header Wo & Wann and footer Orte remain hidden until their navigation links are explicitly released.
+- Public header is sticky (`h-15`). `html` has `scroll-smooth scroll-pt-15` so in-page hashes land below the header, plus `data-scroll-behavior="smooth"` so Next.js keeps route changes instant (without that attribute, CSS smooth-scroll animates list↔detail). Helfis includes Anmelden → `/mithelfen` and Engelsystem → `https://festival26.support.b-side.ms` (new tab). Logged-in users also get a gold dashed lock+Intern chip in the public header next to Programm (not under Helfis). Festival 2026 hash links (`/#ueber-uns`; `/#wo-und-wann` when Die Orte is shown) use `lib/public/scrollToPageHash.ts`; sections add `scroll-mt-16` on top of the html padding. `HomeLocations` sits directly below the Werde-Helfer\*in block and uses `HomeBuilding`, `images/2026/home/locations-legend.svg`, `images/2026/home/locations-drip.svg`, and `homeStatsLine`; its drip overflows upward at the red-to-blue transition below all blue content. `HomeHansaviertel` follows it with the full-width `images/2026/home/hansaviertel.jpg`. Header Wo & Wann and footer Orte remain hidden until their navigation links are explicitly released.
 - App chrome is a pink-to-white top gradient (`.gradient-background`); no wavy SVG page background. Form inputs use a white fill so they stay readable on that gradient.
 - Hero date (`18.–19.` / `September`) and the 10-Jahre badge are painted on the dock SVG (`xMaxYMax` / `xMidYMax slice`) so they stay on the black harbor face. Motto and logo live in a centered `max-w-[1200px]` corridor; water and dock stay full-bleed. The stacked motto (Kultur / Hafen / Kante plus navy strokes and red line, no yellow arrow) is inline SVG (`HeroMottoMobile` / `HeroMottoDesktop`). Below `lg` the motto sits under the logo; from `lg` it sits to the left. Below `md` the harbor block sits lower (`top-[18%] -bottom-[32%]`) so the dock runs out the bottom. Source extracts live in `images/2026/home/hero-motto-*.svg`. The full-color mark sits inset in the upper-right of the corridor.
 
@@ -123,7 +123,7 @@ app/
   api/auth/[...nextauth]/  ← Keep — externally called by Keycloak
   api/health/              ← Keep — external health probe
   bewerbungen/             ← Application forms (public) + redirects to /intern
-  intern/                  ← Programmbeiträge list; `[id]` detail; `mails`; kuration/; slotplan/
+  intern/                  ← Programmbeiträge list; `[id]` detail; `mails`; `export`; kuration/; slotplan/
   programm/                ← Public program: `(catalog)` list, `[id]` details, `[id]/sharepic`, timetable/; list loading must not wrap details
   mithelfen/               ← Helfi signup (public); confirm/[token]; uebersicht (logged-in)
   aenderungslog/           ← Change Log (data-privacy users only)
@@ -133,7 +133,7 @@ app/
 lib/
   actions/                 ← Server actions
     actionAuth.ts, applicationActions.ts, emailConfirmationActions.ts,
-    mailMergeActions.ts, slotActions.ts, venueActions.ts, volunteerActions.ts
+    mailMergeActions.ts, datenExportActions.ts, slotActions.ts, venueActions.ts, volunteerActions.ts
   applications/            ← Curation scoring, cookies, filter query names
   changeLog/               ← Change Log formatting, detection, persistence
   errorLog/                ← Persist failed server-action errors (`ActionErrorLogEntry`)
@@ -145,6 +145,7 @@ lib/
   participants/            ← Participant helpers, type/status/venue/slot services
   schemas/                 ← Zod schemas (applicationSchema.ts, volunteerSchema.ts)
   mailMerge/               ← Mails schreiben / mail merge (variables, slot lines, attachments, simple HTML)
+  datenExport/             ← Datenexport (columns, CSV, Slot fan-out, session draft)
   sharepic/                ← Sharepic PNG render (homepage tokens, Feed/Story, photo on/off)
   upload/                  ← IONOS S3 upload
   utils.ts                 ← cn() helper (clsx + tailwind-merge)
@@ -155,7 +156,7 @@ components/
   volunteers/              ← Helfi signup + overview
   form/                    ← Reusable form inputs
   common/                  ← Layout, navigation, shared UI
-  intern/                  ← Internal workspace components (incl. mail merge)
+  intern/                  ← Internal workspace components (incl. mail merge and Datenexport)
   sharepic/                ← Public Sharepic studio (preview, format/photo, download)
   ui/                      ← Base UI primitives
   awareness/               ← Awareness page components
@@ -187,14 +188,14 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 - Wrap action calls in `try/catch` in client components
 - Admin application edits use focused actions in `applicationActions.ts` + Zod schemas from `applicationSchema.ts`
 - `/intern` is the unified internal workspace. `/bewerbungen/uebersicht` and `/bewerbungen/kuration` redirect there.
-- `/intern` Programmbeiträge is a flat sortable table (Name, Typ, Status, Ort, Zeit, Gage, letzter Kommentar) — no status groups, read-only rows; edits on `/intern/[id]`. Default sort is earliest slot time (`sort`/`sortDir` in URL); multi-slot acts show the earliest only (+N). Without slot sorts last. Data-privacy users can switch the list into **Mails schreiben** mode (`mailMerge` in the URL): filters still apply, select-all targets the filtered rows, then `/intern/mails` composes one text with `{{name}}` `{{ansprechperson}}` `{{typ}}` `{{termin}}` `{{gage}}` (clicking a token inserts it at the caret in the last focused Betreff/Text field), previews per recipient, and sends one `festival@` mail each (SMTP + IMAP Sent). Optional shared attachments (PDF, JPEG, PNG; max 3 files / 10 MB) stay in the browser for that compose session and go out with every mail; IMAP Sent includes them; a refresh drops the files. Used variables must be filled; missing `contactMail` always blocks. Send is one-by-one in the browser (progress, warn on leave). A Comment `Mail: »Betreff«` is posted as the sender. Status does not change. Organizer-initiated festival@ mail is Intern-only; there are no CLI mail scripts. No send archive — see `docs/adr/0018-mail-merge-is-not-a-mail-center.md` and `docs/adr/0019-mail-merge-session-attachments.md`.
+- `/intern` Programmbeiträge is a flat sortable table (Name, Typ, Status, Ort, Zeit, Gage, letzter Kommentar) — no status groups, read-only rows; edits on `/intern/[id]`. Default sort is earliest slot time (`sort`/`sortDir` in URL); multi-slot acts show the earliest only (+N). Without slot sorts last. List filters include Type, Status, and Program Location Area (`areas` plus `unassigned` for Ohne Bereich). An act matches an area chip if at least one of its Schedule Entries is in that area; several area chips are OR. Data-privacy users can switch the list into **Mails schreiben** mode (`mailMerge` in the URL): filters still apply, select-all targets the filtered rows, then `/intern/mails` composes one text with `{{name}}` `{{ansprechperson}}` `{{typ}}` `{{termin}}` `{{gage}}` (clicking a token inserts it at the caret in the last focused Betreff/Text field), previews per recipient, and sends one `festival@` mail each (SMTP + IMAP Sent). Optional shared attachments (PDF, JPEG, PNG; max 3 files / 10 MB) stay in the browser for that compose session and go out with every mail; IMAP Sent includes them; a refresh drops the files. Used variables must be filled; missing `contactMail` always blocks. Send is one-by-one in the browser (progress, warn on leave). A Comment `Mail: »Betreff«` is posted as the sender. Status does not change. Organizer-initiated festival@ mail is Intern-only; there are no CLI mail scripts. No send archive — see `docs/adr/0018-mail-merge-is-not-a-mail-center.md` and `docs/adr/0019-mail-merge-session-attachments.md`. Data-privacy users can also switch into **Datenexport** mode (`datenExport` in the URL): same filters and selection, then `/intern/export` to pick columns, preview every row, and download a semicolon CSV (UTF-8 BOM, German headers, intern table sort). Default columns are Name, Typ, Status, Gage. Slot is opt-in and fans out to one row per Schedule Entry; every selected Beitrag must have a slot or the export errors. Optional columns include Genre, contact fields, and Personenzahl. Contact columns are available, not required. No archive, no Aktivität Comment, no Change Log — see `docs/adr/0020-datenexport-is-a-oneshot-csv.md`.
 - `/intern/[id]` is the shareable Programmbeitrag detail (full edit: status, organizers, fee, schedule slots, comments). List filters stay in the URL and are carried to/from detail. From slotplan (`?from=slotplan&day=&area=` plus the planner visibility filters), back returns to `/intern/slotplan` with that view. Keycloak users load client-side after paint (cached ~5 min server-side).
 - `/intern` routes hide the marketing footer and swap the public header nav for intern links. From `lg` all intern links sit in the header; below `lg` only Programmbeiträge, Slotplan, Programmorte, Kuration stay inline plus Mehr; below `md` an Intern overlay. Intern shell is a `h-dvh` `AppShell`; list/detail/kuration scroll inside it. The public footer only has one Intern entry (`/intern`); full intern nav is header-only. Logged-in users also get a gold dashed Intern chip (`/intern`) in the public header next to Programm.
 - `/intern/slotplan` is a viewport-owned workspace: compact day/area toolbar, grid fills the remaining height, document does not scroll. `day` + `area` + `tab` (`planner` | `locations`) + `showEmpty` + `confirmedOnly` + `hideNotes` persist in the URL (nuqs); default area is `all`. The planner hides Program Locations with no visible Schedule Entry on the selected day; `showEmpty` (filter chip and the hint at the right of the grid) shows them again. `confirmedOnly` hides acts that are not Confirmed; `hideNotes` hides Schedule Notes. The two are independent. When area is `all`, columns are ordered by area `sortOrder` then location `sortOrder` (no visual group headers). Every Schedule Entry is timed (no Ganztägig row). The planner time axis starts 1 hour before the first visible timed entry and ends 1 hour after the last; with no timed entries it keeps the festival day window. Overlaps at the same Program Location are allowed and shown side by side. Each Overlap Group packs to the minimum Lanes (max simultaneous occupancy); width is 1/N of that group so separate piles at the same place can be 1/2 and 1/3. Assignment is start time, then longer first, then the leftmost free Lane. The location column grows by 48px per extra Lane in the largest group (190 + 48×(N−1)). Hover or click uses the full column width. Hover: Bearbeiten opens move (place/time only); arrow icon opens act details; notes have no detail link. Save no longer rejects overlaps; `isBlocking` / AllDay stay in the schema unused.
 - `/intern/kuration` stores anonymous `juryVotes`, calculates jury/bonus/final score at read time via `lib/applications/curationScoring.ts`
 - `/aenderungslog` records successful user save actions with previous/next values; visible only to data-privacy users
 - Failed mutations are persisted to `ActionErrorLogEntry` (source, message, stack, optional actor/target/context); no Intern UI yet
-- `/mithelfen` is public Helfi signup: name, phone, email, optional note (availability or car; empty is fine), privacy checkbox. Copy stays low-pressure: anyone can help, no prior experience. No day prefs. `addVolunteer` stores `Volunteer.emailVerified` as null and sends a confirm mail. `/mithelfen/confirm/[token]` sets the timestamp and sends the welcome mail. Organizers see everyone on `/mithelfen/uebersicht` (login) with an unconfirmed mark when the email is not yet verified, plus the optional note. Data-privacy users get copy-all addresses (comma-separated) and a `mailto:?bcc=` Sammelmail. No per-signup mail to festival@.
+- `/mithelfen` is public Helfi signup: name, phone, email, optional note (availability or car; empty is fine), privacy checkbox. Copy stays low-pressure: anyone can help, no prior experience. No day prefs. Website signup stays open until 18 September 2026, 09:00 local time. `addVolunteer` stores `Volunteer.emailVerified` as null and sends a confirm mail. `/mithelfen/confirm/[token]` sets the timestamp and sends the welcome mail. Organizers see everyone on `/mithelfen/uebersicht` (login) with an unconfirmed mark when the email is not yet verified, plus the optional note. Data-privacy users get copy-all addresses (comma-separated) and a `mailto:?bcc=` Sammelmail. No per-signup mail to festival@.
 - `/awareness` is the public awareness concept (DE). Alternates: `/awareness/leichte-sprache`, `/awareness/english`, `/awareness/easy-language`. Shared left page header (eyebrow, title, navy pills). These routes use a full-page `#D681B4` → `#FFFFFF` gradient in `AppShell`; other public pages keep the short `.gradient-background` fade.
 
 ---
@@ -203,9 +204,9 @@ export const doSomething = async (id: number, value: string): Promise<void> => {
 
 The internal workspace context uses **props directly** (no `useState` for server data):
 
-| Context                  | Used in   | Contains                                                                                                                |
-| ------------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `InternWorkspaceContext` | `/intern` | Filter + table sort + mail-merge mode in URL via `nuqs`; client selection IDs in sessionStorage; slim list participants |
+| Context                  | Used in   | Contains                                                                                                                              |
+| ------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `InternWorkspaceContext` | `/intern` | Filter + table sort + mail-merge / Datenexport mode in URL via `nuqs`; client selection IDs in sessionStorage; slim list participants |
 
 **Do not add `useState` for server-provided data** — the server page passes fresh props after each action and revalidation.
 
@@ -214,7 +215,7 @@ The internal workspace context uses **props directly** (no `useState` for server
 ## Data Types
 
 - `SerializableParticipant`, `SerializableSlot` — JSON-safe (dates as strings), used across client/server boundary
-- `SerializableListParticipant` — slim `/intern` table row (earliest slot, fee, last comment, organizers); not the full detail payload
+- `SerializableListParticipant` — slim `/intern` table row (earliest slot, Program Location Area ids, fee, last comment, organizers); not the full detail payload
 - Prisma types (`Participant`, `Slot`, `Venue`, `Location`, etc.) — server-only
 - `Participant.hasParticipatedBefore`: `true`/`false` for explicit answers, `null` for legacy — keep visually distinct
 - `Participant.feeEuros`: optional whole-euro Gage on the Beitrag; edited in `/intern/[id]` ContributionDetails aside; changelog’d

@@ -29,26 +29,41 @@ _Avoid_: Safer Space (as the page name)
 
 ### Helfi
 
-A person who signs up publicly to help run the festival (crew). Public UI may also say Helfer\*in; the casual festival term is Helfi. Signup collects name, email, phone, and an optional free-text note (rough availability or car; empty is fine). Copy should not imply special skills or experience. Day checkboxes are not collected up front. Email must be confirmed before the signup counts as complete. The first mail only asks to confirm the address; after the click, a second mail covers onboarding (the Engelsystem, Treffen, Telegram during the festival, festival mail for questions). The 2026 public signup closes on 16 September at 00:00 local festival time, while confirmations for a signup started before the cutoff remain valid. Once closed, the public homepage and signup page invite people to attend the imminent festival and help next year. Organizers read the notes on `/mithelfen/uebersicht`.
+A person who helps run the festival (crew). Public UI may also say Helfer\*in; the casual festival term is Helfi. New people join via the public website signup at `/mithelfen` (name, email, phone, optional note), confirm their email, then register in the Engelsystem to take shifts. The 2026 website signup closes on 18 September at 09:00 local festival time; confirmations for a signup started before the cutoff remain valid. Organizers read website-signup notes on `/mithelfen/uebersicht`.
 _Avoid_: Volunteer (in public German UI), Engelsystem user (as the public label)
 
 ### Engelsystem
 
-The public shift-planning tool for the B-Side Festival. Helfis register there once, choose their desired shifts, and are strongly asked to activate both email settings so that changes and festival information can reach them; the settings are not a prerequisite for taking shifts.
+The public shift-planning tool for the B-Side Festival, linked from the header as Helfis → Engelsystem (`https://festival26.support.b-side.ms`, new tab). Helfis register there once, choose their desired shifts, and are strongly asked to activate both email settings so that changes and festival information can reach them; the settings are not a prerequisite for taking shifts.
 _Avoid_: Schichtsystem (when referring to the named tool)
 
 ### Awareness-Freischaltung
 
-Permission to choose Awareness shifts in the Engelsystem. It is granted after an Awareness workshop, previously acquired comparable knowledge, or equivalent experience; interested Helfis signal this by selecting Awareness during Engelsystem registration.
+Permission to choose Awareness shifts in the Engelsystem. It is granted after an Awareness workshop, previously acquired comparable knowledge, or equivalent experience; a Helfi-Treffen does not replace this. Interested Helfis signal this by selecting Awareness during Engelsystem registration.
 
 ### Helfi-Treffen
 
-A general introductory meeting for Helfis that explains the B-Side, the festival, and the available tasks. Attending one meeting is sufficient and is especially useful for people new to the B-Side or the festival.
+A general introductory meeting for Helfis that explains the B-Side, the festival, and the available tasks. It is optional: missing it does not block taking shifts. Attending one meeting is especially useful for people new to the B-Side or the festival.
 _Avoid_: Awareness-Workshop (a separate qualification)
+
+### Zentrale
+
+The signposted check-in point for Helfis in the B-Side. Arrive about 15 minutes before a shift, check in, and collect the festival T-shirt and the Aftershow wristband.
+_Avoid_: Crew-Raum, Angelbase (as the public/mail name)
+
+### Crew-Raum
+
+A place next to the Zentrale with food and drinks for Helfis during the festival. It is not the check-in point and is not framed as a reward.
+_Avoid_: Zentrale
+
+### Helfi-Telegram-Gruppe
+
+The Telegram group for Helfis during the festival, for last-minute infos and shift changes. It is not an organizers-only chat. People who take shifts are invited to join, including friends who sign up at `/mithelfen`.
+_Avoid_: Orga-Gruppe (when meaning this Helfi group)
 
 ### Mitwirken
 
-The public “get involved” area: homepage section and nav group covering Helfis, workshops, and related calls to action. Open Call for program contributions is closed for 2026. The Helfi signup page includes short prose on possible tasks and on next steps after signup (confirm email, later Schichtpläne, Treffen, Telegram during the festival).
+The public “get involved” area on the homepage and in the footer. The header nav group is **Helfis** (Anmelden → `/mithelfen`, Engelsystem → `https://festival26.support.b-side.ms`), not Mitwirken. Open Call for program contributions is closed for 2026. The Helfi signup page includes short prose on possible tasks and on next steps after signup (confirm email, later Schichtpläne, Treffen, Telegram during the festival).
 _Avoid_: Get Involved, Explore (as nav labels)
 
 ### Application
@@ -90,9 +105,14 @@ An immutable internal note posted by an organizer on an application. Comments ca
 An organizer-written mail sent one-to-one to the contact of each selected Programmbeitrag, from one shared text with per-recipient variables and optional shared attachments chosen for that compose session. The UI name is Mails schreiben; the code name is mail merge. The text and files are for that send; they are not stored as a Vorlage and there is no send archive. It is not a mailbox and does not change Application Status.
 _Avoid_: Serienbrief, Mail center, Massenmail, Rundmail (when a mailbox or inbox is meant)
 
+### Datenexport
+
+A one-shot CSV of selected Programmbeiträge. Organizers choose columns, preview the rows, and download the file. It is not an archive and does not change Application Status.
+_Avoid_: Teilnehmer-Export, Excel-Export, PDF-Export, data dump
+
 ### Data-Privacy User
 
-A logged-in user who may access personal or sensitive submitted data such as contact details and the Change Log, and who may send personalized festival@ mails (Mails schreiben).
+A logged-in user who may access personal or sensitive submitted data such as contact details and the Change Log, who may send personalized festival@ mails (Mails schreiben), and who may download a Datenexport.
 
 ### Final Curation Score
 
@@ -188,8 +208,13 @@ _Avoid_: Venue, location
 
 ### Program Location Area
 
-A display and planning group of Program Locations: **B-Side** (in the house), **Im Viertel** (partner places in the neighborhood), and **Sputnikhalle** (aftershow).
-_Avoid_: District, zone, venue group
+A display and planning group of Program Locations: **B-Side** (in the house), **Im Viertel** (partner places in the neighborhood), and **Sputnikhalle** (aftershow). Slotplan and intern Programmbeiträge use the same areas; a Programmbeitrag belongs to an area when at least one of its Schedule Entries is there. A Program Location may have no area; that case is **Ohne Bereich**.
+_Avoid_: District, zone, venue group, Aftershow (as the area name; the aftershow area is Sputnikhalle)
+
+### Ohne Bereich
+
+The intern label for a Program Location with no Program Location Area. Slotplan and intern Programmbeiträge both offer it as a filter next to the named areas, when at least one such Program Location exists.
+_Avoid_: Unassigned, no district
 
 ### Ortspassung
 

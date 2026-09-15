@@ -40,6 +40,7 @@ const NavLinkItem = ({
     onNavigate?: MouseEventHandler<HTMLAnchorElement>;
 }): ReactElement => {
     const hash = getPageHash(link.href);
+    const linkClassName = cn('text-white no-underline hover:text-rose-300', className);
 
     const handleClick = useCallback<MouseEventHandler<HTMLAnchorElement>>(
         (event) => {
@@ -60,13 +61,16 @@ const NavLinkItem = ({
         [hash, onNavigate],
     );
 
+    if (link.external === true) {
+        return (
+            <Link href={link.href} target="_blank" rel="noopener noreferrer" className={linkClassName} onClick={onNavigate}>
+                {link.label}
+            </Link>
+        );
+    }
+
     return (
-        <Link
-            href={link.href}
-            scroll={hash === undefined}
-            className={cn('text-white no-underline hover:text-rose-300', className)}
-            onClick={handleClick}
-        >
+        <Link href={link.href} scroll={hash === undefined} className={linkClassName} onClick={handleClick}>
             {link.label}
         </Link>
     );

@@ -1,3 +1,4 @@
+import { DATEN_EXPORT_PATH } from '@/lib/datenExport/copy';
 import { MAIL_MERGE_COMPOSE_PATH } from '@/lib/mailMerge/copy';
 
 export interface InternNavLink {
@@ -37,7 +38,10 @@ export const isInternNavLinkActive = (
     switch (link.id) {
         case 'contributions':
             return (
-                pathname === '/intern' || pathname === MAIL_MERGE_COMPOSE_PATH || (/^\/intern\/\d+$/.test(pathname) && from !== 'slotplan')
+                pathname === '/intern' ||
+                pathname === MAIL_MERGE_COMPOSE_PATH ||
+                pathname === DATEN_EXPORT_PATH ||
+                (/^\/intern\/\d+$/.test(pathname) && from !== 'slotplan')
             );
         case 'slotplan':
             return pathname === '/intern/slotplan' && tab !== 'locations';
