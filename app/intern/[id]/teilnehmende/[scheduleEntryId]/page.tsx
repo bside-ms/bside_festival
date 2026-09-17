@@ -2,6 +2,7 @@ import WorkshopAttendeePrintButton from '@/components/participants/attendeeForm/
 import formatDate from '@/lib/common/helper/formatDate';
 import prismaClient from '@/lib/common/prismaClient';
 import isLoggedIn from '@/lib/next-auth/isLoggedIn';
+import { activeWorkshopReservationWhere } from '@/lib/workshops/workshopAttendeeReservations';
 import { ApplicationStatus, Type } from '@prisma/client';
 import { notFound, redirect } from 'next/navigation';
 import type { ReactElement } from 'react';
@@ -25,7 +26,7 @@ const WorkshopAttendeePrintPage = async ({ params }: Props): Promise<ReactElemen
 
     const scheduleEntry = await prismaClient.scheduleEntry.findFirst({
         include: {
-            attendees: { orderBy: { fullName: 'asc' }, where: { confirmedAt: { not: null } } },
+            attendees: { orderBy: { fullName: 'asc' }, where: activeWorkshopReservationWhere() },
             participant: true,
             programLocation: true,
         },
@@ -54,12 +55,18 @@ const WorkshopAttendeePrintPage = async ({ params }: Props): Promise<ReactElemen
             </div>
             <h2 className="mt-8 font-display text-2xl font-black">Teilnehmende ({scheduleEntry.attendees.length})</h2>
             {scheduleEntry.attendees.length === 0 ? (
-                <p className="mt-4">Bisher gibt es keine bestätigten Teilnahmen.</p>
+                <p className="mt-4">Bisher gibt es keine Teilnahmen.</p>
             ) : (
                 <ol className="mt-5 space-y-3 text-lg">
                     {scheduleEntry.attendees.map((attendee) => (
                         <li key={attendee.id} className="border-b border-black/30 pb-2">
-                            {attendee.fullName}
+                            <div>{attendee.fullName}</div>
+                            <div className="text-base">
+                                {attendee.mailAddress}
+                                {attendee.confirmedAt === null && (
+                                    <span className="ml-2 text-sm text-black/45">E-Mail-Adresse unbestätigt</span>
+                                )}
+                            </div>
                         </li>
                     ))}
                 </ol>

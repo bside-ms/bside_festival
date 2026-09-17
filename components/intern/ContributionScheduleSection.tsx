@@ -26,6 +26,7 @@ interface ScheduleFormValues {
     startsAt: string;
     endsAt: string;
     maxAttendees: string;
+    visitorNote: string;
 }
 
 type EditorState = { mode: 'create' } | { mode: 'edit'; entry: SerializableScheduleEntry } | null;
@@ -94,6 +95,7 @@ const ContributionScheduleForm = ({
             startsAt: toDateTimeLocalValue(defaultStartsAt),
             endsAt: toDateTimeLocalValue(defaultEndsAt),
             maxAttendees: entry?.maxAttendees?.toString() ?? '',
+            visitorNote: entry?.visitorNote ?? '',
         },
     });
     const { handleSubmit, register } = methods;
@@ -115,6 +117,7 @@ const ContributionScheduleForm = ({
                         isBlocking: false,
                         isPublic: false,
                         maxAttendees: parseNullableNumber(values.maxAttendees),
+                        visitorNote: values.visitorNote,
                     };
 
                     if (entry === null) {
@@ -191,6 +194,17 @@ const ContributionScheduleForm = ({
                     />
                 </label>
 
+                <label className="block">
+                    <span className="text-sm font-bold">Hinweis für Besucher*innen</span>
+                    <textarea
+                        rows={3}
+                        className="mt-1 w-full rounded border border-black p-2 text-sm"
+                        placeholder="z. B. Treffpunkt"
+                        {...register('visitorNote')}
+                    />
+                    <span className="mt-1 block text-xs text-black/60">Wird auf der öffentlichen Programmseite angezeigt.</span>
+                </label>
+
                 {errorMessage !== null && <div className="text-sm font-bold text-red-700">{errorMessage}</div>}
 
                 <div className="flex flex-wrap items-start gap-3">
@@ -253,6 +267,9 @@ const ContributionScheduleSection = ({ participantId, programLocations, schedule
                             <div className="text-sm font-bold">{formatEntrySummary(entry, programLocations)}</div>
                             {entry.maxAttendees !== null && (
                                 <div className="mt-1 text-xs text-black/60">max. {entry.maxAttendees} Anmeldungen</div>
+                            )}
+                            {entry.visitorNote !== null && (
+                                <div className="mt-1 text-xs whitespace-pre-line text-black/60">{entry.visitorNote}</div>
                             )}
                             <div className="mt-2 flex flex-wrap gap-1">
                                 <button

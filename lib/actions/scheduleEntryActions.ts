@@ -34,6 +34,7 @@ export interface ScheduleEntryInput {
     isBlocking: boolean;
     isPublic: boolean;
     maxAttendees?: number | null;
+    visitorNote?: string | null;
 }
 
 interface ScheduleEntryData {
@@ -48,6 +49,7 @@ interface ScheduleEntryData {
     isBlocking: boolean;
     isPublic: boolean;
     maxAttendees: number | null;
+    visitorNote: string | null;
 }
 
 const normalizeText = (value: string | null | undefined): string | null => {
@@ -97,6 +99,7 @@ const validateScheduleEntryInput = (input: ScheduleEntryInput): ScheduleEntryDat
         input.kind === ScheduleEntryKind.Participant && input.timeMode === ScheduleEntryTimeMode.Timed
             ? (input.maxAttendees ?? null)
             : null;
+    const visitorNote = input.kind === ScheduleEntryKind.Participant ? normalizeText(input.visitorNote) : null;
 
     if (input.kind === ScheduleEntryKind.Participant && participantId === null) {
         throw new Error('Teilnehmer:innen-Einträge brauchen einen Programmbeitrag.');
@@ -148,6 +151,7 @@ const validateScheduleEntryInput = (input: ScheduleEntryInput): ScheduleEntryDat
         isBlocking: input.isBlocking,
         isPublic: input.kind === ScheduleEntryKind.ScheduleNote ? input.isPublic : false,
         maxAttendees,
+        visitorNote,
     };
 };
 
@@ -199,6 +203,13 @@ const createScheduleEntryChanges = (
             previousEntry?.maxAttendees ?? null,
             nextEntry?.maxAttendees ?? null,
             formatNullableNumber,
+        ),
+        createChange(
+            'visitorNote',
+            'Hinweis für Besucher*innen',
+            previousEntry?.visitorNote ?? null,
+            nextEntry?.visitorNote ?? null,
+            formatNullableText,
         ),
     ]);
 

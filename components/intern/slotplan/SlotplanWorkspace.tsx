@@ -64,6 +64,7 @@ interface ScheduleEntryFormValues {
     isBlocking: boolean;
     isPublic: boolean;
     maxAttendees: string;
+    visitorNote: string;
 }
 
 interface ProgramLocationFormValues {
@@ -213,6 +214,7 @@ const ScheduleEntryForm = ({
             isBlocking: false,
             isPublic: entry?.isPublic ?? false,
             maxAttendees: entry?.maxAttendees?.toString() ?? '',
+            visitorNote: entry?.visitorNote ?? '',
         },
     });
     const { control, handleSubmit, register, watch } = methods;
@@ -240,6 +242,7 @@ const ScheduleEntryForm = ({
                         isBlocking: false,
                         isPublic: values.isPublic,
                         maxAttendees: parseNullableNumber(values.maxAttendees),
+                        visitorNote: values.visitorNote,
                     };
 
                     if (entry === null) {
@@ -388,15 +391,27 @@ const ScheduleEntryForm = ({
                     )}
 
                     {kind === ScheduleEntryKind.Participant && (
-                        <label className="block">
-                            <span className="text-sm font-bold">Maximale Anmeldungen</span>
-                            <input
-                                type="number"
-                                min="1"
-                                className="mt-1 w-full rounded border border-black p-2"
-                                {...register('maxAttendees')}
-                            />
-                        </label>
+                        <>
+                            <label className="block">
+                                <span className="text-sm font-bold">Maximale Anmeldungen</span>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    className="mt-1 w-full rounded border border-black p-2"
+                                    {...register('maxAttendees')}
+                                />
+                            </label>
+                            <label className="block md:col-span-2">
+                                <span className="text-sm font-bold">Hinweis für Besucher*innen</span>
+                                <textarea
+                                    rows={3}
+                                    className="mt-1 w-full rounded border border-black p-2"
+                                    placeholder="z. B. Treffpunkt"
+                                    {...register('visitorNote')}
+                                />
+                                <span className="mt-1 block text-xs text-black/60">Wird auf der öffentlichen Programmseite angezeigt.</span>
+                            </label>
+                        </>
                     )}
 
                     {errorMessage !== null && <div className="text-sm font-bold text-red-700 md:col-span-2">{errorMessage}</div>}
@@ -466,6 +481,7 @@ const MoveEntryForm = ({
                         isBlocking: false,
                         isPublic: entry.isPublic,
                         maxAttendees: entry.maxAttendees,
+                        visitorNote: entry.visitorNote,
                     });
                     onClose();
                 } catch (error) {
@@ -1377,6 +1393,9 @@ const SlotplanWorkspace = ({
                                                     </div>
                                                 )}
                                                 {genres.length > 0 && <div className="truncate">{genres.join(', ')}</div>}
+                                                {entry.visitorNote !== null && (
+                                                    <div className="whitespace-pre-line">{entry.visitorNote}</div>
+                                                )}
                                                 <div className="mt-1 flex flex-wrap gap-1">
                                                     <button
                                                         type="button"

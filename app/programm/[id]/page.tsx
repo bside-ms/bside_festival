@@ -102,7 +102,7 @@ const ProgramEntryPage = async ({ params }: Props): Promise<ReactElement> => {
                         )}
                     </div>
 
-                    <div>
+                    <div className="min-w-0">
                         <div className="inline-flex bg-[#2C2E83] px-3 py-1 text-sm font-black text-white">
                             {typeLabels[participant.type]}
                         </div>
@@ -115,7 +115,7 @@ const ProgramEntryPage = async ({ params }: Props): Promise<ReactElement> => {
                                 ))}
                             </div>
                         )}
-                        <h1 className="mt-5 text-5xl leading-[0.9] font-black sm:text-6xl md:text-7xl">{participant.name}</h1>
+                        <h1 className="mt-5 text-5xl leading-[0.9] font-black wrap-anywhere sm:text-6xl md:text-7xl">{participant.name}</h1>
                         {participant.description !== null && participant.description !== '' && (
                             <p className="mt-6 text-base leading-relaxed font-medium whitespace-pre-line md:text-lg">
                                 {participant.description}
@@ -147,6 +147,9 @@ const ProgramEntryPage = async ({ params }: Props): Promise<ReactElement> => {
                                         <li key={entry.id} className="border-l-4 border-[#EA504C] pl-4">
                                             <div className="font-black">{entry.programLocation.name}</div>
                                             <div className="mt-1 font-medium">{dates.join(' · ')}</div>
+                                            {entry.visitorNote !== null && entry.visitorNote !== '' && (
+                                                <p className="mt-2 font-medium whitespace-pre-line">{entry.visitorNote}</p>
+                                            )}
                                             {participant.type === Type.Workshop &&
                                                 participant.status === ApplicationStatus.Confirmed &&
                                                 entry.timeMode === ScheduleEntryTimeMode.Timed &&
@@ -161,14 +164,12 @@ const ProgramEntryPage = async ({ params }: Props): Promise<ReactElement> => {
                                                 )}
                                             {loggedIn && participant.type === Type.Workshop && entry.maxAttendees !== null && (
                                                 <WorkshopAttendeeList
-                                                    attendees={entry.attendees
-                                                        .filter((attendee) => attendee.confirmedAt !== null)
-                                                        .map((attendee) => ({
-                                                            confirmedAt: attendee.confirmedAt?.toISOString() ?? null,
-                                                            fullName: attendee.fullName,
-                                                            id: attendee.id,
-                                                            ...(isInDataPrivacyGroup ? { mailAddress: attendee.mailAddress } : {}),
-                                                        }))}
+                                                    attendees={entry.attendees.map((attendee) => ({
+                                                        confirmedAt: attendee.confirmedAt?.toISOString() ?? null,
+                                                        fullName: attendee.fullName,
+                                                        id: attendee.id,
+                                                        ...(isInDataPrivacyGroup ? { mailAddress: attendee.mailAddress } : {}),
+                                                    }))}
                                                     isInDataPrivacyGroup={isInDataPrivacyGroup}
                                                     participantId={participant.id}
                                                     scheduleEntryId={entry.id}

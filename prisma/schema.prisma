@@ -250,6 +250,7 @@ model ScheduleEntry {
     isBlocking        Boolean               @default(true)
     isPublic          Boolean               @default(false)
     maxAttendees      Int?
+    visitorNote       String?               @db.Text
     createdAt         DateTime              @default(now())
     updatedAt         DateTime              @updatedAt
     participantId     Int?

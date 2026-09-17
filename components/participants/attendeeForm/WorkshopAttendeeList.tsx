@@ -85,14 +85,19 @@ const WorkshopAttendeeList = ({
             </div>
 
             {attendees.length === 0 ? (
-                <p className="mt-3 font-medium">Bisher gibt es keine bestätigten Teilnahmen.</p>
+                <p className="mt-3 font-medium">Bisher gibt es keine Teilnahmen.</p>
             ) : (
                 <ul className="mt-3 space-y-2">
                     {attendees.map((attendee) => (
                         <li key={attendee.id} className="rounded bg-[#2C2E83]/10 p-3">
                             <div className="flex flex-wrap items-center justify-between gap-3">
                                 <div>
-                                    <div className="font-bold">{attendee.fullName}</div>
+                                    <div className="font-bold">
+                                        {attendee.fullName}
+                                        {attendee.confirmedAt === null && (
+                                            <span className="ml-2 text-xs font-normal text-black/45">E-Mail-Adresse unbestätigt</span>
+                                        )}
+                                    </div>
                                     {isInDataPrivacyGroup && attendee.mailAddress !== undefined && (
                                         <div className="text-sm">{attendee.mailAddress}</div>
                                     )}
@@ -102,9 +107,6 @@ const WorkshopAttendeeList = ({
                                         attendee.message !== '' && (
                                             <div className="mt-2 text-sm whitespace-pre-line">Nachricht: {attendee.message}</div>
                                         )}
-                                    {showMessages && attendee.confirmedAt === null && (
-                                        <div className="mt-2 text-sm font-bold">E-Mail-Bestätigung steht noch aus</div>
-                                    )}
                                 </div>
                                 {allowRemoval && (
                                     <button
