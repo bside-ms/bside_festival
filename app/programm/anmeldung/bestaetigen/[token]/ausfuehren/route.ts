@@ -9,5 +9,5 @@ export const GET = async (request: Request, { params }: Props): Promise<NextResp
     const { token } = await params;
     await confirmWorkshopAttendee(token);
 
-    return NextResponse.redirect(new URL(`/programm/anmeldung/bestaetigen/${token}`, request.url));
+    return NextResponse.redirect(new URL(`/programm/anmeldung/bestaetigen/${token}`, process.env.APP_URL ?? request.url));
 };
