@@ -6,7 +6,7 @@ import zehnJahreBadge from '@/images/2026/home/zehn-jahre-badge.svg';
 import logoMark from '@/images/2026/logo_transparent.svg';
 import { homeDateDays, homeDateMonth, homeMotto } from '@/lib/public/homeContent';
 import Image from 'next/image';
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 
 type HarborStampProps = {
     className: string;
@@ -50,7 +50,11 @@ const HeroBadgeStamp = ({
     </svg>
 );
 
-const HomeHero = (): ReactElement => (
+type Props = {
+    children?: ReactNode;
+};
+
+const HomeHero = ({ children }: Props): ReactElement => (
     <section className="relative h-[calc(100dvh-3.75rem)] max-h-224 min-h-200 overflow-hidden bg-linear-to-br from-[#f4b6d6] via-[#f7cfe2] to-white">
         <div className="pointer-events-none absolute inset-x-0 top-0 bottom-[-8%] md:hidden">
             <HeroWaterMobile className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMax slice" />
@@ -124,7 +128,7 @@ const HomeHero = (): ReactElement => (
             height={186}
         />
 
-        <div className="absolute inset-0 z-10 mx-auto w-full max-w-300">
+        <div className="pointer-events-none absolute inset-0 z-10 mx-auto w-full max-w-300">
             <Image
                 src={logoMark}
                 alt=""
@@ -149,6 +153,7 @@ const HomeHero = (): ReactElement => (
         <p className="sr-only">
             {homeMotto} {homeDateDays} {homeDateMonth} 10 Jahre B-Side Festival
         </p>
+        {children}
     </section>
 );
 

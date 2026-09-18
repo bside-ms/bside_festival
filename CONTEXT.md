@@ -201,6 +201,16 @@ _Avoid_: Type (when referring to a public catalog grouping)
 
 The sections appear in this order: Musik; Workshops; Lesungen, Vorträge & Poesie; Performance, Theater & Kabarett; Familienprogramm; Ausstellungen; Essensstände; Nachbarschaft; Infostände; Catering; Sonstiges.
 
+### Was läuft gerade?
+
+The homepage card of what is happening in the festival program at this moment. It lists Confirmed Program Entries whose Timed Schedule Entries overlap now, grouped by Program Section.
+_Avoid_: Jetzt, Now playing, currently playing, live ticker, Aktuell (as the name of this card)
+
+### Als Nächstes
+
+The next few upcoming program appearances after Was läuft gerade?, not the rest of the festival. On the homepage it sits under that heading as a toggle.
+_Avoid_: Up next, full upcoming program, demnächst (as the name of this list)
+
 ### Program Location
 
 A schedulable place in the slot plan, such as a stage, room, area, or external venue. Program locations may be grouped for display, but each one can be scheduled directly. Each has an implicit character (for example dancefloor, rock bar, intimate room, workshop room) that comes from the real place and from what the festival actually programs there.

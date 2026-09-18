@@ -2,8 +2,10 @@ import Gallery from '@/components/home/Gallery';
 import HomeHansaviertel from '@/components/home/HomeHansaviertel';
 import HomeHero from '@/components/home/HomeHero';
 import HomeLocations from '@/components/home/HomeLocations';
+import HomeNowPlaying from '@/components/home/HomeNowPlaying';
 import VolunteersCtaMarks from '@/components/home/VolunteersCtaMarks';
 import introNeonHeart from '@/images/2026/home/intro-neon-heart.jpg';
+import type { NowPlayingData } from '@/lib/public/getHomeNowPlaying';
 import { betterplaceUrl, homeAddress } from '@/lib/public/homeContent';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,13 +16,14 @@ const sectionPad = 'relative mx-auto w-full max-w-6xl px-6 py-16 md:px-10 md:py-
 const showParticipationHomeSection = true;
 
 type Props = {
+    nowPlaying: NowPlayingData | null;
     showVolunteerSignup: boolean;
 };
 
-const HomePage = ({ showVolunteerSignup }: Props): ReactElement => {
+const HomePage = ({ nowPlaying, showVolunteerSignup }: Props): ReactElement => {
     return (
         <div className="overflow-x-hidden font-display text-black">
-            <HomeHero />
+            <HomeHero>{nowPlaying !== null && <HomeNowPlaying nowPlaying={nowPlaying} />}</HomeHero>
 
             <section className="relative z-0 bg-[#FABF74] text-[#2C2E83]">
                 <div className={`${sectionPad} grid gap-10 md:grid-cols-2 md:items-center`}>
